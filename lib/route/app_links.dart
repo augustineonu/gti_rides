@@ -47,6 +47,9 @@ class AppLinks {
   static const favorite = "/renter/more/favorite";
   static const accountDetails = "/renter/more/accountDetails";
   static const email = "/email";
+  static const phoneInput =
+      "/renter/more/account_details/account_verification/phone/phoneInput";
+  static const phoneOtp = "/renter/more/account_details/account_verification/phone/phoneOtp";
 
   // static const chatAction = "/user/chat/:key/:action";
 
@@ -55,6 +58,7 @@ class AppLinks {
     "login": login,
     "splash": splash,
     "emailOtp": emailOtp,
+    "phoneOtp": phoneOtp,
     "verifyOtp": verifyOtp,
     "resetPassword": resetPassword,
     "requestResetPassword": requestResetPassword,
@@ -82,6 +86,7 @@ class AppLinks {
     'favorite': favorite,
     'accountDetails': accountDetails,
     'email': email,
+    'phoneInput': phoneInput,
     // 'trips': trips,
   };
 

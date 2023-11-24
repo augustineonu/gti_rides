@@ -21,7 +21,6 @@ class AccountDetailsController extends GetxController {
   }
 
   TextEditingController fullNameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
   RxBool isDone = false.obs;
   RxBool showPassword = false.obs;
   RxBool isLoading = false.obs;
@@ -40,7 +39,7 @@ class AccountDetailsController extends GetxController {
   // navigation method
   void goBack() => routeService.goBack();
   void routeToEmailInput() => routeService.gotoRoute(AppLinks.email);
-  void routeToVerifyEmail() => routeService.gotoRoute(AppLinks.emailOtp);
+  void routeToPhoneInput() => routeService.gotoRoute(AppLinks.phoneInput);
 
   void openCamera() {
    final picked = imageService.pickImage(source: ImageSource.camera);

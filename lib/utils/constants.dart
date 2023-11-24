@@ -31,8 +31,13 @@ class AppStrings {
   static String carRenter = "Car Renter";
   static String carOwner = "Car Owner";
   static String verifyOtp = "Verify OTP";
+  static String verifyEmail = "Verify email";
   static String pleaseInputOtp =
       "Please input a one time OTP sent to %s or %s  to continue.";
+  static String pleaseInputOtpEmail =
+      "Please input a one time OTP sent to %s to continue.";
+  static String pleaseInputOtpPhone =
+      "Please input a one time OTP sent to %s to continue.";
   static String resendOtp = "Resend OTP in ";
   static String cont = "Continue";
   static String explorerError =
@@ -293,4 +298,8 @@ class AppStrings {
   static String remove  = 'Remove';
   static String loginSettings  = 'LOGIN SETTINGS';
   static String mobileNumber  = 'Mobile Number';
+  static String phoneNumber  = 'Phone number';
+  static String inputPhoneNumber  = 'Input phone number';
+  static String phoneHintText  = '+2348 189 899 437';
+  static String verifyPhoneNumber  = 'Verify phone number';
 }

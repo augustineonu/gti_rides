@@ -9,7 +9,6 @@ import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
-
 import 'utils/screen_util.dart';
 
 void main() {

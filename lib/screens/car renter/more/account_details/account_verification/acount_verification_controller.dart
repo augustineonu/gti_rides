@@ -6,13 +6,15 @@ import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
 
-
 class AccountVerificationController extends GetxController {
   Logger logger = Logger('OTPVerificationController');
   RxBool isLoading = false.obs;
   Timer? countdownTimer;
   Duration myDuration = Duration(days: 5);
   final TextEditingController pinController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+
   RxBool showPassword = true.obs;
   final GlobalKey<FormState> emailVerificationFormKey = GlobalKey<FormState>();
   final FocusNode focus = FocusNode();
@@ -36,7 +38,10 @@ class AccountVerificationController extends GetxController {
     super.onInit();
   }
 
+  void goBack() => routeService.goBack();
   void onFocusChange() => update();
+  void routeToVerifyEmail() => routeService.gotoRoute(AppLinks.emailOtp);
+  void routeToVerifyPhoneNumber() => routeService.gotoRoute(AppLinks.phoneOtp);
 
   void togglePasswordShow() {
     showPassword.value = !showPassword.value;

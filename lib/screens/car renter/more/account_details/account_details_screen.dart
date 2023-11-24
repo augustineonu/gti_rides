@@ -85,7 +85,7 @@ class AccountDetailsScreen extends GetView<AccountDetailsController> {
           accountDetailsWidget(
                 title: AppStrings.mobileNumber,
                 body: '+234823456778',
-                onTap:  (){}
+                onTap:  controller.routeToPhoneInput
               ),
         SizedBox(
           height: size.height * 0.08,

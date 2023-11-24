@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/car%20renter/more/account_details/account_details_controller.dart';
+import 'package:gti_rides/screens/car%20renter/more/account_details/account_verification/acount_verification_controller.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/text_input_widgets/normal_text_input_widget.dart';
@@ -9,7 +10,7 @@ import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
 
-class EmailScreen extends GetView<AccountDetailsController> {
+class EmailScreen extends GetView<AccountVerificationController> {
   const EmailScreen([Key? key]) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -59,7 +60,7 @@ class EmailScreen extends GetView<AccountDetailsController> {
         : GtiButton(
             height: 40.sp,
             width: size.width.sp,
-            text: "continue".tr,
+            text: AppStrings.cont,
             onTap: controller.routeToVerifyEmail,
             isLoading: controller.isLoading.value,
           );

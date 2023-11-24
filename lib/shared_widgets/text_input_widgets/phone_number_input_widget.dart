@@ -9,7 +9,7 @@ class PhoneNumberInputWidget extends StatelessWidget {
   final String expectedVariable;
   final TextInputType? textInputType;
   final Function onGestureTab;
-  final String dialedCode;
+  // final String dialedCode;
   final Widget? prefixIcon;
   final Widget? prefix;
   final void Function(String)? onChanged;
@@ -22,7 +22,7 @@ class PhoneNumberInputWidget extends StatelessWidget {
       this.textInputType,
       this.textInputIcon,
       required this.onGestureTab,
-      required this.dialedCode,
+      // required this.dialedCode,
       this.prefixIcon,
       this.prefix,
       this.onChanged});
@@ -42,19 +42,19 @@ class PhoneNumberInputWidget extends StatelessWidget {
           labelText,
           style: Theme.of(context).textTheme.bodyLarge,
         ),
-        prefix: prefix ??
-            GestureDetector(
-              onTap: onGestureTab(),
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                child: Text(dialedCode,
-                    style: const TextStyle(color: primaryColor)),
-              ),
-            ),
+        prefix: prefix ?? SizedBox()
+            // GestureDetector(
+            //   onTap: onGestureTab(),
+            //   child: Container(
+            //     padding:
+            //         const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+            //     margin: const EdgeInsets.symmetric(horizontal: 8.0),
+            //     decoration: const BoxDecoration(
+            //         borderRadius: BorderRadius.all(Radius.circular(5.0))),
+            //     child: Text('dialedCode',
+            //         style: const TextStyle(color: primaryColor)),
+            //   ),
+            // ),
       ),
     );
   }
