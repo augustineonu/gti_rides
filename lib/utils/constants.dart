@@ -311,4 +311,13 @@ class AppStrings {
   static String selectDocument  = 'Select the kind of document you want to upload';
   static String uploadToCompleteApproval  = 'In order complete the approval of your account Please upload a copy of your identity ';
   static String chooseYourIdentityType  = 'Choose your identity type';
+  static String nationalId  = 'National ID';
+  static String passport  = 'Passport';
+  static String drivingLicense  = 'Driving license';
+  static String uploadProofOfIdentity  = 'Upload proof of identity';
+  static String pleaseMakeSurePicIsClear  = 'Please make sure picture is clear';
+  static String inputAddressSm  = 'Input address';
+  static String save  = 'Save';
+  static String inputOccupation  = 'Input occupation';
+  static String emergencyContact  = 'Emergency contact';
 }

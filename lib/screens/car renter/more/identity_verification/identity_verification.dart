@@ -26,9 +26,9 @@ class IdentityVerificationScreen
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-          backgroundColor: backgroundColor,
-          appBar: appBar(),
-          body: body(size, context),
+      backgroundColor: backgroundColor,
+      appBar: appBar(),
+      body: body(size, context),
       // }
     );
   }
@@ -71,7 +71,7 @@ class IdentityVerificationScreen
           identityVerificationWidget(
               title: AppStrings.gender,
               subTitle: AppStrings.selectGender,
-              onTap: () {}),
+              onTap: controller.routeToHomeAddress),
           identityVerificationWidget(
               title: AppStrings.dob,
               subTitle: AppStrings.provideDob,
@@ -104,15 +104,15 @@ class IdentityVerificationScreen
           identityVerificationWidget(
               title: AppStrings.homeAddress,
               subTitle: AppStrings.provideHomeAddress,
-              onTap: () {}),
+              onTap: controller.routeToHomeAddress),
           identityVerificationWidget(
               title: AppStrings.officeAddress,
               subTitle: AppStrings.addOfficeAddress,
-              onTap: () {}),
+              onTap: controller.routeToOfficeAddress),
           identityVerificationWidget(
               title: AppStrings.occupation,
               subTitle: AppStrings.provideOccupation,
-              onTap: () {}),
+              onTap: controller.routeToOccupation),
 
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -124,12 +124,11 @@ class IdentityVerificationScreen
                 ),
                 const SizedBox(width: 6),
                 textWidget(
-                    text: AppStrings.accountStatusCaps,
-                    style: getBoldStyle()),
+                    text: AppStrings.accountStatusCaps, style: getBoldStyle()),
               ],
             ),
           ),
-           identityVerificationWidget(
+          identityVerificationWidget(
               title: AppStrings.approved,
               titleColor: green,
               subTitle: AppStrings.youCanProceedToRent,
@@ -144,12 +143,11 @@ class IdentityVerificationScreen
     );
   }
 
-  Widget identityVerificationWidget({
-    required String title,
-    required String subTitle,
-    void Function()? onTap,
-    Color? titleColor
-  }) {
+  Widget identityVerificationWidget(
+      {required String title,
+      required String subTitle,
+      void Function()? onTap,
+      Color? titleColor}) {
     return Column(
       children: [
         InkWell(
@@ -159,7 +157,9 @@ class IdentityVerificationScreen
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                textWidget(text: title, style: getRegularStyle(color: titleColor ?? black)),
+                textWidget(
+                    text: title,
+                    style: getRegularStyle(color: titleColor ?? black)),
                 textWidget(
                     text: subTitle,
                     style: getRegularStyle(fontSize: 12.sp, color: grey2)),
@@ -170,5 +170,18 @@ class IdentityVerificationScreen
         divider(color: borderColor),
       ],
     );
+  }
+
+  Widget saveButton() {
+    return controller.isLoading.isTrue
+        ? centerLoadingIcon()
+        : GtiButton(
+            height: 50.sp,
+            width: 300.sp,
+            text: AppStrings.save,
+            // color: secondaryColor,
+            onTap: () {},
+            isLoading: controller.isLoading.value,
+          );
   }
 }

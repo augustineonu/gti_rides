@@ -4,6 +4,9 @@ import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
 
+enum IdType { nationalId, passport, driverLicense }
+
+
 class IdentityVerificationController extends GetxController {
   Logger logger = Logger("Controller");
 
@@ -21,14 +24,16 @@ class IdentityVerificationController extends GetxController {
 
     super.onInit();
   }
-
+  
+  PageController pageController = PageController();
+  TextEditingController homeAddressController = TextEditingController();
   final animationValue = 0.0.obs;
   RxInt currentIndex = 0.obs;
   RxBool isLoading = false.obs;
+  // RxBool selectedIdType = false.obs;
   RxBool selectedNationalID = false.obs;
   RxBool selectedPassport = false.obs;
   RxBool selectedDriversLicense = false.obs;
-  PageController pageController = PageController();
 
   Rx<String> testString = 'hello world'.obs;
 
@@ -37,8 +42,20 @@ class IdentityVerificationController extends GetxController {
       routeService.gotoRoute(AppLinks.paymentSummary);
   void routeToProofOfIdentity() =>
       routeService.gotoRoute(AppLinks.proofOfIdentity);
+  void routeToHomeAddress() =>
+      routeService.gotoRoute(AppLinks.homeAddress);
+  void routeToOfficeAddress() =>
+      routeService.gotoRoute(AppLinks.officeAddress);
+  void routeToOccupation() =>
+      routeService.gotoRoute(AppLinks.occupation);
 
-      void onSelectIdType() => selectedNationalID.value = !selectedNationalID.value;
+      // void onSelectIdType() => selectedIdType.value = !selectedIdType.value;
+
+      Rx<IdType> selectedIdType = IdType.nationalId.obs;
+
+void onSelectIdType(IdType idType) {
+  selectedIdType.value = idType;
+}
 
   void onPageChanged(int value) {
     currentIndex.value = value;

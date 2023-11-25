@@ -3,14 +3,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/car%20renter/more/identity_verification/identity_verification_controller.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
+import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/sqaure_check_box_widget.dart';
+import 'package:gti_rides/shared_widgets/text_input_widgets/normal_text_input_widget.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/shared_widgets/upload_image_widget.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
 
-class ProofOfIdentityScreen extends GetView<IdentityVerificationController> {
-  const ProofOfIdentityScreen([Key? key]) : super(key: key);
+class HomeAddressScreen extends GetView<IdentityVerificationController> {
+  const HomeAddressScreen([Key? key]) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -24,11 +26,11 @@ class ProofOfIdentityScreen extends GetView<IdentityVerificationController> {
 
   AppBar appBar() {
     return gtiAppBar(
-      onTap: () => controller.goBack(),
+      onTap: controller.goBack,
       leading: const Icon(Icons.arrow_back),
       centerTitle: true,
       title: textWidget(
-          text: AppStrings.proofOfIdentity,
+          text: AppStrings.homeAddress,
           style: getMediumStyle().copyWith(fontWeight: FontWeight.w500)),
       titleColor: iconColor(),
     );
@@ -41,69 +43,36 @@ class ProofOfIdentityScreen extends GetView<IdentityVerificationController> {
       child: Obx(() => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                width: 255.sp,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    textWidget(
-                        text: AppStrings.selectDocument,
-                        textOverflow: TextOverflow.visible,
-                        style: getBoldStyle()),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    textWidget(
-                        text: AppStrings.uploadToCompleteApproval,
-                        textOverflow: TextOverflow.visible,
-                        style: getRegularStyle(fontSize: 12.sp, color: grey2)),
-                  ],
-                ),
+              NormalInputTextWidget(
+                expectedVariable: 'field',
+                title: AppStrings.inputAddressSm,
+                hintText: AppStrings.inputAddressSm,
+                controller: controller.homeAddressController,
               ),
-              SizedBox(
-                height: 30,
-              ),
-              textWidget(
-                  text: AppStrings.chooseYourIdentityType,
-                  textOverflow: TextOverflow.visible,
-                  style: getRegularStyle(fontSize: 12.sp, color: grey2)),
-              const SizedBox(height: 12),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  checkBoxWithText(
-                      title: AppStrings.nationalId,
-                      selectedIdType: controller.selectedIdType.value,
-                      onTap: controller.onSelectIdType,
-                      idType: IdType.nationalId),
-                  checkBoxWithText(
-                      title: AppStrings.passport,
-                      selectedIdType: controller.selectedIdType.value,
-                      onTap: controller.onSelectIdType,
-                      idType: IdType.passport),
-                  checkBoxWithText(
-                      title: AppStrings.drivingLicense,
-                      selectedIdType: controller.selectedIdType.value,
-                      onTap: controller.onSelectIdType,
-                      idType: IdType.driverLicense),
-                  SizedBox(
-                    width: 20,
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 24,
-              ),
+              const SizedBox(height: 32),
               imageUploadWidget(
                 title: AppStrings.uploadProofOfIdentity,
                 body: AppStrings.pleaseMakeSurePicIsClear,
                 onTap: () {},
               ),
-              const SizedBox(height: 20),
-      
+              const SizedBox(height: 55),
+              saveButton(),
             ],
           )),
     );
+  }
+
+  Widget saveButton() {
+    return controller.isLoading.isTrue
+        ? centerLoadingIcon()
+        : GtiButton(
+            height: 50.sp,
+            width: 370,
+            text: AppStrings.save,
+            // color: secondaryColor,
+            onTap: () {},
+            isLoading: controller.isLoading.value,
+          );
   }
 
   Widget checkBoxWithText(

@@ -53,6 +53,10 @@ class AppLinks {
   static const changePassword = "/renter/more/account_details/changePassword";
   static const identityVerification = "/renter/more/identityVerification";
   static const proofOfIdentity = "/renter/more/identityVerification/proofOfIdentity";
+  static const homeAddress = "/renter/more/identityVerification/homeAddress";
+  static const officeAddress = "/renter/more/identityVerification/officeAddress";
+  static const emergencyContact = "/renter/more/identityVerification/emergencyContact";
+  static const occupation = "/renter/more/identityVerification/occupation";
 
   // static const chatAction = "/user/chat/:key/:action";
 
@@ -93,6 +97,9 @@ class AppLinks {
     'changePassword': changePassword,
     'identityVerification': identityVerification,
     'proofOfIdentity': proofOfIdentity,
+    'homeAddress': homeAddress,
+    'officeAddress': officeAddress,
+    'occupation': occupation
     // 'trips': trips,
   };
 

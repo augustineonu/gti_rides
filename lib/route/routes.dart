@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/screens/car%20renter/home/choose_trip_date/choose_trip_date_screen.dart';
+import 'package:gti_rides/screens/car%20renter/home/search_city/search_city_screen.dart';
 import 'package:gti_rides/screens/car%20renter/home/search_result/car_selection_result/car_selection_result_screen.dart';
 import 'package:gti_rides/screens/car%20renter/home/search_result/car_selection_result/kyc_check/kyc_check_screen.dart';
 import 'package:gti_rides/screens/car%20renter/home/search_result/car_selection_result/payment_summary/payment_summary_screen.dart';
@@ -11,16 +11,19 @@ import 'package:gti_rides/screens/car%20renter/home/search_result/car_selection_
 import 'package:gti_rides/screens/car%20renter/home/search_result/reviews/review_screen.dart';
 import 'package:gti_rides/screens/car%20renter/home/search_result/search_filter/search_filter_screen.dart';
 import 'package:gti_rides/screens/car%20renter/home/search_result/search_result_screen.dart';
-import 'package:gti_rides/screens/car%20renter/home/search_city/search_city_screen.dart';
 import 'package:gti_rides/screens/car%20renter/landing_page.dart';
 import 'package:gti_rides/screens/car%20renter/more/account_details/account_details_screen.dart';
 import 'package:gti_rides/screens/car%20renter/more/account_details/account_verification/change_password/change_password_screen.dart';
-import 'package:gti_rides/screens/car%20renter/more/account_details/account_verification/email/email_verification.dart';
 import 'package:gti_rides/screens/car%20renter/more/account_details/account_verification/email/email_imput_screen.dart';
+import 'package:gti_rides/screens/car%20renter/more/account_details/account_verification/email/email_verification.dart';
 import 'package:gti_rides/screens/car%20renter/more/account_details/account_verification/phone/phone_input_screen.dart';
 import 'package:gti_rides/screens/car%20renter/more/account_details/account_verification/phone/phone_verification.dart';
 import 'package:gti_rides/screens/car%20renter/more/favorite/favorite_screen.dart';
 import 'package:gti_rides/screens/car%20renter/more/identity_verification/identity_verification.dart';
+import 'package:gti_rides/screens/car%20renter/more/identity_verification/screens/emergency_contact_screen.dart';
+import 'package:gti_rides/screens/car%20renter/more/identity_verification/screens/home_address_screen.dart';
+import 'package:gti_rides/screens/car%20renter/more/identity_verification/screens/occupation_screen.dart';
+import 'package:gti_rides/screens/car%20renter/more/identity_verification/screens/office_address_screen.dart';
 import 'package:gti_rides/screens/car%20renter/more/identity_verification/screens/proof_of_identity.dart';
 import 'package:gti_rides/screens/car%20renter/more/more_screen.dart';
 import 'package:gti_rides/screens/car%20renter/more/profile/profile_screen.dart';
@@ -42,18 +45,15 @@ class AppRoutes {
       binding: SplashScreenBinding(),
     ),
     GetPage(
-      name: AppLinks.onboarding,
-      page: () => const OnboardingScreen(),
-      binding: OnboardingScreenBinding(),
-     transition: Transition.rightToLeftWithFade
-    ),
+        name: AppLinks.onboarding,
+        page: () => const OnboardingScreen(),
+        binding: OnboardingScreenBinding(),
+        transition: Transition.rightToLeftWithFade),
     GetPage(
-      name: AppLinks.login,
-      page: () => const LoginScreen(),
-      binding: LoginScreenBinding(),
-
-       transition: Transition.rightToLeftWithFade
-    ),
+        name: AppLinks.login,
+        page: () => const LoginScreen(),
+        binding: LoginScreenBinding(),
+        transition: Transition.rightToLeftWithFade),
     GetPage(
       name: AppLinks.signUp,
       page: () => const SignUpScreen(),
@@ -174,14 +174,30 @@ class AppRoutes {
       name: AppLinks.changePassword,
       page: () => const ChangePasswordScreen(),
     ),
-      GetPage(
+    GetPage(
       name: AppLinks.identityVerification,
       page: () => const IdentityVerificationScreen(),
       binding: IdentityVerifiationBinding(),
     ),
-      GetPage(
+    GetPage(
       name: AppLinks.proofOfIdentity,
       page: () => const ProofOfIdentityScreen(),
+    ),
+    GetPage(
+      name: AppLinks.homeAddress,
+      page: () => const HomeAddressScreen(),
+    ),
+    GetPage(
+      name: AppLinks.officeAddress,
+      page: () => const OfficeAddressScreen(),
+    ),
+    GetPage(
+      name: AppLinks.emergencyContact,
+      page: () => const EmergencyContactScreen(),
+    ),
+    GetPage(
+      name: AppLinks.occupation,
+      page: () => const OccupationScreen(),
     ),
   ];
 }
