@@ -79,7 +79,7 @@ class AccountDetailsScreen extends GetView<AccountDetailsController> {
           accountDetailsWidget(
                 title: AppStrings.password,
                 body: '*****************',
-                onTap:  (){}
+                onTap:  controller.routeToChangePassword
               ),
         divider(color: borderColor),
           accountDetailsWidget(

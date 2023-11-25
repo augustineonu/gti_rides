@@ -14,11 +14,14 @@ import 'package:gti_rides/screens/car%20renter/home/search_result/search_result_
 import 'package:gti_rides/screens/car%20renter/home/search_city/search_city_screen.dart';
 import 'package:gti_rides/screens/car%20renter/landing_page.dart';
 import 'package:gti_rides/screens/car%20renter/more/account_details/account_details_screen.dart';
+import 'package:gti_rides/screens/car%20renter/more/account_details/account_verification/change_password/change_password_screen.dart';
 import 'package:gti_rides/screens/car%20renter/more/account_details/account_verification/email/email_verification.dart';
 import 'package:gti_rides/screens/car%20renter/more/account_details/account_verification/email/email_imput_screen.dart';
 import 'package:gti_rides/screens/car%20renter/more/account_details/account_verification/phone/phone_input_screen.dart';
 import 'package:gti_rides/screens/car%20renter/more/account_details/account_verification/phone/phone_verification.dart';
 import 'package:gti_rides/screens/car%20renter/more/favorite/favorite_screen.dart';
+import 'package:gti_rides/screens/car%20renter/more/identity_verification/identity_verification.dart';
+import 'package:gti_rides/screens/car%20renter/more/identity_verification/screens/proof_of_identity.dart';
 import 'package:gti_rides/screens/car%20renter/more/more_screen.dart';
 import 'package:gti_rides/screens/car%20renter/more/profile/profile_screen.dart';
 import 'package:gti_rides/screens/car%20renter/trips/choose_single_trip_date/choose_single_trip_date_screen.dart';
@@ -166,6 +169,19 @@ class AppRoutes {
     GetPage(
       name: AppLinks.phoneOtp,
       page: () => const PhoneVerificationScreen(),
+    ),
+    GetPage(
+      name: AppLinks.changePassword,
+      page: () => const ChangePasswordScreen(),
+    ),
+      GetPage(
+      name: AppLinks.identityVerification,
+      page: () => const IdentityVerificationScreen(),
+      binding: IdentityVerifiationBinding(),
+    ),
+      GetPage(
+      name: AppLinks.proofOfIdentity,
+      page: () => const ProofOfIdentityScreen(),
     ),
   ];
 }

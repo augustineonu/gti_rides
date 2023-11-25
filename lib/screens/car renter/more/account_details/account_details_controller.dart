@@ -40,6 +40,7 @@ class AccountDetailsController extends GetxController {
   void goBack() => routeService.goBack();
   void routeToEmailInput() => routeService.gotoRoute(AppLinks.email);
   void routeToPhoneInput() => routeService.gotoRoute(AppLinks.phoneInput);
+  void routeToChangePassword() => routeService.gotoRoute(AppLinks.changePassword);
 
   void openCamera() {
    final picked = imageService.pickImage(source: ImageSource.camera);

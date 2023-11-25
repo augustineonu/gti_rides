@@ -228,6 +228,7 @@ class AppStrings {
   static String driversLicense = "Driver's License";
   static String provideDriversLicense = "Provide Driver's License";
   static String addressVerificationCaps = "ADDRESS VERIFICATION";
+  static String accountStatusCaps = "ACCOUNT STATUS";
   static String homeAddress = "Home Address";
   static String provideHomeAddress = "Provide Home Address";
   static String officeAddress = "Office Address";
@@ -237,7 +238,8 @@ class AppStrings {
   static String editProfile = "Edit Profile";
   static String accountDetails = "Account details";
   static String favorite = "Favorite";
-  static String identityVerification = "Identity verification";
+  static String identityVerification = "Identity Verification";
+  static String identityVerificationSm = "Identity verification";
   static String reportAnIncident = "Report an incident";
   static String referrals = "Referrals";
   static String howGtiWorks1 = "How GTI Ride works";
@@ -302,4 +304,11 @@ class AppStrings {
   static String inputPhoneNumber  = 'Input phone number';
   static String phoneHintText  = '+2348 189 899 437';
   static String verifyPhoneNumber  = 'Verify phone number';
+  static String oldPasswordSm  = 'Old password';
+  static String newPasswordSm  = 'New password';
+  static String confirmPasswordSm  = 'Confirm password';
+  static String youCanProceedToRent  = 'You can proceed to rent a car';
+  static String selectDocument  = 'Select the kind of document you want to upload';
+  static String uploadToCompleteApproval  = 'In order complete the approval of your account Please upload a copy of your identity ';
+  static String chooseYourIdentityType  = 'Choose your identity type';
 }

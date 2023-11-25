@@ -48,8 +48,11 @@ class AppLinks {
   static const accountDetails = "/renter/more/accountDetails";
   static const email = "/email";
   static const phoneInput =
-      "/renter/more/account_details/account_verification/phone/phoneInput";
-  static const phoneOtp = "/renter/more/account_details/account_verification/phone/phoneOtp";
+      "/renter/more/account_details/account_verification/phoneInput";
+  static const phoneOtp = "/renter/more/account_details/account_verification/phoneOtp";
+  static const changePassword = "/renter/more/account_details/changePassword";
+  static const identityVerification = "/renter/more/identityVerification";
+  static const proofOfIdentity = "/renter/more/identityVerification/proofOfIdentity";
 
   // static const chatAction = "/user/chat/:key/:action";
 
@@ -87,6 +90,9 @@ class AppLinks {
     'accountDetails': accountDetails,
     'email': email,
     'phoneInput': phoneInput,
+    'changePassword': changePassword,
+    'identityVerification': identityVerification,
+    'proofOfIdentity': proofOfIdentity,
     // 'trips': trips,
   };
 

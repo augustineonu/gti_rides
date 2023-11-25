@@ -9,13 +9,18 @@ import 'package:gti_rides/services/route_service.dart';
 class AccountVerificationController extends GetxController {
   Logger logger = Logger('OTPVerificationController');
   RxBool isLoading = false.obs;
+  RxBool showOldPassword = true.obs;
+  RxBool showNewPassword = true.obs;
+  RxBool showConfirmPassword = true.obs;
   Timer? countdownTimer;
   Duration myDuration = Duration(days: 5);
   final TextEditingController pinController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
+  TextEditingController oldPasswordController = TextEditingController();
+  TextEditingController newPasswordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
 
-  RxBool showPassword = true.obs;
   final GlobalKey<FormState> emailVerificationFormKey = GlobalKey<FormState>();
   final FocusNode focus = FocusNode();
 
@@ -42,11 +47,11 @@ class AccountVerificationController extends GetxController {
   void onFocusChange() => update();
   void routeToVerifyEmail() => routeService.gotoRoute(AppLinks.emailOtp);
   void routeToVerifyPhoneNumber() => routeService.gotoRoute(AppLinks.phoneOtp);
+  
+  void obscureOldPassword() => showOldPassword.value = !showOldPassword.value;
 
-  void togglePasswordShow() {
-    showPassword.value = !showPassword.value;
-  }
-
+  void obscureNewPassword() => showNewPassword.value = !showNewPassword.value;
+  void obscureConfirmPassword() => showConfirmPassword.value = !showConfirmPassword.value;
   void startTimer() {
     countdownTimer =
         Timer.periodic(Duration(seconds: 1), (_) => setCountDown());

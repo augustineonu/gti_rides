@@ -54,7 +54,10 @@ class MoreController extends GetxController {
   void routeToSearchCity() => routeService.gotoRoute(AppLinks.searchCity);
   void routeToProfile() => routeService.gotoRoute(AppLinks.profile);
   void routeToFavorite() => routeService.gotoRoute(AppLinks.favorite);
-  void routeToAccountDetails() => routeService.gotoRoute(AppLinks.accountDetails);
+  void routeToAccountDetails() =>
+      routeService.gotoRoute(AppLinks.accountDetails);
+  void routeToIdentityVerification() =>
+      routeService.gotoRoute(AppLinks.identityVerification);
 
   @override
   void dispose() {

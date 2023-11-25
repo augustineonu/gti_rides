@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/car%20renter/home/search_result/search_filter/search_filter_controller.dart';
-import 'package:gti_rides/screens/car%20renter/widgets/sqaure_check_box_widget.dart';
+import 'package:gti_rides/shared_widgets/sqaure_check_box_widget.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/switch_widget.dart';

@@ -63,6 +63,7 @@ class ImageAssets {
   static const String curvedLineFaq = "$SVG_PATH/curved_line_faq.svg";
   static const String treashBin = "$SVG_PATH/trash.svg";
   static const String person = "$SVG_PATH/person1.svg";
+  static const String pencil = "$SVG_PATH/pencil.svg";
   // PNG IMAGES
 
   static const String onboarding = "$IMAGE_PATH/onboarding_1.png";

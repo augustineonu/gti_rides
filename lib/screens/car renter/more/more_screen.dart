@@ -91,6 +91,7 @@ class MoreScreen extends StatelessWidget {
                                 case 1:
                                   controller.routeToFavorite();
                                 case 2:
+                                controller.routeToIdentityVerification();
                                   break;
                                 default:
                               }
