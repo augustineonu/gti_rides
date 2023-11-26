@@ -37,7 +37,10 @@ class _GtiRidesState extends State<GtiRides> {
   @override
   Widget build(BuildContext context) {
     final MediaQueryData selectedSize = getScreenSize(context);
-    precacheImage(AssetImage(ImageAssets.onboarding01), context);
+    precacheImage(const AssetImage(ImageAssets.onboarding01), context);
+    precacheImage(const AssetImage(ImageAssets.onboarding02), context);
+    precacheImage(const AssetImage(ImageAssets.onboarding03), context);
+    
     return ScreenUtilInit(
         designSize: selectedSize.size,
         builder: (

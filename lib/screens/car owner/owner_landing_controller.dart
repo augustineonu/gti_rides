@@ -1,12 +1,12 @@
 import 'package:get/get.dart';
 import 'package:gti_rides/services/logger.dart';
 
-class RenterLandingController extends GetxController {
+class OwnerLandingPageController extends GetxController {
   Logger logger = Logger('OnboardingController');
 
   RxBool isDone = false.obs;
 
-  RenterLandingController() {
+  OwnerLandingPageController() {
     logger.log('Controller initialized');
   }
   var tabIndex = 0.obs;

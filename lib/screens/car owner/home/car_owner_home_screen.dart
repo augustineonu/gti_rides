@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/screens/car%20owner/home/car_owner_home_controller.dart';
 import 'package:gti_rides/screens/car%20renter/home/car_renter_home_controller.dart';
 import 'package:gti_rides/screens/car%20renter/home/paint.dart';
 import 'package:gti_rides/screens/car%20renter/widgets/build_carousel_dot.dart';
@@ -15,24 +16,24 @@ import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
 import 'package:iconsax/iconsax.dart';
 
-class CarRenterBinding extends Bindings {
+class CarOwnerBinding extends Bindings {
   @override
   void dependencies() {
     // TODO: implement dependencies
-    Get.put<CarRenterHomeController>(CarRenterHomeController());
+    Get.put<CarOwnerHomeController>(CarOwnerHomeController());
   }
 }
 
-class CarRenterHomeScreen extends StatefulWidget {
-  const CarRenterHomeScreen({
+class CarOwnerHomeScreen extends StatefulWidget {
+  const CarOwnerHomeScreen({
     super.key,
   });
 
   @override
-  State<CarRenterHomeScreen> createState() => _CarRenterHomeScreenState();
+  State<CarOwnerHomeScreen> createState() => _CarRenterHomeScreenState();
 }
 
-class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
+class _CarRenterHomeScreenState extends State<CarOwnerHomeScreen> {
   late Timer timer;
   RxInt currentIndex = 0.obs;
 
@@ -70,13 +71,12 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final height = MediaQuery.of(context).size.height;
-    final ctrl = Get.put<CarRenterHomeController>(CarRenterHomeController());
+    final ctrl = Get.put<CarOwnerHomeController>(CarOwnerHomeController());
     return Obx(
       () => Scaffold(
         body: SafeArea(
           child: Column(
             children: [
-              // appBar(size, controller: ctrl),
               appBar(size, ctrl),
               body(ctrl),
             ],
@@ -86,36 +86,7 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
     );
   }
 
-  Widget appBar(Size size, CarRenterHomeController ctrl) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16, top: 10, bottom: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          profileAvatar(
-            height: 40,
-            width: 40,
-            imgUrl:
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ88joJfjwoaz_jWaMQhbZn2X11VHGBzWKiQg&usqp=CAU',
-          ),
-          switchProfileWidget(
-              size: size,
-              title: AppStrings.carRenter,
-              imageUrl: ImageAssets.renter,
-              onTapCarOwner: ctrl.routeToCarOwnerLanding),
-          Padding(
-            padding: const EdgeInsets.only(right: 20),
-            child: Icon(
-              Iconsax.notification4,
-              size: 24.sp,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget body(CarRenterHomeController ctrl) {
+  Widget body(CarOwnerHomeController ctrl) {
     return Expanded(
       child: SingleChildScrollView(
         controller: scrollController,
@@ -123,8 +94,14 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
         child: Column(
           // mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            headerText(),
-            discoverCity(onTap: () => ctrl.routeToSearchCity()),
+            // headerText(),
+            Container(
+              decoration: BoxDecoration(
+                  color: primaryColorLight,
+                  borderRadius: BorderRadius.all(Radius.circular(4.r)),
+                  image: DecorationImage(
+                      image: AssetImage(ImageAssets.carListingBg))),
+              ),
             howGtiWorksCard(onTap: () {}),
             textWidget(
               text: AppStrings.recentViewCar,
@@ -262,56 +239,6 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
     );
   }
 
-  Widget discoverCity({void Function()? onTap}) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 15.sp),
-      child: Stack(children: [
-        ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(4.r)),
-            child: Image.asset(
-              ImageAssets.ladyHandout,
-              fit: BoxFit.cover,
-              height: 260.sp,
-            )),
-        Positioned(
-          bottom: 30.sp,
-          left: 15,
-          right: 15,
-          child: Container(
-            height: 130.sp,
-            padding: EdgeInsets.all(20.sp),
-            decoration: BoxDecoration(
-                color: primaryColorDark.withOpacity(0.6),
-                image: const DecorationImage(
-                  image: AssetImage("assets/images/splash_bg.png"),
-                ),
-                borderRadius: BorderRadius.all(Radius.circular(4.r))),
-            child: Column(
-              children: [
-                textWidget(
-                    text: "Discover your perfect Ride.",
-                    style: getBoldStyle(fontSize: 18.sp, color: white).copyWith(
-                        fontWeight: FontWeight.w900, fontFamily: 'neue')),
-                textWidget(
-                    text: "Feel free to search for car in your location",
-                    style:
-                        getLightStyle(fontSize: 12.sp, color: white).copyWith(
-                      fontWeight: FontWeight.w400,
-                    )),
-                SizedBox(
-                  height: 10.sp,
-                ),
-                GestureDetector(
-                    onTap: onTap,
-                    child: SvgPicture.asset('assets/svg/search_field.svg')),
-              ],
-            ),
-          ),
-        ),
-      ]),
-    );
-  }
-
   Widget headerText() {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -331,7 +258,7 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
   }
 }
 
-Widget appBar(Size? size, {required CarRenterHomeController controller}) {
+Widget appBar(Size size, CarOwnerHomeController ctrl) {
   return Padding(
     padding: const EdgeInsets.only(left: 16, top: 10, bottom: 10),
     child: Row(
@@ -344,10 +271,10 @@ Widget appBar(Size? size, {required CarRenterHomeController controller}) {
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ88joJfjwoaz_jWaMQhbZn2X11VHGBzWKiQg&usqp=CAU',
         ),
         switchProfileWidget(
-            size: size!,
-            title: AppStrings.carRenter,
-            imageUrl: ImageAssets.renter,
-            onTapCarOwner: controller.routeToCarOwnerLanding),
+            size: size,
+            title: AppStrings.carOwner,
+            imageUrl: ImageAssets.owner,
+            onTapCarRenter: ctrl.routeToCarRenterLanding),
         Padding(
           padding: const EdgeInsets.only(right: 20),
           child: Icon(

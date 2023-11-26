@@ -17,8 +17,6 @@ class TripsController extends GetxController {
     logger.log("TripsController Initialized");
   }
 
-
-
   @override
   void onInit() {
     super.onInit();
@@ -28,6 +26,7 @@ class TripsController extends GetxController {
       (index) => RatingItem(rating: 'Rating ${index + 1}'),
     );
   }
+
   @override
   void onReady() {
     // TODO: implement onReady
@@ -54,19 +53,18 @@ class TripsController extends GetxController {
     AppStrings.maintenance,
     AppStrings.fifthPoint,
   ];
-  
-    List<int> selectedIndices = [];
-      List<RatingItem> ratings1 = List<RatingItem>.empty(growable: true);
+
+  List<int> selectedIndices = [];
+  List<RatingItem> ratings1 = List<RatingItem>.empty(growable: true);
 
   //  methods
   void goBack() => routeService.goBack();
-  void routeToPaymentSummary({required bool isComingFromTrips}) =>
-      routeService.gotoRoute(AppLinks.paymentSummary,
-      arguments: isComingFromTrips);
+  void routeToPaymentSummary({required bool isComingFromTrips}) => routeService
+      .gotoRoute(AppLinks.paymentSummary, arguments: isComingFromTrips);
   void routeToChooseTripDate() =>
       routeService.gotoRoute(AppLinks.chooseSingleDateTrip);
 
-  void routeToHome()=> routeService.offAllNamed(AppLinks.landingPage);
+  void routeToHome() => routeService.offAllNamed(AppLinks.carRenterLanding);
   void onPageChanged(int value) {
     currentIndex.value = value;
     pageController.animateToPage(
@@ -92,7 +90,6 @@ class TripsController extends GetxController {
     }
   }
 
-
   // void toggleSelection(int index) {
   //   if (selectedIndices.contains(index)) {
   //     selectedIndices.remove(index);
@@ -102,8 +99,7 @@ class TripsController extends GetxController {
   //   update();
   // }
 
-
-   void toggleSelection1(int index, RatingType selectedType) {
+  void toggleSelection1(int index, RatingType selectedType) {
     final RatingItem rating = ratings1[index];
 
     if (rating.selectedType == selectedType) {

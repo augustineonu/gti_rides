@@ -7,8 +7,8 @@ import 'package:gti_rides/services/logger.dart';
 
 import '../../../services/route_service.dart';
 
-class CarRenterHomeController extends GetxController {
-  Logger logger = Logger('LoginController');
+class CarOwnerHomeController extends GetxController {
+  Logger logger = Logger('CarOwnerHomeController');
   late Timer timer;
   RxInt currentIndex = 0.obs;
 
@@ -21,7 +21,7 @@ class CarRenterHomeController extends GetxController {
   TextEditingController emailOrPhoneController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  CarRenterHomeController() {
+  CarOwnerHomeController() {
     init();
   }
 
@@ -60,8 +60,7 @@ class CarRenterHomeController extends GetxController {
   void routeToLandingPage() =>
       routeService.gotoRoute(AppLinks.carRenterLanding);
   void routeToSearchCity() => routeService.gotoRoute(AppLinks.searchCity);
-  void routeToCarOwnerLanding() =>
-      routeService.offAllNamed(AppLinks.carOwnerLanding);
+  void routeToCarRenterLanding() => routeService.gotoRoute(AppLinks.carRenterLanding);
 
   @override
   void dispose() {

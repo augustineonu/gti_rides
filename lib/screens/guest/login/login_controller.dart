@@ -34,7 +34,8 @@ class LoginController extends GetxController
 
   // navigation method
   void routeToSignUp() => routeService.gotoRoute(AppLinks.signUp);
-  void routeToLandingPage() => routeService.gotoRoute(AppLinks.landingPage);
+  void routeToLandingPage() =>
+      routeService.gotoRoute(AppLinks.carRenterLanding);
 
   @override
   void dispose() {

@@ -29,7 +29,7 @@ class AppLinks {
   static const orderDetails = "/orders/waitingOrders/orderDetails";
   static const performance = "/performance";
   static const settings = "/settings";
-  static const landingPage = "/landingPage";
+  static const carRenterLanding = "/renterLandingPage";
   static const searchCity = "/searchCity";
   static const chooseTripDate = "/chooseTripDate";
   static const searchResult = "/searchResult";
@@ -63,6 +63,7 @@ class AppLinks {
   static const occupation = "/renter/more/identityVerification/occupation";
   static const gender = "/renter/more/identityVerification/gender";
   static const referral = "/renter/more/referral";
+  static const carOwnerLanding = "/ownerLanding";
 
   // static const chatAction = "/user/chat/:key/:action";
 
@@ -82,7 +83,7 @@ class AppLinks {
     "completedOrders": completedOrders,
     "orderDetails": orderDetails,
     "settings": settings,
-    "landingPage": landingPage,
+    "renterLandingPage": carRenterLanding,
     'searchCity': searchCity,
     'chooseTripDate': chooseTripDate,
     'searchResult': searchResult,
@@ -108,6 +109,7 @@ class AppLinks {
     'occupation': occupation,
     'gender': gender,
     'referral': referral,
+    'carOwnerLanding': carOwnerLanding,
     // 'trips': trips,
   };
 

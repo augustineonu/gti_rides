@@ -1,6 +1,7 @@
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:gti_rides/route/app_links.dart';
+import 'package:gti_rides/screens/car%20owner/owner_landing_page.dart';
 import 'package:gti_rides/screens/car%20renter/home/choose_trip_date/choose_trip_date_screen.dart';
 import 'package:gti_rides/screens/car%20renter/home/search_city/search_city_screen.dart';
 import 'package:gti_rides/screens/car%20renter/home/search_result/car_selection_result/car_selection_result_screen.dart';
@@ -77,8 +78,8 @@ class AppRoutes {
       binding: ResetPasswordBinding(),
     ),
     GetPage(
-      name: AppLinks.landingPage,
-      page: () => const LandingPage(),
+      name: AppLinks.carRenterLanding,
+      page: () => const RenterLandingPage(),
       // binding: ResetPasswordBinding(),
     ),
     GetPage(
@@ -208,6 +209,14 @@ class AppRoutes {
     GetPage(
       name: AppLinks.referral,
       page: () => const ReferralCodeScreen(),
+    ),
+    GetPage(
+      name: AppLinks.carOwnerLanding,
+      page: () => const OwnerLandingPage(),
+    ),
+    GetPage(
+      name: AppLinks.carRenterLanding,
+      page: () => const RenterLandingPage(),
     ),
   ];
 }

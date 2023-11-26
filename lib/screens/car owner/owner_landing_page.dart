@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/screens/car%20owner/home/car_owner_home_screen.dart';
+import 'package:gti_rides/screens/car%20owner/owner_landing_controller.dart';
 import 'package:gti_rides/screens/car%20renter/home/car_renter_home_screen.dart';
 import 'package:gti_rides/screens/car%20renter/inbox/inbox_screen.dart';
 import 'package:gti_rides/screens/car%20renter/landing_controller.dart';
@@ -11,20 +13,20 @@ import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
 
-class RenterLandingPage extends StatelessWidget {
-  const RenterLandingPage({super.key});
+class OwnerLandingPage extends StatelessWidget {
+  const OwnerLandingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final RenterLandingController controller =
-        Get.put(RenterLandingController(), permanent: false);
+    final OwnerLandingPageController controller =
+        Get.put(OwnerLandingPageController(), permanent: false);
     return Scaffold(
       bottomNavigationBar:
           Obx(() => bottomNavBar(context, controller)),
       body: Obx(() => IndexedStack(
             index: controller.tabIndex.value,
             children: const [
-              CarRenterHomeScreen(),
+              CarOwnerHomeScreen(),
               TripsScreen(),
               InboxScreen(),
               MoreScreen(),
@@ -34,14 +36,14 @@ class RenterLandingPage extends StatelessWidget {
   }
 
   Widget bottomNavBar(
-      BuildContext context, RenterLandingController controller) {
+      BuildContext context, OwnerLandingPageController landingPageController) {
     return MediaQuery(
         data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
         child: BottomNavigationBar(
           showUnselectedLabels: true,
           showSelectedLabels: true,
-          onTap: controller.changeTabIndex,
-          currentIndex: controller.tabIndex.value,
+          onTap: landingPageController.changeTabIndex,
+          currentIndex: landingPageController.tabIndex.value,
           backgroundColor: white,
           unselectedItemColor: black,
           selectedItemColor: primaryColor,
@@ -56,7 +58,7 @@ class RenterLandingPage extends StatelessWidget {
                 child: SvgPicture.asset(
                   ImageAssets.search,
                   height: 18.sp,
-                  color: controller.tabIndex.value == 0
+                  color: landingPageController.tabIndex.value == 0
                       ? primaryColor
                       : black,
                 ),
@@ -70,7 +72,7 @@ class RenterLandingPage extends StatelessWidget {
                 child: SvgPicture.asset(
                   ImageAssets.trip,
                   height: 18.sp,
-                  color: controller.tabIndex.value == 1
+                  color: landingPageController.tabIndex.value == 1
                       ? primaryColor
                       : black,
                 ),
@@ -84,7 +86,7 @@ class RenterLandingPage extends StatelessWidget {
                 child: SvgPicture.asset(
                   ImageAssets.inbox,
                   height: 18.sp,
-                  color: controller.tabIndex.value == 2
+                  color: landingPageController.tabIndex.value == 2
                       ? primaryColor
                       : black,
                 ),
@@ -98,7 +100,7 @@ class RenterLandingPage extends StatelessWidget {
                 child: SvgPicture.asset(
                   ImageAssets.more,
                   height: 18.sp,
-                  color: controller.tabIndex.value == 3
+                  color: landingPageController.tabIndex.value == 3
                       ? primaryColor
                       : black,
                 ),

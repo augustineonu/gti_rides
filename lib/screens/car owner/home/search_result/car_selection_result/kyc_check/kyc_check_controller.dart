@@ -4,15 +4,15 @@ import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
 
-class PaymentSummaryController extends GetxController {
+class KycCheckController extends GetxController {
   Logger logger = Logger("Controller");
 
-  PaymentSummaryController() {
+  KycCheckController() {
     init();
   }
 
   void init() {
-    logger.log("PaymentSummaryController Initialized");
+    logger.log("KycCheckController Initialized");
   }
 
   @override
@@ -22,18 +22,15 @@ class PaymentSummaryController extends GetxController {
     super.onInit();
   }
 
+  RxBool isLoading = false.obs;
   final animationValue = 0.0.obs;
   RxInt currentIndex = 0.obs;
-  RxBool isLoading = false.obs;
-  RxBool isComingFromTrips = false.obs;
   PageController pageController = PageController();
 
   Rx<String> testString = 'hello world'.obs;
 
-  var args = Get.arguments;
-
   void goBack() => routeService.goBack();
-  void routeToHome() => routeService.gotoRoute(AppLinks.carRenterLanding);
+  void routeToUpdateKyc() => routeService.gotoRoute(AppLinks.updateKyc);
 
   void onPageChanged(int value) {
     currentIndex.value = value;
