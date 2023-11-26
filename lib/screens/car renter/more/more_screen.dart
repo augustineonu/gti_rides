@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/screens/car%20renter/home/paint.dart';
 import 'package:gti_rides/screens/car%20renter/more/more_controller.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
@@ -35,38 +36,7 @@ class MoreScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    InkWell(
-                      onTap: controller.routeToProfile,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          textWidget(
-                              text: 'Tade Williams',
-                              textOverflow: TextOverflow.visible,
-                              style: getMediumStyle(fontSize: 18.sp)
-                                  .copyWith(fontWeight: FontWeight.w500)),
-                          textWidget(
-                              text: AppStrings.editProfile,
-                              textOverflow: TextOverflow.visible,
-                              style: getMediumStyle(color: primaryColor)
-                                  .copyWith(fontWeight: FontWeight.w500)),
-                        ],
-                      ),
-                    ),
-                    imageAvatar(
-                        imgUrl:
-                            "https://img.freepik.com/premium-vector/avatar-profile-icon_188544-4755.jpg",
-                        height: 34.sp,
-                        width: 34.sp),
-                  ],
-                ),
-              ),
+              appBar(controller),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
@@ -74,7 +44,7 @@ class MoreScreen extends StatelessWidget {
                     children: <Widget>[
                       rentVehicleCard(onTap: () {}, height: height),
                       SizedBox(
-                        height: 30.sp,
+                        height: 10.sp,
                       ),
                       ListView.builder(
                         shrinkWrap: true,
@@ -139,6 +109,41 @@ class MoreScreen extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget appBar(MoreController controller) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          InkWell(
+            onTap: controller.routeToProfile,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                textWidget(
+                    text: 'Tade Williams',
+                    textOverflow: TextOverflow.visible,
+                    style: getMediumStyle(fontSize: 18.sp)
+                        .copyWith(fontWeight: FontWeight.w500)),
+                textWidget(
+                    text: AppStrings.editProfile,
+                    textOverflow: TextOverflow.visible,
+                    style: getMediumStyle(color: primaryColor)
+                        .copyWith(fontWeight: FontWeight.w500)),
+              ],
+            ),
+          ),
+          profileAvatar(
+            height: 40,
+            width: 40,
+            imgUrl:
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ88joJfjwoaz_jWaMQhbZn2X11VHGBzWKiQg&usqp=CAU',
+          ),
+        ],
       ),
     );
   }

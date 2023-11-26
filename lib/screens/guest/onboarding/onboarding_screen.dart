@@ -29,7 +29,8 @@ class OnboardingScreen extends GetView<OnboardingController> {
       body: Obx(
         () => Column(
           children: [
-            SizedBox(
+            AnimatedContainer(
+              duration: Duration(milliseconds: 1000),
               height: height * 0.75.sp,
               child: PageView.builder(
                   controller: controller.controller,

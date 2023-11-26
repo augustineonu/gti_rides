@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/car%20renter/home/car_renter_home_controller.dart';
+import 'package:gti_rides/screens/car%20renter/home/paint.dart';
 import 'package:gti_rides/screens/car%20renter/widgets/build_carousel_dot.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
@@ -71,90 +72,90 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
     final ctrl = Get.put<CarRenterHomeController>(CarRenterHomeController());
     return Obx(
       () => Scaffold(
-        appBar: appBar(),
-        body: SingleChildScrollView(
-          controller: scrollController,
-          padding: EdgeInsets.symmetric(vertical: 10.sp, horizontal: 16.sp),
+        body: SafeArea(
           child: Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(
-                height: 50,
-                width: 50,
-                child: imageAvatar(
-                          imgUrl:
-                  "https://img.freepik.com/premium-vector/avatar-profile-icon_188544-4755.jpg",
-                          height: 34.sp,
-                          width: 34.sp),
-              ),
+            children: [
+              appBar(),
+              body(ctrl),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
-             
-
-              headerText(),
-              discoverCity(onTap: () => ctrl.routeToSearchCity()),
-              howGtiWorksCard(onTap: () {}),
-              textWidget(
-                text: AppStrings.recentViewCar,
-                style: getRegularStyle(),
-              ),
-              // ClipRRect(
-              //   borderRadius: BorderRadius.all(Radius.circular(4.r)),
-              //   child: Image.asset("assets/images/car.png"),
-              // ),
-              SizedBox(
-                height: 150.sp,
-                child: Stack(
-                  children: [
-                    PageView(
-                      physics: ScrollPhysics(),
-                      controller: cardPageController,
-                      onPageChanged: (int index) {
-                        currentIndex.value = index;
-                      },
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(4.r)),
-                          child: Image.asset(
-                            "assets/images/car.png",
-                            fit: BoxFit.contain,
-                          ),
+  Widget body(CarRenterHomeController ctrl) {
+    return Expanded(
+      child: SingleChildScrollView(
+        controller: scrollController,
+        padding: EdgeInsets.symmetric(vertical: 10.sp, horizontal: 16.sp),
+        child: Column(
+          // mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            headerText(),
+            discoverCity(onTap: () => ctrl.routeToSearchCity()),
+            howGtiWorksCard(onTap: () {}),
+            textWidget(
+              text: AppStrings.recentViewCar,
+              style: getRegularStyle(),
+            ),
+            // ClipRRect(
+            //   borderRadius: BorderRadius.all(Radius.circular(4.r)),
+            //   child: Image.asset("assets/images/car.png"),
+            // ),
+            SizedBox(
+              height: 150.sp,
+              child: Stack(
+                children: [
+                  PageView(
+                    physics: ScrollPhysics(),
+                    controller: cardPageController,
+                    onPageChanged: (int index) {
+                      currentIndex.value = index;
+                    },
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(4.r)),
+                        child: Image.asset(
+                          "assets/images/car.png",
+                          fit: BoxFit.contain,
                         ),
-                        ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(4.r)),
-                          child: Image.asset("assets/images/car.png"),
-                        ),
-                        ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(4.r)),
-                          child: Image.asset("assets/images/car.png"),
-                        ),
-                      ],
-                    ),
-                    Positioned(
-                      bottom: 3,
-                      right: 0,
-                      left: 0,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: List.generate(
-                          3,
-                          (index) => BuildCarouselDot(
-                            currentIndex: currentIndex.value,
-                            index: index,
-                          ),
+                      ),
+                      ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(4.r)),
+                        child: Image.asset("assets/images/car.png"),
+                      ),
+                      ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(4.r)),
+                        child: Image.asset("assets/images/car.png"),
+                      ),
+                    ],
+                  ),
+                  Positioned(
+                    bottom: 3,
+                    right: 0,
+                    left: 0,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: List.generate(
+                        3,
+                        (index) => BuildCarouselDot(
+                          currentIndex: currentIndex.value,
+                          index: index,
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
+            ),
 
-              Text(
-                ctrl.exampleText.value,
-              ),
-            ],
-          ),
+            Text(
+              ctrl.exampleText.value,
+            ),
+          ],
         ),
       ),
     );
@@ -299,57 +300,61 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
   }
 }
 
-AppBar appBar() {
-  return gtiAppBar(
-      leading: Padding(
-        padding: const EdgeInsets.only(left: 16),
-        child: imageAvatar(
-            imgUrl:
-                "https://img.freepik.com/premium-vector/avatar-profile-icon_188544-4755.jpg",
-            height: 34.sp,
-            width: 34.sp),
-      ),
-      title: Container(
-        // width: 138.sp,
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
-        decoration: BoxDecoration(
-          color: primaryColorLight,
-          borderRadius: BorderRadius.all(
-            Radius.circular(4.r),
+Widget appBar() {
+  return Padding(
+    padding: const EdgeInsets.only(left: 16, top: 10, bottom: 10),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        profileAvatar(
+          height: 40,
+          width: 40,
+          imgUrl:
+              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ88joJfjwoaz_jWaMQhbZn2X11VHGBzWKiQg&usqp=CAU',
+        ),
+        Container(
+          // width: 138.sp,
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
+          decoration: BoxDecoration(
+            color: primaryColorVeryLight,
+            borderRadius: BorderRadius.all(
+              Radius.circular(4.r),
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Image.asset("assets/images/key.png"),
+              SizedBox(
+                width: 4.w,
+              ),
+              textWidget(
+                  text: AppStrings.carRenter,
+                  style:
+                      getMediumStyle().copyWith(fontWeight: FontWeight.w500)),
+              SizedBox(
+                width: 8.w,
+              ),
+              CircleAvatar(
+                radius: 15.r,
+                backgroundColor: primaryColor,
+                child: SvgPicture.asset(
+                  ImageAssets.arrowDown,
+                  height: 11.sp,
+                ),
+              ),
+            ],
           ),
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Image.asset("assets/images/key.png"),
-            SizedBox(
-              width: 4.w,
-            ),
-            textWidget(
-                text: AppStrings.carRenter,
-                style: getMediumStyle().copyWith(fontWeight: FontWeight.w500)),
-            SizedBox(
-              width: 8.w,
-            ),
-            CircleAvatar(
-              radius: 15.r,
-              backgroundColor: primaryColor,
-              child: SvgPicture.asset(
-                ImageAssets.arrowDown,
-                height: 11.sp,
-              ),
-            )
-          ],
-        ),
-      ),
-      actions: [
         Padding(
           padding: const EdgeInsets.only(right: 20),
           child: Icon(
             Iconsax.notification4,
             size: 24.sp,
           ),
-        )
-      ]);
+        ),
+      ],
+    ),
+  );
 }

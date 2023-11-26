@@ -7,6 +7,7 @@ import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/text_input_widgets/normal_text_input_widget.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
+import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
 import 'package:image_picker/image_picker.dart';
@@ -45,7 +46,7 @@ class ProfileScreen extends GetView<ProfileController> {
     );
   }
 
-  Widget body(size, context) {
+  Widget body(Size size, context) {
     return SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 20.0.sp, vertical: 24.sp),
         child: Column(
@@ -59,117 +60,39 @@ class ProfileScreen extends GetView<ProfileController> {
                 text: AppStrings.findYourDetails, style: getRegularStyle()),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
-              child: InkWell(
-                onTap: () {
-                  print("Press");
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: SizedBox(
+                height: 78.sp,
+                child: Stack(
                   children: [
-                    textWidget(
-                        text: AppStrings.displayPicture,
-                        style: getRegularStyle()),
-                    InkWell(
-                      onTap: () {
-                        Get.bottomSheet(
-                            Container(
-                              padding: EdgeInsets.only(top: 20, bottom: 70),
-                              width: size.width,
-                              height: 220.sp,
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  ClipRRect(
-                                    child: Image.asset(
-                                        'assets/images/default_profile_image.png'),
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      Get.bottomSheet(
-                                        Container(
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 10, horizontal: 15),
-                                         
-                                          height: 150,
-                                          width: size.width,
-                                          child: Column(
-                                            children: [
-                                              textWidget(
-                                                  text: AppStrings.selectOption,
-                                                  style: getMediumStyle()),
-                                              SizedBox(
-                                                height: 20,
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Expanded(
-                                                    child: GtiButton(
-                                                      width: 120.sp,
-                                                      text: AppStrings.camera,
-                                                      onTap:  ()=> controller.openCamera(),
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Expanded(
-                                                    child: GtiButton(
-                                                      width: 120.sp,
-                                                      text: AppStrings.gallery,
-                                                      onTap: () {},
-                                                    ),
-                                                  ),
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        backgroundColor: white,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(0.r),
-                                                topRight:
-                                                    Radius.circular(0.r))),
-                                      );
-                                    },
-                                    child: textWidget(
-                                        text: AppStrings.tapToChange,
-                                        style: getBoldStyle(
-                                            fontSize: 16.sp,
-                                            color: primaryColor)),
-                                  )
-                                ],
-                              ),
-                            ),
-                            backgroundColor: white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(0.r),
-                                  topRight: Radius.circular(0.r)),
-                            ));
-                      },
-                      child: Stack(
-                        children: [
-                          Positioned(
-                              right: 0,
-                              bottom: 0,
-                              child: SvgPicture.asset(
-                                'assets/svg/camera_plus.svg',
-                                width: 21.sp,
-                                height: 21.sp,
-                              )),
-                          Transform.scale(
-                            scale: 1.5,
-                            child: imageAvatar(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        textWidget(
+                            text: AppStrings.displayPicture,
+                            style: getRegularStyle()),
+                        InkWell(
+                          onTap: () {
+                            changeImageSheet(size);
+                          },
+                          child: Stack(
+                            children: [
+                              profileAvatar(
                                 imgUrl:
                                     "https://img.freepik.com/premium-vector/avatar-profile-icon_188544-4755.jpg",
-                                height: 38.sp,
-                                width: 34.sp),
+                                height: 65.sp,
+                                width: 65.sp,
+                                boxHeight: 65.sp,
+                                boxWidth: 65.sp,
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
+                    Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: SvgPicture.asset(ImageAssets.camera)),
                   ],
                 ),
               ),
@@ -195,6 +118,83 @@ class ProfileScreen extends GetView<ProfileController> {
             saveButton(),
           ],
         ));
+  }
+
+  Future<dynamic> changeImageSheet(Size size) {
+    return Get.bottomSheet(
+        Container(
+          padding: const EdgeInsets.only(top: 20, bottom: 70),
+          width: size.width,
+          height: 220.sp,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              imageWidget(
+                imgUrl:
+                    "https://img.freepik.com/premium-vector/avatar-profile-icon_188544-4755.jpg",
+                height: 65.sp,
+                width: 65.sp,
+            
+              ),
+              InkWell(
+                onTap: () {
+                  selectOptionSheet(size);
+                },
+                child: textWidget(
+                    text: AppStrings.tapToChange,
+                    style: getBoldStyle(fontSize: 16.sp, color: primaryColor)),
+              )
+            ],
+          ),
+        ),
+        backgroundColor: white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(0.r), topRight: Radius.circular(0.r)),
+        ));
+  }
+
+  Future<dynamic> selectOptionSheet(Size size) {
+    return Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+        height: 150,
+        width: size.width,
+        child: Column(
+          children: [
+            textWidget(text: AppStrings.selectOption, style: getMediumStyle()),
+            const SizedBox(
+              height: 20,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: GtiButton(
+                    width: 120.sp,
+                    text: AppStrings.camera,
+                    onTap: () => controller.openCamera(),
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: GtiButton(
+                    width: 120.sp,
+                    text: AppStrings.gallery,
+                    onTap: () {},
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+      backgroundColor: white,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(0.r), topRight: Radius.circular(0.r))),
+    );
   }
 
   Widget saveButton() {

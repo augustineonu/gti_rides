@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 const primaryColor = Color(0xffECAE00);
 const primaryColorLight = Color(0xffFFD970);
+const primaryColorVeryLight = Color(0xffF9d7a3);
 const primaryColorLight1 = Color(0xffFFF7E2);
 const primaryColorLight2 = Color(0xfffdf7e2);
 const primaryColorDark = Color(0xff1A1300);

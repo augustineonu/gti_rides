@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:gti_rides/screens/car%20renter/home/paint.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
@@ -155,8 +156,10 @@ Widget imageAvatar({
             height: 38,
             width: 34,
             child: ClipRRect(
-                borderRadius: BorderRadius.circular(30),
-                child: Image.asset('assets/images/default_profile_image.png')),
+              borderRadius: BorderRadius.circular(30),
+              child: Image.asset('assets/images/default_profile_image.png',
+                  height: 34.sp, width: 34.sp),
+            ),
           ),
           errorWidget: (context, url, error) => ClipRRect(
               borderRadius: BorderRadius.circular(30),
@@ -168,42 +171,55 @@ Widget imageAvatar({
   );
 }
 
-Widget imageAvatar1({
+Widget profileAvatar({
   required String imgUrl,
   double? height,
   double? width,
+  double? boxHeight,
+  double? boxWidth,
 }) {
-  return Container(
-    decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(topRight: Radius.circular(40)),
-        border: Border.all(
-            width: 3, color: Colors.green, style: BorderStyle.solid)),
-    child: CachedNetworkImage(
-      imageUrl: imgUrl,
-      imageBuilder: (context, imageProvider) => Container(
-        width: width ?? 198.0.w,
-        height: height ?? 200.0.h,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
-        ),
-      ),
-      placeholder: (context, url) => const SizedBox(
-        height: 100,
-        width: 104,
-        child: Center(
-          child: CircularProgressIndicator(
-            color: Colors.blue,
-          ),
-        ),
-      ),
-      errorWidget: (context, url, error) => Image.asset(
-        ImageAssets.userIcon,
-        height: 34.sp,
-        width: 34.sp,
-      ),
-    ),
-  );
+  return SizedBox(
+      height: boxHeight ?? 40,
+      width: boxWidth  ?? 40,
+      child: Builder(builder: (context) {
+        return Stack(
+          children: [
+            Positioned.fill(
+              child: CustomPaint(
+                painter: PercentagePainter(),
+              ),
+            ),
+            Align(
+                alignment: Alignment.center,
+                child: CachedNetworkImage(
+                  imageUrl: imgUrl,
+                  imageBuilder: (context, imageProvider) => Container(
+                    width: width ?? 198.0.w,
+                    height: height ?? 200.0.h,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                          image: imageProvider, fit: BoxFit.cover),
+                    ),
+                  ),
+                  placeholder: (context, url) => const SizedBox(
+                    height: 30,
+                    width: 30,
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => Image.asset(
+                    ImageAssets.userIcon,
+                    height: 34.sp,
+                    width: 34.sp,
+                  ),
+                )),
+          ],
+        );
+      }));
 }
 
 Widget imageWidget({
@@ -214,16 +230,16 @@ Widget imageWidget({
   return CachedNetworkImage(
     imageUrl: imgUrl,
     imageBuilder: (context, imageProvider) => Container(
-      width: width ?? 198.0.w,
-      height: height ?? 200.0.h,
+      width: width ?? 34.0.w,
+      height: height ?? 34.0.h,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
       ),
     ),
     placeholder: (context, url) => const SizedBox(
-      height: 100,
-      width: 104,
+      height: 30,
+      width: 30,
       child: Center(
         child: CircularProgressIndicator(
           color: Colors.blue,
