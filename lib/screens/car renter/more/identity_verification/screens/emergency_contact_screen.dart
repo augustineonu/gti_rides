@@ -16,6 +16,7 @@ class EmergencyContactScreen extends GetView<IdentityVerificationController> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    // final controller = Get.put(AccountVerificationController());
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: appBar(),

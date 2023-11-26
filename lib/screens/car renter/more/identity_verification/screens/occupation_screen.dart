@@ -50,12 +50,7 @@ class OccupationScreen extends GetView<IdentityVerificationController> {
                 controller: controller.homeAddressController,
               ),
               const SizedBox(height: 32),
-              imageUploadWidget(
-                title: AppStrings.uploadProofOfIdentity,
-                body: AppStrings.pleaseMakeSurePicIsClear,
-                onTap: () {},
-              ),
-              const SizedBox(height: 55),
+          
               saveButton(),
             ],
           )),
@@ -66,7 +61,7 @@ class OccupationScreen extends GetView<IdentityVerificationController> {
     return controller.isLoading.isTrue
         ? centerLoadingIcon()
         : GtiButton(
-            height: 50.sp,
+            height: 40.sp,
             width: 370,
             text: AppStrings.save,
             // color: secondaryColor,

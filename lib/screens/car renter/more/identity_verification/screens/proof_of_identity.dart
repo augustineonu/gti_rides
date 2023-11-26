@@ -50,7 +50,7 @@ class ProofOfIdentityScreen extends GetView<IdentityVerificationController> {
                         text: AppStrings.selectDocument,
                         textOverflow: TextOverflow.visible,
                         style: getBoldStyle()),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     textWidget(
@@ -60,7 +60,7 @@ class ProofOfIdentityScreen extends GetView<IdentityVerificationController> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               textWidget(
@@ -86,7 +86,7 @@ class ProofOfIdentityScreen extends GetView<IdentityVerificationController> {
                       selectedIdType: controller.selectedIdType.value,
                       onTap: controller.onSelectIdType,
                       idType: IdType.driverLicense),
-                  SizedBox(
+                  const SizedBox(
                     width: 20,
                   ),
                 ],

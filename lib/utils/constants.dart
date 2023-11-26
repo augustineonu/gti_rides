@@ -320,4 +320,5 @@ class AppStrings {
   static String save  = 'Save';
   static String inputOccupation  = 'Input occupation';
   static String emergencyContact  = 'Emergency contact';
+  static String uploadDocumentToProveAddress  = 'Upload document to prove address';
 }

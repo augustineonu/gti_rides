@@ -48,6 +48,8 @@ class IdentityVerificationController extends GetxController {
       routeService.gotoRoute(AppLinks.officeAddress);
   void routeToOccupation() =>
       routeService.gotoRoute(AppLinks.occupation);
+  void routeToEmergencyContactn() =>
+      routeService.gotoRoute(AppLinks.emergencyContact);
 
       // void onSelectIdType() => selectedIdType.value = !selectedIdType.value;
 

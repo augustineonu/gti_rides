@@ -51,7 +51,7 @@ class HomeAddressScreen extends GetView<IdentityVerificationController> {
               ),
               const SizedBox(height: 32),
               imageUploadWidget(
-                title: AppStrings.uploadProofOfIdentity,
+                title: AppStrings.uploadDocumentToProveAddress,
                 body: AppStrings.pleaseMakeSurePicIsClear,
                 onTap: () {},
               ),
@@ -66,7 +66,7 @@ class HomeAddressScreen extends GetView<IdentityVerificationController> {
     return controller.isLoading.isTrue
         ? centerLoadingIcon()
         : GtiButton(
-            height: 50.sp,
+            height: 40.sp,
             width: 370,
             text: AppStrings.save,
             // color: secondaryColor,

@@ -79,7 +79,7 @@ class IdentityVerificationScreen
           identityVerificationWidget(
               title: AppStrings.emergencyContactDetails,
               subTitle: AppStrings.inputEmergencyDetails,
-              onTap: () {}),
+              onTap: controller.routeToEmergencyContactn),
           identityVerificationWidget(
               title: AppStrings.driversLicense,
               subTitle: AppStrings.provideDriversLicense,

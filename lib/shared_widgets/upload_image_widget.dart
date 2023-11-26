@@ -21,17 +21,23 @@ Widget imageUploadWidget({
         children: [
           GestureDetector(
             onTap: onTap,
-            child: Column(
-              children: [
-                textWidget(
-                    text: title, style: getRegularStyle(color: primaryColor)),
-                SizedBox(
-                  height: 4,
-                ),
-                textWidget(
-                    text: body,
-                    style: getRegularStyle(fontSize: 10.sp, color: grey2)),
-              ],
+            child: SizedBox(
+              width: 200.sp,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  textWidget(
+                      text: title,
+                      textOverflow: TextOverflow.visible,
+                       style: getRegularStyle(color: primaryColor)),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  textWidget(
+                      text: body,
+                      style: getRegularStyle(fontSize: 10.sp, color: grey2)),
+                ],
+              ),
             ),
           ),
           SvgPicture.asset(ImageAssets.imageCard)
