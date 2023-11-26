@@ -88,10 +88,7 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
                           width: 34.sp),
               ),
 
-              imageAvatar1(  imgUrl:
-                  "https://img.freepik.com/premium-vector/avatar-profile-icon_188544-4755.jpg",
-                          height: 34.sp,
-                          width: 34.sp),
+             
 
               headerText(),
               discoverCity(onTap: () => ctrl.routeToSearchCity()),

@@ -24,7 +24,7 @@ Widget dropdownWidget({
       child: DropdownButtonFormField(
         hint: Text(
           hintText!,
-          style: getRegularStyle(),
+          style: getRegularStyle(color: borderColor),
         ),
         value: selectedUserValue,
         selectedItemBuilder: (context) {
@@ -59,26 +59,26 @@ Widget dropdownWidget({
         onChanged: (String? value) => onChange(value),
         icon: Icon(
           Iconsax.arrow_down_1,
-          color: iconColor(),
+          color: borderColor,
         ),
         decoration: decoration ??
             InputDecoration(
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
-                  color: secondaryColor,
+                  color: borderColor,
                   width: 1.0.w,
                 ),
                 borderRadius: BorderRadius.all(
-                  Radius.circular(15.0.r),
+                  Radius.circular(4.0.r),
                 ),
               ),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(
-                  color: secondaryColor,
+                  color: borderColor,
                   width: 1.0.w,
                 ),
                 borderRadius: BorderRadius.all(
-                  Radius.circular(15.0.r),
+                  Radius.circular(4.0.r),
                 ),
               ),
               border: OutlineInputBorder(
@@ -87,7 +87,7 @@ Widget dropdownWidget({
                   width: 1.0.w,
                 ),
                 borderRadius: BorderRadius.all(
-                  Radius.circular(15.0.r),
+                  Radius.circular(4.0.r),
                 ),
               ),
 

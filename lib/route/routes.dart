@@ -21,10 +21,12 @@ import 'package:gti_rides/screens/car%20renter/more/account_details/account_veri
 import 'package:gti_rides/screens/car%20renter/more/favorite/favorite_screen.dart';
 import 'package:gti_rides/screens/car%20renter/more/identity_verification/identity_verification.dart';
 import 'package:gti_rides/screens/car%20renter/more/identity_verification/screens/emergency_contact_screen.dart';
+import 'package:gti_rides/screens/car%20renter/more/identity_verification/screens/gender_screen.dart';
 import 'package:gti_rides/screens/car%20renter/more/identity_verification/screens/home_address_screen.dart';
 import 'package:gti_rides/screens/car%20renter/more/identity_verification/screens/occupation_screen.dart';
 import 'package:gti_rides/screens/car%20renter/more/identity_verification/screens/office_address_screen.dart';
 import 'package:gti_rides/screens/car%20renter/more/identity_verification/screens/proof_of_identity.dart';
+import 'package:gti_rides/screens/car%20renter/more/identity_verification/screens/referral_code_screen.dart';
 import 'package:gti_rides/screens/car%20renter/more/more_screen.dart';
 import 'package:gti_rides/screens/car%20renter/more/profile/profile_screen.dart';
 import 'package:gti_rides/screens/car%20renter/trips/choose_single_trip_date/choose_single_trip_date_screen.dart';
@@ -198,6 +200,14 @@ class AppRoutes {
     GetPage(
       name: AppLinks.occupation,
       page: () => const OccupationScreen(),
+    ),
+    GetPage(
+      name: AppLinks.gender,
+      page: () => const GenderScreen(),
+    ),
+    GetPage(
+      name: AppLinks.referral,
+      page: () => const ReferralCodeScreen(),
     ),
   ];
 }

@@ -37,11 +37,11 @@ class InboxScreen extends StatelessWidget {
 
   Widget body(double width) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          faqWidget(width)
+          faqWidget(width),
         ],
       ),
     );
@@ -49,61 +49,62 @@ class InboxScreen extends StatelessWidget {
 
   Widget faqWidget(double width) {
     return Column(
-          children: [
-            Container(
-              width: width,
-              height: 2.sp,
-              decoration: BoxDecoration(
-                color: primaryColor,
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(2.r),
-                topRight: Radius.circular(2.r),)
+      children: [
+        Container(
+          width: width,
+          height: 2.sp,
+          decoration: BoxDecoration(
+              color: primaryColor,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(2.r),
+                topRight: Radius.circular(2.r),
+              )),
+        ),
+        Container(
+          width: width.sp,
+          decoration: BoxDecoration(
+              color: white,
+              borderRadius: BorderRadius.all(
+                Radius.circular(4.r),
               ),
-            ),
-            Container(
+              boxShadow: [
+                BoxShadow(
+                  color: black.withOpacity(0.1),
+                  offset: Offset(0.0, 5.0), //(x,y)
+                  blurRadius: 4.0,
+                ),
+              ]),
+          padding: EdgeInsets.all(18.sp),
+          child: InkWell(
+            onTap: () {},
+            child: Container(
               width: width.sp,
               decoration: BoxDecoration(
-                  color: white,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(4.r),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: black.withOpacity(0.1),
-                      offset: Offset(0.0, 5.0), //(x,y)
-                      blurRadius: 4.0,
-                    ),
-                  ]),
-              padding: EdgeInsets.all(18.sp),
-              child: InkWell(
-                onTap: () {},
-                child: Container(
-                  width: width.sp,
-                  decoration: BoxDecoration(
-                    color: primaryColorLight,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(4.r),
-                    ),
-                  ),
-                  padding: EdgeInsets.all(10.sp),
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(ImageAssets.chat),
-                      SizedBox(
-                        width: 4.sp,
-                      ),
-                      Expanded(
-                        child: textWidget(
-                            text: AppStrings.findAnswersToFAQ,
-                            textOverflow: TextOverflow.visible,
-                            style: getLightStyle(fontSize: 12.sp)),
-                      )
-                    ],
-                  ),
+                color: primaryColorLight,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(4.r),
                 ),
               ),
+              padding: EdgeInsets.all(10.sp),
+              child: Row(
+                children: [
+                  SvgPicture.asset(ImageAssets.chat),
+                  SizedBox(
+                    width: 4.sp,
+                  ),
+                  Expanded(
+                    child: textWidget(
+                        text: AppStrings.findAnswersToFAQ,
+                        textOverflow: TextOverflow.visible,
+                        style: getLightStyle(fontSize: 12.sp)),
+                  )
+                ],
+              ),
             ),
-          ],
-        );
+          ),
+        ),
+      ],
+    );
   }
 
   PreferredSize customAppBar(double width) {
@@ -116,11 +117,15 @@ class InboxScreen extends StatelessWidget {
             Container(
               width: width,
               padding: EdgeInsets.only(
-                  top: 10.sp, bottom: 20.sp, left: 20, right: 20),
+                  top: 0.sp, bottom: 20.sp, left: 20, right: 20),
               height: 210.h,
               decoration: const BoxDecoration(
-                color: darkBrown,
-              ),
+                  color: darkBrown,
+                  image: DecorationImage(
+                      image: AssetImage(
+                        ImageAssets.appBarBg1,
+                      ),
+                      fit: BoxFit.fitHeight)),
               child: SafeArea(
                 child: SizedBox(
                   width: 180.sp,
@@ -167,7 +172,7 @@ class InboxScreen extends StatelessWidget {
   Widget startConversation(double width) {
     return Positioned(
       // top: 180.sp,
-      bottom: 0.sp,
+      bottom: 10.sp,
       left: 20.sp,
       right: 20.sp,
       child: Column(children: [

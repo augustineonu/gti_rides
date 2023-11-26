@@ -3,9 +3,9 @@ import 'package:get/get.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
+import 'package:gti_rides/utils/constants.dart';
 
 enum IdType { nationalId, passport, driverLicense }
-
 
 class IdentityVerificationController extends GetxController {
   Logger logger = Logger("Controller");
@@ -24,9 +24,14 @@ class IdentityVerificationController extends GetxController {
 
     super.onInit();
   }
-  
+
   PageController pageController = PageController();
   TextEditingController homeAddressController = TextEditingController();
+  TextEditingController officeAddressController = TextEditingController();
+  TextEditingController occupationAddressController = TextEditingController();
+  TextEditingController emergencyContactController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController relationshipController = TextEditingController();
   final animationValue = 0.0.obs;
   RxInt currentIndex = 0.obs;
   RxBool isLoading = false.obs;
@@ -37,27 +42,31 @@ class IdentityVerificationController extends GetxController {
 
   Rx<String> testString = 'hello world'.obs;
 
+  // list
+  List<String> gender = [
+    AppStrings.male,
+    AppStrings.female,
+  ];
+
   void goBack() => routeService.goBack();
   void routeToPaymentSummary() =>
       routeService.gotoRoute(AppLinks.paymentSummary);
   void routeToProofOfIdentity() =>
       routeService.gotoRoute(AppLinks.proofOfIdentity);
-  void routeToHomeAddress() =>
-      routeService.gotoRoute(AppLinks.homeAddress);
-  void routeToOfficeAddress() =>
-      routeService.gotoRoute(AppLinks.officeAddress);
-  void routeToOccupation() =>
-      routeService.gotoRoute(AppLinks.occupation);
-  void routeToEmergencyContactn() =>
+  void routeToHomeAddress() => routeService.gotoRoute(AppLinks.homeAddress);
+  void routeToOfficeAddress() => routeService.gotoRoute(AppLinks.officeAddress);
+  void routeToOccupation() => routeService.gotoRoute(AppLinks.occupation);
+  void routeToEmergencyContact() =>
       routeService.gotoRoute(AppLinks.emergencyContact);
+  void routeToSelectGender() => routeService.gotoRoute(AppLinks.gender);
 
-      // void onSelectIdType() => selectedIdType.value = !selectedIdType.value;
+  // void onSelectIdType() => selectedIdType.value = !selectedIdType.value;
 
-      Rx<IdType> selectedIdType = IdType.nationalId.obs;
+  Rx<IdType> selectedIdType = IdType.nationalId.obs;
 
-void onSelectIdType(IdType idType) {
-  selectedIdType.value = idType;
-}
+  void onSelectIdType(IdType idType) {
+    selectedIdType.value = idType;
+  }
 
   void onPageChanged(int value) {
     currentIndex.value = value;

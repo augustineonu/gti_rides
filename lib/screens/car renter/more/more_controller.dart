@@ -21,6 +21,8 @@ class MoreController extends GetxController {
 
   late Timer timer;
   RxInt currentIndex = 0.obs;
+    RxBool isLoading = false.obs;
+
   late PageController cardPageController;
   ScrollController scrollController = ScrollController();
 
@@ -38,6 +40,7 @@ class MoreController extends GetxController {
       'image': ImageAssets.note1,
       'title': " ${AppStrings.identityVerification}"
     },
+    {'image': ImageAssets.toyCar, 'title': AppStrings.myDrivers},
     {'image': ImageAssets.headSet, 'title': "  ${AppStrings.reportAnIncident}"},
     {'image': ImageAssets.people, 'title': "  ${AppStrings.referrals}"},
     {'image': ImageAssets.key, 'title': "  ${AppStrings.howGtiWorks1}"},
@@ -49,6 +52,7 @@ class MoreController extends GetxController {
   // update();
 
   // navigation method
+    void goBack() => routeService.goBack();
   void routeToSignUp() => routeService.gotoRoute(AppLinks.signUp);
   void routeToLandingPage() => routeService.gotoRoute(AppLinks.landingPage);
   void routeToSearchCity() => routeService.gotoRoute(AppLinks.searchCity);
@@ -58,6 +62,7 @@ class MoreController extends GetxController {
       routeService.gotoRoute(AppLinks.accountDetails);
   void routeToIdentityVerification() =>
       routeService.gotoRoute(AppLinks.identityVerification);
+  void routeToReferralCode() => routeService.gotoRoute(AppLinks.referral);
 
   @override
   void dispose() {

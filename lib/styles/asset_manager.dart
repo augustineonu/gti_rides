@@ -65,6 +65,10 @@ class ImageAssets {
   static const String person = "$SVG_PATH/person1.svg";
   static const String pencil = "$SVG_PATH/pencil.svg";
   static const String imageCard = "$SVG_PATH/image_card.svg";
+  static const String toyCar = "$SVG_PATH/toy_car.svg";
+  static const String prize = "$SVG_PATH/prize.svg";
+  static const String copy = "$SVG_PATH/copy.svg";
+  static const String appBarBg = "$SVG_PATH/appbar_bg.svg";
   // PNG IMAGES
 
   static const String onboarding = "$IMAGE_PATH/onboarding_1.png";
@@ -72,4 +76,6 @@ class ImageAssets {
   static const String user = "$IMAGE_PATH/user.png";
   static const String ladyWorks = "$IMAGE_PATH/lady_works.png";
   static const String ladyHandout = "$IMAGE_PATH/unsplash.png";
+  static const String appBarBg1 = "$IMAGE_PATH/appbar_bg.png";
+
 }

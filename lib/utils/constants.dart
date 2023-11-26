@@ -87,7 +87,8 @@ class AppStrings {
   static String interState = "Inter state";
   static String intraState = "Intra state";
   static String goBeyondState = "Go beyond owner's current state";
-  static String goBeyondStateExtra = "Go beyond owner's current state (This cost extra charges)";
+  static String goBeyondStateExtra =
+      "Go beyond owner's current state (This cost extra charges)";
   static String cannotGoBeyondState = "Can not go beyond owner's state";
   static String hostRating = "HOST RATING";
   static String featuresCaps = "FEATURES";
@@ -196,23 +197,27 @@ class AppStrings {
   static String positive = "Positive";
   static String seeAllReviews = "See all reviews";
   static String inputDestinationState = "Input Destination state";
-  static String inputAddressPickUp = "Input the address our driver will pick you up";
+  static String inputAddressPickUp =
+      "Input the address our driver will pick you up";
   static String reviews = "Reviews";
   static String all = "All";
   static String positiveR = "Positive (%s)";
   static String negativeR = "Negative (%s)";
   static String yourRoute = "Your Route";
-  static String weWantToKnowTheRoute = "we want to know the route our drive will pick you and drop you through out your trip";
+  static String weWantToKnowTheRoute =
+      "we want to know the route our drive will pick you and drop you through out your trip";
   static String yourStart = "Your Start";
   static String endRoute = "End Route";
   static String securityEscort = "Security Escort";
   static String youWillDrive = "You will be able to drive yourself around";
   static String selfPickUp = "Self Pick Up";
-  static String weWillSupplyYouAddress = "We will supply you the address to pick up the car, turn off if you want us to bring the car to your location (This cost extra charges)";
+  static String weWillSupplyYouAddress =
+      "We will supply you the address to pick up the car, turn off if you want us to bring the car to your location (This cost extra charges)";
   static String inPutAddressDropCar = "Input address we will drop the car";
   static String selectNoOfSecurity = "Select Number of Security Personal";
   static String gainApproval = "Gain approval for renting a car";
-  static String kycMessage = "On your first trip, you will be required to provide essential information on your profile before you can proceed.";
+  static String kycMessage =
+      "On your first trip, you will be required to provide essential information on your profile before you can proceed.";
   static String profilePicture = "Profile picture";
   static String addToContinue = "Add the Following to Continue";
   static String addDisplayPic = "Add a Display Picture";
@@ -256,69 +261,94 @@ class AppStrings {
   static String extend = 'Extend';
   static String return1 = 'Return';
   static String note = 'Note: ';
-  static String systemWillCheckAvailability = 'System will check availability of car for the requested period before you proceed';
+  static String systemWillCheckAvailability =
+      'System will check availability of car for the requested period before you proceed';
   static String lastDate = 'Last date';
   static String dateTimeHintText = '5 Nov, 9:00am';
   static String checkAvailability = 'Check availability';
   static String availableDates = 'Available dates';
   static String talkToAdmin = 'Talk to admin';
   static String carNotAvailable = 'Car not available';
-  static String carNotAvailableForExtension = 'Car is not available for extension period requested you can proceed to talk to see a way we can help you';
+  static String carNotAvailableForExtension =
+      'Car is not available for extension period requested you can proceed to talk to see a way we can help you';
   static String summary = 'Summary';
-  static String feeWillBeRefundedWhen = 'Fee will be Refunded when Vehicle is Returned in the same Condition';
+  static String feeWillBeRefundedWhen =
+      'Fee will be Refunded when Vehicle is Returned in the same Condition';
   static String sendRequest = 'Send request';
   static String proceedToPay = 'Proceed to Pay';
-  static String extendedTripSuccessMessage = 'Trip successfully extended, Safe trip!';
+  static String extendedTripSuccessMessage =
+      'Trip successfully extended, Safe trip!';
   static String extendedTripSuccessMessage1 = 'See details';
   static String home = 'Home';
   static String seeDetails = 'Home';
   static String rateTrip = 'Rate trip';
   static String cleanliness = 'Cleanliness';
-  static String roadTardiness  = 'Road tardiness';
-  static String convenience  = 'Convenience';
-  static String maintenance  = 'maintenance';
-  static String fifthPoint  = '5th point';
-  static String continueToLeaveReview  = 'Continue to leave a review';
-  static String hi  = 'Hi %s';
-  static String submit  = 'Submit';
-  static String review  = 'Review';
-  static String reviewHintText  = 'Let others know about your experience';
-  static String feelFreetTalkToSupport  = 'Free feel to talk to our Support Team';
-  static String startConversation  = 'Start conversation';
-  static String findAnswersToFAQ  = 'Find Answers to Frequently Asked Questions (FAQs)';
-  static String rentOutYourVehichle  = 'Rent out your Vehicle';
-  static String youCanListYourCar  = 'You can also list your car on GTI Rides and earn, listing is free, you can set your rules.';
-  static String yourPersonalDetails  = 'Your personal details';
-  static String findYourDetails  = 'Find your details below';
-  static String displayPicture  = 'Display picture';
-  static String saveDetails  = 'Save details';
-  static String fullNameHint  = 'Surname and Last Name';
-  static String tapToChange  = 'Tap to change';
-  static String selectOption  = 'Select option';
-  static String camera  = 'Camera';
-  static String gallery  = 'Galerry';
-  static String remove  = 'Remove';
-  static String loginSettings  = 'LOGIN SETTINGS';
-  static String mobileNumber  = 'Mobile Number';
-  static String phoneNumber  = 'Phone number';
-  static String inputPhoneNumber  = 'Input phone number';
-  static String phoneHintText  = '+2348 189 899 437';
-  static String verifyPhoneNumber  = 'Verify phone number';
-  static String oldPasswordSm  = 'Old password';
-  static String newPasswordSm  = 'New password';
-  static String confirmPasswordSm  = 'Confirm password';
-  static String youCanProceedToRent  = 'You can proceed to rent a car';
-  static String selectDocument  = 'Select the kind of document you want to upload';
-  static String uploadToCompleteApproval  = 'In order complete the approval of your account Please upload a copy of your identity ';
-  static String chooseYourIdentityType  = 'Choose your identity type';
-  static String nationalId  = 'National ID';
-  static String passport  = 'Passport';
-  static String drivingLicense  = 'Driving license';
-  static String uploadProofOfIdentity  = 'Upload proof of identity';
-  static String pleaseMakeSurePicIsClear  = 'Please make sure picture is clear';
-  static String inputAddressSm  = 'Input address';
-  static String save  = 'Save';
-  static String inputOccupation  = 'Input occupation';
-  static String emergencyContact  = 'Emergency contact';
-  static String uploadDocumentToProveAddress  = 'Upload document to prove address';
+  static String roadTardiness = 'Road tardiness';
+  static String convenience = 'Convenience';
+  static String maintenance = 'maintenance';
+  static String fifthPoint = '5th point';
+  static String continueToLeaveReview = 'Continue to leave a review';
+  static String hi = 'Hi %s';
+  static String submit = 'Submit';
+  static String review = 'Review';
+  static String reviewHintText = 'Let others know about your experience';
+  static String feelFreetTalkToSupport =
+      'Free feel to talk to our Support Team';
+  static String startConversation = 'Start conversation';
+  static String findAnswersToFAQ =
+      'Find Answers to Frequently Asked Questions (FAQs)';
+  static String rentOutYourVehichle = 'Rent out your Vehicle';
+  static String youCanListYourCar =
+      'You can also list your car on GTI Rides and earn, listing is free, you can set your rules.';
+  static String yourPersonalDetails = 'Your personal details';
+  static String findYourDetails = 'Find your details below';
+  static String displayPicture = 'Display picture';
+  static String saveDetails = 'Save details';
+  static String fullNameHint = 'Surname and Last Name';
+  static String tapToChange = 'Tap to change';
+  static String selectOption = 'Select option';
+  static String camera = 'Camera';
+  static String gallery = 'Galerry';
+  static String remove = 'Remove';
+  static String loginSettings = 'LOGIN SETTINGS';
+  static String mobileNumber = 'Mobile Number';
+  static String phoneNumber = 'Phone number';
+  static String inputPhoneNumber = 'Input phone number';
+  static String phoneHintText = '+2348 189 899 437';
+  static String verifyPhoneNumber = 'Verify phone number';
+  static String oldPasswordSm = 'Old password';
+  static String newPasswordSm = 'New password';
+  static String confirmPasswordSm = 'Confirm password';
+  static String youCanProceedToRent = 'You can proceed to rent a car';
+  static String selectDocument =
+      'Select the kind of document you want to upload';
+  static String uploadToCompleteApproval =
+      'In order complete the approval of your account Please upload a copy of your identity ';
+  static String chooseYourIdentityType = 'Choose your identity type';
+  static String nationalId = 'National ID';
+  static String passport = 'Passport';
+  static String drivingLicense = 'Driving license';
+  static String uploadProofOfIdentity = 'Upload proof of identity';
+  static String pleaseMakeSurePicIsClear = 'Please make sure picture is clear';
+  static String inputAddressSm = 'Input address';
+  static String save = 'Save';
+  static String name = 'Name';
+  static String inputOccupation = 'Input occupation';
+  static String inputEmergencyNumber = 'Input emergency number';
+  static String inputName = 'Input name';
+  static String emergencyContact = 'Emergency contact';
+  static String uploadDocumentToProveAddress =
+      'Upload document to prove address';
+  static String relationship = 'Relationship';
+  static String inputRelationship = 'Input Relationship';
+  static String male = 'Male';
+  static String female = 'Female';
+  static String referral = 'Referral';
+  static String myDrivers = 'My drivers';
+  static String shareLink = 'Share link';
+  static String getDiscountOnEveryOneYouTell =
+      'Get discount on every one you tell about GTI Rides and they register and rent a ride with us';
+  static String yourReferralCode = 'Your Referral Code';
+  static String copyCode = 'Copy code';
+  static String yourReferralLink = 'Your referral link';
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/car%20renter/more/identity_verification/identity_verification_controller.dart';
+import 'package:gti_rides/shared_widgets/dropdown_widget.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/sqaure_check_box_widget.dart';
@@ -12,8 +13,8 @@ import 'package:gti_rides/shared_widgets/upload_image_widget.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
 
-class EmergencyContactScreen extends GetView<IdentityVerificationController> {
-  const EmergencyContactScreen([Key? key]) : super(key: key);
+class GenderScreen extends GetView<IdentityVerificationController> {
+  const GenderScreen([Key? key]) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -32,7 +33,7 @@ class EmergencyContactScreen extends GetView<IdentityVerificationController> {
       leading: const Icon(Icons.arrow_back),
       centerTitle: true,
       title: textWidget(
-          text: AppStrings.emergencyContact,
+          text: AppStrings.gender,
           style: getMediumStyle().copyWith(fontWeight: FontWeight.w500)),
       titleColor: iconColor(),
     );
@@ -45,29 +46,16 @@ class EmergencyContactScreen extends GetView<IdentityVerificationController> {
       child: Obx(() => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              NormalInputTextWidget(
-                expectedVariable: 'field',
-                title: AppStrings.inputEmergencyNumber,
-                hintText: AppStrings.phoneHintText,
-                controller: controller.homeAddressController,
-              ),
-              const SizedBox(height: 24),
-              NormalInputTextWidget(
-                expectedVariable: 'field',
-                title: AppStrings.name,
-                hintText: AppStrings.inputName,
-                controller: controller.nameController,
-              ),
-              const SizedBox(height: 24),
-              NormalInputTextWidget(
-                expectedVariable: 'field',
-                title: AppStrings.relationship,
-                hintText: AppStrings.inputRelationship,
-                controller: controller.relationshipController,
-              ),
+              textWidget(text: AppStrings.selectGender, style: getRegularStyle()),
+              dropdownWidget(
+                  context: context,
+                  hintText: 'Select gender',
+                  selectedUserValue: AppStrings.male,
+                  values: controller.gender,
+                  onChange: (value) {
+                    print('Selected value: $value');
+                  }),
               const SizedBox(height: 74),
-        
-
               saveButton(),
             ],
           )),
@@ -78,45 +66,12 @@ class EmergencyContactScreen extends GetView<IdentityVerificationController> {
     return controller.isLoading.isTrue
         ? centerLoadingIcon()
         : GtiButton(
-            height: 50.sp,
+            height: 40.sp,
             width: 370,
             text: AppStrings.save,
             // color: secondaryColor,
             onTap: () {},
             isLoading: controller.isLoading.value,
           );
-  }
-
-  Widget checkBoxWithText(
-      {
-      // required bool selected,
-      required IdType idType,
-      required IdType selectedIdType,
-      required String title,
-      required void Function(IdType)? onTap}) {
-    return GestureDetector(
-      onTap: () => onTap!(idType),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          sqaureCheckBox(
-              padingWidth: 2.sp,
-              marginRight: 4.sp,
-              border: Border.all(
-                  color: idType == selectedIdType ? primaryColor : grey1,
-                  width: 1.6),
-              color:
-                  idType == selectedIdType ? primaryColor : Colors.transparent),
-          const SizedBox(
-            width: 5,
-          ),
-          textWidget(
-              text: title,
-              style: getRegularStyle(
-                  fontSize: 10.sp,
-                  color: idType == selectedIdType ? primaryColor : grey1)),
-        ],
-      ),
-    );
   }
 }

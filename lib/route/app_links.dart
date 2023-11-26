@@ -49,14 +49,20 @@ class AppLinks {
   static const email = "/email";
   static const phoneInput =
       "/renter/more/account_details/account_verification/phoneInput";
-  static const phoneOtp = "/renter/more/account_details/account_verification/phoneOtp";
+  static const phoneOtp =
+      "/renter/more/account_details/account_verification/phoneOtp";
   static const changePassword = "/renter/more/account_details/changePassword";
   static const identityVerification = "/renter/more/identityVerification";
-  static const proofOfIdentity = "/renter/more/identityVerification/proofOfIdentity";
+  static const proofOfIdentity =
+      "/renter/more/identityVerification/proofOfIdentity";
   static const homeAddress = "/renter/more/identityVerification/homeAddress";
-  static const officeAddress = "/renter/more/identityVerification/officeAddress";
-  static const emergencyContact = "/renter/more/identityVerification/emergencyContact";
+  static const officeAddress =
+      "/renter/more/identityVerification/officeAddress";
+  static const emergencyContact =
+      "/renter/more/identityVerification/emergencyContact";
   static const occupation = "/renter/more/identityVerification/occupation";
+  static const gender = "/renter/more/identityVerification/gender";
+  static const referral = "/renter/more/referral";
 
   // static const chatAction = "/user/chat/:key/:action";
 
@@ -99,7 +105,9 @@ class AppLinks {
     'proofOfIdentity': proofOfIdentity,
     'homeAddress': homeAddress,
     'officeAddress': officeAddress,
-    'occupation': occupation
+    'occupation': occupation,
+    'gender': gender,
+    'referral': referral,
     // 'trips': trips,
   };
 
