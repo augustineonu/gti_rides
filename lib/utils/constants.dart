@@ -351,4 +351,9 @@ class AppStrings {
   static String yourReferralCode = 'Your Referral Code';
   static String copyCode = 'Copy code';
   static String yourReferralLink = 'Your referral link';
+  static String listMyCar = 'List my car';
+  static String doYouWantToListYourCar = 'Do you want to list your car for rent and start earning? Get started by listing your car';
+  static String getYourCarListed = 'Get your car listed';
+  static String manageListedVehicles = 'Manage listed Vehicles';
+  static String manageYourVehicleAViailability = 'Manage your vehicle availabilty';
 }

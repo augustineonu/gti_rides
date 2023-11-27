@@ -8,6 +8,7 @@ import 'package:gti_rides/screens/car%20renter/home/car_renter_home_controller.d
 import 'package:gti_rides/screens/car%20renter/home/paint.dart';
 import 'package:gti_rides/screens/car%20renter/widgets/build_carousel_dot.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
+import 'package:gti_rides/shared_widgets/how_gti_works_widget.dart';
 import 'package:gti_rides/shared_widgets/switch_profile_widget.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
@@ -125,7 +126,7 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
           children: <Widget>[
             headerText(),
             discoverCity(onTap: () => ctrl.routeToSearchCity()),
-            howGtiWorksCard(onTap: () {}),
+            howGtiWorksCard(onTap: () {}, imageUrl: ImageAssets.ladyWorks),
             textWidget(
               text: AppStrings.recentViewCar,
               style: getRegularStyle(),
@@ -188,76 +189,6 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget howGtiWorksCard({void Function()? onTap}) {
-    return Container(
-      // height: 125.sp,
-      margin: const EdgeInsets.symmetric(vertical: 15),
-      decoration: BoxDecoration(
-        color: primaryColorLight,
-        borderRadius: BorderRadius.all(
-          Radius.circular(4.r),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            flex: 3,
-            child: SizedBox(
-              // width: 120.sp,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10, right: 5),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    textWidget(
-                        text: AppStrings.howGtiWorks,
-                        style: getSemiBoldStyle(fontSize: 16.sp).copyWith(
-                            fontWeight: FontWeight.w600, fontFamily: 'neue')),
-                    SizedBox(
-                      height: 7.sp,
-                    ),
-                    textWidget(
-                        text: AppStrings.weArePeer,
-                        style: getLightStyle(fontSize: 10.sp)
-                            .copyWith(fontWeight: FontWeight.w400)),
-                    SizedBox(
-                      height: 7.sp,
-                    ),
-                    InkWell(
-                      onTap: onTap,
-                      child: textWidget(
-                          text: AppStrings.readMore,
-                          style: getLightStyle(fontSize: 10.sp).copyWith(
-                            fontWeight: FontWeight.w400,
-                            decoration: TextDecoration.underline,
-                          )),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          ClipRRect(
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(
-                4.r,
-              ),
-              bottomRight: Radius.circular(
-                4.r,
-              ),
-            ),
-            child: Image.asset(
-              ImageAssets.ladyWorks,
-              width: 170.sp,
-              fit: BoxFit.fitHeight,
-            ),
-          ),
-        ],
       ),
     );
   }

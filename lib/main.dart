@@ -40,7 +40,7 @@ class _GtiRidesState extends State<GtiRides> {
     precacheImage(const AssetImage(ImageAssets.onboarding01), context);
     precacheImage(const AssetImage(ImageAssets.onboarding02), context);
     precacheImage(const AssetImage(ImageAssets.onboarding03), context);
-    
+
     return ScreenUtilInit(
         designSize: selectedSize.size,
         builder: (
@@ -55,6 +55,15 @@ class _GtiRidesState extends State<GtiRides> {
               // backgroundColor: backgroundColor,
               useMaterial3: true,
               appBarTheme: const AppBarTheme(),
+              // cardTheme:  CardTheme(
+              //   surfaceTintColor: Colors.white,
+              //     shape: RoundedRectangleBorder(
+              //           side: BorderSide(color: borderColor),
+              //             borderRadius: BorderRadius.all(
+              //               Radius.circular(8.r),
+              //             ),
+              //           ),
+              // ),
               textTheme: const TextTheme(
                 bodyMedium: TextStyle(
                   fontFamily: 'Basis Grotesque Pro',

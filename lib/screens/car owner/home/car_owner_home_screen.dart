@@ -5,10 +5,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/car%20owner/home/car_owner_home_controller.dart';
-import 'package:gti_rides/screens/car%20renter/home/car_renter_home_controller.dart';
-import 'package:gti_rides/screens/car%20renter/home/paint.dart';
 import 'package:gti_rides/screens/car%20renter/widgets/build_carousel_dot.dart';
+import 'package:gti_rides/shared_widgets/date_time_col_widget.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
+import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
+import 'package:gti_rides/shared_widgets/how_gti_works_widget.dart';
 import 'package:gti_rides/shared_widgets/switch_profile_widget.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
@@ -51,7 +52,7 @@ class _CarRenterHomeScreenState extends State<CarOwnerHomeScreen> {
 
     timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
       if (currentIndex.value < 2) {
-        currentIndex.value++;
+        // currentIndex.value++;
         print("next page ${currentIndex.value}>>>");
       } else {
         currentIndex.value = 0;
@@ -65,6 +66,14 @@ class _CarRenterHomeScreenState extends State<CarOwnerHomeScreen> {
         );
       }
     });
+  }
+
+  @override
+  void dispose() {
+    timer.cancel(); // Cancel the timer to stop the animation
+    cardPageController.dispose(); // Dispose of the PageController
+    scrollController.dispose(); // Dispose of the ScrollController
+    super.dispose();
   }
 
   @override
@@ -86,7 +95,9 @@ class _CarRenterHomeScreenState extends State<CarOwnerHomeScreen> {
     );
   }
 
-  Widget body(CarOwnerHomeController ctrl) {
+  Widget body(
+    CarOwnerHomeController ctrl,
+  ) {
     return Expanded(
       child: SingleChildScrollView(
         controller: scrollController,
@@ -94,50 +105,29 @@ class _CarRenterHomeScreenState extends State<CarOwnerHomeScreen> {
         child: Column(
           // mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // headerText(),
-            Container(
-              decoration: BoxDecoration(
-                  color: primaryColorLight,
-                  borderRadius: BorderRadius.all(Radius.circular(4.r)),
-                  image: DecorationImage(
-                      image: AssetImage(ImageAssets.carListingBg))),
-              ),
-            howGtiWorksCard(onTap: () {}),
-            textWidget(
-              text: AppStrings.recentViewCar,
-              style: getRegularStyle(),
-            ),
-            // ClipRRect(
-            //   borderRadius: BorderRadius.all(Radius.circular(4.r)),
-            //   child: Image.asset("assets/images/car.png"),
+            getCarListedCard(onTap: () {}),
+            manageListedVehicles(),
+            howGtiWorksCard(onTap: () {}, imageUrl: ImageAssets.guyWorks),
+            // textWidget(
+            //   text: AppStrings.recentViewCar,
+            //   style: getRegularStyle(),
             // ),
+
             SizedBox(
-              height: 150.sp,
+              height: 235.sp,
               child: Stack(
                 children: [
                   PageView(
-                    physics: ScrollPhysics(),
+                    physics: const ScrollPhysics(),
                     controller: cardPageController,
                     onPageChanged: (int index) {
                       currentIndex.value = index;
                     },
                     scrollDirection: Axis.horizontal,
                     children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(4.r)),
-                        child: Image.asset(
-                          "assets/images/car.png",
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                      ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(4.r)),
-                        child: Image.asset("assets/images/car.png"),
-                      ),
-                      ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(4.r)),
-                        child: Image.asset("assets/images/car.png"),
-                      ),
+                      carCardWidget(),
+                      carCardWidget(),
+                      carCardWidget(),
                     ],
                   ),
                   Positioned(
@@ -169,73 +159,280 @@ class _CarRenterHomeScreenState extends State<CarOwnerHomeScreen> {
     );
   }
 
-  Widget howGtiWorksCard({void Function()? onTap}) {
-    return Container(
-      // height: 125.sp,
-      margin: const EdgeInsets.symmetric(vertical: 15),
-      decoration: BoxDecoration(
-        color: primaryColorLight,
+  Widget carCardWidget() {
+    return Card(
+      color: white,
+      surfaceTintColor: Colors.transparent,
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
-          Radius.circular(4.r),
+          Radius.circular(8.r),
         ),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
         children: [
-          Expanded(
-            flex: 3,
-            child: SizedBox(
-              // width: 120.sp,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10, right: 5),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          ClipRRect(
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(4.r),
+              topLeft: Radius.circular(4.r),
+            ),
+            child: Image.asset(
+              "assets/images/car.png",
+              fit: BoxFit.contain,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(11.0),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     textWidget(
-                        text: AppStrings.howGtiWorks,
-                        style: getSemiBoldStyle(fontSize: 16.sp).copyWith(
-                            fontWeight: FontWeight.w600, fontFamily: 'neue')),
-                    SizedBox(
-                      height: 7.sp,
-                    ),
-                    textWidget(
-                        text: AppStrings.weArePeer,
-                        style: getLightStyle(fontSize: 10.sp)
-                            .copyWith(fontWeight: FontWeight.w400)),
-                    SizedBox(
-                      height: 7.sp,
-                    ),
-                    InkWell(
-                      onTap: onTap,
-                      child: textWidget(
-                          text: AppStrings.readMore,
-                          style: getLightStyle(fontSize: 10.sp).copyWith(
-                            fontWeight: FontWeight.w400,
-                            decoration: TextDecoration.underline,
-                          )),
+                        text: '2019 KIA SPORTAGE',
+                        textOverflow: TextOverflow.visible,
+                        style: getSemiBoldStyle(fontSize: 14.sp).copyWith(
+                          height: 1.2.sp,
+                          fontWeight: FontWeight.w600,
+                          // fontFamily: 'neue'
+                        )),
+                    Row(
+                      children: [
+                        SvgPicture.asset(ImageAssets.naira),
+                        SizedBox(
+                          width: 2.sp,
+                        ),
+                        textWidget(
+                          text: '100,000 ',
+                          style: getMediumStyle(fontSize: 12.sp).copyWith(
+                            fontFamily: 'Neue',
+                          ),
+                        ),
+                        SvgPicture.asset(
+                          ImageAssets.close,
+                          height: 6,
+                          color: secondaryColor,
+                        ),
+                        textWidget(
+                          text: ' 5days',
+                          style: getMediumStyle(fontSize: 12.sp).copyWith(
+                            fontFamily: 'Neue',
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ),
-            ),
-          ),
-          ClipRRect(
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(
-                4.r,
-              ),
-              bottomRight: Radius.circular(
-                4.r,
-              ),
-            ),
-            child: Image.asset(
-              ImageAssets.ladyWorks,
-              width: 170.sp,
-              fit: BoxFit.fitHeight,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: 145.sp,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: 6.sp,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              textWidget(
+                                  text: AppStrings.startDate,
+                                  style: getLightStyle(
+                                      fontSize: 7.sp, color: black)),
+                              textWidget(
+                                  text: AppStrings.endDate,
+                                  style: getLightStyle(
+                                      fontSize: 7.sp, color: black)),
+                              SizedBox(
+                                width: 2.sp,
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              dateTimeColWIdget(
+                                alignment: CrossAxisAlignment.start,
+                                title: 'Wed, 1 Nov,',
+                                titleFontSize: 10.sp,
+                                subTitleFontSize: 10.sp,
+                                subTitleFontWeight: FontWeight.w500,
+                                subTitle: '9:00am',
+                              ),
+                              SvgPicture.asset(
+                                ImageAssets.arrowForwardRounded,
+                                height: 10.sp,
+                                width: 10.sp,
+                                color: secondaryColor,
+                              ),
+                              dateTimeColWIdget(
+                                  alignment: CrossAxisAlignment.start,
+                                  title: 'Wed, 1 Nov,',
+                                  titleFontSize: 10.sp,
+                                  subTitleFontSize: 10.sp,
+                                  subTitleFontWeight: FontWeight.w500,
+                                  subTitle: '9:00am'),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        SvgPicture.asset(
+                            ImageAssets.thumbsUpPrimaryColor),
+                        SizedBox(
+                          width: 5.sp,
+                        ),
+                        RichText(
+                          text: TextSpan(
+                              text: '97%',
+                              style: getMediumStyle(
+                                fontSize: 12.sp,
+                              ),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: ' (66 trips)',
+                                  style: getLightStyle(
+                                    fontSize: 12.sp,
+                                  ),
+                                )
+                              ]),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ],
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget manageListedVehicles() {
+    return Container(
+      height: 66.sp,
+      //width: size.width,
+      margin: EdgeInsets.symmetric(vertical: 20.sp),
+      decoration: BoxDecoration(
+          color: primaryColorLight,
+          borderRadius: BorderRadius.all(
+            Radius.circular(4.r),
+          ),
+          image: const DecorationImage(
+              alignment: Alignment.centerRight,
+              image: AssetImage(ImageAssets.manageListedBg))),
+
+      child: Row(children: [
+        ClipRRect(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(4.r), bottomLeft: Radius.circular(4.r)),
+          child: Image.asset(
+            ImageAssets.steering1,
+            fit: BoxFit.fitHeight,
+          ),
+        ),
+        // SizedBox(
+        //   width: 10.sp,),
+        SizedBox(
+          width: 147.sp,
+          height: 66.sp,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 10, top: 2, bottom: 5),
+            child: Column(
+              children: [
+                textWidget(
+                    text: AppStrings.manageListedVehicles,
+                    textOverflow: TextOverflow.visible,
+                    style: getSemiBoldStyle(fontSize: 15.sp).copyWith(
+                        height: 1.2.sp,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'neue')),
+                SizedBox(
+                  height: 2.sp,
+                ),
+                Expanded(
+                  child: textWidget(
+                      text: AppStrings.manageYourVehicleAViailability,
+                      textOverflow: TextOverflow.visible,
+                      style: getLightStyle(fontSize: 10.sp).copyWith(
+                        fontWeight: FontWeight.w400,
+                        height: 1.2.sp,
+                      )),
+                ),
+              ],
+            ),
+          ),
+        )
+      ]),
+    );
+  }
+
+  Widget getCarListedCard({void Function()? onTap}) {
+    return Stack(
+      children: [
+        Container(
+          height: 140.sp,
+          padding: EdgeInsets.symmetric(vertical: 14, horizontal: 8.sp),
+          decoration: BoxDecoration(
+              color: primaryColorLight3,
+              borderRadius: BorderRadius.all(Radius.circular(4.r)),
+              image: const DecorationImage(
+                  image: AssetImage(ImageAssets.carListingBg),
+                  fit: BoxFit.fitHeight)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                width: 139.sp,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    textWidget(
+                      text: AppStrings.getYourCarListed,
+                      style: getMediumStyle(),
+                    ),
+                    const SizedBox(
+                      height: 7,
+                    ),
+                    Expanded(
+                      child: textWidget(
+                        text: AppStrings.doYouWantToListYourCar,
+                        textOverflow: TextOverflow.visible,
+                        style: getRegularStyle(fontSize: 10),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 7,
+                    ),
+                    GtiButton(
+                      width: 90.sp,
+                      height: 26.sp,
+                      fontSize: 10.sp,
+                      text: AppStrings.listMyCar,
+                      onTap: onTap,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+            ],
+          ),
+        ),
+        Positioned(
+          bottom: 5,
+          right: 2,
+          child: Image.asset(
+            ImageAssets.greyCar,
+            width: 190.sp,
+          ),
+        ),
+      ],
     );
   }
 

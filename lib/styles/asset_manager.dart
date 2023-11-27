@@ -70,6 +70,8 @@ class ImageAssets {
   static const String copy = "$SVG_PATH/copy.svg";
   static const String appBarBg = "$SVG_PATH/appbar_bg.svg";
   static const String camera = "$SVG_PATH/camera.svg";
+  static const String greyCar1 = "$SVG_PATH/grey_car.svg";
+  static const String steering = "$SVG_PATH/steering.svg";
   // static const String carListingBg = "$SVG_PATH/car_listing_bg.svg";
   // PNG IMAGES
 
@@ -85,5 +87,10 @@ class ImageAssets {
   static const String renter = "$IMAGE_PATH/key.png";
   static const String owner = "$IMAGE_PATH/owner.png";
   static const String carListingBg = "$IMAGE_PATH/carListingBg.png";
+  static const String greyCar = "$IMAGE_PATH/grey_car.png";
+  static const String howGtiWorksBg = "$IMAGE_PATH/how_gti_works_bg.png";
+  static const String guyWorks = "$IMAGE_PATH/guy_works.png";
+  static const String manageListedBg = "$IMAGE_PATH/manage_listed_bg.png";
+  static const String steering1 = "$IMAGE_PATH/steering.png";
 
 }

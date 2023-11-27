@@ -6,6 +6,7 @@ const primaryColorLight = Color(0xffFFD970);
 const primaryColorVeryLight = Color(0xffF9d7a3);
 const primaryColorLight1 = Color(0xffFFF7E2);
 const primaryColorLight2 = Color(0xfffdf7e2);
+const primaryColorLight3 = Color(0xfffdf6de);
 const primaryColorDark = Color(0xff1A1300);
 const backgroundColor = Color(0xffFFFBF0);
 const secondaryColor = Color(0xff1A1300);
