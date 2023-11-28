@@ -227,7 +227,7 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
                                                   controller.updateSelectedTime(
                                                       index % 12 + 1,
                                                       controller
-                                                          .selectedMinute.value,
+                                                          .selectedEndMins.value,
                                                       controller
                                                           .selectedAmPm.value);
                                                 },

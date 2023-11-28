@@ -356,4 +356,11 @@ class AppStrings {
   static String getYourCarListed = 'Get your car listed';
   static String manageListedVehicles = 'Manage listed Vehicles';
   static String manageYourVehicleAViailability = 'Manage your vehicle availabilty';
+  static String carStatus = 'Car status:';
+  static String listYourVehicle = 'List your Vehicle';
+  static String vehicleTypeSm = 'Vehicle type';
+  static String vehicleInfo = 'Vehicle info';
+  static String documentation = 'Documentation';
+  static String addPhotos = 'Add Photos';
+  static String  availability = ' Availability';
 }

@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/car%20renter/home/search_result/search_result_controller.dart';
 import 'package:gti_rides/screens/car%20renter/widgets/build_carousel_dot.dart';
+import 'package:gti_rides/screens/car%20renter/widgets/car_availability_tag.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
@@ -253,38 +254,6 @@ class SearchResultScreen extends GetView<SearchResultController> {
         ));
   }
 
-  Widget carAvailabilityTag({required String status}) {
-    return Positioned(
-      right: 7,
-      top: 10,
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 4),
-        decoration: BoxDecoration(
-          color: black,
-          borderRadius: BorderRadius.all(
-            Radius.circular(2.r),
-          ),
-        ),
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(2.r),
-              ),
-              border: Border.all(
-                color: primaryColor,
-              )),
-          child: Center(
-            child: textWidget(
-              text: status,
-              style: getLightStyle(fontSize: 10.sp, color: primaryColor)
-                  .copyWith(fontWeight: FontWeight.w300),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 
   Widget continueButton() {
     return controller.isLoading.isTrue

@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/car%20owner/home/car_owner_home_controller.dart';
 import 'package:gti_rides/screens/car%20renter/widgets/build_carousel_dot.dart';
+import 'package:gti_rides/shared_widgets/car_availability_tag.dart';
 import 'package:gti_rides/shared_widgets/date_time_col_widget.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
@@ -80,14 +81,14 @@ class _CarRenterHomeScreenState extends State<CarOwnerHomeScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final height = MediaQuery.of(context).size.height;
-    final ctrl = Get.put<CarOwnerHomeController>(CarOwnerHomeController());
+    final controller = Get.put<CarOwnerHomeController>(CarOwnerHomeController());
     return Obx(
       () => Scaffold(
         body: SafeArea(
           child: Column(
             children: [
-              appBar(size, ctrl),
-              body(ctrl),
+              appBar(size, controller),
+              body(controller, size),
             ],
           ),
         ),
@@ -95,9 +96,7 @@ class _CarRenterHomeScreenState extends State<CarOwnerHomeScreen> {
     );
   }
 
-  Widget body(
-    CarOwnerHomeController ctrl,
-  ) {
+  Widget body(CarOwnerHomeController controller, Size size) {
     return Expanded(
       child: SingleChildScrollView(
         controller: scrollController,
@@ -105,7 +104,7 @@ class _CarRenterHomeScreenState extends State<CarOwnerHomeScreen> {
         child: Column(
           // mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            getCarListedCard(onTap: () {}),
+            getCarListedCard(onTap: controller.routeTolistVehicle),
             manageListedVehicles(),
             howGtiWorksCard(onTap: () {}, imageUrl: ImageAssets.guyWorks),
             // textWidget(
@@ -115,6 +114,7 @@ class _CarRenterHomeScreenState extends State<CarOwnerHomeScreen> {
 
             SizedBox(
               height: 235.sp,
+              width: size.width,
               child: Stack(
                 children: [
                   PageView(
@@ -125,13 +125,13 @@ class _CarRenterHomeScreenState extends State<CarOwnerHomeScreen> {
                     },
                     scrollDirection: Axis.horizontal,
                     children: [
-                      carCardWidget(),
-                      carCardWidget(),
-                      carCardWidget(),
+                      carCardWidget(size),
+                      carCardWidget(size),
+                      carCardWidget(size),
                     ],
                   ),
                   Positioned(
-                    bottom: 3,
+                    bottom: 95.sp,
                     right: 0,
                     left: 0,
                     child: Row(
@@ -151,7 +151,7 @@ class _CarRenterHomeScreenState extends State<CarOwnerHomeScreen> {
             ),
 
             Text(
-              ctrl.exampleText.value,
+              controller.exampleText.value,
             ),
           ],
         ),
@@ -159,154 +159,165 @@ class _CarRenterHomeScreenState extends State<CarOwnerHomeScreen> {
     );
   }
 
-  Widget carCardWidget() {
-    return Card(
-      color: white,
-      surfaceTintColor: Colors.transparent,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(8.r),
-        ),
-      ),
-      child: Column(
+  Widget carCardWidget(Size size) {
+    return SizedBox(
+      width: size.width,
+      child: Stack(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(4.r),
-              topLeft: Radius.circular(4.r),
+          Card(
+            color: white,
+            surfaceTintColor: Colors.transparent,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(8.r),
+              ),
             ),
-            child: Image.asset(
-              "assets/images/car.png",
-              fit: BoxFit.contain,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(11.0),
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    textWidget(
-                        text: '2019 KIA SPORTAGE',
-                        textOverflow: TextOverflow.visible,
-                        style: getSemiBoldStyle(fontSize: 14.sp).copyWith(
-                          height: 1.2.sp,
-                          fontWeight: FontWeight.w600,
-                          // fontFamily: 'neue'
-                        )),
-                    Row(
-                      children: [
-                        SvgPicture.asset(ImageAssets.naira),
-                        SizedBox(
-                          width: 2.sp,
-                        ),
-                        textWidget(
-                          text: '100,000 ',
-                          style: getMediumStyle(fontSize: 12.sp).copyWith(
-                            fontFamily: 'Neue',
-                          ),
-                        ),
-                        SvgPicture.asset(
-                          ImageAssets.close,
-                          height: 6,
-                          color: secondaryColor,
-                        ),
-                        textWidget(
-                          text: ' 5days',
-                          style: getMediumStyle(fontSize: 12.sp).copyWith(
-                            fontFamily: 'Neue',
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(4.r),
+                    topLeft: Radius.circular(4.r),
+                  ),
+                  child: Image.asset(
+                    "assets/images/car.png",
+                    fit: BoxFit.contain,
+                  ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      width: 145.sp,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                Padding(
+                  padding: const EdgeInsets.all(11.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SizedBox(
-                            height: 6.sp,
-                          ),
+                          textWidget(
+                              text: '2019 KIA SPORTAGE',
+                              textOverflow: TextOverflow.visible,
+                              style: getSemiBoldStyle(fontSize: 14.sp).copyWith(
+                                height: 1.2.sp,
+                                fontWeight: FontWeight.w600,
+                                // fontFamily: 'neue'
+                              )),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              textWidget(
-                                  text: AppStrings.startDate,
-                                  style: getLightStyle(
-                                      fontSize: 7.sp, color: black)),
-                              textWidget(
-                                  text: AppStrings.endDate,
-                                  style: getLightStyle(
-                                      fontSize: 7.sp, color: black)),
+                              SvgPicture.asset(ImageAssets.naira),
                               SizedBox(
                                 width: 2.sp,
                               ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              dateTimeColWIdget(
-                                alignment: CrossAxisAlignment.start,
-                                title: 'Wed, 1 Nov,',
-                                titleFontSize: 10.sp,
-                                subTitleFontSize: 10.sp,
-                                subTitleFontWeight: FontWeight.w500,
-                                subTitle: '9:00am',
+                              textWidget(
+                                text: '100,000 ',
+                                style: getMediumStyle(fontSize: 12.sp).copyWith(
+                                  fontFamily: 'Neue',
+                                ),
                               ),
                               SvgPicture.asset(
-                                ImageAssets.arrowForwardRounded,
-                                height: 10.sp,
-                                width: 10.sp,
+                                ImageAssets.close,
+                                height: 6,
                                 color: secondaryColor,
                               ),
-                              dateTimeColWIdget(
-                                  alignment: CrossAxisAlignment.start,
-                                  title: 'Wed, 1 Nov,',
-                                  titleFontSize: 10.sp,
-                                  subTitleFontSize: 10.sp,
-                                  subTitleFontWeight: FontWeight.w500,
-                                  subTitle: '9:00am'),
+                              textWidget(
+                                text: ' 5days',
+                                style: getMediumStyle(fontSize: 12.sp).copyWith(
+                                  fontFamily: 'Neue',
+                                ),
+                              ),
                             ],
                           ),
                         ],
                       ),
-                    ),
-                    Row(
-                      children: [
-                        SvgPicture.asset(
-                            ImageAssets.thumbsUpPrimaryColor),
-                        SizedBox(
-                          width: 5.sp,
-                        ),
-                        RichText(
-                          text: TextSpan(
-                              text: '97%',
-                              style: getMediumStyle(
-                                fontSize: 12.sp,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            width: 145.sp,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: 6.sp,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    textWidget(
+                                        text: AppStrings.startDate,
+                                        style: getLightStyle(
+                                            fontSize: 7.sp, color: black)),
+                                    textWidget(
+                                        text: AppStrings.endDate,
+                                        style: getLightStyle(
+                                            fontSize: 7.sp, color: black)),
+                                    SizedBox(
+                                      width: 2.sp,
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    dateTimeColWIdget(
+                                      alignment: CrossAxisAlignment.start,
+                                      title: 'Wed, 1 Nov,',
+                                      titleFontSize: 10.sp,
+                                      subTitleFontSize: 10.sp,
+                                      subTitleFontWeight: FontWeight.w500,
+                                      subTitle: '9:00am',
+                                    ),
+                                    SvgPicture.asset(
+                                      ImageAssets.arrowForwardRounded,
+                                      height: 10.sp,
+                                      width: 10.sp,
+                                      color: secondaryColor,
+                                    ),
+                                    dateTimeColWIdget(
+                                        alignment: CrossAxisAlignment.start,
+                                        title: 'Wed, 1 Nov,',
+                                        titleFontSize: 10.sp,
+                                        subTitleFontSize: 10.sp,
+                                        subTitleFontWeight: FontWeight.w500,
+                                        subTitle: '9:00am'),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              SvgPicture.asset(
+                                  ImageAssets.thumbsUpPrimaryColor),
+                              SizedBox(
+                                width: 5.sp,
                               ),
-                              children: <TextSpan>[
-                                TextSpan(
-                                  text: ' (66 trips)',
-                                  style: getLightStyle(
-                                    fontSize: 12.sp,
-                                  ),
-                                )
-                              ]),
-                        ),
-                      ],
-                    )
-                  ],
+                              RichText(
+                                text: TextSpan(
+                                    text: '97%',
+                                    style: getMediumStyle(
+                                      fontSize: 12.sp,
+                                    ),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: ' (66 trips)',
+                                        style: getLightStyle(
+                                          fontSize: 12.sp,
+                                        ),
+                                      )
+                                    ]),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
           ),
+          carAvailabilityTag(
+              status: '${AppStrings.carStatus} ${AppStrings.active}'),
         ],
       ),
     );
@@ -455,7 +466,7 @@ class _CarRenterHomeScreenState extends State<CarOwnerHomeScreen> {
   }
 }
 
-Widget appBar(Size size, CarOwnerHomeController ctrl) {
+Widget appBar(Size size, CarOwnerHomeController controller) {
   return Padding(
     padding: const EdgeInsets.only(left: 16, top: 10, bottom: 10),
     child: Row(
@@ -471,7 +482,7 @@ Widget appBar(Size size, CarOwnerHomeController ctrl) {
             size: size,
             title: AppStrings.carOwner,
             imageUrl: ImageAssets.owner,
-            onTapCarRenter: ctrl.routeToCarRenterLanding),
+            onTapCarRenter: controller.routeToCarRenterLanding),
         Padding(
           padding: const EdgeInsets.only(right: 20),
           child: Icon(

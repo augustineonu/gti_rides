@@ -64,6 +64,7 @@ class AppLinks {
   static const gender = "/renter/more/identityVerification/gender";
   static const referral = "/renter/more/referral";
   static const carOwnerLanding = "/ownerLanding";
+  static const listVehicle = "/owner/home/listVehicle";
 
   // static const chatAction = "/user/chat/:key/:action";
 
@@ -110,6 +111,7 @@ class AppLinks {
     'gender': gender,
     'referral': referral,
     'carOwnerLanding': carOwnerLanding,
+    'listVehicle': listVehicle,
     // 'trips': trips,
   };
 

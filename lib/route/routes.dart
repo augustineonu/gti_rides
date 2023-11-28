@@ -1,6 +1,7 @@
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:gti_rides/route/app_links.dart';
+import 'package:gti_rides/screens/car%20owner/home/list_vehicle/list_vehicle_screen.dart';
 import 'package:gti_rides/screens/car%20owner/owner_landing_page.dart';
 import 'package:gti_rides/screens/car%20renter/home/choose_trip_date/choose_trip_date_screen.dart';
 import 'package:gti_rides/screens/car%20renter/home/search_city/search_city_screen.dart';
@@ -217,6 +218,10 @@ class AppRoutes {
     GetPage(
       name: AppLinks.carRenterLanding,
       page: () => const RenterLandingPage(),
+    ),
+    GetPage(
+      name: AppLinks.listVehicle,
+      page: () => const ListVehicleScreen(),
     ),
   ];
 }

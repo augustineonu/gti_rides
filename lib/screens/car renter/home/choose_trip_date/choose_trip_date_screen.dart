@@ -13,6 +13,7 @@ import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
+import 'package:gti_rides/utils/utils.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class ChooseTripDateBinding extends Bindings {
@@ -116,8 +117,7 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
                 Container(
                     margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                     height: 50,
-                    child: Text(
-                        'StartRangeDate:' '${controller.selectedTimeText}')),
+                    child: Text('StartRangeDate:' '${controller.startDate}')),
                 SizedBox(
                     height: 50,
                     child: Text('EndRangeDate:' '${controller.endDate}')),
@@ -128,7 +128,331 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
                     todayHighlightColor: primaryColor,
                     controller: controller.datePickerController,
                     selectionMode: DateRangePickerSelectionMode.range,
-                    onSelectionChanged: controller.selectionChanged,
+                    // onSelectionChanged: controller.selectionChanged,
+                    onSelectionChanged:
+                        (DateRangePickerSelectionChangedArgs args) async {
+                      controller.startDate.value =
+                          formatDate(args.value.startDate).toString();
+                      controller.endDate.value =
+                          formatDate(args.value.endDate ?? args.value.startDate)
+                              .toString();
+
+                      // then open dialog
+                      await Future.delayed(const Duration(seconds: 2));
+                      showDialog(
+                          context: context,
+                          barrierColor: Colors.transparent,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return StatefulBuilder(
+                                builder: (context, setState) {
+                              return Dialog(
+                                backgroundColor: white,
+                                insetPadding: const EdgeInsets.all(0),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        2.0.r)), //this right here
+                                child: Container(
+                                  height: 230.sp,
+                                  width: double.infinity,
+                                  color: white,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15, vertical: 22),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            // start time
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    const SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    textWidget(
+                                                        text: AppStrings
+                                                            .startTime,
+                                                        style: getMediumStyle(
+                                                            fontSize: 12.sp)),
+                                                  ],
+                                                ),
+                                                const SizedBox(
+                                                  height: 14,
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    // Hours wheel
+                                                    timeWheelPicker(
+                                                      setState,
+                                                      onSelectedItemChanged:
+                                                          (value) {
+                                                        print(
+                                                            "selected $value");
+                                                        controller
+                                                            .onSelectedStartHourChanged(
+                                                                value);
+                                                        setState(() {});
+                                                      },
+                                                      childCount: 13,
+                                                      builder:
+                                                          (context, index) {
+                                                        bool isSelected = index ==
+                                                            controller
+                                                                .selectedStartHour
+                                                                .value;
+                                                        return timeWidget(
+                                                            isSelected:
+                                                                isSelected,
+                                                            item: Hours(
+                                                              hours: index,
+                                                              color: isSelected
+                                                                  ? primaryColor
+                                                                  : grey5,
+                                                              fontWeight:
+                                                                  isSelected
+                                                                      ? FontWeight
+                                                                          .w800
+                                                                      : null,
+                                                            ));
+                                                      },
+                                                    ),
+                                                    // Minutes wheel
+                                                    timeWheelPicker(
+                                                      setState,
+                                                      onSelectedItemChanged:
+                                                          (value) {
+                                                        print(
+                                                            "selected $value");
+                                                        controller
+                                                            .onSelectedStartMinsChanged(
+                                                                value);
+                                                        setState(() {});
+                                                      },
+                                                      childCount: 61,
+                                                      builder:
+                                                          (context, index) {
+                                                        bool isSelected = index ==
+                                                            controller
+                                                                .selectedStartMinute
+                                                                .value;
+                                                        return timeWidget(
+                                                            isSelected:
+                                                                isSelected,
+                                                            item: Minutes(
+                                                              mins: index,
+                                                              color: isSelected
+                                                                  ? primaryColor
+                                                                  : grey5,
+                                                              fontWeight:
+                                                                  isSelected
+                                                                      ? FontWeight
+                                                                          .w800
+                                                                      : null,
+                                                            ));
+                                                      },
+                                                    ),
+
+                                                    // AM or PM
+                                                    timeWheelPicker(
+                                                      setState,
+                                                      onSelectedItemChanged:
+                                                          (value) {
+                                                        print(
+                                                            "selected $value");
+                                                        controller
+                                                            .onSelectedStartAmPmChanged(
+                                                                value);
+                                                        setState(() {});
+                                                      },
+                                                      childCount: 2,
+                                                      builder:
+                                                          (context, index) {
+                                                        bool isSelected = index ==
+                                                            controller
+                                                                .selectedStartAmPm
+                                                                .value;
+                                                        bool isItAm =
+                                                            index == 0;
+                                                        return timeWidget(
+                                                            isSelected:
+                                                                isSelected,
+                                                            item: AmPm(
+                                                              isItAm: isItAm,
+                                                              color: isSelected
+                                                                  ? primaryColor
+                                                                  : grey5,
+                                                              fontWeight:
+                                                                  isSelected
+                                                                      ? FontWeight
+                                                                          .w800
+                                                                      : null,
+                                                            ));
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+
+                                            // end time
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    const SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    textWidget(
+                                                        text:
+                                                            AppStrings.endTime,
+                                                        style: getMediumStyle(
+                                                            fontSize: 12.sp)),
+                                                  ],
+                                                ),
+                                                const SizedBox(
+                                                  height: 14,
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    // Hours wheel
+                                                    timeWheelPicker(
+                                                      setState,
+                                                      onSelectedItemChanged:
+                                                          (value) {
+                                                        controller
+                                                            .onSelectedEndHourChanged(
+                                                                value);
+                                                        setState(() {});
+                                                      },
+                                                      childCount: 13,
+                                                      builder:
+                                                          (context, index) {
+                                                        bool isSelected = index ==
+                                                            controller
+                                                                .selectedEndHour
+                                                                .value;
+                                                        return timeWidget(
+                                                            isSelected:
+                                                                isSelected,
+                                                            item: Hours(
+                                                              hours: index,
+                                                              color: isSelected
+                                                                  ? primaryColor
+                                                                  : grey5,
+                                                              fontWeight:
+                                                                  isSelected
+                                                                      ? FontWeight
+                                                                          .w800
+                                                                      : null,
+                                                            ));
+                                                      },
+                                                    ),
+                                                    // Minutes wheel
+                                                    timeWheelPicker(
+                                                      setState,
+                                                      onSelectedItemChanged:
+                                                          (value) {
+                                                        print(
+                                                            "selected $value");
+                                                        controller
+                                                            .onSelectedEndMinsChanged(
+                                                                value);
+                                                        setState(() {});
+                                                      },
+                                                      childCount: 61,
+                                                      builder:
+                                                          (context, index) {
+                                                        bool isSelected = index ==
+                                                            controller
+                                                                .selectedEndMins
+                                                                .value;
+                                                        return timeWidget(
+                                                            isSelected:
+                                                                isSelected,
+                                                            item: Minutes(
+                                                              mins: index,
+                                                              color: isSelected
+                                                                  ? primaryColor
+                                                                  : grey5,
+                                                              fontWeight:
+                                                                  isSelected
+                                                                      ? FontWeight
+                                                                          .w800
+                                                                      : null,
+                                                            ));
+                                                      },
+                                                    ),
+
+                                                    // AM or PM
+                                                    timeWheelPicker(
+                                                      setState,
+                                                      onSelectedItemChanged:
+                                                          (value) {
+                                                        print(
+                                                            "selected $value");
+                                                        controller
+                                                            .onSelectedEndAmPmChanged(
+                                                                value);
+                                                        setState(() {});
+                                                      },
+                                                      childCount: 2,
+                                                      builder:
+                                                          (context, index) {
+                                                        bool isSelected = index ==
+                                                            controller
+                                                                .selectedEndAmPm
+                                                                .value;
+                                                        bool isItAm =
+                                                            index == 0;
+                                                        return timeWidget(
+                                                            isSelected:
+                                                                isSelected,
+                                                            item: AmPm(
+                                                              isItAm: isItAm,
+                                                              color: isSelected
+                                                                  ? primaryColor
+                                                                  : grey5,
+                                                              fontWeight:
+                                                                  isSelected
+                                                                      ? FontWeight
+                                                                          .w800
+                                                                      : null,
+                                                            ));
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 20.sp),
+                                        child: GtiButton(
+                                          text: AppStrings.cont,
+                                          onTap: controller.goBack,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            });
+                          });
+                    },
                     allowViewNavigation: false,
                     navigationDirection:
                         DateRangePickerNavigationDirection.vertical,
@@ -170,113 +494,267 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
               showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return Dialog(
-                      backgroundColor: white,
-                      insetPadding: const EdgeInsets.all(0),
-                      shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(2.0.r)), //this right here
-                      child: Container(
-                        height: 230.sp,
-                        width: double.infinity,
-                        color: white,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 20.sp, horizontal: 5.sp),
+                    return StatefulBuilder(builder: (context, setState) {
+                      return Dialog(
+                        backgroundColor: white,
+                        insetPadding: const EdgeInsets.all(0),
+                        shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(2.0.r)), //this right here
+                        child: Container(
+                          height: 230.sp,
+                          width: double.infinity,
+                          color: white,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              Row(
-                                children: [
-                                  // Hours wheel
-                                  SizedBox(
-                                    width: 70,
-                                    height: 180,
-                                    child: ListWheelScrollView.useDelegate(
-                                      itemExtent: 50,
-                                      perspective: 0.005,
-                                      diameterRatio: 1.2,
-                                      physics: FixedExtentScrollPhysics(),
-                                      onSelectedItemChanged:(value)=> print("selected $value"),
-                                      // controller: FixedExtentScrollController(initialItem: ),
-                                      childDelegate:
-                                          ListWheelChildBuilderDelegate(
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 22),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    // start time
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            textWidget(
+                                                text: AppStrings.startTime,
+                                                style: getMediumStyle(
+                                                    fontSize: 12.sp)),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 14,
+                                        ),
+                                        Row(
+                                          children: [
+                                            // Hours wheel
+                                            timeWheelPicker(
+                                              setState,
+                                              onSelectedItemChanged: (value) {
+                                                print("selected $value");
+                                                controller
+                                                    .onSelectedStartHourChanged(
+                                                        value);
+                                                setState(() {});
+                                              },
                                               childCount: 13,
                                               builder: (context, index) {
-                                                return Hours(
-                                                  hours: index,
-                                                );
+                                                bool isSelected = index ==
+                                                    controller.selectedStartHour
+                                                        .value;
+                                                return timeWidget(
+                                                    isSelected: isSelected,
+                                                    item: Hours(
+                                                      hours: index,
+                                                      color: isSelected
+                                                          ? primaryColor
+                                                          : grey5,
+                                                      fontWeight: isSelected
+                                                          ? FontWeight.w800
+                                                          : null,
+                                                    ));
                                               },
-                                              
-                                              ),
-                                    ),
-                                  ),
-                                  // Minutes wheel
-                                  SizedBox(
-                                    width: 70,
-                                    height: 180,
-                                    child: ListWheelScrollView.useDelegate(
-                                      itemExtent: 50,
-                                      perspective: 0.005,
-                                      diameterRatio: 1.2,
-                                      physics: FixedExtentScrollPhysics(),
-                                      childDelegate:
-                                          ListWheelChildBuilderDelegate(
+                                            ),
+                                            // Minutes wheel
+                                            timeWheelPicker(
+                                              setState,
+                                              onSelectedItemChanged: (value) {
+                                                print("selected $value");
+                                                controller
+                                                    .onSelectedStartMinsChanged(
+                                                        value);
+                                                setState(() {});
+                                              },
                                               childCount: 61,
                                               builder: (context, index) {
-                                                return Minutes(
-                                                  mins: index,
-                                                );
-                                              }),
-                                    ),
-                                  ),
+                                                bool isSelected = index ==
+                                                    controller
+                                                        .selectedStartMinute
+                                                        .value;
+                                                return timeWidget(
+                                                    isSelected: isSelected,
+                                                    item: Minutes(
+                                                      mins: index,
+                                                      color: isSelected
+                                                          ? primaryColor
+                                                          : grey5,
+                                                      fontWeight: isSelected
+                                                          ? FontWeight.w800
+                                                          : null,
+                                                    ));
+                                              },
+                                            ),
 
-                                  // AM or PM
-                                  SizedBox(
-                                    width: 70,
-                                    height: 180,
-                                    child: ListWheelScrollView.useDelegate(
-                                      itemExtent: 50,
-                                      perspective: 0.005,
-                                      diameterRatio: 1.2,
-                                      physics: FixedExtentScrollPhysics(),
-                                      childDelegate:
-                                          ListWheelChildBuilderDelegate(
+                                            // AM or PM
+                                            timeWheelPicker(
+                                              setState,
+                                              onSelectedItemChanged: (value) {
+                                                print("selected $value");
+                                                controller
+                                                    .onSelectedStartAmPmChanged(
+                                                        value);
+                                                setState(() {});
+                                              },
                                               childCount: 2,
                                               builder: (context, index) {
-                                                switch (index) {
-                                                  case 0:
-                                                    return const AmPm(
-                                                      isItAm: true,
-                                                    );
-                                                  case 1:
-                                                    return const AmPm(
-                                                      isItAm: false,
-                                                    );
-                                                    // break;
-                                                  default:
-                                                }
-                                                return null;
-                                              
-                                              }),
+                                                bool isSelected = index ==
+                                                    controller.selectedStartAmPm
+                                                        .value;
+                                                bool isItAm = index == 0;
+                                                return timeWidget(
+                                                    isSelected: isSelected,
+                                                    item: AmPm(
+                                                      isItAm: isItAm,
+                                                      color: isSelected
+                                                          ? primaryColor
+                                                          : grey5,
+                                                      fontWeight: isSelected
+                                                          ? FontWeight.w800
+                                                          : null,
+                                                    ));
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                ],
+
+                                    // end time
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            textWidget(
+                                                text: AppStrings.endTime,
+                                                style: getMediumStyle(
+                                                    fontSize: 12.sp)),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 14,
+                                        ),
+                                        Row(
+                                          children: [
+                                            // Hours wheel
+                                            timeWheelPicker(
+                                              setState,
+                                              onSelectedItemChanged: (value) {
+                                                controller
+                                                    .onSelectedEndHourChanged(
+                                                        value);
+                                                setState(() {});
+                                              },
+                                              childCount: 13,
+                                              builder: (context, index) {
+                                                bool isSelected = index ==
+                                                    controller
+                                                        .selectedEndHour.value;
+                                                return timeWidget(
+                                                    isSelected: isSelected,
+                                                    item: Hours(
+                                                      hours: index,
+                                                      color: isSelected
+                                                          ? primaryColor
+                                                          : grey5,
+                                                      fontWeight: isSelected
+                                                          ? FontWeight.w800
+                                                          : null,
+                                                    ));
+                                              },
+                                            ),
+                                            // Minutes wheel
+                                            timeWheelPicker(
+                                              setState,
+                                              onSelectedItemChanged: (value) {
+                                                print("selected $value");
+                                                controller
+                                                    .onSelectedEndMinsChanged(
+                                                        value);
+                                                setState(() {});
+                                              },
+                                              childCount: 61,
+                                              builder: (context, index) {
+                                                bool isSelected = index ==
+                                                    controller
+                                                        .selectedEndMins.value;
+                                                return timeWidget(
+                                                    isSelected: isSelected,
+                                                    item: Minutes(
+                                                      mins: index,
+                                                      color: isSelected
+                                                          ? primaryColor
+                                                          : grey5,
+                                                      fontWeight: isSelected
+                                                          ? FontWeight.w800
+                                                          : null,
+                                                    ));
+                                              },
+                                            ),
+
+                                            // AM or PM
+                                            timeWheelPicker(
+                                              setState,
+                                              onSelectedItemChanged: (value) {
+                                                print("selected $value");
+                                                controller
+                                                    .onSelectedEndAmPmChanged(
+                                                        value);
+                                                setState(() {});
+                                              },
+                                              childCount: 2,
+                                              builder: (context, index) {
+                                                bool isSelected = index ==
+                                                    controller
+                                                        .selectedEndAmPm.value;
+                                                bool isItAm = index == 0;
+                                                return timeWidget(
+                                                    isSelected: isSelected,
+                                                    item: AmPm(
+                                                      isItAm: isItAm,
+                                                      color: isSelected
+                                                          ? primaryColor
+                                                          : grey5,
+                                                      fontWeight: isSelected
+                                                          ? FontWeight.w800
+                                                          : null,
+                                                    ));
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                              // Padding(
-                              //   padding:
-                              //       EdgeInsets.symmetric(horizontal: 20.sp),
-                              //   child: GtiButton(
-                              //     text: AppStrings.cont,
-                              //     onTap: () {},
-                              //   ),
-                              // ),
+                              Padding(
+                                padding:
+                                    EdgeInsets.symmetric(horizontal: 20.sp),
+                                child: GtiButton(
+                                  text: AppStrings.cont,
+                                  onTap: () {},
+                                ),
+                              ),
                             ],
                           ),
                         ),
-                      ),
-                    );
+                      );
+                    });
                   });
             },
             child: Padding(
@@ -290,20 +768,53 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
         ]);
   }
 
-  Widget timePickerWidget(
-    BuildContext context, {
-    required void Function(int)? onSelectedItemChanged,
-    required List<Widget> children,
+  Widget timeWidget({
+    required bool isSelected,
+    required Widget item,
   }) {
-    return Expanded(
-      child: CupertinoPicker(
-        // backgroundColor: Colors.red,
+    return Column(
+      children: [
+        // if (isSelected)
+        SizedBox(
+          width: 31,
+          height: 1,
+          child: ColoredBox(
+            color: isSelected ? primaryColor : Colors.transparent,
+          ),
+          // Set your desired color
+        ),
+        item,
+        // if (isSelected) // Add colored Divider for selected item
+        SizedBox(
+          width: 31,
+          height: 1,
+          child: ColoredBox(
+            color: isSelected ? primaryColor : Colors.transparent,
+          ),
+          // Set your desired color
+        ),
+      ],
+    );
+  }
 
-        selectionOverlay: const CupertinoPickerDefaultSelectionOverlay(
-            background: Colors.transparent),
-        itemExtent: 40,
+  Widget timeWheelPicker(StateSetter setState,
+      {required void Function(int)? onSelectedItemChanged,
+      required int? childCount,
+      required Widget? Function(BuildContext, int) builder}) {
+    return SizedBox(
+      width: 50,
+      height: 90,
+      child: ListWheelScrollView.useDelegate(
+        itemExtent: 35,
+        perspective: 0.005,
+        diameterRatio: 1.2,
+        physics: const FixedExtentScrollPhysics(),
         onSelectedItemChanged: onSelectedItemChanged,
-        children: children,
+        // controller: FixedExtentScrollController(initialItem: ),
+        childDelegate: ListWheelChildBuilderDelegate(
+          childCount: childCount,
+          builder: builder,
+        ),
       ),
     );
   }

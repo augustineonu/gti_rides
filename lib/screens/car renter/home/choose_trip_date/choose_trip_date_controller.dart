@@ -25,8 +25,13 @@ class ChooseTripDateController extends GetxController {
   Rx<String> startDate = '0'.obs;
   Rx<String> endDate = '0'.obs;
   Rx<String> selectedTimeText = ''.obs;
-  RxInt selectedHour = 0.obs;
-  RxInt selectedMinute = 0.obs;
+  RxInt selectedStartHour = 0.obs;
+  RxInt selectedEndHour = 0.obs;
+  RxInt selectedStartMinute = 0.obs;
+  RxInt selectedEndMins = 0.obs;
+  RxInt selectedStartAmPm = 0.obs;
+  RxInt selectedEndAmPm = 0.obs;
+
   RxString selectedAmPm = 'am'.obs;
 
   ChooseTripDateController() {
@@ -50,13 +55,24 @@ class ChooseTripDateController extends GetxController {
     super.onInit();
   }
 
+  void onSelectedStartHourChanged(int value) => selectedStartHour.value = value;
+
+  void onSelectedStartMinsChanged(int value) =>
+      selectedStartMinute.value = value;
+
+  void onSelectedStartAmPmChanged(int value) => selectedStartAmPm.value = value;
+
+  void onSelectedEndHourChanged(int value) => selectedEndHour.value = value;
+  void onSelectedEndMinsChanged(int value) => selectedEndMins.value = value;
+  void onSelectedEndAmPmChanged(int value) => selectedEndAmPm.value = value;
+
   void updateSelectedTime(
-      int selectedHour, int selectedMinute, String selectedAmPm) {
-    final formattedHour = selectedAmPm == 'am' && selectedHour == 12
+      int selectedStartHour, int selectedMinute, String selectedAmPm) {
+    final formattedHour = selectedAmPm == 'am' && selectedStartHour == 12
         ? 0
-        : selectedAmPm == 'pm' && selectedHour != 12
-            ? selectedHour + 12
-            : selectedHour;
+        : selectedAmPm == 'pm' && selectedStartHour != 12
+            ? selectedStartHour + 12
+            : selectedStartHour;
 
     final formattedMinute = selectedMinute;
     selectedTimeText.value =

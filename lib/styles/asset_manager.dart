@@ -66,6 +66,7 @@ class ImageAssets {
   static const String pencil = "$SVG_PATH/pencil.svg";
   static const String imageCard = "$SVG_PATH/image_card.svg";
   static const String toyCar = "$SVG_PATH/toy_car.svg";
+  static const String toyCar1 = "$SVG_PATH/toyCar1.svg";
   static const String prize = "$SVG_PATH/prize.svg";
   static const String copy = "$SVG_PATH/copy.svg";
   static const String appBarBg = "$SVG_PATH/appbar_bg.svg";
