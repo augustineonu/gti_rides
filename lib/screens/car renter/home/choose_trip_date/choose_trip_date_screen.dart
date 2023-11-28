@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/screens/car%20renter/home/choose_trip_date/am_pm.dart';
 import 'package:gti_rides/screens/car%20renter/home/choose_trip_date/choose_trip_date_controller.dart';
-import 'package:gti_rides/screens/car%20renter/home/search_city/search_city_controller.dart';
+import 'package:gti_rides/screens/car%20renter/home/choose_trip_date/hours.dart';
+import 'package:gti_rides/screens/car%20renter/home/choose_trip_date/minutes.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
-import 'package:gti_rides/shared_widgets/text_input_widgets/normal_text_input_widget.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class ChooseTripDateBinding extends Bindings {
@@ -78,7 +78,7 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
                       ],
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 5,
                   ),
                   SvgPicture.asset(
@@ -86,7 +86,7 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
                     width: 20.sp,
                     height: 20.sp,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 8,
                   ),
                   SizedBox(
@@ -118,7 +118,7 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
                     height: 50,
                     child: Text(
                         'StartRangeDate:' '${controller.selectedTimeText}')),
-                Container(
+                SizedBox(
                     height: 50,
                     child: Text('EndRangeDate:' '${controller.endDate}')),
                 SizedBox(
@@ -157,7 +157,7 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
 
   AppBar appBar(context) {
     return gtiAppBar(
-        leading: Icon(Icons.arrow_back),
+        leading: const Icon(Icons.arrow_back),
         centerTitle: false,
         title: textWidget(
             text: AppStrings.tripDates,
@@ -172,7 +172,7 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
                   builder: (BuildContext context) {
                     return Dialog(
                       backgroundColor: white,
-                      insetPadding: EdgeInsets.all(0),
+                      insetPadding: const EdgeInsets.all(0),
                       shape: RoundedRectangleBorder(
                           borderRadius:
                               BorderRadius.circular(2.0.r)), //this right here
@@ -184,251 +184,94 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
                           padding: EdgeInsets.symmetric(
                               vertical: 20.sp, horizontal: 5.sp),
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              SizedBox(
-                                height: 120,
-                                width: double.infinity,
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 15),
-                                            child: textWidget(
-                                                text: AppStrings.startTime,
-                                                style: getRegularStyle(
-                                                  fontSize: 12,
-                                                ).copyWith(
-                                                    fontWeight:
-                                                        FontWeight.w500)),
-                                          ),
-                                          Expanded(
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                timePickerWidget(context,
-                                                    // onSelectedItemChanged:
-                                                    //         (int index) {
-                                                    //   // setState(() {
-                                                    //     controller.selectedStartTime =
-                                                    //         controller.selectedStartTime!.replacing(
-                                                    //             hour: index % 12);
-                                                    //   // });
-                                                    // },
-                                                    onSelectedItemChanged:
-                                                        (int index) {
-                                                  controller.updateSelectedTime(
-                                                      index % 12 + 1,
-                                                      controller
-                                                          .selectedMinute.value,
-                                                      controller
-                                                          .selectedAmPm.value);
-                                                },
-                                                    children: List.generate(13,
-                                                        (index) {
-                                                      final hour = index == 0
-                                                          ? 12
-                                                          : index;
-                                                      return textWidget(
-                                                          text: '$hour',
-                                                          style: getMediumStyle(
-                                                                  color:
-                                                                      primaryColor)
-                                                              .copyWith(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w900));
-                                                    })),
-                                                timePickerWidget(
-                                                  context,
-                                                  onSelectedItemChanged:
-                                                      (int index) {
-                                                    // setState(() {
-                                                    //   selectedTime =
-                                                    //       selectedTime!.replacing(
-                                                    //           minute: index);
-                                                    // });
-                                                  },
-                                                  children: List.generate(60,
-                                                      (index) {
-                                                    return textWidget(
-                                                      text: index
-                                                          .toString()
-                                                          .padLeft(2, '0'),
-                                                      style: getMediumStyle()
-                                                          .copyWith(
-                                                        color: primaryColor,
-                                                        fontWeight:
-                                                            FontWeight.w900,
-                                                      ),
-                                                    );
-                                                  }),
-                                                ),
-                                                timePickerWidget(
-                                                  context,
-                                                  onSelectedItemChanged:
-                                                      (int index) {
-                                                    // setState(() {
-                                                    //   selectedTime = index == 0
-                                                    //       ? selectedTime!
-                                                    //           .replacing(
-                                                    //               hour: DayPeriod
-                                                    //                   .am.index)
-                                                    //       : selectedTime!
-                                                    //           .replacing(
-                                                    //               hour: DayPeriod
-                                                    //                   .pm.index);
-                                                    // });
-                                                  },
-                                                  children: ['am', 'pm']
-                                                      .map((period) {
-                                                    return textWidget(
-                                                        text: period,
-                                                        style: getMediumStyle(
-                                                                color:
-                                                                    primaryColor)
-                                                            .copyWith(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w900));
-                                                  }).toList(),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                              Row(
+                                children: [
+                                  // Hours wheel
+                                  SizedBox(
+                                    width: 70,
+                                    height: 180,
+                                    child: ListWheelScrollView.useDelegate(
+                                      itemExtent: 50,
+                                      perspective: 0.005,
+                                      diameterRatio: 1.2,
+                                      physics: FixedExtentScrollPhysics(),
+                                      onSelectedItemChanged:(value)=> print("selected $value"),
+                                      // controller: FixedExtentScrollController(initialItem: ),
+                                      childDelegate:
+                                          ListWheelChildBuilderDelegate(
+                                              childCount: 13,
+                                              builder: (context, index) {
+                                                return Hours(
+                                                  hours: index,
+                                                );
+                                              },
+                                              
+                                              ),
                                     ),
-
-                                    // end time picker
-
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 20),
-                                            child: textWidget(
-                                                text: AppStrings.endTime,
-                                                style: getRegularStyle(
-                                                  fontSize: 12,
-                                                ).copyWith(
-                                                    fontWeight:
-                                                        FontWeight.w500)),
-                                          ),
-                                          Expanded(
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: [
-                                                timePickerWidget(
-                                                  context,
-                                                  onSelectedItemChanged:
-                                                      (int index) {
-                                                    // setState(() {
-                                                    //   selectedTime =
-                                                    //       selectedTime!.replacing(
-                                                    //           hour: index % 12);
-                                                    // });
-                                                  },
-                                                  children: List.generate(12,
-                                                      (index) {
-                                                    final hour =
-                                                        index == 0 ? 12 : index;
-                                                    return textWidget(
-                                                        text: '$hour',
-                                                        style: getMediumStyle(
-                                                                color:
-                                                                    primaryColor)
-                                                            .copyWith(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w900));
-                                                  }),
-                                                ),
-                                                timePickerWidget(
-                                                  context,
-                                                  onSelectedItemChanged:
-                                                      (int index) {
-                                                    // setState(() {
-                                                    //   selectedTime =
-                                                    //       selectedTime!.replacing(
-                                                    //           minute: index);
-                                                    // });
-                                                  },
-                                                  children: List.generate(60,
-                                                      (index) {
-                                                    return textWidget(
-                                                      text: index
-                                                          .toString()
-                                                          .padLeft(2, '0'),
-                                                      style: getMediumStyle()
-                                                          .copyWith(
-                                                        color: primaryColor,
-                                                        fontWeight:
-                                                            FontWeight.w900,
-                                                      ),
-                                                    );
-                                                  }),
-                                                ),
-                                                timePickerWidget(
-                                                  context,
-                                                  onSelectedItemChanged:
-                                                      (int index) {
-                                                    // setState(() {
-                                                    //   selectedTime = index == 0
-                                                    //       ? selectedTime!
-                                                    //           .replacing(
-                                                    //               hour: DayPeriod
-                                                    //                   .am.index)
-                                                    //       : selectedTime!
-                                                    //           .replacing(
-                                                    //               hour: DayPeriod
-                                                    //                   .pm.index);
-                                                    // });
-                                                  },
-                                                  children: ['am', 'pm']
-                                                      .map((period) {
-                                                    return textWidget(
-                                                        text: period,
-                                                        style: getMediumStyle(
-                                                                color:
-                                                                    primaryColor)
-                                                            .copyWith(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w900));
-                                                  }).toList(),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                  ),
+                                  // Minutes wheel
+                                  SizedBox(
+                                    width: 70,
+                                    height: 180,
+                                    child: ListWheelScrollView.useDelegate(
+                                      itemExtent: 50,
+                                      perspective: 0.005,
+                                      diameterRatio: 1.2,
+                                      physics: FixedExtentScrollPhysics(),
+                                      childDelegate:
+                                          ListWheelChildBuilderDelegate(
+                                              childCount: 61,
+                                              builder: (context, index) {
+                                                return Minutes(
+                                                  mins: index,
+                                                );
+                                              }),
                                     ),
-                                  ],
-                                ),
-                              ),
-                              ///////////
-                              /// cancel or done button
+                                  ),
 
-                              Padding(
-                                padding:
-                                    EdgeInsets.symmetric(horizontal: 20.sp),
-                                child: GtiButton(
-                                  text: AppStrings.cont,
-                                  onTap: () {},
-                                ),
+                                  // AM or PM
+                                  SizedBox(
+                                    width: 70,
+                                    height: 180,
+                                    child: ListWheelScrollView.useDelegate(
+                                      itemExtent: 50,
+                                      perspective: 0.005,
+                                      diameterRatio: 1.2,
+                                      physics: FixedExtentScrollPhysics(),
+                                      childDelegate:
+                                          ListWheelChildBuilderDelegate(
+                                              childCount: 2,
+                                              builder: (context, index) {
+                                                switch (index) {
+                                                  case 0:
+                                                    return const AmPm(
+                                                      isItAm: true,
+                                                    );
+                                                  case 1:
+                                                    return const AmPm(
+                                                      isItAm: false,
+                                                    );
+                                                    // break;
+                                                  default:
+                                                }
+                                                return null;
+                                              
+                                              }),
+                                    ),
+                                  ),
+                                ],
                               ),
+                              // Padding(
+                              //   padding:
+                              //       EdgeInsets.symmetric(horizontal: 20.sp),
+                              //   child: GtiButton(
+                              //     text: AppStrings.cont,
+                              //     onTap: () {},
+                              //   ),
+                              // ),
                             ],
                           ),
                         ),
