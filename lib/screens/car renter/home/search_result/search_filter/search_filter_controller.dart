@@ -174,6 +174,8 @@ class SearchFilterController extends GetxController {
     AppStrings.toyota,
     AppStrings.volvo,
   ];
+  
+  
   // methods
   void goBack() => routeService.goBack();
 

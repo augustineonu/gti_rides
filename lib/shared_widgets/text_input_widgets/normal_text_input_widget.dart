@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/styles.dart';
@@ -29,6 +30,8 @@ class NormalInputTextWidget extends StatelessWidget {
   final Color? textColor;
   final double? fontSize;
   final int? maxLines;
+  final double? titleFontSize;
+  final int? maxLength;
   const NormalInputTextWidget(
       {super.key,
       this.controller,
@@ -53,7 +56,10 @@ class NormalInputTextWidget extends StatelessWidget {
       this.onTap,
       this.textColor,
       this.fontSize,
-      this.maxLines = 1});
+      this.maxLines = 1,
+      this.titleFontSize,
+      this.maxLength
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -68,12 +74,16 @@ class NormalInputTextWidget extends StatelessWidget {
                   children: <TextSpan>[
                     TextSpan(
                         text: richSubTitle ?? '',
-                        style: getRegularStyle(color: grey2)),
+                        style: getRegularStyle(
+                          color: grey2,
+                        )),
                     // can add more TextSpans here...
                   ],
                 ),
               )
-            : textWidget(text: title, style: getRegularStyle()),
+            : textWidget(
+                text: title,
+                style: getRegularStyle(fontSize: titleFontSize ?? 14)),
         SizedBox(
           height: 3,
         ),
@@ -83,6 +93,10 @@ class NormalInputTextWidget extends StatelessWidget {
           readOnly: readOnly!,
           onTap: onTap,
           maxLines: maxLines,
+          //      inputFormatters: [
+          //   LengthLimitingTextInputFormatter(10),
+          // ],
+          maxLength: maxLength,
           style: getRegularStyle(fontSize: fontSize ?? 16, color: textColor),
           decoration: InputDecoration(
             filled: filled,
@@ -92,7 +106,7 @@ class NormalInputTextWidget extends StatelessWidget {
                 EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 10),
             hintText: hintText,
             hintStyle: hintStyle ??
-                getLightStyle(color: grey1, fontSize: 12.sp)
+                getLightStyle(color: hintTextColor ?? grey1, fontSize: 12.sp)
                     .copyWith(fontWeight: FontWeight.w400),
 
             enabledBorder: enabledBorder ??

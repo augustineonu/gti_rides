@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_dash/flutter_dash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/car%20owner/home/list_vehicle/list_vehicle_controller.dart';
+import 'package:gti_rides/shared_widgets/dropdown_widget.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/text_input_widgets/normal_text_input_widget.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
+import 'package:gti_rides/shared_widgets/upload_image_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
-import 'package:iconsax/iconsax.dart';
 
 class ListVehicleScreenBinding extends Bindings {
   @override
@@ -32,12 +32,12 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
           appBar: appBar(),
           // body: body(size, context)),
           body: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.0.sp, vertical: 13.sp),
+            padding: EdgeInsets.only(left: 20.0.sp, right: 20.sp, top: 13.sp),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(left: 10),
+                  padding: const EdgeInsets.only(left: 0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -74,7 +74,7 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                           subTitle: AppStrings.documentation,
                           child: Dash(
                               direction: Axis.horizontal,
-                              length: 27.sp,
+                              length: 28.sp,
                               dashLength: 2,
                               dashThickness: 2,
                               dashColor: primaryColor),
@@ -88,7 +88,7 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                           subTitle: AppStrings.addPhotos,
                           child: Dash(
                               direction: Axis.horizontal,
-                              length: 27.sp,
+                              length: 28.sp,
                               dashLength: 2,
                               dashThickness: 2,
                               dashColor: primaryColor),
@@ -110,7 +110,14 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                     ],
                   ),
                 ),
-                Expanded(
+
+                // imageUploadWidget(
+                //   title: AppStrings.uploadVehicleDoc,
+                //   body: AppStrings.pleaseMakeSurePicAreClear,
+                //   onTap: () {},
+                // ),
+                Flexible(
+                  fit: FlexFit.tight,
                   child: SingleChildScrollView(
                       child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -122,7 +129,7 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                       ),
                       // pageview pages
                       SizedBox(
-                        height: size.height * 0.9,
+                        height: size.height * 0.900.sp,
                         child: PageView(
                           // itemCount: controller.pages.length,
                           controller: controller.pageController,
@@ -134,13 +141,106 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                           //   return page;
                           // },
                           children: <Widget>[
-                            // Sender page
-                            Container(),
-                            // Receiver page
-                            Container(),
+                            // Vehicle type page
+                            vehicleTypePage(context, controller, size),
 
-                            // Package page
-                            Container(),
+                            // vehicle info page
+                            vehicleInfoPage(context, controller, size),
+
+                            // Documantation page
+                            SizedBox(
+                              child: Column(
+                                children: [
+                                  imageUploadWidget(
+                                    title: AppStrings.uploadVehicleDoc,
+                                    body: AppStrings.pleaseMakeSurePicAreClear,
+                                    onTap: () {},
+                                  ),
+                                  SizedBox(
+                                    height: 24.sp,
+                                  ),
+                                  NormalInputTextWidget(
+                                      expectedVariable: 'field',
+                                      title: AppStrings.vehicleLicense,
+                                      hintText: AppStrings.uploadDocument,
+                                      // maxLines: 3,
+                                      // maxLength: 100,
+                                      hintTextColor: primaryColor,
+                                      textInputType:
+                                          TextInputType.streetAddress,
+                                      titleFontSize: 12.sp),
+                                  SizedBox(
+                                    height: 24.sp,
+                                  ),
+                                   NormalInputTextWidget(
+                                      expectedVariable: 'field',
+                                      title: AppStrings.roadWorthiness,
+                                      hintText: AppStrings.uploadDocument,
+                                      // maxLines: 3,
+                                      // maxLength: 100,
+                                      hintTextColor: primaryColor,
+                                      textInputType:
+                                          TextInputType.streetAddress,
+                                      titleFontSize: 12.sp),
+                                  SizedBox(
+                                    height: 24.sp,
+                                  ),
+                                  dropdownWidget1(
+                                      context: context,
+                                      hintText: 'Select',
+                                      title: AppStrings.selectInsuranceType,
+                                      iconColor: grey3,
+                                      values: controller.transmissions,
+                                      onChange: (value) {
+                                        print('Selected value: $value');
+                                      }),
+                                  SizedBox(
+                                    height: 24.sp,
+                                  ),
+                                  dropdownWidget1(
+                                      context: context,
+                                      hintText: 'Select',
+                                      title: AppStrings.vehicleFeatures,
+                                      iconColor: grey3,
+                                      values: controller.features,
+                                      onChange: (value) {
+                                        print('Selected value: $value');
+                                      }),
+                                  SizedBox(
+                                    height: 24.sp,
+                                  ),
+                                  dropdownWidget1(
+                                      context: context,
+                                      hintText: 'Select',
+                                      title: AppStrings.vehicleType,
+                                      iconColor: grey3,
+                                      values: controller.vehicleTypes,
+                                      onChange: (value) {
+                                        print('Selected value: $value');
+                                      }),
+                                  SizedBox(
+                                    height: 24.sp,
+                                  ),
+                                  dropdownWidget1(
+                                      context: context,
+                                      hintText: 'Select',
+                                      title: AppStrings.numberOfSeats,
+                                      iconColor: grey3,
+                                      values: controller.vehicleSeats,
+                                      onChange: (value) {
+                                        print('Selected value: $value');
+                                      }),
+                                  SizedBox(
+                                    height: 50.sp,
+                                  ),
+                                  GtiButton(
+                                    onTap: () {},
+                                    text: AppStrings.cont,
+                                    width: size.width,
+                                  ),
+                                ],
+                              ),
+                            ),
 
                             //Dispatch page
                             dispatchPage(size),
@@ -162,6 +262,146 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
           ),
           // }
         ));
+  }
+
+  Widget vehicleInfoPage(
+      BuildContext context, ListVehicleController controller, Size size) {
+    return SizedBox(
+      child: Column(
+        children: [
+          NormalInputTextWidget(
+              expectedVariable: 'field',
+              title: AppStrings.tellUsAboutYourVehicle,
+              hintText: AppStrings.writeHere,
+              maxLines: 3,
+              maxLength: 100,
+              textInputType: TextInputType.streetAddress,
+              titleFontSize: 12.sp),
+          SizedBox(
+            height: 24.sp,
+          ),
+          dropdownWidget1(
+              context: context,
+              hintText: 'Select',
+              title: AppStrings.vehicleTransmission,
+              iconColor: grey3,
+              values: controller.transmissions,
+              onChange: (value) {
+                print('Selected value: $value');
+              }),
+          SizedBox(
+            height: 24.sp,
+          ),
+          dropdownWidget1(
+              context: context,
+              hintText: 'Select',
+              title: AppStrings.vehicleFeatures,
+              iconColor: grey3,
+              values: controller.features,
+              onChange: (value) {
+                print('Selected value: $value');
+              }),
+          SizedBox(
+            height: 24.sp,
+          ),
+          dropdownWidget1(
+              context: context,
+              hintText: 'Select',
+              title: AppStrings.vehicleType,
+              iconColor: grey3,
+              values: controller.vehicleTypes,
+              onChange: (value) {
+                print('Selected value: $value');
+              }),
+          SizedBox(
+            height: 24.sp,
+          ),
+          dropdownWidget1(
+              context: context,
+              hintText: 'Select',
+              title: AppStrings.numberOfSeats,
+              iconColor: grey3,
+              values: controller.vehicleSeats,
+              onChange: (value) {
+                print('Selected value: $value');
+              }),
+          SizedBox(
+            height: 50.sp,
+          ),
+          GtiButton(
+            onTap: () {},
+            text: AppStrings.cont,
+            width: size.width,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget vehicleTypePage(
+      BuildContext context, ListVehicleController controller, Size size) {
+    return SizedBox(
+      child: Column(
+        children: [
+          dropdownWidget1(
+              context: context,
+              hintText: 'Select',
+              title: AppStrings.whatIsTheBrandOfVehicle,
+              iconColor: grey3,
+              values: controller.vehicleBrands,
+              onChange: (value) {
+                print('Selected value: $value');
+              }),
+          SizedBox(
+            height: 24.sp,
+          ),
+          dropdownWidget1(
+              context: context,
+              hintText: 'Select',
+              title: AppStrings.whatIsTheModelOfVehicle,
+              iconColor: grey3,
+              values: controller.vehicleBrands,
+              onChange: (value) {
+                print('Selected value: $value');
+              }),
+          SizedBox(
+            height: 24.sp,
+          ),
+          NormalInputTextWidget(
+              expectedVariable: 'field',
+              title: AppStrings.whatIsTheVINOfVehicle,
+              hintText: AppStrings.inputVin,
+              textInputType: TextInputType.number,
+              titleFontSize: 12.sp),
+          SizedBox(
+            height: 24.sp,
+          ),
+          NormalInputTextWidget(
+              expectedVariable: 'field',
+              title: AppStrings.inputLincesePlateNumber,
+              hintText: AppStrings.inputState,
+              textInputType: TextInputType.number,
+              titleFontSize: 12.sp),
+          SizedBox(
+            height: 24.sp,
+          ),
+          NormalInputTextWidget(
+              expectedVariable: 'field',
+              title: AppStrings.whatCityAreYouIn,
+              hintText: AppStrings.inputCity,
+              textInputType: TextInputType.streetAddress,
+              titleFontSize: 12.sp),
+          SizedBox(
+            height: 50.sp,
+          ),
+          GtiButton(
+            onTap: () {},
+            text: AppStrings.cont,
+            width: size.width,
+          ),
+        ],
+      ),
+    );
   }
 
   AppBar appBar() {
@@ -226,40 +466,52 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
     Widget? child,
     required bool isSelected,
   }) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            AnimatedContainer(
-              duration: Duration(milliseconds: 300),
-              margin: const EdgeInsets.symmetric(horizontal: 0),
-              height: 38.sp,
-              width: 34.sp,
-              padding: EdgeInsets.symmetric(horizontal: 5.sp, vertical: 7.sp),
-              decoration: BoxDecoration(
-                color: isSelected ? primaryColor : white,
-                shape: BoxShape.circle,
-                border: Border.all(color: primaryColor),
-              ),
-              child: Center(
-                child: SvgPicture.asset(ImageAssets.toyCar1),
-              ),
+    return SizedBox(
+      height: 60.sp,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    margin: const EdgeInsets.symmetric(horizontal: 0),
+                    // height: 38.sp,
+                    // width: 32.sp,
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 5.sp, vertical: 7.sp),
+                    decoration: BoxDecoration(
+                      color: isSelected ? primaryColor : white,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: primaryColor),
+                    ),
+                    child: Center(
+                      child: SvgPicture.asset(
+                        ImageAssets.toyCar1,
+                        width: 33,
+                      ),
+                    ),
+                  ),
+                ),
+                child ?? const SizedBox(),
+              ],
             ),
-            child ?? SizedBox(),
-          ],
-        ),
-        const SizedBox(
-          height: 5,
-        ),
-        textWidget(
-          text: subTitle,
-          style: getLightStyle(fontSize: 8, color: iconColor())
-              .copyWith(fontWeight: FontWeight.w400),
-        )
-      ],
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          textWidget(
+            text: subTitle,
+            style: getLightStyle(fontSize: 8, color: iconColor())
+                .copyWith(fontWeight: FontWeight.w400),
+          )
+        ],
+      ),
     );
   }
 

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/styles.dart';
+import 'package:gti_rides/utils/constants.dart';
 import 'package:iconsax/iconsax.dart';
 
 Widget dropdownWidget({
@@ -22,6 +24,7 @@ Widget dropdownWidget({
       borderOnForeground: false,
       color: Colors.transparent,
       child: DropdownButtonFormField(
+        isExpanded: true,
         hint: Text(
           hintText!,
           style: getRegularStyle(color: borderColor),
@@ -57,7 +60,7 @@ Widget dropdownWidget({
             .titleLarge
             ?.copyWith(color: Colors.white),
         onChanged: (String? value) => onChange(value),
-        icon: Icon(
+        icon: const Icon(
           Iconsax.arrow_down_1,
           color: borderColor,
         ),
@@ -96,6 +99,124 @@ Widget dropdownWidget({
             ),
       ),
     ),
+  );
+}
+
+Widget dropdownWidget1({
+  required BuildContext context,
+  // required String? selectedUserValue,
+  required String? hintText,
+  required List<String> values,
+  required Function onChange,
+  InputDecoration? decoration,
+  required String? title,
+  Color? iconColor,
+  // double? radius,
+  // Color? arrow,
+  // Color? display,
+  // FontWeight? fontWeight,
+  // double? fontSize,
+}) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      textWidget(
+        text: title,
+        style: getRegularStyle(fontSize: 12.sp),
+      ),
+      SizedBox(
+        height: 5.sp,
+      ),
+      SizedBox(
+        height: 45.sp,
+        // padding: const EdgeInsets.symmetric(vertical: 5.0),
+        child: Material(
+          borderOnForeground: false,
+          color: Colors.transparent,
+          child: ButtonTheme(
+            alignedDropdown: true,
+            child: DropdownButtonFormField(
+              iconEnabledColor: red,
+              isExpanded: true,
+              hint: Text(
+                hintText!,
+                style: getRegularStyle(color: borderColor),
+              ),
+              // value: selectedUserValue,
+              selectedItemBuilder: (context) {
+                return values
+                    .map((item) => Container(
+                          alignment: Alignment.centerLeft,
+                          constraints: const BoxConstraints(minWidth: 100),
+                          child: Text(
+                            item,
+                            style: getRegularStyle(),
+                          ),
+                        ))
+                    .toList();
+              },
+              items: values
+                  .map(
+                    (item) => DropdownMenuItem(
+                      value: item,
+                      child: Text(
+                        item,
+                        style: getRegularStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  )
+                  .toList(),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge
+                  ?.copyWith(color: Colors.white),
+              onChanged: (String? value) => onChange(value),
+              icon:  Icon(
+                Iconsax.arrow_down_1,
+                color: iconColor ?? borderColor,
+              ),
+              decoration: decoration ??
+                  InputDecoration(
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 5.sp, vertical: 13.sp),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color:  borderColor,
+                        width: 1.0.w,
+                      ),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(4.0.r),
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: borderColor,
+                        width: 1.0.w,
+                      ),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(4.0.r),
+                      ),
+                    ),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: secondaryColor,
+                        width: 1.0.w,
+                      ),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(4.0.r),
+                      ),
+                    ),
+
+                    // filled: true,
+                    fillColor: Colors.transparent,
+                  ),
+            ),
+          ),
+        ),
+      ),
+    ],
   );
 }
 
@@ -180,7 +301,7 @@ class DropDownMenuWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(5.r),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: primaryColor, width: 2),
+            borderSide: const BorderSide(color: primaryColor, width: 2),
             borderRadius: BorderRadius.circular(5.r),
           ),
           focusColor: Colors.black,
