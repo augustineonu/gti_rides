@@ -3,9 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/car%20renter/home/search_result/search_filter/search_filter_controller.dart';
-import 'package:gti_rides/shared_widgets/sqaure_check_box_widget.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
+import 'package:gti_rides/shared_widgets/sqaure_check_box_widget.dart';
 import 'package:gti_rides/shared_widgets/switch_widget.dart';
 import 'package:gti_rides/shared_widgets/text_input_widgets/normal_text_input_widget.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
@@ -63,7 +63,7 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             sortBy(
-              onTap: () => dialogWidget(
+              onTap: () => dialogWidgetWithClose(
                 size,
                 alignment: Alignment.topCenter,
                 contentHeight: size.height * 0.29,
@@ -469,7 +469,7 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
 
   Future<dynamic> transmission(Size size) {
     final value = controller.selectedTransmissions.value;
-    return dialogWidget(
+    return dialogWidgetWithClose(
       size,
       contentHeight: size.height * 0.25,
       title: AppStrings.transmission,
@@ -511,12 +511,12 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
   }
 
   Future<dynamic> category(Size size) {
-    return dialogWidget(
+    return dialogWidgetWithClose(
       size,
       contentHeight: size.height * 0.52,
       title: AppStrings.category,
       space: 35.sp,
-      onTap:  () => controller.goBack(),
+      onTap: () => controller.goBack(),
       content: StatefulBuilder(builder: (context, state) {
         return ListView.separated(
           itemCount: controller.categories.length,
@@ -555,7 +555,7 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
   }
 
   Future<dynamic> carSeat(Size size) {
-    return dialogWidget(
+    return dialogWidgetWithClose(
       size,
       alignment: Alignment.center,
       contentHeight: size.height * 0.44,
@@ -598,7 +598,7 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
   }
 
   Future<dynamic> vehicleType(Size size) {
-    return dialogWidget(
+    return dialogWidgetWithClose(
       size,
       alignment: Alignment.topCenter,
       contentHeight: size.height * 0.44,
@@ -640,7 +640,6 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
     );
   }
 
- 
   Widget hostRating() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.sp, vertical: 10),

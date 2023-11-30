@@ -10,15 +10,49 @@ import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
 
+class EmailScreenBinding extends Bindings {
+  @override
+  void dependencies() {
+    // TODO: implement dependencies
+    Get.put<AccountVerificationController>(AccountVerificationController());
+  }
+}
+
 class EmailScreen extends GetView<AccountVerificationController> {
   const EmailScreen([Key? key]) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+
+  final controller =  Get.put<AccountVerificationController>(AccountVerificationController());
     return Scaffold(
         backgroundColor: backgroundColor,
-        appBar: appBar(),
-        body: body(size, context));
+        appBar: gtiAppBar(
+      onTap: controller.goBack,
+      leading: const Icon(Icons.arrow_back),
+      centerTitle: true,
+      title: textWidget(
+          text: AppStrings.email,
+          style: getMediumStyle().copyWith(fontWeight: FontWeight.w500)),
+      titleColor: iconColor(),
+    ),
+        body: Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        // crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          NormalInputTextWidget(
+            expectedVariable: 'email',
+            title: AppStrings.email,
+            hintText: AppStrings.emailHintText,
+            textInputType: TextInputType.emailAddress,
+            controller: controller.emailController,
+          ),
+          SizedBox(height: 30.sp,),
+          continueButton(size),
+        ],
+      ),
+    ));
     // }
   }
 

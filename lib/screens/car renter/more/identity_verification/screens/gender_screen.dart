@@ -46,15 +46,15 @@ class GenderScreen extends GetView<IdentityVerificationController> {
       child: Obx(() => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              textWidget(text: AppStrings.selectGender, style: getRegularStyle()),
-              dropdownWidget(
+              // textWidget(text: AppStrings.selectGender, style: getRegularStyle()),
+              dropdownWidget1(
                   context: context,
                   hintText: 'Select gender',
-                  selectedUserValue: AppStrings.male,
+                  // selectedUserValue: AppStrings.male,
                   values: controller.gender,
                   onChange: (value) {
                     print('Selected value: $value');
-                  }),
+                  }, title: AppStrings.selectGender),
               const SizedBox(height: 74),
               saveButton(),
             ],

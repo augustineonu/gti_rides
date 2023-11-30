@@ -164,7 +164,7 @@ class ResetPasswordScreen extends GetView<ResetPasswordController> {
             width: 300.sp,
             text: AppStrings.cont,
             color: primaryColor,
-            onTap: () {},
+            onTap: controller.routeToLogin,
             // onTap: controller.routeToPhoneVerification,
             isLoading: controller.isLoading.value,
           );

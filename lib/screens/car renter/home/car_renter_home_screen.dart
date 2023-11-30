@@ -122,6 +122,7 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
         controller: scrollController,
         padding: EdgeInsets.symmetric(vertical: 10.sp, horizontal: 16.sp),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           // mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             headerText(),
@@ -147,11 +148,14 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
                     },
                     scrollDirection: Axis.horizontal,
                     children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(4.r)),
-                        child: Image.asset(
-                          "assets/images/car.png",
-                          fit: BoxFit.contain,
+                      GestureDetector(
+                        onTap: ctrl.routeToCarSelectionResult,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(4.r)),
+                          child: Image.asset(
+                            "assets/images/car.png",
+                            fit: BoxFit.contain,
+                          ),
                         ),
                       ),
                       ClipRRect(
@@ -184,9 +188,9 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
               ),
             ),
 
-            Text(
-              ctrl.exampleText.value,
-            ),
+            // Text(
+            //   ctrl.exampleText.value,
+            // ),
           ],
         ),
       ),

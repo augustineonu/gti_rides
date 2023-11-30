@@ -4,7 +4,6 @@ import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/utils/constants.dart';
 
-
 class ListVehicleController extends GetxController {
   Logger logger = Logger("Controller");
   RxBool isLoading = false.obs;
@@ -81,14 +80,14 @@ class ListVehicleController extends GetxController {
     AppStrings.toyota,
     AppStrings.volvo,
   ];
-  
- List<String> transmissions = [
+
+  List<String> transmissions = [
     AppStrings.allTransmission,
     AppStrings.manual,
     AppStrings.automatic,
   ];
 
-    List<String> features = [
+  List<String> features = [
     AppStrings.allFeatures,
     AppStrings.wheelchairAccessible,
     AppStrings.allWheelDrive,
@@ -113,7 +112,7 @@ class ListVehicleController extends GetxController {
     AppStrings.usbInput,
   ];
 
-    List<String> vehicleTypes = [
+  List<String> vehicleTypes = [
     AppStrings.allTypes,
     AppStrings.cars,
     AppStrings.suvs,
@@ -132,8 +131,21 @@ class ListVehicleController extends GetxController {
     AppStrings.nineOrMore,
   ];
 
+  List<String> drivers = [
+  //   {
+  //   'name': 'John Doe',
+  //   'details': '08180065778 | johndoe@gmail.com',
+  // },
+  //   {
+  //   'name': 'John Doe',
+  //   'details': '08180065778 | johndoe@gmail.com',
+  // },
+  //   {
+  //   'name': 'John Doe',
+  //   'details': '08180065778 | johndoe@gmail.com',
+  // },
+  ];
 
 // routing methods
   void goBack() => routeService.goBack();
-
 }

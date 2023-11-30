@@ -50,6 +50,7 @@ class MoreScreen extends StatelessWidget {
                         shrinkWrap: true,
                         itemCount: controller.profileOptions.length,
                         itemBuilder: (context, index) {
+                          // show "My Drivers" only if user type is Car Owner
                           final option = controller.profileOptions[index];
                           return profileOptionsWIdget(
                             imageUrl: option['image'],
@@ -62,6 +63,7 @@ class MoreScreen extends StatelessWidget {
                                   controller.routeToFavorite();
                                 case 2:
                                   controller.routeToIdentityVerification();
+                                // show "My Drivers" only if user type is Car Owner
                                 case 3:
                                   return;
                                 case 5:

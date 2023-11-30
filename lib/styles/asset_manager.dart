@@ -73,6 +73,8 @@ class ImageAssets {
   static const String camera = "$SVG_PATH/camera.svg";
   static const String greyCar1 = "$SVG_PATH/grey_car.svg";
   static const String steering = "$SVG_PATH/steering.svg";
+  static const String info = "$SVG_PATH/info.svg";
+  static const String folder = "$SVG_PATH/Folder.svg";
   // static const String carListingBg = "$SVG_PATH/car_listing_bg.svg";
   // PNG IMAGES
 

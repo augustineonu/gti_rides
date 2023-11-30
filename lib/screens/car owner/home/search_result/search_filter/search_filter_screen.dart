@@ -63,7 +63,7 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             sortBy(
-              onTap: () => dialogWidget(
+              onTap: () => dialogWidgetWithClose(
                 size,
                 alignment: Alignment.topCenter,
                 contentHeight: size.height * 0.29,
@@ -469,7 +469,7 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
 
   Future<dynamic> transmission(Size size) {
     final value = controller.selectedTransmissions.value;
-    return dialogWidget(
+    return dialogWidgetWithClose(
       size,
       contentHeight: size.height * 0.25,
       title: AppStrings.transmission,
@@ -511,12 +511,12 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
   }
 
   Future<dynamic> category(Size size) {
-    return dialogWidget(
+    return dialogWidgetWithClose(
       size,
       contentHeight: size.height * 0.52,
       title: AppStrings.category,
       space: 35.sp,
-      onTap:  () => controller.goBack(),
+      onTap: () => controller.goBack(),
       content: StatefulBuilder(builder: (context, state) {
         return ListView.separated(
           itemCount: controller.categories.length,
@@ -555,7 +555,7 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
   }
 
   Future<dynamic> carSeat(Size size) {
-    return dialogWidget(
+    return dialogWidgetWithClose(
       size,
       alignment: Alignment.center,
       contentHeight: size.height * 0.44,
@@ -598,7 +598,7 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
   }
 
   Future<dynamic> vehicleType(Size size) {
-    return dialogWidget(
+    return dialogWidgetWithClose(
       size,
       alignment: Alignment.topCenter,
       contentHeight: size.height * 0.44,
@@ -640,7 +640,6 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
     );
   }
 
- 
   Widget hostRating() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.sp, vertical: 10),

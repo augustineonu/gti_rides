@@ -137,7 +137,7 @@ class SearchCityScreen extends GetView<SearchCityController> {
                                         expectedVariable: "field",
                                         hintText: "1 Nov, 9:00am",
                                         controller:
-                                            controller.locationController,
+                                            controller.fromController,
                                         onTap: () =>
                                             controller.routeToSelecteDate(),
                                       ),
@@ -151,7 +151,7 @@ class SearchCityScreen extends GetView<SearchCityController> {
                                         expectedVariable: "field",
                                         hintText: "5 Nov, 9:00am",
                                         controller:
-                                            controller.locationController,
+                                            controller.toController,
                                       ),
                                     ),
                                   ],

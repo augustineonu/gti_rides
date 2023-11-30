@@ -79,10 +79,7 @@ class IdentityVerificationScreen
               title: AppStrings.emergencyContactDetails,
               subTitle: AppStrings.inputEmergencyDetails,
               onTap: controller.routeToEmergencyContact),
-          identityVerificationWidget(
-              title: AppStrings.driversLicense,
-              subTitle: AppStrings.provideDriversLicense,
-              onTap: () {}),
+   
 
           // address verification
           Padding(

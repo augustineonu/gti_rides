@@ -161,6 +161,7 @@ class AppRoutes {
     GetPage(
       name: AppLinks.email,
       page: () => const EmailScreen(),
+      binding: EmailScreenBinding()
     ),
     GetPage(
       name: AppLinks.emailOtp,

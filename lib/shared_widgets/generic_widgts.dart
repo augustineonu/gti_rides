@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:gti_rides/screens/car%20renter/home/paint.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
@@ -180,7 +179,7 @@ Widget profileAvatar({
 }) {
   return SizedBox(
       height: boxHeight ?? 40,
-      width: boxWidth  ?? 40,
+      width: boxWidth ?? 40,
       child: Builder(builder: (context) {
         return Stack(
           children: [
@@ -254,7 +253,7 @@ Widget imageWidget({
   );
 }
 
-Future<dynamic> dialogWidget(
+Future<dynamic> dialogWidgetWithClose(
   Size size, {
   required String title,
   double? contentHeight,

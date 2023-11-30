@@ -26,7 +26,7 @@ class MoreController extends GetxController {
 
   RxBool isDone = false.obs;
   RxBool showPassword = false.obs;
-  Rx<String> exampleText = "example".obs;
+  Rx<String> exampleText = "".obs;
 
   List<Map<String, dynamic>> profileOptions = [
     {

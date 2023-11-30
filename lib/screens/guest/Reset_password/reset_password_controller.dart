@@ -58,4 +58,7 @@ class ResetPasswordController extends GetxController {
   void routeToresetPassword() => routeService.gotoRoute(
         AppLinks.resetPassword,
       );
+  void routeToLogin() => routeService.gotoRoute(
+        AppLinks.login,
+      );
 }

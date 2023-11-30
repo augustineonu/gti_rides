@@ -16,6 +16,8 @@ class SearchCityController extends GetxController {
   RxString flagEmoji = '🇺🇸'.obs;
 
   TextEditingController searchCategoryController = TextEditingController();
+  TextEditingController fromController = TextEditingController();
+  TextEditingController toController = TextEditingController();
   TextEditingController locationController = TextEditingController();
 
   RxList<String> cities = <String>[].obs;

@@ -248,9 +248,11 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
         : GtiButton(
             height: 40.sp,
             width: 380.sp,
-            text: controller.args
-                ? AppStrings.proceedToPay
-                : AppStrings.sendRequest,
+            text:
+            //  controller.args
+                // ? AppStrings.proceedToPay
+                // : 
+                AppStrings.sendRequest,
             color: primaryColor,
             // onTap: controller.routeToUpdateKyc,
             onTap: () {

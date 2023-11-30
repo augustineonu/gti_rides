@@ -32,6 +32,7 @@ class NormalInputTextWidget extends StatelessWidget {
   final int? maxLines;
   final double? titleFontSize;
   final int? maxLength;
+  final bool? showCursor;
   const NormalInputTextWidget(
       {super.key,
       this.controller,
@@ -58,7 +59,8 @@ class NormalInputTextWidget extends StatelessWidget {
       this.fontSize,
       this.maxLines = 1,
       this.titleFontSize,
-      this.maxLength
+      this.maxLength,
+      this.showCursor
       });
 
   @override
@@ -83,6 +85,7 @@ class NormalInputTextWidget extends StatelessWidget {
               )
             : textWidget(
                 text: title,
+                textOverflow: TextOverflow.visible,
                 style: getRegularStyle(fontSize: titleFontSize ?? 14)),
         SizedBox(
           height: 3,
@@ -93,6 +96,7 @@ class NormalInputTextWidget extends StatelessWidget {
           readOnly: readOnly!,
           onTap: onTap,
           maxLines: maxLines,
+          showCursor: showCursor,
           //      inputFormatters: [
           //   LengthLimitingTextInputFormatter(10),
           // ],

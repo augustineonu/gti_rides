@@ -147,7 +147,10 @@ class SearchResultScreen extends GetView<SearchResultController> {
                                   ),
                                 ),
                               ),
-                              carAvailabilityTag(status: AppStrings.available),
+                              carAvailabilityTag(
+                                positionRight: 7.sp,
+                                positionTop: 6.sp,
+                                status: AppStrings.available),
                             ],
                           ),
                         ),

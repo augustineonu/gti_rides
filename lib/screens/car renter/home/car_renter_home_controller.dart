@@ -62,6 +62,8 @@ class CarRenterHomeController extends GetxController {
   void routeToSearchCity() => routeService.gotoRoute(AppLinks.searchCity);
   void routeToCarOwnerLanding() =>
       routeService.offAllNamed(AppLinks.carOwnerLanding);
+  void routeToCarSelectionResult() =>
+      routeService.offAllNamed(AppLinks.carSelectionResult);
 
   @override
   void dispose() {

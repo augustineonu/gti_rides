@@ -30,7 +30,7 @@ class PaymentSummaryController extends GetxController {
 
   Rx<String> testString = 'hello world'.obs;
 
-  var args = Get.arguments;
+  // bool args = Get.arguments;
 
   void goBack() => routeService.goBack();
   void routeToHome() => routeService.gotoRoute(AppLinks.carRenterLanding);

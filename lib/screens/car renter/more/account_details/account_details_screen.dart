@@ -72,7 +72,8 @@ class AccountDetailsScreen extends GetView<AccountDetailsController> {
             accountDetailsWidget(
                 title: AppStrings.email,
                 body: 'Tadewilliams@gmail.com',
-                onTap: controller.routeToEmailInput),
+                // onTap: controller.routeToEmailInput
+                ),
           ],
         ),
         divider(color: borderColor),
@@ -97,7 +98,7 @@ class AccountDetailsScreen extends GetView<AccountDetailsController> {
   Widget accountDetailsWidget(
       {required String title,
       required String body,
-      required void Function()? onTap}) {
+       void Function()? onTap}) {
     return InkWell(
       onTap: onTap,
       child: Padding(

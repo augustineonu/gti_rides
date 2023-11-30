@@ -129,7 +129,7 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                       ),
                       // pageview pages
                       SizedBox(
-                        height: size.height * 0.900.sp,
+                        height: size.height * 0.950.sp,
                         child: PageView(
                           // itemCount: controller.pages.length,
                           controller: controller.pageController,
@@ -148,88 +148,145 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                             vehicleInfoPage(context, controller, size),
 
                             // Documantation page
+                            documentationPage(context, controller, size),
+
+                            //Add photos page
+                            addPhotosPage(size),
                             SizedBox(
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  imageUploadWidget(
-                                    title: AppStrings.uploadVehicleDoc,
-                                    body: AppStrings.pleaseMakeSurePicAreClear,
-                                    onTap: () {},
+                                  textWidget(
+                                      text: AppStrings.availability,
+                                      textOverflow: TextOverflow.visible,
+                                      style: getMediumStyle()),
+                                  SizedBox(
+                                    height: 8.sp,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: NormalInputTextWidget(
+                                          expectedVariable: 'field',
+                                          title: AppStrings.from,
+                                          showCursor: false,
+                                          hintText: AppStrings.dateTimeHintText,
+                                        ),
+                                      ),
+                                      SizedBox(width: 20.sp),
+                                      Expanded(
+                                        child: NormalInputTextWidget(
+                                          expectedVariable: 'field',
+                                          title: AppStrings.to,
+                                          showCursor: false,
+                                          hintText: AppStrings.dateTimeHintText,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                   SizedBox(
                                     height: 24.sp,
                                   ),
                                   NormalInputTextWidget(
-                                      expectedVariable: 'field',
-                                      title: AppStrings.vehicleLicense,
-                                      hintText: AppStrings.uploadDocument,
-                                      // maxLines: 3,
-                                      // maxLength: 100,
-                                      hintTextColor: primaryColor,
-                                      textInputType:
-                                          TextInputType.streetAddress,
-                                      titleFontSize: 12.sp),
+                                    expectedVariable: 'field',
+                                    title: AppStrings.howMuchForAdvance,
+                                    titleFontSize: 12.sp,
+                                    showCursor: false,
+                                    hintText: AppStrings.amountHintText,
+                                    textInputType: TextInputType.number,
+                                  ),
                                   SizedBox(
                                     height: 24.sp,
                                   ),
-                                   NormalInputTextWidget(
-                                      expectedVariable: 'field',
-                                      title: AppStrings.roadWorthiness,
-                                      hintText: AppStrings.uploadDocument,
-                                      // maxLines: 3,
-                                      // maxLength: 100,
-                                      hintTextColor: primaryColor,
-                                      textInputType:
-                                          TextInputType.streetAddress,
-                                      titleFontSize: 12.sp),
+                                  NormalInputTextWidget(
+                                    expectedVariable: 'field',
+                                    title: AppStrings.proposeRentalRate,
+                                    titleFontSize: 12.sp,
+                                    showCursor: false,
+                                    hintText: AppStrings.amountHintText,
+                                    prefixIcon: Transform.scale(
+                                        scale: 0.3,
+                                        child: SvgPicture.asset(
+                                          ImageAssets.naira,
+                                          width: 10.sp,
+                                        )),
+                                    textInputType: TextInputType.number,
+                                  ),
+                                  SizedBox(
+                                    height: 24.sp,
+                                  ),
+                                  Row(
+                                    children: [
+                                      textWidget(
+                                          text: AppStrings.discount,
+                                          style: getMediumStyle()),
+                                      SizedBox(
+                                        width: 4.sp,
+                                      ),
+                                      SvgPicture.asset(
+                                        ImageAssets.info,
+                                      ),
+                                      SizedBox(
+                                        width: 1.5.sp,
+                                      ),
+                                      textWidget(
+                                          text: AppStrings.learnMore,
+                                          style: getMediumStyle(
+                                              color: primaryColor,
+                                              fontSize: 10.sp)),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 4.sp,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: dropdownWidget1(
+                                            context: context,
+                                            hintText: 'Select',
+                                            title: AppStrings.chooseNuberOfDays,
+                                            iconColor: grey3,
+                                            values: List.generate(
+                                                10,
+                                                (index) =>
+                                                    (index + 1).toString()),
+                                            onChange: (value) {
+                                              print('Selected value: $value');
+                                            }),
+                                      ),
+                                      SizedBox(width: 20.sp),
+                                      Expanded(
+                                        child: NormalInputTextWidget(
+                                          expectedVariable: 'field',
+                                          title: AppStrings.inputDiscountPerDay,
+                                          titleFontSize: 12.sp,
+                                          showCursor: false,
+                                          hintText: AppStrings.amountHintText,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                   SizedBox(
                                     height: 24.sp,
                                   ),
                                   dropdownWidget1(
-                                      context: context,
-                                      hintText: 'Select',
-                                      title: AppStrings.selectInsuranceType,
-                                      iconColor: grey3,
-                                      values: controller.transmissions,
-                                      onChange: (value) {
-                                        print('Selected value: $value');
-                                      }),
-                                  SizedBox(
-                                    height: 24.sp,
+                                    context: context,
+                                    hintText: 'Select',
+                                    title: AppStrings.selectDriver,
+                                    iconColor: grey3,
+                                    values: controller.drivers,
+                                    // values: List.generate(controller.drivers.length,
+                                    //  (index) => controller.drivers[index]['name'].toString()),
+                                    onChange: (value) {
+                                      print('Selected value: $value');
+                                    },
+                                    onTap: () {
+                                      if (controller.drivers.isEmpty) {
+                                        noDriverDialog(size);
+                                      }
+                                    },
                                   ),
-                                  dropdownWidget1(
-                                      context: context,
-                                      hintText: 'Select',
-                                      title: AppStrings.vehicleFeatures,
-                                      iconColor: grey3,
-                                      values: controller.features,
-                                      onChange: (value) {
-                                        print('Selected value: $value');
-                                      }),
-                                  SizedBox(
-                                    height: 24.sp,
-                                  ),
-                                  dropdownWidget1(
-                                      context: context,
-                                      hintText: 'Select',
-                                      title: AppStrings.vehicleType,
-                                      iconColor: grey3,
-                                      values: controller.vehicleTypes,
-                                      onChange: (value) {
-                                        print('Selected value: $value');
-                                      }),
-                                  SizedBox(
-                                    height: 24.sp,
-                                  ),
-                                  dropdownWidget1(
-                                      context: context,
-                                      hintText: 'Select',
-                                      title: AppStrings.numberOfSeats,
-                                      iconColor: grey3,
-                                      values: controller.vehicleSeats,
-                                      onChange: (value) {
-                                        print('Selected value: $value');
-                                      }),
                                   SizedBox(
                                     height: 50.sp,
                                   ),
@@ -241,12 +298,6 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                                 ],
                               ),
                             ),
-
-                            //Dispatch page
-                            dispatchPage(size),
-                            dispatchPage(size),
-
-                            // Add more page widgets for each step
                           ],
                         ),
                       ),
@@ -262,6 +313,218 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
           ),
           // }
         ));
+  }
+
+  Future<dynamic> noDriverDialog(Size size) {
+    return Get.dialog(StatefulBuilder(builder: (context, setState) {
+      return Dialog(
+        child: Container(
+          height: size.height * 0.5.sp,
+          padding: EdgeInsets.only(
+              left: 40.sp, right: 40.sp, bottom: 30.sp, top: 65.sp),
+          // height: ,
+          decoration: BoxDecoration(
+            color: white,
+            borderRadius: BorderRadius.all(
+              Radius.circular(12.sp),
+            ),
+          ),
+          child: Column(
+            children: [
+              SvgPicture.asset(ImageAssets.folder),
+              SizedBox(
+                height: 40.sp,
+              ),
+              textWidget(
+                text: AppStrings.yetToAddDriver,
+                textOverflow: TextOverflow.visible,
+                style: getBoldStyle(
+                  color: primaryColor,
+                ),
+              ),
+              SizedBox(
+                height: 10.sp,
+              ),
+              textWidget(
+                text: AppStrings.pleaseAddDriver,
+                textOverflow: TextOverflow.visible,
+                textAlign: TextAlign.center,
+                style: getRegularStyle(),
+              ),
+              SizedBox(
+                height: 40.sp,
+              ),
+              GtiButton(
+                onTap: () {},
+                text: AppStrings.cont,
+                width: size.width,
+              ),
+            ],
+          ),
+        ),
+      );
+    }));
+  }
+
+  Widget addPhotosPage(Size size) {
+    return SizedBox(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          textWidget(
+              text: AppStrings.howToTakePhoto,
+              textOverflow: TextOverflow.visible,
+              style: getRegularStyle(fontSize: 12.sp)),
+          SizedBox(
+            height: 14.sp,
+          ),
+          ListView.separated(
+            shrinkWrap: true,
+            itemCount: 5,
+            itemBuilder: (context, index) {
+              return Row(
+                children: [
+                  SvgPicture.asset(ImageAssets.kycCheck),
+                  SizedBox(
+                    width: 6.sp,
+                  ),
+                  textWidget(
+                      text: "content 1",
+                      style: getRegularStyle(fontSize: 12.sp)),
+                ],
+              );
+            },
+            separatorBuilder: (context, _) => SizedBox(
+              height: 8.sp,
+            ),
+          ),
+          SizedBox(
+            height: 24.sp,
+          ),
+          photoUploadWithTitle(size,
+              title: AppStrings.uploadVehiclePhotos,
+              content: AppStrings.selectPhotos,
+              onTap: () {}),
+          SizedBox(
+            height: 50.sp,
+          ),
+          GtiButton(
+            onTap: () {},
+            text: AppStrings.cont,
+            width: size.width,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget photoUploadWithTitle(
+    Size size, {
+    required String title,
+    required String content,
+    required void Function()? onTap,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        RichText(
+          text: TextSpan(
+              text: title,
+              style: getRegularStyle(fontSize: 12.sp),
+              children: <TextSpan>[
+                TextSpan(
+                  text: AppStrings.youCanUploadOnly10Photos,
+                  style: getRegularStyle(fontSize: 12.sp, color: grey3),
+                )
+              ]),
+        ),
+        GestureDetector(
+          onTap: onTap,
+          child: Container(
+            width: size.width,
+            margin: EdgeInsets.symmetric(vertical: 6.sp),
+            padding: EdgeInsets.symmetric(horizontal: 10.sp, vertical: 13.sp),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(4.r)),
+                border: Border.all(color: borderColor)),
+            child: textWidget(
+                text: content,
+                textOverflow: TextOverflow.visible,
+                style: getRegularStyle(fontSize: 12.sp, color: primaryColor)),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget documentationPage(
+      BuildContext context, ListVehicleController controller, Size size) {
+    return SizedBox(
+      child: Column(
+        children: [
+          imageUploadWidget(
+            title: AppStrings.uploadVehicleDoc,
+            body: AppStrings.pleaseMakeSurePicAreClear,
+            onTap: () {},
+          ),
+          SizedBox(
+            height: 24.sp,
+          ),
+          photoUploadWithTitle(size,
+              title: AppStrings.vehicleLicense,
+              content: AppStrings.uploadDocument,
+              onTap: () {}),
+          SizedBox(
+            height: 24.sp,
+          ),
+          photoUploadWithTitle(size,
+              title: AppStrings.roadWorthiness,
+              content: AppStrings.uploadDocument,
+              onTap: () {}),
+          SizedBox(
+            height: 24.sp,
+          ),
+          dropdownWidget1(
+              context: context,
+              hintText: 'Select',
+              title: AppStrings.selectInsuranceType,
+              iconColor: grey3,
+              values: controller.transmissions,
+              onChange: (value) {
+                print('Selected value: $value');
+              }),
+          SizedBox(
+            height: 24.sp,
+          ),
+          photoUploadWithTitle(size,
+              title: AppStrings.certificateOfInsurance,
+              content: AppStrings.uploadDocument,
+              onTap: () {}),
+          SizedBox(
+            height: 24.sp,
+          ),
+          photoUploadWithTitle(size,
+              title: AppStrings.vehicleInspectionReport,
+              content: AppStrings.uploadDocument,
+              onTap: () {}),
+          SizedBox(
+            height: 24.sp,
+          ),
+          photoUploadWithTitle(size,
+              title: AppStrings.uploadVehiclePhotos,
+              content: AppStrings.uploadDocument,
+              onTap: () {}),
+          SizedBox(
+            height: 50.sp,
+          ),
+          GtiButton(
+            onTap: () {},
+            text: AppStrings.cont,
+            width: size.width,
+          ),
+        ],
+      ),
+    );
   }
 
   Widget vehicleInfoPage(

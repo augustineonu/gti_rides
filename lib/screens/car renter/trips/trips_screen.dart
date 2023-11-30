@@ -59,6 +59,9 @@ class TripsScreen extends GetView<TripsController> {
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
+                          SizedBox(
+                            height: 20.sp,
+                          ),
                           buildBody(size, context, controller, expanded),
                         ],
                       ),
@@ -281,7 +284,8 @@ class TripsScreen extends GetView<TripsController> {
                                                         horizontal: 15),
                                                 decoration: BoxDecoration(
                                                   color: primaryColor,
-                                                  borderRadius: BorderRadius.all(
+                                                  borderRadius:
+                                                      BorderRadius.all(
                                                     Radius.circular(4.r),
                                                   ),
                                                 ),
@@ -333,12 +337,12 @@ class TripsScreen extends GetView<TripsController> {
                                                 border: InputBorder.none,
                                                 enabledBorder: InputBorder.none,
                                               ),
-                                                  SizedBox(height: 37.sp),
+                                              SizedBox(height: 37.sp),
                                               GtiButton(
-                                                width: 350,
-                                                text: AppStrings.submit,
-                                                onTap: controller.routeToHome
-                                              ),
+                                                  width: 350,
+                                                  text: AppStrings.submit,
+                                                  onTap:
+                                                      controller.routeToHome),
                                             ]),
                                       ),
                                     ));
@@ -542,7 +546,7 @@ class TripsScreen extends GetView<TripsController> {
   }
 
   Future<dynamic> extendTimeDialog(Size size, TripsController controller) {
-    return dialogWidget(
+    return dialogWidgetWithClose(
       size,
       title: '',
       space: 1.sp,
@@ -695,6 +699,9 @@ class TripsScreen extends GetView<TripsController> {
           return ExpandableNotifier(
               child: Card(
             // clipBehavior: Clip.antiAlias,
+            //  color: white,
+            margin: EdgeInsets.symmetric(vertical: 12.sp, horizontal: 0),
+            surfaceTintColor: Colors.transparent,
             shape: BeveledRectangleBorder(
               borderRadius: BorderRadius.circular(4.0),
             ),
@@ -1004,6 +1011,7 @@ class TripsScreen extends GetView<TripsController> {
             width: 300.sp,
             text: AppStrings.payNow,
             color: primaryColor,
+            onTap: () {},
             // onTap: controller.routeToPhoneVerification,
             isLoading: controller.isLoading.value,
           );

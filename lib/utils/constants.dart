@@ -384,4 +384,20 @@ class AppStrings {
   static String  uploadDocument = '+ Upload document';
   static String  roadWorthiness = 'Road Worthiness';
   static String  selectInsuranceType = 'Select type of Insurance';
+  static String  vehicleInspectionReport = 'Vehicle Inspection Report';
+  static String  certificateOfInsurance = 'Certificate of Insurance';
+  static String  uploadVehiclePhotos = 'Upload Vehicle Photos';
+  static String  youCanUploadOnly10Photos = ' (You can upload only 10 photos)';
+  static String  selectPhotos = '+ Select photos';
+  static String  howToTakePhoto = 'Here is how to take nice picture of your vehicle';
+  static String  howMuchForAdvance = 'How much advance do you need for you to rent out your Vehicle?';
+  static String  proposeRentalRate = 'Proposed Rental Rate (per day)';
+  static String  amountHintText = '0.0';
+  static String  discount = 'Discount';
+  static String  learnMore = 'Learn more';
+  static String  chooseNuberOfDays = 'Choose number of days';
+  static String  inputDiscountPerDay = 'Input discount per day';
+  static String  selectDriver = 'Select a Driver';
+  static String  yetToAddDriver = 'You are yet to add a driver';
+  static String  pleaseAddDriver = 'Please add a driver to continue listing your vehicle';
 }

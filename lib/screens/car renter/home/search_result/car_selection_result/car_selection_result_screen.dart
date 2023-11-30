@@ -40,7 +40,7 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
 
   AppBar appBar() {
     return gtiAppBar(
-      onTap: () => controller.goBack(),
+      onTap: controller.goBack,
       leading: Transform.scale(
         scale: 0.3,
         child: SvgPicture.asset(
@@ -355,7 +355,10 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
         SizedBox(
           height: size.height * 0.02,
         ),
-        // continueButton(),
+        continueButton(),
+         SizedBox(
+          height: size.height * 0.02,
+        ),
       ],
     ));
   }
@@ -1026,10 +1029,10 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
     return controller.isLoading.isTrue
         ? centerLoadingIcon()
         : GtiButton(
-            height: 50.sp,
             width: 300.sp,
             text: "continue".tr,
-            color: secondaryColor,
+            color: primaryColor,
+            onTap: controller.routeToKycCheck,
             // onTap: controller.routeToPhoneVerification,
             isLoading: controller.isLoading.value,
           );

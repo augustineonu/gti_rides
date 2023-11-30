@@ -481,6 +481,7 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
 
   AppBar appBar(context) {
     return gtiAppBar(
+      onTap: controller.goBack,
         leading: const Icon(Icons.arrow_back),
         centerTitle: false,
         title: textWidget(
