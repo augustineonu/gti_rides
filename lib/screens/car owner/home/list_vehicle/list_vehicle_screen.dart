@@ -3,6 +3,7 @@ import 'package:flutter_dash/flutter_dash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/models/drivers_model.dart';
 import 'package:gti_rides/screens/car%20owner/home/list_vehicle/list_vehicle_controller.dart';
 import 'package:gti_rides/shared_widgets/dropdown_widget.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
@@ -13,6 +14,12 @@ import 'package:gti_rides/shared_widgets/upload_image_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
+import 'package:iconsax/iconsax.dart';
+
+enum Fruit {
+  apple,
+  banana,
+}
 
 class ListVehicleScreenBinding extends Bindings {
   @override
@@ -270,14 +277,18 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                                   SizedBox(
                                     height: 24.sp,
                                   ),
-                                  dropdownWidget1(
+                                  textWidget(
+                                      text: AppStrings.selectDriver,
+                                      style: getRegularStyle(fontSize: 12.sp)),
+                                  showPopUpMenu(controller, size),
+                                  dropdownWidget(
                                     context: context,
                                     hintText: 'Select',
                                     title: AppStrings.selectDriver,
                                     iconColor: grey3,
-                                    values: controller.drivers,
-                                    // values: List.generate(controller.drivers.length,
-                                    //  (index) => controller.drivers[index]['name'].toString()),
+                                    values: List.generate(
+                                        controller.drivers.length,
+                                        (index) => controller.drivers[index]),
                                     onChange: (value) {
                                       print('Selected value: $value');
                                     },
@@ -313,6 +324,142 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
           ),
           // }
         ));
+  }
+
+  PopupMenuButton<Driver> showPopUpMenu(
+      ListVehicleController controller, Size size) {
+    if (controller.drivers.isEmpty) {
+      // Get.dialog(
+      //    StatefulBuilder(
+      //     builder: (context, setState) {
+      //       return Dialog(
+      //         child: Container(
+      //           height: size.height * 0.5.sp,
+      //           padding: EdgeInsets.only(
+      //               left: 40.sp, right: 40.sp, bottom: 30.sp, top: 65.sp),
+      //           // height: ,
+      //           decoration: BoxDecoration(
+      //             color: white,
+      //             borderRadius: BorderRadius.all(
+      //               Radius.circular(12.sp),
+      //             ),
+      //           ),
+      //           child: Column(
+      //             children: [
+      //               SvgPicture.asset(ImageAssets.folder),
+      //               SizedBox(
+      //                 height: 40.sp,
+      //               ),
+      //               textWidget(
+      //                 text: AppStrings.yetToAddDriver,
+      //                 textOverflow: TextOverflow.visible,
+      //                 style: getBoldStyle(
+      //                   color: primaryColor,
+      //                 ),
+      //               ),
+      //               SizedBox(
+      //                 height: 10.sp,
+      //               ),
+      //               textWidget(
+      //                 text: AppStrings.pleaseAddDriver,
+      //                 textOverflow: TextOverflow.visible,
+      //                 textAlign: TextAlign.center,
+      //                 style: getRegularStyle(),
+      //               ),
+      //               SizedBox(
+      //                 height: 40.sp,
+      //               ),
+      //               GtiButton(
+      //                 onTap: () {},
+      //                 text: AppStrings.cont,
+      //                 width: size.width,
+      //               ),
+      //             ],
+      //           ),
+      //         ),
+      //       );
+      //     }
+      //   ),
+      // );
+      print("helo world");
+    }
+    return PopupMenuButton<Driver>(
+      // padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      constraints: BoxConstraints.tightFor(width: 320.sp, height: 250.sp),
+      surfaceTintColor: Colors.transparent,
+      color: backgroundColor,
+      itemBuilder: (BuildContext context) {
+        return List<PopupMenuEntry<Driver>>.generate(
+          controller.drivers.length,
+          (int index) {
+            final driver = Driver(
+              name: controller.drivers[index]['name'],
+              details: controller.drivers[index]['details'],
+            );
+
+            return PopupMenuItem(
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+              value: driver,
+              child: AnimatedBuilder(
+                animation: controller.selectedItem1,
+                builder: (context, child) {
+                  return RadioListTile<Driver>(
+                    value: driver,
+                    groupValue: controller.selectedItem1.value,
+                    title: child,
+                    onChanged: (Driver? value) {
+                      controller.selectedItem1.value = value!;
+                      controller.selectedView.value = value.name;
+
+                      Navigator.pop(context);
+                    },
+                    dense: true,
+                    fillColor: MaterialStateProperty.all(primaryColor),
+                    activeColor: primaryColor,
+                  );
+                },
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      textWidget(text: driver.name, style: getMediumStyle()),
+                      textWidget(
+                          text: driver.details,
+                          style: getRegularStyle(fontSize: 10.sp)),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+      child: Container(
+        constraints:
+            BoxConstraints.tightFor(width: size.width.sp, height: 45.sp),
+        // width: size.width,
+        margin: EdgeInsets.symmetric(vertical: 5.sp),
+
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(4.r)),
+            border: Border.all(color: grey3)),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10.sp, vertical: 10.sp),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              textWidget(
+                  text: controller.selectedView.value,
+                  style: getRegularStyle(fontSize: 10.sp)),
+              const Icon(
+                Iconsax.arrow_down_1,
+                color: grey3,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Future<dynamic> noDriverDialog(Size size) {

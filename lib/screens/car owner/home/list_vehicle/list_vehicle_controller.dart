@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/models/drivers_model.dart';
+import 'package:gti_rides/screens/car%20owner/home/list_vehicle/list_vehicle_screen.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/utils/constants.dart';
@@ -131,20 +133,42 @@ class ListVehicleController extends GetxController {
     AppStrings.nineOrMore,
   ];
 
-  List<String> drivers = [
+  List<Map<String, dynamic>> drivers = [
   //   {
   //   'name': 'John Doe',
   //   'details': '08180065778 | johndoe@gmail.com',
   // },
   //   {
-  //   'name': 'John Doe',
+  //   'name': 'Pascal Odi',
   //   'details': '08180065778 | johndoe@gmail.com',
   // },
   //   {
-  //   'name': 'John Doe',
+  //   'name': 'Mbang Ade',
   //   'details': '08180065778 | johndoe@gmail.com',
   // },
+  //   {
+  //   'name': 'Mbang Ade',
+  //   'details': '08180065778 | johndoe@gmail.com',
+  // },
+  //   {
+  //   'name': 'Mbang Ade',
+  //   'details': '08180065778 | johndoe@gmail.com',
+  // },
+  //   {
+  //   'name': 'Mbang Ade',
+  //   'details': '08180065778 | johndoe@gmail.com',
+  // },
+ 
+ 
   ];
+
+  
+   RxString selectedView = 'select'.obs;
+ValueNotifier<Fruit> selectedItem =  ValueNotifier<Fruit>(Fruit.apple);
+ValueNotifier<Driver> selectedItem1 =  ValueNotifier<Driver>( Driver(
+    name: 'John Doe',
+    details: '08180065778 | johndoe@gmail.com',
+  ),);
 
 // routing methods
   void goBack() => routeService.goBack();
