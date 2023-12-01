@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/models/drivers_model.dart';
-import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/screens/car%20owner/home/list_vehicle/list_vehicle_screen.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/utils/constants.dart';
 
-class ManageVehicleController extends GetxController {
-  Logger logger = Logger("Controller");
+class QuickEditController extends GetxController {
+  Logger logger = Logger("QuickEdit Controller");
 
-  ManageVehicleController() {
+  QuickEditController() {
     init();
   }
 
   void init() {
-    logger.log("ManageVehicleController Initialized");
+    logger.log("QuickEditController Initialized");
   }
 
   @override
@@ -56,5 +55,4 @@ class ManageVehicleController extends GetxController {
 
 // routing methods
   void goBack() => routeService.goBack();
-  void routeToQuickEdit() => routeService.gotoRoute(AppLinks.quickEdit);
 }

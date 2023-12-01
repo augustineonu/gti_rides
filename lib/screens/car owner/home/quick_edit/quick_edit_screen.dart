@@ -11,7 +11,7 @@ import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
 
-class ManageVehicleBinding extends Bindings {
+class QuickEditBinding extends Bindings {
   @override
   void dependencies() {
     // TODO: implement dependencies
@@ -19,8 +19,8 @@ class ManageVehicleBinding extends Bindings {
   }
 }
 
-class ManageVehicleScreen extends GetView<ManageVehicleController> {
-  const ManageVehicleScreen([Key? key]) : super(key: key);
+class QuickEditScreen extends GetView<ManageVehicleController> {
+  const QuickEditScreen([Key? key]) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -276,7 +276,6 @@ class ManageVehicleScreen extends GetView<ManageVehicleController> {
                   case 0:
                     deleteVehicleSheet(size);
                   case 1:
-                    controller.routeToQuickEdit();
                   case 2:
                   case 3:
                     break;
@@ -312,70 +311,74 @@ class ManageVehicleScreen extends GetView<ManageVehicleController> {
 
   Future<dynamic> deleteVehicleSheet(Size size) {
     return Get.bottomSheet(
-      SizedBox(
-        height: size.height * 0.4.sp,
-        width: size.width.sp,
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          SvgPicture.asset(ImageAssets.warning),
-          SizedBox(
-            height: 15.sp,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 50.0),
-            child: Column(
-              children: [
-                textWidget(
-                    text:
-                        AppStrings.areYouSureToDelete.trArgs(["Tesla Model Y"]),
-                    textAlign: TextAlign.center,
-                    textOverflow: TextOverflow.visible,
-                    style: getSemiBoldStyle()),
-                SizedBox(
-                  height: 12.sp,
-                ),
-                textWidget(
-                    text: AppStrings.everyDataWouldBeDeleted
-                        .trArgs(["Tesla Model Y"]),
-                    textAlign: TextAlign.center,
-                    textOverflow: TextOverflow.visible,
-                    style: getRegularStyle(color: grey3, fontSize: 12.sp)),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 22.sp,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              GtiButton(
-                text: AppStrings.cancel,
-                color: backgroundColor,
-                width: 150.sp,
-                hasBorder: true,
-                borderColor: primaryColor,
-                textColor: primaryColor,
-                onTap: controller.goBack,
-              ),
-              SizedBox(
-                width: 4.sp,
-              ),
-              GtiButton(
-                text: AppStrings.cont,
-                width: 150.sp,
-                onTap: () {},
-              ),
-            ],
-          )
-        ]),
-      ),
-      backgroundColor: backgroundColor,
-      isScrollControlled: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(4.r), topRight: Radius.circular(4.r)),
-      ),
-    );
+                    SizedBox(
+                      height: size.height * 0.4.sp,
+                      width: size.width.sp,
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(ImageAssets.warning),
+                            SizedBox(
+                              height: 15.sp,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                              child: Column(
+                                children: [
+                                  textWidget(
+                                      text: AppStrings.areYouSureToDelete
+                                          .trArgs(["Tesla Model Y"]),
+                                      textAlign: TextAlign.center,
+                                      textOverflow: TextOverflow.visible,
+                                      style: getSemiBoldStyle()),
+                                  SizedBox(
+                                    height: 12.sp,
+                                  ),
+                                  textWidget(
+                                      text: AppStrings.everyDataWouldBeDeleted
+                                          .trArgs(["Tesla Model Y"]),
+                                      textAlign: TextAlign.center,
+                                      textOverflow: TextOverflow.visible,
+                                      style: getRegularStyle(
+                                          color: grey3, fontSize: 12.sp)),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 22.sp,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                GtiButton(
+                                  text: AppStrings.cancel,
+                                  color: backgroundColor,
+                                  width: 150.sp,
+                                  hasBorder: true,
+                                  borderColor: primaryColor,
+                                  textColor: primaryColor,
+                                  onTap: controller.goBack,
+                                ),
+                                SizedBox(
+                                  width: 4.sp,
+                                ),
+                                GtiButton(
+                                  text: AppStrings.cont,
+                                  width: 150.sp,
+                                  onTap: () {},
+                                ),
+                              ],
+                            )
+                          ]),
+                    ),
+                    backgroundColor: backgroundColor,
+                    isScrollControlled: true,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(4.r),
+                          topRight: Radius.circular(4.r)),
+                    ),
+                  );
   }
 
   AppBar appBar() {

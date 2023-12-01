@@ -352,60 +352,74 @@ class AppStrings {
   static String copyCode = 'Copy code';
   static String yourReferralLink = 'Your referral link';
   static String listMyCar = 'List my car';
-  static String doYouWantToListYourCar = 'Do you want to list your car for rent and start earning? Get started by listing your car';
+  static String doYouWantToListYourCar =
+      'Do you want to list your car for rent and start earning? Get started by listing your car';
   static String getYourCarListed = 'Get your car listed';
   static String manageListedVehicles = 'Manage listed Vehicles';
-  static String manageYourVehicleAViailability = 'Manage your vehicle availabilty';
+  static String manageYourVehicleAViailability =
+      'Manage your vehicle availabilty';
   static String carStatus = 'Car status:';
   static String listYourVehicle = 'List your Vehicle';
   static String vehicleTypeSm = 'Vehicle type';
   static String vehicleInfo = 'Vehicle info';
   static String documentation = 'Documentation  ';
   static String addPhotos = 'Add Photos';
-  static String  availability = ' Availability';
-  static String  whatIsTheBrandOfVehicle = 'What is the Brand of your Vehicle?';
-  static String  whatIsTheModelOfVehicle = 'What is the Model of your Vehicle? (Year)';
-  static String  whatIsTheVINOfVehicle = 'What is your Vehicle Identification Number? (VIN)';
-  static String  inputVin = 'Input VIN';
-  static String  inputState = 'Input state';
-  static String  inputCity = 'Input city';
-  static String  inputPlateNumber = 'Input Plate Number';
-  static String  inputLincesePlateNumber = 'What is your Vehicle License Plate Number?';
-  static String  whatStateAreYouIn = 'What State are you in?';
-  static String  whatCityAreYouIn = 'What City are you in?';
-  static String  tellUsAboutYourVehicle = 'Tell us a little bit about your Vehicle';
-  static String  writeHere = 'Write here....';
-  static String  vehicleTransmission = 'Vehicle Transmission';
-  static String  vehicleFeatures = 'Vehicle Features';
-  static String  numberOfSeats = 'Number of Seats';
-  static String  uploadVehicleDoc = 'Upload Vehicle Documents';
-  static String  pleaseMakeSurePicAreClear = 'Please make sure pictures are clear!';
-  static String  vehicleLicense = 'Vehicle License';
-  static String  uploadDocument = '+ Upload document';
-  static String  roadWorthiness = 'Road Worthiness';
-  static String  selectInsuranceType = 'Select type of Insurance';
-  static String  vehicleInspectionReport = 'Vehicle Inspection Report';
-  static String  certificateOfInsurance = 'Certificate of Insurance';
-  static String  uploadVehiclePhotos = 'Upload Vehicle Photos';
-  static String  youCanUploadOnly10Photos = ' (You can upload only 10 photos)';
-  static String  selectPhotos = '+ Select photos';
-  static String  howToTakePhoto = 'Here is how to take nice picture of your vehicle';
-  static String  howMuchForAdvance = 'How much advance do you need for you to rent out your Vehicle?';
-  static String  proposeRentalRate = 'Proposed Rental Rate (per day)';
-  static String  amountHintText = '0.0';
-  static String  discount = 'Discount';
-  static String  learnMore = 'Learn more';
-  static String  chooseNuberOfDays = 'Choose number of days';
-  static String  inputDiscountPerDay = 'Input discount per day';
-  static String  selectDriver = 'Select a Driver';
-  static String  yetToAddDriver = 'You are yet to add a driver';
-  static String  pleaseAddDriver = 'Please add a driver to continue listing your vehicle';
-  static String  manageCars = 'Manage your cars';
-  static String  allCarsSm = 'All cars';
-  static String  booked = 'Booked';
-  static String  tripDate = 'Trip date';
-  static String  aAvailabilityDate = 'Availability date';
-  static String  quickEdit = 'Quick edit';
-  static String  edit = 'Edit';
-  static String  carHistory = 'Car history';
+  static String availability = ' Availability';
+  static String whatIsTheBrandOfVehicle = 'What is the Brand of your Vehicle?';
+  static String whatIsTheModelOfVehicle =
+      'What is the Model of your Vehicle? (Year)';
+  static String whatIsTheVINOfVehicle =
+      'What is your Vehicle Identification Number? (VIN)';
+  static String inputVin = 'Input VIN';
+  static String inputState = 'Input state';
+  static String inputCity = 'Input city';
+  static String inputPlateNumber = 'Input Plate Number';
+  static String inputLincesePlateNumber =
+      'What is your Vehicle License Plate Number?';
+  static String whatStateAreYouIn = 'What State are you in?';
+  static String whatCityAreYouIn = 'What City are you in?';
+  static String tellUsAboutYourVehicle =
+      'Tell us a little bit about your Vehicle';
+  static String writeHere = 'Write here....';
+  static String vehicleTransmission = 'Vehicle Transmission';
+  static String vehicleFeatures = 'Vehicle Features';
+  static String numberOfSeats = 'Number of Seats';
+  static String uploadVehicleDoc = 'Upload Vehicle Documents';
+  static String pleaseMakeSurePicAreClear =
+      'Please make sure pictures are clear!';
+  static String vehicleLicense = 'Vehicle License';
+  static String uploadDocument = '+ Upload document';
+  static String roadWorthiness = 'Road Worthiness';
+  static String selectInsuranceType = 'Select type of Insurance';
+  static String vehicleInspectionReport = 'Vehicle Inspection Report';
+  static String certificateOfInsurance = 'Certificate of Insurance';
+  static String uploadVehiclePhotos = 'Upload Vehicle Photos';
+  static String youCanUploadOnly10Photos = ' (You can upload only 10 photos)';
+  static String selectPhotos = '+ Select photos';
+  static String howToTakePhoto =
+      'Here is how to take nice picture of your vehicle';
+  static String howMuchForAdvance =
+      'How much advance do you need for you to rent out your Vehicle?';
+  static String proposeRentalRate = 'Proposed Rental Rate (per day)';
+  static String amountHintText = '0.0';
+  static String discount = 'Discount';
+  static String learnMore = 'Learn more';
+  static String chooseNuberOfDays = 'Choose number of days';
+  static String inputDiscountPerDay = 'Input discount per day';
+  static String selectDriver = 'Select a Driver';
+  static String yetToAddDriver = 'You are yet to add a driver';
+  static String pleaseAddDriver =
+      'Please add a driver to continue listing your vehicle';
+  static String manageCars = 'Manage your cars';
+  static String allCarsSm = 'All cars';
+  static String booked = 'Booked';
+  static String tripDate = 'Trip date';
+  static String aAvailabilityDate = 'Availability date';
+  static String quickEdit = 'Quick edit';
+  static String edit = 'Edit';
+  static String carHistory = 'Car history';
+  static String areYouSureToDelete = 'Are you sure you want to delete %s';
+  static String everyDataWouldBeDeleted =
+      'Every data about %s would be deleted and won\'t be able to be recovered';
+  // static String quickEdit = 'Quick edit';
 }

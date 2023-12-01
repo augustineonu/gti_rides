@@ -79,6 +79,7 @@ class ImageAssets {
   static const String pencilEdit = "$SVG_PATH/pencil_edit.svg";
   static const String pencilPlain = "$SVG_PATH/pencil_plain.svg";
   static const String history = "$SVG_PATH/history.svg";
+  static const String warning = "$SVG_PATH/warning.svg";
   // static const String carListingBg = "$SVG_PATH/car_listing_bg.svg";
   // PNG IMAGES
 
