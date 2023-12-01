@@ -75,6 +75,10 @@ class ImageAssets {
   static const String steering = "$SVG_PATH/steering.svg";
   static const String info = "$SVG_PATH/info.svg";
   static const String folder = "$SVG_PATH/Folder.svg";
+  static const String popUpMenu = "$SVG_PATH/pop_up_menu.svg";
+  static const String pencilEdit = "$SVG_PATH/pencil_edit.svg";
+  static const String pencilPlain = "$SVG_PATH/pencil_plain.svg";
+  static const String history = "$SVG_PATH/history.svg";
   // static const String carListingBg = "$SVG_PATH/car_listing_bg.svg";
   // PNG IMAGES
 

@@ -105,7 +105,7 @@ class _CarRenterHomeScreenState extends State<CarOwnerHomeScreen> {
           // mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             getCarListedCard(onTap: controller.routeTolistVehicle),
-            manageListedVehicles(),
+            manageListedVehicles(onTap: controller.routeToManageVehicle),
             howGtiWorksCard(onTap: () {}, imageUrl: ImageAssets.guyWorks),
             // textWidget(
             //   text: AppStrings.recentViewCar,
@@ -323,62 +323,67 @@ class _CarRenterHomeScreenState extends State<CarOwnerHomeScreen> {
     );
   }
 
-  Widget manageListedVehicles() {
-    return Container(
-      height: 66.sp,
-      //width: size.width,
-      margin: EdgeInsets.symmetric(vertical: 20.sp),
-      decoration: BoxDecoration(
-          color: primaryColorLight,
-          borderRadius: BorderRadius.all(
-            Radius.circular(4.r),
-          ),
-          image: const DecorationImage(
-              alignment: Alignment.centerRight,
-              image: AssetImage(ImageAssets.manageListedBg))),
-
-      child: Row(children: [
-        ClipRRect(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(4.r), bottomLeft: Radius.circular(4.r)),
-          child: Image.asset(
-            ImageAssets.steering1,
-            fit: BoxFit.fitHeight,
-          ),
-        ),
-        // SizedBox(
-        //   width: 10.sp,),
-        SizedBox(
-          width: 147.sp,
-          height: 66.sp,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 10, top: 2, bottom: 5),
-            child: Column(
-              children: [
-                textWidget(
-                    text: AppStrings.manageListedVehicles,
-                    textOverflow: TextOverflow.visible,
-                    style: getSemiBoldStyle(fontSize: 15.sp).copyWith(
-                        height: 1.2.sp,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'neue')),
-                SizedBox(
-                  height: 2.sp,
-                ),
-                Expanded(
-                  child: textWidget(
-                      text: AppStrings.manageYourVehicleAViailability,
-                      textOverflow: TextOverflow.visible,
-                      style: getLightStyle(fontSize: 10.sp).copyWith(
-                        fontWeight: FontWeight.w400,
-                        height: 1.2.sp,
-                      )),
-                ),
-              ],
+  Widget manageListedVehicles({
+    void Function()? onTap
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        height: 66.sp,
+        //width: size.width,
+        margin: EdgeInsets.symmetric(vertical: 20.sp),
+        decoration: BoxDecoration(
+            color: primaryColorLight,
+            borderRadius: BorderRadius.all(
+              Radius.circular(4.r),
+            ),
+            image: const DecorationImage(
+                alignment: Alignment.centerRight,
+                image: AssetImage(ImageAssets.manageListedBg))),
+    
+        child: Row(children: [
+          ClipRRect(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(4.r), bottomLeft: Radius.circular(4.r)),
+            child: Image.asset(
+              ImageAssets.steering1,
+              fit: BoxFit.fitHeight,
             ),
           ),
-        )
-      ]),
+          // SizedBox(
+          //   width: 10.sp,),
+          SizedBox(
+            width: 147.sp,
+            height: 66.sp,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10, top: 2, bottom: 5),
+              child: Column(
+                children: [
+                  textWidget(
+                      text: AppStrings.manageListedVehicles,
+                      textOverflow: TextOverflow.visible,
+                      style: getSemiBoldStyle(fontSize: 15.sp).copyWith(
+                          height: 1.2.sp,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'neue')),
+                  SizedBox(
+                    height: 2.sp,
+                  ),
+                  Expanded(
+                    child: textWidget(
+                        text: AppStrings.manageYourVehicleAViailability,
+                        textOverflow: TextOverflow.visible,
+                        style: getLightStyle(fontSize: 10.sp).copyWith(
+                          fontWeight: FontWeight.w400,
+                          height: 1.2.sp,
+                        )),
+                  ),
+                ],
+              ),
+            ),
+          )
+        ]),
+      ),
     );
   }
 

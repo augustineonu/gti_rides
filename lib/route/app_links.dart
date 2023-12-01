@@ -65,6 +65,7 @@ class AppLinks {
   static const referral = "/renter/more/referral";
   static const carOwnerLanding = "/ownerLanding";
   static const listVehicle = "/owner/home/listVehicle";
+  static const manageVehicle = "/owner/home/manageVehicle";
 
   // static const chatAction = "/user/chat/:key/:action";
 
@@ -112,6 +113,7 @@ class AppLinks {
     'referral': referral,
     'carOwnerLanding': carOwnerLanding,
     'listVehicle': listVehicle,
+    'manageVehicle': manageVehicle,
     // 'trips': trips,
   };
 

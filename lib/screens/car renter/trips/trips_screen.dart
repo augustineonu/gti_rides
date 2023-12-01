@@ -7,6 +7,7 @@ import 'package:gti_rides/models/rating_model.dart';
 import 'package:gti_rides/screens/car%20renter/trips/trips_controller.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
+import 'package:gti_rides/shared_widgets/tab_indicator.dart';
 import 'package:gti_rides/shared_widgets/text_input_widgets/normal_text_input_widget.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
@@ -802,8 +803,11 @@ class TripsScreen extends GetView<TripsController> {
                                   textWidget(
                                       text: '100,000',
                                       style: getRegularStyle(color: grey5)),
-                                  textWidget(
-                                      text: ' x ', style: getRegularStyle()),
+                                  // textWidget(
+                                  //     text: ' x ', style: getRegularStyle()),
+                                  
+                                   SvgPicture.asset(ImageAssets.closeSmall,
+                                  width: 7.sp, height: 7.sp,),
                                   textWidget(
                                       text: '5days',
                                       style: getRegularStyle(color: grey5)),
@@ -1017,19 +1021,5 @@ class TripsScreen extends GetView<TripsController> {
           );
   }
 
-  Widget tabIndicator(
-      {required String title, required bool selected, void Function()? onTap}) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 8.sp, horizontal: 16.sp),
-        decoration: BoxDecoration(
-            color: selected ? primaryColor : Colors.transparent,
-            borderRadius: BorderRadius.all(Radius.circular(4.r))),
-        child: textWidget(
-            text: title,
-            style: getRegularStyle(color: selected ? white : grey3)),
-      ),
-    );
-  }
+ 
 }

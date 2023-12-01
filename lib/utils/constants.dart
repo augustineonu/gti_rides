@@ -400,4 +400,12 @@ class AppStrings {
   static String  selectDriver = 'Select a Driver';
   static String  yetToAddDriver = 'You are yet to add a driver';
   static String  pleaseAddDriver = 'Please add a driver to continue listing your vehicle';
+  static String  manageCars = 'Manage your cars';
+  static String  allCarsSm = 'All cars';
+  static String  booked = 'Booked';
+  static String  tripDate = 'Trip date';
+  static String  aAvailabilityDate = 'Availability date';
+  static String  quickEdit = 'Quick edit';
+  static String  edit = 'Edit';
+  static String  carHistory = 'Car history';
 }

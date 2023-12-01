@@ -134,30 +134,30 @@ class ListVehicleController extends GetxController {
   ];
 
   List<Map<String, dynamic>> drivers = [
-  //   {
-  //   'name': 'John Doe',
-  //   'details': '08180065778 | johndoe@gmail.com',
-  // },
-  //   {
-  //   'name': 'Pascal Odi',
-  //   'details': '08180065778 | johndoe@gmail.com',
-  // },
-  //   {
-  //   'name': 'Mbang Ade',
-  //   'details': '08180065778 | johndoe@gmail.com',
-  // },
-  //   {
-  //   'name': 'Mbang Ade',
-  //   'details': '08180065778 | johndoe@gmail.com',
-  // },
-  //   {
-  //   'name': 'Mbang Ade',
-  //   'details': '08180065778 | johndoe@gmail.com',
-  // },
-  //   {
-  //   'name': 'Mbang Ade',
-  //   'details': '08180065778 | johndoe@gmail.com',
-  // },
+    {
+    'name': 'John Doe',
+    'details': '08180065778 | johndoe@gmail.com',
+  },
+    {
+    'name': 'Pascal Odi',
+    'details': '08180065778 | johndoe@gmail.com',
+  },
+    {
+    'name': 'Mbang Ade',
+    'details': '08180065778 | johndoe@gmail.com',
+  },
+    {
+    'name': 'Mbang Ade',
+    'details': '08180065778 | johndoe@gmail.com',
+  },
+    {
+    'name': 'Mbang Ade',
+    'details': '08180065778 | johndoe@gmail.com',
+  },
+    {
+    'name': 'Mbang Ade',
+    'details': '08180065778 | johndoe@gmail.com',
+  },
  
  
   ];
@@ -165,7 +165,7 @@ class ListVehicleController extends GetxController {
   
    RxString selectedView = 'select'.obs;
 ValueNotifier<Fruit> selectedItem =  ValueNotifier<Fruit>(Fruit.apple);
-ValueNotifier<Driver> selectedItem1 =  ValueNotifier<Driver>( Driver(
+Rx<Driver> selectedItem1 =  Rx<Driver>( Driver(
     name: 'John Doe',
     details: '08180065778 | johndoe@gmail.com',
   ),);

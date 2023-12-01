@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dash/flutter_dash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -280,7 +281,144 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                                   textWidget(
                                       text: AppStrings.selectDriver,
                                       style: getRegularStyle(fontSize: 12.sp)),
-                                  showPopUpMenu(controller, size),
+                                  // showPopUpMenu(controller, size),
+                                  //  InkWell(
+                                  //     onTap: () {
+                                  //     if (controller.drivers.isEmpty) {
+                                  //       print("Please select");
+                                  //     }
+                                  //   },
+                                  //   child: Container(
+                                  //     width: 200, height: 100,
+                                  //     color: red,
+                                  //   )),
+                                  InkWell(
+                                    onTap: () {
+                                      if (controller.drivers.isEmpty) {
+                                        print("Please select");
+                                      }
+                                    },
+                                    child: PopupMenuButton<Driver>(
+                                      // padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                                      constraints: BoxConstraints.tightFor(
+                                          width: 320.sp, height: 250.sp),
+                                      surfaceTintColor: Colors.transparent,
+                                      color: backgroundColor,
+                                      onSelected: (value) {},
+                                      itemBuilder: (BuildContext context) {
+                                        return List<
+                                            PopupMenuEntry<Driver>>.generate(
+                                          controller.drivers.length,
+                                          (int index) {
+                                            final driver = Driver(
+                                              name: controller.drivers[index]
+                                                  ['name'],
+                                              details: controller.drivers[index]
+                                                  ['details'],
+                                            );
+
+                                            return PopupMenuItem(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 5,
+                                                      horizontal: 0),
+                                              value: driver,
+                                              child: AnimatedBuilder(
+                                                animation: controller
+                                                    .selectedItem1
+                                                    .value
+                                                    .reactive,
+                                                builder: (context, child) {
+                                                  return RadioListTile<Driver>(
+                                                    value: driver,
+                                                    groupValue: controller
+                                                        .selectedItem1.value,
+                                                    title: child,
+                                                    onChanged: (Driver? value) {
+                                                      controller.selectedItem1
+                                                          .value = value!;
+                                                      controller.selectedView
+                                                          .value = value.name;
+
+                                                      Navigator.pop(context);
+                                                    },
+                                                    dense: true,
+                                                    fillColor:
+                                                        MaterialStateProperty
+                                                            .all(primaryColor),
+                                                    activeColor: primaryColor,
+                                                  );
+                                                },
+                                                child: SingleChildScrollView(
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      textWidget(
+                                                          text: driver.name,
+                                                          style:
+                                                              getMediumStyle()),
+                                                      textWidget(
+                                                          text: driver.details,
+                                                          style:
+                                                              getRegularStyle(
+                                                                  fontSize:
+                                                                      10.sp)),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: GestureDetector(
+                                        // onTap: () {
+                                        //   if (controller.drivers.isEmpty) {
+                                        //     if (kDebugMode) {
+                                        //       print("No driver found");
+                                        //     }
+                                        //     noDriverDialog(size);
+                                        //   }
+                                        // },
+                                        child: Container(
+                                          constraints: BoxConstraints.tightFor(
+                                              width: size.width.sp,
+                                              height: 45.sp),
+                                          // width: size.width,
+                                          margin: EdgeInsets.symmetric(
+                                              vertical: 5.sp),
+
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(4.r)),
+                                              border: Border.all(color: grey3)),
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 10.sp,
+                                                vertical: 10.sp),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                textWidget(
+                                                    text: controller
+                                                        .selectedView.value,
+                                                    style: getRegularStyle(
+                                                        fontSize: 10.sp)),
+                                                const Icon(
+                                                  Iconsax.arrow_down_1,
+                                                  color: grey3,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                   dropdownWidget(
                                     context: context,
                                     hintText: 'Select',
@@ -326,142 +464,7 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
         ));
   }
 
-  PopupMenuButton<Driver> showPopUpMenu(
-      ListVehicleController controller, Size size) {
-    if (controller.drivers.isEmpty) {
-      // Get.dialog(
-      //    StatefulBuilder(
-      //     builder: (context, setState) {
-      //       return Dialog(
-      //         child: Container(
-      //           height: size.height * 0.5.sp,
-      //           padding: EdgeInsets.only(
-      //               left: 40.sp, right: 40.sp, bottom: 30.sp, top: 65.sp),
-      //           // height: ,
-      //           decoration: BoxDecoration(
-      //             color: white,
-      //             borderRadius: BorderRadius.all(
-      //               Radius.circular(12.sp),
-      //             ),
-      //           ),
-      //           child: Column(
-      //             children: [
-      //               SvgPicture.asset(ImageAssets.folder),
-      //               SizedBox(
-      //                 height: 40.sp,
-      //               ),
-      //               textWidget(
-      //                 text: AppStrings.yetToAddDriver,
-      //                 textOverflow: TextOverflow.visible,
-      //                 style: getBoldStyle(
-      //                   color: primaryColor,
-      //                 ),
-      //               ),
-      //               SizedBox(
-      //                 height: 10.sp,
-      //               ),
-      //               textWidget(
-      //                 text: AppStrings.pleaseAddDriver,
-      //                 textOverflow: TextOverflow.visible,
-      //                 textAlign: TextAlign.center,
-      //                 style: getRegularStyle(),
-      //               ),
-      //               SizedBox(
-      //                 height: 40.sp,
-      //               ),
-      //               GtiButton(
-      //                 onTap: () {},
-      //                 text: AppStrings.cont,
-      //                 width: size.width,
-      //               ),
-      //             ],
-      //           ),
-      //         ),
-      //       );
-      //     }
-      //   ),
-      // );
-      print("helo world");
-    }
-    return PopupMenuButton<Driver>(
-      // padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      constraints: BoxConstraints.tightFor(width: 320.sp, height: 250.sp),
-      surfaceTintColor: Colors.transparent,
-      color: backgroundColor,
-      itemBuilder: (BuildContext context) {
-        return List<PopupMenuEntry<Driver>>.generate(
-          controller.drivers.length,
-          (int index) {
-            final driver = Driver(
-              name: controller.drivers[index]['name'],
-              details: controller.drivers[index]['details'],
-            );
-
-            return PopupMenuItem(
-              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-              value: driver,
-              child: AnimatedBuilder(
-                animation: controller.selectedItem1,
-                builder: (context, child) {
-                  return RadioListTile<Driver>(
-                    value: driver,
-                    groupValue: controller.selectedItem1.value,
-                    title: child,
-                    onChanged: (Driver? value) {
-                      controller.selectedItem1.value = value!;
-                      controller.selectedView.value = value.name;
-
-                      Navigator.pop(context);
-                    },
-                    dense: true,
-                    fillColor: MaterialStateProperty.all(primaryColor),
-                    activeColor: primaryColor,
-                  );
-                },
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      textWidget(text: driver.name, style: getMediumStyle()),
-                      textWidget(
-                          text: driver.details,
-                          style: getRegularStyle(fontSize: 10.sp)),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          },
-        );
-      },
-      child: Container(
-        constraints:
-            BoxConstraints.tightFor(width: size.width.sp, height: 45.sp),
-        // width: size.width,
-        margin: EdgeInsets.symmetric(vertical: 5.sp),
-
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(4.r)),
-            border: Border.all(color: grey3)),
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10.sp, vertical: 10.sp),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              textWidget(
-                  text: controller.selectedView.value,
-                  style: getRegularStyle(fontSize: 10.sp)),
-              const Icon(
-                Iconsax.arrow_down_1,
-                color: grey3,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
+  
   Future<dynamic> noDriverDialog(Size size) {
     return Get.dialog(StatefulBuilder(builder: (context, setState) {
       return Dialog(
