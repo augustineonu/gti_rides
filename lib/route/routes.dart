@@ -2,8 +2,9 @@ import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/screens/car%20owner/home/list_vehicle/list_vehicle_screen.dart';
+import 'package:gti_rides/screens/car%20owner/home/manage_vehicle/car_history/car_history_screen.dart';
 import 'package:gti_rides/screens/car%20owner/home/manage_vehicle/manage_vehicle_screen.dart';
-import 'package:gti_rides/screens/car%20owner/home/quick_edit/quick_edit_screen.dart';
+import 'package:gti_rides/screens/car%20owner/home/manage_vehicle/quick_edit/quick_edit_screen.dart';
 import 'package:gti_rides/screens/car%20owner/owner_landing_page.dart';
 import 'package:gti_rides/screens/car%20renter/home/choose_trip_date/choose_trip_date_screen.dart';
 import 'package:gti_rides/screens/car%20renter/home/search_city/search_city_screen.dart';
@@ -235,6 +236,11 @@ class AppRoutes {
       name: AppLinks.quickEdit,
       page: () => const QuickEditScreen(),
       binding: QuickEditBinding()
+    ),
+    GetPage(
+      name: AppLinks.carHistory,
+      page: () => const CarHistoryScreen(),
+      binding: CarHistoryBinding()
     ),
   ];
 }

@@ -279,6 +279,7 @@ class ManageVehicleScreen extends GetView<ManageVehicleController> {
                     controller.routeToQuickEdit();
                   case 2:
                   case 3:
+                    controller.routeToCarHistory();
                     break;
                   default:
                 }

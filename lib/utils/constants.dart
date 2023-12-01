@@ -414,12 +414,17 @@ class AppStrings {
   static String allCarsSm = 'All cars';
   static String booked = 'Booked';
   static String tripDate = 'Trip date';
-  static String aAvailabilityDate = 'Availability date';
+  static String availabilityDate = 'Availability date';
   static String quickEdit = 'Quick edit';
   static String edit = 'Edit';
   static String carHistory = 'Car history';
   static String areYouSureToDelete = 'Are you sure you want to delete %s';
   static String everyDataWouldBeDeleted =
       'Every data about %s would be deleted and won\'t be able to be recovered';
-  // static String quickEdit = 'Quick edit';
+  static String proposedPricePerDay = 'Propose price per day';
+  static String carRating = 'Car rating';
+  static String feedbacks = 'Feedbacks';
+  static String seeAllFeedbacks = 'See all feedbacks';
+  static String totalEarnings = 'Total earnings';
+  static String seeAllTrips = 'See all trips';
 }

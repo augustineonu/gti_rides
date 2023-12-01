@@ -4,15 +4,15 @@ import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
 
-class CarSelectionResultController extends GetxController {
+class CarHistoryController extends GetxController {
   Logger logger = Logger("Controller");
 
-  CarSelectionResultController() {
+  CarHistoryController() {
     init();
   }
 
   void init() {
-    logger.log("CarSelectionResultController Initialized");
+    logger.log("CarHistoryController Initialized");
   }
 
   @override

@@ -66,7 +66,8 @@ class AppLinks {
   static const carOwnerLanding = "/ownerLanding";
   static const listVehicle = "/owner/home/listVehicle";
   static const manageVehicle = "/owner/home/manageVehicle";
-  static const quickEdit = "/owner/home/quickEdit";
+  static const quickEdit = "/owner/home/manageVehicle/quickEdit";
+  static const carHistory = "/owner/home/manageVehicle/carHistory";
 
   // static const chatAction = "/user/chat/:key/:action";
 
@@ -116,6 +117,7 @@ class AppLinks {
     'listVehicle': listVehicle,
     'manageVehicle': manageVehicle,
     'quickEdit': quickEdit,
+    'carHistory': carHistory,
     // 'trips': trips,
   };
 

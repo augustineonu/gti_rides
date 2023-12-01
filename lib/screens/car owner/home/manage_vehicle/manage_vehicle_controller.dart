@@ -31,7 +31,7 @@ class ManageVehicleController extends GetxController {
   RxBool isLoading = false.obs;
   PageController pageController = PageController();
   RxInt selectedIndex = 0.obs;
-  RxString testString = "kkkk".obs;
+  RxString testString = "".obs;
 
   TextEditingController senderNameController = TextEditingController();
 
@@ -57,4 +57,5 @@ class ManageVehicleController extends GetxController {
 // routing methods
   void goBack() => routeService.goBack();
   void routeToQuickEdit() => routeService.gotoRoute(AppLinks.quickEdit);
+  void routeToCarHistory() => routeService.gotoRoute(AppLinks.carHistory);
 }
