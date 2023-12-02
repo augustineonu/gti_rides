@@ -34,13 +34,12 @@ class CarHistoryController extends GetxController {
   RxBool selectedSecurityEscort = false.obs;
   RxBool selectedSelfPickUp = false.obs;
 
-  Rx<String> testString = "Hello".obs;
+  Rx<String> testString = "".obs;
 
   void goBack() => routeService.goBack();
-  void routeToSearchFilter() => routeService.gotoRoute(AppLinks.searchFilter);
-  void routeToReviews() => routeService.gotoRoute(AppLinks.reviews);
-  void routeToViewCar() => routeService.gotoRoute(AppLinks.viewCar);
-  void routeToKycCheck() => routeService.gotoRoute(AppLinks.kycCheck);
+  void routeToFeedbacks() => routeService.gotoRoute(AppLinks.feedback);
+  void routeToOwnerTrips() => routeService.gotoRoute(AppLinks.ownerTrips);
+  void routeToQuickEdit() => routeService.gotoRoute(AppLinks.quickEdit);
 
   void onSelectInterState(bool value) => selectedInterState.value = value;
   void onSelectSecurityEscort(bool value) =>

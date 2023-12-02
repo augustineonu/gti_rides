@@ -4,11 +4,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/car%20owner/home/car_owner_home_screen.dart';
 import 'package:gti_rides/screens/car%20owner/owner_landing_controller.dart';
-import 'package:gti_rides/screens/car%20renter/home/car_renter_home_screen.dart';
+import 'package:gti_rides/screens/car%20owner/rent_history/rent_history_screen.dart';
 import 'package:gti_rides/screens/car%20renter/inbox/inbox_screen.dart';
-import 'package:gti_rides/screens/car%20renter/landing_controller.dart';
 import 'package:gti_rides/screens/car%20renter/more/more_screen.dart';
-import 'package:gti_rides/screens/car%20renter/trips/trips_screen.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
@@ -27,7 +25,7 @@ class OwnerLandingPage extends StatelessWidget {
             index: controller.tabIndex.value,
             children: const [
               CarOwnerHomeScreen(),
-              TripsScreen(),
+              RentHistoryScreen(),
               InboxScreen(),
               MoreScreen(),
             ],

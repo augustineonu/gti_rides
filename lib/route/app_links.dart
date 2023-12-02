@@ -68,6 +68,8 @@ class AppLinks {
   static const manageVehicle = "/owner/home/manageVehicle";
   static const quickEdit = "/owner/home/manageVehicle/quickEdit";
   static const carHistory = "/owner/home/manageVehicle/carHistory";
+  static const feedback = "/owner/home/rentHistory/feedback";
+  static const ownerTrips = "/owner/home/rentHistory/ownerTrips";
 
   // static const chatAction = "/user/chat/:key/:action";
 
@@ -118,6 +120,8 @@ class AppLinks {
     'manageVehicle': manageVehicle,
     'quickEdit': quickEdit,
     'carHistory': carHistory,
+    'feedback': feedback,
+    'ownerTrips': ownerTrips,
     // 'trips': trips,
   };
 

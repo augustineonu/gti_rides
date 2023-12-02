@@ -427,4 +427,8 @@ class AppStrings {
   static String seeAllFeedbacks = 'See all feedbacks';
   static String totalEarnings = 'Total earnings';
   static String seeAllTrips = 'See all trips';
+  static String activeNum = 'Active (%s)';
+  static String completedNum = 'Completed (%s)';
+  static String tripId = 'Trip ID';
+  static String copied = 'Copied';
 }

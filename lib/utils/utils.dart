@@ -122,7 +122,7 @@ showSuccessSnackbar({required String message, Color? color}) {
       snackPosition: SnackPosition.TOP,
       message: message,
       isDismissible: false,
-      backgroundColor: color ?? secondaryColor,
+      backgroundColor: color ?? success,
       duration: const Duration(seconds: 4),
       margin: EdgeInsets.all(10),
       padding: EdgeInsets.all(20),

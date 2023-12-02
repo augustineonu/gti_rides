@@ -9,7 +9,8 @@ Widget tabIndicator(
       }) {
     return InkWell(
       onTap: onTap,
-      child: Container(
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 200),
         width: width,
         padding: EdgeInsets.symmetric(vertical: 8.sp, horizontal: 16.sp),
         decoration: BoxDecoration(
