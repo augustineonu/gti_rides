@@ -38,7 +38,9 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
   AppBar appBar() {
     return gtiAppBar(
         onTap: () => controller.goBack(),
-        leading: const Icon(Icons.arrow_back),
+        leading: Transform.scale(
+            scale: 0.5,
+            child: SvgPicture.asset(ImageAssets.arrowLeft, color: black)),
         centerTitle: false,
         title: textWidget(
             text: AppStrings.filter,

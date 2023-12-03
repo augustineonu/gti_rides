@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -7,8 +6,6 @@ import 'package:gti_rides/screens/car%20owner/home/manage_vehicle/car_history/ca
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/sqaure_check_box_widget.dart';
-import 'package:gti_rides/shared_widgets/switch_widget.dart';
-import 'package:gti_rides/shared_widgets/text_input_widgets/normal_text_input_widget.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
@@ -99,9 +96,7 @@ class CarHistoryScreen extends GetView<CarHistoryController> {
             transmission(),
             divider(color: borderColor),
             aboutCar(),
-        
-      
-     
+
             textWidget(
                 text: controller.testString.value,
                 style: getMediumStyle(fontSize: 12.sp, color: grey2)
@@ -385,9 +380,9 @@ class CarHistoryScreen extends GetView<CarHistoryController> {
                   textWidget(
                       text: 'Wed 1 Nov, 9:00am',
                       style: getMediumStyle(fontSize: 12.sp, color: grey3)),
-                      SizedBox(
-                      height: 5.sp,
-                    ),
+                  SizedBox(
+                    height: 5.sp,
+                  ),
                   textWidget(
                       text: 'Wed 1 Nov, 9:00am',
                       style: getMediumStyle(fontSize: 12.sp, color: grey3)),
@@ -432,7 +427,12 @@ class CarHistoryScreen extends GetView<CarHistoryController> {
   AppBar appBar() {
     return gtiAppBar(
       onTap: () => controller.goBack(),
-      leading: const Icon(Icons.arrow_back),
+      leading: Transform.scale(
+          scale: 0.5,
+          child: SvgPicture.asset(
+            color: black,
+            ImageAssets.arrowLeft,
+          )),
       centerTitle: true,
       title: textWidget(
           text: 'Tesla Model Y',

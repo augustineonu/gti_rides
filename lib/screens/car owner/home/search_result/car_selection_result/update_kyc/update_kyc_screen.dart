@@ -35,7 +35,12 @@ class UpdateKycScreen extends GetView<UpdateKycController> {
   AppBar appBar() {
     return gtiAppBar(
       onTap: () => controller.goBack(),
-      leading: const Icon(Icons.arrow_back),
+      leading: Transform.scale(
+          scale: 0.5,
+          child: SvgPicture.asset(
+            color: black,
+            ImageAssets.arrowLeft,
+          )),
       centerTitle: true,
       title: textWidget(
           text: AppStrings.addToContinue,

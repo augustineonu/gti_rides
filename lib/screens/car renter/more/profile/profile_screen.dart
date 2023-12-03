@@ -10,7 +10,6 @@ import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
-import 'package:image_picker/image_picker.dart';
 
 class ProfileBinding extends Bindings {
   @override
@@ -37,7 +36,9 @@ class ProfileScreen extends GetView<ProfileController> {
   AppBar appBar() {
     return gtiAppBar(
       onTap: controller.goBack,
-      leading: const Icon(Icons.arrow_back),
+      leading: Transform.scale(
+          scale: 0.5,
+          child: SvgPicture.asset(ImageAssets.arrowLeft, color: black)),
       centerTitle: true,
       title: textWidget(
           text: "Profile",
@@ -134,7 +135,6 @@ class ProfileScreen extends GetView<ProfileController> {
                     "https://img.freepik.com/premium-vector/avatar-profile-icon_188544-4755.jpg",
                 height: 65.sp,
                 width: 65.sp,
-            
               ),
               InkWell(
                 onTap: () {

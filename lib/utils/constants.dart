@@ -432,4 +432,10 @@ class AppStrings {
   static String tripId = 'Trip ID';
   static String copied = 'Copied';
   static String reportTripToAdin = 'Report trip to admin';
+  static String carTripCompleted = 'Car trip completed';
+  static String totalAmount = 'Total amount';
+  static String vat = 'VAT';
+  static String tripStartDate = 'Trip start date';
+  static String tripEndDate = 'Trip end date';
+  static String paymentRef = 'Payment ref';
 }

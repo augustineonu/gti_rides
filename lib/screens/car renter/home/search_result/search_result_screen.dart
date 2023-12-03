@@ -38,7 +38,9 @@ class SearchResultScreen extends GetView<SearchResultController> {
   AppBar appBar() {
     return gtiAppBar(
         onTap: () => controller.goBack(),
-        leading: Icon(Icons.arrow_back),
+        leading: Transform.scale(
+            scale: 0.5,
+            child: SvgPicture.asset(ImageAssets.arrowLeft, color: black)),
         centerTitle: false,
         title: textWidget(
             text: "Surulere, Lagos",
@@ -103,7 +105,7 @@ class SearchResultScreen extends GetView<SearchResultController> {
                           child: Stack(
                             children: [
                               PageView(
-                                physics: ScrollPhysics(),
+                                physics: const ScrollPhysics(),
                                 // controller: cardPageController,
                                 controller: PageController(),
                                 onPageChanged: (int index) {
@@ -148,9 +150,9 @@ class SearchResultScreen extends GetView<SearchResultController> {
                                 ),
                               ),
                               carAvailabilityTag(
-                                positionRight: 7.sp,
-                                positionTop: 6.sp,
-                                status: AppStrings.available),
+                                  positionRight: 7.sp,
+                                  positionTop: 6.sp,
+                                  status: AppStrings.available),
                             ],
                           ),
                         ),
@@ -256,7 +258,6 @@ class SearchResultScreen extends GetView<SearchResultController> {
           ],
         ));
   }
-
 
   Widget continueButton() {
     return controller.isLoading.isTrue

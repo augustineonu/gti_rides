@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/car%20renter/home/search_result/car_selection_result/payment_summary/payment_summary_controller.dart';
-import 'package:gti_rides/screens/car%20renter/home/search_result/car_selection_result/update_kyc/update_kyc_controller.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
@@ -36,7 +35,9 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
   AppBar appBar() {
     return gtiAppBar(
       onTap: () => controller.goBack(),
-      leading: const Icon(Icons.arrow_back),
+      leading: Transform.scale(
+          scale: 0.5,
+          child: SvgPicture.asset(ImageAssets.arrowLeft, color: black)),
       centerTitle: true,
       title: textWidget(
           text: AppStrings.addToContinue,

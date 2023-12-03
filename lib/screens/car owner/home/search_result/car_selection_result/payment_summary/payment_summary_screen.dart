@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/car%20renter/home/search_result/car_selection_result/payment_summary/payment_summary_controller.dart';
-import 'package:gti_rides/screens/car%20renter/home/search_result/car_selection_result/update_kyc/update_kyc_controller.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
@@ -37,7 +36,12 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
   AppBar appBar() {
     return gtiAppBar(
       onTap: () => controller.goBack(),
-      leading: const Icon(Icons.arrow_back),
+      leading: Transform.scale(
+          scale: 0.5,
+          child: SvgPicture.asset(
+            color: black,
+            ImageAssets.arrowLeft,
+          )),
       centerTitle: true,
       title: textWidget(
           text: AppStrings.summary,
@@ -71,11 +75,11 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
                     subTitle: '9:00am'),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             divider(color: borderColor),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Row(
@@ -133,7 +137,7 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
                   style: getLightStyle(fontSize: 10.sp, color: primaryColor)),
             ),
             Container(
-              margin: EdgeInsets.symmetric(vertical: 20),
+              margin: const EdgeInsets.symmetric(vertical: 20),
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
               decoration:
                   BoxDecoration(color: primaryColorLight.withOpacity(0.1)),
@@ -248,24 +252,23 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
         : GtiButton(
             height: 40.sp,
             width: 380.sp,
-            text: 
-            // controller.args
-            //     ? AppStrings.proceedToPay
-            //     : 
+            text:
+                // controller.args
+                //     ? AppStrings.proceedToPay
+                //     :
                 AppStrings.sendRequest,
             color: primaryColor,
             // onTap: controller.routeToUpdateKyc,
             onTap: () {
-              successDialog(title: AppStrings.extendedTripSuccessMessage,
-              body: AppStrings.extendedTripSuccessMessage1,
-              buttonTitle: AppStrings.home,
-              onTap: controller.routeToHome );
+              successDialog(
+                  title: AppStrings.extendedTripSuccessMessage,
+                  body: AppStrings.extendedTripSuccessMessage1,
+                  buttonTitle: AppStrings.home,
+                  onTap: controller.routeToHome);
             },
             isLoading: controller.isLoading.value,
           );
   }
-
-
 
   // Column(
   //       crossAxisAlignment: CrossAxisAlignment.start,

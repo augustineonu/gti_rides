@@ -114,7 +114,9 @@ class QuickEditScreen extends GetView<QuickEditController> {
   AppBar appBar() {
     return gtiAppBar(
       onTap: controller.goBack,
-      leading: const Icon(Icons.arrow_back),
+      leading: Transform.scale(
+          scale: 0.5,
+          child: SvgPicture.asset(ImageAssets.arrowLeft, color: black)),
       centerTitle: true,
       title: textWidget(
           text: AppStrings.quickEdit,

@@ -1,4 +1,3 @@
-import 'package:get/get.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 
 class OnBoardingContent {

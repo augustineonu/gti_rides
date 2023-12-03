@@ -1,6 +1,7 @@
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:gti_rides/route/app_links.dart';
+import 'package:gti_rides/screens/car%20owner/rent_history/completed_trip/completed_trip_screen.dart';
 import 'package:gti_rides/screens/car%20owner/rent_history/feedbacks/feedbacks_screen.dart';
 import 'package:gti_rides/screens/car%20owner/home/list_vehicle/list_vehicle_screen.dart';
 import 'package:gti_rides/screens/car%20owner/home/manage_vehicle/car_history/car_history_screen.dart';
@@ -253,6 +254,11 @@ class AppRoutes {
       name: AppLinks.ownerTrips,
       page: () => const OwnerTripsScreen(),
       binding: OwnerTripsBinding()
+    ),
+    GetPage(
+      name: AppLinks.completedTrip,
+      page: () => const CompletedTripScreen(),
+      binding: CompletedTripBinding()
     ),
   ];
 }

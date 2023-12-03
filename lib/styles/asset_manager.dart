@@ -81,8 +81,10 @@ class ImageAssets {
   static const String history = "$SVG_PATH/history.svg";
   static const String warning = "$SVG_PATH/warning.svg";
   static const String docCopy = "$SVG_PATH/doc_copy.svg";
+  static const String arrowLeft = "$SVG_PATH/arrow_left1.svg";
+  static const String completedCheck = "$SVG_PATH/completed_check.svg";
   // static const String carListingBg = "$SVG_PATH/car_listing_bg.svg";
-  // PNG IMAGES
+  // PNG IMAGES 
 
   static const String onboarding = "$IMAGE_PATH/onboarding_1.png";
   static const String onboarding01 = "$IMAGE_PATH/onboarding01.png";

@@ -170,11 +170,12 @@ class FeedbacksScreen extends GetView<FeedbacksController> {
   AppBar appbar() {
     return gtiAppBar(
       onTap: controller.goBack,
-      leading: Icon(
-        Icons.arrow_back_rounded,
-        color: black,
-        size: 24.sp,
-      ),
+      leading: Transform.scale(
+          scale: 0.5,
+          child: SvgPicture.asset(
+            color: black,
+            ImageAssets.arrowLeft,
+          )),
       title: textWidget(
           text: AppStrings.feedbacks,
           style: getMediumStyle(color: grey5)

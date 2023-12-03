@@ -38,7 +38,9 @@ class SearchResultScreen extends GetView<SearchResultController> {
 
   AppBar appBar() {
     return gtiAppBar(
-        leading: Icon(Icons.arrow_back),
+        leading: Transform.scale(
+            scale: 0.5,
+            child: SvgPicture.asset(ImageAssets.arrowLeft, color: black)),
         centerTitle: false,
         title: textWidget(text: "Surulere, Lagos", style: getMediumStyle()),
         titleColor: iconColor(),

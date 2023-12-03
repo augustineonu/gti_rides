@@ -3,9 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/car%20renter/home/search_result/search_filter/search_filter_controller.dart';
-import 'package:gti_rides/shared_widgets/sqaure_check_box_widget.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
+import 'package:gti_rides/shared_widgets/sqaure_check_box_widget.dart';
 import 'package:gti_rides/shared_widgets/switch_widget.dart';
 import 'package:gti_rides/shared_widgets/text_input_widgets/normal_text_input_widget.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
@@ -38,7 +38,9 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
   AppBar appBar() {
     return gtiAppBar(
         onTap: () => controller.goBack(),
-        leading: const Icon(Icons.arrow_back),
+        leading: Transform.scale(
+            scale: 0.5,
+            child: SvgPicture.asset(ImageAssets.arrowLeft, color: black)),
         centerTitle: false,
         title: textWidget(
             text: AppStrings.filter,
@@ -411,7 +413,7 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
                     StatefulBuilder(
                       builder: (context, state) {
                         return ListView.separated(
-                          physics: ScrollPhysics(),
+                          physics: const ScrollPhysics(),
                           itemCount: controller.features.length,
                           shrinkWrap: true,
                           itemBuilder: (context, index) {

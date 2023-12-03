@@ -111,16 +111,20 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
           trailling: Positioned(
             right: 7.sp,
             top: 11.sp,
-            child: Row(children: [
-              textWidget(
-                  text: AppStrings.completed,
-                  style: getRegularStyle(fontSize: 10.sp, color: primaryColor)),
-              Icon(
-                Iconsax.arrow_right_3,
-                color: primaryColor,
-                size: 12,
-              )
-            ]),
+            child: InkWell(
+              onTap: controller.routeToCompletedTrip,
+              child: Row(children: [
+                textWidget(
+                    text: AppStrings.completed,
+                    style:
+                        getRegularStyle(fontSize: 10.sp, color: primaryColor)),
+              const  Icon(
+                  Iconsax.arrow_right_3,
+                  color: primaryColor,
+                  size: 12,
+                )
+              ]),
+            ),
           ),
         );
 

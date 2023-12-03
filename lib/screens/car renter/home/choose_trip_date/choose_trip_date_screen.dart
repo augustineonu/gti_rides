@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -481,8 +480,12 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
 
   AppBar appBar(context) {
     return gtiAppBar(
-      onTap: controller.goBack,
-        leading: const Icon(Icons.arrow_back),
+        onTap: controller.goBack,
+        leading: Transform.scale(
+            scale: 0.5,
+            child: SvgPicture.asset(
+              ImageAssets.arrowLeft,
+            )),
         centerTitle: false,
         title: textWidget(
             text: AppStrings.tripDates,

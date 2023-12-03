@@ -78,7 +78,7 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
                       ],
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 5,
                   ),
                   SvgPicture.asset(
@@ -86,7 +86,7 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
                     width: 20.sp,
                     height: 20.sp,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 8,
                   ),
                   SizedBox(
@@ -118,7 +118,7 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
                     height: 50,
                     child: Text(
                         'StartRangeDate:' '${controller.selectedTimeText}')),
-                Container(
+                SizedBox(
                     height: 50,
                     child: Text('EndRangeDate:' '${controller.endDate}')),
                 SizedBox(
@@ -157,7 +157,12 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
 
   AppBar appBar(context) {
     return gtiAppBar(
-        leading: Icon(Icons.arrow_back),
+        leading: Transform.scale(
+            scale: 0.5,
+            child: SvgPicture.asset(
+              ImageAssets.arrowLeft,
+          
+            color: black)),
         centerTitle: false,
         title: textWidget(
             text: AppStrings.tripDates,
@@ -172,7 +177,7 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
                   builder: (BuildContext context) {
                     return Dialog(
                       backgroundColor: white,
-                      insetPadding: EdgeInsets.all(0),
+                      insetPadding: const EdgeInsets.all(0),
                       shape: RoundedRectangleBorder(
                           borderRadius:
                               BorderRadius.circular(2.0.r)), //this right here
@@ -226,8 +231,8 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
                                                         (int index) {
                                                   controller.updateSelectedTime(
                                                       index % 12 + 1,
-                                                      controller
-                                                          .selectedEndMins.value,
+                                                      controller.selectedEndMins
+                                                          .value,
                                                       controller
                                                           .selectedAmPm.value);
                                                 },

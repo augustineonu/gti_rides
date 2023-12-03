@@ -382,7 +382,12 @@ class ManageVehicleScreen extends GetView<ManageVehicleController> {
   AppBar appBar() {
     return gtiAppBar(
       onTap: controller.goBack,
-      leading: const Icon(Icons.arrow_back),
+      leading: Transform.scale(
+          scale: 0.5,
+          child: SvgPicture.asset(
+          color: black,
+            ImageAssets.arrowLeft,
+          )),
       centerTitle: true,
       title: textWidget(
           text: AppStrings.manageCars,

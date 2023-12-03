@@ -37,7 +37,9 @@ class SearchResultScreen extends GetView<SearchResultController> {
   AppBar appBar() {
     return gtiAppBar(
         onTap: () => controller.goBack(),
-        leading: Icon(Icons.arrow_back),
+        leading: Transform.scale(
+            scale: 0.5,
+            child: SvgPicture.asset(ImageAssets.arrowLeft, color: black)),
         centerTitle: false,
         title: textWidget(
             text: "Surulere, Lagos",
@@ -102,7 +104,7 @@ class SearchResultScreen extends GetView<SearchResultController> {
                           child: Stack(
                             children: [
                               PageView(
-                                physics: ScrollPhysics(),
+                                physics: const ScrollPhysics(),
                                 // controller: cardPageController,
                                 controller: PageController(),
                                 onPageChanged: (int index) {
@@ -258,7 +260,7 @@ class SearchResultScreen extends GetView<SearchResultController> {
       right: 7,
       top: 10,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 4),
         decoration: BoxDecoration(
           color: black,
           borderRadius: BorderRadius.all(
@@ -266,7 +268,7 @@ class SearchResultScreen extends GetView<SearchResultController> {
           ),
         ),
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.all(
                 Radius.circular(2.r),

@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dash/flutter_dash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -464,7 +463,6 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
         ));
   }
 
-  
   Future<dynamic> noDriverDialog(Size size) {
     return Get.dialog(StatefulBuilder(builder: (context, setState) {
       return Dialog(
@@ -820,7 +818,9 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
   AppBar appBar() {
     return gtiAppBar(
       onTap: controller.goBack,
-      leading: const Icon(Icons.arrow_back),
+      leading: Transform.scale(
+          scale: 0.5,
+          child: SvgPicture.asset(ImageAssets.arrowLeft, color: black)),
       centerTitle: true,
       title: textWidget(
           text: AppStrings.listYourVehicle,

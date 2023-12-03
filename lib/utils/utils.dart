@@ -125,7 +125,7 @@ showSuccessSnackbar({required String message, Color? color}) {
       backgroundColor: color ?? success,
       duration: const Duration(seconds: 4),
       margin: EdgeInsets.all(10),
-      padding: EdgeInsets.all(20),
+      padding: EdgeInsets.all(15),
       borderRadius: 16.0,
       mainButton: GestureDetector(
         onTap: () => routeService.goBack(),

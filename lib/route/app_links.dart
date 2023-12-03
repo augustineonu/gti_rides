@@ -70,6 +70,7 @@ class AppLinks {
   static const carHistory = "/owner/home/manageVehicle/carHistory";
   static const feedback = "/owner/home/rentHistory/feedback";
   static const ownerTrips = "/owner/home/rentHistory/ownerTrips";
+  static const completedTrip = "/owner/home/rentHistory/ownerTrips/completedTrip";
 
   // static const chatAction = "/user/chat/:key/:action";
 
@@ -122,6 +123,7 @@ class AppLinks {
     'carHistory': carHistory,
     'feedback': feedback,
     'ownerTrips': ownerTrips,
+    'completedTrip': completedTrip,
     // 'trips': trips,
   };
 

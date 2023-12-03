@@ -3,17 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:gti_rides/screens/car%20renter/home/choose_trip_date/choose_trip_date_controller.dart';
-import 'package:gti_rides/screens/car%20renter/home/search_city/search_city_controller.dart';
 import 'package:gti_rides/screens/car%20renter/trips/choose_single_trip_date/choose_single_trip_date_controller.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
-import 'package:gti_rides/shared_widgets/text_input_widgets/normal_text_input_widget.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class ChooseSingleDateTripBinding extends Bindings {
@@ -80,7 +76,7 @@ class ChooseSingleDateTripScreen
                       ],
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 5,
                   ),
                   SvgPicture.asset(
@@ -88,7 +84,7 @@ class ChooseSingleDateTripScreen
                     width: 20.sp,
                     height: 20.sp,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 8,
                   ),
                   SizedBox(
@@ -120,7 +116,7 @@ class ChooseSingleDateTripScreen
                     height: 50,
                     child: Text(
                         'StartRangeDate:' '${controller.selectedTimeText}')),
-                Container(
+                SizedBox(
                     height: 50,
                     child: Text('EndRangeDate:' '${controller.endDate}')),
                 SizedBox(
@@ -159,7 +155,9 @@ class ChooseSingleDateTripScreen
 
   AppBar appBar(context) {
     return gtiAppBar(
-        leading: Icon(Icons.arrow_back),
+        leading: Transform.scale(
+            scale: 0.5,
+            child: SvgPicture.asset(ImageAssets.arrowLeft, color: black)),
         onTap: controller.goBack,
         centerTitle: false,
         title: textWidget(
@@ -169,9 +167,7 @@ class ChooseSingleDateTripScreen
         titleColor: iconColor(),
         actions: [
           InkWell(
-            onTap: () {
-            
-            },
+            onTap: () {},
             child: Padding(
               padding: const EdgeInsets.only(right: 16, top: 10),
               child: textWidget(

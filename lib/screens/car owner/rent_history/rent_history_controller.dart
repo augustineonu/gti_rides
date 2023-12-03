@@ -50,4 +50,5 @@ class RentHistoryController extends GetxController {
   void goBack() => routeService.goBack();
   void routeToQuickEdit() => routeService.gotoRoute(AppLinks.quickEdit);
   void routeToCarHistory() => routeService.gotoRoute(AppLinks.carHistory);
+  void routeToCompletedTrip() => routeService.gotoRoute(AppLinks.completedTrip);
 }

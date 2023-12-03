@@ -3,15 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/car%20renter/more/account_details/account_details_controller.dart';
-import 'package:gti_rides/screens/car%20renter/more/profile/profile_controller.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
-import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
-import 'package:gti_rides/shared_widgets/text_input_widgets/normal_text_input_widget.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
-import 'package:image_picker/image_picker.dart';
 
 class AccountDetailsBinding extends Bindings {
   @override
@@ -26,18 +22,19 @@ class AccountDetailsScreen extends GetView<AccountDetailsController> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    return  Scaffold(
-          backgroundColor: backgroundColor,
-          appBar: appBar(),
-          body: body(size, context));
-      // }
- 
+    return Scaffold(
+        backgroundColor: backgroundColor,
+        appBar: appBar(),
+        body: body(size, context));
+    // }
   }
 
   AppBar appBar() {
     return gtiAppBar(
       onTap: controller.goBack,
-      leading: const Icon(Icons.arrow_back),
+      leading: Transform.scale(
+          scale: 0.5,
+          child: SvgPicture.asset(ImageAssets.arrowLeft, color: black)),
       centerTitle: true,
       title: textWidget(
           text: AppStrings.accountDetails,
@@ -70,24 +67,22 @@ class AccountDetailsScreen extends GetView<AccountDetailsController> {
               height: 20,
             ),
             accountDetailsWidget(
-                title: AppStrings.email,
-                body: 'Tadewilliams@gmail.com',
-                // onTap: controller.routeToEmailInput
-                ),
+              title: AppStrings.email,
+              body: 'Tadewilliams@gmail.com',
+              // onTap: controller.routeToEmailInput
+            ),
           ],
         ),
         divider(color: borderColor),
-          accountDetailsWidget(
-                title: AppStrings.password,
-                body: '*****************',
-                onTap:  controller.routeToChangePassword
-              ),
+        accountDetailsWidget(
+            title: AppStrings.password,
+            body: '*****************',
+            onTap: controller.routeToChangePassword),
         divider(color: borderColor),
-          accountDetailsWidget(
-                title: AppStrings.mobileNumber,
-                body: '+234823456778',
-                onTap:  controller.routeToPhoneInput
-              ),
+        accountDetailsWidget(
+            title: AppStrings.mobileNumber,
+            body: '+234823456778',
+            onTap: controller.routeToPhoneInput),
         SizedBox(
           height: size.height * 0.08,
         ),
@@ -96,9 +91,7 @@ class AccountDetailsScreen extends GetView<AccountDetailsController> {
   }
 
   Widget accountDetailsWidget(
-      {required String title,
-      required String body,
-       void Function()? onTap}) {
+      {required String title, required String body, void Function()? onTap}) {
     return InkWell(
       onTap: onTap,
       child: Padding(

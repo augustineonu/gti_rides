@@ -4,11 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/car%20renter/home/search_result/search_result_controller.dart';
-import 'package:gti_rides/screens/car%20renter/home/search_city/search_city_controller.dart';
 import 'package:gti_rides/screens/car%20renter/widgets/build_carousel_dot.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
-import 'package:gti_rides/shared_widgets/text_input_widgets/normal_text_input_widget.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
@@ -38,7 +36,9 @@ class SearchResultScreen extends GetView<SearchResultController> {
 
   AppBar appBar() {
     return gtiAppBar(
-        leading: Icon(Icons.arrow_back),
+        leading: Transform.scale(
+            scale: 0.5,
+            child: SvgPicture.asset(ImageAssets.arrowLeft, color: black)),
         centerTitle: false,
         title: textWidget(text: "Surulere, Lagos", style: getMediumStyle()),
         titleColor: iconColor(),
@@ -98,7 +98,7 @@ class SearchResultScreen extends GetView<SearchResultController> {
                           child: Stack(
                             children: [
                               PageView(
-                                physics: ScrollPhysics(),
+                                physics: const ScrollPhysics(),
                                 // controller: cardPageController,
                                 controller: PageController(),
                                 onPageChanged: (int index) {
@@ -254,7 +254,7 @@ class SearchResultScreen extends GetView<SearchResultController> {
       right: 7,
       top: 10,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 4),
         decoration: BoxDecoration(
           color: black,
           borderRadius: BorderRadius.all(
@@ -262,7 +262,7 @@ class SearchResultScreen extends GetView<SearchResultController> {
           ),
         ),
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.all(
                 Radius.circular(2.r),

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:gti_rides/screens/car%20renter/more/account_details/account_details_controller.dart';
 import 'package:gti_rides/screens/car%20renter/more/account_details/account_verification/acount_verification_controller.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/text_input_widgets/normal_text_input_widget.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
+import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
 
@@ -52,7 +53,9 @@ class PhoneInputScreen extends StatelessWidget {
   AppBar appBar(AccountVerificationController controller) {
     return gtiAppBar(
       onTap: controller.goBack,
-      leading: const Icon(Icons.arrow_back),
+      leading: Transform.scale(
+          scale: 0.5,
+          child: SvgPicture.asset(ImageAssets.arrowLeft, color: black)),
       centerTitle: true,
       title: textWidget(
           text: AppStrings.phoneNumber,
