@@ -431,4 +431,5 @@ class AppStrings {
   static String completedNum = 'Completed (%s)';
   static String tripId = 'Trip ID';
   static String copied = 'Copied';
+  static String reportTripToAdin = 'Report trip to admin';
 }

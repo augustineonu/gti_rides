@@ -35,18 +35,10 @@ class RentHistoryController extends GetxController {
 
   TextEditingController senderNameController = TextEditingController();
 
-  List<Map<String, String>>  quickOptions =[
-    {
-      "imageUrl": ImageAssets.treashBin,
-      "title": AppStrings.remove,
-    },
+  List<Map<String, String>> quickOptions = [
     {
       "imageUrl": ImageAssets.pencilEdit,
-      "title": AppStrings.quickEdit,
-    },
-    {
-      "imageUrl": ImageAssets.pencilPlain,
-      "title": AppStrings.edit,
+      "title": AppStrings.reportTripToAdin,
     },
     {
       "imageUrl": ImageAssets.history,

@@ -11,6 +11,7 @@ import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
+import 'package:iconsax/iconsax.dart';
 
 class RentHistoryBinding extends Bindings {
   @override
@@ -45,12 +46,12 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
                       children: [
                         tabIndicator(
                             width: 150.sp,
-                            title: AppStrings.allCarsSm,
+                            title: AppStrings.active,
                             selected: controller.selectedIndex.value == 0,
                             onTap: () => controller.selectedIndex.value = 0),
                         tabIndicator(
                             width: 150.sp,
-                            title: AppStrings.booked,
+                            title: AppStrings.completed,
                             selected: controller.selectedIndex.value == 1,
                             onTap: () => controller.selectedIndex.value = 1),
                       ],
@@ -74,191 +75,204 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
   Widget buildBody(context, Size size) {
     switch (controller.selectedIndex.value) {
       case 0:
-        return Stack(
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                  border: Border.all(color: greyLight),
-                  borderRadius: BorderRadius.all(Radius.circular(4.r))),
-              child: Row(
-                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        // Active trips
+        return cardWidget(
+          context,
+          size,
+          title: 'Tesla Model Y',
+          amount: '100,000 ',
+          noOfDays: '5days',
+          startDateTime: "wed, 1 Nov, 9:00am",
+          endDateTime: "wed, 1 Nov, 9:00am",
+          trailling: Positioned(
+            right: 12.sp,
+            top: 12.sp,
+            child: InkWell(
+                onTap: () {
+                  quickOptionsSheet(size);
+                },
+                child: SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: SvgPicture.asset(ImageAssets.popUpMenu))),
+          ),
+        );
+
+      case 1:
+        // Completed trips
+        return cardWidget(
+          context,
+          size,
+          title: 'Tesla Model Y',
+          amount: '100,000 ',
+          noOfDays: '5days',
+          startDateTime: "wed, 1 Nov, 9:00am",
+          endDateTime: "wed, 1 Nov, 9:00am",
+          trailling: Positioned(
+            right: 7.sp,
+            top: 11.sp,
+            child: Row(children: [
+              textWidget(
+                  text: AppStrings.completed,
+                  style: getRegularStyle(fontSize: 10.sp, color: primaryColor)),
+              Icon(
+                Iconsax.arrow_right_3,
+                color: primaryColor,
+                size: 12,
+              )
+            ]),
+          ),
+        );
+
+      default:
+        return const SizedBox();
+    }
+  }
+
+  Widget cardWidget(context, Size size,
+      {required String title,
+      required String amount,
+      required String noOfDays,
+      required String startDateTime,
+      required String endDateTime,
+      required Widget trailling}) {
+    return Stack(
+      children: [
+        Container(
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+              border: Border.all(color: greyLight),
+              borderRadius: BorderRadius.all(Radius.circular(4.r))),
+          child: Row(
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Stack(
                 children: [
-                  Stack(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(4.r),
-                            bottomLeft: Radius.circular(4.r)),
-                        child: Image.asset(
-                          'assets/images/fav_car.png',
-                          fit: BoxFit.fitHeight,
-                        ),
-                      ),
-                      Positioned(
-                        left: 10,
-                        right: 10,
-                        top: 25,
-                        bottom: 25,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 5, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: black.withOpacity(0.4),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(2.r),
-                            ),
-                          ),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 6, vertical: 4),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(2.r),
-                                ),
-                                border: Border.all(
-                                  color: primaryColor,
-                                )),
-                            child: Center(
-                              child: textWidget(
-                                text: 'Car status: \n booked',
-                                textAlign: TextAlign.center,
-                                style: getLightStyle(
-                                        fontSize: 10.sp, color: primaryColor)
-                                    .copyWith(fontWeight: FontWeight.w400),
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          // width: 135.sp,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              textWidget(
-                                  text: 'Tesla Model Y', style: getBoldStyle()),
-                              const SizedBox(
-                                height: 3,
-                              ),
-                              Row(
-                                // crossAxisAlignment: alignment,
-                                children: [
-                                  SvgPicture.asset(ImageAssets.naira),
-                                  textWidget(
-                                      text: '100,000 ',
-                                      style: getMediumStyle(fontSize: 10.sp)
-                                          .copyWith(fontFamily: 'Neue')),
-                                  // textWidget(
-                                  //     text: ' x ', style: getMediumStyle(fontSize: 10.sp).copyWith(fontFamily: 'Neue')),
-                                  SvgPicture.asset(
-                                    ImageAssets.closeSmall,
-                                    width: 7.sp,
-                                    height: 7.sp,
-                                  ),
-                                  textWidget(
-                                      text: ' 5days',
-                                      style: getMediumStyle(fontSize: 10.sp)
-                                          .copyWith(fontFamily: 'Neue')),
-                                ],
-                              ),
-
-                              /// Show the thumbs up and number trips
-                              //  Row(
-                              //       children: [
-                              //         SvgPicture.asset(
-                              //             ImageAssets.thumbsUpPrimaryColor),
-                              //         SizedBox(
-                              //           width: 5.sp,
-                              //         ),
-                              //         RichText(
-                              //           text: TextSpan(
-                              //               text: '97%',
-                              //               style: getMediumStyle(
-                              //                 fontSize: 12.sp,
-                              //               ),
-                              //               children: <TextSpan>[
-                              //                 TextSpan(
-                              //                   text: ' (66 trips)',
-                              //                   style: getLightStyle(
-                              //                       fontSize: 12.sp, color: grey2),
-                              //                 )
-                              //               ]),
-                              //         ),
-                              //       ],
-                              //     ),
-
-                              ////////
-                              const SizedBox(
-                                height: 10,
-                              ),
-
-                              textWidget(
-                                text: AppStrings.tripDate,
-                                // show AppStrings.aAvailabilityDate
-                                style: getRegularStyle(
-                                  color: grey3,
-                                  fontSize: 10.sp,
-                                ),
-                              ),
-
-                              const SizedBox(
-                                height: 3,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  textWidget(
-                                      text: "wed, 1 Nov, 9:00am",
-                                      style: getMediumStyle(fontSize: 10.sp)
-                                          .copyWith(fontFamily: 'Neue')),
-                                  SvgPicture.asset(
-                                    ImageAssets.arrowForwardRounded,
-                                    height: 8.sp,
-                                    width: 8.sp,
-                                  ),
-                                  textWidget(
-                                      text: "wed, 1 Nov, 9:00am",
-                                      style: getMediumStyle(fontSize: 10.sp)
-                                          .copyWith(fontFamily: 'Neue')),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                  ClipRRect(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(4.r),
+                        bottomLeft: Radius.circular(4.r)),
+                    child: Image.asset(
+                      'assets/images/fav_car.png',
+                      fit: BoxFit.fitHeight,
                     ),
                   ),
                 ],
               ),
-            ),
-            Positioned(
-              right: 12.sp,
-              top: 12.sp,
-              child: InkWell(
-                  onTap: () {
-                    quickOptionsSheet(size);
-                  },
-                  child: SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: SvgPicture.asset(ImageAssets.popUpMenu))),
-            ),
-          ],
-        );
-      default:
-        return const SizedBox();
-    }
+              Padding(
+                padding: const EdgeInsets.all(6.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      // width: 135.sp,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          textWidget(text: title, style: getBoldStyle()),
+                          const SizedBox(
+                            height: 3,
+                          ),
+                          Row(
+                            // crossAxisAlignment: alignment,
+                            children: [
+                              SvgPicture.asset(ImageAssets.naira),
+                              textWidget(
+                                  text: amount,
+                                  style: getMediumStyle(fontSize: 10.sp)
+                                      .copyWith(fontFamily: 'Neue')),
+                              // textWidget(
+                              //     text: ' x ', style: getMediumStyle(fontSize: 10.sp).copyWith(fontFamily: 'Neue')),
+                              SvgPicture.asset(
+                                ImageAssets.closeSmall,
+                                width: 7.sp,
+                                height: 7.sp,
+                              ),
+                              textWidget(
+                                  text: ' $noOfDays',
+                                  style: getMediumStyle(fontSize: 10.sp)
+                                      .copyWith(fontFamily: 'Neue')),
+                            ],
+                          ),
+
+                          /// Show the thumbs up and number trips
+                          //  Row(
+                          //       children: [
+                          //         SvgPicture.asset(
+                          //             ImageAssets.thumbsUpPrimaryColor),
+                          //         SizedBox(
+                          //           width: 5.sp,
+                          //         ),
+                          //         RichText(
+                          //           text: TextSpan(
+                          //               text: '97%',
+                          //               style: getMediumStyle(
+                          //                 fontSize: 12.sp,
+                          //               ),
+                          //               children: <TextSpan>[
+                          //                 TextSpan(
+                          //                   text: ' (66 trips)',
+                          //                   style: getLightStyle(
+                          //                       fontSize: 12.sp, color: grey2),
+                          //                 )
+                          //               ]),
+                          //         ),
+                          //       ],
+                          //     ),
+
+                          ////////
+                          const SizedBox(
+                            height: 10,
+                          ),
+
+                          textWidget(
+                            text: AppStrings.tripDate,
+                            // show AppStrings.aAvailabilityDate
+                            style: getRegularStyle(
+                              color: grey3,
+                              fontSize: 10.sp,
+                            ),
+                          ),
+
+                          const SizedBox(
+                            height: 3,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              textWidget(
+                                  text: startDateTime,
+                                  textOverflow: TextOverflow.visible,
+                                  style: getMediumStyle(fontSize: 10.sp)
+                                      .copyWith(fontFamily: 'Neue')),
+                              SizedBox(width: 2),
+                              SvgPicture.asset(
+                                ImageAssets.arrowForwardRounded,
+                                height: 8.sp,
+                                width: 8.sp,
+                              ),
+                              SizedBox(width: 2),
+                              textWidget(
+                                  text: endDateTime,
+                                  textOverflow: TextOverflow.visible,
+                                  style: getMediumStyle(fontSize: 10.sp)
+                                      .copyWith(fontFamily: 'Neue')),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        trailling
+      ],
+    );
   }
 
   Future<dynamic> quickOptionsSheet(Size size) {
@@ -276,12 +290,11 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
               onTap: () {
                 switch (index) {
                   case 0:
-                    deleteVehicleSheet(size);
+                  // report trip to admin;
+
                   case 1:
-                    controller.routeToQuickEdit();
-                  case 2:
-                  case 3:
                     controller.routeToCarHistory();
+
                     break;
                   default:
                 }
@@ -303,74 +316,6 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
             height: 18,
           ),
         ),
-      ),
-      backgroundColor: backgroundColor,
-      isScrollControlled: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(4.r), topRight: Radius.circular(4.r)),
-      ),
-    );
-  }
-
-  Future<dynamic> deleteVehicleSheet(Size size) {
-    return Get.bottomSheet(
-      SizedBox(
-        height: size.height * 0.4.sp,
-        width: size.width.sp,
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          SvgPicture.asset(ImageAssets.warning),
-          SizedBox(
-            height: 15.sp,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 50.0),
-            child: Column(
-              children: [
-                textWidget(
-                    text:
-                        AppStrings.areYouSureToDelete.trArgs(["Tesla Model Y"]),
-                    textAlign: TextAlign.center,
-                    textOverflow: TextOverflow.visible,
-                    style: getSemiBoldStyle()),
-                SizedBox(
-                  height: 12.sp,
-                ),
-                textWidget(
-                    text: AppStrings.everyDataWouldBeDeleted
-                        .trArgs(["Tesla Model Y"]),
-                    textAlign: TextAlign.center,
-                    textOverflow: TextOverflow.visible,
-                    style: getRegularStyle(color: grey3, fontSize: 12.sp)),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 22.sp,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              GtiButton(
-                text: AppStrings.cancel,
-                color: backgroundColor,
-                width: 150.sp,
-                hasBorder: true,
-                borderColor: primaryColor,
-                textColor: primaryColor,
-                onTap: controller.goBack,
-              ),
-              SizedBox(
-                width: 4.sp,
-              ),
-              GtiButton(
-                text: AppStrings.cont,
-                width: 150.sp,
-                onTap: () {},
-              ),
-            ],
-          )
-        ]),
       ),
       backgroundColor: backgroundColor,
       isScrollControlled: true,
