@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:gti_rides/screens/car%20renter/home/car_renter_home_screen.dart';
 import 'package:gti_rides/screens/car%20renter/inbox/inbox_screen.dart';
 import 'package:gti_rides/screens/car%20renter/landing_controller.dart';
-import 'package:gti_rides/screens/car%20renter/more/more_screen.dart';
+import 'package:gti_rides/screens/more/more_screen.dart';
 import 'package:gti_rides/screens/car%20renter/trips/trips_screen.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';

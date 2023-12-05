@@ -42,139 +42,104 @@ Widget dropdownWidget(
             color: Colors.transparent,
             child: ButtonTheme(
               alignedDropdown: true,
-              child: StatefulBuilder(builder: (context, setState) {
-                return DropdownButtonFormField<Map<String, dynamic>>(
-                  isExpanded: true,
-                  hint: Text(
-                    hintText!,
-                    style: getRegularStyle(color: borderColor),
-                  ),
-                  // value: selectedUserValue,
-                  selectedItemBuilder: (context) {
-                    return values
-                        .map((item) => Container(
-                              alignment: Alignment.centerLeft,
-                              constraints: const BoxConstraints(minWidth: 100),
-                              child: Text(
-                                selectedValue?['name'] ?? '',
-                                style: getRegularStyle(),
-                              ),
-                            ))
-                        .toList();
-                  },
-                  items: values.map((item) {
-                    bool isSelected = item == selectedValue;
-                    return DropdownMenuItem(
-                      value: item,
-                      child: GestureDetector(
-                        onTap: () {
-                          onChange(item);
-                          setState(() {
-                            selectedValue = item;
-                            print("updated state");
-                          });
-                        },
-                        child: Row(
-                          children: [
-                            // Radio(
-                            //   value: item,
-                            //   groupValue: selectedValue,
-                            //   onChanged: (Map<String, dynamic>? value) {
-                            //     setState(() {
-                            //       onChange(value);
-                            //       selectedValue = value!;
-                            //     });
-                            //   },
-                            // ),
-                            Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: borderColor,
-                                  width: 1.0.w,
-                                ),
-                                // borderRadius: BorderRadius.circular(4.0.r),
-                                color: isSelected
-                                    ? Colors.blue
-                                    : Colors.transparent,
-                              ),
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 5.sp,
-                                vertical: 13.sp,
-                              ),
+              child: DropdownButtonFormField<Map<String, dynamic>>(
+                isExpanded: true,
+                hint: Text(
+                  hintText!,
+                  style: getRegularStyle(color: borderColor),
+                ),
+                // value: selectedUserValue,
+                selectedItemBuilder: (context) {
+                  return values
+                      .map((item) => Container(
+                            alignment: Alignment.centerLeft,
+                            constraints: const BoxConstraints(minWidth: 100),
+                            child: Text(
+                              selectedValue?['name'] ?? '',
+                              style: getRegularStyle(),
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  item['name'],
-                                  style: getRegularStyle(
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                Text(
-                                  item['details'],
-                                  style: getRegularStyle(
-                                    fontSize: 10,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge
-                      ?.copyWith(color: Colors.white),
-                  onChanged: (Map<String, dynamic>? value) {
-                    setState(() {
-                      onChange(value);
-                    });
-                  },
-                  icon: const Icon(
-                    Iconsax.arrow_down_1,
-                    color: borderColor,
-                  ),
-                  decoration: decoration ??
-                      InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(
-                            horizontal: 5.sp, vertical: 13.sp),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: borderColor,
-                            width: 1.0.w,
-                          ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(4.0.r),
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: borderColor,
-                            width: 1.0.w,
-                          ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(4.0.r),
-                          ),
-                        ),
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: secondaryColor,
-                            width: 1.0.w,
-                          ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(4.0.r),
-                          ),
-                        ),
+                          ))
+                      .toList();
+                },
+                items: values.map((item) {
+                  bool isSelected = item == selectedValue;
+                  return DropdownMenuItem(
+                    value: item,
+                    child: GestureDetector(
+                      onTap: () {
+                        onChange(item);
 
-                        // filled: true,
-                        fillColor: Colors.transparent,
+                        selectedValue = item;
+                        print("updated state ${selectedValue.toString()}");
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            item['name'] ?? '',
+                            style: getRegularStyle(
+                              fontSize: 16,
+                            ),
+                          ),
+                          Text(
+                            item['details'] ?? '',
+                            style: getRegularStyle(
+                              fontSize: 10,
+                            ),
+                          ),
+                        ],
                       ),
-                );
-              }),
+                    ),
+                  );
+                }).toList(),
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge
+                    ?.copyWith(color: Colors.white),
+                onChanged: (Map<String, dynamic>? value) {
+                  onChange(value);
+                
+                },
+                icon: const Icon(
+                  Iconsax.arrow_down_1,
+                  color: borderColor,
+                ),
+                decoration: decoration ??
+                    InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(
+                          horizontal: 5.sp, vertical: 13.sp),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: borderColor,
+                          width: 1.0.w,
+                        ),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(4.0.r),
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: borderColor,
+                          width: 1.0.w,
+                        ),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(4.0.r),
+                        ),
+                      ),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: secondaryColor,
+                          width: 1.0.w,
+                        ),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(4.0.r),
+                        ),
+                      ),
+
+                      // filled: true,
+                      fillColor: Colors.transparent,
+                    ),
+              ),
             ),
           ),
         ),

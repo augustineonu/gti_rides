@@ -115,7 +115,7 @@ showErrorSnackbar({required String message, Color? color}) {
   }
 }
 
-showSuccessSnackbar({required String message, Color? color}) {
+showSuccessSnackbar({required String message, Color? color, Color? textColor}) {
   final overlayContext = Get.overlayContext;
   if (overlayContext != null) {
     Get.rawSnackbar(

@@ -438,4 +438,19 @@ class AppStrings {
   static String tripStartDate = 'Trip start date';
   static String tripEndDate = 'Trip end date';
   static String paymentRef = 'Payment ref';
+  static String paymentStatus = 'Payment status';
+  static String sent = 'Sent';
+  static String rentalReview = 'Rental review';
+  static String leaveReviewAboutRental = 'Leave review about rental';
+  static String speakToSupport = 'Speak to support';
+  static String letOthersKnowAboutRentalExperience = 'Let others know about the rental experience';
+  static String allApayment = 'All Payment';
+  static String paymentAccount = 'Payment account';
+  static String paymentMethod = 'Payment method';
+  static String youHaveNoAccountAdded = 'You have no account added yet';
+  static String addInfo = 'Add info';
+  static String selectBank = 'Select bank';
+  static String bankAccountNumber = 'Bank account number';
+  static String bankAccountNumberHintText = 'Please enter your bank account number';
+  static String bankAccountAddedSuccess = 'Bank account added successfully';
 }

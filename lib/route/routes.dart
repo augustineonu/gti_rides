@@ -1,6 +1,7 @@
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:gti_rides/route/app_links.dart';
+import 'package:gti_rides/screens/car%20owner/payment/verify_otp_screen.dart';
 import 'package:gti_rides/screens/car%20owner/rent_history/completed_trip/completed_trip_screen.dart';
 import 'package:gti_rides/screens/car%20owner/rent_history/feedbacks/feedbacks_screen.dart';
 import 'package:gti_rides/screens/car%20owner/home/list_vehicle/list_vehicle_screen.dart';
@@ -20,23 +21,23 @@ import 'package:gti_rides/screens/car%20renter/home/search_result/reviews/review
 import 'package:gti_rides/screens/car%20renter/home/search_result/search_filter/search_filter_screen.dart';
 import 'package:gti_rides/screens/car%20renter/home/search_result/search_result_screen.dart';
 import 'package:gti_rides/screens/car%20renter/landing_page.dart';
-import 'package:gti_rides/screens/car%20renter/more/account_details/account_details_screen.dart';
-import 'package:gti_rides/screens/car%20renter/more/account_details/account_verification/change_password/change_password_screen.dart';
-import 'package:gti_rides/screens/car%20renter/more/account_details/account_verification/email/email_imput_screen.dart';
-import 'package:gti_rides/screens/car%20renter/more/account_details/account_verification/email/email_verification.dart';
-import 'package:gti_rides/screens/car%20renter/more/account_details/account_verification/phone/phone_input_screen.dart';
-import 'package:gti_rides/screens/car%20renter/more/account_details/account_verification/phone/phone_verification.dart';
-import 'package:gti_rides/screens/car%20renter/more/favorite/favorite_screen.dart';
-import 'package:gti_rides/screens/car%20renter/more/identity_verification/identity_verification.dart';
-import 'package:gti_rides/screens/car%20renter/more/identity_verification/screens/emergency_contact_screen.dart';
-import 'package:gti_rides/screens/car%20renter/more/identity_verification/screens/gender_screen.dart';
-import 'package:gti_rides/screens/car%20renter/more/identity_verification/screens/home_address_screen.dart';
-import 'package:gti_rides/screens/car%20renter/more/identity_verification/screens/occupation_screen.dart';
-import 'package:gti_rides/screens/car%20renter/more/identity_verification/screens/office_address_screen.dart';
-import 'package:gti_rides/screens/car%20renter/more/identity_verification/screens/proof_of_identity.dart';
-import 'package:gti_rides/screens/car%20renter/more/identity_verification/screens/referral_code_screen.dart';
-import 'package:gti_rides/screens/car%20renter/more/more_screen.dart';
-import 'package:gti_rides/screens/car%20renter/more/profile/profile_screen.dart';
+import 'package:gti_rides/screens/more/account_details/account_details_screen.dart';
+import 'package:gti_rides/screens/more/account_details/account_verification/change_password/change_password_screen.dart';
+import 'package:gti_rides/screens/more/account_details/account_verification/email/email_imput_screen.dart';
+import 'package:gti_rides/screens/more/account_details/account_verification/email/email_verification.dart';
+import 'package:gti_rides/screens/more/account_details/account_verification/phone/phone_input_screen.dart';
+import 'package:gti_rides/screens/more/account_details/account_verification/phone/phone_verification.dart';
+import 'package:gti_rides/screens/more/favorite/favorite_screen.dart';
+import 'package:gti_rides/screens/more/identity_verification/identity_verification.dart';
+import 'package:gti_rides/screens/more/identity_verification/screens/emergency_contact_screen.dart';
+import 'package:gti_rides/screens/more/identity_verification/screens/gender_screen.dart';
+import 'package:gti_rides/screens/more/identity_verification/screens/home_address_screen.dart';
+import 'package:gti_rides/screens/more/identity_verification/screens/occupation_screen.dart';
+import 'package:gti_rides/screens/more/identity_verification/screens/office_address_screen.dart';
+import 'package:gti_rides/screens/more/identity_verification/screens/proof_of_identity.dart';
+import 'package:gti_rides/screens/more/identity_verification/screens/referral_code_screen.dart';
+import 'package:gti_rides/screens/more/more_screen.dart';
+import 'package:gti_rides/screens/more/profile/profile_screen.dart';
 import 'package:gti_rides/screens/car%20renter/trips/choose_single_trip_date/choose_single_trip_date_screen.dart';
 import 'package:gti_rides/screens/guest/Reset_password/request_reset_password_screen.dart';
 import 'package:gti_rides/screens/guest/login/login_screen.dart';
@@ -259,6 +260,11 @@ class AppRoutes {
       name: AppLinks.completedTrip,
       page: () => const CompletedTripScreen(),
       binding: CompletedTripBinding()
+    ),
+    GetPage(
+      name: AppLinks.verifyAccountOtp,
+      page: () => const VerifyOtpScreen(),
+
     ),
   ];
 }

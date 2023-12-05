@@ -4,9 +4,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/car%20owner/home/car_owner_home_screen.dart';
 import 'package:gti_rides/screens/car%20owner/owner_landing_controller.dart';
+import 'package:gti_rides/screens/car%20owner/payment/payment_screen.dart';
 import 'package:gti_rides/screens/car%20owner/rent_history/rent_history_screen.dart';
 import 'package:gti_rides/screens/car%20renter/inbox/inbox_screen.dart';
-import 'package:gti_rides/screens/car%20renter/more/more_screen.dart';
+import 'package:gti_rides/screens/more/more_screen.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
@@ -26,7 +27,7 @@ class OwnerLandingPage extends StatelessWidget {
             children: const [
               CarOwnerHomeScreen(),
               RentHistoryScreen(),
-              InboxScreen(),
+              PaymentScreen(),
               MoreScreen(),
             ],
           )),
@@ -54,7 +55,7 @@ class OwnerLandingPage extends StatelessWidget {
               icon: Container(
                 margin: const EdgeInsets.only(bottom: 8),
                 child: SvgPicture.asset(
-                  ImageAssets.search,
+                  ImageAssets.home,
                   height: 18.sp,
                   color: landingPageController.tabIndex.value == 0
                       ? primaryColor
@@ -68,7 +69,7 @@ class OwnerLandingPage extends StatelessWidget {
               icon: Container(
                 margin: const EdgeInsets.only(bottom: 8),
                 child: SvgPicture.asset(
-                  ImageAssets.trip,
+                  ImageAssets.payment,
                   height: 18.sp,
                   color: landingPageController.tabIndex.value == 1
                       ? primaryColor
@@ -82,7 +83,7 @@ class OwnerLandingPage extends StatelessWidget {
               icon: Container(
                 margin: const EdgeInsets.only(bottom: 8),
                 child: SvgPicture.asset(
-                  ImageAssets.inbox,
+                  ImageAssets.historyIcon,
                   height: 18.sp,
                   color: landingPageController.tabIndex.value == 2
                       ? primaryColor

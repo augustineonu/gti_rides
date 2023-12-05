@@ -83,6 +83,9 @@ class ImageAssets {
   static const String docCopy = "$SVG_PATH/doc_copy.svg";
   static const String arrowLeft = "$SVG_PATH/arrow_left1.svg";
   static const String completedCheck = "$SVG_PATH/completed_check.svg";
+  static const String home = "$SVG_PATH/home.svg";
+  static const String payment = "$SVG_PATH/payment.svg";
+  static const String historyIcon = "$SVG_PATH/history_icon.svg";
   // static const String carListingBg = "$SVG_PATH/car_listing_bg.svg";
   // PNG IMAGES 
 
@@ -103,5 +106,6 @@ class ImageAssets {
   static const String guyWorks = "$IMAGE_PATH/guy_works.png";
   static const String manageListedBg = "$IMAGE_PATH/manage_listed_bg.png";
   static const String steering1 = "$IMAGE_PATH/steering.png";
+  static const String doubleCheck = "$IMAGE_PATH/checkmark.png";
 
 }

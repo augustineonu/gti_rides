@@ -71,6 +71,7 @@ class AppLinks {
   static const feedback = "/owner/home/rentHistory/feedback";
   static const ownerTrips = "/owner/home/rentHistory/ownerTrips";
   static const completedTrip = "/owner/home/rentHistory/ownerTrips/completedTrip";
+  static const verifyAccountOtp = "/owner/home/payment/verifyOtp";
 
   // static const chatAction = "/user/chat/:key/:action";
 
@@ -124,6 +125,7 @@ class AppLinks {
     'feedback': feedback,
     'ownerTrips': ownerTrips,
     'completedTrip': completedTrip,
+    'verifyAccountOtp': verifyAccountOtp,
     // 'trips': trips,
   };
 

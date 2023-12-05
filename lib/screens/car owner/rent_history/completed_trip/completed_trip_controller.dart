@@ -5,6 +5,7 @@ import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
+import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/utils.dart';
 
