@@ -70,8 +70,11 @@ class AppLinks {
   static const carHistory = "/owner/home/manageVehicle/carHistory";
   static const feedback = "/owner/home/rentHistory/feedback";
   static const ownerTrips = "/owner/home/rentHistory/ownerTrips";
-  static const completedTrip = "/owner/home/rentHistory/ownerTrips/completedTrip";
+  static const completedTrip =
+      "/owner/home/rentHistory/ownerTrips/completedTrip";
   static const verifyAccountOtp = "/owner/home/payment/verifyOtp";
+  static const drivers = "/more/drivers";
+  static const addDriver = "/more/drivers/addDriver";
 
   // static const chatAction = "/user/chat/:key/:action";
 
@@ -126,6 +129,8 @@ class AppLinks {
     'ownerTrips': ownerTrips,
     'completedTrip': completedTrip,
     'verifyAccountOtp': verifyAccountOtp,
+    'drivers': drivers,
+    'addDriver': addDriver,
     // 'trips': trips,
   };
 

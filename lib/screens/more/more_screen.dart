@@ -65,7 +65,8 @@ class MoreScreen extends StatelessWidget {
                                   controller.routeToIdentityVerification();
                                 // show "My Drivers" only if user type is Car Owner
                                 case 3:
-                                  return;
+                                  controller.routeToDrivers();
+                                case 4:
                                 case 5:
                                   controller.routeToReferralCode();
                                   break;

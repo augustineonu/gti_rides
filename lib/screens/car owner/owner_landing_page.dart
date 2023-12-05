@@ -62,21 +62,7 @@ class OwnerLandingPage extends StatelessWidget {
                       : black,
                 ),
               ),
-              label: AppStrings.search,
-              backgroundColor: backgroundColor,
-            ),
-            BottomNavigationBarItem(
-              icon: Container(
-                margin: const EdgeInsets.only(bottom: 8),
-                child: SvgPicture.asset(
-                  ImageAssets.payment,
-                  height: 18.sp,
-                  color: landingPageController.tabIndex.value == 1
-                      ? primaryColor
-                      : black,
-                ),
-              ),
-              label: AppStrings.trips,
+              label: AppStrings.home,
               backgroundColor: backgroundColor,
             ),
             BottomNavigationBarItem(
@@ -85,12 +71,26 @@ class OwnerLandingPage extends StatelessWidget {
                 child: SvgPicture.asset(
                   ImageAssets.historyIcon,
                   height: 18.sp,
+                  color: landingPageController.tabIndex.value == 1
+                      ? primaryColor
+                      : black,
+                ),
+              ),
+              label: AppStrings.rentHistory,
+              backgroundColor: backgroundColor,
+            ),
+            BottomNavigationBarItem(
+              icon: Container(
+                margin: const EdgeInsets.only(bottom: 8),
+                child: SvgPicture.asset(
+                  ImageAssets.payment,
+                  height: 18.sp,
                   color: landingPageController.tabIndex.value == 2
                       ? primaryColor
                       : black,
                 ),
               ),
-              label: AppStrings.inboox,
+              label: AppStrings.payment,
               backgroundColor: backgroundColor,
             ),
             BottomNavigationBarItem(

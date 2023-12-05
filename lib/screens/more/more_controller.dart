@@ -39,10 +39,12 @@ class MoreController extends GetxController {
       'title': " ${AppStrings.identityVerification}"
     },
     {'image': ImageAssets.toyCar, 'title': AppStrings.myDrivers},
-    {'image': ImageAssets.headSet, 'title': "  ${AppStrings.reportAnIncident}"},
-    {'image': ImageAssets.people, 'title': "  ${AppStrings.referrals}"},
     {'image': ImageAssets.key, 'title': "  ${AppStrings.howGtiWorks1}"},
+    {'image': ImageAssets.people, 'title': "  ${AppStrings.referrals}"},
+    {'image': ImageAssets.headSet, 'title': "  ${AppStrings.reportAnIncident}"},
+    {'image': ImageAssets.headSet, 'title': "  ${AppStrings.contactCustomerCare}"},
   ];
+
 
   onPageChanged(int index) {}
 
@@ -62,6 +64,7 @@ class MoreController extends GetxController {
   void routeToIdentityVerification() =>
       routeService.gotoRoute(AppLinks.identityVerification);
   void routeToReferralCode() => routeService.gotoRoute(AppLinks.referral);
+  void routeToDrivers() => routeService.gotoRoute(AppLinks.drivers);
 
   @override
   void dispose() {

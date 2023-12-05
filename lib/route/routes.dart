@@ -1,14 +1,14 @@
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:gti_rides/route/app_links.dart';
-import 'package:gti_rides/screens/car%20owner/payment/verify_otp_screen.dart';
-import 'package:gti_rides/screens/car%20owner/rent_history/completed_trip/completed_trip_screen.dart';
-import 'package:gti_rides/screens/car%20owner/rent_history/feedbacks/feedbacks_screen.dart';
 import 'package:gti_rides/screens/car%20owner/home/list_vehicle/list_vehicle_screen.dart';
 import 'package:gti_rides/screens/car%20owner/home/manage_vehicle/car_history/car_history_screen.dart';
 import 'package:gti_rides/screens/car%20owner/home/manage_vehicle/manage_vehicle_screen.dart';
 import 'package:gti_rides/screens/car%20owner/home/manage_vehicle/quick_edit/quick_edit_screen.dart';
 import 'package:gti_rides/screens/car%20owner/owner_landing_page.dart';
+import 'package:gti_rides/screens/car%20owner/payment/verify_otp_screen.dart';
+import 'package:gti_rides/screens/car%20owner/rent_history/completed_trip/completed_trip_screen.dart';
+import 'package:gti_rides/screens/car%20owner/rent_history/feedbacks/feedbacks_screen.dart';
 import 'package:gti_rides/screens/car%20owner/rent_history/owner_trips/owner_trips_screen.dart';
 import 'package:gti_rides/screens/car%20renter/home/choose_trip_date/choose_trip_date_screen.dart';
 import 'package:gti_rides/screens/car%20renter/home/search_city/search_city_screen.dart';
@@ -21,12 +21,21 @@ import 'package:gti_rides/screens/car%20renter/home/search_result/reviews/review
 import 'package:gti_rides/screens/car%20renter/home/search_result/search_filter/search_filter_screen.dart';
 import 'package:gti_rides/screens/car%20renter/home/search_result/search_result_screen.dart';
 import 'package:gti_rides/screens/car%20renter/landing_page.dart';
+import 'package:gti_rides/screens/car%20renter/trips/choose_single_trip_date/choose_single_trip_date_screen.dart';
+import 'package:gti_rides/screens/guest/Reset_password/request_reset_password_screen.dart';
+import 'package:gti_rides/screens/guest/login/login_screen.dart';
+import 'package:gti_rides/screens/guest/onboarding/onboarding_screen.dart';
+import 'package:gti_rides/screens/guest/otp_verification/otp_verification.dart';
+import 'package:gti_rides/screens/guest/signup/signup_screen.dart';
+import 'package:gti_rides/screens/guest/splash/splash_screen.dart';
 import 'package:gti_rides/screens/more/account_details/account_details_screen.dart';
 import 'package:gti_rides/screens/more/account_details/account_verification/change_password/change_password_screen.dart';
 import 'package:gti_rides/screens/more/account_details/account_verification/email/email_imput_screen.dart';
 import 'package:gti_rides/screens/more/account_details/account_verification/email/email_verification.dart';
 import 'package:gti_rides/screens/more/account_details/account_verification/phone/phone_input_screen.dart';
 import 'package:gti_rides/screens/more/account_details/account_verification/phone/phone_verification.dart';
+import 'package:gti_rides/screens/more/drivers/add_driver_screen.dart';
+import 'package:gti_rides/screens/more/drivers/drivers_screen.dart';
 import 'package:gti_rides/screens/more/favorite/favorite_screen.dart';
 import 'package:gti_rides/screens/more/identity_verification/identity_verification.dart';
 import 'package:gti_rides/screens/more/identity_verification/screens/emergency_contact_screen.dart';
@@ -38,13 +47,6 @@ import 'package:gti_rides/screens/more/identity_verification/screens/proof_of_id
 import 'package:gti_rides/screens/more/identity_verification/screens/referral_code_screen.dart';
 import 'package:gti_rides/screens/more/more_screen.dart';
 import 'package:gti_rides/screens/more/profile/profile_screen.dart';
-import 'package:gti_rides/screens/car%20renter/trips/choose_single_trip_date/choose_single_trip_date_screen.dart';
-import 'package:gti_rides/screens/guest/Reset_password/request_reset_password_screen.dart';
-import 'package:gti_rides/screens/guest/login/login_screen.dart';
-import 'package:gti_rides/screens/guest/onboarding/onboarding_screen.dart';
-import 'package:gti_rides/screens/guest/otp_verification/otp_verification.dart';
-import 'package:gti_rides/screens/guest/signup/signup_screen.dart';
-import 'package:gti_rides/screens/guest/splash/splash_screen.dart';
 
 import '../screens/guest/Reset_password/reset_password_screen.dart';
 
@@ -166,10 +168,9 @@ class AppRoutes {
       binding: AccountDetailsBinding(),
     ),
     GetPage(
-      name: AppLinks.email,
-      page: () => const EmailScreen(),
-      binding: EmailScreenBinding()
-    ),
+        name: AppLinks.email,
+        page: () => const EmailScreen(),
+        binding: EmailScreenBinding()),
     GetPage(
       name: AppLinks.emailOtp,
       page: () => const EmailVerificationScreen(),
@@ -232,39 +233,40 @@ class AppRoutes {
       page: () => const ListVehicleScreen(),
     ),
     GetPage(
-      name: AppLinks.manageVehicle,
-      page: () => const ManageVehicleScreen(),
-      binding: ManageVehicleBinding()
-    ),
+        name: AppLinks.manageVehicle,
+        page: () => const ManageVehicleScreen(),
+        binding: ManageVehicleBinding()),
     GetPage(
-      name: AppLinks.quickEdit,
-      page: () => const QuickEditScreen(),
-      binding: QuickEditBinding()
-    ),
+        name: AppLinks.quickEdit,
+        page: () => const QuickEditScreen(),
+        binding: QuickEditBinding()),
     GetPage(
-      name: AppLinks.carHistory,
-      page: () => const CarHistoryScreen(),
-      binding: CarHistoryBinding()
-    ),
+        name: AppLinks.carHistory,
+        page: () => const CarHistoryScreen(),
+        binding: CarHistoryBinding()),
     GetPage(
-      name: AppLinks.feedback,
-      page: () => const FeedbacksScreen(),
-      binding: FeedbacksBinding()
-    ),
+        name: AppLinks.feedback,
+        page: () => const FeedbacksScreen(),
+        binding: FeedbacksBinding()),
     GetPage(
-      name: AppLinks.ownerTrips,
-      page: () => const OwnerTripsScreen(),
-      binding: OwnerTripsBinding()
-    ),
+        name: AppLinks.ownerTrips,
+        page: () => const OwnerTripsScreen(),
+        binding: OwnerTripsBinding()),
     GetPage(
-      name: AppLinks.completedTrip,
-      page: () => const CompletedTripScreen(),
-      binding: CompletedTripBinding()
-    ),
+        name: AppLinks.completedTrip,
+        page: () => const CompletedTripScreen(),
+        binding: CompletedTripBinding()),
     GetPage(
       name: AppLinks.verifyAccountOtp,
       page: () => const VerifyOtpScreen(),
-
+    ),
+    GetPage(
+      name: AppLinks.drivers,
+      page: () => const DriversScreen(),
+    ),
+    GetPage(
+      name: AppLinks.addDriver,
+      page: () => const AddDriverScreen(),
     ),
   ];
 }

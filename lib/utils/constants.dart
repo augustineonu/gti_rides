@@ -453,4 +453,14 @@ class AppStrings {
   static String bankAccountNumber = 'Bank account number';
   static String bankAccountNumberHintText = 'Please enter your bank account number';
   static String bankAccountAddedSuccess = 'Bank account added successfully';
+  static String payment = 'Payment';
+  static String rentHistory = 'Rent history';
+  static String contactCustomerCare = 'Contact customer care';
+  static String addDriver = 'Add a driver';
+  static String addNewDriver = 'Add a new driver';
+  static String driverFullName = 'Driver Full Name';
+  static String driversNumber = "Driver's Number";
+  static String driversEmail = "Driver's Email";
+  static String driverAddedMessage = "Driver Successfully Added";
+  static String thankYouForAddingDriver = "Thank you, for adding a new driver.";
 }
