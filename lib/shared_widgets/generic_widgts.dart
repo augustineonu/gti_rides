@@ -253,6 +253,31 @@ Widget imageWidget({
   );
 }
 
+Widget profileImageWidget({
+  required String imgUrl,
+  String? localImagePath, // Add this parameter for the local image path
+  double? height,
+  double? width,
+}) {
+  return Image(
+    image: localImagePath != null
+        ? AssetImage(localImagePath) as ImageProvider<Object> // Use localImagePath if available
+        : NetworkImage(imgUrl), // Fallback to network image URL
+    width: width ?? 34.0.w,
+    height: height ?? 34.0.h,
+    fit: BoxFit.cover,
+    errorBuilder: (context, error, stackTrace) {
+      // If there's an error loading the image, display a placeholder
+      return Image.asset(
+        ImageAssets.userIcon,
+        height: 34.sp,
+        width: 34.sp,
+      );
+    },
+  );
+}
+
+
 Future<dynamic> dialogWidgetWithClose(
   Size size, {
   required String title,

@@ -1,35 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:gti_rides/screens/car%20owner/payment/payment_controller.dart';
 import 'package:gti_rides/screens/shared_screens/more/account_details/account_verification/acount_verification_controller.dart';
-import 'package:gti_rides/screens/guest/otp_verification/otp_verification_controller.dart';
-import 'package:gti_rides/screens/guest/otp_verification/otp_widgets/otp_input.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
+import 'package:gti_rides/shared_widgets/text_input_widgets/password_input_text_widget.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
-import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
 
-class VerifyOtpScreen extends GetView<PaymentController> {
-  const VerifyOtpScreen([Key? key]) : super(key: key);
+class ChangePasswordScreen extends GetView<AccountVerificationController> {
+  const ChangePasswordScreen([Key? key]) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-
-    final controller = Get.put<PaymentController>(PaymentController());
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: backgroundColor,
-      appBar: appbar(),
-      body: body(context, size),
+    final controller = Get.put(AccountVerificationController());
+    return Obx(
+      () => Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: backgroundColor,
+        appBar: appbar(),
+        body: body(context, size, controller: controller),
+      ),
+      // }
     );
   }
 
-  Widget body(BuildContext context, Size size) {
+  Widget body(BuildContext context, Size size, {required AccountVerificationController controller}) {
     return Column(
       children: [
         Expanded(
@@ -39,55 +37,41 @@ class VerifyOtpScreen extends GetView<PaymentController> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                textWidget(
-                  text: AppStrings.verifyOtp,
-                  textOverflow: TextOverflow.visible,
-                  style: getBoldStyle(
-                          fontSize: 24.sp,
-                          fontWeight: FontWeight.w500,
-                          color: black)
-                      .copyWith(
-                    fontFamily: "Neue",
-                  ),
+             
+                PasswordInputTextWidget(
+                  title: AppStrings.oldPasswordSm,
+                  controller: controller.oldPasswordController,
+                  expectedVariable: 'password',
+                  isObscureValue: controller.showOldPassword.value,
+                  onTap: () => controller.obscureOldPassword(),
                 ),
                 SizedBox(
-                  height: 8.sp,
+                  height: 16.sp,
                 ),
-                textWidget(
-                  text:
-                      AppStrings.pleaseInputOtpEmail.trArgs(["Gti@gmail.com"]),
-                  textOverflow: TextOverflow.visible,
-                  style: getLightStyle(fontSize: 12.sp, color: grey2)
-                      .copyWith(fontWeight: FontWeight.w300),
+                PasswordInputTextWidget(
+                  title: AppStrings.newPasswordSm,
+                  controller: controller.newPasswordController,
+                  expectedVariable: 'password',
+                  isObscureValue: controller.showNewPassword.value,
+                  onTap: () => controller.obscureNewPassword(),
                 ),
                 SizedBox(
-                  height: 40.sp,
+                  height: 16.sp,
                 ),
-
-                buildOTPPinPut(
-                    controller: controller.pinController,
-                    context: context,
-                    email: "test@example.com",
-                    // email: '',
-                    phone: '',
-                    otpType: 'email',
-                    focusNode: controller.focus,
-                    onCompleted: (pin) {}),
-                SizedBox(
-                  height: 30.sp,
+                PasswordInputTextWidget(
+                  title: AppStrings.confirmPasswordSm,
+                  controller: controller.confirmPasswordController,
+                  expectedVariable: 'password',
+                  isObscureValue: controller.showConfirmPassword.value,
+                  onTap: () => controller.obscureConfirmPassword(),
                 ),
-                clickToResendCode(),
-                SizedBox(
-                  height: 15.sp,
-                ),
-
-                // SizedBox(height: size.height * 0.02),
-                SizedBox(height: size.height * 0.04),
-                continueButton(),
+                SizedBox(height: size.height * 0.08),
+                ContinueButton(),
               ],
             ),
           ),
         ),
+
       ],
     );
   }
@@ -100,7 +84,10 @@ class VerifyOtpScreen extends GetView<PaymentController> {
         color: black,
         size: 24.sp,
       ),
-      title: SizedBox(),
+      title: textWidget(
+          text: AppStrings.password,
+          style: getMediumStyle().copyWith(fontWeight: FontWeight.w500)),
+      titleColor: iconColor(),
     );
   }
 
@@ -157,27 +144,16 @@ class VerifyOtpScreen extends GetView<PaymentController> {
     );
   }
 
-  Widget continueButton() {
+  Widget ContinueButton() {
     return controller.isLoading.isTrue
         ? centerLoadingIcon()
         : GtiButton(
             height: 45.sp,
             width: 300.sp,
-            text: AppStrings.cont,
+            text: AppStrings.resetPassword,
             color: primaryColor,
-            onTap: () {
-              successDialog(
-                title: AppStrings.bankAccountAddedSuccess,
-                body: '',
-                buttonTitle: AppStrings.cont,
-                onTap: () {
-                  controller.addedPaymentMethod.value = true;
-                  // controller.goBack();
-                  Get.back(closeOverlays: true); // Pops back one route
-                  Get.back(closeOverlays: true); // Pops back another route
-                },
-              );
-            },
+            onTap: () {},
+            // onTap: controller.routeToPhoneVerification,
             isLoading: controller.isLoading.value,
           );
   }

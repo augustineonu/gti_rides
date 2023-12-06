@@ -51,9 +51,15 @@ String getTimeIn12HourFormat(DateTime dateTime) {
 //   return formatter.format(datetime);
 // }
 
-// rteurns date as example Wed, 1 Nove
+// rteurns date as example 1 Nov
 String formatDate(DateTime datetime) {
   var formatter = DateFormat('dd MMM');
+  return formatter.format(datetime);
+}
+
+// / rteurns date as example Wed, 1 Nov
+String formatDayDate(DateTime datetime) {
+  var formatter = DateFormat('E, d MMM');
   return formatter.format(datetime);
 }
 

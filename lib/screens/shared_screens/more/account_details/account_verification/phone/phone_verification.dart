@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:gti_rides/screens/car%20owner/payment/payment_controller.dart';
 import 'package:gti_rides/screens/shared_screens/more/account_details/account_verification/acount_verification_controller.dart';
 import 'package:gti_rides/screens/guest/otp_verification/otp_verification_controller.dart';
 import 'package:gti_rides/screens/guest/otp_verification/otp_widgets/otp_input.dart';
@@ -13,14 +12,15 @@ import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
 
-class VerifyOtpScreen extends GetView<PaymentController> {
-  const VerifyOtpScreen([Key? key]) : super(key: key);
+
+class PhoneVerificationScreen extends GetView<AccountVerificationController> {
+  const PhoneVerificationScreen([Key? key]) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
-    final controller = Get.put<PaymentController>(PaymentController());
+    final controller = Get.put<AccountVerificationController>(AccountVerificationController());
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: backgroundColor,
@@ -40,7 +40,7 @@ class VerifyOtpScreen extends GetView<PaymentController> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 textWidget(
-                  text: AppStrings.verifyOtp,
+                  text: AppStrings.verifyPhoneNumber,
                   textOverflow: TextOverflow.visible,
                   style: getBoldStyle(
                           fontSize: 24.sp,
@@ -54,8 +54,8 @@ class VerifyOtpScreen extends GetView<PaymentController> {
                   height: 8.sp,
                 ),
                 textWidget(
-                  text:
-                      AppStrings.pleaseInputOtpEmail.trArgs(["Gti@gmail.com"]),
+                  text: AppStrings.pleaseInputOtpPhone
+                      .trArgs(["+2345......."]),
                   textOverflow: TextOverflow.visible,
                   style: getLightStyle(fontSize: 12.sp, color: grey2)
                       .copyWith(fontWeight: FontWeight.w300),
@@ -88,6 +88,7 @@ class VerifyOtpScreen extends GetView<PaymentController> {
             ),
           ),
         ),
+   
       ],
     );
   }
@@ -165,19 +166,8 @@ class VerifyOtpScreen extends GetView<PaymentController> {
             width: 300.sp,
             text: AppStrings.cont,
             color: primaryColor,
-            onTap: () {
-              successDialog(
-                title: AppStrings.bankAccountAddedSuccess,
-                body: '',
-                buttonTitle: AppStrings.cont,
-                onTap: () {
-                  controller.addedPaymentMethod.value = true;
-                  // controller.goBack();
-                  Get.back(closeOverlays: true); // Pops back one route
-                  Get.back(closeOverlays: true); // Pops back another route
-                },
-              );
-            },
+            onTap: (){},
+            // onTap: controller.routeToforgotPassword,
             isLoading: controller.isLoading.value,
           );
   }

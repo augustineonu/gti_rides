@@ -7,7 +7,7 @@ import 'package:gti_rides/screens/car%20owner/owner_landing_controller.dart';
 import 'package:gti_rides/screens/car%20owner/payment/payment_screen.dart';
 import 'package:gti_rides/screens/car%20owner/rent_history/rent_history_screen.dart';
 import 'package:gti_rides/screens/car%20renter/inbox/inbox_screen.dart';
-import 'package:gti_rides/screens/more/more_screen.dart';
+import 'package:gti_rides/screens/shared_screens/more/more_screen.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';

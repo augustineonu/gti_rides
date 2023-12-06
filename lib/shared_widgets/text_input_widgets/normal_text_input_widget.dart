@@ -91,6 +91,7 @@ class NormalInputTextWidget extends StatelessWidget {
           height: 3,
         ),
         TextFormField(
+          onTapOutside: (event) => FocusScope.of(context).unfocus(),
           controller: controller,
           keyboardType: textInputType ?? TextInputType.emailAddress,
           readOnly: readOnly!,
