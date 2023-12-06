@@ -14,6 +14,7 @@ class PasswordInputTextWidget extends StatelessWidget {
   final String expectedVariable;
   final IconData? icon;
   final String title;
+  final InputBorder? errorBorder;
   const PasswordInputTextWidget({
     super.key,
     this.theme,
@@ -23,6 +24,7 @@ class PasswordInputTextWidget extends StatelessWidget {
     this.onTap,
     this.icon,
     required this.title,
+    this.errorBorder,
   });
 
   @override
@@ -55,7 +57,7 @@ class PasswordInputTextWidget extends StatelessWidget {
               ),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(
-                  color: grey1,
+                  color: primaryColor,
                   width: 1.0.w,
                 ),
                 borderRadius: BorderRadius.all(
@@ -71,6 +73,16 @@ class PasswordInputTextWidget extends StatelessWidget {
                   Radius.circular(5.0.r),
                 ),
               ),
+               errorBorder: errorBorder ?? 
+                OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: danger,
+                    width: 1.0.w,
+                  ),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(5.0.r),
+                  ),
+                ),
               // label: Text(
               //   'Password ',
               //   // style: theme.bodyText1,

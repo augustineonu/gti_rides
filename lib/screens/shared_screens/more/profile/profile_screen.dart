@@ -133,6 +133,7 @@ class ProfileScreen extends GetView<ProfileController> {
               imageWidget(
                 imgUrl:
                     "https://img.freepik.com/premium-vector/avatar-profile-icon_188544-4755.jpg",
+                localImagePath: controller.pickedImagePath.string,
                 height: 65.sp,
                 width: 65.sp,
               ),

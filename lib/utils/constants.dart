@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
 class AppStrings {
-  static String baseURL = '';
+  static String baseURL = 'https://gti-kzr9.onrender.com';
   static String loginButtonText = "Log in";
   static String getStartedButtonText = "Get Started";
   static String welcome = "Welcome back";
@@ -43,11 +43,11 @@ class AppStrings {
   static String explorerError =
       "An error occurred accessing the exploer API. Try again Later";
   static String hasSeenIntro = 'hasSeenIntro';
-  static String emailIsRequiredError = "email_required_error".tr;
-  static String passwordIsRequiredError = "password_required_error".tr;
-  static String fullNameRequiredError = "full_name_required_error".tr;
-  static String phoneIsRequiredError = "Phone_is_required".tr;
-  static String fieldIsRequiredError = "field_is_required_error".tr;
+  static String emailIsRequiredError = "email is required";
+  static String passwordIsRequiredError = "password is required";
+  static String fullNameRequiredError = "name is required";
+  static String phoneIsRequiredError = "Phone is required";
+  static String fieldIsRequiredError = "field cannot be empty".tr;
   static String otpIsRequiredError = "Pin is required";
   static String isRequiredError = "Field is required";
   static String search = "Search";

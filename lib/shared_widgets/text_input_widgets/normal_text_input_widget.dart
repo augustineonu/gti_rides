@@ -10,7 +10,7 @@ class NormalInputTextWidget extends StatelessWidget {
   final Widget? prefixIcon;
   final String? labelText;
   final String? hintText;
-  final String expectedVariable;
+  final String? expectedVariable;
   final TextInputType? textInputType;
   final Color? hintTextColor;
   final Color? fillColor;
@@ -24,6 +24,7 @@ class NormalInputTextWidget extends StatelessWidget {
   final InputBorder? enabledBorder;
   final InputBorder? focusedBorder;
   final InputBorder? border;
+  final InputBorder? errorBorder;
   final TextStyle? hintStyle;
   final EdgeInsetsGeometry? contentPadding;
   final void Function()? onTap;
@@ -37,7 +38,7 @@ class NormalInputTextWidget extends StatelessWidget {
       {super.key,
       this.controller,
       this.labelText,
-      required this.expectedVariable,
+       this.expectedVariable,
       this.textInputType,
       this.prefixIcon,
       this.hintText,
@@ -60,7 +61,8 @@ class NormalInputTextWidget extends StatelessWidget {
       this.maxLines = 1,
       this.titleFontSize,
       this.maxLength,
-      this.showCursor
+      this.showCursor,
+      this.errorBorder,
       });
 
   @override
@@ -127,7 +129,7 @@ class NormalInputTextWidget extends StatelessWidget {
             focusedBorder: focusedBorder ??
                 OutlineInputBorder(
                   borderSide: BorderSide(
-                    color: grey1,
+                    color: primaryColor,
                     width: 1.0.w,
                   ),
                   borderRadius: BorderRadius.all(
@@ -138,6 +140,16 @@ class NormalInputTextWidget extends StatelessWidget {
                 OutlineInputBorder(
                   borderSide: BorderSide(
                     color: grey1,
+                    width: 1.0.w,
+                  ),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(5.0.r),
+                  ),
+                ),
+                errorBorder: errorBorder ?? 
+                OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: danger,
                     width: 1.0.w,
                   ),
                   borderRadius: BorderRadius.all(
@@ -156,8 +168,8 @@ class NormalInputTextWidget extends StatelessWidget {
             // ),
           ),
           validator: (value) {
-            if (value!.isEmpty) {
-              return fetchErrorText(expectedTextVariable: expectedVariable);
+            if (value == null || value.isEmpty) {
+              return fetchErrorText(expectedTextVariable: expectedVariable ?? '');
             }
             return null;
           },

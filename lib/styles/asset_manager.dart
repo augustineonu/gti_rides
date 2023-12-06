@@ -107,5 +107,6 @@ class ImageAssets {
   static const String manageListedBg = "$IMAGE_PATH/manage_listed_bg.png";
   static const String steering1 = "$IMAGE_PATH/steering.png";
   static const String doubleCheck = "$IMAGE_PATH/checkmark.png";
+  static const String ladyFrontPage = "$IMAGE_PATH/lady_frontpage.png";
 
 }

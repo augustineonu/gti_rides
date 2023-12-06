@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/guest/signup/signup_controller.dart';
+import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/text_input_widgets/normal_text_input_widget.dart';
 import 'package:gti_rides/shared_widgets/text_input_widgets/password_input_text_widget.dart';
@@ -118,7 +119,7 @@ class SignUpScreen extends GetView<SignUpController> {
 
   Widget signUpPageView(BuildContext context, double width) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.6,
+      height: MediaQuery.of(context).size.height * 0.7,
       child: PageView(
         physics: const NeverScrollableScrollPhysics(),
         controller: controller.pageController,
@@ -127,103 +128,131 @@ class SignUpScreen extends GetView<SignUpController> {
         },
         children: [
           /// car renter registration page
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              NormalInputTextWidget(
-                title: AppStrings.fullName,
-                expectedVariable: "fullName",
-                hintText: AppStrings.nameHintText,
-                textInputType: TextInputType.emailAddress,
-                controller: controller.emailOrPhoneController,
-              ),
-              SizedBox(
-                height: 16.sp,
-              ),
-              NormalInputTextWidget(
-                title: AppStrings.email,
-                expectedVariable: "email",
-                hintText: AppStrings.emailHintText,
-                controller: controller.emailOrPhoneController,
-              ),
-              SizedBox(
-                height: 16.sp,
-              ),
-              PasswordInputTextWidget(
-                title: AppStrings.password,
-                controller: controller.passwordController,
-                expectedVariable: 'password',
-                isObscureValue: controller.showPassword.value,
-                onTap: () => controller.obscurePassword(),
-              ),
-              SizedBox(
-                height: 16.sp,
-              ),
-              NormalInputTextWidget(
-                title: '',
-                hasRichTitle: true,
-                richTitle: AppStrings.referralCode,
-                richSubTitle: AppStrings.optional,
-                expectedVariable: "",
-                hintText: AppStrings.referralCodeHint,
-                textInputType: TextInputType.emailAddress,
-                controller: controller.emailOrPhoneController,
-              ),
-              SizedBox(
-                height: 40.sp,
-              ),
-              GtiButton(
-                text: AppStrings.createAccount,
-                width: width,
-                onTap: () => controller.routeToOtpVerification(),
-              ),
-              SizedBox(
-                height: 26.sp,
-              ),
-            ],
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                Form(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  key: controller.signUpFormKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      NormalInputTextWidget(
+                        title: AppStrings.fullName,
+                        expectedVariable: "fullName",
+                        hintText: AppStrings.nameHintText,
+                        textInputType: TextInputType.name,
+                        controller: controller.fullNameController,
+                      ),
+                      SizedBox(
+                        height: 16.sp,
+                      ),
+                      NormalInputTextWidget(
+                        title: AppStrings.email,
+                        expectedVariable: "email",
+                        hintText: AppStrings.emailHintText,
+                        controller: controller.emailController,
+                      ),
+                      SizedBox(
+                        height: 16.sp,
+                      ),
+                      NormalInputTextWidget(
+                        title: AppStrings.phoneNumber,
+                        expectedVariable: "phone",
+                        hintText: AppStrings.phoneHintText,
+                        controller: controller.phoneNoController,
+                      ),
+                      SizedBox(
+                        height: 16.sp,
+                      ),
+                      PasswordInputTextWidget(
+                        title: AppStrings.password,
+                        controller: controller.passwordController,
+                        expectedVariable: 'password',
+                        isObscureValue: controller.showPassword.value,
+                        onTap: () => controller.obscurePassword(),
+                      ),
+                      SizedBox(
+                        height: 16.sp,
+                      ),
+                    ],
+                  ),
+                ),
+                NormalInputTextWidget(
+                  title: '',
+                  hasRichTitle: true,
+                  richTitle: AppStrings.referralCode,
+                  richSubTitle: AppStrings.optional,
+                  // expectedVariable: "",
+                  hintText: AppStrings.referralCodeHint,
+                  textInputType: TextInputType.name,
+                  controller: controller.referralCodeController,
+                ),
+                SizedBox(
+                  height: 40.sp,
+                ),
+                controller.isLoading.isTrue
+                    ? centerLoadingIcon()
+                    : GtiButton(
+                        text: AppStrings.createAccount,
+                        width: width,
+                        onTap: () => controller.processSignup(),
+                        isLoading: controller.isLoading.value,
+                      ),
+                SizedBox(
+                  height: 26.sp,
+                ),
+              ],
+            ),
           ),
           ///// car owner registration page
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              NormalInputTextWidget(
-                title: AppStrings.fullName,
-                expectedVariable: "fullName",
-                hintText: AppStrings.nameHintText,
-                textInputType: TextInputType.emailAddress,
-                controller: controller.emailOrPhoneController,
+          SingleChildScrollView(
+            child: Form(
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              key: controller.signUpFormKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  NormalInputTextWidget(
+                    title: AppStrings.fullName,
+                    expectedVariable: "fullName",
+                    hintText: AppStrings.nameHintText,
+                    textInputType: TextInputType.emailAddress,
+                    controller: controller.emailController,
+                  ),
+                  SizedBox(
+                    height: 16.sp,
+                  ),
+                  NormalInputTextWidget(
+                    title: AppStrings.email,
+                    expectedVariable: "email",
+                    hintText: AppStrings.emailHintText,
+                    controller: controller.emailController,
+                  ),
+                  SizedBox(
+                    height: 16.sp,
+                  ),
+                  PasswordInputTextWidget(
+                    title: AppStrings.password,
+                    controller: controller.passwordController,
+                    expectedVariable: 'password',
+                    isObscureValue: controller.showPassword.value,
+                    onTap: () => controller.obscurePassword(),
+                  ),
+                  SizedBox(
+                    height: 40.sp,
+                  ),
+                  GtiButton(
+                    text: AppStrings.createAccount,
+                    width: width,
+                    onTap: () {},
+                  ),
+                  SizedBox(
+                    height: 26.sp,
+                  ),
+                ],
               ),
-              SizedBox(
-                height: 16.sp,
-              ),
-              NormalInputTextWidget(
-                title: AppStrings.email,
-                expectedVariable: "email",
-                hintText: AppStrings.emailHintText,
-                controller: controller.emailOrPhoneController,
-              ),
-              SizedBox(
-                height: 16.sp,
-              ),
-              PasswordInputTextWidget(
-                title: AppStrings.password,
-                controller: controller.passwordController,
-                expectedVariable: 'password',
-                isObscureValue: controller.showPassword.value,
-                onTap: () => controller.obscurePassword(),
-              ),
-              SizedBox(
-                height: 40.sp,
-              ),
-              GtiButton(
-                text: AppStrings.createAccount,
-                width: width,
-                onTap: () {},
-              ),
-              SizedBox(
-                height: 26.sp,
-              ),
-            ],
+            ),
           ),
         ],
       ),

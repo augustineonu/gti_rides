@@ -42,13 +42,18 @@ class MoreController extends GetxController {
     {'image': ImageAssets.key, 'title': "  ${AppStrings.howGtiWorks1}"},
     {'image': ImageAssets.people, 'title': "  ${AppStrings.referrals}"},
     {'image': ImageAssets.headSet, 'title': "  ${AppStrings.reportAnIncident}"},
-    {'image': ImageAssets.headSet, 'title': "  ${AppStrings.contactCustomerCare}"},
+    {
+      'image': ImageAssets.headSet,
+      'title': "  ${AppStrings.contactCustomerCare}"
+    },
   ];
-
 
   onPageChanged(int index) {}
 
   void obscurePassword() => showPassword.value = !showPassword.value;
+  void logOut() {
+    routeService.offAllNamed(AppLinks.login);
+  }
   // update();
 
   // navigation method

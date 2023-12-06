@@ -80,7 +80,7 @@ class MoreScreen extends StatelessWidget {
                         height: 10.sp,
                       ),
                       InkWell(
-                        onTap: () {},
+                        onTap: controller.logOut,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 20, vertical: 13),

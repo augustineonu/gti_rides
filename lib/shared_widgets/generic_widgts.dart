@@ -223,11 +223,12 @@ Widget profileAvatar({
 
 Widget imageWidget({
   required String imgUrl,
+  String? localImagePath,
   double? height,
   double? width,
 }) {
   return CachedNetworkImage(
-    imageUrl: imgUrl,
+    imageUrl: localImagePath ?? imgUrl,
     imageBuilder: (context, imageProvider) => Container(
       width: width ?? 34.0.w,
       height: height ?? 34.0.h,
