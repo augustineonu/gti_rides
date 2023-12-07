@@ -1,8 +1,6 @@
 import 'dart:convert';
-
 import 'package:get/get.dart';
 import 'package:gti_rides/services/api_service.dart';
-
 import '../models/api_response_model.dart';
 import 'logger.dart';
 
@@ -31,6 +29,7 @@ class AuthService {
       rethrow;
     }
   }
+  
   Future<ApiResponseModel> signUp({required Map payload}) async {
     try {
       var jsonString;
@@ -44,7 +43,7 @@ class AuthService {
       //   jsonString = jsonEncode(result);
       // }
 
-      return ApiResponseModel.fromJson(jsonEncode(result));
+      return ApiResponseModel.fromJson(result);
     } catch (err) {
       logger.log("SignUp Error: $err");
       rethrow;
@@ -54,7 +53,7 @@ class AuthService {
   Future<ApiResponseModel> login({required Map payload}) async {
     try {
       final result = await apiService.postRequest(
-        endpoint: '/auth/login',
+        endpoint: '/user/auth/login',
         data: payload,
       );
 

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/guest/login/login_controller.dart';
+import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/text_input_widgets/normal_text_input_widget.dart';
 import 'package:gti_rides/shared_widgets/text_input_widgets/password_input_text_widget.dart';
@@ -49,62 +50,68 @@ class LoginScreen extends GetView<LoginController> {
         children: [
           Expanded(
             child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  textWidget(
-                      text: AppStrings.welcome,
-                      style: getBoldStyle(fontSize: 24.sp).copyWith(
-                          fontFamily: "Neue", fontWeight: FontWeight.w500)),
-                  textWidget(
-                      text: AppStrings.inputYourDetailsLogin,
-                      style: getLightStyle(fontSize: 12.sp, color: grey2)
-                          .copyWith(fontWeight: FontWeight.w300)),
-                  SizedBox(
-                    height: 22.sp,
-                  ),
-                  NormalInputTextWidget(
-                    title: AppStrings.emailOrPhone,
-                    expectedVariable: "email",
-                    hintText: AppStrings.emailHintText,
-                    controller: controller.emailOrPhoneController,
-                  ),
-                  SizedBox(
-                    height: 16.sp,
-                  ),
-                  PasswordInputTextWidget(
-                    title: AppStrings.password,
-                    controller: controller.passwordController,
-                    expectedVariable: 'password',
-                    isObscureValue: controller.showPassword.value,
-                    onTap: () => controller.obscurePassword(),
-                  ),
-                  SizedBox(
-                    height: 14.sp,
-                  ),
-                  forgotPassword(onTap: () {}),
-                  SizedBox(
-                    height: 40.sp,
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GtiButton(
-                        text: AppStrings.loginButtonText,
-                        width: width,
-                        onTap: () => controller.routeToLandingPage(),
-                      ),
-                      SizedBox(
-                        height: 22.sp,
-                      ),
-                      signUp(onTap: () => controller.routeToSignUp()),
-                      SizedBox(
-                        height: 36.sp,
-                      ),
-                      touchID(onTap: () {}),
-                    ],
-                  ),
-                ],
+              child: Form(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                key: controller.loginFormKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    textWidget(
+                        text: AppStrings.welcome,
+                        style: getBoldStyle(fontSize: 24.sp).copyWith(
+                            fontFamily: "Neue", fontWeight: FontWeight.w500)),
+                    textWidget(
+                        text: AppStrings.inputYourDetailsLogin,
+                        style: getLightStyle(fontSize: 12.sp, color: grey2)
+                            .copyWith(fontWeight: FontWeight.w300)),
+                    SizedBox(
+                      height: 22.sp,
+                    ),
+                    NormalInputTextWidget(
+                      title: AppStrings.emailOrPhone,
+                      expectedVariable: "email",
+                      hintText: AppStrings.emailHintText,
+                      controller: controller.emailOrPhoneController,
+                    ),
+                    SizedBox(
+                      height: 16.sp,
+                    ),
+                    PasswordInputTextWidget(
+                      title: AppStrings.password,
+                      controller: controller.passwordController,
+                      expectedVariable: 'password',
+                      isObscureValue: controller.showPassword.value,
+                      onTap: () => controller.obscurePassword(),
+                    ),
+                    SizedBox(
+                      height: 14.sp,
+                    ),
+                    forgotPassword(onTap: () {}),
+                    SizedBox(
+                      height: 40.sp,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        controller.isLoading.value
+                            ? centerLoadingIcon()
+                            : GtiButton(
+                                text: AppStrings.loginButtonText,
+                                width: width,
+                                onTap: controller.processLogin,
+                              ),
+                        SizedBox(
+                          height: 22.sp,
+                        ),
+                        signUp(onTap: () => controller.routeToSignUp()),
+                        SizedBox(
+                          height: 36.sp,
+                        ),
+                        touchID(onTap: () {}),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
