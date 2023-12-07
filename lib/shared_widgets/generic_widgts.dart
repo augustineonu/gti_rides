@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -176,6 +178,9 @@ Widget profileAvatar({
   double? width,
   double? boxHeight,
   double? boxWidth,
+  String? localImagePath,
+    BoxFit fit = BoxFit.cover,
+  double radius = 100,
 }) {
   return SizedBox(
       height: boxHeight ?? 40,
@@ -188,7 +193,17 @@ Widget profileAvatar({
                 painter: PercentagePainter(),
               ),
             ),
-            Align(
+        localImagePath != null && localImagePath.isNotEmpty 
+        ?   ClipRRect(
+              borderRadius: BorderRadius.circular(radius),
+          child: Image.file(
+            File(localImagePath),
+            width: width,
+            height: height,
+            fit: fit,
+          ),
+        )
+        : Align(
                 alignment: Alignment.center,
                 child: CachedNetworkImage(
                   imageUrl: imgUrl,
@@ -215,44 +230,73 @@ Widget profileAvatar({
                     height: 34.sp,
                     width: 34.sp,
                   ),
-                )),
+                )) ,
           ],
         );
       }));
 }
 
+
 Widget imageWidget({
   required String imgUrl,
   String? localImagePath,
-  double? height,
   double? width,
+  double? height,
+  double imageSizeWidth = 34.0,
+  double imageSizeHeight = 34.0,
+  BoxFit fit = BoxFit.cover,
+  double radius = 100,
 }) {
-  return CachedNetworkImage(
-    imageUrl: localImagePath ?? imgUrl,
-    imageBuilder: (context, imageProvider) => Container(
-      width: width ?? 34.0.w,
-      height: height ?? 34.0.h,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
-      ),
-    ),
-    placeholder: (context, url) => const SizedBox(
-      height: 30,
-      width: 30,
-      child: Center(
-        child: CircularProgressIndicator(
-          color: Colors.blue,
+  if (localImagePath != null && localImagePath.isNotEmpty) {
+    print("Image widget: is running in background");
+    return Builder(
+      builder: (context) {
+        return ClipRRect(
+              borderRadius: BorderRadius.circular(radius),
+          child: Image.file(
+            File(localImagePath),
+            width: width,
+            height: height,
+            fit: fit,
+          ),
+        );
+      }
+    );
+  } else {
+     print("Image widget: :2   is running in background");
+    return CachedNetworkImage(
+      alignment: Alignment.center,
+      imageUrl: imgUrl,
+      imageBuilder: (context, imageProvider) => Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+        
+          shape: BoxShape.circle,
+          image: DecorationImage(
+            image: imageProvider,
+            fit: fit,
+          ),
         ),
       ),
-    ),
-    errorWidget: (context, url, error) => Image.asset(
-      ImageAssets.userIcon,
-      height: 34.sp,
-      width: 34.sp,
-    ),
-  );
+      placeholder: (context, url) => SizedBox(
+        height: imageSizeHeight,
+        width: imageSizeWidth,
+        child: Center(
+          child: CircularProgressIndicator(
+            color: Colors.blue,
+          ),
+        ),
+      ),
+      errorWidget: (context, url, error) => Image.asset(
+        ImageAssets.userIcon,
+        height: imageSizeHeight,
+        width: imageSizeWidth,
+      ),
+    );
+  }
 }
+
 
 Widget profileImageWidget({
   required String imgUrl,
@@ -262,7 +306,8 @@ Widget profileImageWidget({
 }) {
   return Image(
     image: localImagePath != null
-        ? AssetImage(localImagePath) as ImageProvider<Object> // Use localImagePath if available
+        ? AssetImage(localImagePath)
+            as ImageProvider<Object> // Use localImagePath if available
         : NetworkImage(imgUrl), // Fallback to network image URL
     width: width ?? 34.0.w,
     height: height ?? 34.0.h,
@@ -277,7 +322,6 @@ Widget profileImageWidget({
     },
   );
 }
-
 
 Future<dynamic> dialogWidgetWithClose(
   Size size, {

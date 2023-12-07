@@ -69,7 +69,7 @@ class SignUpController extends GetxController
     isLoading.value = true;
 
     try {
-      final ApiResponseModel result = await authService.signUp(
+      final Map<String, dynamic> result = await authService.signUp1(
           payload: SignUpRequestModel(
         fullName: fullNameController.text,
         emailAddress: emailController.text,
@@ -80,11 +80,13 @@ class SignUpController extends GetxController
       ).toJson());
 
       // logger.log(result.message.toString());
-      if (result.status == 'success' || result.status_code == 200) {
-        await showSuccessSnackbar(message: result.message);
+      if (result['status'] == 'success' || result['status_code'] == 200) {
+        await showSuccessSnackbar(message: result['message']);
         routeService.offAllNamed(AppLinks.verifyOtp, arguments: {
           'email': emailController.text,
         });
+      } else {
+        await showErrorSnackbar(message: result['message']);
       }
     } catch (e) {
       logger.log("error rrr: $e");

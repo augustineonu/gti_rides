@@ -141,8 +141,7 @@ class MoreScreen extends StatelessWidget {
           ),
           profileAvatar(
             height: 40,
-            width: 40,
-            imgUrl:
+            width: 40,            imgUrl:
                 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ88joJfjwoaz_jWaMQhbZn2X11VHGBzWKiQg&usqp=CAU',
           ),
         ],

@@ -78,6 +78,7 @@ class ProfileScreen extends GetView<ProfileController> {
                           child: Stack(
                             children: [
                               profileAvatar(
+                                localImagePath: controller.pickedImagePath.string,
                                 imgUrl:
                                     "https://img.freepik.com/premium-vector/avatar-profile-icon_188544-4755.jpg",
                                 height: 65.sp,
@@ -123,31 +124,35 @@ class ProfileScreen extends GetView<ProfileController> {
 
   Future<dynamic> changeImageSheet(Size size) {
     return Get.bottomSheet(
-        Container(
-          padding: const EdgeInsets.only(top: 20, bottom: 70),
-          width: size.width,
-          height: 220.sp,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              imageWidget(
-                imgUrl:
-                    "https://img.freepik.com/premium-vector/avatar-profile-icon_188544-4755.jpg",
-                localImagePath: controller.pickedImagePath.string,
-                height: 65.sp,
-                width: 65.sp,
+        Obx(() => Container(
+              padding: const EdgeInsets.only(top: 20, bottom: 70),
+              width: size.width,
+              height: 220.sp,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  imageWidget(
+                    imageSizeWidth: 150.sp,
+                    imageSizeHeight: 120.sp,
+                    radius: 80,
+                    imgUrl:
+                        "https://img.freepik.com/premium-vector/avatar-profile-icon_188544-4755.jpg",
+                    localImagePath: controller.pickedImagePath.string,
+                    height: 65.sp,
+                    width: 65.sp,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      selectOptionSheet(size);
+                    },
+                    child: textWidget(
+                        text: AppStrings.tapToChange,
+                        style:
+                            getBoldStyle(fontSize: 16.sp, color: primaryColor)),
+                  )
+                ],
               ),
-              InkWell(
-                onTap: () {
-                  selectOptionSheet(size);
-                },
-                child: textWidget(
-                    text: AppStrings.tapToChange,
-                    style: getBoldStyle(fontSize: 16.sp, color: primaryColor)),
-              )
-            ],
-          ),
-        ),
+            )),
         backgroundColor: white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -183,7 +188,7 @@ class ProfileScreen extends GetView<ProfileController> {
                   child: GtiButton(
                     width: 120.sp,
                     text: AppStrings.gallery,
-                    onTap: () {},
+                    onTap: controller.openGallery,
                   ),
                 ),
               ],

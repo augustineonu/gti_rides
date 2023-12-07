@@ -11,6 +11,26 @@ AuthService authService = Get.find();
 class AuthService {
   Logger logger = Logger('AuthService');
 
+  Future<Map<String, dynamic>> signUp1({required Map payload}) async {
+    try {
+      var jsonString;
+      final Map<String, dynamic> result = await apiService.postRequest(
+        endpoint: '/user/auth/register',
+        data: payload,
+      );
+
+      // Convert the Map result into a JSON string
+      // if (result != null) {
+      //   jsonString = jsonEncode(result);
+      // }
+      //  jsonString = jsonEncode(result);
+
+      return result;
+    } catch (err) {
+      logger.log("SignUp Error: $err");
+      rethrow;
+    }
+  }
   Future<ApiResponseModel> signUp({required Map payload}) async {
     try {
       var jsonString;
@@ -24,7 +44,7 @@ class AuthService {
       //   jsonString = jsonEncode(result);
       // }
 
-      return ApiResponseModel.fromJson(result);
+      return ApiResponseModel.fromJson(jsonEncode(result));
     } catch (err) {
       logger.log("SignUp Error: $err");
       rethrow;
