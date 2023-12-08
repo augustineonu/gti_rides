@@ -19,8 +19,7 @@ class LoginController extends GetxController
 
   TextEditingController emailOrPhoneController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-    final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
-
+  final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
 
   LoginController() {
     init();
@@ -43,7 +42,7 @@ class LoginController extends GetxController
   void routeToLandingPage() =>
       routeService.gotoRoute(AppLinks.carRenterLanding);
 
-        Future<void> processLogin() async {
+  Future<void> processLogin() async {
     if (!loginFormKey.currentState!.validate()) {
       return;
     }
@@ -51,11 +50,10 @@ class LoginController extends GetxController
     isLoading.value = true;
 
     try {
-      final  result = await authService.login(
+      final result = await authService.login(
           payload: LoginRequestModel(
         user: emailOrPhoneController.text,
         password: passwordController.text,
-    
       ).toJson());
 
       // logger.log(result.message.toString());
@@ -80,4 +78,3 @@ class LoginController extends GetxController
     super.dispose();
   }
 }
-

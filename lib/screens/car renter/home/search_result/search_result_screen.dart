@@ -80,8 +80,6 @@ class SearchResultScreen extends GetView<SearchResultController> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            textWidget(
-                text: controller.testString.value, style: getMediumStyle()),
             ListView.separated(
               physics: const ScrollPhysics(),
               shrinkWrap: true,
@@ -117,7 +115,7 @@ class SearchResultScreen extends GetView<SearchResultController> {
                                     // borderRadius:
                                     //     BorderRadius.all(Radius.circular(4.r)),
                                     child: Image.asset(
-                                      "assets/images/car.png",
+                                      "assets/images/range.png",
                                       fit: BoxFit.fitHeight,
                                     ),
                                   ),
@@ -250,7 +248,8 @@ class SearchResultScreen extends GetView<SearchResultController> {
               },
               separatorBuilder: (context, _) => SizedBox(height: 24.h),
             ),
-
+            textWidget(
+                text: controller.testString.value, style: getMediumStyle()),
             SizedBox(
               height: size.height * 0.02,
             ),

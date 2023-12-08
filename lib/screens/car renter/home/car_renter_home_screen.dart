@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/car%20renter/home/car_renter_home_controller.dart';
-import 'package:gti_rides/screens/car%20renter/home/paint.dart';
 import 'package:gti_rides/screens/car%20renter/widgets/build_carousel_dot.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/how_gti_works_widget.dart';
@@ -47,7 +46,7 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
     // TODO: implement initState
     super.initState();
     print("init called>>>");
-    cardPageController = PageController(initialPage: 0);
+    cardPageController = PageController(viewportFraction: 0.9, initialPage: 0);
 
     timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
       if (currentIndex.value < 2) {
@@ -79,7 +78,7 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
             children: [
               // appBar(size, controller: ctrl),
               appBar(size, ctrl),
-              body(ctrl),
+              body(ctrl, size),
             ],
           ),
         ),
@@ -116,7 +115,7 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
     );
   }
 
-  Widget body(CarRenterHomeController ctrl) {
+  Widget body(CarRenterHomeController ctrl, Size size) {
     return Expanded(
       child: SingleChildScrollView(
         controller: scrollController,
@@ -127,49 +126,125 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
           children: <Widget>[
             headerText(),
             discoverCity(onTap: () => ctrl.routeToSearchCity()),
-            howGtiWorksCard(onTap: () {}, imageUrl: ImageAssets.ladyFrontPage),
+            howGtiWorksCard(onTap: () {}, imageUrl: ImageAssets.ladyPick),
             textWidget(
               text: AppStrings.recentViewCar,
               style: getRegularStyle(),
             ),
-            // ClipRRect(
-            //   borderRadius: BorderRadius.all(Radius.circular(4.r)),
-            //   child: Image.asset("assets/images/car.png"),
-            // ),
             SizedBox(
-              height: 150.sp,
+              height: 8,
+            ),
+            SizedBox(
+              height: 190.sp,
               child: Stack(
                 children: [
                   PageView(
-                    physics: ScrollPhysics(),
+                    padEnds: false,
+                    physics: const ScrollPhysics(),
                     controller: cardPageController,
                     onPageChanged: (int index) {
                       currentIndex.value = index;
                     },
                     scrollDirection: Axis.horizontal,
-                    children: [
-                      GestureDetector(
+                    children: List<Widget>.generate(
+                        ctrl.recentlyViewedCar.length, (index) {
+                      final car = ctrl.recentlyViewedCar[index];
+
+                      return GestureDetector(
                         onTap: ctrl.routeToCarSelectionResult,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(4.r)),
-                          child: Image.asset(
-                            "assets/images/car.png",
-                            fit: BoxFit.contain,
+                        child: Container(
+                          // width: 350,
+                          margin: const EdgeInsets.only(right: 10),
+                          decoration: BoxDecoration(
+                              color: white,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(4.r),
+                              ),
+                              border: Border.all(color: borderColor)),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(4.r),
+                                    topLeft: Radius.circular(4.r)),
+                                child: Image.asset(
+                                  car.imageUrl,
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 10, left: 10),
+                                child: textWidget(
+                                  text: car.carModel,
+                                  style: getMediumStyle().copyWith(
+                                      fontFamily: 'Neue',
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 10, right: 10, bottom: 10),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        SvgPicture.asset(
+                                            ImageAssets.thumbsUpGreen),
+                                        SizedBox(
+                                          width: 5.sp,
+                                        ),
+                                        RichText(
+                                          text: TextSpan(
+                                              text: '${car.ratings}%',
+                                              style: getMediumStyle(
+                                                fontSize: 12.sp,
+                                              ),
+                                              children: <TextSpan>[
+                                                TextSpan(
+                                                  text: ' (${car.trips} trips)',
+                                                  style: getLightStyle(
+                                                      fontSize: 12.sp,
+                                                      color: grey2),
+                                                )
+                                              ]),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        SvgPicture.asset(ImageAssets.tag),
+                                        SizedBox(
+                                          width: 2.sp,
+                                        ),
+                                        SvgPicture.asset(ImageAssets.naira),
+                                        SizedBox(
+                                          width: 2.sp,
+                                        ),
+                                        textWidget(
+                                          text: '5,000/day',
+                                          style: getMediumStyle().copyWith(
+                                            fontFamily: 'Neue',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ),
-                      ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(4.r)),
-                        child: Image.asset("assets/images/car.png"),
-                      ),
-                      ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(4.r)),
-                        child: Image.asset("assets/images/car.png"),
-                      ),
-                    ],
+                      );
+                    }),
                   ),
                   Positioned(
-                    bottom: 3,
+                    bottom: 70,
                     right: 0,
                     left: 0,
                     child: Row(

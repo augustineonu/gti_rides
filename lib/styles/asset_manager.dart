@@ -86,10 +86,12 @@ class ImageAssets {
   static const String home = "$SVG_PATH/home.svg";
   static const String payment = "$SVG_PATH/payment.svg";
   static const String historyIcon = "$SVG_PATH/history_icon.svg";
+  static const String ladyPick1 = "$SVG_PATH/lady_pick.svg";
   // static const String carListingBg = "$SVG_PATH/car_listing_bg.svg";
   // PNG IMAGES 
 
-  static const String onboarding = "$IMAGE_PATH/onboarding_1.png";
+  static const String onboarding_01 = "$IMAGE_PATH/onboarding_01.png";
+  static const String onboarding_02 = "$IMAGE_PATH/onboarding_02.png";
   static const String onboarding01 = "$IMAGE_PATH/onboarding01.png";
   static const String onboarding02 = "$IMAGE_PATH/onboarding02.png";
   static const String onboarding03 = "$IMAGE_PATH/onboarding03.png";
@@ -108,5 +110,6 @@ class ImageAssets {
   static const String steering1 = "$IMAGE_PATH/steering.png";
   static const String doubleCheck = "$IMAGE_PATH/checkmark.png";
   static const String ladyFrontPage = "$IMAGE_PATH/lady_frontpage.png";
+  static const String ladyPick = "$IMAGE_PATH/lady_picks.png";
 
 }

@@ -7,7 +7,7 @@ class SearchResultController extends GetxController {
   Logger logger = Logger("Controller");
   RxBool isLoading = false.obs;
 
-  Rx<String> testString = "Hello".obs;
+  Rx<String> testString = "".obs;
 
   SearchResultController() {
     init();

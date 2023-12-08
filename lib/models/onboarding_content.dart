@@ -12,12 +12,12 @@ class OnBoardingContent {
     OnBoardingContent(
         title: "Rent any car of your choice",
         description: "Find Your Dream Ride and hit the Road in no time",
-        imageUrl: ImageAssets.onboarding01),
+        imageUrl: ImageAssets.onboarding_01),
     OnBoardingContent(
         title: "List your car, start earning",
         description:
             "Join our community of Car Owners who are making passive income by renting out their cars to our vetted renters",
-        imageUrl: ImageAssets.onboarding02),
+        imageUrl: ImageAssets.onboarding_02),
     OnBoardingContent(
         title: "Find Your Dream Ride",
         description:

@@ -37,8 +37,8 @@ class _GtiRidesState extends State<GtiRides> {
   @override
   Widget build(BuildContext context) {
     final MediaQueryData selectedSize = getScreenSize(context);
-    precacheImage(const AssetImage(ImageAssets.onboarding01), context);
-    precacheImage(const AssetImage(ImageAssets.onboarding02), context);
+    precacheImage(const AssetImage(ImageAssets.onboarding_01), context);
+    precacheImage(const AssetImage(ImageAssets.onboarding_02), context);
     precacheImage(const AssetImage(ImageAssets.onboarding03), context);
 
     return ScreenUtilInit(
@@ -55,15 +55,7 @@ class _GtiRidesState extends State<GtiRides> {
               // backgroundColor: backgroundColor,
               useMaterial3: true,
               appBarTheme: const AppBarTheme(),
-              // cardTheme:  CardTheme(
-              //   surfaceTintColor: Colors.white,
-              //     shape: RoundedRectangleBorder(
-              //           side: BorderSide(color: borderColor),
-              //             borderRadius: BorderRadius.all(
-              //               Radius.circular(8.r),
-              //             ),
-              //           ),
-              // ),
+
               textTheme: const TextTheme(
                 bodyMedium: TextStyle(
                   fontFamily: 'Basis Grotesque Pro',
@@ -84,18 +76,5 @@ class _GtiRidesState extends State<GtiRides> {
             // home: const MyHomePage(title: 'Flutter Demo Home Page'),
           );
         });
-  }
-
-  Future<void> loadImage(String imageUrl) async {
-    try {
-      // load network image example
-      // await precacheImage(NetworkImage(imageUrl), context);
-      // or
-      // Load assets image example
-      await precacheImage(const AssetImage(ImageAssets.onboarding), context);
-      print('Image loaded and cached successfully!');
-    } catch (e) {
-      print('Failed to load and cache the image: $e');
-    }
   }
 }

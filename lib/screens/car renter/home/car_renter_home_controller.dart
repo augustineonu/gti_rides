@@ -1,9 +1,14 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/models/renter/recently_viewed_car_model.dart';
+
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/logger.dart';
+import 'package:gti_rides/styles/asset_manager.dart';
 
 import '../../../services/route_service.dart';
 
@@ -52,6 +57,29 @@ class CarRenterHomeController extends GetxController {
     });
   }
 
+  // variables
+
+  final List<RecentlyViewCarModel> recentlyViewedCar = [
+    RecentlyViewCarModel(
+        imageUrl: 'assets/images/range.png',
+        carModel: '2012 KIA Sportage',
+        ratings: '78',
+        trips: '25',
+        pricePerDay: '250,000'),
+    RecentlyViewCarModel(
+        imageUrl: 'assets/images/range.png',
+        carModel: '2015 Range',
+        ratings: '83',
+        trips: '14',
+        pricePerDay: '350,000'),
+    RecentlyViewCarModel(
+        imageUrl: 'assets/images/range.png',
+        carModel: '2018 Chevrolet',
+        ratings: '60',
+        trips: '16',
+        pricePerDay: '270,000'),
+  ];
+
   void obscurePassword() => showPassword.value = !showPassword.value;
   // update();
 
@@ -63,7 +91,7 @@ class CarRenterHomeController extends GetxController {
   void routeToCarOwnerLanding() =>
       routeService.offAllNamed(AppLinks.carOwnerLanding);
   void routeToCarSelectionResult() =>
-      routeService.offAllNamed(AppLinks.carSelectionResult);
+      routeService.gotoRoute(AppLinks.carSelectionResult);
 
   @override
   void dispose() {
