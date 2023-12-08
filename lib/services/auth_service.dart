@@ -93,7 +93,7 @@ class AuthService {
   Future<ApiResponseModel> resendOTP({required Map payload}) async {
     try {
       final result = await apiService.postRequest(
-        endpoint: '/otp/resend',
+        endpoint: 'user/auth/resendOTP',
         data: payload,
       );
       return ApiResponseModel.fromJson(result);
