@@ -2,20 +2,25 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/services/auth_service.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
+import 'package:gti_rides/utils/utils.dart';
 
 import '../../../route/app_links.dart';
 
 class OtpVerificationController extends GetxController {
   Logger logger = Logger('OTPVerificationController');
   RxBool isLoading = false.obs;
+  RxBool isDoneIputtingPin = false.obs;
   Timer? countdownTimer;
   Duration myDuration = Duration(days: 5);
   final TextEditingController pinController = TextEditingController();
   RxBool showPassword = true.obs;
-  final GlobalKey<FormState> emailVerificationFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> otpFormKey = GlobalKey<FormState>();
   final FocusNode focus = FocusNode();
+
+  String emailOrPhone = '';
 
   OtpVerificationController() {
     init();
@@ -34,6 +39,16 @@ class OtpVerificationController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
+
+    // Access the arguments using Get.arguments
+    Map<String, dynamic>? arguments = Get.arguments;
+
+    if (arguments != null && arguments.containsKey('emailOrPhone')) {
+      emailOrPhone = arguments['emailOrPhone'];
+
+      // Now you have access to the passed data (emailOrPhone)
+      logger.log('Received email or phone: $emailOrPhone');
+    }
   }
 
   void onFocusChange() => update();
@@ -71,14 +86,7 @@ class OtpVerificationController extends GetxController {
     update();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    pinController.dispose();
-    focus
-      ..removeListener(onFocusChange)
-      ..dispose();
-  }
+  void goBack() => routeService.goBack();
 
   // void printDeviceType() {
   //   logger.log(deviceService.deviceType);
@@ -87,4 +95,40 @@ class OtpVerificationController extends GetxController {
   void routeToforgotPassword() => routeService.gotoRoute(
         AppLinks.requestResetPassword,
       );
+
+  Future<void> verifyOtp({
+    required String emailOrPhone,
+    required String otp,
+  }) async {
+    if (!otpFormKey.currentState!.validate()) {
+      return;
+    }
+    isLoading.value = true;
+    try {
+      final result = await authService.verifyOtp(payload: {
+        "user": emailOrPhone, // email or phone number
+        "otp": otp
+      });
+      if (result.status == "success" || result.status_code == 200) {
+        await showSuccessSnackbar(message: result.message);
+        routeService.offAllNamed(AppLinks.login);
+      } else {
+        showErrorSnackbar(message: result.message);
+      }
+    } catch (e) {
+      logger.log("error: $e");
+      showErrorSnackbar(message: e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    pinController.dispose();
+    focus
+      ..removeListener(onFocusChange)
+      ..dispose();
+  }
 }

@@ -33,7 +33,7 @@ class AppStrings {
   static String verifyOtp = "Verify OTP";
   static String verifyEmail = "Verify email";
   static String pleaseInputOtp =
-      "Please input a one time OTP sent to %s or %s  to continue.";
+      "Please input a one time OTP sent to %s to continue.";
   static String pleaseInputOtpEmail =
       "Please input a one time OTP sent to %s to continue.";
   static String pleaseInputOtpPhone =

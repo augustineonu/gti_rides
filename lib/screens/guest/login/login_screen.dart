@@ -98,8 +98,7 @@ class LoginScreen extends GetView<LoginController> {
                             : GtiButton(
                                 text: AppStrings.loginButtonText,
                                 width: width,
-                                // onTap: controller.processLogin,
-                                onTap: controller.routeToLandingPage,
+                                onTap: controller.processLogin,
                               ),
                         SizedBox(
                           height: 22.sp,

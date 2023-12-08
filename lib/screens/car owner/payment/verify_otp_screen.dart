@@ -71,6 +71,7 @@ class VerifyOtpScreen extends GetView<PaymentController> {
                     // email: '',
                     phone: '',
                     otpType: 'email',
+                     expectedVariable: 'otp',
                     focusNode: controller.focus,
                     onCompleted: (pin) {}),
                 SizedBox(

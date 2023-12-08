@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gti_rides/styles/styles.dart';
+import 'package:gti_rides/utils/utils.dart';
 import 'package:pinput/pinput.dart';
 
 Widget buildOTPPinPut({
@@ -11,6 +12,7 @@ Widget buildOTPPinPut({
   String? phone,
   Function(String)? onCompleted,
   FocusNode? focusNode,
+  required String expectedVariable,
 }) {
   // final theme = VoucherfastTheme.of(context);
   final defaultPinTheme = PinTheme(
@@ -33,13 +35,19 @@ Widget buildOTPPinPut({
       //   return s == '2222' ? null : 'Pin is incorrect';
       // },
       focusNode: focusNode,
-      length: 5,
+      length: 6,
       controller: controller,
       defaultPinTheme: defaultPinTheme,
       focusedPinTheme: focusedPinTheme,
       pinputAutovalidateMode: PinputAutovalidateMode.disabled,
       showCursor: true,
       keyboardType: TextInputType.number,
+      validator:(value) {
+          if (value == null || value.isEmpty) {
+              return fetchErrorText(expectedTextVariable: expectedVariable);
+            }
+            return null;
+      },
       cursor: Text(
         "_",
         style: getMediumStyle(fontSize: 24.sp),

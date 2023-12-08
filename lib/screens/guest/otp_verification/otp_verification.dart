@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -64,7 +65,7 @@ class OtpVerificationScreen extends GetView<OtpVerificationController> {
                 ),
                 textWidget(
                   text: AppStrings.pleaseInputOtp
-                      .trArgs(["Gti@gmail.com", "081........"]),
+                      .trArgs([controller.emailOrPhone.removeAllWhitespace]),
                   textOverflow: TextOverflow.visible,
                   style: getLightStyle(fontSize: 12.sp, color: grey2)
                       .copyWith(fontWeight: FontWeight.w300),
@@ -73,15 +74,25 @@ class OtpVerificationScreen extends GetView<OtpVerificationController> {
                   height: 40.sp,
                 ),
 
-                buildOTPPinPut(
-                    controller: controller.pinController,
-                    context: context,
-                    email: "test@example.com",
-                    // email: '',
-                    phone: '',
-                    otpType: 'email',
-                    focusNode: controller.focus,
-                    onCompleted: (pin) {}),
+                Form(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  key: controller.otpFormKey,
+                  child: buildOTPPinPut(
+                      controller: controller.pinController,
+                      context: context,
+                      email: "test@example.com",
+                      // email: '',
+                      phone: '',
+                      otpType: 'email',
+                      expectedVariable: 'otp',
+                      focusNode: controller.focus,
+                      onCompleted: (pin) {
+                        controller.isDoneIputtingPin.value = true;
+                        if (kDebugMode) {
+                          print("otp $pin");
+                        }
+                      }),
+                ),
                 SizedBox(
                   height: 60.sp,
                 ),
@@ -106,6 +117,7 @@ class OtpVerificationScreen extends GetView<OtpVerificationController> {
 
   AppBar appbar() {
     return gtiAppBar(
+      onTap: controller.goBack,
       leading: Icon(
         Icons.arrow_back_rounded,
         color: black,
@@ -137,37 +149,6 @@ class OtpVerificationScreen extends GetView<OtpVerificationController> {
     );
   }
 
-  Widget appLogo() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            textWidget(
-              text: "Welcome",
-              style: getBoldStyle(
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.w600,
-                  color: iconColor()),
-            ),
-            SizedBox(
-              height: 8.h,
-            ),
-            textWidget(
-              text: "Login to continue",
-              style: getBoldStyle(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w400,
-                  color: iconColor()),
-            ),
-          ],
-        ),
-        // SvgPicture.asset(ImageAssets.appLogo),
-      ],
-    );
-  }
-
   Widget continueButton() {
     return controller.isLoading.isTrue
         ? centerLoadingIcon()
@@ -175,8 +156,10 @@ class OtpVerificationScreen extends GetView<OtpVerificationController> {
             height: 45.sp,
             width: 300.sp,
             text: AppStrings.cont,
-            color: primaryColor,
-            onTap: controller.routeToforgotPassword,
+            color: controller.isDoneIputtingPin.value ? primaryColor : primaryColorLight1,
+            onTap: () => controller.verifyOtp(
+                emailOrPhone: controller.emailOrPhone,
+                otp: controller.pinController.text),
             isLoading: controller.isLoading.value,
           );
   }

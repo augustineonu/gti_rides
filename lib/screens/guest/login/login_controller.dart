@@ -57,13 +57,22 @@ class LoginController extends GetxController
       ).toJson());
 
       // logger.log(result.message.toString());
-      if (result.status == 'success' || result.status_code == 200) {
-        await showSuccessSnackbar(message: result.message);
+      if (result.status == 'error' || result.status_code == 403) {
+        if (result.message.contains('Email not')) {
+          // call request OTP
+          await authService
+              .resendOTP(payload: {"user": emailOrPhoneController.text});
+              
+          await showSuccessSnackbar(message: result.message);
+          await routeService.gotoRoute(AppLinks.verifyOtp,
+              arguments: {'emailOrPhone': emailOrPhoneController.text});
+        }
+        await showErrorSnackbar(message: result.message);
         // routeService.offAllNamed(AppLinks.verifyOtp, arguments: {
         //   'email': emailController.text,
         // });
       } else {
-        await showErrorSnackbar(message: result.message);
+        await showSuccessSnackbar(message: result.message);
       }
     } catch (e) {
       logger.log("error rrr: $e");

@@ -71,6 +71,7 @@ class PhoneVerificationScreen extends GetView<AccountVerificationController> {
                     // email: '',
                     phone: '',
                     otpType: 'email',
+                     expectedVariable: 'otp',
                     focusNode: controller.focus,
                     onCompleted: (pin) {}),
                 SizedBox(

@@ -80,6 +80,7 @@ class OtpVerificationScreen extends GetView<OtpVerificationController> {
                     // email: '',
                     phone: '',
                     otpType: 'email',
+                     expectedVariable: 'otp',
                     focusNode: controller.focus,
                     onCompleted: (pin) {}),
                 SizedBox(

@@ -63,6 +63,19 @@ class AuthService {
       rethrow;
     }
   }
+  Future<ApiResponseModel> resendOtp({required Map payload}) async {
+    try {
+      final result = await apiService.postRequest(
+        endpoint: '/user/auth/resendOTP',
+        data: payload,
+      );
+
+      return ApiResponseModel.fromJson(result);
+    } catch (err) {
+      logger.log("Resend OTP Error: $err");
+      rethrow;
+    }
+  }
 
   Future<ApiResponseModel> logOut({required String token}) async {
     try {
@@ -90,10 +103,10 @@ class AuthService {
     }
   }
 
-  Future<ApiResponseModel> verifyOtpEmail({required Map payload}) async {
+  Future<ApiResponseModel> verifyOtp({required Map payload}) async {
     try {
       final result = await apiService.postRequest(
-        endpoint: '/auth/verify-otp-email',
+        endpoint: '/user/auth/verifyOTP',
         data: payload,
       );
       return ApiResponseModel.fromJson(result);
