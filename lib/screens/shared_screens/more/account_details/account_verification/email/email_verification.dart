@@ -67,10 +67,6 @@ class EmailVerificationScreen extends GetView<AccountVerificationController> {
                 buildOTPPinPut(
                     controller: controller.pinController,
                     context: context,
-                    email: "test@example.com",
-                    // email: '',
-                    phone: '',
-                    otpType: 'email',
                      expectedVariable: 'otp',
                     focusNode: controller.focus,
                     onCompleted: (pin) {}),

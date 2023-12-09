@@ -41,6 +41,8 @@ class LoginController extends GetxController
   void routeToSignUp() => routeService.gotoRoute(AppLinks.signUp);
   void routeToLandingPage() =>
       routeService.gotoRoute(AppLinks.carRenterLanding);
+  void routeToRequestRestePassword() =>
+      routeService.gotoRoute(AppLinks.requestResetPassword);
 
   Future<void> processLogin() async {
     if (!loginFormKey.currentState!.validate()) {

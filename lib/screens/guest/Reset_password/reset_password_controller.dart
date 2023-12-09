@@ -55,6 +55,8 @@ class ResetPasswordController extends GetxController {
     emailOrPhoneController.dispose();
   }
 
+  void goBack()=> routeService.goBack();
+
   void routeToresetPassword() => routeService.gotoRoute(
         AppLinks.resetPassword,
       );

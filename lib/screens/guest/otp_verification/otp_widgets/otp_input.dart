@@ -7,10 +7,8 @@ import 'package:pinput/pinput.dart';
 Widget buildOTPPinPut({
   required TextEditingController controller,
   required BuildContext context,
-  required String otpType,
-  String? email,
-  String? phone,
   Function(String)? onCompleted,
+  void Function(String)? onChanged,
   FocusNode? focusNode,
   required String expectedVariable,
 }) {
@@ -42,6 +40,7 @@ Widget buildOTPPinPut({
       pinputAutovalidateMode: PinputAutovalidateMode.disabled,
       showCursor: true,
       keyboardType: TextInputType.number,
+      onTapOutside:  (event) => FocusScope.of(context).unfocus(),
       validator:(value) {
           if (value == null || value.isEmpty) {
               return fetchErrorText(expectedTextVariable: expectedVariable);
@@ -53,8 +52,6 @@ Widget buildOTPPinPut({
         style: getMediumStyle(fontSize: 24.sp),
       ),
       useNativeKeyboard: true,
-      onChanged: (pin) {
-        print("pincode $pin");
-      },
+      onChanged: onChanged,
       onCompleted: onCompleted);
 }

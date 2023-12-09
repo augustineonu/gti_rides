@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
@@ -35,6 +36,7 @@ class PasswordInputTextWidget extends StatelessWidget {
         textWidget(text: title, style: getRegularStyle()),
         TextFormField(
             controller: controller,
+            inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'\S'))],
             // style: theme.bodyText1.copyWith(fontSize: 16.0),
             style: getRegularStyle(fontSize: 16),
             obscureText: isObscureValue ?? false,

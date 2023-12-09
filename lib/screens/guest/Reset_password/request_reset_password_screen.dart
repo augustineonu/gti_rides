@@ -92,6 +92,7 @@ class RequestResetPasswordScreen extends GetView<ResetPasswordController> {
 
   AppBar appbar() {
     return gtiAppBar(
+      onTap: controller.goBack,
       leading: Icon(
         Icons.arrow_back_rounded,
         color: black,

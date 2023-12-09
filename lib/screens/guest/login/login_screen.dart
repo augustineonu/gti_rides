@@ -86,7 +86,7 @@ class LoginScreen extends GetView<LoginController> {
                     SizedBox(
                       height: 14.sp,
                     ),
-                    forgotPassword(onTap: () {}),
+                    forgotPassword(onTap: controller.routeToRequestRestePassword),
                     SizedBox(
                       height: 40.sp,
                     ),
