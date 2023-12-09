@@ -18,7 +18,7 @@ class OtpVerificationController extends GetxController {
   Duration myDuration = Duration(days: 5);
   final TextEditingController pinController = TextEditingController();
   RxBool showPassword = true.obs;
-  final GlobalKey<FormState> otpFormKey = GlobalKey<FormState>();
+GlobalKey<FormState> otpFormKey = GlobalKey<FormState>();
   final FocusNode focus = FocusNode();
 
   String emailOrPhone = '';
@@ -62,40 +62,9 @@ class OtpVerificationController extends GetxController {
     showPassword.value = !showPassword.value;
   }
 
-  void startTimer() {
-    countdownTimer =
-        Timer.periodic(Duration(seconds: 1), (_) => setCountDown());
-  }
 
-  // Step 4
-  void stopTimer() {
-    countdownTimer!.cancel();
-  }
-
-  // Step 5
-  void resetTimer() {
-    stopTimer();
-    myDuration = Duration(days: 5);
-  }
-
-  // Step 6
-  void setCountDown() {
-    final reduceSecondsBy = 1;
-
-    final seconds = myDuration.inSeconds - reduceSecondsBy;
-    if (seconds < 0) {
-      countdownTimer!.cancel();
-    } else {
-      myDuration = Duration(seconds: seconds);
-    }
-    update();
-  }
 
   void goBack() => routeService.goBack();
-
-  // void printDeviceType() {
-  //   logger.log(deviceService.deviceType);
-  // }
 
   void routeToforgotPassword() => routeService.gotoRoute(
         AppLinks.requestResetPassword,

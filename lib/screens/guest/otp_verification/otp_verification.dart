@@ -16,7 +16,7 @@ class OtpVerificationBinding extends Bindings {
   @override
   void dependencies() {
     // TODO: implement dependencies
-    Get.put<OtpVerificationController>(OtpVerificationController());
+    Get.put<OtpVerificationController>(OtpVerificationController(), permanent: true);
   }
 }
 
@@ -28,18 +28,19 @@ class OtpVerificationScreen extends GetView<OtpVerificationController> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+   final controller = Get.find<OtpVerificationController>();
     return Obx(
       () => Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: backgroundColor,
-        appBar: appbar(),
-        body: body(context, size),
+        appBar: appbar(controller),
+        body: body(context, size, controller),
       ),
       // }
     );
   }
 
-  Widget body(BuildContext context, Size size) {
+  Widget body(BuildContext context, Size size, OtpVerificationController controller) {
     return Column(
       children: [
         Expanded(
@@ -114,7 +115,7 @@ class OtpVerificationScreen extends GetView<OtpVerificationController> {
     );
   }
 
-  AppBar appbar() {
+  AppBar appbar(OtpVerificationController controller) {
     return gtiAppBar(
       onTap: controller.goBack,
       leading: Icon(

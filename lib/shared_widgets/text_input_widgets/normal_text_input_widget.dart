@@ -34,6 +34,7 @@ class NormalInputTextWidget extends StatelessWidget {
   final double? titleFontSize;
   final int? maxLength;
   final bool? showCursor;
+  final List<TextInputFormatter>? inputFormatters;
   const NormalInputTextWidget(
       {super.key,
       this.controller,
@@ -63,6 +64,7 @@ class NormalInputTextWidget extends StatelessWidget {
       this.maxLength,
       this.showCursor,
       this.errorBorder,
+      this.inputFormatters,
       });
 
   @override
@@ -100,9 +102,7 @@ class NormalInputTextWidget extends StatelessWidget {
           onTap: onTap,
           maxLines: maxLines,
           showCursor: showCursor,
-          //      inputFormatters: [
-          //   LengthLimitingTextInputFormatter(10),
-          // ],
+               inputFormatters: inputFormatters,
           maxLength: maxLength,
           style: getRegularStyle(fontSize: fontSize ?? 16, color: textColor),
           decoration: InputDecoration(

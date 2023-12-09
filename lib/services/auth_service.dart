@@ -32,16 +32,11 @@ class AuthService {
   
   Future<ApiResponseModel> signUp({required Map payload}) async {
     try {
-      var jsonString;
+      
       final result = await apiService.postRequest(
         endpoint: '/user/auth/register',
         data: payload,
       );
-
-      // Convert the Map result into a JSON string
-      // if (result != null) {
-      //   jsonString = jsonEncode(result);
-      // }
 
       return ApiResponseModel.fromJson(result);
     } catch (err) {
@@ -63,6 +58,7 @@ class AuthService {
       rethrow;
     }
   }
+ 
   Future<ApiResponseModel> resendOtp({required Map payload}) async {
     try {
       final result = await apiService.postRequest(

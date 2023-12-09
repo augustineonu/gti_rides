@@ -15,7 +15,7 @@ class SignUpRequestModel {
   final String emailAddress;
   final String phoneNumber;
   final String userType;
-  final String? referralCode;
+   String? referralCode;
   final String password;
 
   SignUpRequestModel({
@@ -37,12 +37,21 @@ class SignUpRequestModel {
         password: json["password"],
       );
 
-  Map<String, dynamic> toJson() => {
-        "fullName": fullName,
-        "emailAddress": emailAddress,
-        "phoneNumber": phoneNumber,
-        "userType": userType,
-        "referralCode": referralCode,
-        "password": password,
-      };
+ Map<String, dynamic> toJson() {
+  Map<String, dynamic> json = {
+    "fullName": fullName,
+    "emailAddress": emailAddress,
+    "phoneNumber": phoneNumber,
+    "userType": userType,
+    "password": password,
+  };
+
+  // Only include referralCode if it's not null or empty
+  if (referralCode != null && referralCode!.isNotEmpty) {
+    json["referralCode"] = referralCode;
+  }
+
+  return json;
+}
+
 }

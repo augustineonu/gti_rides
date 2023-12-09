@@ -19,7 +19,7 @@ class LoginController extends GetxController
 
   TextEditingController emailOrPhoneController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
+GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
 
   LoginController() {
     init();

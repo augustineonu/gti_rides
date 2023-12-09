@@ -17,7 +17,7 @@ class ResetPasswordController extends GetxController {
       TextEditingController();
   RxBool showPassword = true.obs;
   RxBool showPassword1 = true.obs;
-  final GlobalKey<FormState> emailVerificationFormKey = GlobalKey<FormState>();
+GlobalKey<FormState> resetPasswordFormKey = GlobalKey<FormState>();
   final FocusNode focus = FocusNode();
 
   ResetPasswordController() {
@@ -63,4 +63,8 @@ class ResetPasswordController extends GetxController {
   void routeToLogin() => routeService.gotoRoute(
         AppLinks.login,
       );
-}
+
+      Future<void> requestResetPassword() async{
+
+      }
+      }

@@ -71,14 +71,22 @@ class RequestResetPasswordScreen extends GetView<ResetPasswordController> {
                 SizedBox(
                   height: 40.sp,
                 ),
-                NormalInputTextWidget(
-                  title: AppStrings.emailOrPhone,
-                  expectedVariable: "email",
-                  hintText: AppStrings.emailHintText,
-                  controller: controller.emailOrPhoneController,
+                Form(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  key: controller.resetPasswordFormKey,
+                  child: Column(
+                    children: [
+                      NormalInputTextWidget(
+                        title: AppStrings.emailOrPhone,
+                        expectedVariable: "email",
+                        hintText: AppStrings.emailHintText,
+                        controller: controller.emailOrPhoneController,
+                      ),
+                      SizedBox(height: size.height * 0.09),
+                      ContinueButton(),
+                    ],
+                  ),
                 ),
-                SizedBox(height: size.height * 0.09),
-                ContinueButton(),
               ],
             ),
           ),

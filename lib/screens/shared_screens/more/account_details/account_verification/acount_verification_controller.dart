@@ -22,7 +22,7 @@ class AccountVerificationController extends GetxController {
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
 
-  final GlobalKey<FormState> emailVerificationFormKey = GlobalKey<FormState>();
+GlobalKey<FormState> emailVerificationFormKey = GlobalKey<FormState>();
   final FocusNode focus = FocusNode();
 
   AccountVerificationController() {
