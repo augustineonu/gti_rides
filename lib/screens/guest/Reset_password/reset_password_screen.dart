@@ -44,44 +44,48 @@ class ResetPasswordScreen extends GetView<ResetPasswordController> {
         Expanded(
           child: SingleChildScrollView(
             padding: EdgeInsets.symmetric(horizontal: 20.0.sp, vertical: 16.sp),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                textWidget(
-                  text: AppStrings.resetPassword,
-                  textOverflow: TextOverflow.visible,
-                  style: getBoldStyle(
-                          fontSize: 24.sp,
-                          fontWeight: FontWeight.w500,
-                          color: black)
-                      .copyWith(
-                    fontFamily: "Neue",
+            child: Form(
+               autovalidateMode: AutovalidateMode.onUserInteraction,
+                  key: controller.resetPasswordFormKey1,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  textWidget(
+                    text: AppStrings.resetPassword,
+                    textOverflow: TextOverflow.visible,
+                    style: getBoldStyle(
+                            fontSize: 24.sp,
+                            fontWeight: FontWeight.w500,
+                            color: black)
+                        .copyWith(
+                      fontFamily: "Neue",
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: 16.sp,
-                ),
-                PasswordInputTextWidget(
-                  title: AppStrings.newPassword,
-                  controller: controller.passwordController,
-                  expectedVariable: 'password',
-                  isObscureValue: controller.showPassword.value,
-                  onTap: () => controller.obscurePassword(),
-                ),
-                SizedBox(
-                  height: 16.sp,
-                ),
-                PasswordInputTextWidget(
-                  title: AppStrings.confirmPassword,
-                  controller: controller.conFirmPasswordController,
-                  expectedVariable: 'password',
-                  isObscureValue: controller.showPassword.value,
-                  onTap: () => controller.obscurePassword1(),
-                ),
-                SizedBox(height: size.height * 0.08),
-                ContinueButton(),
-              ],
+                  SizedBox(
+                    height: 16.sp,
+                  ),
+                  PasswordInputTextWidget(
+                    title: AppStrings.newPassword,
+                    controller: controller.passwordController,
+                    expectedVariable: 'password',
+                    isObscureValue: controller.showPassword.value,
+                    onTap: () => controller.obscurePassword(),
+                  ),
+                  SizedBox(
+                    height: 16.sp,
+                  ),
+                  PasswordInputTextWidget(
+                    title: AppStrings.confirmPassword,
+                    controller: controller.conFirmPasswordController,
+                    expectedVariable: 'password',
+                    isObscureValue: controller.showPassword1.value,
+                    onTap: () => controller.obscurePassword1(),
+                  ),
+                  SizedBox(height: size.height * 0.08),
+                  ContinueButton(),
+                ],
+              ),
             ),
           ),
         ),
@@ -94,6 +98,7 @@ class ResetPasswordScreen extends GetView<ResetPasswordController> {
 
   AppBar appbar() {
     return gtiAppBar(
+      onTap: controller.goBack,
       leading: Icon(
         Icons.arrow_back_rounded,
         color: black,
@@ -103,59 +108,7 @@ class ResetPasswordScreen extends GetView<ResetPasswordController> {
     );
   }
 
-  Widget clickToResendCode() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        TextButton(
-          onPressed: () {},
-          child: RichText(
-            text: TextSpan(children: <InlineSpan>[
-              TextSpan(
-                  text: AppStrings.resendOtp,
-                  style: getRegularStyle(color: primaryColor)),
-              TextSpan(
-                  text: "00:00",
-                  style: getRegularStyle(color: greyShade1)
-                      .copyWith(fontWeight: FontWeight.w500)),
-            ]),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget appLogo() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            textWidget(
-              text: "Welcome",
-              style: getBoldStyle(
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.w600,
-                  color: iconColor()),
-            ),
-            SizedBox(
-              height: 8.h,
-            ),
-            textWidget(
-              text: "Login to continue",
-              style: getBoldStyle(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w400,
-                  color: iconColor()),
-            ),
-          ],
-        ),
-        // SvgPicture.asset(ImageAssets.appLogo),
-      ],
-    );
-  }
-
+ 
   Widget ContinueButton() {
     return controller.isLoading.isTrue
         ? centerLoadingIcon()
@@ -164,7 +117,7 @@ class ResetPasswordScreen extends GetView<ResetPasswordController> {
             width: 300.sp,
             text: AppStrings.cont,
             color: primaryColor,
-            onTap: controller.routeToLogin,
+            onTap: controller.resetPassword,
             // onTap: controller.routeToPhoneVerification,
             isLoading: controller.isLoading.value,
           );

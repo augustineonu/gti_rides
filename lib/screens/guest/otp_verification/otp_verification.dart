@@ -16,7 +16,7 @@ class OtpVerificationBinding extends Bindings {
   @override
   void dependencies() {
     // TODO: implement dependencies
-    Get.put<OtpVerificationController>(OtpVerificationController(), permanent: true);
+    Get.put<OtpVerificationController>(OtpVerificationController());
   }
 }
 

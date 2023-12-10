@@ -111,11 +111,23 @@ class AuthService {
     }
   }
 
-  Future<ApiResponseModel> resetPassword({required Map payload}) async {
+  Future<ApiResponseModel> requestResetPassword({required Map payload}) async {
     try {
       final result = await apiService.postRequest(
-        endpoint: '/auth/reset-password',
+        endpoint: '/user/auth/resetPassword',
         data: payload,
+      );
+      return ApiResponseModel.fromJson(result);
+    } catch (err) {
+      rethrow;
+    }
+  }
+  Future<ApiResponseModel> resetPassword({required Map payload, required String token}) async {
+    try {
+      final result = await apiService.postRequest(
+        endpoint: '/user/auth/addNewPassword',
+        data: payload,
+        token: token
       );
       return ApiResponseModel.fromJson(result);
     } catch (err) {

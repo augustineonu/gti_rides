@@ -227,23 +227,24 @@ class ApiService {
       );
       logger.log("GET REQUEST RESPONSE ($endpoint) :: $response");
       apiResponse = ApiResponseModel.fromJson(response.data);
-      // if (!apiResponse.status || apiResponse.statusCode == 401) {
-      //   bool newAccessTokenResult = await tokenService.getNewAccessToken();
-      //   if (!newAccessTokenResult) {
-      //     logger.log('Going to welcome screen');
-      //     // routeService.offAllNamed(AppLinks.welcomeBack);
-      //     return;
-      //   }
-      //   response = await _dio.get(
-      //     endpoint,
-      //     options: Options(
-      //       headers: {
-      //         // 'Authorization': 'Bearer ${tokenService.accessToken.value}',
-      //       },
-      //     ),
-      //   );
-      //   apiResponse = ApiResponseModel.fromJson(response.data);
-      // }
+      if (apiResponse.status != 'success'.toLowerCase() ||
+            apiResponse.status_code == 401) {
+        bool newAccessTokenResult = await tokenService.getNewAccessToken();
+        if (!newAccessTokenResult) {
+          logger.log('Going to welcome screen');
+          // routeService.offAllNamed(AppLinks.welcomeBack);
+          return;
+        }
+        response = await _dio.get(
+          endpoint,
+          options: Options(
+            headers: {
+              // 'Authorization': 'Bearer ${tokenService.accessToken.value}',
+            },
+          ),
+        );
+        apiResponse = ApiResponseModel.fromJson(response.data);
+      }
       return apiResponse;
     } on DioException catch (e) {
       logger.log("POST REQUEST ERROR ($endpoint) :: ${e.response?.data}");

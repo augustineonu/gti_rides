@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/models/auth/login_request_model.dart';
 import 'package:gti_rides/route/app_links.dart';
+import 'package:gti_rides/services/api_service.dart';
 import 'package:gti_rides/services/auth_service.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
@@ -74,7 +75,9 @@ GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
         //   'email': emailController.text,
         // });
       } else {
+        // await apiService.getRequest(endpoint)
         await showSuccessSnackbar(message: result.message);
+
       }
     } catch (e) {
       logger.log("error rrr: $e");

@@ -18,10 +18,11 @@ class OtpVerificationController extends GetxController {
   Duration myDuration = Duration(days: 5);
   final TextEditingController pinController = TextEditingController();
   RxBool showPassword = true.obs;
-GlobalKey<FormState> otpFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> otpFormKey = GlobalKey<FormState>();
   final FocusNode focus = FocusNode();
 
   String emailOrPhone = '';
+  RxBool isResetPassword = false.obs;
 
   late Timer timer;
   RxString countdownText = '2:00'.obs;
@@ -50,6 +51,7 @@ GlobalKey<FormState> otpFormKey = GlobalKey<FormState>();
 
     if (arguments != null && arguments.containsKey('emailOrPhone')) {
       emailOrPhone = arguments['emailOrPhone'];
+      isResetPassword.value = arguments['isResetPassword'];
 
       // Now you have access to the passed data (emailOrPhone)
       logger.log('Received email or phone: $emailOrPhone');
@@ -61,8 +63,6 @@ GlobalKey<FormState> otpFormKey = GlobalKey<FormState>();
   void togglePasswordShow() {
     showPassword.value = !showPassword.value;
   }
-
-
 
   void goBack() => routeService.goBack();
 
@@ -84,8 +84,16 @@ GlobalKey<FormState> otpFormKey = GlobalKey<FormState>();
         "otp": otp
       });
       if (result.status == "success" || result.status_code == 200) {
-        await showSuccessSnackbar(message: result.message);
-        routeService.offAllNamed(AppLinks.login);
+        if (isResetPassword.value) {
+          await showSuccessSnackbar(message: result.message);
+          pinController.clear();
+          await routeService.gotoRoute(AppLinks.resetPassword,
+              arguments: {"accessToken": result.data!['accessToken']});
+          isLoading.value = false;
+        } else {
+          await showSuccessSnackbar(message: result.message);
+          routeService.offAllNamed(AppLinks.login);
+        }
       } else {
         showErrorSnackbar(message: result.message);
       }

@@ -83,7 +83,7 @@ class RequestResetPasswordScreen extends GetView<ResetPasswordController> {
                         controller: controller.emailOrPhoneController,
                       ),
                       SizedBox(height: size.height * 0.09),
-                      ContinueButton(),
+                      continueButton(),
                     ],
                   ),
                 ),
@@ -110,59 +110,8 @@ class RequestResetPasswordScreen extends GetView<ResetPasswordController> {
     );
   }
 
-  Widget clickToResendCode() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        TextButton(
-          onPressed: () {},
-          child: RichText(
-            text: TextSpan(children: <InlineSpan>[
-              TextSpan(
-                  text: AppStrings.resendOtp,
-                  style: getRegularStyle(color: primaryColor)),
-              TextSpan(
-                  text: "00:00",
-                  style: getRegularStyle(color: greyShade1)
-                      .copyWith(fontWeight: FontWeight.w500)),
-            ]),
-          ),
-        ),
-      ],
-    );
-  }
 
-  Widget appLogo() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            textWidget(
-              text: "Welcome",
-              style: getBoldStyle(
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.w600,
-                  color: iconColor()),
-            ),
-            SizedBox(
-              height: 8.h,
-            ),
-            textWidget(
-              text: "Login to continue",
-              style: getBoldStyle(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w400,
-                  color: iconColor()),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget ContinueButton() {
+  Widget continueButton() {
     return controller.isLoading.isTrue
         ? centerLoadingIcon()
         : GtiButton(
@@ -170,7 +119,7 @@ class RequestResetPasswordScreen extends GetView<ResetPasswordController> {
             width: 300.sp,
             text: AppStrings.cont,
             color: primaryColor,
-            onTap: controller.routeToresetPassword,
+            onTap: controller.requestResetPassword,
             isLoading: controller.isLoading.value,
           );
   }
