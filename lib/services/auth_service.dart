@@ -134,6 +134,18 @@ class AuthService {
       rethrow;
     }
   }
+  Future<ApiResponseModel> socialSignUp({required Map payload}) async {
+    try {
+      final result = await apiService.postRequest(
+        endpoint: '/user/auth/socialProfile',
+        data: payload,
+     
+      );
+      return ApiResponseModel.fromJson(result);
+    } catch (err) {
+      rethrow;
+    }
+  }
 
   Future<ApiResponseModel> getProfile() async {
     // try {

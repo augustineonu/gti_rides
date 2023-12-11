@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:gti_rides/services/api_service.dart';
 import 'package:gti_rides/services/auth_service.dart';
+import 'package:gti_rides/services/google_sign_in_service.dart';
 import 'package:gti_rides/services/image_service.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/services/token_service.dart';
@@ -20,6 +21,7 @@ class AppBinding extends Bindings {
     Get.put(ImageService());
     Get.put(ApiService());
     Get.put(AuthService());
+    Get.put(GoogleSignInService());
     // Get.put(AppService());
     // Get.put(FirebaseService());
     // Get.put(AgentService());

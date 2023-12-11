@@ -80,7 +80,7 @@ class SignUpScreen extends GetView<SignUpController> {
                               .copyWith(fontWeight: FontWeight.w400)),
                     ),
                     googleSignUp(
-                      onTap: () {},
+                      onTap: controller.googleSignUp,
                     ),
                   ],
                 ),

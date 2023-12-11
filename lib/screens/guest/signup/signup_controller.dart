@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/models/api_response_model.dart';
 import 'package:gti_rides/models/auth/sign_up_request_model.dart';
+import 'package:gti_rides/models/auth/social_signup_request_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/auth_service.dart';
+import 'package:gti_rides/services/google_sign_in_service.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/utils/utils.dart';
@@ -117,6 +119,33 @@ class SignUpController extends GetxController
       showErrorSnackbar(message: e.toString());
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  Future<void> googleSignUp() async {
+    try {
+      final Map<String, dynamic>? result =
+          await googleSignInService.signInWithGoogle();
+      if (result != null) {
+        logger.log("user google detials ${result}");
+        final response = await authService.socialSignUp(
+            payload: SocialSignUpRequestModel(
+                    fullName: result["fullName"],
+                    emailAddress: result["email"],
+                    socialType: "google",
+                    socialId: result["googleId"])
+                .toJson());
+        if (response.status == "success" || response.status_code == 200) {
+          await showSuccessSnackbar(message: response.message);
+          await routeService.offAllNamed(AppLinks.carRenterLanding);
+        } else {
+          logger.log("error: ${response.message}");
+          await showErrorSnackbar(message: response.message);
+        }
+      }
+    } catch (e) {
+      logger.log("error rrr: $e");
+      showErrorSnackbar(message: e.toString());
     }
   }
 
