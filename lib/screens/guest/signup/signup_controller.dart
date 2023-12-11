@@ -12,7 +12,8 @@ class SignUpController extends GetxController
     with GetSingleTickerProviderStateMixin {
   Logger logger = Logger('SignUpController');
 
-  final GlobalKey<FormState> signUpFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> signUpFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> ownerSignUpFormKey = GlobalKey<FormState>();
 
   final animationValue = 0.0.obs;
   RxInt currentIndex = 0.obs;
@@ -22,9 +23,13 @@ class SignUpController extends GetxController
   RxBool isLoading = false.obs;
 
   TextEditingController fullNameController = TextEditingController();
+  TextEditingController ownerFullNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+  TextEditingController ownerEmailController = TextEditingController();
   TextEditingController phoneNoController = TextEditingController();
+  TextEditingController ownerPhoneNoController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController ownerPasswordController = TextEditingController();
   TextEditingController referralCodeController = TextEditingController();
 
   SignUpController() {
@@ -62,31 +67,50 @@ class SignUpController extends GetxController
   void routeToOtpVerification() => routeService.gotoRoute(AppLinks.verifyOtp);
 
   Future<void> processSignup() async {
-    if (!signUpFormKey.currentState!.validate()) {
+    if ((signUpFormKey.currentState != null &&
+            !signUpFormKey.currentState!.validate()) ||
+        (ownerSignUpFormKey.currentState != null &&
+            !ownerSignUpFormKey.currentState!.validate())) {
       return;
     }
 
     isLoading.value = true;
 
     try {
-      final Map<String, dynamic> result = await authService.signUp1(
-          payload: SignUpRequestModel(
-        fullName: fullNameController.text,
-        emailAddress: emailController.text,
-        phoneNumber: phoneNoController.text,
-        password: passwordController.text,
-        referralCode: referralCodeController.text,
+      // Use the right set of controllers based on the selected user type
+      final SignUpRequestModel signUpRequest = SignUpRequestModel(
+        fullName: currentIndex.value == 0
+            ? fullNameController.text
+            : ownerFullNameController.text,
+        emailAddress: currentIndex.value == 0
+            ? emailController.text
+            : ownerEmailController.text,
+        phoneNumber: currentIndex.value == 0
+            ? phoneNoController.text
+            : ownerPhoneNoController.text,
+        password: currentIndex.value == 0
+            ? passwordController.text
+            : ownerPasswordController.text,
         userType: currentIndex.value == 0 ? 'renter' : 'owner',
-      ).toJson());
+      );
+
+      logger.log("email ${signUpRequest.emailAddress}");
+      // Check if referralCode is not empty before including it in the payload
+      if (currentIndex.value == 0 && referralCodeController.text.isNotEmpty) {
+        signUpRequest.referralCode = referralCodeController.text;
+      }
+      final result = await authService.signUp(payload: signUpRequest.toJson());
 
       // logger.log(result.message.toString());
-      if (result['status'] == 'success' || result['status_code'] == 200) {
-        await showSuccessSnackbar(message: result['message']);
-        routeService.offAllNamed(AppLinks.verifyOtp, arguments: {
-          'email': emailController.text,
+
+      if (result.status == 'success' || result.status_code == 200) {
+        await showSuccessSnackbar(message: result.message);
+
+        await routeService.gotoRoute(AppLinks.verifyOtp, arguments: {
+          'emailOrPhone': signUpRequest.emailAddress,
         });
       } else {
-        await showErrorSnackbar(message: result['message']);
+        await showErrorSnackbar(message: result.message);
       }
     } catch (e) {
       logger.log("error rrr: $e");
@@ -100,5 +124,14 @@ class SignUpController extends GetxController
   void dispose() {
     pageController.dispose();
     super.dispose();
+    fullNameController.dispose();
+    ownerFullNameController.dispose();
+    emailController.dispose();
+    ownerEmailController.dispose();
+    phoneNoController.dispose();
+    ownerPhoneNoController.dispose();
+    passwordController.dispose();
+    ownerPasswordController.dispose();
+    referralCodeController.dispose();
   }
 }

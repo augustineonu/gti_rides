@@ -8,8 +8,8 @@ import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/utils/utils.dart';
 
-class ResetPasswordController extends GetxController {
-  Logger logger = Logger('OTPVerificationController');
+class RequestResetPasswordController extends GetxController {
+  Logger logger = Logger('ResetPasswordController');
   RxBool isLoading = false.obs;
 
   Duration myDuration = const Duration(days: 5);
@@ -24,7 +24,7 @@ class ResetPasswordController extends GetxController {
   final FocusNode focus = FocusNode();
   RxString accessToken = ''.obs;
 
-  ResetPasswordController() {
+  RequestResetPasswordController() {
     init();
   }
 
@@ -46,7 +46,7 @@ class ResetPasswordController extends GetxController {
     Map<String, dynamic>? arguments = Get.arguments;
 
     if (arguments != null) {
-      accessToken.value = arguments['accessToken'];
+      accessToken = arguments['accessToken'];
 
       // Now you have access to the passed data (emailOrPhone)
       logger.log('Received accessToken: $accessToken');
@@ -140,3 +140,4 @@ class ResetPasswordController extends GetxController {
     }
   }
 }
+ 

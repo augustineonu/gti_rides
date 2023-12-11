@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/models/auth/login_request_model.dart';
 import 'package:gti_rides/route/app_links.dart';
+import 'package:gti_rides/services/api_service.dart';
 import 'package:gti_rides/services/auth_service.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
@@ -19,7 +20,7 @@ class LoginController extends GetxController
 
   TextEditingController emailOrPhoneController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
+GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
 
   LoginController() {
     init();
@@ -41,6 +42,8 @@ class LoginController extends GetxController
   void routeToSignUp() => routeService.gotoRoute(AppLinks.signUp);
   void routeToLandingPage() =>
       routeService.gotoRoute(AppLinks.carRenterLanding);
+  void routeToRequestRestePassword() =>
+      routeService.gotoRoute(AppLinks.requestResetPassword);
 
   Future<void> processLogin() async {
     if (!loginFormKey.currentState!.validate()) {
@@ -72,7 +75,9 @@ class LoginController extends GetxController
         //   'email': emailController.text,
         // });
       } else {
+        // await apiService.getRequest(endpoint)
         await showSuccessSnackbar(message: result.message);
+
       }
     } catch (e) {
       logger.log("error rrr: $e");

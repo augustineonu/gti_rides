@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -99,7 +100,7 @@ class SignUpScreen extends GetView<SignUpController> {
   }
 
   Widget googleSignUp({void Function()? onTap}) {
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -161,6 +162,9 @@ class SignUpScreen extends GetView<SignUpController> {
                         expectedVariable: "phone",
                         hintText: AppStrings.phoneHintText,
                         controller: controller.phoneNoController,
+                         inputFormatters: [
+                      LengthLimitingTextInputFormatter(11),
+                    ],
                       ),
                       SizedBox(
                         height: 16.sp,
@@ -209,7 +213,7 @@ class SignUpScreen extends GetView<SignUpController> {
           SingleChildScrollView(
             child: Form(
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              key: controller.signUpFormKey,
+              key: controller.ownerSignUpFormKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -217,8 +221,8 @@ class SignUpScreen extends GetView<SignUpController> {
                     title: AppStrings.fullName,
                     expectedVariable: "fullName",
                     hintText: AppStrings.nameHintText,
-                    textInputType: TextInputType.emailAddress,
-                    controller: controller.emailController,
+                    textInputType: TextInputType.name,
+                    controller: controller.ownerFullNameController,
                   ),
                   SizedBox(
                     height: 16.sp,
@@ -227,14 +231,28 @@ class SignUpScreen extends GetView<SignUpController> {
                     title: AppStrings.email,
                     expectedVariable: "email",
                     hintText: AppStrings.emailHintText,
-                    controller: controller.emailController,
+                    textInputType: TextInputType.emailAddress,
+                    controller: controller.ownerEmailController,
+                  ),
+                  SizedBox(
+                    height: 16.sp,
+                  ),
+                  NormalInputTextWidget(
+                    title: AppStrings.phoneNumber,
+                    expectedVariable: "phone",
+                    hintText: AppStrings.phoneHintText,
+                    textInputType: TextInputType.phone,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(11),
+                    ],
+                    controller: controller.ownerPhoneNoController,
                   ),
                   SizedBox(
                     height: 16.sp,
                   ),
                   PasswordInputTextWidget(
                     title: AppStrings.password,
-                    controller: controller.passwordController,
+                    controller: controller.ownerPasswordController,
                     expectedVariable: 'password',
                     isObscureValue: controller.showPassword.value,
                     onTap: () => controller.obscurePassword(),
@@ -242,11 +260,13 @@ class SignUpScreen extends GetView<SignUpController> {
                   SizedBox(
                     height: 40.sp,
                   ),
-                  GtiButton(
-                    text: AppStrings.createAccount,
-                    width: width,
-                    onTap: () {},
-                  ),
+                  controller.isLoading.isTrue
+                      ? centerLoadingIcon()
+                      : GtiButton(
+                          text: AppStrings.createAccount,
+                          width: width,
+                          onTap: controller.processSignup,
+                        ),
                   SizedBox(
                     height: 26.sp,
                   ),

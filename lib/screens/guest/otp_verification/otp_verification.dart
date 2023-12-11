@@ -28,18 +28,19 @@ class OtpVerificationScreen extends GetView<OtpVerificationController> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+   final controller = Get.find<OtpVerificationController>();
     return Obx(
       () => Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: backgroundColor,
-        appBar: appbar(),
-        body: body(context, size),
+        appBar: appbar(controller),
+        body: body(context, size, controller),
       ),
       // }
     );
   }
 
-  Widget body(BuildContext context, Size size) {
+  Widget body(BuildContext context, Size size, OtpVerificationController controller) {
     return Column(
       children: [
         Expanded(
@@ -73,37 +74,36 @@ class OtpVerificationScreen extends GetView<OtpVerificationController> {
                 SizedBox(
                   height: 40.sp,
                 ),
-
                 Form(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   key: controller.otpFormKey,
-                  child: buildOTPPinPut(
-                      controller: controller.pinController,
-                      context: context,
-                      email: "test@example.com",
-                      // email: '',
-                      phone: '',
-                      otpType: 'email',
-                      expectedVariable: 'otp',
-                      focusNode: controller.focus,
-                      onCompleted: (pin) {
-                        controller.isDoneIputtingPin.value = true;
-                        if (kDebugMode) {
-                          print("otp $pin");
-                        }
-                      }),
-                ),
-                SizedBox(
-                  height: 60.sp,
-                ),
-                clickToResendCode(),
-                SizedBox(
-                  height: 15.sp,
-                ),
+                  child: Column(
+                    children: [
+                      buildOTPPinPut(
+                        controller: controller.pinController,
+                        context: context,
+                        expectedVariable: 'otp',
+                        focusNode: controller.focus,
+                        onChanged: (pin) => controller.isDoneIputtingPin.value =
+                            pin.length == 6,
+                        // print("pincode $pin");
 
-                // SizedBox(height: size.height * 0.02),
-                SizedBox(height: size.height * 0.04),
-                continueButton(),
+                        onCompleted: (pin) => pin.length == 6
+                            ? controller.isDoneIputtingPin.value = true
+                            : controller.isDoneIputtingPin.value = false,
+                      ),
+                      SizedBox(
+                        height: 60.sp,
+                      ),
+                      clickToResendCode(),
+                      SizedBox(
+                        height: 15.sp,
+                      ),
+                      SizedBox(height: size.height * 0.04),
+                      continueButton(),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -115,7 +115,7 @@ class OtpVerificationScreen extends GetView<OtpVerificationController> {
     );
   }
 
-  AppBar appbar() {
+  AppBar appbar(OtpVerificationController controller) {
     return gtiAppBar(
       onTap: controller.goBack,
       leading: Icon(
@@ -132,14 +132,18 @@ class OtpVerificationScreen extends GetView<OtpVerificationController> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         TextButton(
-          onPressed: () {},
+          onPressed: () {
+            if (controller.isCountDownFinished.value) {
+              controller.resendOtp(emailOrPhone: controller.emailOrPhone);
+            } else {}
+          },
           child: RichText(
             text: TextSpan(children: <InlineSpan>[
               TextSpan(
                   text: AppStrings.resendOtp,
                   style: getRegularStyle(color: primaryColor)),
               TextSpan(
-                  text: "00:00",
+                  text: controller.countdownText.value,
                   style: getRegularStyle(color: greyShade1)
                       .copyWith(fontWeight: FontWeight.w500)),
             ]),
@@ -156,10 +160,21 @@ class OtpVerificationScreen extends GetView<OtpVerificationController> {
             height: 45.sp,
             width: 300.sp,
             text: AppStrings.cont,
-            color: controller.isDoneIputtingPin.value ? primaryColor : primaryColorLight1,
-            onTap: () => controller.verifyOtp(
-                emailOrPhone: controller.emailOrPhone,
-                otp: controller.pinController.text),
+            textColor: controller.isDoneIputtingPin.value
+                ? white
+                : black.withOpacity(0.3),
+            color: controller.isDoneIputtingPin.value
+                ? primaryColor
+                : primaryColorLight1,
+            onTap: !controller.isDoneIputtingPin.value
+                ? () {}
+                : () => controller.verifyOtp(
+                    emailOrPhone: controller.emailOrPhone,
+                    otp: controller.pinController.text),
+            // {
+            //   print("object ");
+            // },
+
             isLoading: controller.isLoading.value,
           );
   }

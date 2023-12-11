@@ -32,16 +32,11 @@ class AuthService {
   
   Future<ApiResponseModel> signUp({required Map payload}) async {
     try {
-      var jsonString;
+      
       final result = await apiService.postRequest(
         endpoint: '/user/auth/register',
         data: payload,
       );
-
-      // Convert the Map result into a JSON string
-      // if (result != null) {
-      //   jsonString = jsonEncode(result);
-      // }
 
       return ApiResponseModel.fromJson(result);
     } catch (err) {
@@ -63,6 +58,7 @@ class AuthService {
       rethrow;
     }
   }
+ 
   Future<ApiResponseModel> resendOtp({required Map payload}) async {
     try {
       final result = await apiService.postRequest(
@@ -93,7 +89,7 @@ class AuthService {
   Future<ApiResponseModel> resendOTP({required Map payload}) async {
     try {
       final result = await apiService.postRequest(
-        endpoint: 'user/auth/resendOTP',
+        endpoint: '/user/auth/resendOTP',
         data: payload,
       );
       return ApiResponseModel.fromJson(result);
@@ -115,11 +111,23 @@ class AuthService {
     }
   }
 
-  Future<ApiResponseModel> resetPassword({required Map payload}) async {
+  Future<ApiResponseModel> requestResetPassword({required Map payload}) async {
     try {
       final result = await apiService.postRequest(
-        endpoint: '/auth/reset-password',
+        endpoint: '/user/auth/resetPassword',
         data: payload,
+      );
+      return ApiResponseModel.fromJson(result);
+    } catch (err) {
+      rethrow;
+    }
+  }
+  Future<ApiResponseModel> resetPassword({required Map payload, required String token}) async {
+    try {
+      final result = await apiService.postRequest(
+        endpoint: '/user/auth/addNewPassword',
+        data: payload,
+        token: token
       );
       return ApiResponseModel.fromJson(result);
     } catch (err) {

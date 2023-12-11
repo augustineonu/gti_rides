@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/screens/guest/Reset_password/request_reset_password_controller.dart';
 import 'package:gti_rides/screens/guest/Reset_password/reset_password_controller.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
@@ -15,13 +16,13 @@ class RequestResetPasswordBinding extends Bindings {
   @override
   void dependencies() {
     // TODO: implement dependencies
-    Get.put<ResetPasswordController>(ResetPasswordController());
+    Get.put<RequestResetPasswordController>(RequestResetPasswordController());
   }
 }
 
 TextEditingController textController = TextEditingController();
 
-class RequestResetPasswordScreen extends GetView<ResetPasswordController> {
+class RequestResetPasswordScreen extends GetView<RequestResetPasswordController> {
   const RequestResetPasswordScreen([Key? key]) : super(key: key);
 
   @override
@@ -71,14 +72,22 @@ class RequestResetPasswordScreen extends GetView<ResetPasswordController> {
                 SizedBox(
                   height: 40.sp,
                 ),
-                NormalInputTextWidget(
-                  title: AppStrings.emailOrPhone,
-                  expectedVariable: "email",
-                  hintText: AppStrings.emailHintText,
-                  controller: controller.emailOrPhoneController,
+                Form(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  key: controller.resetPasswordFormKey,
+                  child: Column(
+                    children: [
+                      NormalInputTextWidget(
+                        title: AppStrings.emailOrPhone,
+                        expectedVariable: "email",
+                        hintText: AppStrings.emailHintText,
+                        controller: controller.emailOrPhoneController,
+                      ),
+                      SizedBox(height: size.height * 0.09),
+                      continueButton(),
+                    ],
+                  ),
                 ),
-                SizedBox(height: size.height * 0.09),
-                ContinueButton(),
               ],
             ),
           ),
@@ -92,6 +101,7 @@ class RequestResetPasswordScreen extends GetView<ResetPasswordController> {
 
   AppBar appbar() {
     return gtiAppBar(
+      onTap: controller.goBack,
       leading: Icon(
         Icons.arrow_back_rounded,
         color: black,
@@ -101,59 +111,8 @@ class RequestResetPasswordScreen extends GetView<ResetPasswordController> {
     );
   }
 
-  Widget clickToResendCode() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        TextButton(
-          onPressed: () {},
-          child: RichText(
-            text: TextSpan(children: <InlineSpan>[
-              TextSpan(
-                  text: AppStrings.resendOtp,
-                  style: getRegularStyle(color: primaryColor)),
-              TextSpan(
-                  text: "00:00",
-                  style: getRegularStyle(color: greyShade1)
-                      .copyWith(fontWeight: FontWeight.w500)),
-            ]),
-          ),
-        ),
-      ],
-    );
-  }
 
-  Widget appLogo() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            textWidget(
-              text: "Welcome",
-              style: getBoldStyle(
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.w600,
-                  color: iconColor()),
-            ),
-            SizedBox(
-              height: 8.h,
-            ),
-            textWidget(
-              text: "Login to continue",
-              style: getBoldStyle(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w400,
-                  color: iconColor()),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget ContinueButton() {
+  Widget continueButton() {
     return controller.isLoading.isTrue
         ? centerLoadingIcon()
         : GtiButton(
@@ -161,7 +120,7 @@ class RequestResetPasswordScreen extends GetView<ResetPasswordController> {
             width: 300.sp,
             text: AppStrings.cont,
             color: primaryColor,
-            onTap: controller.routeToresetPassword,
+            onTap: controller.requestResetPassword,
             isLoading: controller.isLoading.value,
           );
   }
