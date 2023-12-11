@@ -463,4 +463,7 @@ class AppStrings {
   static String driversEmail = "Driver's Email";
   static String driverAddedMessage = "Driver Successfully Added";
   static String thankYouForAddingDriver = "Thank you, for adding a new driver.";
+  static String licenseNumber = "License Number";
+  static String uploadDriversLicense = "Upload Driver's License";
+  static String uploadDriversLicenseHint = "Upload License";
 }

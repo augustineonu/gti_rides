@@ -77,6 +77,7 @@ GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
       } else {
         // await apiService.getRequest(endpoint)
         await showSuccessSnackbar(message: result.message);
+        await routeService.offAllNamed(AppLinks.carRenterLanding);
 
       }
     } catch (e) {

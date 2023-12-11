@@ -39,12 +39,14 @@ dependencies:
   flutter_secure_storage: ^9.0.0
   cached_network_image: ^3.2.3
   permission_handler: ^10.4.3
+  local_auth_android: ^1.0.35
   flutter_screenutil: ^5.9.0
   socket_io_client: ^2.0.3+1
   device_info_plus: ^9.0.3
   overlay_support: ^2.1.0
   cupertino_icons: ^1.0.2
   flutter_dotenv: ^5.1.0
+  local_auth_ios: ^1.1.5
   flutter_iconly: ^1.0.2
   url_launcher: ^6.1.14
   dotted_border: ^2.1.0
@@ -65,6 +67,7 @@ dependencies:
   flutter_svg:
   get: ^4.6.5
   dio: ^5.3.2
+  google_sign_in: ^6.2.0
   
 
 dev_dependencies:

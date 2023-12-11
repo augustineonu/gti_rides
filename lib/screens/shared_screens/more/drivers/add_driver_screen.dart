@@ -69,6 +69,22 @@ class AddDriverScreen extends GetView<DriversController> {
                   hintText: AppStrings.emailHintText,
                   // controller: controller.relationshipController,
                 ),
+                const SizedBox(height: 24),
+                NormalInputTextWidget(
+                  expectedVariable: 'field',
+                  title: AppStrings.licenseNumber,
+                  hintText: AppStrings.licenseNumber,
+                  // controller: controller.relationshipController,
+                ),
+                const SizedBox(height: 24),
+                NormalInputTextWidget(
+                  expectedVariable: 'field',
+                  title: AppStrings.uploadDriversLicense,
+                  hintText: AppStrings.uploadDriversLicenseHint,
+                  readOnly: true,
+                  
+                  // controller: controller.relationshipController,
+                ),
                 const SizedBox(height: 74),
                 contButton(),
               ],
