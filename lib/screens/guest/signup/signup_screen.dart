@@ -100,7 +100,7 @@ class SignUpScreen extends GetView<SignUpController> {
   }
 
   Widget googleSignUp({void Function()? onTap}) {
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/screens/guest/Reset_password/request_reset_password_controller.dart';
 import 'package:gti_rides/screens/guest/Reset_password/reset_password_controller.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
@@ -15,13 +16,13 @@ class RequestResetPasswordBinding extends Bindings {
   @override
   void dependencies() {
     // TODO: implement dependencies
-    Get.put<ResetPasswordController>(ResetPasswordController());
+    Get.put<RequestResetPasswordController>(RequestResetPasswordController());
   }
 }
 
 TextEditingController textController = TextEditingController();
 
-class RequestResetPasswordScreen extends GetView<ResetPasswordController> {
+class RequestResetPasswordScreen extends GetView<RequestResetPasswordController> {
   const RequestResetPasswordScreen([Key? key]) : super(key: key);
 
   @override
