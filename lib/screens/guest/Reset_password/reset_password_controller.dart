@@ -95,7 +95,7 @@ class ResetPasswordController extends GetxController {
           .requestResetPassword(payload: {"user": emailOrPhoneController.text});
 
       if (result.status == "success" || result.status_code == 200) {
-        await showSuccessSnackbar(message: result.message);
+        await showSuccessSnackbar(message: result.message!);
         isLoading.value = false;
         await routeService.gotoRoute(AppLinks.verifyOtp, arguments: {
           'emailOrPhone': emailOrPhoneController.text,
@@ -126,11 +126,11 @@ class ResetPasswordController extends GetxController {
           token: accessToken.value);
 
       if (result.status == "success" || result.status_code == 200) {
-        await showSuccessSnackbar(message: result.message);
+        await showSuccessSnackbar(message: result.message!);
         await routeService.offAllNamed(AppLinks.login);
       } else {
         logger.log("error rrr: ${result.message}");
-        showErrorSnackbar(message: result.message);
+        showErrorSnackbar(message: result.message!);
       }
     } catch (e) {
       logger.log("error rrr: $e");

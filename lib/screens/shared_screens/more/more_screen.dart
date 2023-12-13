@@ -127,7 +127,7 @@ class MoreScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 textWidget(
-                    text: 'Tade Williams',
+                    text: controller.user.value.fullName,
                     textOverflow: TextOverflow.visible,
                     style: getMediumStyle(fontSize: 18.sp)
                         .copyWith(fontWeight: FontWeight.w500)),
@@ -141,8 +141,8 @@ class MoreScreen extends StatelessWidget {
           ),
           profileAvatar(
             height: 40,
-            width: 40,            imgUrl:
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ88joJfjwoaz_jWaMQhbZn2X11VHGBzWKiQg&usqp=CAU',
+            width: 40, imgUrl: controller.user.value.profilePic!,
+            // 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ88joJfjwoaz_jWaMQhbZn2X11VHGBzWKiQg&usqp=CAU',
           ),
         ],
       ),

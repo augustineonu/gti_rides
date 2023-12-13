@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:gti_rides/models/api_response_model.dart';
+import 'package:gti_rides/models/auth/token_model.dart';
 import 'package:gti_rides/services/auth_service.dart';
 import 'package:gti_rides/services/logger.dart';
 
@@ -8,7 +9,7 @@ TokenService get tokenService => Get.find();
 
 class TokenService {
   Logger logger = Logger('TokenService');
-  // Rx<Tokens> tokens = Tokens().obs;
+  Rx<TokenModel> tokens = TokenModel().obs;
   RxString accessToken = ''.obs;
   RxString refreshToken = ''.obs;
 
@@ -27,7 +28,7 @@ class TokenService {
   }
 
   Future<bool> setTokenModel(tokensJson) async {
-    // tokens.value = Tokens.fromJson(tokensJson);
+    tokens.value = TokenModel.fromJson(tokensJson);
     // come to this later #TODO: 
     // await biometricService.saveTokensData(tokens.value);
     return true;
@@ -46,13 +47,13 @@ class TokenService {
   Future<bool> getNewAccessToken() async {
     try {
       final ApiResponseModel result =
-          await authService.getNewAccessToken(refreshToken: refreshToken.value);
+          await authService.getNewAccessToken(accessToken: accessToken.value);
       if (result.status == 'error'.toLowerCase()) {
         return false;
       }
 
       await setTokenModel(result.data);
-      // setAccessToken(tokens.value.accessToken);
+      setAccessToken(tokens.value.accessToken);
       // setRefreshToken(tokens.value.refreshToken);
 
       return true;

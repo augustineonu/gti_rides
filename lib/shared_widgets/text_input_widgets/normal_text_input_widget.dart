@@ -21,6 +21,7 @@ class NormalInputTextWidget extends StatelessWidget {
   final bool? hasRichTitle;
   final String? richTitle;
   final String? richSubTitle;
+  final String? initialValue;
   final InputBorder? enabledBorder;
   final InputBorder? focusedBorder;
   final InputBorder? border;
@@ -65,10 +66,12 @@ class NormalInputTextWidget extends StatelessWidget {
       this.showCursor,
       this.errorBorder,
       this.inputFormatters,
+      this.initialValue = '',
       });
 
   @override
   Widget build(BuildContext context) {
+    //  controller!.text = initialValue!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

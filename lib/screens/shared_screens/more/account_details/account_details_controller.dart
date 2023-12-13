@@ -2,16 +2,20 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/models/user_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/image_service.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
+import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/utils/constants.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AccountDetailsController extends GetxController {
   Logger logger = Logger('AccountDetailsController');
+  Rx<UserModel> user = UserModel().obs;
+
   AccountDetailsController() {
     init();
   }
@@ -31,6 +35,8 @@ class AccountDetailsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+
+    user = userService.user;
   }
 
   void obscurePassword() => showPassword.value = !showPassword.value;
@@ -40,10 +46,11 @@ class AccountDetailsController extends GetxController {
   void goBack() => routeService.goBack();
   void routeToEmailInput() => routeService.gotoRoute(AppLinks.email);
   void routeToPhoneInput() => routeService.gotoRoute(AppLinks.phoneInput);
-  void routeToChangePassword() => routeService.gotoRoute(AppLinks.changePassword);
+  void routeToChangePassword() =>
+      routeService.gotoRoute(AppLinks.changePassword);
 
   void openCamera() {
-   final picked = imageService.pickImage(source: ImageSource.camera);
+    final picked = imageService.pickImage(source: ImageSource.camera);
   }
 
   void openGallery() {

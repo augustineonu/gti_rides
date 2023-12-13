@@ -9,6 +9,7 @@ import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
+import 'package:gti_rides/utils/helpers.dart';
 
 class InboxBinding extends Bindings {
   @override
@@ -30,7 +31,7 @@ class InboxScreen extends StatelessWidget {
     final ctrl = Get.put<InboxController>(InboxController());
 
     return Scaffold(
-      appBar: customAppBar(width),
+      appBar: customAppBar(width, ctrl),
       body: body(width),
     );
   }
@@ -107,7 +108,7 @@ class InboxScreen extends StatelessWidget {
     );
   }
 
-  PreferredSize customAppBar(double width) {
+  PreferredSize customAppBar(double width, InboxController ctrl) {
     return PreferredSize(
       preferredSize: Size(width, 280),
       child: SizedBox(
@@ -140,7 +141,7 @@ class InboxScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           textWidget(
-                              text: AppStrings.hi.trArgs(['Tade']),
+                              text: AppStrings.hi.trArgs([extractFirstName(ctrl.user.value.fullName!)]),
                               style: getRegularStyle(color: white)
                                   .copyWith(fontWeight: FontWeight.w700)),
                           SizedBox(
@@ -162,14 +163,14 @@ class InboxScreen extends StatelessWidget {
                 ),
               ),
             ),
-            startConversation(width),
+            startConversation(width, ctrl),
           ],
         ),
       ),
     );
   }
 
-  Widget startConversation(double width) {
+  Widget startConversation(double width, InboxController ctrl) {
     return Positioned(
       // top: 180.sp,
       bottom: 10.sp,
@@ -193,7 +194,7 @@ class InboxScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               textWidget(
-                  text: AppStrings.hi.trArgs(['Tade']),
+                  text: AppStrings.hi.trArgs([extractFirstName(ctrl.user.value.fullName!)]),
                   style: getRegularStyle(color: white)
                       .copyWith(fontWeight: FontWeight.w700)),
               SizedBox(

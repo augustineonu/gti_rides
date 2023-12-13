@@ -5,7 +5,7 @@ TextAlign? textAlign,
 TextOverflow ? textOverflow,
 int? maxLines,
 }) => Text(
-      text!,
+      text ?? '',
       maxLines: maxLines,
       overflow: textOverflow ?? TextOverflow.ellipsis,
       style: style,

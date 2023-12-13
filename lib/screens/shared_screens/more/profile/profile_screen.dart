@@ -28,7 +28,7 @@ class ProfileScreen extends GetView<ProfileController> {
       () => Scaffold(
           backgroundColor: backgroundColor,
           appBar: appBar(),
-          body: body(size, context)),
+          body: body(size, context, controller)),
       // }
     );
   }
@@ -47,7 +47,7 @@ class ProfileScreen extends GetView<ProfileController> {
     );
   }
 
-  Widget body(Size size, context) {
+  Widget body(Size size, context,ProfileController controller) {
     return SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 20.0.sp, vertical: 24.sp),
         child: Column(
@@ -78,9 +78,10 @@ class ProfileScreen extends GetView<ProfileController> {
                           child: Stack(
                             children: [
                               profileAvatar(
-                                localImagePath: controller.pickedImagePath.string,
-                                imgUrl:
-                                    "https://img.freepik.com/premium-vector/avatar-profile-icon_188544-4755.jpg",
+                                localImagePath:
+                                    controller.pickedImagePath.string,
+                                imgUrl: controller.user.value.profilePic!,
+                                // "https://img.freepik.com/premium-vector/avatar-profile-icon_188544-4755.jpg",
                                 height: 65.sp,
                                 width: 65.sp,
                                 boxHeight: 65.sp,
@@ -99,20 +100,32 @@ class ProfileScreen extends GetView<ProfileController> {
                 ),
               ),
             ),
-            NormalInputTextWidget(
-              expectedVariable: 'fullName',
-              title: AppStrings.fullName,
-              hintText: AppStrings.fullNameHint,
-              controller: controller.fullNameController,
-            ),
-            SizedBox(
-              height: 20.sp,
-            ),
-            NormalInputTextWidget(
-              expectedVariable: 'email',
-              title: AppStrings.email,
-              hintText: AppStrings.email,
-              controller: controller.emailController,
+            Form(
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              key: controller.updateFormKey,
+              child: Column(
+                children: [
+                  NormalInputTextWidget(
+                    expectedVariable: 'fullName',
+                    title: AppStrings.fullName,
+                    hintText: AppStrings.fullNameHint,
+                    controller: controller.fullNameController..text = controller.user.value.fullName!,
+                    initialValue: controller.user.value.fullName,
+                  ),
+                  SizedBox(
+                    height: 20.sp,
+                  ),
+                  NormalInputTextWidget(
+                    expectedVariable: 'email',
+                    title: AppStrings.email,
+                    hintText: AppStrings.email,
+                    controller: controller.emailController..text = controller.user.value.emailAddress!,
+                    readOnly: true,
+                    textInputType: TextInputType.none,
+                    initialValue: controller.user.value.emailAddress,
+                  ),
+                ],
+              ),
             ),
             SizedBox(
               height: size.height * 0.08,
@@ -211,7 +224,7 @@ class ProfileScreen extends GetView<ProfileController> {
             width: 300.sp,
             text: AppStrings.saveDetails,
             // color: secondaryColor,
-            // onTap: controller.routeToPhoneVerification,
+            onTap: controller.updateProfile,
             isLoading: controller.isLoading.value,
           );
   }

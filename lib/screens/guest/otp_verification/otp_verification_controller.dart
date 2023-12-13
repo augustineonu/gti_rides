@@ -85,17 +85,17 @@ class OtpVerificationController extends GetxController {
       });
       if (result.status == "success" || result.status_code == 200) {
         if (isResetPassword.value) {
-          await showSuccessSnackbar(message: result.message);
+          await showSuccessSnackbar(message: result.message!);
           pinController.clear();
           await routeService.gotoRoute(AppLinks.resetPassword,
               arguments: {"accessToken": result.data!['accessToken']});
           isLoading.value = false;
         } else {
-          await showSuccessSnackbar(message: result.message);
+          await showSuccessSnackbar(message: result.message!);
           routeService.offAllNamed(AppLinks.login);
         }
       } else {
-        showErrorSnackbar(message: result.message);
+        showErrorSnackbar(message: result.message!);
       }
     } catch (e) {
       logger.log("error: $e");
@@ -113,10 +113,10 @@ class OtpVerificationController extends GetxController {
       final result =
           await authService.resendOTP(payload: {"user": emailOrPhone});
       if (result.status == "success" || result.status_code == 200) {
-        await showSuccessSnackbar(message: result.message);
+        await showSuccessSnackbar(message: result.message!);
         // routeService.offAllNamed(AppLinks.login);
       } else {
-        showErrorSnackbar(message: result.message);
+        showErrorSnackbar(message: result.message!);
       }
     } catch (e) {
       logger.log("error: $e");

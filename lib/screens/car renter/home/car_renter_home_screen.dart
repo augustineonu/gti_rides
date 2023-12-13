@@ -13,6 +13,7 @@ import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
+import 'package:gti_rides/utils/helpers.dart';
 import 'package:iconsax/iconsax.dart';
 
 class CarRenterBinding extends Bindings {
@@ -93,16 +94,14 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           profileAvatar(
-            height: 40,
-            width: 40,
-            imgUrl:
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ88joJfjwoaz_jWaMQhbZn2X11VHGBzWKiQg&usqp=CAU',
-          ),
+              height: 40, width: 40, imgUrl: ctrl.user.value.profilePic!
+              // 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ88joJfjwoaz_jWaMQhbZn2X11VHGBzWKiQg&usqp=CAU',
+              ),
           switchProfileWidget(
               size: size,
               title: AppStrings.carRenter,
               imageUrl: ImageAssets.renter,
-              onTapCarOwner: ctrl.routeToCarOwnerLanding),
+              onTapCarOwner: ctrl.switchProfileToOwner),
           Padding(
             padding: const EdgeInsets.only(right: 20),
             child: Icon(
@@ -124,7 +123,7 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           // mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            headerText(),
+            headerText(ctrl),
             discoverCity(onTap: () => ctrl.routeToSearchCity()),
             howGtiWorksCard(onTap: () {}, imageUrl: ImageAssets.ladyPick),
             textWidget(
@@ -272,6 +271,26 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
     );
   }
 
+  Widget headerText(CarRenterHomeController ctrl) {
+    return Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              textWidget(
+                  text: AppStrings.welcomeBack.trArgs(
+                      [extractFirstName(ctrl.user.value.fullName!)]),
+                  style: getRegularStyle()
+                      .copyWith(fontWeight: FontWeight.w400)),
+              SizedBox(
+                width: 5.sp,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 3),
+                child: SvgPicture.asset(ImageAssets.wavingHand),
+              ),
+            ],
+          );
+  }
+
   Widget discoverCity({void Function()? onTap}) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 15.sp),
@@ -322,23 +341,7 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
     );
   }
 
-  Widget headerText() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        textWidget(
-            text: AppStrings.welcomeBack.trArgs(['Tade']),
-            style: getRegularStyle().copyWith(fontWeight: FontWeight.w400)),
-        SizedBox(
-          width: 5.sp,
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 3),
-          child: SvgPicture.asset(ImageAssets.wavingHand),
-        ),
-      ],
-    );
-  }
+  
 }
 
 Widget appBar(Size? size, {required CarRenterHomeController controller}) {

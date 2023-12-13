@@ -68,7 +68,7 @@ class AccountDetailsScreen extends GetView<AccountDetailsController> {
             ),
             accountDetailsWidget(
               title: AppStrings.email,
-              body: 'Tadewilliams@gmail.com',
+              body: controller.user.value.emailAddress!,
               // onTap: controller.routeToEmailInput
             ),
           ],
@@ -81,7 +81,7 @@ class AccountDetailsScreen extends GetView<AccountDetailsController> {
         divider(color: borderColor),
         accountDetailsWidget(
             title: AppStrings.mobileNumber,
-            body: '+234823456778',
+            body: controller.user.value.phoneNumber!,
             onTap: controller.routeToPhoneInput),
         SizedBox(
           height: size.height * 0.08,
@@ -101,7 +101,7 @@ class AccountDetailsScreen extends GetView<AccountDetailsController> {
           children: [
             textWidget(text: title, style: getRegularStyle(color: black)),
             textWidget(
-                text: body,
+                text: body ?? '',
                 style: getRegularStyle(fontSize: 12.sp, color: grey2)),
           ],
         ),

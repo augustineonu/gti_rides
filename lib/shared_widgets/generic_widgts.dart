@@ -173,7 +173,7 @@ Widget imageAvatar({
 }
 
 Widget profileAvatar({
-  required String imgUrl,
+  String imgUrl = "https://img.freepik.com/premium-vector/avatar-profile-icon_188544-4755.jpg",
   double? height,
   double? width,
   double? boxHeight,
@@ -285,6 +285,7 @@ Widget imageWidget({
         child: Center(
           child: CircularProgressIndicator(
             color: Colors.blue,
+          value: height,
           ),
         ),
       ),

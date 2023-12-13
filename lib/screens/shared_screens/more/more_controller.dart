@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/models/user_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/logger.dart';
+import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/utils/constants.dart';
 
@@ -9,12 +11,17 @@ import '../../../services/route_service.dart';
 
 class MoreController extends GetxController {
   Logger logger = Logger('MoreController');
+
+  Rx<UserModel> user = UserModel().obs;
+
   MoreController() {
     init();
   }
 
   void init() {
-    logger.log('Controller initialized');
+    logger.log('MoreController initialized');
+    user = userService.user;
+    logger.log("User:: $user");
   }
 
   // late Timer timer;

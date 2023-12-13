@@ -5,18 +5,25 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/models/renter/recently_viewed_car_model.dart';
+import 'package:gti_rides/models/user_model.dart';
 
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/logger.dart';
+import 'package:gti_rides/services/renter_service.dart';
+import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
+import 'package:gti_rides/utils/utils.dart';
 
 import '../../../services/route_service.dart';
 
 class CarRenterHomeController extends GetxController {
-  Logger logger = Logger('LoginController');
+  Logger logger = Logger('CarRenterHomeController');
+  Rx<UserModel> user = UserModel().obs;
+
   late Timer timer;
   RxInt currentIndex = 0.obs;
 
+  RxBool isLoading = false.obs;
   RxBool isDone = false.obs;
   RxBool showPassword = false.obs;
   Rx<String> exampleText = "example".obs;
@@ -31,7 +38,10 @@ class CarRenterHomeController extends GetxController {
   }
 
   void init() {
-    logger.log('Controller initialized');
+    logger.log('CarRenterHomeController initialized');
+    user = userService.user;
+
+    logger.log("USER: ${user.value.toJson()}");
   }
 
   onPageChanged(int index) {}
@@ -92,6 +102,28 @@ class CarRenterHomeController extends GetxController {
       routeService.offAllNamed(AppLinks.carOwnerLanding);
   void routeToCarSelectionResult() =>
       routeService.gotoRoute(AppLinks.carSelectionResult);
+
+
+
+  Future<void> switchProfileToOwner() async {
+    isLoading.value = true;
+    try {
+      final result =
+          await renterService.switchProfile(payload: {"userType": "renter"});
+
+      if (result.status == "success" || result.status_code == 200) {
+        await showSuccessSnackbar(message: result.message!);
+        await routeService.offAllNamed(AppLinks.carOwnerLanding);
+      } else {
+        await showErrorSnackbar(message: result.message!);
+      }
+    } catch (e) {
+      logger.log("error rrr: $e");
+      showErrorSnackbar(message: e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
 
   @override
   void dispose() {

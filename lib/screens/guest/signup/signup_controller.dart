@@ -106,13 +106,13 @@ class SignUpController extends GetxController
       // logger.log(result.message.toString());
 
       if (result.status == 'success' || result.status_code == 200) {
-        await showSuccessSnackbar(message: result.message);
+        await showSuccessSnackbar(message: result.message!);
 
         await routeService.gotoRoute(AppLinks.verifyOtp, arguments: {
           'emailOrPhone': signUpRequest.emailAddress,
         });
       } else {
-        await showErrorSnackbar(message: result.message);
+        await showErrorSnackbar(message: result.message!);
       }
     } catch (e) {
       logger.log("error rrr: $e");
@@ -136,11 +136,11 @@ class SignUpController extends GetxController
                     socialId: result["googleId"])
                 .toJson());
         if (response.status == "success" || response.status_code == 200) {
-          await showSuccessSnackbar(message: response.message);
+          await showSuccessSnackbar(message: response.message!);
           await routeService.offAllNamed(AppLinks.carRenterLanding);
         } else {
           logger.log("error: ${response.message}");
-          await showErrorSnackbar(message: response.message);
+          await showErrorSnackbar(message: response.message!);
         }
       }
     } catch (e) {
