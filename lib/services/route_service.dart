@@ -63,9 +63,18 @@ class RouteService extends NavigatorObserver {
     return Get.toNamed(route, arguments: arguments);
   }
 
+  Future<dynamic>? getOff(Widget Function() page, {Object? arguments}) {
+    logger.log('getting off one route and replacing a new route $page');
+    return Get.off(page, arguments: arguments);
+  }
   Future<dynamic>? offAllNamed(String route, {Object? arguments}) {
     logger.log('getting off all routes and navigating to $route');
     return Get.offAllNamed(route, arguments: arguments);
+  }
+
+  Future<dynamic>? offAllNamedUntill(String route, {Object? arguments}) {
+    logger.log("getting off all routes and navigating to $route");
+    return Get.offNamedUntil(route, (Route<dynamic> route) => route.isFirst);
   }
 
   Future<dynamic>? openScreen(Widget page,

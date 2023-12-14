@@ -29,6 +29,7 @@ import 'package:gti_rides/screens/guest/otp_verification/otp_verification.dart';
 import 'package:gti_rides/screens/guest/signup/signup_screen.dart';
 import 'package:gti_rides/screens/guest/splash/splash_screen.dart';
 import 'package:gti_rides/screens/shared_screens/more/account_details/account_details_screen.dart';
+import 'package:gti_rides/screens/shared_screens/more/account_details/account_verification/change_password/chancge_password_otp.dart';
 import 'package:gti_rides/screens/shared_screens/more/account_details/account_verification/change_password/change_password_screen.dart';
 import 'package:gti_rides/screens/shared_screens/more/account_details/account_verification/email/email_imput_screen.dart';
 import 'package:gti_rides/screens/shared_screens/more/account_details/account_verification/email/email_verification.dart';
@@ -267,6 +268,10 @@ class AppRoutes {
     GetPage(
       name: AppLinks.addDriver,
       page: () => const AddDriverScreen(),
+    ),
+    GetPage(
+      name: AppLinks.changePasswordOtp,
+      page: () => const ChangePasswordOtpScreen(),
     ),
   ];
 }

@@ -176,42 +176,42 @@ class ApiService {
     required FormData data,
   }) async {
     try {
-      logger.log("PATCH REQUEST DATA:: $data");
+      logger.log("PATCH REQUEST DATA:: ${data.fields.toString()}");
       late Response response;
       response = await _dio.put(
         endpoint,
         data: data,
         options: Options(
           headers: {
-            // 'Authorization': 'Bearer ${tokenService.accessToken.value}',
-            'Content-Type': 'image/png'
+            'Authorization': 'Bearer ${tokenService.accessToken.value}',
+            // 'Content-Type': 'image/png'
           },
         ),
       );
       logger.log("PATCH REQUEST RESPONSE:: $response");
       final ApiResponseModel apiResponse =
           ApiResponseModel.fromJson(response.data);
-      // if (!apiResponse.status || apiResponse.statusCode == 401) {
-      //   bool newAccessTokenResult = await tokenService.getNewAccessToken();
-      //   if (!newAccessTokenResult) {
-      //     logger.log('Going to welcome screen');
-      //     routeService.offAllNamed(AppLinks.welcomeBack);
-      //     return;
-      //   }
-      //   response = await _dio.put(
-      //     endpoint,
-      //     data: data,
-      //     options: Options(
-      //       headers: {
-      //         'Authorization': 'Bearer ${tokenService.accessToken.value}',
-      //         'Content-Type': 'image/png'
-      //       },
-      //     ),
-      //   );
-      // }
+      if (apiResponse.status != "success" || apiResponse.status_code == 401) {
+        bool newAccessTokenResult = await tokenService.getNewAccessToken();
+        if (!newAccessTokenResult) {
+          logger.log('Going to welcome screen');
+          routeService.offAllNamed(AppLinks.login);
+          return;
+        }
+        response = await _dio.put(
+          endpoint,
+          data: data,
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer ${tokenService.accessToken.value}',
+              'Content-Type': 'image/png'
+            },
+          ),
+        );
+      }
       return response.data;
     } on DioException catch (e) {
-      logger.log("POST REQUEST ERROR ($endpoint) :: ${e.response?.data}");
+      logger.log("PATCH REQUEST ERROR ($endpoint) :: ${e.response?.data}");
       if (e.response?.data != null) {
         return e.response?.data;
       }

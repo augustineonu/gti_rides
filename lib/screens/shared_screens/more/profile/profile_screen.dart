@@ -109,7 +109,7 @@ class ProfileScreen extends GetView<ProfileController> {
                     expectedVariable: 'fullName',
                     title: AppStrings.fullName,
                     hintText: AppStrings.fullNameHint,
-                    controller: controller.fullNameController..text = controller.user.value.fullName!,
+                    controller: controller.fullNameController,
                     initialValue: controller.user.value.fullName,
                   ),
                   SizedBox(
@@ -119,7 +119,7 @@ class ProfileScreen extends GetView<ProfileController> {
                     expectedVariable: 'email',
                     title: AppStrings.email,
                     hintText: AppStrings.email,
-                    controller: controller.emailController..text = controller.user.value.emailAddress!,
+                    controller: controller.emailController,
                     readOnly: true,
                     textInputType: TextInputType.none,
                     initialValue: controller.user.value.emailAddress,
@@ -150,7 +150,7 @@ class ProfileScreen extends GetView<ProfileController> {
                     radius: 80,
                     imgUrl:
                         "https://img.freepik.com/premium-vector/avatar-profile-icon_188544-4755.jpg",
-                    localImagePath: controller.pickedImagePath.string,
+                    localImagePath: controller.pickedImagePath.value.isNotEmpty ? controller.pickedImagePath.value : null,
                     height: 65.sp,
                     width: 65.sp,
                   ),

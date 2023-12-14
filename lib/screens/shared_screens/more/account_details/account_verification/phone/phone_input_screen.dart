@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -22,29 +23,37 @@ class PhoneInputScreen extends StatelessWidget {
         appBar: appBar(controller),
         body: Padding(
           padding: const EdgeInsets.all(20.0),
-          child: Column(
-            // crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              NormalInputTextWidget(
-                expectedVariable: 'phone',
-                title: AppStrings.inputPhoneNumber,
-                hintText: AppStrings.phoneHintText,
-                textInputType: TextInputType.phone,
-                controller: controller.phoneController,
-              ),
-              SizedBox(
-                height: 30.sp,
-              ),
-              controller.isLoading.isTrue
-                  ? centerLoadingIcon()
-                  : GtiButton(
-                      height: 40.sp,
-                      width: size.width.sp,
-                      text: AppStrings.cont,
-                      onTap: controller.routeToVerifyPhoneNumber,
-                      isLoading: controller.isLoading.value,
-                    ),
-            ],
+          child: Form(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            key: controller.phoneFormKey,
+            child: Column(
+              // crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                NormalInputTextWidget(
+                  expectedVariable: 'phone',
+                  title: AppStrings.inputPhoneNumber,
+                  hintText: AppStrings.phoneHintText,
+                  textInputType: TextInputType.phone,
+                  controller: controller.phoneController,
+                     inputFormatters: [
+                      LengthLimitingTextInputFormatter(11),
+                    ],
+                ),
+                SizedBox(
+                  height: 30.sp,
+                ),
+                controller.isLoading.isTrue
+                    ? centerLoadingIcon()
+                    : GtiButton(
+                        height: 40.sp,
+                        width: size.width.sp,
+                        text: AppStrings.cont,
+                        onTap: controller.requestOtp,
+                        
+                        isLoading: controller.isLoading.value,
+                      ),
+              ],
+            ),
           ),
         ));
     // }

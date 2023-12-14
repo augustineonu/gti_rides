@@ -1,33 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:gti_rides/screens/shared_screens/more/account_details/account_verification/acount_verification_controller.dart';
-import 'package:gti_rides/screens/guest/otp_verification/otp_verification_controller.dart';
 import 'package:gti_rides/screens/guest/otp_verification/otp_widgets/otp_input.dart';
-import 'package:gti_rides/screens/shared_screens/more/account_details/account_verification/phone/phone_verification_controller.dart';
+import 'package:gti_rides/screens/shared_screens/more/account_details/account_verification/change_password/change_password_controller.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
-import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
 
-class PhoneVerificationScreen extends GetView<PhoneVerificationController> {
-  const PhoneVerificationScreen([Key? key]) : super(key: key);
+class ChangePasswordOtpScreen extends GetView<ChangePhoneController> {
+  const ChangePasswordOtpScreen([Key? key]) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
-    final controller =
-        Get.put<PhoneVerificationController>(PhoneVerificationController());
-    return Obx(() => Scaffold(
-          resizeToAvoidBottomInset: false,
-          backgroundColor: backgroundColor,
-          appBar: appbar(),
-          body: body(context, size),
-        ));
+    final controller = Get.put<ChangePhoneController>(ChangePhoneController());
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      backgroundColor: backgroundColor,
+      appBar: appbar(),
+      body: body(context, size),
+    );
   }
 
   Widget body(BuildContext context, Size size) {
@@ -56,7 +51,7 @@ class PhoneVerificationScreen extends GetView<PhoneVerificationController> {
                 ),
                 textWidget(
                   text:
-                      AppStrings.pleaseInputOtpPhone.trArgs([controller.email]),
+                      AppStrings.pleaseInputOtpPhone.trArgs([controller.phone]),
                   textOverflow: TextOverflow.visible,
                   style: getLightStyle(fontSize: 12.sp, color: grey2)
                       .copyWith(fontWeight: FontWeight.w300),
@@ -112,7 +107,7 @@ class PhoneVerificationScreen extends GetView<PhoneVerificationController> {
         TextButton(
           onPressed: () {
             if (controller.isCountDownFinished.value) {
-              controller.resendOtp(emailOrPhone: controller.email);
+              controller.resendOtp(emailOrPhone: controller.phone);
             } else {}
           },
           child: RichText(
@@ -147,7 +142,7 @@ class PhoneVerificationScreen extends GetView<PhoneVerificationController> {
             onTap: !controller.isDoneIputtingPin.value
                 ? () {}
                 : () => controller.verifyOtp(
-                    emailOrPhone: controller.email,
+                    emailOrPhone: controller.phone,
                     otp: controller.pinController.text),
             isLoading: controller.isLoading.value,
           );

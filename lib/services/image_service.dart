@@ -12,23 +12,29 @@ class ImageService {
 
   RxString imagePath = ''.obs;
 
-  Future<ImageResponse> pickImage({required ImageSource source}) async {
-    try {
-      final ImagePicker picker = ImagePicker();
-      final XFile? pickedFile = await picker.pickImage(
-        source: source,
-        imageQuality: 25,
-        // Reduce Image quality
-        // maxHeight: 500,
-        // reduce the image size
-        // maxWidth: 500
-      );
-      Uint8List selectedImageBytes = await pickedFile!.readAsBytes();
-      String selectedImagePath = pickedFile.path;
-      return ImageResponse(
-          imageBytes: selectedImageBytes, imagePath: selectedImagePath);
-    } catch (e) {
-      rethrow;
+Future<ImageResponse?> pickImage({required ImageSource source}) async {
+  try {
+    final ImagePicker picker = ImagePicker();
+    final XFile? pickedFile = await picker.pickImage(
+      source: source,
+      imageQuality: 25,
+    );
+
+    if (pickedFile == null) {
+      // User canceled image selection
+      return null;
     }
+
+    Uint8List selectedImageBytes = await pickedFile.readAsBytes();
+    String selectedImagePath = pickedFile.path;
+    return ImageResponse(
+      // imageBytes: selectedImageBytes,
+      imagePath: selectedImagePath,
+    );
+  } catch (e) {
+    rethrow;
   }
+}
+
+
 }

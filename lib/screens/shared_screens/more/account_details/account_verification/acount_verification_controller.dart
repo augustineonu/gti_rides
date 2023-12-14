@@ -1,11 +1,16 @@
 import 'dart:async';
-
+import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/models/api_response_model.dart';
 import 'package:gti_rides/models/banks_model.dart';
+import 'package:gti_rides/models/user_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/logger.dart';
+import 'package:gti_rides/services/more_service.dart';
 import 'package:gti_rides/services/route_service.dart';
+import 'package:gti_rides/services/user_service.dart';
+import 'package:gti_rides/utils/utils.dart';
 
 class AccountVerificationController extends GetxController {
   Logger logger = Logger('OTPVerificationController');
@@ -17,12 +22,15 @@ class AccountVerificationController extends GetxController {
   Duration myDuration = Duration(days: 5);
   final TextEditingController pinController = TextEditingController();
   TextEditingController emailController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
+  TextEditingController phoneController =
+      TextEditingController(text: userService.user.value.phoneNumber);
   TextEditingController oldPasswordController = TextEditingController();
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
 
-GlobalKey<FormState> emailVerificationFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> emailVerificationFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> phoneFormKey = GlobalKey<FormState>();
+
   final FocusNode focus = FocusNode();
 
   AccountVerificationController() {
@@ -44,8 +52,48 @@ GlobalKey<FormState> emailVerificationFormKey = GlobalKey<FormState>();
     super.onInit();
   }
 
+  Future<void> requestOtp() async {
+    if (!phoneFormKey.currentState!.validate()) {
+      return;
+    }
+    ApiResponseModel result;
+    ApiResponseModel response;
+    try {
+      var formData = dio.FormData.fromMap({
+        "phoneNumber": phoneController.text,
+      });
+      response = await userService.updateProfile(payload: formData);
+      if (response.status == "success") {
+        result = await moreService
+            .resendOtp(payload: {"user": userService.user.value.emailAddress});
 
-  
+        if (result.message == "success" || result.status_code == 200) {
+          await showSuccessSnackbar(message: "Kindly verifyfy OTP to continue");
+          logger.log("refresh user details ${response.data.toString()}");
+          final UserModel userModel = UserModel.fromJson(response.data[0]);
+          userService.setCurrentUser(userModel.toJson());
+          
+          await routeService.gotoRoute(AppLinks.phoneOtp,
+              arguments: {'email': userService.user.value.emailAddress});
+          // await routeService.getOff(
+          //   AppLinks.more,
+          // );
+        } else {
+          await showErrorSnackbar(message: result.message!);
+          logger.log("error requesting OTP${result.message!}");
+        }
+      } else {
+        await showErrorSnackbar(message: response.message!);
+        logger.log("error requesting OTP${response.message!}");
+      }
+    } catch (e) {
+      logger.log("error : $e");
+      showErrorSnackbar(message: e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   void goBack() => routeService.goBack();
   void onFocusChange() => update();
   void routeToVerifyEmail() => routeService.gotoRoute(AppLinks.emailOtp);

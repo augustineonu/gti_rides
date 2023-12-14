@@ -25,6 +25,7 @@ class AccountDetailsController extends GetxController {
   }
 
   TextEditingController fullNameController = TextEditingController();
+
   RxBool isDone = false.obs;
   RxBool showPassword = false.obs;
   RxBool isLoading = false.obs;
@@ -56,6 +57,8 @@ class AccountDetailsController extends GetxController {
   void openGallery() {
     imageService.pickImage(source: ImageSource.gallery);
   }
+
+
 
   @override
   void dispose() {

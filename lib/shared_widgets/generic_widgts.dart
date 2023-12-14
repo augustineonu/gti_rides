@@ -285,7 +285,7 @@ Widget imageWidget({
         child: Center(
           child: CircularProgressIndicator(
             color: Colors.blue,
-          value: height,
+          value: 50,
           ),
         ),
       ),
