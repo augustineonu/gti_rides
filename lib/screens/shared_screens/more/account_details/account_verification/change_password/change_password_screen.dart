@@ -70,7 +70,7 @@ class ChangePasswordScreen extends GetView<ChangePhoneController> {
                     onTap: () => controller.obscureConfirmPassword(),
                   ),
                   SizedBox(height: size.height * 0.08),
-                  ContinueButton(),
+                  continueButton(),
                 ],
               ),
             ),
@@ -96,60 +96,10 @@ class ChangePasswordScreen extends GetView<ChangePhoneController> {
     );
   }
 
-  Widget clickToResendCode() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        TextButton(
-          onPressed: () {},
-          child: RichText(
-            text: TextSpan(children: <InlineSpan>[
-              TextSpan(
-                  text: AppStrings.resendOtp,
-                  style: getRegularStyle(color: primaryColor)),
-              TextSpan(
-                  text: "00:00",
-                  style: getRegularStyle(color: greyShade1)
-                      .copyWith(fontWeight: FontWeight.w500)),
-            ]),
-          ),
-        ),
-      ],
-    );
-  }
 
-  Widget appLogo() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            textWidget(
-              text: "Welcome",
-              style: getBoldStyle(
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.w600,
-                  color: iconColor()),
-            ),
-            SizedBox(
-              height: 8.h,
-            ),
-            textWidget(
-              text: "Login to continue",
-              style: getBoldStyle(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w400,
-                  color: iconColor()),
-            ),
-          ],
-        ),
-        // SvgPicture.asset(ImageAssets.appLogo),
-      ],
-    );
-  }
 
-  Widget ContinueButton() {
+
+  Widget continueButton() {
     return controller.isLoading.isTrue
         ? centerLoadingIcon()
         : GtiButton(

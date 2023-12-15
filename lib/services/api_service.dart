@@ -184,7 +184,6 @@ class ApiService {
         options: Options(
           headers: {
             'Authorization': 'Bearer ${tokenService.accessToken.value}',
-            // 'Content-Type': 'image/png'
           },
         ),
       );

@@ -147,7 +147,7 @@ class PhoneVerificationScreen extends GetView<PhoneVerificationController> {
             onTap: !controller.isDoneIputtingPin.value
                 ? () {}
                 : () => controller.verifyOtp(
-                    emailOrPhone: controller.email,
+                    // emailOrPhone: controller.email,
                     otp: controller.pinController.text),
             isLoading: controller.isLoading.value,
           );

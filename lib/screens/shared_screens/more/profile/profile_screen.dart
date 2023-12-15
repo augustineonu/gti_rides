@@ -52,7 +52,7 @@ class ProfileScreen extends GetView<ProfileController> {
         padding: EdgeInsets.symmetric(horizontal: 20.0.sp, vertical: 24.sp),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             textWidget(
                 text: AppStrings.yourPersonalDetails,

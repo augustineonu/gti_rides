@@ -83,11 +83,32 @@ class ProfileController extends GetxController {
     isLoading.value = true;
 
     try {
-      var formData = dio.FormData.fromMap({
-        "fullName": fullNameController.text,
-        'file': await dio.MultipartFile.fromFile(pickedImagePath!.value,
-            filename: pickedImagePath!.value)
-      });
+      Future<dio.FormData> constructFormData() async {
+        var formData = dio.FormData(
+            //   {
+            //   "fullName": fullNameController.text,
+            //   'file': await dio.MultipartFile.fromFile(pickedImagePath.value,
+            //       filename: pickedImagePath.value)
+            // }
+            );
+        // Check if fullName is not empty before adding it to formData
+        if (fullNameController.text.isNotEmpty) {
+          formData.fields.add(MapEntry('fullName', fullNameController.text));
+        }
+        // Check if imagePath is not empty before adding the image file to formData
+        if (pickedImagePath.value.isNotEmpty) {
+          formData.files.add(MapEntry(
+            'file',
+            await dio.MultipartFile.fromFile(
+              pickedImagePath.value,
+              filename: pickedImagePath.value,
+            ),
+          ));
+        }
+        return formData;
+      }
+
+      final formData = await constructFormData();
       final result = await userService.updateProfile(payload: formData);
 
       if (result.status == "success" || result.status_code == 200) {
@@ -97,9 +118,12 @@ class ProfileController extends GetxController {
           logger.log("refresh user details ${response.data.toString()}");
           final UserModel userModel = UserModel.fromJson(response.data[0]);
           userService.setCurrentUser(userModel.toJson());
+          routeService.goBack;
         }
-        routeService.offAllNamed(AppLinks.more);
+        // routeService.offAllNamed(AppLinks.more);
+        routeService.goBack;
       } else {
+        logger.log("error updating user: ${result.message}");
         await showErrorSnackbar(message: result.message!);
         routeService.goBack;
       }

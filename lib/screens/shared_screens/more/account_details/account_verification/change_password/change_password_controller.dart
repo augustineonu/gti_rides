@@ -174,11 +174,12 @@ class ChangePhoneController extends GetxController {
           .resendOTP(payload: {"user": user.value.emailAddress});
       if (result.status == "success" || result.status_code == 200) {
         await showSuccessSnackbar(message: result.message!);
-        // routeService.getOff(() => ChangePasswordOtpScreen(), arguments: {
-        //   "oldPassword": oldPasswordController.text,
-        //   "newPassword": newPasswordController.text
-        // });
+        routeService.getOff(() => const ChangePasswordOtpScreen(), arguments: {
+          "oldPassword": oldPasswordController.text,
+          "newPassword": newPasswordController.text
+        });
       } else {
+        logger.log("error resending OTP ${result.message!}");
         showErrorSnackbar(message: result.message!);
       }
     } catch (e) {
@@ -239,6 +240,8 @@ class ChangePhoneController extends GetxController {
     super.dispose();
     timer.cancel();
     pinController.dispose();
+      newPasswordController.clear();
+    oldPasswordController.clear();
     focus
       ..removeListener(onFocusChange)
       ..dispose();
@@ -248,6 +251,8 @@ class ChangePhoneController extends GetxController {
   void onClose() {
     // TODO: implement onClose
     super.onClose();
+     newPasswordController.clear();
+    oldPasswordController.clear();
     timer.cancel();
   }
 }

@@ -54,10 +54,20 @@ class UserService {
       rethrow;
     }
   }
+  Future<ApiResponseModel> changePassword({required Map  payload}) async {
+    try {
+      final result = await apiService.putRequest(
+        endpoint: '/user/profile/changePassword',
+        data: payload,
+      );
+
+      return ApiResponseModel.fromJson(result);
+    } catch (err) {
+      logger.log("Login Error: $err");
+      rethrow;
+    }
+  }
 
 
-  // Agent? getCurrentAgentModel() {
-  //   return agentModel.value;
-  // }
 
 }

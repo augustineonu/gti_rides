@@ -86,6 +86,7 @@ class LoginController extends GetxController
       } else {
         tokenService.setTokenModel(result.data!);
         tokenService.setAccessToken(result.data!["accessToken"]);
+        logger.log("set token:: ${result.data!["accessToken"]}");
 
         //
         final response = await authService.getProfile();

@@ -3,20 +3,22 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/guest/otp_verification/otp_widgets/otp_input.dart';
 import 'package:gti_rides/screens/shared_screens/more/account_details/account_verification/change_password/change_password_controller.dart';
+import 'package:gti_rides/screens/shared_screens/more/account_details/account_verification/change_password/change_password_otp_controller.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
 
-class ChangePasswordOtpScreen extends GetView<ChangePhoneController> {
+class ChangePasswordOtpScreen extends GetView<ChangePasswordOtpController> {
   const ChangePasswordOtpScreen([Key? key]) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
-    final controller = Get.put<ChangePhoneController>(ChangePhoneController());
+    final controller =
+        Get.put<ChangePasswordOtpController>(ChangePasswordOtpController());
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: backgroundColor,
@@ -36,7 +38,7 @@ class ChangePasswordOtpScreen extends GetView<ChangePhoneController> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 textWidget(
-                  text: AppStrings.verifyPhoneNumber,
+                  text: AppStrings.verifyEmail,
                   textOverflow: TextOverflow.visible,
                   style: getBoldStyle(
                           fontSize: 24.sp,
@@ -50,8 +52,8 @@ class ChangePasswordOtpScreen extends GetView<ChangePhoneController> {
                   height: 8.sp,
                 ),
                 textWidget(
-                  text:
-                      AppStrings.pleaseInputOtpPhone.trArgs([controller.phone]),
+                  text: AppStrings.pleaseInputOtpEmail
+                      .trArgs([controller.user.value.emailAddress!]),
                   textOverflow: TextOverflow.visible,
                   style: getLightStyle(fontSize: 12.sp, color: grey2)
                       .copyWith(fontWeight: FontWeight.w300),
@@ -107,7 +109,8 @@ class ChangePasswordOtpScreen extends GetView<ChangePhoneController> {
         TextButton(
           onPressed: () {
             if (controller.isCountDownFinished.value) {
-              controller.resendOtp(emailOrPhone: controller.phone);
+              controller.resendOtp(
+                  emailOrPhone: controller.user.value.emailAddress!);
             } else {}
           },
           child: RichText(
@@ -142,7 +145,7 @@ class ChangePasswordOtpScreen extends GetView<ChangePhoneController> {
             onTap: !controller.isDoneIputtingPin.value
                 ? () {}
                 : () => controller.verifyOtp(
-                    emailOrPhone: controller.phone,
+                    // emailOrPhone: controller.phone,
                     otp: controller.pinController.text),
             isLoading: controller.isLoading.value,
           );

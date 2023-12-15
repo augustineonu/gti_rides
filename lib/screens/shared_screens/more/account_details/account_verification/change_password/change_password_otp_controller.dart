@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:gti_rides/models/api_response_model.dart';
 import 'package:gti_rides/models/user_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/auth_service.dart';
@@ -11,10 +10,9 @@ import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/services/token_service.dart';
 import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/utils/utils.dart';
-import 'package:dio/dio.dart' as dio;
 
-class PhoneVerificationController extends GetxController {
-  Logger logger = Logger('PhoneVerificationController');
+class ChangePasswordOtpController extends GetxController {
+  Logger logger = Logger('ChangePasswordOtpController');
   RxBool isLoading = false.obs;
   RxBool isDoneIputtingPin = false.obs;
   RxBool isCountDownFinished = false.obs;
@@ -26,19 +24,19 @@ class PhoneVerificationController extends GetxController {
   final FocusNode focus = FocusNode();
   Rx<UserModel> user = UserModel().obs;
 
-  String email = '';
-  String newPhoneNumber = '';
+  String oldPassword = '';
+  String newPassword = '';
   // RxBool isResetPassword = false.obs;
 
   late Timer timer;
   RxString countdownText = '2:00'.obs;
 
-  PhoneVerificationController() {
+  ChangePasswordOtpController() {
     init();
   }
 
   void init() {
-    logger.log('Controller initialized');
+    logger.log('ChangePasswordOtpController initialized');
     load();
   }
 
@@ -56,13 +54,13 @@ class PhoneVerificationController extends GetxController {
     // Access the arguments using Get.arguments
     Map<String, dynamic>? arguments = Get.arguments;
 
-    if (arguments != null && arguments.containsKey('email')) {
-      email = arguments['email'];
-      newPhoneNumber = arguments['newPhoneNumber'];
+    if (arguments != null) {
+      oldPassword = arguments['oldPassword'];
+      newPassword = arguments['newPassword'];
 
       // Now you have access to the passed data (emailOrPhone)
-      logger.log('Received email: $email');
-      logger.log('Received newPhoneNumber: $newPhoneNumber');
+      logger.log('Received password: $oldPassword');
+      logger.log('Received newPassword: $newPassword');
     }
   }
 
@@ -89,7 +87,7 @@ class PhoneVerificationController extends GetxController {
     // ApiResponseModel response;
     try {
       final result = await authService.verifyOtp(payload: {
-        "user": email, // email or phone number
+        "user": user.value.emailAddress!, // email or phone number
         "otp": otp
       });
       if (result.status == "success" || result.status_code == 200) {
@@ -100,12 +98,13 @@ class PhoneVerificationController extends GetxController {
         tokenService.setAccessToken(result.data["accessToken"]);
         logger.log("saved new token:: ${result.data["accessToken"]}");
         logger.log("access token:: ${tokenService.accessToken}");
-        var formData = dio.FormData.fromMap({
-          "phoneNumber": newPhoneNumber,
-        });
-        final response = await userService.updateProfile(payload: formData);
-        if (response.status == "success") {
+
+        final response = await userService.changePassword(
+            payload: {"password": oldPassword, "newPassword": newPassword});
+        if (response.status == "success" || response.status_code == 200) {
+          logger.log("change password message ${response.message}");
           pinController.clear();
+          isLoading.value = false;
           // await userService.user.value.userId
 
           // After OTP verification
@@ -121,7 +120,8 @@ class PhoneVerificationController extends GetxController {
           // await routeService.offAllNamedUntill(AppLinks.more);
         } else {
           showErrorSnackbar(message: result.message!);
-          logger.log("error updating user profile ${response.message!}");
+          isLoading.value = false;
+          logger.log("error changing password ${response.message!}");
         }
 
         isLoading.value = false;
