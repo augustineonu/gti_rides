@@ -24,6 +24,7 @@ class CarRenterHomeController extends GetxController {
   RxInt currentIndex = 0.obs;
 
   RxBool isLoading = false.obs;
+  RxBool isSwitchingProfile = false.obs;
   RxBool isDone = false.obs;
   RxBool showPassword = false.obs;
   Rx<String> exampleText = "example".obs;
@@ -109,7 +110,7 @@ class CarRenterHomeController extends GetxController {
     isLoading.value = true;
     try {
       final result =
-          await renterService.switchProfile(payload: {"userType": "renter"});
+          await renterService.switchProfile(payload: {"userType": "owner"});
 
       if (result.status == "success" || result.status_code == 200) {
         await showSuccessSnackbar(message: result.message!);

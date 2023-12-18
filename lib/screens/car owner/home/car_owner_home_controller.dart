@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/logger.dart';
+import 'package:gti_rides/services/renter_service.dart';
+import 'package:gti_rides/utils/utils.dart';
 
 import '../../../services/route_service.dart';
 
@@ -11,6 +13,7 @@ class CarOwnerHomeController extends GetxController {
   Logger logger = Logger('CarOwnerHomeController');
   late Timer timer;
   RxInt currentIndex = 0.obs;
+  RxBool isLoading = false.obs;
 
   RxBool isDone = false.obs;
   RxBool showPassword = false.obs;
@@ -63,6 +66,28 @@ class CarOwnerHomeController extends GetxController {
   void routeToCarRenterLanding() => routeService.gotoRoute(AppLinks.carRenterLanding);
   void routeTolistVehicle() => routeService.gotoRoute(AppLinks.listVehicle);
   void routeToManageVehicle() => routeService.gotoRoute(AppLinks.manageVehicle);
+
+   Future<void> switchProfileToRenter() async {
+    isLoading.value = true;
+    try {
+      final result =
+          await renterService.switchProfile(payload: {"userType": "renter"});
+
+      if (result.status == "success" || result.status_code == 200) {
+        await showSuccessSnackbar(message: result.message!);
+        logger.log("success message::: ${result.message}");
+        await routeService.offAllNamed(AppLinks.carRenterLanding);
+      } else {
+        await showErrorSnackbar(message: result.message!);
+      }
+    } catch (e) {
+      logger.log("error rrr: $e");
+      showErrorSnackbar(message: e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
 
   @override
   void dispose() {

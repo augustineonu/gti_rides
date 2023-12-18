@@ -29,7 +29,7 @@ class TokenService {
 
   Future<bool> setTokenModel(tokensJson) async {
     tokens.value = TokenModel.fromJson(tokensJson);
-    
+
     // come to this later #TODO: 
     // await biometricService.saveTokensData(tokens.value);
     return true;
@@ -54,7 +54,7 @@ class TokenService {
       }
 
       await setTokenModel(result.data);
-      setAccessToken(tokens.value.accessToken);
+      setAccessToken(result.data["accessToken"]);
       // setRefreshToken(tokens.value.refreshToken);
 
       return true;

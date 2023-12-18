@@ -74,14 +74,31 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
     final ctrl = Get.put<CarRenterHomeController>(CarRenterHomeController());
     return Obx(
       () => Scaffold(
-        body: SafeArea(
-          child: Column(
-            children: [
-              // appBar(size, controller: ctrl),
-              appBar(size, ctrl),
-              body(ctrl, size),
-            ],
-          ),
+        body: Stack(
+          children: [
+            SafeArea(
+              child: Column(
+                children: [
+                  // appBar(size, controller: ctrl),
+                  appBar(size, ctrl),
+                  body(ctrl, size),
+                ],
+              ),
+            ),
+             ctrl.isLoading.isTrue
+                ? Stack(
+                    children: [
+                      const Opacity(
+                        opacity: 0.5,
+                        child: ModalBarrier(
+                            dismissible: false, color: Colors.black),
+                      ),
+                      Center(
+                        child: Center(child: centerLoadingIcon()),
+                      ),
+                    ],
+                  ) : const SizedBox()
+          ],
         ),
       ),
     );
@@ -371,4 +388,6 @@ Widget appBar(Size? size, {required CarRenterHomeController controller}) {
       ],
     ),
   );
+  
 }
+

@@ -109,67 +109,66 @@ class ApiService {
     }
   }
 
- Future<dynamic> putRequest({
-  required String endpoint,
-  required Map data,
-}) async {
-  try {
-    late Response response;
-    logger.log("PATCH REQUEST DATA:: $data");
+  Future<dynamic> putRequest({
+    required String endpoint,
+    required Map data,
+  }) async {
+    try {
+      late Response response;
+      logger.log("PATCH REQUEST DATA:: $data");
 
-    // Function to make the actual request
-    Future<void> makeRequest() async {
-      response = await _dio.put(
-        endpoint,
-        data: data,
-        options: Options(
-          headers: {
-            'Authorization': 'Bearer ${tokenService.accessToken.value}',
-          },
-        ),
-      );
-    }
-
-    await makeRequest();
-
-    logger.log("PATCH REQUEST RESPONSE:: $response");
-    
-    final ApiResponseModel apiResponse =
-        ApiResponseModel.fromJson(response.data);
-
-    if (apiResponse.status_code == 400) {
-      // Attempt to get a new access token
-      bool newAccessTokenResult = await tokenService.getNewAccessToken();
-
-      // Log the new token value
-      logger.log("New access token: ${tokenService.accessToken.value}");
-
-      if (!newAccessTokenResult) {
-        logger.log('Going to Login screen');
-        routeService.offAllNamed(AppLinks.login);
-        return;
+      // Function to make the actual request
+      Future<void> makeRequest() async {
+        response = await _dio.put(
+          endpoint,
+          data: data,
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer ${tokenService.accessToken.value}',
+            },
+          ),
+        );
       }
 
-      // Retry the request with the new access token
       await makeRequest();
-    }
 
-    return response.data;
-  } on DioException catch (e) {
-    logger.log("PUT REQUEST ERROR ($endpoint) :: ${e.response?.data}");
-    if (e.response?.data != null) {
-      return e.response?.data;
+      logger.log("PATCH REQUEST RESPONSE:: $response");
+
+      final ApiResponseModel apiResponse =
+          ApiResponseModel.fromJson(response.data);
+
+      if (apiResponse.status_code == 400) {
+        // Attempt to get a new access token
+        bool newAccessTokenResult = await tokenService.getNewAccessToken();
+
+        // Log the new token value
+        logger.log("New access token: ${tokenService.accessToken.value}");
+
+        if (!newAccessTokenResult) {
+          logger.log('Going to Login screen');
+          routeService.offAllNamed(AppLinks.login);
+          return;
+        }
+
+        // Retry the request with the new access token
+        await makeRequest();
+      }
+
+      return response.data;
+    } on DioException catch (e) {
+      logger.log("PUT REQUEST ERROR ($endpoint) :: ${e.response?.data}");
+      if (e.response?.data != null) {
+        return e.response?.data;
+      }
+      // Throw a custom exception or return an error object
+      throw "An error occurred";
+    } on SocketException {
+      throw "Seems you are offline";
+    } catch (error) {
+      logger.log("Error: $error");
+      throw error.toString();
     }
-    // Throw a custom exception or return an error object
-    throw "An error occurred";
-  } on SocketException {
-    throw "Seems you are offline";
-  } catch (error) {
-    logger.log("Error: $error");
-    throw error.toString();
   }
-}
-
 
   Future<dynamic> putRequestFile({
     required String endpoint,
@@ -177,44 +176,58 @@ class ApiService {
   }) async {
     try {
       logger.log("PATCH REQUEST DATA:: ${data.fields.toString()}");
-      late Response response;
-      response = await _dio.put(
+      // late Response response;
+      Response response = await _dio.put(
         endpoint,
         data: data,
         options: Options(
+          // receiveDataWhenStatusError: false,
           headers: {
             'Authorization': 'Bearer ${tokenService.accessToken.value}',
           },
         ),
       );
-      logger.log("PATCH REQUEST RESPONSE:: $response");
+      logger.log("PATCH REQUEST  ($endpoint) :: ${response.data}");
+
+      // logger.log("PATCH REQUEST RESPONSE:: $response");
       final ApiResponseModel apiResponse =
           ApiResponseModel.fromJson(response.data);
-      if (apiResponse.status != "success" || apiResponse.status_code == 401) {
+
+      // Check if the response status code is 400 and handle it globally
+      if (apiResponse.status_code == 400) {
         bool newAccessTokenResult = await tokenService.getNewAccessToken();
         if (!newAccessTokenResult) {
-          logger.log('Going to welcome screen');
+          logger.log('Going to Login screen');
           routeService.offAllNamed(AppLinks.login);
           return;
         }
+
+        // Retry the request with the new access token
         response = await _dio.put(
           endpoint,
           data: data,
           options: Options(
             headers: {
               'Authorization': 'Bearer ${tokenService.accessToken.value}',
-              'Content-Type': 'image/png'
+              'Content-Type': 'image/png',
             },
           ),
         );
       }
-      return response.data;
+
+      // Propagate the response to the caller
+      return apiResponse;
     } on DioException catch (e) {
       logger.log("PATCH REQUEST ERROR ($endpoint) :: ${e.response?.data}");
-      if (e.response?.data != null) {
-        return e.response?.data;
-      }
-      throw "An error occurred";
+
+      final ApiResponseModel apiResponse =
+          ApiResponseModel.fromJson(e.response!.data);
+      return apiResponse;
+      // Propagate the error to the caller
+      // if (e.response?.data != null) {
+      //   return e.response?.data;
+      // }
+      // throw "An error occurred";
     } on SocketException {
       throw "seems you are offline";
     } catch (error) {
@@ -231,7 +244,7 @@ class ApiService {
       response = await _dio.get(
         endpoint,
         options: Options(
-            responseType: ResponseType.plain,
+          responseType: ResponseType.plain,
           headers: {
             'Authorization': 'Bearer ${tokenService.accessToken.value}',
           },
@@ -276,18 +289,6 @@ class ApiService {
 
   Future<void> _logOut() async {
     try {
-      // final result = await authService.logOut(token: tokenService.accessToken.value);
-      // if (!result.status || result.statusCode == 401) {
-      //   bool newAccessTokenResult = await tokenService.getNewAccessToken();
-      //   if (!newAccessTokenResult) {
-      //     logger.log('Going to welcome screen');
-      //     routeService.offAllNamed(AppLinks.welcomeBack);
-      //   }
-      //   await authService.logOut(token: token);
-      //   routeService.offAllNamed(AppLinks.login);
-      // }
-
-      //////
       ///
       // await biometricService.clearAll();
       // await authService.logOut(token: tokenService.accessToken.value);

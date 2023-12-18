@@ -81,16 +81,35 @@ class _CarRenterHomeScreenState extends State<CarOwnerHomeScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final height = MediaQuery.of(context).size.height;
-    final controller = Get.put<CarOwnerHomeController>(CarOwnerHomeController());
+    final controller =
+        Get.put<CarOwnerHomeController>(CarOwnerHomeController());
     return Obx(
       () => Scaffold(
-        body: SafeArea(
-          child: Column(
-            children: [
-              appBar(size, controller),
-              body(controller, size),
-            ],
-          ),
+        body: Stack(
+          children: [
+            SafeArea(
+              child: Column(
+                children: [
+                  appBar(size, controller),
+                  body(controller, size),
+                ],
+              ),
+            ),
+            controller.isLoading.isTrue
+                ? Stack(
+                    children: [
+                      const Opacity(
+                        opacity: 0.5,
+                        child: ModalBarrier(
+                            dismissible: false, color: Colors.black),
+                      ),
+                      Center(
+                        child: Center(child: centerLoadingIcon()),
+                      ),
+                    ],
+                  )
+                : const SizedBox()
+          ],
         ),
       ),
     );
@@ -323,9 +342,7 @@ class _CarRenterHomeScreenState extends State<CarOwnerHomeScreen> {
     );
   }
 
-  Widget manageListedVehicles({
-    void Function()? onTap
-  }) {
+  Widget manageListedVehicles({void Function()? onTap}) {
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -340,11 +357,12 @@ class _CarRenterHomeScreenState extends State<CarOwnerHomeScreen> {
             image: const DecorationImage(
                 alignment: Alignment.centerRight,
                 image: AssetImage(ImageAssets.manageListedBg))),
-    
+
         child: Row(children: [
           ClipRRect(
             borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(4.r), bottomLeft: Radius.circular(4.r)),
+                topLeft: Radius.circular(4.r),
+                bottomLeft: Radius.circular(4.r)),
             child: Image.asset(
               ImageAssets.steering1,
               fit: BoxFit.fitHeight,
@@ -487,7 +505,7 @@ Widget appBar(Size size, CarOwnerHomeController controller) {
             size: size,
             title: AppStrings.carOwner,
             imageUrl: ImageAssets.owner,
-            onTapCarRenter: controller.routeToCarRenterLanding),
+            onTapCarRenter: controller.switchProfileToRenter),
         Padding(
           padding: const EdgeInsets.only(right: 20),
           child: Icon(

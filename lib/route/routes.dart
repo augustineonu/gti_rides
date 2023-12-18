@@ -45,7 +45,7 @@ import 'package:gti_rides/screens/shared_screens/more/identity_verification/scre
 import 'package:gti_rides/screens/shared_screens/more/identity_verification/screens/occupation_screen.dart';
 import 'package:gti_rides/screens/shared_screens/more/identity_verification/screens/office_address_screen.dart';
 import 'package:gti_rides/screens/shared_screens/more/identity_verification/screens/proof_of_identity.dart';
-import 'package:gti_rides/screens/shared_screens/more/identity_verification/screens/referral_code_screen.dart';
+import 'package:gti_rides/screens/shared_screens/more/referral/referral_code_screen.dart';
 import 'package:gti_rides/screens/shared_screens/more/more_screen.dart';
 import 'package:gti_rides/screens/shared_screens/more/profile/profile_screen.dart';
 
