@@ -2,7 +2,11 @@
     <application
         android:label="gti_rides"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        
+        >
+        
+    <!-- android:name=".MyApp"  -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -29,5 +33,9 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+            <!-- android:name="io.flutter.app.FlutterApplication" -->
+        
+        <!-- <uses-sdk android:minSdkVersion="26" android:targetSdkVersion="34" /> -->
+
     </application>
 </manifest>

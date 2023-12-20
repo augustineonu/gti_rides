@@ -5,10 +5,12 @@ import 'package:gti_rides/models/user_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/api_service.dart';
 import 'package:gti_rides/services/auth_service.dart';
+import 'package:gti_rides/services/biometric_service.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/services/token_service.dart';
 import 'package:gti_rides/services/user_service.dart';
+import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/utils/utils.dart';
 
 class LoginController extends GetxController
@@ -79,7 +81,7 @@ class LoginController extends GetxController
           await routeService.gotoRoute(AppLinks.verifyOtp,
               arguments: {'emailOrPhone': emailOrPhoneController.text});
         }
-        await showErrorSnackbar(message: result.message!);
+         showErrorSnackbar(message: result.message!);
         // routeService.offAllNamed(AppLinks.verifyOtp, arguments: {
         //   'email': emailController.text,
         // });
@@ -109,6 +111,21 @@ class LoginController extends GetxController
       showErrorSnackbar(message: e.toString());
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  Future<void> biometricLogin() async {
+    final authenticated = await biometricService.authenticate(
+        message: 'Please authenticate to Login into your account');
+
+    final biometrics = await biometricService.getBiometrics();
+    if (authenticated) {
+      // call login with biometrics
+      logger.log("User authenticated");
+    } else if (biometrics.isEmpty) {
+      infoDialog(
+        content: "No biometrics",
+      );
     }
   }
 

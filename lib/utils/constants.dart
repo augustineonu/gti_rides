@@ -231,6 +231,8 @@ class AppStrings {
   static String emergencyContactDetails = "Emergency Contact Details";
   static String inputEmergencyDetails = "Input Emergency Details";
   static String driversLicense = "Driver's License";
+  static String driversLicenseNo = "Driver's License Number";
+  static String licenseExpireyDate = "Expiry Date of Driver's License";
   static String provideDriversLicense = "Provide Driver's License";
   static String addressVerificationCaps = "ADDRESS VERIFICATION";
   static String accountStatusCaps = "ACCOUNT STATUS";
@@ -251,6 +253,7 @@ class AppStrings {
   static String logOut = "Log out";
   static String pending = "Pending";
   static String active = "Active";
+  static String inputDetails = "Input details";
   static String completed = "Completed";
   static String orderStatus = 'Order Status:';
   static String approved = 'Approved';
@@ -329,6 +332,8 @@ class AppStrings {
   static String passport = 'Passport';
   static String drivingLicense = 'Driving license';
   static String uploadProofOfIdentity = 'Upload proof of identity';
+  static String uploadFrontView = 'Upload front view';
+  static String uploadBackView = 'Upload back view';
   static String pleaseMakeSurePicIsClear = 'Please make sure picture is clear';
   static String inputAddressSm = 'Input address';
   static String save = 'Save';

@@ -9,9 +9,17 @@ import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
+import 'package:intercom_flutter/intercom_flutter.dart';
 import 'utils/screen_util.dart';
+// import 'package:intercom_flutter/intercom_flutter.dart';
 
-void main() {
+
+void main() async {
+   WidgetsFlutterBinding.ensureInitialized();
+      await Intercom.instance.initialize(
+        'hivazykc', iosApiKey: 'ios_sdk-efac9e9f5fa7bf1e1bfb33d91f1cddd68b47f895', 
+        androidApiKey: 'android_sdk-3337cce19e6e590feed33d6b48f39eae825fcfd0');
+
   runApp(const GtiRides());
 }
 

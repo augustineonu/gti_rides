@@ -30,8 +30,47 @@ class ApiService {
     _dio = Dio(
       BaseOptions(
         baseUrl: baseURL,
+        connectTimeout: Duration(seconds: 6000),
+        receiveTimeout: Duration(seconds: 6000),
         headers: {
           'Content-Type': 'application/json',
+        },
+      ),
+    );
+
+    _dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          // Add the access token to the request header
+          
+          options.headers['Authorization'] =
+              'Bearer ${tokenService.accessToken.value}';
+          return handler.next(options);
+        },
+        onError: (DioException e, handler) async {
+          if (e.response?.statusCode == 400) {
+            // If a 401 response is received, refresh the access token
+            // String newAccessToken = await refreshToken();
+            bool newAccessTokenResult = await tokenService.getNewAccessToken();
+            if (!newAccessTokenResult) {
+              logger.log('Going to Login screen');
+              routeService.offAllNamed(AppLinks.login);
+              return;
+            }
+
+            // Update the request header with the new access token
+            e.requestOptions.headers['Authorization'] =
+                'Bearer ${tokenService.accessToken.value}';
+                
+                _dio.options.headers['Authorization'] =
+                'Bearer ${tokenService.accessToken.value}';
+
+            // Repeat the request with the updated header
+            return handler.resolve(await _dio.fetch(e.requestOptions));
+          } else if(e.response?.statusCode == 403) {
+            logger.log("status code == 403");
+          }
+          return handler.next(e);
         },
       ),
     );
@@ -56,12 +95,12 @@ class ApiService {
       response = await _dio.post(
         endpoint,
         data: data,
-        options: Options(
-          headers: {
-            'Authorization':
-                'Bearer ${token ?? tokenService.accessToken.value}',
-          },
-        ),
+        // options: Options(
+        //   headers: {
+        //     'Authorization':
+        //         'Bearer ${token ?? tokenService.accessToken.value}',
+        //   },
+        // ),
       );
       logger.log("POST REQUEST RESPONSE:: $response");
       final ApiResponseModel apiResponse =

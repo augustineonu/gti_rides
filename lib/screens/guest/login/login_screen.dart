@@ -107,7 +107,9 @@ class LoginScreen extends GetView<LoginController> {
                         SizedBox(
                           height: 36.sp,
                         ),
-                        touchID(onTap: () {}),
+                        touchID(onTap: () {
+                          controller.biometricLogin();
+                        }),
                       ],
                     ),
                   ],

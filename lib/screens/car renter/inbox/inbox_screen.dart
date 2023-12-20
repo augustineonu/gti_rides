@@ -10,6 +10,7 @@ import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/helpers.dart';
+import 'package:intercom_flutter/intercom_flutter.dart';
 
 class InboxBinding extends Bindings {
   @override
@@ -141,7 +142,9 @@ class InboxScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           textWidget(
-                              text: AppStrings.hi.trArgs([extractFirstName(ctrl.user.value.fullName!)]),
+                              text: AppStrings.hi.trArgs([
+                                extractFirstName(ctrl.user.value.fullName!)
+                              ]),
                               style: getRegularStyle(color: white)
                                   .copyWith(fontWeight: FontWeight.w700)),
                           SizedBox(
@@ -194,14 +197,20 @@ class InboxScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               textWidget(
-                  text: AppStrings.hi.trArgs([extractFirstName(ctrl.user.value.fullName!)]),
+                  text: AppStrings.hi
+                      .trArgs([extractFirstName(ctrl.user.value.fullName!)]),
                   style: getRegularStyle(color: white)
                       .copyWith(fontWeight: FontWeight.w700)),
               SizedBox(
                 height: 10.sp,
               ),
               InkWell(
-                onTap: () {},
+                onTap: () async {
+                  await Intercom.instance.loginIdentifiedUser(
+                    email: ctrl.user.value.emailAddress
+                  );
+                  await Intercom.instance.displayMessenger();
+                },
                 child: Container(
                   width: 144.sp,
                   decoration: BoxDecoration(

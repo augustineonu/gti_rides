@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "834484120579",
+    "project_id": "gti-rides",
+    "storage_bucket": "gti-rides.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:834484120579:android:9e9b357943ee9c64ecf236",
+        "android_client_info": {
+          "package_name": "com.example.gti_rides"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxe9sY0W-6euLVV_JM0n1jLjEiN_aFvyk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -4,7 +4,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/shared_screens/more/identity_verification/identity_verification_controller.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
+import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/sqaure_check_box_widget.dart';
+import 'package:gti_rides/shared_widgets/text_input_widgets/normal_text_input_widget.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/shared_widgets/upload_image_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
@@ -42,69 +44,72 @@ class ProofOfIdentityScreen extends GetView<IdentityVerificationController> {
       {required IdentityVerificationController controller}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
-      child: Obx(() => Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                width: 255.sp,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    textWidget(
-                        text: AppStrings.selectDocument,
-                        textOverflow: TextOverflow.visible,
-                        style: getBoldStyle()),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    textWidget(
-                        text: AppStrings.uploadToCompleteApproval,
-                        textOverflow: TextOverflow.visible,
-                        style: getRegularStyle(fontSize: 12.sp, color: grey2)),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              textWidget(
-                  text: AppStrings.chooseYourIdentityType,
-                  textOverflow: TextOverflow.visible,
-                  style: getRegularStyle(fontSize: 12.sp, color: grey2)),
-              const SizedBox(height: 12),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  checkBoxWithText(
-                      title: AppStrings.nationalId,
-                      selectedIdType: controller.selectedIdType.value,
-                      onTap: controller.onSelectIdType,
-                      idType: IdType.nationalId),
-                  checkBoxWithText(
-                      title: AppStrings.passport,
-                      selectedIdType: controller.selectedIdType.value,
-                      onTap: controller.onSelectIdType,
-                      idType: IdType.passport),
-                  checkBoxWithText(
-                      title: AppStrings.drivingLicense,
-                      selectedIdType: controller.selectedIdType.value,
-                      onTap: controller.onSelectIdType,
-                      idType: IdType.driverLicense),
-                  const SizedBox(
-                    width: 20,
+      child: Obx(() => SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: 255.sp,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      textWidget(
+                          text: AppStrings.selectDocument,
+                          textOverflow: TextOverflow.visible,
+                          style: getBoldStyle()),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      textWidget(
+                          text: AppStrings.uploadToCompleteApproval,
+                          textOverflow: TextOverflow.visible,
+                          style:
+                              getRegularStyle(fontSize: 12.sp, color: grey2)),
+                    ],
                   ),
-                ],
-              ),
-              const SizedBox(
-                height: 24,
-              ),
-              imageUploadWidget(
-                title: AppStrings.uploadProofOfIdentity,
-                body: AppStrings.pleaseMakeSurePicIsClear,
-                onTap: () {},
-              ),
-              const SizedBox(height: 20),
-            ],
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                NormalInputTextWidget(
+                  title: AppStrings.driversLicenseNo,
+                  expectedVariable: "number",
+                  hintText: AppStrings.inputDetails,
+                  textInputType: TextInputType.number,
+                  // controller: controller.emailOrPhoneController,
+                ),
+                const SizedBox(height: 20),
+                NormalInputTextWidget(
+                  title: AppStrings.licenseExpireyDate,
+                  expectedVariable: "number",
+                  hintText: AppStrings.inputDetails,
+                  textInputType: TextInputType.datetime,
+                  // controller: controller.emailOrPhoneController,
+                ),
+                const SizedBox(
+                  height: 24,
+                ),
+                imageUploadWidget(
+                  title: AppStrings.uploadFrontView,
+                  body: AppStrings.pleaseMakeSurePicIsClear,
+                  onTap: () {},
+                ),
+                const SizedBox(height: 16),
+                imageUploadWidget(
+                  title: AppStrings.uploadBackView,
+                  body: AppStrings.pleaseMakeSurePicIsClear,
+                  onTap: () {},
+                ),
+                const SizedBox(height: 80),
+                controller.isLoading.value
+                    ? centerLoadingIcon()
+                    : GtiButton(
+                        text: AppStrings.loginButtonText,
+                        width: size.width,
+                        onTap: () {},
+                      ),
+              ],
+            ),
           )),
     );
   }

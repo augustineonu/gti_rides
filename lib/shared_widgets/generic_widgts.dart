@@ -173,13 +173,14 @@ Widget imageAvatar({
 }
 
 Widget profileAvatar({
-  String imgUrl = "https://img.freepik.com/premium-vector/avatar-profile-icon_188544-4755.jpg",
+  String imgUrl =
+      "https://img.freepik.com/premium-vector/avatar-profile-icon_188544-4755.jpg",
   double? height,
   double? width,
   double? boxHeight,
   double? boxWidth,
   String? localImagePath,
-    BoxFit fit = BoxFit.cover,
+  BoxFit fit = BoxFit.cover,
   double radius = 100,
 }) {
   return SizedBox(
@@ -193,49 +194,48 @@ Widget profileAvatar({
                 painter: PercentagePainter(),
               ),
             ),
-        localImagePath != null && localImagePath.isNotEmpty 
-        ?   ClipRRect(
-              borderRadius: BorderRadius.circular(radius),
-          child: Image.file(
-            File(localImagePath),
-            width: width,
-            height: height,
-            fit: fit,
-          ),
-        )
-        : Align(
-                alignment: Alignment.center,
-                child: CachedNetworkImage(
-                  imageUrl: imgUrl,
-                  imageBuilder: (context, imageProvider) => Container(
-                    width: width ?? 198.0.w,
-                    height: height ?? 200.0.h,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                          image: imageProvider, fit: BoxFit.cover),
+            localImagePath != null && localImagePath.isNotEmpty
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(radius),
+                    child: Image.file(
+                      File(localImagePath),
+                      width: width,
+                      height: height,
+                      fit: fit,
                     ),
-                  ),
-                  placeholder: (context, url) => const SizedBox(
-                    height: 30,
-                    width: 30,
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.blue,
+                  )
+                : Align(
+                    alignment: Alignment.center,
+                    child: CachedNetworkImage(
+                      imageUrl: imgUrl,
+                      imageBuilder: (context, imageProvider) => Container(
+                        width: width ?? 198.0.w,
+                        height: height ?? 200.0.h,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                              image: imageProvider, fit: BoxFit.cover),
+                        ),
                       ),
-                    ),
-                  ),
-                  errorWidget: (context, url, error) => Image.asset(
-                    ImageAssets.userIcon,
-                    height: 34.sp,
-                    width: 34.sp,
-                  ),
-                )) ,
+                      placeholder: (context, url) => const SizedBox(
+                        height: 30,
+                        width: 30,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => Image.asset(
+                        ImageAssets.userIcon,
+                        height: 34.sp,
+                        width: 34.sp,
+                      ),
+                    )),
           ],
         );
       }));
 }
-
 
 Widget imageWidget({
   required String imgUrl,
@@ -249,21 +249,19 @@ Widget imageWidget({
 }) {
   if (localImagePath != null && localImagePath.isNotEmpty) {
     print("Image widget: is running in background");
-    return Builder(
-      builder: (context) {
-        return ClipRRect(
-              borderRadius: BorderRadius.circular(radius),
-          child: Image.file(
-            File(localImagePath),
-            width: width,
-            height: height,
-            fit: fit,
-          ),
-        );
-      }
-    );
+    return Builder(builder: (context) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(radius),
+        child: Image.file(
+          File(localImagePath),
+          width: width,
+          height: height,
+          fit: fit,
+        ),
+      );
+    });
   } else {
-     print("Image widget: :2   is running in background");
+    print("Image widget: :2   is running in background");
     return CachedNetworkImage(
       alignment: Alignment.center,
       imageUrl: imgUrl,
@@ -271,7 +269,6 @@ Widget imageWidget({
         width: width,
         height: height,
         decoration: BoxDecoration(
-        
           shape: BoxShape.circle,
           image: DecorationImage(
             image: imageProvider,
@@ -285,7 +282,7 @@ Widget imageWidget({
         child: Center(
           child: CircularProgressIndicator(
             color: Colors.blue,
-          value: 50,
+            value: 50,
           ),
         ),
       ),
@@ -297,7 +294,6 @@ Widget imageWidget({
     );
   }
 }
-
 
 Widget profileImageWidget({
   required String imgUrl,
@@ -369,6 +365,52 @@ Future<dynamic> dialogWidgetWithClose(
             height: space,
           ),
           content,
+        ],
+      ),
+    ),
+  ));
+}
+
+Future<dynamic> infoDialog({
+  required String content,
+  double? contentHeight,
+  void Function()? onTap,
+  double? space,
+}) async {
+  return await Get.dialog(Dialog(
+  
+    backgroundColor: Colors.transparent,
+    child: Container(
+      // width: size.width,
+      height: contentHeight,
+      padding: const EdgeInsets.all(19),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(8.r)),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(
+            children: [
+              InkWell(
+                onTap: onTap,
+                child: SvgPicture.asset(
+                  ImageAssets.closeSmall,
+                  height: 15.sp,
+                  color: black,
+                ),
+              ),
+              const Spacer(),
+              const Spacer(),
+            ],
+          ),
+          textWidget(
+            text: content,
+            style: getRegularStyle(),
+          ),
+          SizedBox(
+            height: space,
+          ),
         ],
       ),
     ),

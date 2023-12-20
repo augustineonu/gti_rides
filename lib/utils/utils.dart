@@ -220,7 +220,7 @@ Widget showShimmerLoader() {
     separatorBuilder: (context, index) => const SizedBox(height: 10),
   );
 }
-
+// https://www.gtiautos.com/
 void openUrl(String url) async {
   if (!await launchUrl(Uri.parse(url))) {
     Logger('Utils').debug('msg: Failed to launch $url');
