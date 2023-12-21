@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/models/list_response_model.dart';
 import 'package:gti_rides/models/user_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/utils/constants.dart';
+import 'package:gti_rides/utils/utils.dart';
 
 import '../../../services/route_service.dart';
 
@@ -13,15 +15,18 @@ class MoreController extends GetxController {
   Logger logger = Logger('MoreController');
 
   Rx<UserModel> user = UserModel().obs;
+   Rx<ListResponseModel> userKyc = ListResponseModel().obs;
 
   MoreController() {
     init();
   }
 
-  void init() {
+  void init() async {
     logger.log('MoreController initialized');
     user = userService.user;
     logger.log("User:: $user");
+
+    await getBiometricProfile();
   }
 
   // late Timer timer;
@@ -77,6 +82,26 @@ class MoreController extends GetxController {
       routeService.gotoRoute(AppLinks.identityVerification);
   void routeToReferralCode() => routeService.gotoRoute(AppLinks.referral);
   void routeToDrivers() => routeService.gotoRoute(AppLinks.drivers);
+
+
+    Future<void> getBiometricProfile() async {
+    try {
+      final response = await userService.getKycProfile();
+
+      if (response.status == "success" || response.status_code == 200) {
+        logger.log("User KYC ${response.data.toString()}");
+        final ListResponseModel userModel = ListResponseModel.fromJson(response.data?[0]);
+        // Check if the response data list is not empty
+        if (response.data != null || response.data != []) {
+          userKyc.value = userModel;
+          userService.setUserKyc(response.toJson());
+        }
+      }
+    } catch (e) {
+      logger.log("error rrr: $e");
+      showErrorSnackbar(message: e.toString());
+    }
+  }
 
   @override
   void dispose() {

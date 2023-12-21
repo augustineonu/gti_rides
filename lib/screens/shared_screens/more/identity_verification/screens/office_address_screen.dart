@@ -46,11 +46,15 @@ class OfficeAddressScreen extends GetView<IdentityVerificationController> {
       child: Obx(() => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              NormalInputTextWidget(
-                expectedVariable: 'field',
-                title: AppStrings.inputAddressSm,
-                hintText: AppStrings.inputAddressSm,
-                controller: controller.homeAddressController,
+              Form(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                key: controller.updateFormKey,
+                child: NormalInputTextWidget(
+                  expectedVariable: 'field',
+                  title: AppStrings.inputAddressSm,
+                  hintText: AppStrings.inputAddressSm,
+                  controller: controller.officeAddressController,
+                ),
               ),
               const SizedBox(height: 32),
               saveButton(),
@@ -67,7 +71,7 @@ class OfficeAddressScreen extends GetView<IdentityVerificationController> {
             width: 370,
             text: AppStrings.save,
             // color: secondaryColor,
-            onTap: () {},
+            onTap: controller.updateKyc,
             isLoading: controller.isLoading.value,
           );
   }

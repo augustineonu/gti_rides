@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/route/app_links.dart';
+import 'package:gti_rides/services/device_service.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
+import 'package:gti_rides/services/storage_service.dart';
 
 class SplashController extends GetxController
     with GetSingleTickerProviderStateMixin {
   Logger logger = Logger('SplashController');
   final animationValue = 0.0.obs;
   late AnimationController _animationController;
+
 
   SplashController() {
     init();
@@ -17,7 +20,8 @@ class SplashController extends GetxController
   void init() {
     logger.log('Controller initialized');
     initAnimation();
-    // deviceService.getDeviceInfo();
+    deviceService.getDeviceInfo();
+       
   }
 
   Future<void> getSavedAgentModel() async {

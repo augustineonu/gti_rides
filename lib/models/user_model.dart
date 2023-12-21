@@ -18,6 +18,7 @@ class UserModel {
     final String? referralCode;
     final DateTime? registerDate;
     final String? userType;
+    final String? status;
 
     UserModel({
          this.userId,
@@ -28,6 +29,7 @@ class UserModel {
          this.referralCode,
          this.registerDate,
          this.userType,
+         this.status
     });
 
     factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
@@ -39,6 +41,7 @@ class UserModel {
         referralCode: json["referralCode"],
         registerDate: DateTime.parse(json["registerDate"]),
         userType: json["userType"],
+        status: json["status"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -48,7 +51,8 @@ class UserModel {
         "phoneNumber": phoneNumber,
         "profilePic": profilePic,
         "referralCode": referralCode,
-        "registerDate": registerDate!.toIso8601String(),
+        "registerDate": registerDate?.toIso8601String(),
         "userType": userType,
+        "status": status
     };
 }

@@ -23,16 +23,17 @@ class IdentityVerificationScreen
   const IdentityVerificationScreen([Key? key]) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(IdentityVerificationController());
     var size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: backgroundColor,
-      appBar: appBar(),
+      appBar: appBar(controller),
       body: body(size, context),
       // }
     );
   }
 
-  AppBar appBar() {
+  AppBar appBar(IdentityVerificationController controller) {
     return gtiAppBar(
       onTap: () => controller.goBack(),
       leading: Transform.scale(
@@ -47,6 +48,7 @@ class IdentityVerificationScreen
   }
 
   Widget body(Size size, context) {
+    final userKyc = controller.userKyc.value.data;
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,15 +73,24 @@ class IdentityVerificationScreen
               onTap: controller.routeToProofOfIdentity),
           identityVerificationWidget(
               title: AppStrings.gender,
-              subTitle: AppStrings.selectGender,
+              subTitle: userKyc != []
+                  ? userKyc![0]["gender"] ?? AppStrings.selectGender
+                  : AppStrings.selectGender,
               onTap: controller.routeToSelectGender),
           identityVerificationWidget(
               title: AppStrings.dob,
-              subTitle: AppStrings.provideDob,
+              subTitle: userKyc != []
+                  ? userKyc![0]["dateOfBirth"] ?? AppStrings.provideDob
+                  : AppStrings.provideDob,
               onTap: () {}),
           identityVerificationWidget(
               title: AppStrings.emergencyContactDetails,
-              subTitle: AppStrings.inputEmergencyDetails,
+              subTitle: userKyc != []
+                  ? (userKyc![0]["emergencyName"] != null &&
+                          userKyc![0]["emergencyNumber"] != null)
+                      ? "${userKyc![0]["emergencyName"]} - ${userKyc![0]["emergencyNumber"]}"
+                      : AppStrings.inputEmergencyDetails
+                  : AppStrings.inputEmergencyDetails,
               onTap: controller.routeToEmergencyContact),
 
           // address verification
@@ -100,15 +111,23 @@ class IdentityVerificationScreen
           ),
           identityVerificationWidget(
               title: AppStrings.homeAddress,
-              subTitle: AppStrings.provideHomeAddress,
+              subTitle: userKyc != []
+                  ? userKyc![0]["homeAddress"] ?? AppStrings.provideHomeAddress
+                  : AppStrings.provideHomeAddress,
               onTap: controller.routeToHomeAddress),
+
           identityVerificationWidget(
               title: AppStrings.officeAddress,
-              subTitle: AppStrings.addOfficeAddress,
+              subTitle: userKyc != []
+                  ? userKyc![0]["officeAddress"] ?? AppStrings.addOfficeAddress
+                  : AppStrings.addOfficeAddress,
               onTap: controller.routeToOfficeAddress),
+
           identityVerificationWidget(
               title: AppStrings.occupation,
-              subTitle: AppStrings.provideOccupation,
+              subTitle: userKyc != []
+                  ? userKyc![0]["occupation"] ?? AppStrings.provideOccupation
+                  : AppStrings.provideOccupation,
               onTap: controller.routeToOccupation),
 
           Padding(
@@ -126,9 +145,22 @@ class IdentityVerificationScreen
             ),
           ),
           identityVerificationWidget(
-              title: AppStrings.approved,
-              titleColor: green,
-              subTitle: AppStrings.youCanProceedToRent,
+              title: controller.user.value.status?.toLowerCase() == "pending"
+                  ? AppStrings.pending
+                  : controller.user.value.status?.toLowerCase() == "approved"
+                      ? AppStrings.approved
+                      : AppStrings.suspended,
+              titleColor: controller.user.value.status?.toLowerCase() ==
+                      "pending"
+                  ? yellow
+                  : controller.user.value.status?.toLowerCase() == "approved"
+                      ? green
+                      : red,
+              subTitle: controller.user.value.status?.toLowerCase() == "pending"
+                  ? AppStrings.pendingApproval
+                  : controller.user.value.status?.toLowerCase() == "approved"
+                      ? AppStrings.youCanProceedToRent
+                      : AppStrings.accountSuspended,
               onTap: () {}),
           SizedBox(
             height: size.height * 0.07,

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
+import 'package:gti_rides/services/storage_service.dart';
 
 class OnboardingController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -11,6 +12,7 @@ class OnboardingController extends GetxController
   RxInt currentIndex = 0.obs;
   PageController controller = PageController();
   RxBool isDone = false.obs;
+    bool? isFirstTimeLogin;
 
   OnboardingController() {
     init();
@@ -20,6 +22,7 @@ class OnboardingController extends GetxController
     logger.log('Controller initialized');
     // initAnimation();
     // deviceService.getDeviceInfo();
+     storageService.insert('firstTimeLogin', isFirstTimeLogin);
   }
 
   @override

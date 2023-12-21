@@ -17,16 +17,16 @@ class EmergencyContactScreen extends GetView<IdentityVerificationController> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    // final controller = Get.put(AccountVerificationController());
+    final controller = Get.put(IdentityVerificationController());
     return Scaffold(
       backgroundColor: backgroundColor,
-      appBar: appBar(),
+      appBar: appBar(controller),
       body: body(size, context, controller: controller),
       // }
     );
   }
 
-  AppBar appBar() {
+  AppBar appBar(IdentityVerificationController controller) {
     return gtiAppBar(
       onTap: controller.goBack,
       leading: Transform.scale(

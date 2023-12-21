@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
 class AppStrings {
-  static String baseURL = 'https://gti-kzr9.onrender.com';
+  static String baseURL = 'https://squid-app-9sdyd.ondigitalocean.app';
   static String loginButtonText = "Log in";
   static String getStartedButtonText = "Get Started";
   static String welcome = "Welcome back";
@@ -252,6 +252,7 @@ class AppStrings {
   static String howGtiWorks1 = "How GTI Ride works";
   static String logOut = "Log out";
   static String pending = "Pending";
+  static String suspended = "Suspended";
   static String active = "Active";
   static String inputDetails = "Input details";
   static String completed = "Completed";
@@ -323,6 +324,8 @@ class AppStrings {
   static String newPasswordSm = 'New password';
   static String confirmPasswordSm = 'Confirm password';
   static String youCanProceedToRent = 'You can proceed to rent a car';
+  static String pendingApproval = 'Pending Approval';
+  static String accountSuspended = 'Account suspended, kindly contact support';
   static String selectDocument =
       'Select the kind of document you want to upload';
   static String uploadToCompleteApproval =
@@ -471,4 +474,5 @@ class AppStrings {
   static String licenseNumber = "License Number";
   static String uploadDriversLicense = "Upload Driver's License";
   static String uploadDriversLicenseHint = "Upload License";
+  static String kindlyLoginWithCredToSetBiometrics = "Kindly login with credentials to setup Biometrics";
 }

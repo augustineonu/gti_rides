@@ -1,15 +1,27 @@
+
 import 'dart:convert';
 
 class ListResponseModel {
-    final int status_code;
-    final String status;
-    final dynamic data;
+    final int? status_code;
+    final String? status;
+    final List<dynamic>? data;
 
     ListResponseModel({
-        required this.status_code,
-        required this.status,
-        required this.data,
+        this.status_code,
+        this.status,
+        this.data,
     });
+
+    ListResponseModel copyWith({
+        int? status_code,
+        String? status,
+        List<dynamic>? data,
+    }) => 
+        ListResponseModel(
+            status_code: status_code ?? this.status_code,
+            status: status ?? this.status,
+            data: data ?? this.data,
+        );
 
     factory ListResponseModel.fromRawJson(String str) => ListResponseModel.fromJson(json.decode(str));
 
@@ -18,61 +30,96 @@ class ListResponseModel {
     factory ListResponseModel.fromJson(Map<String, dynamic> json) => ListResponseModel(
         status_code: json["status_code"],
         status: json["status"],
-        // data: List<User>.from(json["data"].map((x) => User.fromJson(x))),
-        data: json["data"] as dynamic,
+        data: json["data"] == null ? [] : List<dynamic>.from(json["data"]!.map((x) => x)),
     );
 
     Map<String, dynamic> toJson() => {
         "status_code": status_code,
         "status": status,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x)),
     };
 }
 
-class User {
-    final String userId;
-    final String emailAddress;
-    final String fullName;
-    final String phoneNumber;
-    final String profilePic;
-    final String referralCode;
-    final DateTime registerDate;
-    final String userType;
 
-    User({
-        required this.userId,
-        required this.emailAddress,
-        required this.fullName,
-        required this.phoneNumber,
-        required this.profilePic,
-        required this.referralCode,
-        required this.registerDate,
-        required this.userType,
-    });
+// import 'dart:convert';
 
-    factory User.fromRawJson(String str) => User.fromJson(json.decode(str));
+// class ListResponseModel {
+//     final int? status_code;
+//     final String? status;
+//     final dynamic data;
 
-    String toRawJson() => json.encode(toJson());
+//     ListResponseModel({
+//          this.status_code,
+//          this.status,
+//          this.data,
+//     });
 
-    factory User.fromJson(Map<String, dynamic> json) => User(
-        userId: json["userID"],
-        emailAddress: json["emailAddress"],
-        fullName: json["fullName"],
-        phoneNumber: json["phoneNumber"],
-        profilePic: json["profilePic"],
-        referralCode: json["referralCode"],
-        registerDate: DateTime.parse(json["registerDate"]),
-        userType: json["userType"],
-    );
+//     factory ListResponseModel.fromRawJson(String str) => ListResponseModel.fromJson(json.decode(str));
 
-    Map<String, dynamic> toJson() => {
-        "userID": userId,
-        "emailAddress": emailAddress,
-        "fullName": fullName,
-        "phoneNumber": phoneNumber,
-        "profilePic": profilePic,
-        "referralCode": referralCode,
-        "registerDate": registerDate.toIso8601String(),
-        "userType": userType,
-    };
-}
+//     String toRawJson() => json.encode(toJson());
+
+//     factory ListResponseModel.fromJson(Map<String, dynamic> json) => ListResponseModel(
+//         status_code: json["status_code"],
+//         status: json["status"],
+//         // data: List<User>.from(json["data"].map((x) => User.fromJson(x))),
+//         data: json["data"] as dynamic,
+//     );
+
+//     Map<String, dynamic> toJson() => {
+//         "status_code": status_code,
+//         "status": status,
+//         "data": List<dynamic>.from(data.map((x) => x.toJson())),
+//     };
+// }
+
+// class User {
+//     final String userId;
+//     final String emailAddress;
+//     final String fullName;
+//     final String phoneNumber;
+//     final String profilePic;
+//     final String referralCode;
+//     final DateTime registerDate;
+//     final String userType;
+//     final String status;
+
+//     User({
+//         required this.userId,
+//         required this.emailAddress,
+//         required this.fullName,
+//         required this.phoneNumber,
+//         required this.profilePic,
+//         required this.referralCode,
+//         required this.registerDate,
+//         required this.userType,
+//         required this.status,
+//     });
+
+//     factory User.fromRawJson(String str) => User.fromJson(json.decode(str));
+
+//     String toRawJson() => json.encode(toJson());
+
+//     factory User.fromJson(Map<String, dynamic> json) => User(
+//         userId: json["userID"],
+//         emailAddress: json["emailAddress"],
+//         fullName: json["fullName"],
+//         phoneNumber: json["phoneNumber"],
+//         profilePic: json["profilePic"],
+//         referralCode: json["referralCode"],
+//         registerDate: DateTime.parse(json["registerDate"]),
+//         userType: json["userType"],
+//         status: json["status"],
+//     );
+
+//     Map<String, dynamic> toJson() => {
+//         "userID": userId,
+//         "emailAddress": emailAddress,
+//         "fullName": fullName,
+//         "phoneNumber": phoneNumber,
+//         "profilePic": profilePic,
+//         "referralCode": referralCode,
+//         "registerDate": registerDate.toIso8601String(),
+//         "userType": userType,
+//         "status": status,
+//     };
+// }

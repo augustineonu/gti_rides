@@ -2,11 +2,13 @@ import 'package:get/get.dart';
 import 'package:gti_rides/services/api_service.dart';
 import 'package:gti_rides/services/auth_service.dart';
 import 'package:gti_rides/services/biometric_service.dart';
+import 'package:gti_rides/services/device_service.dart';
 import 'package:gti_rides/services/google_sign_in_service.dart';
 import 'package:gti_rides/services/image_service.dart';
 import 'package:gti_rides/services/more_service.dart';
 import 'package:gti_rides/services/renter_service.dart';
 import 'package:gti_rides/services/route_service.dart';
+import 'package:gti_rides/services/storage_service.dart';
 import 'package:gti_rides/services/token_service.dart';
 import 'package:gti_rides/services/user_service.dart';
 import 'route/app_links.dart';
@@ -18,9 +20,9 @@ class AppBinding extends Bindings {
   @override
   void dependencies() {
     logger.log('loading dependencies');
-    // Get.put(DeviceService());
+    Get.put(DeviceService());
     Get.put(AppLinks());
-    // Get.put(StorageService());
+    Get.put(StorageService());
     Get.put(RouteService());
     Get.put(ImageService());
     Get.put(ApiService());

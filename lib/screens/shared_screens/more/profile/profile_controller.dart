@@ -71,6 +71,7 @@ class ProfileController extends GetxController {
     ImageResponse? response =
         await imageService.pickImage(source: ImageSource.gallery);
     if (response != null) {
+      logger.log("Picked image $pickedImagePath");
       pickedImagePath.value = response.imagePath;
     }
   }
@@ -84,19 +85,16 @@ class ProfileController extends GetxController {
 
     try {
       Future<dio.FormData> constructFormData() async {
-        var formData = dio.FormData(
-            //   {
-            //   "fullName": fullNameController.text,
-            //   'file': await dio.MultipartFile.fromFile(pickedImagePath.value,
-            //       filename: pickedImagePath.value)
-            // }
-            );
+        var formData = dio.FormData.fromMap({});
+      
+        
         // Check if fullName is not empty before adding it to formData
         if (fullNameController.text.isNotEmpty) {
           formData.fields.add(MapEntry('fullName', fullNameController.text));
         }
         // Check if imagePath is not empty before adding the image file to formData
         if (pickedImagePath.value.isNotEmpty) {
+          // formData.
           formData.files.add(MapEntry(
             'file',
             await dio.MultipartFile.fromFile(
@@ -105,6 +103,7 @@ class ProfileController extends GetxController {
             ),
           ));
         }
+        logger.log("form field ${formData}");
         return formData;
       }
 
@@ -116,7 +115,7 @@ class ProfileController extends GetxController {
         final response = await authService.getProfile();
         if (response.status == "success" || response.status_code == 200) {
           logger.log("refresh user details ${response.data.toString()}");
-          final UserModel userModel = UserModel.fromJson(response.data[0]);
+          final UserModel userModel = UserModel.fromJson(response.data?[0]);
           userService.setCurrentUser(userModel.toJson());
           routeService.goBack;
         }

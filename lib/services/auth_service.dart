@@ -145,6 +145,28 @@ class AuthService {
       rethrow;
     }
   }
+  Future<ApiResponseModel> addBiometric({required Map payload}) async {
+    try {
+      final result = await apiService.putRequest(
+        endpoint: '/user/auth/addBiometric',
+        data: payload,
+      );
+      return ApiResponseModel.fromJson(result);
+    } catch (err) {
+      rethrow;
+    }
+  }
+  Future<ApiResponseModel> biometricLogin({required Map payload}) async {
+    try {
+      final result = await apiService.postRequest(
+        endpoint: '/user/auth/biometricProfile',
+        data: payload,
+      );
+      return ApiResponseModel.fromJson(result);
+    } catch (err) {
+      rethrow;
+    }
+  }
 
   Future<ListResponseModel> getProfile() async {
     try {
@@ -162,10 +184,13 @@ class AuthService {
   }
 
   Future<ApiResponseModel> getNewAccessToken(
-      {required String accessToken}) async {
+      // {required String accessToken}
+      ) async {
     try {
-      final result = await apiService.postRequest(
-          endpoint: '/user/auth/refreshToken', token: accessToken);
+      final result = await apiService.getRequest(
+           '/user/auth/refreshToken', 
+          // token: accessToken
+          );
       return ApiResponseModel.fromJson(result);
     } catch (err) {
       rethrow;

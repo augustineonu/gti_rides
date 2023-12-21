@@ -18,15 +18,16 @@ class HomeAddressScreen extends GetView<IdentityVerificationController> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    final controller = Get.put(IdentityVerificationController());
     return Scaffold(
       backgroundColor: backgroundColor,
-      appBar: appBar(),
+      appBar: appBar(controller),
       body: body(size, context, controller: controller),
       // }
     );
   }
 
-  AppBar appBar() {
+  AppBar appBar(IdentityVerificationController controller) {
     return gtiAppBar(
       onTap: controller.goBack,
       leading: Transform.scale(
@@ -44,24 +45,32 @@ class HomeAddressScreen extends GetView<IdentityVerificationController> {
       {required IdentityVerificationController controller}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
-      child: Obx(() => Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              NormalInputTextWidget(
-                expectedVariable: 'field',
-                title: AppStrings.inputAddressSm,
-                hintText: AppStrings.inputAddressSm,
-                controller: controller.homeAddressController,
-              ),
-              const SizedBox(height: 32),
-              imageUploadWidget(
-                title: AppStrings.uploadDocumentToProveAddress,
-                body: AppStrings.pleaseMakeSurePicIsClear,
-                onTap: () {},
-              ),
-              const SizedBox(height: 55),
-              saveButton(),
-            ],
+      child: Obx(() => Form(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            key: controller.updateFormKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                NormalInputTextWidget(
+                  expectedVariable: 'field',
+                  title: AppStrings.inputAddressSm,
+                  hintText: AppStrings.inputAddressSm,
+                  controller: controller.homeAddressController,
+                ),
+                const SizedBox(height: 32),
+                imageUploadWidget(
+                  title: AppStrings.uploadDocumentToProveAddress,
+                  body: controller.pickedImageName.value.isNotEmpty
+                      ? controller.pickedImageName.value
+                      : AppStrings.pleaseMakeSurePicIsClear,
+                  onTap: () {
+                    selectOptionSheet(size);
+                  },
+                ),
+                const SizedBox(height: 55),
+                saveButton(),
+              ],
+            ),
           )),
     );
   }
@@ -74,41 +83,51 @@ class HomeAddressScreen extends GetView<IdentityVerificationController> {
             width: 370,
             text: AppStrings.save,
             // color: secondaryColor,
-            onTap: () {},
+            onTap: controller.updateKyc,
             isLoading: controller.isLoading.value,
           );
   }
 
-  Widget checkBoxWithText(
-      {
-      // required bool selected,
-      required IdType idType,
-      required IdType selectedIdType,
-      required String title,
-      required void Function(IdType)? onTap}) {
-    return GestureDetector(
-      onTap: () => onTap!(idType),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          sqaureCheckBox(
-              padingWidth: 2.sp,
-              marginRight: 4.sp,
-              border: Border.all(
-                  color: idType == selectedIdType ? primaryColor : grey1,
-                  width: 1.6),
-              color:
-                  idType == selectedIdType ? primaryColor : Colors.transparent),
-          const SizedBox(
-            width: 5,
-          ),
-          textWidget(
-              text: title,
-              style: getRegularStyle(
-                  fontSize: 10.sp,
-                  color: idType == selectedIdType ? primaryColor : grey1)),
-        ],
+  Future<dynamic> selectOptionSheet(Size size) {
+    return Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+        height: 150,
+        width: size.width,
+        child: Column(
+          children: [
+            textWidget(text: AppStrings.selectOption, style: getMediumStyle()),
+            const SizedBox(
+              height: 20,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: GtiButton(
+                    width: 120.sp,
+                    text: AppStrings.camera,
+                    onTap: () => controller.openCamera(),
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: GtiButton(
+                    width: 120.sp,
+                    text: AppStrings.gallery,
+                    onTap: controller.openGallery,
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
       ),
+      backgroundColor: white,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(0.r), topRight: Radius.circular(0.r))),
     );
   }
 }

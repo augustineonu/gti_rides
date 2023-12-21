@@ -7,6 +7,7 @@ import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/route/routes.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
+import 'package:gti_rides/services/storage_service.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:intercom_flutter/intercom_flutter.dart';
@@ -39,6 +40,9 @@ class _GtiRidesState extends State<GtiRides> {
     logger.log('intState');
     bindings.dependencies();
     // loadImage(ImageAssets.onboarding);
+    storageService.init().then((_) {
+       logger.debug('loading session...');
+    });
     super.initState();
   }
 

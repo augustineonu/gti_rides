@@ -6,11 +6,14 @@ import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/api_service.dart';
 import 'package:gti_rides/services/auth_service.dart';
 import 'package:gti_rides/services/biometric_service.dart';
+import 'package:gti_rides/services/device_service.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
+import 'package:gti_rides/services/storage_service.dart';
 import 'package:gti_rides/services/token_service.dart';
 import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
+import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/utils.dart';
 
 class LoginController extends GetxController
@@ -20,8 +23,10 @@ class LoginController extends GetxController
   RxInt currentIndex = 0.obs;
   PageController controller = PageController();
   RxBool isDone = false.obs;
+  // RxBool? isFirstTimeLogin;
   RxBool showPassword = false.obs;
   RxBool isLoading = false.obs;
+  // RxBool? isFirstTimeLogin;
 
   TextEditingController emailOrPhoneController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -36,8 +41,10 @@ class LoginController extends GetxController
   }
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
+    // isFirstTimeLogin.value;
+    // isFirstTimeLogin = await storageService.fetch("firstTimeLogin");
   }
 
   void obscurePassword() => showPassword.value = !showPassword.value;
@@ -54,6 +61,15 @@ class LoginController extends GetxController
     return List<UserModel>.from(
       list.map((item) => UserModel.fromJson(item)),
     );
+  }
+
+  Future<bool?> firstTimeLoginCheck() async {
+    bool? value = await storageService.fetch('firstTimeLogin');
+    if (value == null || value == true) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   Future<void> processLogin() async {
@@ -81,7 +97,7 @@ class LoginController extends GetxController
           await routeService.gotoRoute(AppLinks.verifyOtp,
               arguments: {'emailOrPhone': emailOrPhoneController.text});
         }
-         showErrorSnackbar(message: result.message!);
+        showErrorSnackbar(message: result.message!);
         // routeService.offAllNamed(AppLinks.verifyOtp, arguments: {
         //   'email': emailController.text,
         // });
@@ -90,13 +106,28 @@ class LoginController extends GetxController
         tokenService.setAccessToken(result.data!["accessToken"]);
         logger.log("set token:: ${result.data!["accessToken"]}");
 
-        //
+        var isFirstTimeLogin = await firstTimeLoginCheck();
+
+        if (isFirstTimeLogin!) {
+          final res = await authService
+              .addBiometric(payload: {"biometricID": deviceService.deviceId});
+          if (res.status == "success" || res.status_code == 200) {
+            isFirstTimeLogin = false;
+            await storageService.insert('firstTimeLogin', isFirstTimeLogin!);
+            logger.log("${res.status} ${res.message}");
+          } else {
+            logger.log("${res.status} ${res.message}");
+          }
+        }
+        // await getProfileBeforeRouting(result.message!);
         final response = await authService.getProfile();
         if (response.status == "success" || response.status_code == 200) {
           // persist user data
           logger.log("user ${response.data.toString()}");
-          final UserModel userModel = UserModel.fromJson(response.data[0]);
+          final UserModel userModel = UserModel.fromJson(response.data?[0]);
           userService.setCurrentUser(userModel.toJson());
+          // persiste data
+          await userService.saveUserData(userModel);
           await showSuccessSnackbar(message: result.message!);
 
           if (userModel.userType.toString() == "renter") {
@@ -114,7 +145,29 @@ class LoginController extends GetxController
     }
   }
 
+  Future<void> getProfileBeforeRouting(String? message) async {
+    final response = await authService.getProfile();
+    if (response.status == "success" || response.status_code == 200) {
+      // persist user data
+      logger.log("user ${response.data.toString()}");
+      final UserModel userModel = UserModel.fromJson(response.data?[0]);
+      userService.setCurrentUser(userModel.toJson());
+      // persiste data
+      await userService.saveUserData(userModel);
+      await showSuccessSnackbar(message: message!);
+
+      if (userModel.userType.toString() == "renter") {
+        await routeService.gotoRoute(AppLinks.carRenterLanding);
+      } else {
+        await routeService.gotoRoute(AppLinks.carOwnerLanding);
+      }
+    }
+  }
+
   Future<void> biometricLogin() async {
+    final UserModel? userModel = await userService.getUserData();
+    logger.log("user:: ${userModel!.emailAddress!}");
+
     final authenticated = await biometricService.authenticate(
         message: 'Please authenticate to Login into your account');
 
@@ -122,6 +175,47 @@ class LoginController extends GetxController
     if (authenticated) {
       // call login with biometrics
       logger.log("User authenticated");
+
+      final isFirstTimeLogin = await firstTimeLoginCheck();
+      if (isFirstTimeLogin!) {
+        await showErrorSnackbar(
+            message: AppStrings.kindlyLoginWithCredToSetBiometrics);
+      } else {
+        try {
+          final response = await authService.biometricLogin(payload: {
+            "user": userModel.emailAddress!,
+            "biometricID": deviceService.deviceId
+          });
+          if (response.status == "success" || response.status_code == 200) {
+            // logger.log("success: ${response.message}");
+            // await showSuccessSnackbar(message: response.message!);
+            // await getProfileBeforeRouting(response.message!);
+            final response = await authService.getProfile();
+
+            if (response.status == "success" || response.status_code == 200) {
+              // persist user data
+              logger.log("user ${response.data.toString()}");
+              final UserModel userModel = UserModel.fromJson(response.data?[0]);
+              userService.setCurrentUser(userModel.toJson());
+              // persiste data
+              await userService.saveUserData(userModel);
+              await showSuccessSnackbar(message: response.status!);
+
+              if (userModel.userType.toString() == "renter") {
+                await routeService.gotoRoute(AppLinks.carRenterLanding);
+              } else {
+                await routeService.gotoRoute(AppLinks.carOwnerLanding);
+              }
+            }
+          } else {
+            logger.log("failed: ${response.message}");
+            showErrorSnackbar(message: "${response.message}");
+          }
+        } catch (e) {
+          logger.log("error rrr: $e");
+          showErrorSnackbar(message: e.toString());
+        }
+      }
     } else if (biometrics.isEmpty) {
       infoDialog(
         content: "No biometrics",

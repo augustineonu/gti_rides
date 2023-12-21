@@ -90,7 +90,7 @@ class ApiService {
     String? token,
   }) async {
     try {
-      logger.log("POST REQUEST DATA:: $data");
+      logger.log("POST REQUEST DATA:: $baseURL  $endpoint $data");
       late Response response;
       response = await _dio.post(
         endpoint,
@@ -209,64 +209,116 @@ class ApiService {
     }
   }
 
-  Future<dynamic> putRequestFile({
+  // Future<dynamic> putRequestFile({
+  //   required String endpoint,
+  //   required FormData data,
+  // }) async {
+  //   try {
+  //     logger.log("PATCH REQUEST DATA:: ${data.fields.toString()}");
+  //     // late Response response;
+  //     Response response = await _dio.put(
+  //       endpoint,
+  //       data: data,
+  //       options: Options(
+  //         // receiveDataWhenStatusError: false,
+  //         headers: {
+  //           'Authorization': 'Bearer ${tokenService.accessToken.value}',
+  //         },
+  //       ),
+  //     );
+  //     logger.log("PATCH REQUEST  ($endpoint) :: ${response.data}");
+
+  //     // logger.log("PATCH REQUEST RESPONSE:: $response");
+  //     final ApiResponseModel apiResponse =
+  //         ApiResponseModel.fromJson(response.data);
+
+  //     // Check if the response status code is 400 and handle it globally
+  //     if (apiResponse.status_code == 400) {
+  //       bool newAccessTokenResult = await tokenService.getNewAccessToken();
+  //       if (!newAccessTokenResult) {
+  //         logger.log('Going to Login screen');
+  //         routeService.offAllNamed(AppLinks.login);
+  //         return;
+  //       }
+
+  //       // Retry the request with the new access token
+  //       response = await _dio.put(
+  //         endpoint,
+  //         data: data,
+  //         options: Options(
+  //           headers: {
+  //             'Authorization': 'Bearer ${tokenService.accessToken.value}',
+  //             'Content-Type': 'image/png',
+  //           },
+  //         ),
+  //       );
+  //     }
+
+  //     // Propagate the response to the caller
+  //     return apiResponse;
+  //   } on DioException catch (e) {
+  //     logger.log("PATCH REQUEST ERROR ($endpoint) :: ${e.response?.data}");
+
+  //     final ApiResponseModel apiResponse =
+  //         ApiResponseModel.fromJson(e.response!.data);
+  //     // return apiResponse;
+  //     // Propagate the error to the caller
+  //     // if (e.response?.data != null) {
+  //     //   return e.response?.data;
+  //     // }
+  //     // throw "An error occurred";
+  //   } on SocketException {
+  //     throw "seems you are offline";
+  //   } catch (error) {
+  //     throw error.toString();
+  //   }
+  // }
+
+    Future<dynamic> putRequestFile({
     required String endpoint,
     required FormData data,
   }) async {
     try {
       logger.log("PATCH REQUEST DATA:: ${data.fields.toString()}");
-      // late Response response;
-      Response response = await _dio.put(
+      late Response response;
+      response = await _dio.put(
         endpoint,
         data: data,
         options: Options(
-          // receiveDataWhenStatusError: false,
           headers: {
             'Authorization': 'Bearer ${tokenService.accessToken.value}',
+            // 'Content-Type': 'image/png'
           },
         ),
       );
-      logger.log("PATCH REQUEST  ($endpoint) :: ${response.data}");
-
-      // logger.log("PATCH REQUEST RESPONSE:: $response");
+      logger.log("PATCH REQUEST RESPONSE:: $response");
       final ApiResponseModel apiResponse =
           ApiResponseModel.fromJson(response.data);
-
-      // Check if the response status code is 400 and handle it globally
-      if (apiResponse.status_code == 400) {
+      if (apiResponse.status != "success" || apiResponse.status_code == 401) {
         bool newAccessTokenResult = await tokenService.getNewAccessToken();
         if (!newAccessTokenResult) {
-          logger.log('Going to Login screen');
+          logger.log('Going to welcome screen');
           routeService.offAllNamed(AppLinks.login);
           return;
         }
-
-        // Retry the request with the new access token
         response = await _dio.put(
           endpoint,
           data: data,
           options: Options(
             headers: {
               'Authorization': 'Bearer ${tokenService.accessToken.value}',
-              'Content-Type': 'image/png',
+              'Content-Type': 'image/png'
             },
           ),
         );
       }
-
-      // Propagate the response to the caller
-      return apiResponse;
+      return response.data;
     } on DioException catch (e) {
       logger.log("PATCH REQUEST ERROR ($endpoint) :: ${e.response?.data}");
-
-      final ApiResponseModel apiResponse =
-          ApiResponseModel.fromJson(e.response!.data);
-      return apiResponse;
-      // Propagate the error to the caller
-      // if (e.response?.data != null) {
-      //   return e.response?.data;
-      // }
-      // throw "An error occurred";
+      if (e.response?.data != null) {
+        return e.response?.data;
+      }
+      throw "An error occurred";
     } on SocketException {
       throw "seems you are offline";
     } catch (error) {
@@ -274,6 +326,7 @@ class ApiService {
     }
   }
 
+  
   Future<dynamic> getRequest(
     String endpoint,
   ) async {
@@ -284,9 +337,9 @@ class ApiService {
         endpoint,
         options: Options(
           responseType: ResponseType.plain,
-          headers: {
-            'Authorization': 'Bearer ${tokenService.accessToken.value}',
-          },
+          // headers: {
+          //   'Authorization': 'Bearer ${tokenService.accessToken.value}',
+          // },
         ),
       );
       logger.log("GET REQUEST RESPONSE ($endpoint) :: ${response.data}");
@@ -304,9 +357,9 @@ class ApiService {
           endpoint,
           options: Options(
             responseType: ResponseType.plain,
-            headers: {
-              'Authorization': 'Bearer ${tokenService.accessToken.value}',
-            },
+            // headers: {
+            //   'Authorization': 'Bearer ${tokenService.accessToken.value}',
+            // },
           ),
         );
         // apiResponse = ApiResponseModel.fromJson(response.data);

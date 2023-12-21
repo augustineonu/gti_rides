@@ -46,11 +46,15 @@ class OccupationScreen extends GetView<IdentityVerificationController> {
       child: Obx(() => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              NormalInputTextWidget(
-                expectedVariable: 'field',
-                title: AppStrings.inputOccupation,
-                hintText: AppStrings.inputAddressSm,
-                controller: controller.homeAddressController,
+              Form(
+                 autovalidateMode: AutovalidateMode.onUserInteraction,
+                key: controller.updateFormKey,
+                child: NormalInputTextWidget(
+                  expectedVariable: 'field',
+                  title: AppStrings.inputOccupation,
+                  hintText: AppStrings.inputAddressSm,
+                  controller: controller.occupationController,
+                ),
               ),
               const SizedBox(height: 32),
               saveButton(),
@@ -67,41 +71,11 @@ class OccupationScreen extends GetView<IdentityVerificationController> {
             width: 370,
             text: AppStrings.save,
             // color: secondaryColor,
-            onTap: () {},
+            onTap: controller.updateKyc,
             isLoading: controller.isLoading.value,
           );
   }
 
-  Widget checkBoxWithText(
-      {
-      // required bool selected,
-      required IdType idType,
-      required IdType selectedIdType,
-      required String title,
-      required void Function(IdType)? onTap}) {
-    return GestureDetector(
-      onTap: () => onTap!(idType),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          sqaureCheckBox(
-              padingWidth: 2.sp,
-              marginRight: 4.sp,
-              border: Border.all(
-                  color: idType == selectedIdType ? primaryColor : grey1,
-                  width: 1.6),
-              color:
-                  idType == selectedIdType ? primaryColor : Colors.transparent),
-          const SizedBox(
-            width: 5,
-          ),
-          textWidget(
-              text: title,
-              style: getRegularStyle(
-                  fontSize: 10.sp,
-                  color: idType == selectedIdType ? primaryColor : grey1)),
-        ],
-      ),
-    );
-  }
+
+
 }
