@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/shared_screens/more/identity_verification/identity_verification_controller.dart';
+import 'package:gti_rides/screens/shared_screens/more/identity_verification/home_address/home_address_controller.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/sqaure_check_box_widget.dart';
@@ -13,12 +14,12 @@ import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
 
-class HomeAddressScreen extends GetView<IdentityVerificationController> {
+class HomeAddressScreen extends GetView<HomeAddressController> {
   const HomeAddressScreen([Key? key]) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    final controller = Get.put(IdentityVerificationController());
+    final controller = Get.put(HomeAddressController());
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: appBar(controller),
@@ -27,7 +28,7 @@ class HomeAddressScreen extends GetView<IdentityVerificationController> {
     );
   }
 
-  AppBar appBar(IdentityVerificationController controller) {
+  AppBar appBar(HomeAddressController controller) {
     return gtiAppBar(
       onTap: controller.goBack,
       leading: Transform.scale(
@@ -42,7 +43,7 @@ class HomeAddressScreen extends GetView<IdentityVerificationController> {
   }
 
   Widget body(Size size, context,
-      {required IdentityVerificationController controller}) {
+      {required HomeAddressController controller}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
       child: Obx(() => Form(
@@ -60,13 +61,14 @@ class HomeAddressScreen extends GetView<IdentityVerificationController> {
                 const SizedBox(height: 32),
                 imageUploadWidget(
                   title: AppStrings.uploadDocumentToProveAddress,
-                  body: controller.pickedImageName.value.isNotEmpty
-                      ? controller.pickedImageName.value
+                  body: controller.frontImageName.value.isNotEmpty
+                      ? controller.frontImageName.value
                       : AppStrings.pleaseMakeSurePicIsClear,
                   onTap: () {
                     selectOptionSheet(size);
                   },
                 ),
+              
                 const SizedBox(height: 55),
                 saveButton(),
               ],
@@ -89,6 +91,7 @@ class HomeAddressScreen extends GetView<IdentityVerificationController> {
   }
 
   Future<dynamic> selectOptionSheet(Size size) {
+
     return Get.bottomSheet(
       Container(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
@@ -130,4 +133,7 @@ class HomeAddressScreen extends GetView<IdentityVerificationController> {
               topLeft: Radius.circular(0.r), topRight: Radius.circular(0.r))),
     );
   }
+
+
+
 }

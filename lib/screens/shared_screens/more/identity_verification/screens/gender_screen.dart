@@ -47,15 +47,22 @@ class GenderScreen extends GetView<IdentityVerificationController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // textWidget(text: AppStrings.selectGender, style: getRegularStyle()),
-              dropdownWidget1(
-                  context: context,
-                  hintText: 'Select gender',
-                  // selectedUserValue: AppStrings.male,
-                  values: controller.gender,
-                  onChange: (value) {
-                    print('Selected value: $value');
-                  },
-                  title: AppStrings.selectGender),
+              Form(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                key: controller.updateFormKey,
+                child: dropdownWidget1(
+                    context: context,
+                    hintText: 'Select gender',
+                    // selectedUserValue: AppStrings.male,
+                    values: controller.gender,
+                    expectedVariable: 'gender',
+                    onChange: (value) {
+                      controller.selectedGender.value = value;
+                     
+                      print('Selected value: $value ${controller.selectedGender.value}');
+                    },
+                    title: AppStrings.selectGender),
+              ),
               const SizedBox(height: 74),
               saveButton(),
             ],
@@ -71,7 +78,7 @@ class GenderScreen extends GetView<IdentityVerificationController> {
             width: 370,
             text: AppStrings.save,
             // color: secondaryColor,
-            onTap: () {},
+            onTap: controller.updateKyc,
             isLoading: controller.isLoading.value,
           );
   }

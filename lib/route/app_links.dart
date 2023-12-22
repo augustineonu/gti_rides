@@ -62,6 +62,7 @@ class AppLinks {
       "/renter/more/identityVerification/emergencyContact";
   static const occupation = "/renter/more/identityVerification/occupation";
   static const gender = "/renter/more/identityVerification/gender";
+  static const dob = "/renter/more/identityVerification/dob";
   static const referral = "/renter/more/referral";
   static const carOwnerLanding = "/ownerLanding";
   static const listVehicle = "/owner/home/listVehicle";
@@ -133,6 +134,7 @@ class AppLinks {
     'drivers': drivers,
     'addDriver': addDriver,
     'changePasswordOtp': changePasswordOtp,
+    'dob': dob,
     // 'trips': trips,
   };
 

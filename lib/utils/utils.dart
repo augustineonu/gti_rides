@@ -27,6 +27,8 @@ String fetchErrorText({required String expectedTextVariable}) {
       return AppStrings.fullNameRequiredError;
     case 'field':
       return AppStrings.fieldIsRequiredError;
+      case 'gender':
+      return AppStrings.selectGenderError;
     default:
       return AppStrings.isRequiredError;
   }

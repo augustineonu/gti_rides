@@ -86,8 +86,7 @@ class ProfileController extends GetxController {
     try {
       Future<dio.FormData> constructFormData() async {
         var formData = dio.FormData.fromMap({});
-      
-        
+
         // Check if fullName is not empty before adding it to formData
         if (fullNameController.text.isNotEmpty) {
           formData.fields.add(MapEntry('fullName', fullNameController.text));
@@ -95,15 +94,15 @@ class ProfileController extends GetxController {
         // Check if imagePath is not empty before adding the image file to formData
         if (pickedImagePath.value.isNotEmpty) {
           // formData.
-          formData.files.add(MapEntry(
-            'file',
+          formData.fields.add(MapEntry(
+            'profilePic',
             await dio.MultipartFile.fromFile(
               pickedImagePath.value,
               filename: pickedImagePath.value,
-            ),
+            ).toString(),
           ));
         }
-        logger.log("form field ${formData}");
+        logger.log("form field ${formData.length}");
         return formData;
       }
 

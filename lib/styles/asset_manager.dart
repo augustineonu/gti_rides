@@ -111,5 +111,7 @@ class ImageAssets {
   static const String doubleCheck = "$IMAGE_PATH/checkmark.png";
   static const String ladyFrontPage = "$IMAGE_PATH/lady_frontpage.png";
   static const String ladyPick = "$IMAGE_PATH/lady_picks.png";
+  static const String moreFrame = "$IMAGE_PATH/more_frame.png";
+  static const String rentVehicleBg = "$IMAGE_PATH/rent_vehicle_bg.png'";
 
 }

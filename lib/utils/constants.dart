@@ -47,7 +47,8 @@ class AppStrings {
   static String passwordIsRequiredError = "password is required";
   static String fullNameRequiredError = "name is required";
   static String phoneIsRequiredError = "Phone is required";
-  static String fieldIsRequiredError = "field cannot be empty".tr;
+  static String fieldIsRequiredError = "field cannot be empty";
+  static String selectGenderError = "Kindly select gender";
   static String otpIsRequiredError = "Pin is required";
   static String isRequiredError = "Field is required";
   static String search = "Search";
@@ -268,6 +269,7 @@ class AppStrings {
   static String systemWillCheckAvailability =
       'System will check availability of car for the requested period before you proceed';
   static String lastDate = 'Last date';
+  static String dateHintText = '5 Nov, 1994';
   static String dateTimeHintText = '5 Nov, 9:00am';
   static String checkAvailability = 'Check availability';
   static String availableDates = 'Available dates';
@@ -305,6 +307,8 @@ class AppStrings {
   static String youCanListYourCar =
       'You can also list your car on GTI Rides and earn, listing is free, you can set your rules.';
   static String yourPersonalDetails = 'Your personal details';
+  static String gotYouCoveredVehicles = "We've got you covered with trucks for moving, Benz for luxury getaways, utility vehicles for errands, buses for events e.t.c";
+  static String rentAvehicle = 'Rent a Vehicle';
   static String findYourDetails = 'Find your details below';
   static String displayPicture = 'Display picture';
   static String saveDetails = 'Save details';
@@ -339,6 +343,7 @@ class AppStrings {
   static String uploadBackView = 'Upload back view';
   static String pleaseMakeSurePicIsClear = 'Please make sure picture is clear';
   static String inputAddressSm = 'Input address';
+  static String inputDob = 'Input date of birth';
   static String save = 'Save';
   static String name = 'Name';
   static String inputOccupation = 'Input occupation';

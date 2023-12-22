@@ -13,8 +13,8 @@ import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
 
-class OfficeAddressScreen extends GetView<IdentityVerificationController> {
-  const OfficeAddressScreen([Key? key]) : super(key: key);
+class DateOfBirthScreen extends GetView<IdentityVerificationController> {
+  const DateOfBirthScreen([Key? key]) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(IdentityVerificationController());
@@ -35,7 +35,7 @@ class OfficeAddressScreen extends GetView<IdentityVerificationController> {
           child: SvgPicture.asset(ImageAssets.arrowLeft, color: black)),
       centerTitle: true,
       title: textWidget(
-          text: AppStrings.officeAddress,
+          text: AppStrings.dob,
           style: getMediumStyle().copyWith(fontWeight: FontWeight.w500)),
       titleColor: iconColor(),
     );
@@ -53,9 +53,10 @@ class OfficeAddressScreen extends GetView<IdentityVerificationController> {
                 key: controller.updateFormKey,
                 child: NormalInputTextWidget(
                   expectedVariable: 'field',
-                  title: AppStrings.inputAddressSm,
-                  hintText: AppStrings.inputAddressSm,
+                  title: AppStrings.inputDob,
+                  hintText: AppStrings.dateTimeHintText,
                   controller: controller.officeAddressController,
+                  textInputType: TextInputType.datetime,
                 ),
               ),
               const SizedBox(height: 32),

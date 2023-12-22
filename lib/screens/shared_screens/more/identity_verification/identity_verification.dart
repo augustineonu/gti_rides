@@ -28,7 +28,7 @@ class IdentityVerificationScreen
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: appBar(controller),
-      body: body(size, context),
+      body: Obx(() => body(size, context)),
       // }
     );
   }
@@ -69,7 +69,11 @@ class IdentityVerificationScreen
           const SizedBox(height: 20),
           identityVerificationWidget(
               title: AppStrings.proofOfIdentity,
-              subTitle: AppStrings.addDocument,
+              subTitle: userKyc != []
+                  ? userKyc![0]["drivingLicenceNumber"] != null
+                      ? AppStrings.driversLicense
+                      : AppStrings.addDocument
+                  : AppStrings.addDocument,
               onTap: controller.routeToProofOfIdentity),
           identityVerificationWidget(
               title: AppStrings.gender,
@@ -82,7 +86,7 @@ class IdentityVerificationScreen
               subTitle: userKyc != []
                   ? userKyc![0]["dateOfBirth"] ?? AppStrings.provideDob
                   : AppStrings.provideDob,
-              onTap: () {}),
+              onTap: controller.routeToDob),
           identityVerificationWidget(
               title: AppStrings.emergencyContactDetails,
               subTitle: userKyc != []

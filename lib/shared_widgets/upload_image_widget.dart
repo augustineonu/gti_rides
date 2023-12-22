@@ -16,12 +16,12 @@ Widget imageUploadWidget({
       strokeWidth: 1,
       padding:
           EdgeInsets.only(left: 13, right: 25.sp, top: 12.sp, bottom: 12.sp),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          GestureDetector(
-            onTap: onTap,
-            child: SizedBox(
+      child: GestureDetector(
+          onTap: onTap,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
               width: 200.sp,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,9 +39,9 @@ Widget imageUploadWidget({
                 ],
               ),
             ),
-          ),
-          SvgPicture.asset(ImageAssets.imageCard)
-        ],
+            SvgPicture.asset(ImageAssets.imageCard)
+          ],
+        ),
       ),
     );
   }

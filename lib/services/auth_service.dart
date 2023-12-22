@@ -191,8 +191,10 @@ class AuthService {
            '/user/auth/refreshToken', 
           // token: accessToken
           );
-      return ApiResponseModel.fromJson(result);
+            logger.log("result $result");
+      return ApiResponseModel.fromJson(jsonDecode(result));
     } catch (err) {
+      logger.log("refreshToken $err");
       rethrow;
     }
   }

@@ -41,21 +41,38 @@ class MoreScreen extends StatelessWidget {
                   child: Column(
                     // mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      rentVehicleCard(onTap: () {}, height: height),
+                      controller.user.value.userType == 'renter'
+                          ? rentVehicleCard(
+                              imagePath: ImageAssets.ladyHandout,
+                              title: AppStrings.rentOutYourVehichle,
+                              body: AppStrings.youCanListYourCar,
+                              onTap: () {},
+                              height: height)
+                          : rentVehicleCard(
+                              imagePath: ImageAssets.moreFrame,
+                              title: AppStrings.rentAvehicle,
+                              body: AppStrings.gotYouCoveredVehicles,
+                              onTap: () {},
+                              height: height),
                       SizedBox(
                         height: 10.sp,
                       ),
+                      controller.user.value.userType == "owner"
+                          ? Text("Owner")
+                          : Text("Renter"),
                       ListView.builder(
                         shrinkWrap: true,
                         itemCount: controller.profileOptions.length,
                         itemBuilder: (context, index) {
                           // show "My Drivers" only if user type is Car Owner
                           final option = controller.profileOptions[index];
-                          return profileOptionsWIdget(
-                            imageUrl: option['image'],
-                            title: option['title'],
-                            onTap: () {
-                              switch (index) {
+                          if (controller.user.value.userType == "owner") {
+                            return profileOptionsWIdget(
+                              imageUrl: option['image'],
+                              title: option['title'],
+                              onTap: () {
+                                // controller.routeToDrivers();
+                                switch (index) {
                                 case 0:
                                   controller.routeToAccountDetails();
                                 case 1:
@@ -69,10 +86,59 @@ class MoreScreen extends StatelessWidget {
                                 case 5:
                                   controller.routeToReferralCode();
                                   break;
+                                  case 6:
+                                  break;
+                                  case 7:
+                                  break;
                                 default:
-                              }
-                            },
-                          );
+                                }
+                              },
+                            );
+                          } else {
+                            // if user type is renter
+                            return switch (index) {
+                              0 => profileOptionsWIdget(
+                                  imageUrl: option['image'],
+                                  title: option['title'],
+                                  onTap: () {
+                                    controller.routeToAccountDetails();
+                                  },
+                                ),
+                              1 => profileOptionsWIdget(
+                                  imageUrl: option['image'],
+                                  title: option['title'],
+                                  onTap: () {
+                                    controller.routeToFavorite();
+                                  },
+                                ),
+                              2 => profileOptionsWIdget(
+                                  imageUrl: option['image'],
+                                  title: option['title'],
+                                  onTap: () {
+                                    controller.routeToIdentityVerification();
+                                  },
+                                ),
+                              3 => const SizedBox(), 
+                              4 || 5 => profileOptionsWIdget(
+                                  imageUrl: option['image'],
+                                  title: option['title'],
+                                  onTap: () {
+                                    controller.routeToReferralCode();
+                                  },
+                                ),
+                              6 => profileOptionsWIdget(
+                                  imageUrl: option['image'],
+                                  title: option['title'],
+                                  onTap: () {},
+                                ),
+                              7 => profileOptionsWIdget(
+                                  imageUrl: option['image'],
+                                  title: option['title'],
+                                  onTap: () {},
+                                ),
+                              _ => Container() 
+                            };
+                          }
                         },
                       ),
                       divider(color: borderColor),
@@ -149,7 +215,12 @@ class MoreScreen extends StatelessWidget {
     );
   }
 
-  Widget rentVehicleCard({void Function()? onTap, height}) {
+  Widget rentVehicleCard(
+      {required String title,
+      required String body,
+      required String imagePath,
+      void Function()? onTap,
+      height}) {
     return Container(
       // height: 125.sp,
       margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
@@ -164,11 +235,16 @@ class MoreScreen extends StatelessWidget {
           Positioned(
               left: 50,
               // right: 0,
-              child: Image.asset('assets/images/rent_vehicle_bg.png')),
+              bottom: 0,
+              top: 0,
+              child: Image.asset(
+                'assets/images/rent_vehicle_bg.png',
+                fit: BoxFit.fitHeight,
+              )),
           Stack(
             children: [
               SizedBox(
-                width: 150.sp,
+                width: 160.sp,
                 // height: height,
                 child: Padding(
                   padding: const EdgeInsets.only(
@@ -182,21 +258,24 @@ class MoreScreen extends StatelessWidget {
                         height: 8.sp,
                       ),
                       textWidget(
-                          text: AppStrings.rentOutYourVehichle,
+                          text: title,
                           textOverflow: TextOverflow.visible,
                           style: getSemiBoldStyle(fontSize: 15.sp).copyWith(
                               fontWeight: FontWeight.w600, height: 1.1)),
-                      SizedBox(
-                        height: 5.sp,
+                      // SizedBox(
+                      //   height: 5.sp,
+                      // ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: textWidget(
+                            text: body,
+                            textOverflow: TextOverflow.visible,
+                            style: getLightStyle(fontSize: 10.sp)
+                                .copyWith(fontWeight: FontWeight.w400)),
                       ),
-                      textWidget(
-                          text: AppStrings.youCanListYourCar,
-                          textOverflow: TextOverflow.visible,
-                          style: getLightStyle(fontSize: 10.sp)
-                              .copyWith(fontWeight: FontWeight.w400)),
-                      SizedBox(
-                        height: 7.sp,
-                      ),
+                      // SizedBox(
+                      //   height: 2.sp,
+                      // ),
                       InkWell(
                         onTap: onTap,
                         child: textWidget(
@@ -266,9 +345,10 @@ class MoreScreen extends StatelessWidget {
                       ),
                     ),
                     child: Image.asset(
-                      ImageAssets.ladyHandout,
+                      imagePath,
                       width: 160.sp,
-                      fit: BoxFit.fitHeight,
+                      height: 130,
+                      fit: BoxFit.fill,
                     ),
                   ),
                 ],

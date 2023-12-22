@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -44,32 +45,42 @@ class EmergencyContactScreen extends GetView<IdentityVerificationController> {
       {required IdentityVerificationController controller}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
-      child: Obx(() => Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              NormalInputTextWidget(
-                expectedVariable: 'field',
-                title: AppStrings.inputEmergencyNumber,
-                hintText: AppStrings.phoneHintText,
-                controller: controller.homeAddressController,
+      child: Obx(() => Form(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            key: controller.updateFormKey,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  NormalInputTextWidget(
+                      expectedVariable: 'field',
+                      title: AppStrings.inputEmergencyNumber,
+                      hintText: AppStrings.phoneHintText,
+                      controller: controller.emergencyNumberController,
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(11),
+                        
+                      ],
+                      textInputType: TextInputType.phone,),
+                  const SizedBox(height: 24),
+                  NormalInputTextWidget(
+                    expectedVariable: 'field',
+                    title: AppStrings.name,
+                    hintText: AppStrings.inputName,
+                    controller: controller.emergencyNameController,
+                  ),
+                  const SizedBox(height: 24),
+                  NormalInputTextWidget(
+                    expectedVariable: 'field',
+                    title: AppStrings.relationship,
+                    hintText: AppStrings.inputRelationship,
+                    controller: controller.relationshipController,
+                  ),
+                  const SizedBox(height: 74),
+                  saveButton(),
+                ],
               ),
-              const SizedBox(height: 24),
-              NormalInputTextWidget(
-                expectedVariable: 'field',
-                title: AppStrings.name,
-                hintText: AppStrings.inputName,
-                controller: controller.nameController,
-              ),
-              const SizedBox(height: 24),
-              NormalInputTextWidget(
-                expectedVariable: 'field',
-                title: AppStrings.relationship,
-                hintText: AppStrings.inputRelationship,
-                controller: controller.relationshipController,
-              ),
-              const SizedBox(height: 74),
-              saveButton(),
-            ],
+            ),
           )),
     );
   }
@@ -82,7 +93,7 @@ class EmergencyContactScreen extends GetView<IdentityVerificationController> {
             width: 370,
             text: AppStrings.save,
             // color: secondaryColor,
-            onTap: () {},
+            onTap: controller.updateKyc,
             isLoading: controller.isLoading.value,
           );
   }

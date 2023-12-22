@@ -124,7 +124,7 @@ class ReferralCodeScreen extends GetView<MoreController> {
                       textOverflow: TextOverflow.visible,
                       style: getRegularStyle(color: grey1)),
                   textWidget(
-                      text: 'XETYOIJJB',
+                      text: controller.user.value.referralCode,
                       textAlign: TextAlign.center,
                       textOverflow: TextOverflow.visible,
                       style: getSemiBoldStyle(fontSize: 18..sp)),

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
+import 'package:gti_rides/utils/utils.dart';
 import 'package:iconsax/iconsax.dart';
 
 Widget dropdownWidget(
@@ -98,7 +99,6 @@ Widget dropdownWidget(
                     ?.copyWith(color: Colors.white),
                 onChanged: (Map<String, dynamic>? value) {
                   onChange(value);
-                
                 },
                 icon: const Icon(
                   Iconsax.arrow_down_1,
@@ -158,6 +158,7 @@ Widget dropdownWidget1({
   required String? title,
   Color? iconColor,
   void Function()? onTap,
+  String? expectedVariable,
   // double? radius,
   // Color? arrow,
   // Color? display,
@@ -175,7 +176,7 @@ Widget dropdownWidget1({
         height: 5.sp,
       ),
       SizedBox(
-        height: 45.sp,
+        // height: 55.sp,
         // padding: const EdgeInsets.symmetric(vertical: 5.0),
         child: GestureDetector(
           onTap: onTap,
@@ -187,6 +188,13 @@ Widget dropdownWidget1({
               child: DropdownButtonFormField(
                 iconEnabledColor: red,
                 isExpanded: true,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return fetchErrorText(
+                        expectedTextVariable: expectedVariable ?? '');
+                  }
+                  return null;
+                },
                 hint: Text(
                   hintText!,
                   style: getRegularStyle(color: borderColor),
@@ -234,6 +242,15 @@ Widget dropdownWidget1({
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: borderColor,
+                          width: 1.0.w,
+                        ),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(4.0.r),
+                        ),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: red,
                           width: 1.0.w,
                         ),
                         borderRadius: BorderRadius.all(

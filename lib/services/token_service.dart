@@ -49,21 +49,23 @@ class TokenService {
 // thi smethid is failling
   Future<bool> getNewAccessToken() async {
     try {
-      final ApiResponseModel result =
-          await authService.getNewAccessToken(
+      final ApiResponseModel result = await authService.getNewAccessToken(
             // accessToken: accessToken.value
             );
             logger.log("refresh token: ${result.data} ${result.status}");
-      if (result.status == 'error'.toLowerCase()) {
-        return false;
+      if (result.status == 'success' || result.status_code == 200) {
+         await setTokenModel(result.data);
+      setAccessToken(result.data["accessToken"]);
+        return true;
       }
 
       await setTokenModel(result.data);
       setAccessToken(result.data["accessToken"]);
       // setRefreshToken(tokens.value.refreshToken);
 
-      return true;
+      return false;
     } catch (error) {
+      logger.log("error getting refresh token ${error}");
       return false;
     }
   }

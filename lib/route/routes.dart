@@ -39,6 +39,7 @@ import 'package:gti_rides/screens/shared_screens/more/drivers/add_driver_screen.
 import 'package:gti_rides/screens/shared_screens/more/drivers/drivers_screen.dart';
 import 'package:gti_rides/screens/shared_screens/more/favorite/favorite_screen.dart';
 import 'package:gti_rides/screens/shared_screens/more/identity_verification/identity_verification.dart';
+import 'package:gti_rides/screens/shared_screens/more/identity_verification/screens/dob_screen.dart';
 import 'package:gti_rides/screens/shared_screens/more/identity_verification/screens/emergency_contact_screen.dart';
 import 'package:gti_rides/screens/shared_screens/more/identity_verification/screens/gender_screen.dart';
 import 'package:gti_rides/screens/shared_screens/more/identity_verification/screens/home_address_screen.dart';
@@ -272,6 +273,10 @@ class AppRoutes {
     GetPage(
       name: AppLinks.changePasswordOtp,
       page: () => const ChangePasswordOtpScreen(),
+    ),
+    GetPage(
+      name: AppLinks.dob,
+      page: () => const DateOfBirthScreen(),
     ),
   ];
 }

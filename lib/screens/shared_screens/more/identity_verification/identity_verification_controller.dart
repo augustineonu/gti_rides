@@ -4,6 +4,7 @@ import 'package:gti_rides/models/image_response.dart';
 import 'package:gti_rides/models/list_response_model.dart';
 import 'package:gti_rides/models/user_model.dart';
 import 'package:gti_rides/route/app_links.dart';
+import 'package:gti_rides/services/auth_service.dart';
 import 'package:gti_rides/services/image_service.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
@@ -41,6 +42,7 @@ class IdentityVerificationController extends GetxController {
   void onInit() async {
     update();
 
+    logger.log(" on intit");
     super.onInit();
   }
 
@@ -54,18 +56,21 @@ class IdentityVerificationController extends GetxController {
   TextEditingController homeAddressController = TextEditingController();
   TextEditingController officeAddressController = TextEditingController();
   TextEditingController occupationController = TextEditingController();
-  TextEditingController emergencyContactController = TextEditingController();
+  TextEditingController emergencyNumberController = TextEditingController();
+  TextEditingController emergencyNameController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController relationshipController = TextEditingController();
   final animationValue = 0.0.obs;
   RxInt currentIndex = 0.obs;
   RxBool isLoading = false.obs;
+  RxBool isImageUploadRequired = false.obs;
   // RxBool selectedIdType = false.obs;
   RxBool selectedNationalID = false.obs;
   RxBool selectedPassport = false.obs;
   RxBool selectedDriversLicense = false.obs;
 
   Rx<String> testString = 'hello world'.obs;
+  Rx<String> selectedGender = ''.obs;
   Rx<String> pickedImagePath = ''.obs;
   Rx<String> pickedImageName = ''.obs;
 
@@ -86,25 +91,10 @@ class IdentityVerificationController extends GetxController {
   void routeToEmergencyContact() =>
       routeService.gotoRoute(AppLinks.emergencyContact);
   void routeToSelectGender() => routeService.gotoRoute(AppLinks.gender);
+  void routeToDob() => routeService.gotoRoute(AppLinks.dob);
 
   // void onSelectIdType() => selectedIdType.value = !selectedIdType.value;
 
-  Rx<IdType> selectedIdType = IdType.nationalId.obs;
-
-  void onSelectIdType(IdType idType) {
-    selectedIdType.value = idType;
-  }
-
-  void onPageChanged(int value) {
-    currentIndex.value = value;
-    pageController.animateToPage(
-      value,
-      duration:
-          const Duration(milliseconds: 500), // Adjust the duration as needed
-      curve: Curves.ease,
-    );
-    update();
-  }
 
   void onClickPrevious() {
     if (currentIndex > 0) {
@@ -152,17 +142,17 @@ class IdentityVerificationController extends GetxController {
     }
   }
 
-  
   bool validateImageUpload() {
-  if (pickedImagePath.value.isEmpty) {
-    // Show an error message or handle it accordingly
-    showErrorSnackbar(message: 'Please upload an image.');
-    return false;
+    if (pickedImagePath.value.isEmpty) {
+      // Show an error message or handle it accordingly
+      showErrorSnackbar(message: 'Please upload an image.');
+      return false;
+    }
+    return true;
   }
-  return true;
-}
+
   Future<void> updateKyc() async {
-    if (!updateFormKey.currentState!.validate() || !validateImageUpload()) {
+    if (!updateFormKey.currentState!.validate()) {
       return;
     }
 
@@ -170,7 +160,7 @@ class IdentityVerificationController extends GetxController {
 
     try {
       Future<dio.FormData> constructFormData() async {
-        var formData = dio.FormData();
+        var formData = dio.FormData.fromMap({});
 
         // Check if fullName is not empty before adding it to formData
         if (officeAddressController.text.isNotEmpty) {
@@ -184,17 +174,37 @@ class IdentityVerificationController extends GetxController {
         // Check if imagePath is not empty before adding the image file to formData
         if (pickedImagePath.value.isNotEmpty &&
             homeAddressController.text.isNotEmpty) {
-          formData.files.add(
+          formData.fields.add(
             MapEntry(
               'file',
               await dio.MultipartFile.fromFile(
                 pickedImagePath.value,
                 filename: pickedImagePath.value,
-              ),
+              ).toString(),
             ),
           );
           formData.fields
               .add(MapEntry('homeAddress', homeAddressController.text));
+        }
+
+        if (emergencyNameController.text.isNotEmpty &&
+            emergencyNameController.text.isNotEmpty &&
+            relationshipController.text.isNotEmpty) {
+          formData.fields.add(
+            MapEntry('emergencyNumber', emergencyNumberController.text),
+          );
+          formData.fields.add(
+            MapEntry('emergencyName', emergencyNameController.text),
+          );
+          formData.fields.add(
+            MapEntry('emergencyRelationship', relationshipController.text),
+          );
+        }
+
+        if(selectedGender.isNotEmpty || selectedGender != null){
+          formData.fields.add(
+            MapEntry('gender', selectedGender.string),
+          );
         }
         return formData;
       }
@@ -203,18 +213,25 @@ class IdentityVerificationController extends GetxController {
       final result = await userService.updateKyc(payload: formData);
 
       if (result.status == "success" || result.status_code == 200) {
+        routeService.goBack;
         logger.log("update KYC response ${result.data}");
         await showSuccessSnackbar(message: result.message!);
-        // final response = await authService.getProfile();
-        // if (response.status == "success" || response.status_code == 200) {
-        //   logger.log("refresh user details ${response.data.toString()}");
-        //   final UserModel userModel = UserModel.fromJson(response.data?[0]);
-        //   userService.setCurrentUser(userModel.toJson());
-        //   routeService.goBack;
-        // }
-        // routeService.offAllNamed(AppLinks.more);
-        // routeService.goBack;
-        // Get.back();
+        final response = await userService.getKycProfile();
+        if (response.status == "success" || response.status_code == 200) {
+          final ListResponseModel userModel =
+              ListResponseModel.fromJson(response.data?[0]);
+          // Check if the response data list is not empty
+          if (response.data != null || response.data != []) {
+            userKyc.value = userModel;
+            userService.setUserKyc(response.toJson());
+            userKyc.refresh();
+            update();
+          }
+          routeService.goBack;
+          Navigator.pop;
+        }
+
+        routeService.goBack;
       } else {
         logger.log("error updating user: ${result.message}");
         await showErrorSnackbar(message: result.message!);
