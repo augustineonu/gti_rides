@@ -15,7 +15,7 @@ class MoreController extends GetxController {
   Logger logger = Logger('MoreController');
 
   Rx<UserModel> user = UserModel().obs;
-   Rx<ListResponseModel> userKyc = ListResponseModel().obs;
+  Rx<ListResponseModel> userKyc = ListResponseModel().obs;
 
   MoreController() {
     init();
@@ -83,14 +83,16 @@ class MoreController extends GetxController {
   void routeToReferralCode() => routeService.gotoRoute(AppLinks.referral);
   void routeToDrivers() => routeService.gotoRoute(AppLinks.drivers);
 
+  void launchWebsite() => openUrl(AppStrings.websiteUrl);
 
-    Future<void> getBiometricProfile() async {
+  Future<void> getBiometricProfile() async {
     try {
       final response = await userService.getKycProfile();
 
       if (response.status == "success" || response.status_code == 200) {
         logger.log("User KYC ${response.data.toString()}");
-        final ListResponseModel userModel = ListResponseModel.fromJson(response.data?[0]);
+        final ListResponseModel userModel =
+            ListResponseModel.fromJson(response.data?[0]);
         // Check if the response data list is not empty
         if (response.data != null || response.data != []) {
           userKyc.value = userModel;

@@ -57,9 +57,7 @@ class MoreScreen extends StatelessWidget {
                       SizedBox(
                         height: 10.sp,
                       ),
-                      controller.user.value.userType == "owner"
-                          ? Text("Owner")
-                          : Text("Renter"),
+ 
                       ListView.builder(
                         shrinkWrap: true,
                         itemCount: controller.profileOptions.length,
@@ -119,7 +117,14 @@ class MoreScreen extends StatelessWidget {
                                   },
                                 ),
                               3 => const SizedBox(), 
-                              4 || 5 => profileOptionsWIdget(
+                              4 => profileOptionsWIdget(
+                                  imageUrl: option['image'],
+                                  title: option['title'],
+                                  onTap: () {
+                                    controller.launchWebsite();
+                                  },
+                                ),
+                               5 => profileOptionsWIdget(
                                   imageUrl: option['image'],
                                   title: option['title'],
                                   onTap: () {

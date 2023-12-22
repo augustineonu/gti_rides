@@ -142,7 +142,9 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
           children: <Widget>[
             headerText(ctrl),
             discoverCity(onTap: () => ctrl.routeToSearchCity()),
-            howGtiWorksCard(onTap: () {}, imageUrl: ImageAssets.ladyPick),
+            howGtiWorksCard(onTap: () {
+               ctrl.launchWebsite();
+            }, imageUrl: ImageAssets.ladyPick),
             textWidget(
               text: AppStrings.recentViewCar,
               style: getRegularStyle(),

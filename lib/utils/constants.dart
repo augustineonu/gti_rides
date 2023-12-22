@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 
 class AppStrings {
   static String baseURL = 'https://squid-app-9sdyd.ondigitalocean.app';
+  static String websiteUrl = 'https://www.gtiautos.com/';
   static String loginButtonText = "Log in";
   static String getStartedButtonText = "Get Started";
   static String welcome = "Welcome back";

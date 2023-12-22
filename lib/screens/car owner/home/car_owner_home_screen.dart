@@ -125,7 +125,9 @@ class _CarRenterHomeScreenState extends State<CarOwnerHomeScreen> {
           children: <Widget>[
             getCarListedCard(onTap: controller.routeTolistVehicle),
             manageListedVehicles(onTap: controller.routeToManageVehicle),
-            howGtiWorksCard(onTap: () {}, imageUrl: ImageAssets.guyWorks),
+            howGtiWorksCard(onTap: () {
+              controller.launchWebsite();
+            }, imageUrl: ImageAssets.guyWorks),
             // textWidget(
             //   text: AppStrings.recentViewCar,
             //   style: getRegularStyle(),

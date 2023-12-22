@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/renter_service.dart';
+import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/utils.dart';
 
 import '../../../services/route_service.dart';
@@ -66,6 +67,8 @@ class CarOwnerHomeController extends GetxController {
   void routeToCarRenterLanding() => routeService.gotoRoute(AppLinks.carRenterLanding);
   void routeTolistVehicle() => routeService.gotoRoute(AppLinks.listVehicle);
   void routeToManageVehicle() => routeService.gotoRoute(AppLinks.manageVehicle);
+
+  void launchWebsite() => openUrl(AppStrings.websiteUrl);
 
    Future<void> switchProfileToRenter() async {
     isLoading.value = true;
