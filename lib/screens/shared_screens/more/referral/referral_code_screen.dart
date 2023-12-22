@@ -132,28 +132,32 @@ class ReferralCodeScreen extends GetView<MoreController> {
               ),
             ),
           ),
-          Container(
-            height: size.height,
-            padding:
-                const EdgeInsets.only(top: 20, bottom: 20, right: 15, left: 15),
-            decoration: BoxDecoration(
-                color: primaryColor,
-                borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(4.r),
-                    bottomRight: Radius.circular(4.r))),
-            child: Center(
-              child: Row(
-                children: [
-                  textWidget(
-                      text: AppStrings.copyCode,
-                      textAlign: TextAlign.center,
-                      textOverflow: TextOverflow.visible,
-                      style: getMediumStyle(color: white)),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  SvgPicture.asset(ImageAssets.copy)
-                ],
+          InkWell(
+            onTap: () =>
+                controller.copy(value: controller.user.value.referralCode!),
+            child: Container(
+              height: size.height,
+              padding: const EdgeInsets.only(
+                  top: 20, bottom: 20, right: 15, left: 15),
+              decoration: BoxDecoration(
+                  color: primaryColor,
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(4.r),
+                      bottomRight: Radius.circular(4.r))),
+              child: Center(
+                child: Row(
+                  children: [
+                    textWidget(
+                        text: AppStrings.copyCode,
+                        textAlign: TextAlign.center,
+                        textOverflow: TextOverflow.visible,
+                        style: getMediumStyle(color: white)),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    SvgPicture.asset(ImageAssets.copy)
+                  ],
+                ),
               ),
             ),
           ),

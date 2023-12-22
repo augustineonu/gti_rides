@@ -187,19 +187,23 @@ class LoginController extends GetxController
             "biometricID": deviceService.deviceId
           });
           if (response.status == "success" || response.status_code == 200) {
-            // logger.log("success: ${response.message}");
-            // await showSuccessSnackbar(message: response.message!);
-            // await getProfileBeforeRouting(response.message!);
-            final response = await authService.getProfile();
+            tokenService.setTokenModel(response.data!);
+            tokenService.setAccessToken(response.data!["accessToken"]);
+            logger.log("set token:: ${response.data!["accessToken"]}");
 
-            if (response.status == "success" || response.status_code == 200) {
+    
+            final profileResponse = await authService.getProfile();
+
+            if (profileResponse.status == "success" ||
+                profileResponse.status_code == 200) {
               // persist user data
-              logger.log("user ${response.data.toString()}");
-              final UserModel userModel = UserModel.fromJson(response.data?[0]);
+              logger.log("user ${profileResponse.data.toString()}");
+              final UserModel userModel =
+                  UserModel.fromJson(profileResponse.data?[0]);
               userService.setCurrentUser(userModel.toJson());
               // persiste data
               await userService.saveUserData(userModel);
-              await showSuccessSnackbar(message: response.status!);
+              await showSuccessSnackbar(message: profileResponse.status!);
 
               if (userModel.userType.toString() == "renter") {
                 await routeService.gotoRoute(AppLinks.carRenterLanding);

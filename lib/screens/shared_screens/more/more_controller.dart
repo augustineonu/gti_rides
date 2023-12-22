@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/models/list_response_model.dart';
 import 'package:gti_rides/models/user_model.dart';
@@ -85,6 +86,12 @@ class MoreController extends GetxController {
 
   void launchWebsite() => openUrl(AppStrings.websiteUrl);
 
+     void copy({required String value}) async {
+    await Clipboard.setData(ClipboardData(text: value));
+
+    await showSuccessSnackbar(message: AppStrings.copied);
+  }
+ 
   Future<void> getBiometricProfile() async {
     try {
       final response = await userService.getKycProfile();

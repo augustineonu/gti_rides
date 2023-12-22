@@ -345,7 +345,7 @@ class ApiService {
       logger.log("GET REQUEST RESPONSE ($endpoint) :: ${response.data}");
       apiResponse = ApiResponseModel.fromRawJson(response.data.toString());
       // apiResponse = ApiResponseModel.fromJson(response.data);
-      logger.log("msg: ");
+      logger.log("msg: GET REQUEST");
       if (apiResponse.status_code == 400) {
         bool newAccessTokenResult = await tokenService.getNewAccessToken();
         if (!newAccessTokenResult) {
