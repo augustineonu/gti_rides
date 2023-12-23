@@ -37,6 +37,7 @@ class OnboardingController extends GetxController
   }
 
   void routeToLogin() => routeService.offAllNamed(AppLinks.login);
+  void routeToreturningUserSplash() => routeService.offAllNamed(AppLinks.returningUserSplash);
   void routeToSignUp() => routeService.gotoRoute(AppLinks.signUp);
 
   void pageListener() {

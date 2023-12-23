@@ -14,6 +14,7 @@ class AppLinks {
   static const welcome = "/";
   static const login = "/login";
   static const splash = "/splash";
+  static const returningUserSplash = "/returningUserSplash";
   static const onboarding = "/onboarding";
   static const signUp = "/signUp";
   static const emailOtp = "/emailOtp";

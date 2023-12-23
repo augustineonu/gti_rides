@@ -14,12 +14,11 @@ import 'package:intercom_flutter/intercom_flutter.dart';
 import 'utils/screen_util.dart';
 // import 'package:intercom_flutter/intercom_flutter.dart';
 
-
 void main() async {
-   WidgetsFlutterBinding.ensureInitialized();
-      await Intercom.instance.initialize(
-        'hivazykc', iosApiKey: 'ios_sdk-efac9e9f5fa7bf1e1bfb33d91f1cddd68b47f895', 
-        androidApiKey: 'android_sdk-3337cce19e6e590feed33d6b48f39eae825fcfd0');
+  WidgetsFlutterBinding.ensureInitialized();
+  await Intercom.instance.initialize('hivazykc',
+      iosApiKey: 'ios_sdk-efac9e9f5fa7bf1e1bfb33d91f1cddd68b47f895',
+      androidApiKey: 'android_sdk-3337cce19e6e590feed33d6b48f39eae825fcfd0');
 
   runApp(const GtiRides());
 }
@@ -41,7 +40,7 @@ class _GtiRidesState extends State<GtiRides> {
     bindings.dependencies();
     // loadImage(ImageAssets.onboarding);
     storageService.init().then((_) {
-       logger.debug('loading session...');
+      logger.debug('loading session...');
     });
     super.initState();
   }

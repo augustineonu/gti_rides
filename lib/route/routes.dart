@@ -10,6 +10,7 @@ import 'package:gti_rides/screens/car%20owner/payment/verify_otp_screen.dart';
 import 'package:gti_rides/screens/car%20owner/rent_history/completed_trip/completed_trip_screen.dart';
 import 'package:gti_rides/screens/car%20owner/rent_history/feedbacks/feedbacks_screen.dart';
 import 'package:gti_rides/screens/car%20owner/rent_history/owner_trips/owner_trips_screen.dart';
+import 'package:gti_rides/screens/guest/splash_old_user/returning_user_splash_screen.dart';
 import 'package:gti_rides/screens/shared_screens/choose_trip_date/choose_trip_date_screen.dart';
 import 'package:gti_rides/screens/car%20renter/home/search_city/search_city_screen.dart';
 import 'package:gti_rides/screens/car%20renter/home/search_result/car_selection_result/car_selection_result_screen.dart';
@@ -58,6 +59,11 @@ class AppRoutes {
       name: AppLinks.splash,
       page: () => const SplashScreen(),
       binding: SplashScreenBinding(),
+    ),
+    GetPage(
+      name: AppLinks.returningUserSplash,
+      page: () => const ReturningUserSplashScreen(),
+      binding: ReturningSplashScreenBinding(),
     ),
     GetPage(
         name: AppLinks.onboarding,

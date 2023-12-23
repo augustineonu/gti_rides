@@ -122,7 +122,7 @@ class OnboardingScreen extends GetView<OnboardingController> {
                 hasBorder: true,
                 borderColor: primaryColor,
                 color: white,
-                onTap: () => controller.routeToLogin(),
+                onTap:  controller.routeToreturningUserSplash,
               ),
             ],
           ),
