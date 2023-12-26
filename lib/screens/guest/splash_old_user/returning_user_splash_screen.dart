@@ -35,7 +35,7 @@ class ReturningUserSplashScreen extends GetView<ReturningUserSplashController> {
                       padding: EdgeInsets.symmetric(
                         horizontal: 40.0.w,
                       ),
-                      child: SvgPicture.asset(ImageAssets.appLogo),
+                      child: SizedBox(),
                     ),
                   ),
                 ),
@@ -46,12 +46,12 @@ class ReturningUserSplashScreen extends GetView<ReturningUserSplashController> {
                   bottom: 0,
                   child: Column(
                     children: [
-                      SvgPicture.asset(ImageAssets.splashCar),
-                      Container(
-                        height: 12.sp,
-                        width: MediaQuery.of(context).size.width,
-                        decoration: const BoxDecoration(color: white),
-                      )
+                      SvgPicture.asset(ImageAssets.splashCar1),
+                      // Container(
+                      //   height: 12.sp,
+                      //   width: MediaQuery.of(context).size.width,
+                      //   decoration: const BoxDecoration(color: white),
+                      // )
                     ],
                   )),
             ],

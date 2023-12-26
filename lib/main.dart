@@ -8,6 +8,7 @@ import 'package:gti_rides/route/routes.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/services/storage_service.dart';
+import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:intercom_flutter/intercom_flutter.dart';
@@ -16,15 +17,26 @@ import 'utils/screen_util.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Get.put(UserService());
   await Intercom.instance.initialize('hivazykc',
       iosApiKey: 'ios_sdk-efac9e9f5fa7bf1e1bfb33d91f1cddd68b47f895',
       androidApiKey: 'android_sdk-3337cce19e6e590feed33d6b48f39eae825fcfd0');
-
-  runApp(const GtiRides());
+ bool isNewUser = await determineUserStatus();
+  runApp( GtiRides(isNewUser: isNewUser,));
 }
 
+  Future<bool> determineUserStatus() async{
+    final user = await userService.getUserData();
+    if(user == null){
+      return false;
+    } else {
+      return true;
+    }
+  }
+
 class GtiRides extends StatefulWidget {
-  const GtiRides({super.key});
+   GtiRides({super.key, required this.isNewUser});
+   final bool isNewUser;
 
   @override
   State<GtiRides> createState() => _GtiRidesState();
@@ -43,6 +55,8 @@ class _GtiRidesState extends State<GtiRides> {
       logger.debug('loading session...');
     });
     super.initState();
+
+    logger.log("value:::: ${widget.isNewUser}");
   }
 
   @override
@@ -51,6 +65,7 @@ class _GtiRidesState extends State<GtiRides> {
     precacheImage(const AssetImage(ImageAssets.onboarding_01), context);
     precacheImage(const AssetImage(ImageAssets.onboarding_02), context);
     precacheImage(const AssetImage(ImageAssets.onboarding03), context);
+logger.log("Second value:::: ${widget.isNewUser}");
 
     return ScreenUtilInit(
         designSize: selectedSize.size,
@@ -74,7 +89,7 @@ class _GtiRidesState extends State<GtiRides> {
                 ),
               ),
             ),
-            initialRoute: AppLinks.splash,
+            initialRoute: widget.isNewUser ? AppLinks.returningUserSplash : AppLinks.splash,
             getPages: AppRoutes.pages,
             navigatorObservers: [RouteService(), RouteService().routeObserver],
             onInit: () {

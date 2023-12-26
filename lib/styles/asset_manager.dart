@@ -7,6 +7,7 @@ class ImageAssets {
   static const String appLogo = "$SVG_PATH/gti_rides_logo.svg";
   static const String appLogoYellow = "$SVG_PATH/app_Logo_yellow.svg";
   static const String splashCar = "$SVG_PATH/splash_car.svg";
+  static const String splashCar1 = "$SVG_PATH/splashcar1.svg";
   static const String onboarding1 = "$SVG_PATH/onboarding_2.svg";
   static const String authImage = "$SVG_PATH/auth_image.svg";
   static const String authImage1 = "$SVG_PATH/auth_image1.svg";
