@@ -4,7 +4,6 @@ import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/device_service.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
-import 'package:gti_rides/services/storage_service.dart';
 import 'package:gti_rides/services/user_service.dart';
 
 class SplashController extends GetxController
@@ -44,46 +43,6 @@ class SplashController extends GetxController
     }
   }
 
-  Future<void> getSavedAgentModel() async {
-    // final Agent? agentModel = await biometricService.getAgentModelData();
-    // final User? userModel = await biometricService.getUserData();
-    // final Tokens? tokens = await biometricService.getTokensData();
-    // if (agentModel != null) {
-    //   // setup and move to home screen
-    //   agentService.setCurrentAgentModel(agentModel.toJson());
-    //   agentService.setCurrentUser(agentModel.user!.toJson());
-    //   tokenService.setTokenModel(tokens!.toJson());
-    //   tokenService.setAccessToken(tokens.accessToken);
-    //   tokenService.setRefreshToken(tokens.refreshToken);
-    //   logger.log("Agent model >>: ${agentService.user.toJson()}");
-    //   logger.log("User model >>: ${userModel!.toJson()}");
-    //   // get new access token
-    //   bool result = await tokenService.getNewAccessToken();
-    //   if (!result) {
-    //     // move to welcome screen
-    //     logger.log('Going to welcome screen');
-    //     routeService.offAllNamed(AppLinks.welcomeBack);
-    //     return;
-    //   }
-    //   // move to home screen
-    //   // if (agentModel.user!.isAgentOnline!) {
-    //   await socketService.openConnection();
-    //   if (userModel.isAgentOnline!) {
-    //     logger.log('Going to current Orders screen');
-    //     routeService.offAllNamed(AppLinks.currentOrders);
-    //     return;
-    //   }
-    //   logger.log('Going to home screen');
-    //   routeService.offAllNamed(AppLinks.agentHome);
-
-    //   return;
-    // } else {
-    //   // move to login screen
-    //   logger.log("going to login");
-    //   routeService.offAllNamed(AppLinks.login);
-    //   return;
-    // }
-  }
 
   void initAnimation() {
     logger.log("animation started");
@@ -107,7 +66,6 @@ class SplashController extends GetxController
       logger.log("animation completed");
       if (_animationController.status == AnimationStatus.completed) {
         Future.delayed(const Duration(seconds: 1), () async {
-          // await getSavedAgentModel();
           routeService.gotoRoute(AppLinks.onboarding);
         });
       }

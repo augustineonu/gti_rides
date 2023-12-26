@@ -31,7 +31,25 @@ class LoginScreen extends GetView<LoginController> {
       body: Obx(
         () => Stack(
           children: [
-            SafeArea(child: body(context, width)),
+            SafeArea(
+              child: body(context, width),
+            ),
+            controller.isLoading1.isTrue
+                ? Stack(
+                    children: [
+                      const Opacity(
+                        opacity: 0.5,
+                        child: ModalBarrier(
+                            dismissible: false, color: Colors.black),
+                      ),
+                      Center(
+                        child: Center(
+                          child: centerLoadingIcon(),
+                        ),
+                      ),
+                    ],
+                  )
+                : const SizedBox(),
             Positioned(
                 bottom: 0,
                 right: 0,
@@ -86,7 +104,8 @@ class LoginScreen extends GetView<LoginController> {
                     SizedBox(
                       height: 14.sp,
                     ),
-                    forgotPassword(onTap: controller.routeToRequestRestePassword),
+                    forgotPassword(
+                        onTap: controller.routeToRequestRestePassword),
                     SizedBox(
                       height: 40.sp,
                     ),

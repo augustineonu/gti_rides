@@ -18,14 +18,10 @@ class SplashScreen extends GetView<SplashController> {
 
   @override
   Widget build(BuildContext context) {
-    // print("building splash");
-    
     return Obx(() {
       return Scaffold(
           backgroundColor: primaryColor,
-          body:
-          //  controller.isNewUser.value ?
-            Stack(
+          body: Stack(
             children: [
               Positioned(
                 top: MediaQuery.of(context).size.height * 0.35.sp,
@@ -58,9 +54,7 @@ class SplashScreen extends GetView<SplashController> {
                     ],
                   )),
             ],
-          ) 
-          // : Container(color: red,)
-          );
+          ));
     });
   }
 }

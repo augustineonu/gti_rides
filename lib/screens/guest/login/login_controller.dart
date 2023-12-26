@@ -26,6 +26,7 @@ class LoginController extends GetxController
   // RxBool? isFirstTimeLogin;
   RxBool showPassword = false.obs;
   RxBool isLoading = false.obs;
+  RxBool isLoading1 = false.obs;
   // RxBool? isFirstTimeLogin;
 
   TextEditingController emailOrPhoneController = TextEditingController();
@@ -182,6 +183,7 @@ class LoginController extends GetxController
             message: AppStrings.kindlyLoginWithCredToSetBiometrics);
       } else {
         try {
+          isLoading1.value = true;
           final response = await authService.biometricLogin(payload: {
             "user": userModel.emailAddress!,
             "biometricID": deviceService.deviceId
@@ -191,7 +193,6 @@ class LoginController extends GetxController
             tokenService.setAccessToken(response.data!["accessToken"]);
             logger.log("set token:: ${response.data!["accessToken"]}");
 
-    
             final profileResponse = await authService.getProfile();
 
             if (profileResponse.status == "success" ||
@@ -213,11 +214,14 @@ class LoginController extends GetxController
             }
           } else {
             logger.log("failed: ${response.message}");
+            isLoading1.value = false;
             showErrorSnackbar(message: "${response.message}");
           }
         } catch (e) {
           logger.log("error rrr: $e");
           showErrorSnackbar(message: e.toString());
+        } finally {
+           isLoading1.value = false;
         }
       }
     } else if (biometrics.isEmpty) {
