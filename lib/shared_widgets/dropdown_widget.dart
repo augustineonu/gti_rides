@@ -159,6 +159,7 @@ Widget dropdownWidget1({
   Color? iconColor,
   void Function()? onTap,
   String? expectedVariable,
+  bool multipleSelection = false,
   // double? radius,
   // Color? arrow,
   // Color? display,
@@ -216,12 +217,25 @@ Widget dropdownWidget1({
                     .map(
                       (item) => DropdownMenuItem(
                         value: item,
-                        child: Text(
-                          item,
-                          style: getRegularStyle(
-                            fontSize: 16,
-                          ),
-                        ),
+                        child: multipleSelection ? Row(
+                          children: [
+                            Checkbox(
+                              onChanged: (value) {},
+                              value: false,
+                            ),
+                            Text(
+                              item,
+                              style: getRegularStyle(
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ) :   Text(
+                              item,
+                              style: getRegularStyle(
+                                fontSize: 16,
+                              ),
+                            ),
                       ),
                     )
                     .toList(),

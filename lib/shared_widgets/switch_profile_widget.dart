@@ -33,7 +33,7 @@ Widget switchProfileWidget({
                         width: 5.w,
                       ),
                       textWidget(
-                          text: AppStrings.carOwner,
+                          text: AppStrings.partner,
                           style: getMediumStyle()
                               .copyWith(fontWeight: FontWeight.w500)),
                       SizedBox(
@@ -54,7 +54,7 @@ Widget switchProfileWidget({
                         width: 5.w,
                       ),
                       textWidget(
-                          text: AppStrings.carRenter,
+                          text: AppStrings.renter,
                           style: getMediumStyle()
                               .copyWith(fontWeight: FontWeight.w500)),
                       SizedBox(

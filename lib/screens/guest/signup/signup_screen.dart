@@ -209,7 +209,7 @@ class SignUpScreen extends GetView<SignUpController> {
               ],
             ),
           ),
-          ///// car owner registration page
+          ///// owner registration page
           SingleChildScrollView(
             child: Form(
               autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -291,7 +291,7 @@ class SignUpScreen extends GetView<SignUpController> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           GtiButton(
-            text: AppStrings.carRenter,
+            text: AppStrings.renter,
             style: getRegularStyle(
                 color: controller.currentIndex.value == 0 ? white : grey3),
             width: 150.sp,
@@ -304,7 +304,7 @@ class SignUpScreen extends GetView<SignUpController> {
             },
           ),
           GtiButton(
-            text: AppStrings.carOwner,
+            text: AppStrings.partner,
             style: getRegularStyle(
                 color: controller.currentIndex.value == 1 ? white : grey3),
             width: 150.sp,

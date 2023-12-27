@@ -1,28 +1,28 @@
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:gti_rides/route/app_links.dart';
-import 'package:gti_rides/screens/car%20owner/home/list_vehicle/list_vehicle_screen.dart';
-import 'package:gti_rides/screens/car%20owner/home/manage_vehicle/car_history/car_history_screen.dart';
-import 'package:gti_rides/screens/car%20owner/home/manage_vehicle/manage_vehicle_screen.dart';
-import 'package:gti_rides/screens/car%20owner/home/manage_vehicle/quick_edit/quick_edit_screen.dart';
-import 'package:gti_rides/screens/car%20owner/owner_landing_page.dart';
-import 'package:gti_rides/screens/car%20owner/payment/verify_otp_screen.dart';
-import 'package:gti_rides/screens/car%20owner/rent_history/completed_trip/completed_trip_screen.dart';
-import 'package:gti_rides/screens/car%20owner/rent_history/feedbacks/feedbacks_screen.dart';
-import 'package:gti_rides/screens/car%20owner/rent_history/owner_trips/owner_trips_screen.dart';
+import 'package:gti_rides/screens/Partner/home/list_vehicle/list_vehicle_screen.dart';
+import 'package:gti_rides/screens/Partner/home/manage_vehicle/car_history/car_history_screen.dart';
+import 'package:gti_rides/screens/Partner/home/manage_vehicle/manage_vehicle_screen.dart';
+import 'package:gti_rides/screens/Partner/home/manage_vehicle/quick_edit/quick_edit_screen.dart';
+import 'package:gti_rides/screens/Partner/partner_landing_page.dart';
+import 'package:gti_rides/screens/Partner/payment/verify_otp_screen.dart';
+import 'package:gti_rides/screens/Partner/rent_history/completed_trip/completed_trip_screen.dart';
+import 'package:gti_rides/screens/Partner/rent_history/feedbacks/feedbacks_screen.dart';
+import 'package:gti_rides/screens/Partner/rent_history/owner_trips/owner_trips_screen.dart';
 import 'package:gti_rides/screens/guest/splash_old_user/returning_user_splash_screen.dart';
 import 'package:gti_rides/screens/shared_screens/choose_trip_date/choose_trip_date_screen.dart';
-import 'package:gti_rides/screens/car%20renter/home/search_city/search_city_screen.dart';
-import 'package:gti_rides/screens/car%20renter/home/search_result/car_selection_result/car_selection_result_screen.dart';
-import 'package:gti_rides/screens/car%20renter/home/search_result/car_selection_result/kyc_check/kyc_check_screen.dart';
-import 'package:gti_rides/screens/car%20renter/home/search_result/car_selection_result/payment_summary/payment_summary_screen.dart';
-import 'package:gti_rides/screens/car%20renter/home/search_result/car_selection_result/update_kyc/update_kyc_screen.dart';
-import 'package:gti_rides/screens/car%20renter/home/search_result/car_selection_result/view_car/view_car.dart';
-import 'package:gti_rides/screens/car%20renter/home/search_result/reviews/review_screen.dart';
-import 'package:gti_rides/screens/car%20renter/home/search_result/search_filter/search_filter_screen.dart';
-import 'package:gti_rides/screens/car%20renter/home/search_result/search_result_screen.dart';
-import 'package:gti_rides/screens/car%20renter/landing_page.dart';
-import 'package:gti_rides/screens/car%20renter/trips/choose_single_trip_date/choose_single_trip_date_screen.dart';
+import 'package:gti_rides/screens/renter/home/search_city/search_city_screen.dart';
+import 'package:gti_rides/screens/renter/home/search_result/car_selection_result/car_selection_result_screen.dart';
+import 'package:gti_rides/screens/renter/home/search_result/car_selection_result/kyc_check/kyc_check_screen.dart';
+import 'package:gti_rides/screens/renter/home/search_result/car_selection_result/payment_summary/payment_summary_screen.dart';
+import 'package:gti_rides/screens/renter/home/search_result/car_selection_result/update_kyc/update_kyc_screen.dart';
+import 'package:gti_rides/screens/renter/home/search_result/car_selection_result/view_car/view_car.dart';
+import 'package:gti_rides/screens/renter/home/search_result/reviews/review_screen.dart';
+import 'package:gti_rides/screens/renter/home/search_result/search_filter/search_filter_screen.dart';
+import 'package:gti_rides/screens/renter/home/search_result/search_result_screen.dart';
+import 'package:gti_rides/screens/renter/landing_page.dart';
+import 'package:gti_rides/screens/renter/trips/choose_single_trip_date/choose_single_trip_date_screen.dart';
 import 'package:gti_rides/screens/guest/Reset_password/request_reset_password_screen.dart';
 import 'package:gti_rides/screens/guest/login/login_screen.dart';
 import 'package:gti_rides/screens/guest/onboarding/onboarding_screen.dart';
@@ -230,7 +230,7 @@ class AppRoutes {
     ),
     GetPage(
       name: AppLinks.carOwnerLanding,
-      page: () => const OwnerLandingPage(),
+      page: () => const PartnerLandingPage(),
     ),
     GetPage(
       name: AppLinks.carRenterLanding,

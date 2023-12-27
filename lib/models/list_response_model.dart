@@ -4,7 +4,7 @@ import 'dart:convert';
 class ListResponseModel {
     final int? status_code;
     final String? status;
-    final List<dynamic>? data;
+     List<dynamic>? data;
 
     ListResponseModel({
         this.status_code,

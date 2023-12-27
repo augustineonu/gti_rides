@@ -1,0 +1,22 @@
+import 'package:get/get.dart';
+import 'package:gti_rides/services/logger.dart';
+
+class PartnerLandingController extends GetxController {
+  Logger logger = Logger('PartnerLandingController');
+
+  RxBool isDone = false.obs;
+
+  PartnerLandingController() {
+    logger.log('Controller initialized');
+  }
+  var tabIndex = 0.obs;
+
+  void changeTabIndex(int index) {
+    tabIndex.value = index;
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+  }
+}

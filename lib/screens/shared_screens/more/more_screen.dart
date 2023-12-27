@@ -62,7 +62,7 @@ class MoreScreen extends StatelessWidget {
                         shrinkWrap: true,
                         itemCount: controller.profileOptions.length,
                         itemBuilder: (context, index) {
-                          // show "My Drivers" only if user type is Car Owner
+                          // show "My Drivers" only if user type is Owner
                           final option = controller.profileOptions[index];
                           if (controller.user.value.userType == "owner") {
                             return profileOptionsWIdget(
@@ -77,7 +77,7 @@ class MoreScreen extends StatelessWidget {
                                   controller.routeToFavorite();
                                 case 2:
                                   controller.routeToIdentityVerification();
-                                // show "My Drivers" only if user type is Car Owner
+                                // show "My Drivers" only if user type is Owner
                                 case 3:
                                   controller.routeToDrivers();
                                 case 4:
@@ -397,7 +397,7 @@ AppBar appBar() {
       leading: Padding(
         padding: const EdgeInsets.only(left: 16),
         child: textWidget(
-            text: AppStrings.carRenter,
+            text: AppStrings.renter,
             textOverflow: TextOverflow.visible,
             style: getMediumStyle().copyWith(fontWeight: FontWeight.w500)),
       ),

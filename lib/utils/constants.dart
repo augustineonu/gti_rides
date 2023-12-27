@@ -29,8 +29,8 @@ class AppStrings {
   static String referralCodeHint = "hhryryr";
   static String optional = "(Optional)";
   static String or = "or";
-  static String carRenter = "Car Renter";
-  static String carOwner = "Car Owner";
+  static String renter = "Renter";
+  static String partner = "Partner";
   static String verifyOtp = "Verify OTP";
   static String verifyEmail = "Verify email";
   static String pleaseInputOtp =

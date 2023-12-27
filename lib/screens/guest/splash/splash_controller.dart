@@ -4,14 +4,12 @@ import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/device_service.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
-import 'package:gti_rides/services/user_service.dart';
 
 class SplashController extends GetxController
     with GetSingleTickerProviderStateMixin {
   Logger logger = Logger('SplashController');
   final animationValue = 0.0.obs;
   late AnimationController _animationController;
-  late RxBool isNewUser = false.obs;
 
   SplashController() {
     init();
@@ -21,27 +19,15 @@ class SplashController extends GetxController
     logger.log('SplashController initialized');
     initAnimation();
     deviceService.getDeviceInfo();
-  //  isNewUser.value = await determineUserStatus();
-   logger.log("status 1: ${isNewUser.value}");
   }
 
     @override
   void onInit() {
-    // controller.addListener(pageListener);
 
     logger.log("Init called");
-    logger.log("status: ${isNewUser.value}");
     super.onInit();
   }
 
-  Future<bool> determineUserStatus() async{
-    final user = await userService.getUserData();
-    if(user == null){
-      return false;
-    } else {
-      return true;
-    }
-  }
 
 
   void initAnimation() {

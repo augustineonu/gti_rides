@@ -1,0 +1,14 @@
+{
+    "status_code": 200,
+    "status": "success",
+    "data": [
+        {
+            "brandCode": "WeG",
+            "brandName": "toyota"
+        },
+        {
+            "brandCode": "yxl",
+            "brandName": "pavillon"
+        }
+    ]
+}
