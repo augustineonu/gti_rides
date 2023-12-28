@@ -294,28 +294,36 @@ Widget imageWidget({
     );
   }
 }
-Widget imageWidget1({
-  String? localImagePath,
-  double? width,
-  double? height,
-  BoxFit fit = BoxFit.cover,
-  double radius = 100,
-}) {
-  // if (localImagePath != null && localImagePath.isNotEmpty) {
-    return Builder(builder: (context) {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(radius),
-        child: Image.file(
-          File(localImagePath!),
-          width: width,
-          height: height,
-          fit: fit,
-        ),
-      );
-    });
- 
-  }
 
+Widget imageWidget1(
+    {String? localImagePath,
+    double? width,
+    double? height,
+    BoxFit fit = BoxFit.cover,
+    void Function()? onTap}) {
+  // if (localImagePath != null && localImagePath.isNotEmpty) {
+  return Stack(
+    children: [
+      GestureDetector(
+        onTap: onTap,
+        child: Builder(builder: (context) {
+          return Image.file(
+            File(localImagePath!),
+            width: width,
+            height: height,
+            fit: fit,
+          );
+        }),
+      ),
+      
+      Positioned(
+          right: -4,
+          top: -6,
+          child: Transform.scale(
+              scale: 0.4, child: SvgPicture.asset(ImageAssets.closeSmall))),
+    ],
+  );
+}
 
 Widget profileImageWidget({
   required String imgUrl,
@@ -400,7 +408,6 @@ Future<dynamic> infoDialog({
   double? space,
 }) async {
   return await Get.dialog(Dialog(
-  
     backgroundColor: Colors.transparent,
     child: Container(
       // width: size.width,

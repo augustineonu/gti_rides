@@ -206,7 +206,7 @@ class ListVehicleController extends GetxController {
 // routing methods
   void goBack() => routeService.goBack();
 
-  void openCamera() async {
+  Future<void> openCamera() async {
     ImageResponse? response =
         await imageService.pickImage(source: ImageSource.camera);
     if (response != null) {
@@ -217,14 +217,18 @@ class ListVehicleController extends GetxController {
     }
   }
 
-  void openGallery() async {
+  Future<void> openGallery() async {
     ImageResponse? response =
         await imageService.pickImage(source: ImageSource.gallery);
     if (response != null) {
       logger.log("Picked image $pickedImagePath");
       pickedImagePath.value = response.imagePath;
       selectedPhotos.add(response.imagePath);
+      routeService.goBack;
     }
+  }
+  void removePhoto() {
+// selectedPhotos.removeWhere((element) => false)
   }
 
 

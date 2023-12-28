@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/models/drivers_model.dart';
 import 'package:gti_rides/screens/Partner/home/list_vehicle/list_vehicle_controller.dart';
+import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/shared_widgets/dropdown_widget.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
@@ -16,6 +17,7 @@ import 'package:gti_rides/shared_widgets/upload_image_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
+import 'package:gti_rides/utils/utils.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:multiselect/multiselect.dart';
 
@@ -626,19 +628,32 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
             title: AppStrings.vehicleLicense,
             content: AppStrings.uploadDocument,
             onTap: () {
-              selectOptionSheet(size);
+              if (controller.selectedPhotos.length == 10) {
+                showErrorSnackbar(
+                    message: 'You cannot upload more than 10 photos');
+              } else {
+                selectOptionSheet(size,
+                    onSelectCamera: () => controller
+                        .openCamera()
+                        .then((value) => routeService.goBack()),
+                    onSelectGallery: () => controller
+                        .openGallery()
+                        .then((value) => routeService.goBack()));
+              }
             },
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              for(var photo in controller.selectedPhotos)
-              imageWidget1(
-                radius: 80,
-                localImagePath: photo,
-                height: 30.sp,
-                width: 30.sp,
-              ),
+              for (var index = 0;
+                  index < controller.selectedPhotos.length;
+                  index++)
+                imageWidget1(
+                  onTap: () => controller.selectedPhotos.removeAt(index),
+                  localImagePath: controller.selectedPhotos[index],
+                  height: 30.sp,
+                  width: 30.sp,
+                ),
             ],
           ),
           SizedBox(
@@ -1036,7 +1051,11 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
     );
   }
 
-  Future<dynamic> selectOptionSheet(Size size) {
+  Future<dynamic> selectOptionSheet(
+    Size size, {
+    void Function()? onSelectCamera,
+    void Function()? onSelectGallery,
+  }) {
     return Get.bottomSheet(
       Container(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
@@ -1054,7 +1073,7 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                   child: GtiButton(
                     width: 120.sp,
                     text: AppStrings.camera,
-                    onTap: () => controller.openCamera(),
+                    onTap: onSelectCamera,
                   ),
                 ),
                 const SizedBox(
@@ -1064,7 +1083,7 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                   child: GtiButton(
                     width: 120.sp,
                     text: AppStrings.gallery,
-                    onTap: controller.openGallery,
+                    onTap: onSelectGallery,
                   ),
                 ),
               ],
