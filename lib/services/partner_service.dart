@@ -10,7 +10,7 @@ import 'package:gti_rides/services/logger.dart';
 PartnerService get partnerService => Get.find();
 
 class PartnerService {
-  Logger logger = Logger('OwnerService');
+  Logger logger = Logger('PartnerService');
   // Rx<Agent> agentModel = Agent().obs;
   Rx<UserModel> user = UserModel().obs;
 
@@ -25,7 +25,7 @@ class PartnerService {
   }
 
   void init() {
-    logger.log('Initializing Renter service');
+    logger.log('Initializing Partner service');
   }
 
   Future<ApiResponseModel> switchProfile(
@@ -177,6 +177,20 @@ class PartnerService {
     try {
       final result = await apiService.getRequest(
         '/user/misc/getSeat',
+      );
+      logger.log("result $result");
+
+      final decodedResult = json.decode(result);
+
+      return ListResponseModel.fromJson(decodedResult);
+    } catch (err) {
+      rethrow;
+    }
+  }
+    Future<ListResponseModel> getInsuranceType() async {
+    try {
+      final result = await apiService.getRequest(
+        '/user/misc/getInsuranceType',
       );
       logger.log("result $result");
 

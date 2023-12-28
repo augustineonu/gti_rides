@@ -9,6 +9,7 @@ import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/partner_service.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/utils/constants.dart';
+import 'package:gti_rides/utils/utils.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ListVehicleController extends GetxController {
@@ -23,6 +24,7 @@ class ListVehicleController extends GetxController {
   RxList<dynamic>? carFeatures = <dynamic>[].obs;
   RxList<dynamic>? vehicleTypes = <dynamic>[].obs;
   RxList<dynamic>? vehicleSeats = <dynamic>[].obs;
+  RxList<dynamic>? insurances = <dynamic>[].obs;
 
   RxBool isLoading = false.obs;
   RxBool isGettingBrands = false.obs;
@@ -33,11 +35,18 @@ class ListVehicleController extends GetxController {
   RxString flagEmoji = '🇺🇸'.obs;
   RxString brandCode = ''.obs;
   RxString yearCode = ''.obs;
+  RxString vehicleTypeCode = ''.obs;
+  RxString vehicleSeatCode = ''.obs;
   RxString stateCode = ''.obs;
   RxString cityCode = ''.obs;
   RxString transmissionCode = ''.obs;
+  RxString insuranceCode = ''.obs;
   Rx<String> pickedImagePath = ''.obs;
   RxList<String> selectedPhotos = <String>[].obs;
+  RxList<String> selectedRoadWorthinessPhotos = <String>[].obs;
+  RxList<String> selectedInsurancePhotos = <String>[].obs;
+  RxList<String> selectedInspectionPhotos = <String>[].obs;
+  RxList<String> selectedVehiclePhotos = <String>[].obs;
 
   GlobalKey<FormState> vehicleTypeFormKey = GlobalKey<FormState>();
 
@@ -68,6 +77,8 @@ class ListVehicleController extends GetxController {
     await getStates();
     await getTransmission();
     await getCarFeatures();
+    await getVehicleType();
+    await getVehicleSeats();
   }
 
   @override
@@ -227,8 +238,69 @@ class ListVehicleController extends GetxController {
       routeService.goBack;
     }
   }
-  void removePhoto() {
-// selectedPhotos.removeWhere((element) => false)
+  Future<void> openRoadWorthinessCamera() async {
+    ImageResponse? response =
+        await imageService.pickImage(source: ImageSource.camera);
+    if (response != null) {
+      selectedRoadWorthinessPhotos.add(response.imagePath);
+    }
+  }
+
+  Future<void> openRoadWorthinessGallery() async {
+    ImageResponse? response =
+        await imageService.pickImage(source: ImageSource.gallery);
+    if (response != null) {
+      selectedRoadWorthinessPhotos.add(response.imagePath);
+      routeService.goBack;
+    }
+  }
+  Future<void> openInsuranceCamera() async {
+    ImageResponse? response =
+        await imageService.pickImage(source: ImageSource.camera);
+    if (response != null) {
+      selectedInsurancePhotos.add(response.imagePath);
+    }
+  }
+
+  Future<void> openInsuranceGallery() async {
+    ImageResponse? response =
+        await imageService.pickImage(source: ImageSource.gallery);
+    if (response != null) {
+      selectedInsurancePhotos.add(response.imagePath);
+      routeService.goBack;
+    }
+  }
+  Future<void> openInspectionCamera() async {
+    ImageResponse? response =
+        await imageService.pickImage(source: ImageSource.camera);
+    if (response != null) {
+      selectedInspectionPhotos.add(response.imagePath);
+    }
+  }
+
+  Future<void> openInspectionGallery() async {
+    ImageResponse? response =
+        await imageService.pickImage(source: ImageSource.gallery);
+    if (response != null) {
+      selectedInspectionPhotos.add(response.imagePath);
+      routeService.goBack;
+    }
+  }
+  Future<void> openVehiclePhotoCamera() async {
+    ImageResponse? response =
+        await imageService.pickImage(source: ImageSource.camera);
+    if (response != null) {
+      selectedVehiclePhotos.add(response.imagePath);
+    }
+  }
+
+  Future<void> openVehiclePhotoGallery() async {
+    ImageResponse? response =
+        await imageService.pickImage(source: ImageSource.gallery);
+    if (response != null) {
+      selectedVehiclePhotos.add(response.imagePath);
+      routeService.goBack;
+    }
   }
 
 
@@ -268,6 +340,8 @@ class ListVehicleController extends GetxController {
         }
       } else {
         logger.log("unable to get vehicle year ${response.data}");
+         showErrorSnackbar(
+                  message: response.message!);
         isGettingBrands.value = false;
       }
     } catch (exception) {
@@ -385,7 +459,7 @@ class ListVehicleController extends GetxController {
         logger.log("gotten vehicle Types ${response.data}");
         if (response.data != null && response.data != []) {
           vehicleTypes?.value = response.data!;
-          logger.log("msg ${brands.value.data}");
+          logger.log("msg ${vehicleTypes?.value}");
         }
       } else {
         logger.log("unable to vehicle Types ${response.data}");
@@ -403,10 +477,28 @@ class ListVehicleController extends GetxController {
         logger.log("gotten vehicle seats ${response.data}");
         if (response.data != null && response.data != []) {
           vehicleSeats?.value = response.data!;
-          logger.log("msg ${brands.value.data}");
+          logger.log("seats ${vehicleSeats?.value}");
         }
       } else {
         logger.log("unable to vehicle seats ${response.data}");
+        isGettingBrands.value = false;
+      }
+    } catch (exception) {
+      logger.log("error  $exception");
+    }
+  }
+  Future<void> getInsuranceType() async {
+    try {
+      isGettingBrands.value = true;
+      final response = await partnerService.getInsuranceType();
+      if (response.status == 'success' || response.status_code == 200) {
+        logger.log("gotten insurance type ${response.data}");
+        if (response.data != null && response.data != []) {
+          vehicleSeats?.value = response.data!;
+          logger.log("insurances ${brands.value.data}");
+        }
+      } else {
+        logger.log("unable to get insurance type ${response.data}");
         isGettingBrands.value = false;
       }
     } catch (exception) {
