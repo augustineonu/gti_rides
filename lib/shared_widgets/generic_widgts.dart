@@ -294,6 +294,28 @@ Widget imageWidget({
     );
   }
 }
+Widget imageWidget1({
+  String? localImagePath,
+  double? width,
+  double? height,
+  BoxFit fit = BoxFit.cover,
+  double radius = 100,
+}) {
+  // if (localImagePath != null && localImagePath.isNotEmpty) {
+    return Builder(builder: (context) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(radius),
+        child: Image.file(
+          File(localImagePath!),
+          width: width,
+          height: height,
+          fit: fit,
+        ),
+      );
+    });
+ 
+  }
+
 
 Widget profileImageWidget({
   required String imgUrl,

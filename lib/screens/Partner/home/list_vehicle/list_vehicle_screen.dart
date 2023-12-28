@@ -621,10 +621,26 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
           SizedBox(
             height: 24.sp,
           ),
-          photoUploadWithTitle(size,
-              title: AppStrings.vehicleLicense,
-              content: AppStrings.uploadDocument,
-              onTap: () {}),
+          photoUploadWithTitle(
+            size,
+            title: AppStrings.vehicleLicense,
+            content: AppStrings.uploadDocument,
+            onTap: () {
+              selectOptionSheet(size);
+            },
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              for(var photo in controller.selectedPhotos)
+              imageWidget1(
+                radius: 80,
+                localImagePath: photo,
+                height: 30.sp,
+                width: 30.sp,
+              ),
+            ],
+          ),
           SizedBox(
             height: 24.sp,
           ),
@@ -775,7 +791,9 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
               hintText: 'Select',
               title: AppStrings.numberOfSeats,
               iconColor: grey3,
-              values: controller.vehicleSeats,
+              values: (controller.vehicleSeats?.value ?? [])
+                  .map((seat) => seat["seatName"] as String)
+                  .toList(),
               onChange: (value) {
                 print('Selected value: $value');
               }),
@@ -964,49 +982,6 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
 
   // dispathc page
 
-  Widget dispatchPage(size) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        textWidget(text: "dispatch_summary".tr, style: getMediumStyle()),
-        SizedBox(height: 15.sp),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              width: 200.sp,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  textWidget(
-                      text: "estimated_total".tr,
-                      style:
-                          getRegularStyle(fontSize: 14.sp, color: iconColor())
-                              .copyWith(fontWeight: FontWeight.w600)),
-                  SizedBox(height: 5.sp),
-                  textWidget(
-                      text: "final_amount_will_be_decided".tr,
-                      textOverflow: TextOverflow.visible,
-                      style: getLightStyle(fontSize: 11.sp, color: iconColor())
-                          .copyWith(fontWeight: FontWeight.w400)),
-                ],
-              ),
-            ),
-            textWidget(
-                text: "\$40.0",
-                style: getRegularStyle(fontSize: 20.sp, color: iconColor())
-                    .copyWith(fontWeight: FontWeight.w600))
-          ],
-        ),
-        SizedBox(
-          height: 10.sp,
-        ),
-      ],
-    );
-  }
-
   Widget listingTracker({
     required String subTitle,
     Widget? child,
@@ -1058,6 +1033,49 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
           )
         ],
       ),
+    );
+  }
+
+  Future<dynamic> selectOptionSheet(Size size) {
+    return Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+        height: 150,
+        width: size.width,
+        child: Column(
+          children: [
+            textWidget(text: AppStrings.selectOption, style: getMediumStyle()),
+            const SizedBox(
+              height: 20,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: GtiButton(
+                    width: 120.sp,
+                    text: AppStrings.camera,
+                    onTap: () => controller.openCamera(),
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: GtiButton(
+                    width: 120.sp,
+                    text: AppStrings.gallery,
+                    onTap: controller.openGallery,
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+      backgroundColor: white,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(0.r), topRight: Radius.circular(0.r))),
     );
   }
 

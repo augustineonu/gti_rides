@@ -47,7 +47,7 @@ class ProfileScreen extends GetView<ProfileController> {
     );
   }
 
-  Widget body(Size size, context,ProfileController controller) {
+  Widget body(Size size, context, ProfileController controller) {
     return SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 20.0.sp, vertical: 24.sp),
         child: Column(
@@ -150,7 +150,9 @@ class ProfileScreen extends GetView<ProfileController> {
                     radius: 80,
                     imgUrl:
                         "https://img.freepik.com/premium-vector/avatar-profile-icon_188544-4755.jpg",
-                    localImagePath: controller.pickedImagePath.value.isNotEmpty ? controller.pickedImagePath.value : null,
+                    localImagePath: controller.pickedImagePath.value.isNotEmpty
+                        ? controller.pickedImagePath.value
+                        : null,
                     height: 65.sp,
                     width: 65.sp,
                   ),

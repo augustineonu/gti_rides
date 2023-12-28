@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/models/drivers_model.dart';
+import 'package:gti_rides/models/image_response.dart';
 import 'package:gti_rides/models/list_response_model.dart';
 import 'package:gti_rides/screens/Partner/home/list_vehicle/list_vehicle_screen.dart';
+import 'package:gti_rides/services/image_service.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/partner_service.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/utils/constants.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ListVehicleController extends GetxController {
   Logger logger = Logger("Controller");
@@ -19,6 +22,7 @@ class ListVehicleController extends GetxController {
   RxList<String>? selectedFeatures = <String>[].obs;
   RxList<dynamic>? carFeatures = <dynamic>[].obs;
   RxList<dynamic>? vehicleTypes = <dynamic>[].obs;
+  RxList<dynamic>? vehicleSeats = <dynamic>[].obs;
 
   RxBool isLoading = false.obs;
   RxBool isGettingBrands = false.obs;
@@ -32,6 +36,8 @@ class ListVehicleController extends GetxController {
   RxString stateCode = ''.obs;
   RxString cityCode = ''.obs;
   RxString transmissionCode = ''.obs;
+  Rx<String> pickedImagePath = ''.obs;
+  RxList<String> selectedPhotos = <String>[].obs;
 
   GlobalKey<FormState> vehicleTypeFormKey = GlobalKey<FormState>();
 
@@ -151,7 +157,7 @@ class ListVehicleController extends GetxController {
     AppStrings.vans,
     AppStrings.cargoVans,
   ];
-  List<String> vehicleSeats = [
+  List<String> vehicleSeats1 = [
     AppStrings.allSeat,
     AppStrings.fourOrMore,
     AppStrings.fiveOrMore,
@@ -199,6 +205,28 @@ class ListVehicleController extends GetxController {
 
 // routing methods
   void goBack() => routeService.goBack();
+
+  void openCamera() async {
+    ImageResponse? response =
+        await imageService.pickImage(source: ImageSource.camera);
+    if (response != null) {
+      // Check if pickedImagePath is not null before accessing its value
+      pickedImagePath.value = response.imagePath;
+      selectedPhotos.add(response.imagePath);
+      logger.log("image path :: ${pickedImagePath.value}");
+    }
+  }
+
+  void openGallery() async {
+    ImageResponse? response =
+        await imageService.pickImage(source: ImageSource.gallery);
+    if (response != null) {
+      logger.log("Picked image $pickedImagePath");
+      pickedImagePath.value = response.imagePath;
+      selectedPhotos.add(response.imagePath);
+    }
+  }
+
 
   // Function(List<String>) onChanged(){
   //   controller.selectedFeatures!.value
@@ -357,6 +385,24 @@ class ListVehicleController extends GetxController {
         }
       } else {
         logger.log("unable to vehicle Types ${response.data}");
+        isGettingBrands.value = false;
+      }
+    } catch (exception) {
+      logger.log("error  $exception");
+    }
+  }
+  Future<void> getVehicleSeats() async {
+    try {
+      isGettingBrands.value = true;
+      final response = await partnerService.getVehicleSeats();
+      if (response.status == 'success' || response.status_code == 200) {
+        logger.log("gotten vehicle seats ${response.data}");
+        if (response.data != null && response.data != []) {
+          vehicleSeats?.value = response.data!;
+          logger.log("msg ${brands.value.data}");
+        }
+      } else {
+        logger.log("unable to vehicle seats ${response.data}");
         isGettingBrands.value = false;
       }
     } catch (exception) {

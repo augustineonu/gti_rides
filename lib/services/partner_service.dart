@@ -173,4 +173,18 @@ class PartnerService {
       rethrow;
     }
   }
+    Future<ListResponseModel> getVehicleSeats() async {
+    try {
+      final result = await apiService.getRequest(
+        '/user/misc/getSeat',
+      );
+      logger.log("result $result");
+
+      final decodedResult = json.decode(result);
+
+      return ListResponseModel.fromJson(decodedResult);
+    } catch (err) {
+      rethrow;
+    }
+  }
 }
