@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/shared_screens/more/drivers/drivers_controller.dart';
-import 'package:gti_rides/screens/shared_screens/more/identity_verification/identity_verification_controller.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
-import 'package:gti_rides/shared_widgets/sqaure_check_box_widget.dart';
 import 'package:gti_rides/shared_widgets/text_input_widgets/normal_text_input_widget.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
@@ -105,7 +102,7 @@ class AddDriverScreen extends GetView<DriversController> {
                   title: AppStrings.driverAddedMessage,
                   body: AppStrings.thankYouForAddingDriver,
                   buttonTitle: AppStrings.home,
-                  onTap: controller.routeToHome);
+                  onTap: controller.goBack1);
             },
             isLoading: controller.isLoading.value,
           );

@@ -72,10 +72,26 @@ class PartnerService {
     }
   }
 
-  Future<ListResponseModel> getVehicleYear({required String brandCode}) async {
+  Future<ListResponseModel> getVehicleYear(
+      {required String brandCode, required String brandModelCode}) async {
     try {
       final result = await apiService.getRequest(
-        '/user/misc/getVehicleYear?brandCode=$brandCode',
+        '/user/misc/getVehicleYear?brandCode=$brandCode&brandModelCode=$brandModelCode',
+      );
+      logger.log("result $result");
+
+      final decodedResult = json.decode(result);
+
+      return ListResponseModel.fromJson(decodedResult);
+    } catch (err) {
+      rethrow;
+    }
+  }
+
+  Future<ListResponseModel> getBrandModel({required String brandCode}) async {
+    try {
+      final result = await apiService.getRequest(
+        '/user/misc/getBrandModel?brandCode=$brandCode',
       );
       logger.log("result $result");
 
@@ -131,7 +147,21 @@ class PartnerService {
     }
   }
 
-    Future<ListResponseModel> getTransmission() async {
+  Future<ListResponseModel> addDriver({required FormData data}) async {
+    try {
+      final result = await apiService.postRequest(
+          endpoint: '/user/partner/driver/addDriver', data: data);
+      logger.log("result $result");
+
+      final decodedResult = json.decode(result);
+
+      return ListResponseModel.fromJson(decodedResult);
+    } catch (err) {
+      rethrow;
+    }
+  }
+
+  Future<ListResponseModel> getTransmission() async {
     try {
       final result = await apiService.getRequest(
         '/user/misc/getTransmission',
@@ -145,7 +175,8 @@ class PartnerService {
       rethrow;
     }
   }
-    Future<ListResponseModel> getFeatures() async {
+
+  Future<ListResponseModel> getFeatures() async {
     try {
       final result = await apiService.getRequest(
         '/user/misc/getFeatures',
@@ -159,7 +190,8 @@ class PartnerService {
       rethrow;
     }
   }
-    Future<ListResponseModel> getVehicleType() async {
+
+  Future<ListResponseModel> getVehicleType() async {
     try {
       final result = await apiService.getRequest(
         '/user/misc/getVehicleType',
@@ -173,7 +205,8 @@ class PartnerService {
       rethrow;
     }
   }
-    Future<ListResponseModel> getVehicleSeats() async {
+
+  Future<ListResponseModel> getVehicleSeats() async {
     try {
       final result = await apiService.getRequest(
         '/user/misc/getSeat',
@@ -187,10 +220,26 @@ class PartnerService {
       rethrow;
     }
   }
-    Future<ListResponseModel> getInsuranceType() async {
+
+  Future<ListResponseModel> getInsuranceType() async {
     try {
       final result = await apiService.getRequest(
         '/user/misc/getInsuranceType',
+      );
+      logger.log("result $result");
+
+      final decodedResult = json.decode(result);
+
+      return ListResponseModel.fromJson(decodedResult);
+    } catch (err) {
+      rethrow;
+    }
+  }
+
+  Future<ListResponseModel> getDrivers() async {
+    try {
+      final result = await apiService.getRequest(
+        '/user/partner/driver/getUsersDrivers',
       );
       logger.log("result $result");
 

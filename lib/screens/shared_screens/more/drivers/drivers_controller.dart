@@ -36,6 +36,7 @@ class DriversController extends GetxController {
 
   // navigation method
   void goBack() => routeService.goBack();
+  void goBack1() => routeService.goBack(closeOverlays: true);
   void routeToAddDriver() => routeService.gotoRoute(AppLinks.addDriver);
   void routeToHome() => routeService.gotoRoute(AppLinks.carOwnerLanding);
 

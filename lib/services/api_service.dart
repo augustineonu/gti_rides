@@ -86,7 +86,7 @@ class ApiService {
 
   Future<dynamic> postRequest({
     required String endpoint,
-    Map? data,
+    Object? data,
     String? token,
   }) async {
     try {

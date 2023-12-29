@@ -41,6 +41,7 @@ class UserService {
     user.value = UserModel.fromJson(userJson);
     return true;
   }
+
   bool setUserKyc(userKycJson) {
     userKyc.value = ListResponseModel.fromJson(userKycJson);
     return true;
@@ -63,13 +64,13 @@ class UserService {
       rethrow;
     }
   }
+
   Future<ApiResponseModel> updateKyc({required FormData payload}) async {
     try {
       final result = await apiService.putRequestFile(
         endpoint: '/user/profile/addKYC',
         data: payload,
       );
-
 
       return ApiResponseModel.fromJson(result);
     } catch (err) {

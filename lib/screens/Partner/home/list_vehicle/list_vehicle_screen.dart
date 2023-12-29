@@ -141,7 +141,7 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                       ),
                       // pageview pages
                       SizedBox(
-                        height: size.height * 0.985.sp,
+                        height: size.height / 0.80.sp,
                         child: PageView(
                           // itemCount: controller.pages.length,
                           controller: controller.pageController,
@@ -163,7 +163,7 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                             documentationPage(context, controller, size),
 
                             //Add photos page
-                            addPhotosPage(size),
+                            addPhotosPage(size, controller),
                             SizedBox(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -296,150 +296,193 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                                   //     width: 200, height: 100,
                                   //     color: red,
                                   //   )),
-                                  InkWell(
-                                    onTap: () {
-                                      if (controller.drivers.isEmpty) {
-                                        print("Please select");
-                                      }
-                                    },
-                                    child: PopupMenuButton<Driver>(
-                                      // padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                                      constraints: BoxConstraints.tightFor(
-                                          width: 320.sp, height: 250.sp),
-                                      surfaceTintColor: Colors.transparent,
-                                      color: backgroundColor,
-                                      onSelected: (value) {},
-                                      itemBuilder: (BuildContext context) {
-                                        return List<
-                                            PopupMenuEntry<Driver>>.generate(
-                                          controller.drivers.length,
-                                          (int index) {
-                                            final driver = Driver(
-                                              name: controller.drivers[index]
-                                                  ['name'],
-                                              details: controller.drivers[index]
-                                                  ['details'],
-                                            );
+                                  controller.drivers.isEmpty
+                                      ? GestureDetector(
+                                          onTap: () {
+                                            noDriverDialog(size, controller);
+                                          },
+                                          child: Container(
+                                            height: 45.h,
+                                            width: size.width,
+                                            constraints:
+                                                BoxConstraints.tightFor(
+                                                    width: size.width.sp,
+                                                    height: 45.sp),
+                                            // width: size.width,
+                                            margin: EdgeInsets.symmetric(
+                                                vertical: 5.sp),
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(4.r),
+                                              ),
+                                              border: Border.all(color: grey3),
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 10.sp,
+                                                  vertical: 10.sp),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  textWidget(
+                                                      text: controller
+                                                          .selectedView.value,
+                                                      style: getRegularStyle(
+                                                          fontSize: 10.sp)),
+                                                  const Icon(
+                                                    Iconsax.arrow_down_1,
+                                                    color: grey3,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      : PopupMenuButton<Driver>(
+                                          // padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                                          constraints: BoxConstraints.tightFor(
+                                              width: 320.sp, height: 250.sp),
+                                          surfaceTintColor: Colors.transparent,
+                                          color: backgroundColor,
+                                          onSelected: (value) {},
+                                          onOpened: () {},
+                                          itemBuilder: (BuildContext context) {
+                                            return List<
+                                                PopupMenuEntry<
+                                                    Driver>>.generate(
+                                              controller.drivers.length,
+                                              (int index) {
+                                                final driver = Driver(
+                                                  name: controller
+                                                      .drivers[index]['name'],
+                                                  details:
+                                                      controller.drivers[index]
+                                                          ['details'],
+                                                );
 
-                                            return PopupMenuItem(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
+                                                return PopupMenuItem(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
                                                       vertical: 5,
                                                       horizontal: 0),
-                                              value: driver,
-                                              child: AnimatedBuilder(
-                                                animation: controller
-                                                    .selectedItem1
-                                                    .value
-                                                    .reactive,
-                                                builder: (context, child) {
-                                                  return RadioListTile<Driver>(
-                                                    value: driver,
-                                                    groupValue: controller
-                                                        .selectedItem1.value,
-                                                    title: child,
-                                                    onChanged: (Driver? value) {
-                                                      controller.selectedItem1
-                                                          .value = value!;
-                                                      controller.selectedView
-                                                          .value = value.name;
+                                                  value: driver,
+                                                  child: AnimatedBuilder(
+                                                    animation: controller
+                                                        .selectedItem1
+                                                        .value
+                                                        .reactive,
+                                                    builder: (context, child) {
+                                                      return RadioListTile<
+                                                          Driver>(
+                                                        value: driver,
+                                                        groupValue: controller
+                                                            .selectedItem1
+                                                            .value,
+                                                        title: child,
+                                                        onChanged:
+                                                            (Driver? value) {
+                                                          controller
+                                                              .selectedItem1
+                                                              .value = value!;
+                                                          controller
+                                                                  .selectedView
+                                                                  .value =
+                                                              value.name;
 
-                                                      Navigator.pop(context);
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        dense: true,
+                                                        fillColor:
+                                                            MaterialStateProperty
+                                                                .all(
+                                                                    primaryColor),
+                                                        activeColor:
+                                                            primaryColor,
+                                                      );
                                                     },
-                                                    dense: true,
-                                                    fillColor:
-                                                        MaterialStateProperty
-                                                            .all(primaryColor),
-                                                    activeColor: primaryColor,
-                                                  );
-                                                },
-                                                child: SingleChildScrollView(
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      textWidget(
-                                                          text: driver.name,
-                                                          style:
-                                                              getMediumStyle()),
-                                                      textWidget(
-                                                          text: driver.details,
-                                                          style:
-                                                              getRegularStyle(
-                                                                  fontSize:
-                                                                      10.sp)),
-                                                    ],
+                                                    child:
+                                                        SingleChildScrollView(
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          textWidget(
+                                                              text: driver.name,
+                                                              style:
+                                                                  getMediumStyle()),
+                                                          textWidget(
+                                                              text: driver
+                                                                  .details,
+                                                              style:
+                                                                  getRegularStyle(
+                                                                      fontSize:
+                                                                          10.sp)),
+                                                        ],
+                                                      ),
+                                                    ),
                                                   ),
-                                                ),
-                                              ),
+                                                );
+                                              },
                                             );
                                           },
-                                        );
-                                      },
-                                      child: GestureDetector(
-                                        // onTap: () {
-                                        //   if (controller.drivers.isEmpty) {
-                                        //     if (kDebugMode) {
-                                        //       print("No driver found");
-                                        //     }
-                                        //     noDriverDialog(size);
-                                        //   }
-                                        // },
-                                        child: Container(
-                                          constraints: BoxConstraints.tightFor(
-                                              width: size.width.sp,
-                                              height: 45.sp),
-                                          // width: size.width,
-                                          margin: EdgeInsets.symmetric(
-                                              vertical: 5.sp),
+                                          child: Container(
+                                            constraints:
+                                                BoxConstraints.tightFor(
+                                                    width: size.width.sp,
+                                                    height: 45.sp),
+                                            // width: size.width,
+                                            margin: EdgeInsets.symmetric(
+                                                vertical: 5.sp),
 
-                                          decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(4.r)),
-                                              border: Border.all(color: grey3)),
-                                          child: Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 10.sp,
-                                                vertical: 10.sp),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                textWidget(
-                                                    text: controller
-                                                        .selectedView.value,
-                                                    style: getRegularStyle(
-                                                        fontSize: 10.sp)),
-                                                const Icon(
-                                                  Iconsax.arrow_down_1,
-                                                  color: grey3,
-                                                ),
-                                              ],
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(4.r)),
+                                                border:
+                                                    Border.all(color: grey3)),
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 10.sp,
+                                                  vertical: 10.sp),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  textWidget(
+                                                      text: controller
+                                                          .selectedView.value,
+                                                      style: getRegularStyle(
+                                                          fontSize: 10.sp)),
+                                                  const Icon(
+                                                    Iconsax.arrow_down_1,
+                                                    color: grey3,
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                  ),
-                                  dropdownWidget(
-                                    context: context,
-                                    hintText: 'Select',
-                                    title: AppStrings.selectDriver,
-                                    iconColor: grey3,
-                                    values: List.generate(
-                                        controller.drivers.length,
-                                        (index) => controller.drivers[index]),
-                                    onChange: (value) {
-                                      print('Selected value: $value');
-                                    },
-                                    onTap: () {
-                                      if (controller.drivers.isEmpty) {
-                                        noDriverDialog(size);
-                                      }
-                                    },
-                                  ),
+                                  // dropdownWidget(
+                                  //   context: context,
+                                  //   hintText: 'Select',
+                                  //   title: AppStrings.selectDriver,
+                                  //   iconColor: grey3,
+                                  //   values: List.generate(
+                                  //       controller.drivers.length,
+                                  //       (index) => controller.drivers[index]),
+                                  //   onChange: (value) {
+                                  //     print('Selected value: $value');
+                                  //   },
+                                  //   onTap: () {
+                                  //     if (controller.drivers.isEmpty) {
+                                  //       noDriverDialog(size);
+                                  //     }
+                                  //   },
+                                  // ),
                                   SizedBox(
                                     height: 50.sp,
                                   ),
@@ -468,7 +511,7 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
         ));
   }
 
-  Future<dynamic> noDriverDialog(Size size) {
+  Future<dynamic> noDriverDialog(Size size,ListVehicleController controller) {
     return Get.dialog(StatefulBuilder(builder: (context, setState) {
       return Dialog(
         child: Container(
@@ -508,7 +551,9 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                 height: 40.sp,
               ),
               GtiButton(
-                onTap: () {},
+                onTap: () {
+                  controller.routeToCreateDriver();
+                },
                 text: AppStrings.cont,
                 width: size.width,
               ),
@@ -519,7 +564,7 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
     }));
   }
 
-  Widget addPhotosPage(Size size) {
+  Widget addPhotosPage(Size size, ListVehicleController controller) {
     return SizedBox(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -556,10 +601,36 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
           ),
           photoUploadWithTitle(size,
               title: AppStrings.uploadVehiclePhotos,
-              content: AppStrings.selectPhotos,
-              onTap: () {}),
+              content: AppStrings.uploadDocument, onTap: () {
+            if (controller.selectedVehiclePhotos.length == 10) {
+              showErrorSnackbar(
+                  message: 'You cannot upload more than 10 photos');
+            } else {
+              selectOptionSheet(size,
+                  onSelectCamera: () => controller
+                      .openVehiclePhotoCamera()
+                      .then((value) => routeService.goBack()),
+                  onSelectGallery: () => controller
+                      .openVehiclePhotoGallery()
+                      .then((value) => routeService.goBack()));
+            }
+          }),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              for (var index = 0;
+                  index < controller.selectedVehiclePhotos.length;
+                  index++)
+                imageWidget1(
+                  onTap: () => controller.selectedVehiclePhotos.removeAt(index),
+                  localImagePath: controller.selectedVehiclePhotos[index],
+                  height: 30.sp,
+                  width: 30.sp,
+                ),
+            ],
+          ),
           SizedBox(
-            height: 50.sp,
+            height: 100.sp,
           ),
           GtiButton(
             onTap: () {},
@@ -788,39 +859,7 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                 ),
             ],
           ),
-          SizedBox(
-            height: 24.sp,
-          ),
-          photoUploadWithTitle(size,
-              title: AppStrings.uploadVehiclePhotos,
-              content: AppStrings.uploadDocument, onTap: () {
-            if (controller.selectedVehiclePhotos.length == 10) {
-              showErrorSnackbar(
-                  message: 'You cannot upload more than 10 photos');
-            } else {
-              selectOptionSheet(size,
-                  onSelectCamera: () => controller
-                      .openVehiclePhotoCamera()
-                      .then((value) => routeService.goBack()),
-                  onSelectGallery: () => controller
-                      .openVehiclePhotoGallery()
-                      .then((value) => routeService.goBack()));
-            }
-          }),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              for (var index = 0;
-                  index < controller.selectedVehiclePhotos.length;
-                  index++)
-                imageWidget1(
-                  onTap: () => controller.selectedVehiclePhotos.removeAt(index),
-                  localImagePath: controller.selectedVehiclePhotos[index],
-                  height: 30.sp,
-                  width: 30.sp,
-                ),
-            ],
-          ),
+
           SizedBox(
             height: 50.sp,
           ),
@@ -949,11 +988,10 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
               onChange: (selectedNoOfSeat) {
                 print('Selected value: $selectedNoOfSeat');
 
-                   // Find the seat Type object with the selected name
+                // Find the seat Type object with the selected name
                 var selectedObject =
                     (controller.vehicleSeats?.value ?? []).firstWhere(
-                  (vehicleSeat) =>
-                      vehicleSeat['seatName'] == selectedNoOfSeat,
+                  (vehicleSeat) => vehicleSeat['seatName'] == selectedNoOfSeat,
                   orElse: () => null,
                 );
                 if (selectedObject != null) {
@@ -992,7 +1030,7 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                 values: (controller.brands.value.data ?? [])
                     .map((brand) => brand['brandName'] as String)
                     .toList(),
-                onChange: (selectedBrand) {
+                onChange: (selectedBrand) async {
                   print('Selected value: $selectedBrand');
 
                   // Find the brand object with the selected name
@@ -1004,8 +1042,8 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                   if (selectedBrandObject != null) {
                     String brandCode =
                         selectedBrandObject['brandCode'] as String;
-                    controller.getVehicleYear(brandCode: brandCode);
-                    controller.brandCode.value = brandCode;
+                    await controller.getBrandModel(brandCode1: brandCode);
+                    // controller.brandCode.value = brandCode;
                   }
                   // controller.getVehicleYear(brandCode: 'brandCode');
                 }),

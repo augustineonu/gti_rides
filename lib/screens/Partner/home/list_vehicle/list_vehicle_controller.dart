@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:gti_rides/models/drivers_model.dart';
 import 'package:gti_rides/models/image_response.dart';
 import 'package:gti_rides/models/list_response_model.dart';
+import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/screens/Partner/home/list_vehicle/list_vehicle_screen.dart';
 import 'package:gti_rides/services/image_service.dart';
 import 'package:gti_rides/services/logger.dart';
@@ -25,6 +26,7 @@ class ListVehicleController extends GetxController {
   RxList<dynamic>? vehicleTypes = <dynamic>[].obs;
   RxList<dynamic>? vehicleSeats = <dynamic>[].obs;
   RxList<dynamic>? insurances = <dynamic>[].obs;
+  RxList<dynamic>? drivers1 = <dynamic>[].obs;
 
   RxBool isLoading = false.obs;
   RxBool isGettingBrands = false.obs;
@@ -34,6 +36,7 @@ class ListVehicleController extends GetxController {
   RxString phoneCode = '1'.obs;
   RxString flagEmoji = '🇺🇸'.obs;
   RxString brandCode = ''.obs;
+  RxString modelCode = ''.obs;
   RxString yearCode = ''.obs;
   RxString vehicleTypeCode = ''.obs;
   RxString vehicleSeatCode = ''.obs;
@@ -179,30 +182,30 @@ class ListVehicleController extends GetxController {
   ];
 
   List<Map<String, dynamic>> drivers = [
-    {
-      'name': 'John Doe',
-      'details': '08180065778 | johndoe@gmail.com',
-    },
-    {
-      'name': 'Pascal Odi',
-      'details': '08180065778 | johndoe@gmail.com',
-    },
-    {
-      'name': 'Mbang Ade',
-      'details': '08180065778 | johndoe@gmail.com',
-    },
-    {
-      'name': 'Mbang Ade',
-      'details': '08180065778 | johndoe@gmail.com',
-    },
-    {
-      'name': 'Mbang Ade',
-      'details': '08180065778 | johndoe@gmail.com',
-    },
-    {
-      'name': 'Mbang Ade',
-      'details': '08180065778 | johndoe@gmail.com',
-    },
+    // {
+    //   'name': 'John Doe',
+    //   'details': '08180065778 | johndoe@gmail.com',
+    // },
+    // {
+    //   'name': 'Pascal Odi',
+    //   'details': '08180065778 | johndoe@gmail.com',
+    // },
+    // {
+    //   'name': 'Mbang Ade',
+    //   'details': '08180065778 | johndoe@gmail.com',
+    // },
+    // {
+    //   'name': 'Mbang Ade',
+    //   'details': '08180065778 | johndoe@gmail.com',
+    // },
+    // {
+    //   'name': 'Mbang Ade',
+    //   'details': '08180065778 | johndoe@gmail.com',
+    // },
+    // {
+    //   'name': 'Mbang Ade',
+    //   'details': '08180065778 | johndoe@gmail.com',
+    // },
   ];
 
   RxString selectedView = 'select'.obs;
@@ -216,6 +219,8 @@ class ListVehicleController extends GetxController {
 
 // routing methods
   void goBack() => routeService.goBack();
+  void goBack1() => routeService.goBack(closeOverlays: true);
+  void routeToCreateDriver() => routeService.gotoRoute(AppLinks.addDriver);
 
   Future<void> openCamera() async {
     ImageResponse? response =
@@ -238,6 +243,7 @@ class ListVehicleController extends GetxController {
       routeService.goBack;
     }
   }
+
   Future<void> openRoadWorthinessCamera() async {
     ImageResponse? response =
         await imageService.pickImage(source: ImageSource.camera);
@@ -254,6 +260,7 @@ class ListVehicleController extends GetxController {
       routeService.goBack;
     }
   }
+
   Future<void> openInsuranceCamera() async {
     ImageResponse? response =
         await imageService.pickImage(source: ImageSource.camera);
@@ -270,6 +277,7 @@ class ListVehicleController extends GetxController {
       routeService.goBack;
     }
   }
+
   Future<void> openInspectionCamera() async {
     ImageResponse? response =
         await imageService.pickImage(source: ImageSource.camera);
@@ -286,6 +294,7 @@ class ListVehicleController extends GetxController {
       routeService.goBack;
     }
   }
+
   Future<void> openVehiclePhotoCamera() async {
     ImageResponse? response =
         await imageService.pickImage(source: ImageSource.camera);
@@ -302,7 +311,6 @@ class ListVehicleController extends GetxController {
       routeService.goBack;
     }
   }
-
 
   // Function(List<String>) onChanged(){
   //   controller.selectedFeatures!.value
@@ -327,11 +335,12 @@ class ListVehicleController extends GetxController {
     }
   }
 
-  Future<void> getVehicleYear({required String brandCode}) async {
+  Future<void> getVehicleYear(
+      {required String brandCode, required String brandModelCode}) async {
     try {
       isGettingBrands.value = true;
-      final response =
-          await partnerService.getVehicleYear(brandCode: brandCode);
+      final response = await partnerService.getVehicleYear(
+          brandCode: brandCode, brandModelCode: brandModelCode);
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("gotten vehicle year ${response.data}");
         if (response.data != null && response.data != []) {
@@ -340,8 +349,33 @@ class ListVehicleController extends GetxController {
         }
       } else {
         logger.log("unable to get vehicle year ${response.data}");
-         showErrorSnackbar(
-                  message: response.message!);
+        showErrorSnackbar(message: response.message!);
+        isGettingBrands.value = false;
+      }
+    } catch (exception) {
+      logger.log("error  $exception");
+    }
+  }
+
+  Future<void> getBrandModel({required String brandCode1}) async {
+    try {
+      isGettingBrands.value = true;
+      final response =
+          await partnerService.getBrandModel(brandCode: brandCode1);
+      if (response.status == 'success' || response.status_code == 200) {
+        logger.log("gotten brand model ${response.data}");
+        if (response.data != null && response.data != []) {
+          // vehicleYear?.value = response.data!;
+          logger.log("brand model ${response.data}");
+          brandCode.value = response.data!.first!["brandCode"];
+          modelCode.value = response.data!.first!["modelCode"];
+
+          await getVehicleYear(
+              brandModelCode: modelCode.value, brandCode: brandCode.value);
+        }
+      } else {
+        logger.log("unable to get brand model ${response.data}");
+        showErrorSnackbar(message: response.message!);
         isGettingBrands.value = false;
       }
     } catch (exception) {
@@ -469,6 +503,7 @@ class ListVehicleController extends GetxController {
       logger.log("error  $exception");
     }
   }
+
   Future<void> getVehicleSeats() async {
     try {
       isGettingBrands.value = true;
@@ -487,6 +522,7 @@ class ListVehicleController extends GetxController {
       logger.log("error  $exception");
     }
   }
+
   Future<void> getInsuranceType() async {
     try {
       isGettingBrands.value = true;
@@ -495,7 +531,7 @@ class ListVehicleController extends GetxController {
         logger.log("gotten insurance type ${response.data}");
         if (response.data != null && response.data != []) {
           vehicleSeats?.value = response.data!;
-          logger.log("insurances ${brands.value.data}");
+          logger.log("insurances ${vehicleSeats?.value}");
         }
       } else {
         logger.log("unable to get insurance type ${response.data}");
@@ -505,4 +541,45 @@ class ListVehicleController extends GetxController {
       logger.log("error  $exception");
     }
   }
+ 
+  Future<void> getDrivers() async {
+    try {
+      isGettingBrands.value = true;
+      final response = await partnerService.getDrivers();
+      if (response.status == 'success' || response.status_code == 200) {
+        logger.log("gotten drivers ${response.data}");
+        if (response.data != null) {
+          // drivers = response.data!;
+          logger.log("drivers $drivers");
+        }
+      } else {
+        logger.log("unable to get drivers ${response.data}");
+        isGettingBrands.value = false;
+      }
+    } catch (exception) {
+      logger.log("error  $exception");
+    }
+  }
+  Future<void> createDriver() async {
+    try {
+      isGettingBrands.value = true;
+      final response = await partnerService.addDriver(
+        data: 
+      );
+      if (response.status == 'success' || response.status_code == 200) {
+        logger.log("gotten drivers ${response.data}");
+        if (response.data != null) {
+          // drivers = response.data!;
+          logger.log("drivers $drivers");
+        }
+      } else {
+        logger.log("unable to get drivers ${response.data}");
+        isGettingBrands.value = false;
+      }
+    } catch (exception) {
+      logger.log("error  $exception");
+    }
+  }
+
+
 }
