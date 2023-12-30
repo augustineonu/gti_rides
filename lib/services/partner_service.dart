@@ -321,4 +321,32 @@ class PartnerService extends GetxController {
       rethrow;
     }
   }
+  Future<ApiResponseModel> addCarDocument(
+      {required dio.FormData payload, required String carID}) async {
+    try {
+      final result = await apiService.postRequestFile(
+        endpoint: '/user/partner/car/addCarDocument?carID=$carID',
+        data: payload,
+      );
+
+      return ApiResponseModel.fromJson(result);
+    } catch (err) {
+      logger.log(" Error: $err");
+      rethrow;
+    }
+  }
+  Future<ApiResponseModel> addCarPhoto(
+      {required dio.FormData payload, required String carID}) async {
+    try {
+      final result = await apiService.postRequestFile(
+        endpoint: '/user/partner/car/addCarPhoto?carID=$carID',
+        data: payload,
+      );
+
+      return ApiResponseModel.fromJson(result);
+    } catch (err) {
+      logger.log(" Error: $err");
+      rethrow;
+    }
+  }
 }

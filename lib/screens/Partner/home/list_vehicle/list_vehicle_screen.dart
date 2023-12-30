@@ -679,191 +679,201 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
   Widget documentationPage(
       BuildContext context, ListVehicleController controller, Size size) {
     return SizedBox(
-      child: Column(
-        children: [
-          imageUploadWidget(
-            title: AppStrings.uploadVehicleDoc,
-            body: AppStrings.pleaseMakeSurePicAreClear,
-            onTap: () {},
-          ),
-          SizedBox(
-            height: 24.sp,
-          ),
-          // vehicle license
-          photoUploadWithTitle(
-            size,
-            title: AppStrings.vehicleLicense,
-            content: AppStrings.uploadDocument,
-            onTap: () {
-              if (controller.selectedPhotos.length == 10) {
+      child: Form(
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        key: controller.documentationFormKey,
+        child: Column(
+          children: [
+            imageUploadWidget(
+              title: AppStrings.uploadVehicleDoc,
+              body: AppStrings.pleaseMakeSurePicAreClear,
+              onTap: () {},
+            ),
+            SizedBox(
+              height: 24.sp,
+            ),
+            // vehicle license
+            photoUploadWithTitle(
+              size,
+              title: AppStrings.vehicleLicense,
+              content: AppStrings.uploadDocument,
+              onTap: () {
+                if (controller.selectedPhotos.length == 10) {
+                  showErrorSnackbar(
+                      message: 'You cannot upload more than 10 photos');
+                } else {
+                  selectOptionSheet(size,
+                      onSelectCamera: () => controller
+                          .openCamera()
+                          .then((value) => routeService.goBack()),
+                      onSelectGallery: () => controller
+                          .openGallery()
+                          .then((value) => routeService.goBack()));
+                }
+              },
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                for (var index = 0;
+                    index < controller.selectedPhotos.length;
+                    index++)
+                  imageWidget1(
+                    onTap: () => controller.selectedPhotos.removeAt(index),
+                    localImagePath: controller.selectedPhotos[index],
+                    height: 30.sp,
+                    width: 30.sp,
+                  ),
+              ],
+            ),
+            SizedBox(
+              height: 24.sp,
+            ),
+            // road worthiness
+            photoUploadWithTitle(size,
+                title: AppStrings.roadWorthiness,
+                content: AppStrings.uploadDocument, onTap: () {
+              if (controller.selectedRoadWorthinessPhotos.length == 10) {
                 showErrorSnackbar(
                     message: 'You cannot upload more than 10 photos');
               } else {
                 selectOptionSheet(size,
                     onSelectCamera: () => controller
-                        .openCamera()
+                        .openRoadWorthinessCamera()
                         .then((value) => routeService.goBack()),
                     onSelectGallery: () => controller
-                        .openGallery()
+                        .openRoadWorthinessGallery()
                         .then((value) => routeService.goBack()));
               }
-            },
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              for (var index = 0;
-                  index < controller.selectedPhotos.length;
-                  index++)
-                imageWidget1(
-                  onTap: () => controller.selectedPhotos.removeAt(index),
-                  localImagePath: controller.selectedPhotos[index],
-                  height: 30.sp,
-                  width: 30.sp,
-                ),
-            ],
-          ),
-          SizedBox(
-            height: 24.sp,
-          ),
-          // road worthiness
-          photoUploadWithTitle(size,
-              title: AppStrings.roadWorthiness,
-              content: AppStrings.uploadDocument, onTap: () {
-            if (controller.selectedRoadWorthinessPhotos.length == 10) {
-              showErrorSnackbar(
-                  message: 'You cannot upload more than 10 photos');
-            } else {
-              selectOptionSheet(size,
-                  onSelectCamera: () => controller
-                      .openRoadWorthinessCamera()
-                      .then((value) => routeService.goBack()),
-                  onSelectGallery: () => controller
-                      .openRoadWorthinessGallery()
-                      .then((value) => routeService.goBack()));
-            }
-          }),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              for (var index = 0;
-                  index < controller.selectedRoadWorthinessPhotos.length;
-                  index++)
-                imageWidget1(
-                  onTap: () =>
-                      controller.selectedRoadWorthinessPhotos.removeAt(index),
-                  localImagePath:
-                      controller.selectedRoadWorthinessPhotos[index],
-                  height: 30.sp,
-                  width: 30.sp,
-                ),
-            ],
-          ),
-          SizedBox(
-            height: 24.sp,
-          ),
-          dropdownWidget1(
-              context: context,
-              hintText: 'Select',
-              title: AppStrings.selectInsuranceType,
-              iconColor: grey3,
-              values: (controller.insurances?.value ?? [])
-                  .map((insurance) => insurance['insuranceName'] as String)
-                  .toList(),
-              onChange: (selectedInsurance) {
-                print('Selected value: $selectedInsurance');
-                // Find the brand object with the selected name
-                var selectedObject =
-                    (controller.insurances?.value ?? []).firstWhere(
-                  (brand) => brand['insuranceName'] == selectedInsurance,
-                  orElse: () => null,
-                );
-                if (selectedObject != null) {
-                  String insuranceCode =
-                      selectedObject['transmissionCode'] as String;
-                  controller.insuranceCode.value = insuranceCode;
-                }
-              }),
-          SizedBox(
-            height: 24.sp,
-          ),
-          // certificate of insurance
-          photoUploadWithTitle(size,
-              title: AppStrings.certificateOfInsurance,
-              content: AppStrings.uploadDocument, onTap: () {
-            if (controller.selectedInsurancePhotos.length == 10) {
-              showErrorSnackbar(
-                  message: 'You cannot upload more than 10 photos');
-            } else {
-              selectOptionSheet(size,
-                  onSelectCamera: () => controller
-                      .openInsuranceCamera()
-                      .then((value) => routeService.goBack()),
-                  onSelectGallery: () => controller
-                      .openInsuranceGallery()
-                      .then((value) => routeService.goBack()));
-            }
-          }),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              for (var index = 0;
-                  index < controller.selectedInsurancePhotos.length;
-                  index++)
-                imageWidget1(
-                  onTap: () =>
-                      controller.selectedInsurancePhotos.removeAt(index),
-                  localImagePath: controller.selectedInsurancePhotos[index],
-                  height: 30.sp,
-                  width: 30.sp,
-                ),
-            ],
-          ),
-          SizedBox(
-            height: 24.sp,
-          ),
-          // vehicle inspection
-          photoUploadWithTitle(size,
-              title: AppStrings.vehicleInspectionReport,
-              content: AppStrings.uploadDocument, onTap: () {
-            if (controller.selectedInspectionPhotos.length == 10) {
-              showErrorSnackbar(
-                  message: 'You cannot upload more than 10 photos');
-            } else {
-              selectOptionSheet(size,
-                  onSelectCamera: () => controller
-                      .openInspectionCamera()
-                      .then((value) => routeService.goBack()),
-                  onSelectGallery: () => controller
-                      .openInspectionGallery()
-                      .then((value) => routeService.goBack()));
-            }
-          }),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              for (var index = 0;
-                  index < controller.selectedInspectionPhotos.length;
-                  index++)
-                imageWidget1(
-                  onTap: () =>
-                      controller.selectedInspectionPhotos.removeAt(index),
-                  localImagePath: controller.selectedInspectionPhotos[index],
-                  height: 30.sp,
-                  width: 30.sp,
-                ),
-            ],
-          ),
+            }),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                for (var index = 0;
+                    index < controller.selectedRoadWorthinessPhotos.length;
+                    index++)
+                  imageWidget1(
+                    onTap: () =>
+                        controller.selectedRoadWorthinessPhotos.removeAt(index),
+                    localImagePath:
+                        controller.selectedRoadWorthinessPhotos[index],
+                    height: 30.sp,
+                    width: 30.sp,
+                  ),
+              ],
+            ),
+            SizedBox(
+              height: 24.sp,
+            ),
+            dropdownWidget1(
+                context: context,
+                hintText: 'Select',
+                title: AppStrings.selectInsuranceType,
+                iconColor: grey3,
+                expectedVariable: 'field',
+                values: (controller.insurances?.value ?? [])
+                    .map((insurance) => insurance['insuranceName'] as String)
+                    .toList(),
+                onChange: (selectedInsurance) {
+                  print('Selected value: $selectedInsurance');
+                  // Find the brand object with the selected name
+                  var selectedObject =
+                      (controller.insurances?.value ?? []).firstWhere(
+                    (insurance) =>
+                        insurance['insuranceName'] == selectedInsurance,
+                    orElse: () => null,
+                  );
+                  if (selectedObject != null) {
+                    String insuranceCode =
+                        selectedObject['insuranceCode'] as String;
+                    controller.insuranceCode.value = insuranceCode;
+                  }
+                }),
+            SizedBox(
+              height: 24.sp,
+            ),
+            // certificate of insurance
+            photoUploadWithTitle(size,
+                title: AppStrings.certificateOfInsurance,
+                content: AppStrings.uploadDocument, onTap: () {
+              if (controller.selectedInsurancePhotos.length == 10) {
+                showErrorSnackbar(
+                    message: 'You cannot upload more than 10 photos');
+              } else {
+                selectOptionSheet(size,
+                    onSelectCamera: () => controller
+                        .openInsuranceCamera()
+                        .then((value) => routeService.goBack()),
+                    onSelectGallery: () => controller
+                        .openInsuranceGallery()
+                        .then((value) => routeService.goBack()));
+              }
+            }),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                for (var index = 0;
+                    index < controller.selectedInsurancePhotos.length;
+                    index++)
+                  imageWidget1(
+                    onTap: () =>
+                        controller.selectedInsurancePhotos.removeAt(index),
+                    localImagePath: controller.selectedInsurancePhotos[index],
+                    height: 30.sp,
+                    width: 30.sp,
+                  ),
+              ],
+            ),
+            SizedBox(
+              height: 24.sp,
+            ),
+            // vehicle inspection
+            photoUploadWithTitle(size,
+                title: AppStrings.vehicleInspectionReport,
+                content: AppStrings.uploadDocument, onTap: () {
+              if (controller.selectedInspectionPhotos.length == 10) {
+                showErrorSnackbar(
+                    message: 'You cannot upload more than 10 photos');
+              } else {
+                selectOptionSheet(size,
+                    onSelectCamera: () => controller
+                        .openInspectionCamera()
+                        .then((value) => routeService.goBack()),
+                    onSelectGallery: () => controller
+                        .openInspectionGallery()
+                        .then((value) => routeService.goBack()));
+              }
+            }),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                for (var index = 0;
+                    index < controller.selectedInspectionPhotos.length;
+                    index++)
+                  imageWidget1(
+                    onTap: () =>
+                        controller.selectedInspectionPhotos.removeAt(index),
+                    localImagePath: controller.selectedInspectionPhotos[index],
+                    height: 30.sp,
+                    width: 30.sp,
+                  ),
+              ],
+            ),
 
-          SizedBox(
-            height: 50.sp,
-          ),
-          GtiButton(
-            onTap: () {},
-            text: AppStrings.cont,
-            width: size.width,
-          ),
-        ],
+            SizedBox(
+              height: 50.sp,
+            ),
+            controller.isLoading.isTrue
+                ? centerLoadingIcon()
+                : GtiButton(
+                    onTap: () {
+                      controller.addCarDocument();
+                    },
+                    text: AppStrings.cont,
+                    width: size.width,
+                  ),
+          ],
+        ),
       ),
     );
   }
@@ -903,8 +913,9 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                   // Find the brand object with the selected name
                   var selectedObject =
                       (controller.brands.value.data ?? []).firstWhere(
-                    (brand) =>
-                        brand['transmissionName'] == selectedTransmission,
+                    (transmission) =>
+                        transmission['transmissionName'] ==
+                        selectedTransmission,
                     orElse: () => null,
                   );
                   if (selectedObject != null) {
@@ -930,24 +941,41 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                 ButtonTheme(
                   alignedDropdown: true,
                   child: DropDownMultiSelect(
-                    onChanged: (List<String> selectedFeature) {
-                      controller.selectedFeatures!.value = selectedFeature;
-                      print("selected ${selectedFeature}");
-                      print("selected stage 1 ${selectedFeature}");
-                  // Find the feature object with the selected name
-                  var selectedObject =
-                      (controller.carFeatures?.value ?? []).firstWhere(
-                    (feature) =>
-                        feature['featuresName'] == selectedFeature,
-                    orElse: () => null,
-                  );
-                  if (selectedObject != null) {
-                    String featureCode =
-                        selectedObject['featuresCode'] as String;
-                    // controller.getVehicleYear(brandCode: transmissionCode);
-                    controller.featuresCode.value = featureCode;
-                    print("code $featureCode");
-                  }
+                    onChanged: (List<String> selectedFeatures) {
+                      controller.selectedFeatures!.value = selectedFeatures;
+                      print("selected ${selectedFeatures}");
+
+                      // Find the feature object with the selected name
+                      // var selectedObject =
+                      //     (controller.carFeatures?.value ?? []).firstWhere(
+                      //   (feature) =>
+                      //       feature['featuresName'] == selectedFeatures,
+                      //   orElse: () => null,
+                      // );
+                      // Find the feature objects with the selected names
+                      var selectedObjects =
+                          (controller.carFeatures?.value ?? [])
+                              .where(
+                                (feature) => selectedFeatures
+                                    .contains(feature['featuresName']),
+                              )
+                              .toList();
+                      // Extract featuresCode from selected objects
+                      List<String> featuresCodes = selectedObjects
+                          .map((feature) => feature['featuresCode'] as String)
+                          .toList();
+
+                      // Assign the lists to corresponding controller variables
+                      controller.featuresCode.value = featuresCodes;
+                      print("selectedFeatures: $selectedFeatures");
+                      print("featuresCodes: $featuresCodes");
+                      // if (selectedObject != null) {
+                      //   String featureCode =
+                      //       selectedObject['featuresCode'] as String;
+
+                      //   controller.featuresCode.value = featureCode;
+                      //   print("code $featureCode");
+                      // }
                     },
                     options: (controller.carFeatures?.value ?? [])
                         .map((feature) => feature['featuresName'] as String)
@@ -1021,13 +1049,15 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
             SizedBox(
               height: 50.sp,
             ),
-            GtiButton(
-              onTap: () {
-                controller.addCarInfo();
-              },
-              text: AppStrings.cont,
-              width: size.width,
-            ),
+            controller.isLoading.isTrue
+                ? centerLoadingIcon()
+                : GtiButton(
+                    onTap: () {
+                      controller.addCarInfo();
+                    },
+                    text: AppStrings.cont,
+                    width: size.width,
+                  ),
           ],
         ),
       ),

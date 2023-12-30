@@ -48,7 +48,7 @@ class ListVehicleController extends GetxController {
   RxString stateCode = ''.obs;
   RxString cityCode = ''.obs;
   RxString transmissionCode = ''.obs;
-  RxString featuresCode = ''.obs;
+  RxList<String> featuresCode = <String>[].obs;
   RxString insuranceCode = ''.obs;
   Rx<String> pickedImagePath = ''.obs;
   Rx<String> startDateTime = ''.obs;
@@ -64,6 +64,7 @@ class ListVehicleController extends GetxController {
 
   GlobalKey<FormState> vehicleTypeFormKey = GlobalKey<FormState>();
   GlobalKey<FormState> vehicleInfoFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> documentationFormKey = GlobalKey<FormState>();
 
   TextEditingController senderNameController = TextEditingController();
   TextEditingController phoneNoController = TextEditingController();
@@ -99,6 +100,7 @@ class ListVehicleController extends GetxController {
     await getVehicleType();
     await getVehicleSeats();
     await getDrivers();
+    await getInsuranceType();
     logger.log("oooooooooo");
     // Access the arguments using Get.arguments
     Map<String, dynamic>? arguments = Get.arguments;
@@ -469,7 +471,7 @@ class ListVehicleController extends GetxController {
   }
 
   Future<void> addCar() async {
-     if (!vehicleTypeFormKey.currentState!.validate()) {
+    if (!vehicleTypeFormKey.currentState!.validate()) {
       return;
     }
 
@@ -508,7 +510,7 @@ class ListVehicleController extends GetxController {
   }
 
   Future<void> addCarInfo() async {
-      if (!vehicleInfoFormKey.currentState!.validate()) {
+    if (!vehicleInfoFormKey.currentState!.validate()) {
       return;
     }
     try {
@@ -517,19 +519,19 @@ class ListVehicleController extends GetxController {
         "about": aboutVehicleController.text,
         "transmissionCode": transmissionCode.value,
         "featureCode": featuresCode.value,
-        "typeCode": "i7g",
-        "seatCode": "2mo"
+        "typeCode": vehicleTypeCode.value,
+        "seatCode": vehicleSeatCode
       }, carId: carID.value);
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("car info added ${response.data}");
-        if (response.data != null) {
-          // cities?.value = response.data!;
-          logger.log("carID ${brands.value.data}");
-          showSuccessSnackbar(message: response.message!);
-          pageController.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut);
-        }
+        // if (response.data != null) {
+        // cities?.value = response.data!;
+        // logger.log("carID ${brands.value.data}");
+        showSuccessSnackbar(message: response.message!);
+        pageController.nextPage(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut);
+        // }
       } else {
         logger.log("unable to add car info${response.data}");
         isLoading.value = false;
@@ -626,8 +628,8 @@ class ListVehicleController extends GetxController {
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("gotten insurance type ${response.data}");
         if (response.data != null && response.data != []) {
-          vehicleSeats?.value = response.data!;
-          logger.log("insurances ${vehicleSeats?.value}");
+          insurances?.value = response.data!;
+          logger.log("insurances ${insurances?.value}");
         }
       } else {
         logger.log("unable to get insurance type ${response.data}");
@@ -667,8 +669,8 @@ class ListVehicleController extends GetxController {
         "pricePerDay": rentPerDayController,
         "discountDays": discountNoOfDays,
         "discountPrice": discountPerDayController,
-        "driverID": selectedDriverId
-      }, carID: '');
+        "driverID": selectedDriverId.value
+      }, carID: carID.value);
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("gotten drivers ${response.data}");
         if (response.data != null) {
@@ -681,6 +683,130 @@ class ListVehicleController extends GetxController {
       }
     } catch (exception) {
       logger.log("error  $exception");
+    }
+  }
+
+  bool validateImageUpload() {
+    if (selectedRoadWorthinessPhotos.isEmpty ||
+        selectedPhotos.isEmpty ||
+        selectedInspectionPhotos.isEmpty ||
+        selectedInsurancePhotos.isEmpty) {
+      // Show an error message or handle it accordingly
+      showErrorSnackbar(message: 'Please upload an image.');
+      return false;
+    }
+    return true;
+  }
+
+  Future<void> addCarDocument() async {
+    if (!documentationFormKey.currentState!.validate() ||
+        !validateImageUpload()) {
+      return;
+    }
+    try {
+      isLoading.value = true;
+      var data = dio.FormData();
+      Future<dio.FormData> constructFormData() async {
+        List<List<String>> allSelectedPhotos = [
+          selectedPhotos.value,
+          selectedRoadWorthinessPhotos,
+          selectedInsurancePhotos,
+          selectedInspectionPhotos
+          // Add more lists if needed
+        ];
+        List<dio.MultipartFile> files = [];
+        for (var photoList in allSelectedPhotos) {
+          for (var filePath in photoList) {
+            files.add(
+                await dio.MultipartFile.fromFile(filePath, filename: filePath));
+          }
+        }
+
+        data = dio.FormData.fromMap({
+          'files': files,
+          'insuranceType': insuranceCode.value,
+        });
+
+        logger.log("form field ${data.length}");
+        return data;
+      }
+
+      final formData = await constructFormData();
+      final response = await partnerService.addCarDocument(
+          payload: formData, carID: carID.value);
+      if (response.status == 'success' || response.status_code == 200) {
+        logger.log("car document added ${response.data}");
+
+        // if (response.data != null) {
+        //   // drivers = response.data!;
+        //   // logger.log("drivers $drivers");
+        // }
+      } else {
+        logger.log("unable to get drivers ${response.data}");
+        showErrorSnackbar(message: response.message!);
+        isLoading.value = false;
+      }
+    } catch (exception) {
+      logger.log("error  $exception");
+      showErrorSnackbar(message: exception.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> addCarPhoto() async {
+    if (!documentationFormKey.currentState!.validate() ||
+        !validateImageUpload()) {
+      return;
+    }
+    try {
+      isLoading.value = true;
+      var data = dio.FormData();
+      Future<dio.FormData> constructFormData() async {
+        List<List<String>> allSelectedPhotos = [
+          selectedPhotos.value,
+          selectedRoadWorthinessPhotos,
+          selectedInsurancePhotos,
+          selectedInspectionPhotos
+          // Add more lists if needed
+        ];
+        List<dio.MultipartFile> files = [];
+        for (var photoList in allSelectedPhotos) {
+          for (var filePath in photoList) {
+            files.add(
+                await dio.MultipartFile.fromFile(filePath, filename: filePath));
+          }
+        }
+
+        data = dio.FormData.fromMap({
+          'files': files,
+          'insuranceType': insuranceCode.value,
+        });
+
+        logger.log("form field ${data.length}");
+        return data;
+      }
+
+      final formData = await constructFormData();
+      final response = await partnerService.addCarDocument(
+          payload: formData, carID: carID.value);
+      if (response.status == 'success' || response.status_code == 200) {
+        logger.log("car document added ${response.data}");
+
+        // if (response.data != null) {
+        //   // drivers = response.data!;
+        //   // logger.log("drivers $drivers");
+        // }
+      } else {
+        logger.log("unable to get drivers ${response.data}");
+        showErrorSnackbar(message: response.message!);
+        isLoading.value = false;
+      }
+    } catch (exception) {
+      logger.log("error  $exception");
+      showErrorSnackbar(message: exception.toString());
+    } finally {
+      isLoading.value = false;
     }
   }
 }
