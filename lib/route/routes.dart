@@ -107,7 +107,7 @@ class AppRoutes {
     ),
     GetPage(
       name: AppLinks.chooseTripDate,
-      page: () => const ChooseTripDateScreen(),
+      page: () =>  ChooseTripDateScreen(),
       binding: ChooseTripDateBinding(),
     ),
     GetPage(

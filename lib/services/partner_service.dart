@@ -2,17 +2,20 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:gti_rides/models/api_response_model.dart';
+import 'package:gti_rides/models/drivers_model.dart';
 import 'package:gti_rides/models/list_response_model.dart';
 import 'package:gti_rides/models/user_model.dart';
 import 'package:gti_rides/services/api_service.dart';
 import 'package:gti_rides/services/logger.dart';
+import 'package:dio/dio.dart' as dio;
 
 PartnerService get partnerService => Get.find();
 
-class PartnerService {
+class PartnerService extends GetxController {
   Logger logger = Logger('PartnerService');
   // Rx<Agent> agentModel = Agent().obs;
   Rx<UserModel> user = UserModel().obs;
+  RxList<Driver>? drivers = <Driver>[].obs;
 
   static final PartnerService _cache = PartnerService._internal();
 
@@ -24,8 +27,33 @@ class PartnerService {
     init();
   }
 
-  void init() {
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    logger.log("onInit called");
+  }
+
+  void init() async {
     logger.log('Initializing Partner service');
+    // await getDrivers1();
+  }
+
+  Future<void> getDrivers1() async {
+    try {
+      final response = await partnerService.getDrivers();
+      if (response.status == 'success' || response.status_code == 200) {
+        logger.log("gotten drivers ${response.data}");
+        if (response.data != null) {
+          drivers?.value = response.data! as dynamic;
+          logger.log("drivers $drivers");
+        }
+      } else {
+        logger.log("unable to get drivers ${response.data}");
+      }
+    } catch (exception) {
+      logger.log("error  $exception");
+    }
   }
 
   Future<ApiResponseModel> switchProfile(
@@ -133,23 +161,36 @@ class PartnerService {
     }
   }
 
-  Future<ListResponseModel> addCar({required Map data}) async {
+  Future<ApiResponseModel> addCar({required Map data}) async {
     try {
       final result = await apiService.postRequest(
-          endpoint: '/partner/car/addCar', data: data);
+          endpoint: '/user/partner/car/addCar', data: data);
       logger.log("result $result");
 
-      final decodedResult = json.decode(result);
-
-      return ListResponseModel.fromJson(decodedResult);
+      return ApiResponseModel.fromJson(result);
     } catch (err) {
+      logger.log("error $err");
       rethrow;
     }
   }
 
-  Future<ListResponseModel> addDriver({required FormData data}) async {
+  Future<ApiResponseModel> addCarInfo(
+      {required Map data, required String carId}) async {
     try {
       final result = await apiService.postRequest(
+          endpoint: '/user/partner/car/addCarInfo?carID=$carId', data: data);
+      logger.log("result $result");
+
+      return ApiResponseModel.fromJson(result);
+    } catch (err) {
+      logger.log("error $err");
+      rethrow;
+    }
+  }
+
+  Future<ListResponseModel> addDriver1({required dio.FormData data}) async {
+    try {
+      final result = await apiService.postRequestFile(
           endpoint: '/user/partner/driver/addDriver', data: data);
       logger.log("result $result");
 
@@ -157,6 +198,21 @@ class PartnerService {
 
       return ListResponseModel.fromJson(decodedResult);
     } catch (err) {
+      logger.log("error adding driver $err");
+      rethrow;
+    }
+  }
+
+  Future<ApiResponseModel> addDriver({required dio.FormData payload}) async {
+    try {
+      final result = await apiService.postRequestFile(
+        endpoint: '/user/partner/driver/addDriver',
+        data: payload,
+      );
+
+      return ApiResponseModel.fromJson(result);
+    } catch (err) {
+      logger.log(" Error: $err");
       rethrow;
     }
   }
@@ -247,6 +303,21 @@ class PartnerService {
 
       return ListResponseModel.fromJson(decodedResult);
     } catch (err) {
+      rethrow;
+    }
+  }
+
+  Future<ApiResponseModel> addCarAvailability(
+      {required Map payload, required String carID}) async {
+    try {
+      final result = await apiService.postRequest(
+        endpoint: '/user/partner/car/addCarAvailability?carID=$carID',
+        data: payload,
+      );
+
+      return ApiResponseModel.fromJson(result);
+    } catch (err) {
+      logger.log(" Error: $err");
       rethrow;
     }
   }

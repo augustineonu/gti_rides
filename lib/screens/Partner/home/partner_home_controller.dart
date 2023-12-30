@@ -92,6 +92,8 @@ class PartnerHomeController extends GetxController {
   }
 
 
+
+
   @override
   void dispose() {
     timer.cancel();

@@ -454,6 +454,7 @@ Future<dynamic> successDialog({
 }) {
   return Get.dialog(Dialog(
     alignment: Alignment.topCenter,
+  
     insetPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
     child: Stack(
       children: [
@@ -518,5 +519,5 @@ Future<dynamic> successDialog({
         ),
       ],
     ),
-  ));
+  ),  barrierDismissible: false,);
 }

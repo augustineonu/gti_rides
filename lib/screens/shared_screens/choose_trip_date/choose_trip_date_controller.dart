@@ -31,6 +31,9 @@ class ChooseTripDateController extends GetxController {
   RxInt selectedEndMins = 0.obs;
   RxInt selectedStartAmPm = 0.obs;
   RxInt selectedEndAmPm = 0.obs;
+  RxString appBarTitle = ''.obs;
+  RxString to = ''.obs;
+  RxString from = ''.obs;
 
   RxString selectedAmPm = 'am'.obs;
 
@@ -53,6 +56,18 @@ class ChooseTripDateController extends GetxController {
     update();
 
     super.onInit();
+
+    // Access the arguments using Get.arguments
+    Map<String, dynamic>? arguments = Get.arguments;
+
+    if (arguments != null) {
+      appBarTitle.value = arguments['appBarTitle'];
+      to.value = arguments['to'];
+      from.value = arguments['from'];
+
+      // Now you have access to the passed data (emailOrPhone)
+      logger.log('Received argument: $appBarTitle');
+    }
   }
 
   void onSelectedStartHourChanged(int value) => selectedStartHour.value = value;
@@ -83,11 +98,17 @@ class ChooseTripDateController extends GetxController {
     startDate.value = formatDayDate(args.value.startDate).toString();
     endDate.value =
         formatDayDate(args.value.endDate ?? args.value.startDate).toString();
-        logger.log("selected start date:: ${startDate.value}");
-        logger.log("selected end date:: ${endDate.value}");
+    logger.log("selected start date:: ${startDate.value}");
+    logger.log("selected end date:: ${endDate.value}");
   }
 
   void queryListener() {}
 
   void goBack() => routeService.goBack();
+  void goBack1() => routeService.goBack(closeOverlays: true, result: {
+        "start":
+            "${startDate} ${selectedStartHour}:${selectedStartMinute < 10 ? '0${selectedStartMinute}' : selectedStartMinute}${selectedStartAmPm.value == 0 ? "am" : "PM"}",
+        "end":
+            "${endDate} ${selectedEndHour}:${selectedEndMins < 10 ? '0${selectedEndMins}' : selectedEndMins}${selectedEndAmPm.value == 0 ? "am" : "PM"}"
+      });
 }

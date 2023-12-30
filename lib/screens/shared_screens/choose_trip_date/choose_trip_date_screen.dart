@@ -23,7 +23,12 @@ class ChooseTripDateBinding extends Bindings {
 }
 
 class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
-  const ChooseTripDateScreen([Key? key]) : super(key: key);
+  ChooseTripDateScreen({
+    this.appBarTitle,
+  });
+
+  final String? appBarTitle;
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -54,22 +59,23 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                   SizedBox(
+                  SizedBox(
                     width: 130.sp,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         textWidget(
-                            text: AppStrings.startDate,
+                            text: controller.to.value,
                             style: getRegularStyle(color: black)
                                 .copyWith(fontWeight: FontWeight.w400)),
                         SizedBox(
                           height: 3.sp,
                         ),
                         textWidget(
-                            text: "${controller.startDate} ${controller.selectedStartHour}:${controller.selectedStartMinute}${controller.selectedStartAmPm.value == 0 ? "am" : "PM"}",
-                            style: getRegularStyle(color: black)
-                                .copyWith(fontWeight: FontWeight.w500, fontSize: 12.sp)),
+                            text:
+                                "${controller.startDate} ${controller.selectedStartHour}:${controller.selectedStartMinute < 10 ? '0${controller.selectedStartMinute}' : controller.selectedStartMinute}${controller.selectedStartAmPm.value == 0 ? "am" : "PM"}",
+                            style: getRegularStyle(color: black).copyWith(
+                                fontWeight: FontWeight.w500, fontSize: 12.sp)),
                       ],
                     ),
                   ),
@@ -90,31 +96,34 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         textWidget(
-                            text: AppStrings.endDate,
+                            text: controller.from.value,
                             style: getRegularStyle(color: black)
                                 .copyWith(fontWeight: FontWeight.w400)),
                         SizedBox(
                           height: 3.sp,
                         ),
                         textWidget(
-                            text: "${controller.endDate} ${controller.selectedEndHour}:${controller.selectedEndMins}${controller.selectedEndAmPm.value == 0 ? "am" : "PM"}",
-                            style: getRegularStyle(color: black)
-                                .copyWith(fontWeight: FontWeight.w500,  fontSize: 12.sp)),
+                            text:
+                                "${controller.endDate} ${controller.selectedEndHour}:${controller.selectedEndMins < 10 ? '0${controller.selectedEndMins}' : controller.selectedEndMins}${controller.selectedEndAmPm.value == 0 ? "am" : "PM"}",
+                            style: getRegularStyle(color: black).copyWith(
+                                fontWeight: FontWeight.w500, fontSize: 12.sp)),
                       ],
                     ),
                   ),
                 ],
               ),
             ),
+            SizedBox(height: 30.h,),
             Column(
               children: <Widget>[
-                Container(
-                    margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                    height: 50,
-                    child: Text("StartRangeDate: ${controller.startDate} ${controller.selectedStartHour}:${controller.selectedStartMinute}${controller.selectedStartAmPm.value == 0 ? "am" : "PM"}")),
-                SizedBox(
-                    height: 50,
-                    child: Text('EndRangeDate:' '${controller.endDate}')),
+                // Container(
+                //     margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                //     height: 50,
+                //     child: Text(
+                //         "StartRangeDate: ${controller.startDate} ${controller.selectedStartHour}:${controller.selectedStartMinute < 10 ? '0${controller.selectedStartMinute.value}' : controller.selectedStartMinute.value}${controller.selectedStartAmPm.value == 0 ? "am" : "PM"}")),
+                // SizedBox(
+                    // height: 50,
+                    // child: Text('EndRangeDate:' '${controller.endDate}')),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.6,
                   child: SfDateRangePicker(
@@ -284,8 +293,6 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
                                                             ));
                                                       },
                                                     ),
-                                                 
-                                                 
                                                   ],
                                                 ),
                                               ],
@@ -431,7 +438,9 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
                                             horizontal: 20.sp),
                                         child: GtiButton(
                                           text: AppStrings.cont,
-                                          onTap: controller.goBack,
+                                          onTap:() {
+                                            controller.goBack1();
+                                          } ,
                                         ),
                                       ),
                                     ],
@@ -485,7 +494,7 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
 
   AppBar appBar(context) {
     return gtiAppBar(
-        onTap: controller.goBack,
+        onTap: ()=> controller.goBack1(),
         leading: Transform.scale(
             scale: 0.5,
             child: SvgPicture.asset(
@@ -493,7 +502,8 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
             )),
         centerTitle: false,
         title: textWidget(
-            text: AppStrings.tripDates,
+            text: controller.appBarTitle.value,
+            // text: AppStrings.tripDates,
             style: getRegularStyle(color: black)
                 .copyWith(fontWeight: FontWeight.w500)),
         titleColor: iconColor(),
@@ -751,14 +761,14 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
                                   ],
                                 ),
                               ),
-                              Padding(
-                                padding:
-                                    EdgeInsets.symmetric(horizontal: 20.sp),
-                                child: GtiButton(
-                                  text: AppStrings.cont,
-                                  onTap: () {},
-                                ),
-                              ),
+                              // Padding(
+                              //   padding:
+                              //       EdgeInsets.symmetric(horizontal: 20.sp),
+                              //   child: GtiButton(
+                              //     text: AppStrings.cont,
+                              //     onTap: () {},
+                              //   ),
+                              // ),
                             ],
                           ),
                         ),

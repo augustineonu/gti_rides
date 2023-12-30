@@ -413,7 +413,7 @@ class AppStrings {
   static String howToTakePhoto =
       'Here is how to take nice picture of your vehicle';
   static String howMuchForAdvance =
-      'How much advance do you need for you to rent out your Vehicle?';
+      'How much advance notice do you need for you to rent out your Vehicle?';
   static String proposeRentalRate = 'Proposed Rental Rate (per day)';
   static String amountHintText = '0.0';
   static String discount = 'Discount';
@@ -481,4 +481,5 @@ class AppStrings {
   static String uploadDriversLicense = "Upload Driver's License";
   static String uploadDriversLicenseHint = "Upload License";
   static String kindlyLoginWithCredToSetBiometrics = "Kindly login with credentials to setup Biometrics";
+  static String selectAvailabilityDate = "Select availability date";
 }

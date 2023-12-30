@@ -86,7 +86,7 @@ class ApiService {
 
   Future<dynamic> postRequest({
     required String endpoint,
-    Object? data,
+    Map? data,
     String? token,
   }) async {
     try {
@@ -274,6 +274,59 @@ class ApiService {
   //   }
   // }
 
+    Future<dynamic> postRequestFile({
+    required String endpoint,
+    required FormData data,
+  }) async {
+    try {
+      logger.log("POST REQUEST DATA:: ${data.fields.toString()}");
+      late Response response;
+      response = await _dio.post(
+        endpoint,
+        data: data,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${tokenService.accessToken.value}',
+            // 'Content-Type': 'image/png'
+          },
+        ),
+      );
+      logger.log("POST REQUEST RESPONSE:: $response");
+      final ApiResponseModel apiResponse =
+          ApiResponseModel.fromJson(response.data);
+      if (apiResponse.status != "success" || apiResponse.status_code == 401) {
+        bool newAccessTokenResult = await tokenService.getNewAccessToken();
+        if (!newAccessTokenResult) {
+          logger.log('Going to welcome screen');
+          routeService.offAllNamed(AppLinks.login);
+          return;
+        }
+        response = await _dio.post(
+          endpoint,
+          data: data,
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer ${tokenService.accessToken.value}',
+              'Content-Type': 'image/png'
+            },
+          ),
+        );
+      }
+      return response.data;
+    } on DioException catch (e) {
+      logger.log("POST REQUEST ERROR ($endpoint) :: ${e.response?.data}");
+      if (e.response?.data != null) {
+        return e.response?.data;
+      }
+      throw "An error occurred";
+    } on SocketException {
+      throw "seems you are offline";
+    } catch (error) {
+      throw error.toString();
+    }
+  }
+
+  
     Future<dynamic> putRequestFile({
     required String endpoint,
     required FormData data,

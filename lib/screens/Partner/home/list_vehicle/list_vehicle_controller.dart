@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:gti_rides/models/drivers_model.dart';
 import 'package:gti_rides/models/image_response.dart';
 import 'package:gti_rides/models/list_response_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/screens/Partner/home/list_vehicle/list_vehicle_screen.dart';
+import 'package:gti_rides/screens/shared_screens/more/drivers/drivers_controller.dart';
 import 'package:gti_rides/services/image_service.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/partner_service.dart';
@@ -12,9 +14,12 @@ import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/utils.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:dio/dio.dart' as dio;
 
 class ListVehicleController extends GetxController {
   Logger logger = Logger("Controller");
+
+  // var data = Get.find<DriversController>();
 
   Rx<ListResponseModel> brands = ListResponseModel().obs;
   RxList<dynamic>? vehicleYear = <dynamic>[].obs;
@@ -26,7 +31,7 @@ class ListVehicleController extends GetxController {
   RxList<dynamic>? vehicleTypes = <dynamic>[].obs;
   RxList<dynamic>? vehicleSeats = <dynamic>[].obs;
   RxList<dynamic>? insurances = <dynamic>[].obs;
-  RxList<dynamic>? drivers1 = <dynamic>[].obs;
+  RxList<dynamic>? drivers = <dynamic>[].obs;
 
   RxBool isLoading = false.obs;
   RxBool isGettingBrands = false.obs;
@@ -43,8 +48,14 @@ class ListVehicleController extends GetxController {
   RxString stateCode = ''.obs;
   RxString cityCode = ''.obs;
   RxString transmissionCode = ''.obs;
+  RxString featuresCode = ''.obs;
   RxString insuranceCode = ''.obs;
   Rx<String> pickedImagePath = ''.obs;
+  Rx<String> startDateTime = ''.obs;
+  Rx<String> endDateTime = ''.obs;
+  Rx<String> discountNoOfDays = ''.obs;
+  Rx<String> selectedDriverId = ''.obs;
+  Rx<String> carID = ''.obs;
   RxList<String> selectedPhotos = <String>[].obs;
   RxList<String> selectedRoadWorthinessPhotos = <String>[].obs;
   RxList<String> selectedInsurancePhotos = <String>[].obs;
@@ -52,6 +63,7 @@ class ListVehicleController extends GetxController {
   RxList<String> selectedVehiclePhotos = <String>[].obs;
 
   GlobalKey<FormState> vehicleTypeFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> vehicleInfoFormKey = GlobalKey<FormState>();
 
   TextEditingController senderNameController = TextEditingController();
   TextEditingController phoneNoController = TextEditingController();
@@ -69,6 +81,10 @@ class ListVehicleController extends GetxController {
   TextEditingController kilogramController = TextEditingController();
   TextEditingController vinController = TextEditingController();
   TextEditingController plateNumberController = TextEditingController();
+  TextEditingController advanceAmountController = TextEditingController();
+  TextEditingController rentPerDayController = TextEditingController();
+  TextEditingController discountPerDayController = TextEditingController();
+  TextEditingController aboutVehicleController = TextEditingController();
 
   ListVehicleController() {
     init();
@@ -82,16 +98,40 @@ class ListVehicleController extends GetxController {
     await getCarFeatures();
     await getVehicleType();
     await getVehicleSeats();
+    await getDrivers();
+    logger.log("oooooooooo");
+    // Access the arguments using Get.arguments
+    Map<String, dynamic>? arguments = Get.arguments;
+
+    if (arguments != null) {
+      startDateTime.value = arguments['start'] ?? 'hmm';
+      endDateTime.value = arguments['end'] ?? 'woo';
+
+      // Now you have access to the passed data (emailOrPhone)
+      logger.log('Received data: $arguments');
+    }
   }
 
   @override
   void onInit() async {
+    logger.log("ListVehicleController oninti called");
     pageController.addListener(() {
       currentIndex.value = pageController.page?.round() ?? 0;
       update();
     });
     super.onInit();
     // await getBrands();
+    // Access the arguments using Get.arguments
+    // Map<String, dynamic>? arguments = Get.arguments;
+
+    // if (arguments != null ) {
+    //   startDateTime.value = arguments['start'];
+    //   endDateTime.value = arguments['end'];
+
+    //   // Now you have access to the passed data (emailOrPhone)
+    //   logger.log('Received data: $arguments');
+    // }
+    // logger.log('Received data1: $arguments');
   }
 
   // variables
@@ -181,7 +221,7 @@ class ListVehicleController extends GetxController {
     AppStrings.nineOrMore,
   ];
 
-  List<Map<String, dynamic>> drivers = [
+  List<Map<String, dynamic>> drivers1 = [
     // {
     //   'name': 'John Doe',
     //   'details': '08180065778 | johndoe@gmail.com',
@@ -212,8 +252,8 @@ class ListVehicleController extends GetxController {
   ValueNotifier<Fruit> selectedItem = ValueNotifier<Fruit>(Fruit.apple);
   Rx<Driver> selectedItem1 = Rx<Driver>(
     Driver(
-      name: 'John Doe',
-      details: '08180065778 | johndoe@gmail.com',
+      fullName: 'John Doe',
+      driverEmail: '08180065778 | johndoe@gmail.com',
     ),
   );
 
@@ -221,6 +261,12 @@ class ListVehicleController extends GetxController {
   void goBack() => routeService.goBack();
   void goBack1() => routeService.goBack(closeOverlays: true);
   void routeToCreateDriver() => routeService.gotoRoute(AppLinks.addDriver);
+  void routeToSelectDate() =>
+      routeService.gotoRoute(AppLinks.chooseTripDate, arguments: {
+        "appBarTitle": AppStrings.selectAvailabilityDate,
+        "to": AppStrings.to,
+        "from": AppStrings.from
+      });
 
   Future<void> openCamera() async {
     ImageResponse? response =
@@ -402,14 +448,15 @@ class ListVehicleController extends GetxController {
     }
   }
 
-  Future<void> getCity({required String cityCode}) async {
+  Future<void> getCity({required String cityCode1}) async {
     try {
       isGettingBrands.value = true;
-      final response = await partnerService.getCity(cityCode: cityCode);
+      final response = await partnerService.getCity(cityCode: cityCode1);
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("gotten cities ${response.data}");
         if (response.data != null && response.data != []) {
           cities?.value = response.data!;
+          // cityCode.value = response.data?.first['cityCode'];
           logger.log("cities ${brands.value.data}");
         }
       } else {
@@ -422,10 +469,15 @@ class ListVehicleController extends GetxController {
   }
 
   Future<void> addCar() async {
+     if (!vehicleTypeFormKey.currentState!.validate()) {
+      return;
+    }
+
     try {
-      isAddingCar.value = true;
+      isLoading.value = true;
       final response = await partnerService.addCar(data: {
         "brandCode": brandCode.value,
+        "brandModelCode": modelCode.value,
         "yearCode": yearCode.value,
         "vin": vinController.text,
         "plateNumber": plateNumberController.text,
@@ -433,17 +485,61 @@ class ListVehicleController extends GetxController {
         "cityCode": cityCode.value,
       });
       if (response.status == 'success' || response.status_code == 200) {
-        logger.log("gotten cities ${response.data}");
-        if (response.data != null && response.data != []) {
-          cities?.value = response.data!;
-          logger.log("cities ${brands.value.data}");
+        logger.log("car added ${response.data}");
+        if (response.data != null) {
+          // cities?.value = response.data!;
+          logger.log("carID ${brands.value.data}");
+          carID.value = response.data!["carID"];
+          showSuccessSnackbar(message: response.message!);
+          pageController.nextPage(
+              duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
         }
       } else {
-        logger.log("unable to get city ${response.data}");
-        isAddingCar.value = false;
+        logger.log("unable to add car${response.data}");
+        isLoading.value = false;
+        showErrorSnackbar(message: response.message.toString());
       }
     } catch (exception) {
       logger.log("error  $exception");
+      showErrorSnackbar(message: exception.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> addCarInfo() async {
+      if (!vehicleInfoFormKey.currentState!.validate()) {
+      return;
+    }
+    try {
+      isLoading.value = true;
+      final response = await partnerService.addCarInfo(data: {
+        "about": aboutVehicleController.text,
+        "transmissionCode": transmissionCode.value,
+        "featureCode": featuresCode.value,
+        "typeCode": "i7g",
+        "seatCode": "2mo"
+      }, carId: carID.value);
+      if (response.status == 'success' || response.status_code == 200) {
+        logger.log("car info added ${response.data}");
+        if (response.data != null) {
+          // cities?.value = response.data!;
+          logger.log("carID ${brands.value.data}");
+          showSuccessSnackbar(message: response.message!);
+          pageController.nextPage(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut);
+        }
+      } else {
+        logger.log("unable to add car info${response.data}");
+        isLoading.value = false;
+        showErrorSnackbar(message: response.message.toString());
+      }
+    } catch (exception) {
+      logger.log("error  $exception");
+      showErrorSnackbar(message: exception.toString());
+    } finally {
+      isLoading.value = false;
     }
   }
 
@@ -455,7 +551,7 @@ class ListVehicleController extends GetxController {
         logger.log("gotten transmission ${response.data}");
         if (response.data != null && response.data != []) {
           transmissions?.value = response.data!;
-          logger.log("msg ${brands.value.data}");
+          logger.log("msg ${transmissions?.value}");
         }
       } else {
         logger.log("unable to get transmission ${response.data}");
@@ -474,7 +570,7 @@ class ListVehicleController extends GetxController {
         logger.log("gotten car features ${response.data}");
         if (response.data != null && response.data != []) {
           carFeatures?.value = response.data!;
-          logger.log("msg ${brands.value.data}");
+          logger.log("msg ${carFeatures?.value}");
         }
       } else {
         logger.log("unable to car features ${response.data}");
@@ -541,7 +637,7 @@ class ListVehicleController extends GetxController {
       logger.log("error  $exception");
     }
   }
- 
+
   Future<void> getDrivers() async {
     try {
       isGettingBrands.value = true;
@@ -549,7 +645,7 @@ class ListVehicleController extends GetxController {
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("gotten drivers ${response.data}");
         if (response.data != null) {
-          // drivers = response.data!;
+          drivers?.value = response.data!;
           logger.log("drivers $drivers");
         }
       } else {
@@ -560,16 +656,23 @@ class ListVehicleController extends GetxController {
       logger.log("error  $exception");
     }
   }
-  Future<void> createDriver() async {
+
+  Future<void> addCarAvailability() async {
     try {
-      isGettingBrands.value = true;
-      final response = await partnerService.addDriver(
-        data: 
-      );
+      isLoading.value = true;
+      final response = await partnerService.addCarAvailability(payload: {
+        "startDate": startDateTime.value,
+        "endDate": endDateTime.value,
+        "advanceDays": advanceAmountController,
+        "pricePerDay": rentPerDayController,
+        "discountDays": discountNoOfDays,
+        "discountPrice": discountPerDayController,
+        "driverID": selectedDriverId
+      }, carID: '');
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("gotten drivers ${response.data}");
         if (response.data != null) {
-          // drivers = response.data!;
+          drivers?.value = response.data!;
           logger.log("drivers $drivers");
         }
       } else {
@@ -580,6 +683,4 @@ class ListVehicleController extends GetxController {
       logger.log("error  $exception");
     }
   }
-
-
 }
