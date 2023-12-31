@@ -402,7 +402,7 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                           fullName: controller.drivers?[index]['fullName'],
                           driverEmail: controller.drivers?[index]
                               ['driverEmail'],
-                          driverId: controller.drivers?[index]['driverId'],
+                          driverId: controller.drivers?[index]['driverID'],
                         );
 
                         return PopupMenuItem(
@@ -421,7 +421,7 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                                   controller.selectedView.value =
                                       value.fullName!;
                                   controller.selectedDriverId.value =
-                                      value.driverId!;
+                                      driver.driverId!;
 
                                   Navigator.pop(context);
                                 },
@@ -582,7 +582,7 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                     width: 6.sp,
                   ),
                   textWidget(
-                      text: "content 1",
+                      text: "Please make the photos clear",
                       style: getRegularStyle(fontSize: 12.sp)),
                 ],
               );
@@ -595,6 +595,7 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
             height: 24.sp,
           ),
           photoUploadWithTitle(size,
+              richTitle: true,
               title: AppStrings.uploadVehiclePhotos,
               content: AppStrings.uploadDocument, onTap: () {
             if (controller.selectedVehiclePhotos.length == 10) {
@@ -628,7 +629,9 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
             height: 100.sp,
           ),
           GtiButton(
-            onTap: () {},
+            onTap: () {
+              controller.addCarAvailability();
+            },
             text: AppStrings.cont,
             width: size.width,
           ),
@@ -640,6 +643,7 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
   Widget photoUploadWithTitle(
     Size size, {
     required String title,
+    bool? richTitle = false,
     required String content,
     required void Function()? onTap,
   }) {
@@ -652,7 +656,7 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
               style: getRegularStyle(fontSize: 12.sp),
               children: <TextSpan>[
                 TextSpan(
-                  text: AppStrings.youCanUploadOnly10Photos,
+                  text: richTitle! ? AppStrings.youCanUploadOnly10Photos : '',
                   style: getRegularStyle(fontSize: 12.sp, color: grey3),
                 )
               ]),
@@ -696,72 +700,38 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
             photoUploadWithTitle(
               size,
               title: AppStrings.vehicleLicense,
-              content: AppStrings.uploadDocument,
+              content: controller.selectedPhotoName.isNotEmpty
+                  ? controller.selectedPhotoName.value
+                  : AppStrings.uploadDocument,
               onTap: () {
-                if (controller.selectedPhotos.length == 10) {
-                  showErrorSnackbar(
-                      message: 'You cannot upload more than 10 photos');
-                } else {
-                  selectOptionSheet(size,
-                      onSelectCamera: () => controller
-                          .openCamera()
-                          .then((value) => routeService.goBack()),
-                      onSelectGallery: () => controller
-                          .openGallery()
-                          .then((value) => routeService.goBack()));
-                }
+                selectOptionSheet(size,
+                    onSelectCamera: () => controller
+                        .openCamera()
+                        .then((value) => routeService.goBack()),
+                    onSelectGallery: () => controller
+                        .openGallery()
+                        .then((value) => routeService.goBack()));
               },
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                for (var index = 0;
-                    index < controller.selectedPhotos.length;
-                    index++)
-                  imageWidget1(
-                    onTap: () => controller.selectedPhotos.removeAt(index),
-                    localImagePath: controller.selectedPhotos[index],
-                    height: 30.sp,
-                    width: 30.sp,
-                  ),
-              ],
-            ),
+
             SizedBox(
               height: 24.sp,
             ),
             // road worthiness
             photoUploadWithTitle(size,
                 title: AppStrings.roadWorthiness,
-                content: AppStrings.uploadDocument, onTap: () {
-              if (controller.selectedRoadWorthinessPhotos.length == 10) {
-                showErrorSnackbar(
-                    message: 'You cannot upload more than 10 photos');
-              } else {
-                selectOptionSheet(size,
-                    onSelectCamera: () => controller
-                        .openRoadWorthinessCamera()
-                        .then((value) => routeService.goBack()),
-                    onSelectGallery: () => controller
-                        .openRoadWorthinessGallery()
-                        .then((value) => routeService.goBack()));
-              }
+                content: controller.selectedRoadWorthinessPhotoName.isNotEmpty
+                    ? controller.selectedRoadWorthinessPhotoName.value
+                    : AppStrings.uploadDocument, onTap: () {
+              selectOptionSheet(size,
+                  onSelectCamera: () => controller
+                      .openRoadWorthinessCamera()
+                      .then((value) => routeService.goBack()),
+                  onSelectGallery: () => controller
+                      .openRoadWorthinessGallery()
+                      .then((value) => routeService.goBack()));
             }),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                for (var index = 0;
-                    index < controller.selectedRoadWorthinessPhotos.length;
-                    index++)
-                  imageWidget1(
-                    onTap: () =>
-                        controller.selectedRoadWorthinessPhotos.removeAt(index),
-                    localImagePath:
-                        controller.selectedRoadWorthinessPhotos[index],
-                    height: 30.sp,
-                    width: 30.sp,
-                  ),
-              ],
-            ),
+
             SizedBox(
               height: 24.sp,
             ),
@@ -795,70 +765,35 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
             // certificate of insurance
             photoUploadWithTitle(size,
                 title: AppStrings.certificateOfInsurance,
-                content: AppStrings.uploadDocument, onTap: () {
-              if (controller.selectedInsurancePhotos.length == 10) {
-                showErrorSnackbar(
-                    message: 'You cannot upload more than 10 photos');
-              } else {
-                selectOptionSheet(size,
-                    onSelectCamera: () => controller
-                        .openInsuranceCamera()
-                        .then((value) => routeService.goBack()),
-                    onSelectGallery: () => controller
-                        .openInsuranceGallery()
-                        .then((value) => routeService.goBack()));
-              }
+                content: controller.selectedInsurancePhotoName.isNotEmpty
+                    ? controller.selectedInsurancePhotoName.value
+                    : AppStrings.uploadDocument, onTap: () {
+              selectOptionSheet(size,
+                  onSelectCamera: () => controller
+                      .openInsuranceCamera()
+                      .then((value) => routeService.goBack()),
+                  onSelectGallery: () => controller
+                      .openInsuranceGallery()
+                      .then((value) => routeService.goBack()));
             }),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                for (var index = 0;
-                    index < controller.selectedInsurancePhotos.length;
-                    index++)
-                  imageWidget1(
-                    onTap: () =>
-                        controller.selectedInsurancePhotos.removeAt(index),
-                    localImagePath: controller.selectedInsurancePhotos[index],
-                    height: 30.sp,
-                    width: 30.sp,
-                  ),
-              ],
-            ),
+
             SizedBox(
               height: 24.sp,
             ),
             // vehicle inspection
             photoUploadWithTitle(size,
                 title: AppStrings.vehicleInspectionReport,
-                content: AppStrings.uploadDocument, onTap: () {
-              if (controller.selectedInspectionPhotos.length == 10) {
-                showErrorSnackbar(
-                    message: 'You cannot upload more than 10 photos');
-              } else {
-                selectOptionSheet(size,
-                    onSelectCamera: () => controller
-                        .openInspectionCamera()
-                        .then((value) => routeService.goBack()),
-                    onSelectGallery: () => controller
-                        .openInspectionGallery()
-                        .then((value) => routeService.goBack()));
-              }
+                content: controller.selectedInspectionPhotoName.isNotEmpty ?
+                controller.selectedInspectionPhotoName.value :
+                 AppStrings.uploadDocument, onTap: () {
+              selectOptionSheet(size,
+                  onSelectCamera: () => controller
+                      .openInspectionCamera()
+                      .then((value) => routeService.goBack()),
+                  onSelectGallery: () => controller
+                      .openInspectionGallery()
+                      .then((value) => routeService.goBack()));
             }),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                for (var index = 0;
-                    index < controller.selectedInspectionPhotos.length;
-                    index++)
-                  imageWidget1(
-                    onTap: () =>
-                        controller.selectedInspectionPhotos.removeAt(index),
-                    localImagePath: controller.selectedInspectionPhotos[index],
-                    height: 30.sp,
-                    width: 30.sp,
-                  ),
-              ],
-            ),
 
             SizedBox(
               height: 50.sp,
@@ -909,10 +844,11 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                     .toList(),
                 onChange: (selectedTransmission) {
                   print('Selected value: $selectedTransmission');
+                  print('Selected value1: $selectedTransmission');
 
                   // Find the brand object with the selected name
                   var selectedObject =
-                      (controller.brands.value.data ?? []).firstWhere(
+                      (controller.transmissions?.value ?? []).firstWhere(
                     (transmission) =>
                         transmission['transmissionName'] ==
                         selectedTransmission,
@@ -921,8 +857,8 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                   if (selectedObject != null) {
                     String transmissionCode =
                         selectedObject['transmissionCode'] as String;
-                    // controller.getVehicleYear(brandCode: transmissionCode);
                     controller.transmissionCode.value = transmissionCode;
+                    print('Selected code: $transmissionCode');
                   }
                 }),
             SizedBox(

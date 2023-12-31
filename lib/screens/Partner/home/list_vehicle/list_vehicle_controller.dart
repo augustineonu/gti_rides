@@ -50,16 +50,20 @@ class ListVehicleController extends GetxController {
   RxString transmissionCode = ''.obs;
   RxList<String> featuresCode = <String>[].obs;
   RxString insuranceCode = ''.obs;
-  Rx<String> pickedImagePath = ''.obs;
+  // Rx<String> pickedImagePath = ''.obs;
   Rx<String> startDateTime = ''.obs;
   Rx<String> endDateTime = ''.obs;
   Rx<String> discountNoOfDays = ''.obs;
   Rx<String> selectedDriverId = ''.obs;
   Rx<String> carID = ''.obs;
-  RxList<String> selectedPhotos = <String>[].obs;
-  RxList<String> selectedRoadWorthinessPhotos = <String>[].obs;
-  RxList<String> selectedInsurancePhotos = <String>[].obs;
-  RxList<String> selectedInspectionPhotos = <String>[].obs;
+  Rx<String> selectedPhotos = ''.obs;
+  Rx<String> selectedPhotoName = ''.obs;
+  Rx<String> selectedRoadWorthinessPhoto = ''.obs;
+  Rx<String> selectedRoadWorthinessPhotoName = ''.obs;
+  Rx<String> selectedInsurancePhotos = ''.obs;
+  Rx<String> selectedInsurancePhotoName = ''.obs;
+  Rx<String> selectedInspectionPhotos = ''.obs;
+  Rx<String> selectedInspectionPhotoName = ''.obs;
   RxList<String> selectedVehiclePhotos = <String>[].obs;
 
   GlobalKey<FormState> vehicleTypeFormKey = GlobalKey<FormState>();
@@ -275,9 +279,9 @@ class ListVehicleController extends GetxController {
         await imageService.pickImage(source: ImageSource.camera);
     if (response != null) {
       // Check if pickedImagePath is not null before accessing its value
-      pickedImagePath.value = response.imagePath;
-      selectedPhotos.add(response.imagePath);
-      logger.log("image path :: ${pickedImagePath.value}");
+      selectedPhotoName.value = response.imagePath.split('/').last;
+      selectedPhotos.value = (response.imagePath);
+      logger.log("image path :: ${selectedPhotoName.value}");
     }
   }
 
@@ -285,9 +289,9 @@ class ListVehicleController extends GetxController {
     ImageResponse? response =
         await imageService.pickImage(source: ImageSource.gallery);
     if (response != null) {
-      logger.log("Picked image $pickedImagePath");
-      pickedImagePath.value = response.imagePath;
-      selectedPhotos.add(response.imagePath);
+      logger.log("Picked image $selectedPhotoName");
+      selectedPhotoName.value = response.imagePath.split('/').last;
+      selectedPhotos.value = (response.imagePath);
       routeService.goBack;
     }
   }
@@ -296,7 +300,9 @@ class ListVehicleController extends GetxController {
     ImageResponse? response =
         await imageService.pickImage(source: ImageSource.camera);
     if (response != null) {
-      selectedRoadWorthinessPhotos.add(response.imagePath);
+      selectedRoadWorthinessPhoto.value = response.imagePath;
+      selectedRoadWorthinessPhotoName.value =
+          response.imagePath.split('/').last;
     }
   }
 
@@ -304,7 +310,10 @@ class ListVehicleController extends GetxController {
     ImageResponse? response =
         await imageService.pickImage(source: ImageSource.gallery);
     if (response != null) {
-      selectedRoadWorthinessPhotos.add(response.imagePath);
+      selectedRoadWorthinessPhoto.value = response.imagePath;
+      selectedRoadWorthinessPhotoName.value =
+          response.imagePath.split('/').last;
+
       routeService.goBack;
     }
   }
@@ -313,7 +322,8 @@ class ListVehicleController extends GetxController {
     ImageResponse? response =
         await imageService.pickImage(source: ImageSource.camera);
     if (response != null) {
-      selectedInsurancePhotos.add(response.imagePath);
+      selectedInsurancePhotos.value = response.imagePath;
+      selectedInsurancePhotoName.value = response.imagePath.split('/').last;
     }
   }
 
@@ -321,7 +331,8 @@ class ListVehicleController extends GetxController {
     ImageResponse? response =
         await imageService.pickImage(source: ImageSource.gallery);
     if (response != null) {
-      selectedInsurancePhotos.add(response.imagePath);
+      selectedInsurancePhotos.value = (response.imagePath);
+      selectedInsurancePhotoName.value = response.imagePath.split('/').last;
       routeService.goBack;
     }
   }
@@ -330,7 +341,8 @@ class ListVehicleController extends GetxController {
     ImageResponse? response =
         await imageService.pickImage(source: ImageSource.camera);
     if (response != null) {
-      selectedInspectionPhotos.add(response.imagePath);
+      selectedInspectionPhotos.value = (response.imagePath);
+      selectedInspectionPhotoName.value = (response.imagePath).split('/').last;
     }
   }
 
@@ -338,7 +350,8 @@ class ListVehicleController extends GetxController {
     ImageResponse? response =
         await imageService.pickImage(source: ImageSource.gallery);
     if (response != null) {
-      selectedInspectionPhotos.add(response.imagePath);
+      selectedInspectionPhotos.value = (response.imagePath);
+      selectedInspectionPhotoName.value = (response.imagePath).split('/').last;
       routeService.goBack;
     }
   }
@@ -687,7 +700,19 @@ class ListVehicleController extends GetxController {
   }
 
   bool validateImageUpload() {
-    if (selectedRoadWorthinessPhotos.isEmpty ||
+    if (selectedRoadWorthinessPhoto.isEmpty ||
+        selectedPhotos.isEmpty ||
+        selectedInspectionPhotos.isEmpty ||
+        selectedInsurancePhotos.isEmpty) {
+      // Show an error message or handle it accordingly
+      showErrorSnackbar(message: 'Please upload an image.');
+      return false;
+    }
+    return true;
+  }
+
+  bool validateImageUpload1() {
+    if (selectedRoadWorthinessPhoto.isEmpty ||
         selectedPhotos.isEmpty ||
         selectedInspectionPhotos.isEmpty ||
         selectedInsurancePhotos.isEmpty) {
@@ -707,24 +732,18 @@ class ListVehicleController extends GetxController {
       isLoading.value = true;
       var data = dio.FormData();
       Future<dio.FormData> constructFormData() async {
-        List<List<String>> allSelectedPhotos = [
-          selectedPhotos.value,
-          selectedRoadWorthinessPhotos,
-          selectedInsurancePhotos,
-          selectedInspectionPhotos
-          // Add more lists if needed
-        ];
-        List<dio.MultipartFile> files = [];
-        for (var photoList in allSelectedPhotos) {
-          for (var filePath in photoList) {
-            files.add(
-                await dio.MultipartFile.fromFile(filePath, filename: filePath));
-          }
-        }
-
         data = dio.FormData.fromMap({
-          'files': files,
-          'insuranceType': insuranceCode.value,
+          'files': [
+            await dio.MultipartFile.fromFile(selectedPhotos.value,
+                filename: selectedPhotos.value),
+            await dio.MultipartFile.fromFile(selectedRoadWorthinessPhoto.value,
+                filename: selectedRoadWorthinessPhoto.value),
+            await dio.MultipartFile.fromFile(selectedInsurancePhotos.value,
+                filename: selectedInsurancePhotos.value),
+            await dio.MultipartFile.fromFile(selectedInspectionPhotos.value,
+                filename: selectedInspectionPhotos.value),
+          ],
+          'insuranceType': insuranceCode.value
         });
 
         logger.log("form field ${data.length}");
@@ -742,7 +761,7 @@ class ListVehicleController extends GetxController {
         //   // logger.log("drivers $drivers");
         // }
       } else {
-        logger.log("unable to get drivers ${response.data}");
+        logger.log("unable to add document ${response.data}");
         showErrorSnackbar(message: response.message!);
         isLoading.value = false;
       }
@@ -755,27 +774,18 @@ class ListVehicleController extends GetxController {
   }
 
   Future<void> addCarPhoto() async {
-    if (!documentationFormKey.currentState!.validate() ||
-        !validateImageUpload()) {
+    if (!validateImageUpload1()) {
       return;
     }
     try {
       isLoading.value = true;
       var data = dio.FormData();
       Future<dio.FormData> constructFormData() async {
-        List<List<String>> allSelectedPhotos = [
-          selectedPhotos.value,
-          selectedRoadWorthinessPhotos,
-          selectedInsurancePhotos,
-          selectedInspectionPhotos
-          // Add more lists if needed
-        ];
         List<dio.MultipartFile> files = [];
-        for (var photoList in allSelectedPhotos) {
-          for (var filePath in photoList) {
-            files.add(
-                await dio.MultipartFile.fromFile(filePath, filename: filePath));
-          }
+
+        for (var filePath in selectedVehiclePhotos) {
+          files.add(
+              await dio.MultipartFile.fromFile(filePath, filename: filePath));
         }
 
         data = dio.FormData.fromMap({
@@ -788,17 +798,17 @@ class ListVehicleController extends GetxController {
       }
 
       final formData = await constructFormData();
-      final response = await partnerService.addCarDocument(
+      final response = await partnerService.addCarPhoto(
           payload: formData, carID: carID.value);
       if (response.status == 'success' || response.status_code == 200) {
-        logger.log("car document added ${response.data}");
+        logger.log("car photos added ${response.data}");
 
         // if (response.data != null) {
         //   // drivers = response.data!;
         //   // logger.log("drivers $drivers");
         // }
       } else {
-        logger.log("unable to get drivers ${response.data}");
+        logger.log("unable to add car photos ${response.data}");
         showErrorSnackbar(message: response.message!);
         isLoading.value = false;
       }

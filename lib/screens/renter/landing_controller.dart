@@ -1,8 +1,9 @@
 import 'package:get/get.dart';
+import 'package:gti_rides/screens/shared_screens/more/more_controller.dart';
 import 'package:gti_rides/services/logger.dart';
 
 class RenterLandingController extends GetxController {
-  Logger logger = Logger('OnboardingController');
+  Logger logger = Logger('RenterController');
 
   RxBool isDone = false.obs;
 
@@ -17,6 +18,7 @@ class RenterLandingController extends GetxController {
 
   @override
   void onInit() {
+    Get.find<MoreController>().onInit();
     super.onInit();
   }
 }
