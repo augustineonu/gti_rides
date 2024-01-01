@@ -18,7 +18,8 @@ class RenterLandingController extends GetxController {
 
   @override
   void onInit() {
-    Get.find<MoreController>().onInit();
+    Get.delete<MoreController>();
+    Get.put<MoreController>(MoreController());
     super.onInit();
   }
 }

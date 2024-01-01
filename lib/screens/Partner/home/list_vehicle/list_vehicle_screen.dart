@@ -858,7 +858,7 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                     String transmissionCode =
                         selectedObject['transmissionCode'] as String;
                     controller.transmissionCode.value = transmissionCode;
-                    print('Selected code: $transmissionCode');
+                   
                   }
                 }),
             SizedBox(

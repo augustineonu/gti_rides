@@ -483,81 +483,6 @@ class ListVehicleController extends GetxController {
     }
   }
 
-  Future<void> addCar() async {
-    if (!vehicleTypeFormKey.currentState!.validate()) {
-      return;
-    }
-
-    try {
-      isLoading.value = true;
-      final response = await partnerService.addCar(data: {
-        "brandCode": brandCode.value,
-        "brandModelCode": modelCode.value,
-        "yearCode": yearCode.value,
-        "vin": vinController.text,
-        "plateNumber": plateNumberController.text,
-        "stateCode": stateCode.value,
-        "cityCode": cityCode.value,
-      });
-      if (response.status == 'success' || response.status_code == 200) {
-        logger.log("car added ${response.data}");
-        if (response.data != null) {
-          // cities?.value = response.data!;
-          logger.log("carID ${brands.value.data}");
-          carID.value = response.data!["carID"];
-          showSuccessSnackbar(message: response.message!);
-          pageController.nextPage(
-              duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
-        }
-      } else {
-        logger.log("unable to add car${response.data}");
-        isLoading.value = false;
-        showErrorSnackbar(message: response.message.toString());
-      }
-    } catch (exception) {
-      logger.log("error  $exception");
-      showErrorSnackbar(message: exception.toString());
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  Future<void> addCarInfo() async {
-    if (!vehicleInfoFormKey.currentState!.validate()) {
-      return;
-    }
-    try {
-      isLoading.value = true;
-      final response = await partnerService.addCarInfo(data: {
-        "about": aboutVehicleController.text,
-        "transmissionCode": transmissionCode.value,
-        "featureCode": featuresCode.value,
-        "typeCode": vehicleTypeCode.value,
-        "seatCode": vehicleSeatCode
-      }, carId: carID.value);
-      if (response.status == 'success' || response.status_code == 200) {
-        logger.log("car info added ${response.data}");
-        // if (response.data != null) {
-        // cities?.value = response.data!;
-        // logger.log("carID ${brands.value.data}");
-        showSuccessSnackbar(message: response.message!);
-        pageController.nextPage(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut);
-        // }
-      } else {
-        logger.log("unable to add car info${response.data}");
-        isLoading.value = false;
-        showErrorSnackbar(message: response.message.toString());
-      }
-    } catch (exception) {
-      logger.log("error  $exception");
-      showErrorSnackbar(message: exception.toString());
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
   Future<void> getTransmission() async {
     try {
       isGettingBrands.value = true;
@@ -672,6 +597,83 @@ class ListVehicleController extends GetxController {
     }
   }
 
+  Future<void> addCar() async {
+    if (!vehicleTypeFormKey.currentState!.validate()) {
+      return;
+    }
+
+    try {
+      isLoading.value = true;
+      final response = await partnerService.addCar(data: {
+        "brandCode": brandCode.value,
+        "brandModelCode": modelCode.value,
+        "yearCode": yearCode.value,
+        "vin": vinController.text,
+        "plateNumber": plateNumberController.text,
+        "stateCode": stateCode.value,
+        "cityCode": cityCode.value,
+      });
+      if (response.status == 'success' || response.status_code == 200) {
+        logger.log("car added ${response.data}");
+        if (response.data != null) {
+          // cities?.value = response.data!;
+          logger.log("carID ${brands.value.data}");
+          carID.value = response.data!["carID"];
+          showSuccessSnackbar(message: response.message!);
+          pageController.nextPage(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut);
+        }
+      } else {
+        logger.log("unable to add car${response.data}");
+        isLoading.value = false;
+        showErrorSnackbar(message: response.message.toString());
+      }
+    } catch (exception) {
+      logger.log("error  $exception");
+      showErrorSnackbar(message: exception.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> addCarInfo() async {
+    if (!vehicleInfoFormKey.currentState!.validate()) {
+      return;
+    }
+    try {
+      isLoading.value = true;
+      final response = await partnerService.addCarInfo(data: {
+        "about": aboutVehicleController.text,
+        "transmissionCode": transmissionCode.value,
+        "featureCode": featuresCode.value,
+        "typeCode": vehicleTypeCode.value,
+        "seatCode": vehicleSeatCode.value
+      }, carId: carID.value);
+
+      if (response.status == 'success' || response.status_code == 200) {
+        logger.log("car info added ${response.data}");
+        // if (response.data != null) {
+        // cities?.value = response.data!;
+        // logger.log("carID ${brands.value.data}");
+        showSuccessSnackbar(message: response.message!);
+        pageController.nextPage(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut);
+        // }
+      } else {
+        logger.log("unable to add car info${response.data}");
+        isLoading.value = false;
+        showErrorSnackbar(message: response.message.toString());
+      }
+    } catch (exception) {
+      logger.log("error  $exception");
+      showErrorSnackbar(message: exception.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   Future<void> addCarAvailability() async {
     try {
       isLoading.value = true;
@@ -730,9 +732,30 @@ class ListVehicleController extends GetxController {
     }
     try {
       isLoading.value = true;
-      var data = dio.FormData();
+      var data1 = dio.FormData.fromMap({});
       Future<dio.FormData> constructFormData() async {
-        data = dio.FormData.fromMap({
+
+        data1.fields.addAll([
+          MapEntry(
+            'files',
+            (await dio.MultipartFile.fromFile(
+              selectedPhotos.value,
+              filename: selectedPhotos.value,
+            )).toString(),
+          ),
+          
+          MapEntry(
+            'files',
+            (await dio.MultipartFile.fromFile(
+              selectedRoadWorthinessPhoto.value,
+              filename: selectedRoadWorthinessPhoto.value,
+            )).toString(),
+          ),
+          MapEntry('fullName', insuranceCode.value)
+        ]);
+        // data1.fields.add(MapEntry('fullName', insuranceCode.value));
+
+        dio.FormData data = dio.FormData.fromMap({
           'files': [
             await dio.MultipartFile.fromFile(selectedPhotos.value,
                 filename: selectedPhotos.value),
@@ -746,8 +769,8 @@ class ListVehicleController extends GetxController {
           'insuranceType': insuranceCode.value
         });
 
-        logger.log("form field ${data.length}");
-        return data;
+        logger.log("form field ${data1.length}");
+        return data1;
       }
 
       final formData = await constructFormData();
