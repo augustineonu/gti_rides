@@ -306,6 +306,20 @@ class PartnerService extends GetxController {
       rethrow;
     }
   }
+  Future<ListResponseModel> getCars() async {
+    try {
+      final result = await apiService.getRequest(
+        '/owner/cars/getCars',
+      );
+      logger.log("result $result");
+
+      final decodedResult = json.decode(result);
+
+      return ListResponseModel.fromJson(decodedResult);
+    } catch (err) {
+      rethrow;
+    }
+  }
 
   Future<ApiResponseModel> addCarAvailability(
       {required Map payload, required String carID}) async {

@@ -11,6 +11,7 @@ import 'package:gti_rides/services/image_service.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/partner_service.dart';
 import 'package:gti_rides/services/route_service.dart';
+import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/utils.dart';
 import 'package:image_picker/image_picker.dart';
@@ -32,8 +33,10 @@ class ListVehicleController extends GetxController {
   RxList<dynamic>? vehicleSeats = <dynamic>[].obs;
   RxList<dynamic>? insurances = <dynamic>[].obs;
   RxList<dynamic>? drivers = <dynamic>[].obs;
+  RxList<dynamic>? cars = <dynamic>[].obs;
 
   RxBool isLoading = false.obs;
+  RxBool isLoading1 = false.obs;
   RxBool isGettingBrands = false.obs;
   RxBool isAddingCar = false.obs;
   PageController pageController = PageController();
@@ -676,28 +679,36 @@ class ListVehicleController extends GetxController {
 
   Future<void> addCarAvailability() async {
     try {
-      isLoading.value = true;
+      isLoading1.value = true;
       final response = await partnerService.addCarAvailability(payload: {
         "startDate": startDateTime.value,
         "endDate": endDateTime.value,
-        "advanceDays": advanceAmountController,
-        "pricePerDay": rentPerDayController,
-        "discountDays": discountNoOfDays,
-        "discountPrice": discountPerDayController,
+        "advanceDays": advanceAmountController.text,
+        "pricePerDay": rentPerDayController.text,
+        "discountDays": discountNoOfDays.value,
+        "discountPrice": discountPerDayController.text,
         "driverID": selectedDriverId.value
       }, carID: carID.value);
+
       if (response.status == 'success' || response.status_code == 200) {
-        logger.log("gotten drivers ${response.data}");
-        if (response.data != null) {
-          drivers?.value = response.data!;
-          logger.log("drivers $drivers");
-        }
+        logger.log("added availability ${response.data}");
+          showSuccessSnackbar(message: response.message!);
+       successDialog(title: AppStrings.vehicleInfoSubmitted,
+        body: AppStrings.thankYouForYourPatience,
+         buttonTitle: AppStrings.home, onTap: (){
+          routeService.goBack(closeOverlays: true);
+         });
+       
       } else {
         logger.log("unable to get drivers ${response.data}");
-        isGettingBrands.value = false;
+        showErrorSnackbar(message: response.message!);
+        isLoading1.value = false;
       }
     } catch (exception) {
       logger.log("error  $exception");
+       showErrorSnackbar(message: exception.toString());
+    } finally {
+      isLoading1.value = false;
     }
   }
 
@@ -714,12 +725,12 @@ class ListVehicleController extends GetxController {
   }
 
   bool validateImageUpload1() {
-    if (selectedRoadWorthinessPhoto.isEmpty ||
-        selectedPhotos.isEmpty ||
-        selectedInspectionPhotos.isEmpty ||
-        selectedInsurancePhotos.isEmpty) {
+    if (selectedVehiclePhotos.isEmpty) {
       // Show an error message or handle it accordingly
       showErrorSnackbar(message: 'Please upload an image.');
+      return false;
+    } else if (selectedVehiclePhotos.length < 6) {
+      showErrorSnackbar(message: 'Kindly upload more photos.');
       return false;
     }
     return true;
@@ -734,40 +745,49 @@ class ListVehicleController extends GetxController {
       isLoading.value = true;
       var data1 = dio.FormData.fromMap({});
       Future<dio.FormData> constructFormData() async {
-
         data1.fields.addAll([
           MapEntry(
-            'files',
+            'document',
             (await dio.MultipartFile.fromFile(
               selectedPhotos.value,
               filename: selectedPhotos.value,
-            )).toString(),
+            ))
+                .toString(),
           ),
-          
           MapEntry(
-            'files',
+            'vehicleLicense',
+            (await dio.MultipartFile.fromFile(
+              selectedPhotos.value,
+              filename: selectedPhotos.value,
+            ))
+                .toString(),
+          ),
+          MapEntry(
+            'roadWorthiness',
             (await dio.MultipartFile.fromFile(
               selectedRoadWorthinessPhoto.value,
               filename: selectedRoadWorthinessPhoto.value,
-            )).toString(),
+            ))
+                .toString(),
           ),
-          MapEntry('fullName', insuranceCode.value)
+          MapEntry(
+            'insuranceCertificate',
+            (await dio.MultipartFile.fromFile(
+              selectedInsurancePhotos.value,
+              filename: selectedInsurancePhotos.value,
+            ))
+                .toString(),
+          ),
+          MapEntry(
+            'inspectionReport',
+            (await dio.MultipartFile.fromFile(
+              selectedInspectionPhotos.value,
+              filename: selectedInspectionPhotos.value,
+            ))
+                .toString(),
+          ),
+          MapEntry('insuranceType', insuranceCode.value)
         ]);
-        // data1.fields.add(MapEntry('fullName', insuranceCode.value));
-
-        dio.FormData data = dio.FormData.fromMap({
-          'files': [
-            await dio.MultipartFile.fromFile(selectedPhotos.value,
-                filename: selectedPhotos.value),
-            await dio.MultipartFile.fromFile(selectedRoadWorthinessPhoto.value,
-                filename: selectedRoadWorthinessPhoto.value),
-            await dio.MultipartFile.fromFile(selectedInsurancePhotos.value,
-                filename: selectedInsurancePhotos.value),
-            await dio.MultipartFile.fromFile(selectedInspectionPhotos.value,
-                filename: selectedInspectionPhotos.value),
-          ],
-          'insuranceType': insuranceCode.value
-        });
 
         logger.log("form field ${data1.length}");
         return data1;
@@ -779,10 +799,10 @@ class ListVehicleController extends GetxController {
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("car document added ${response.data}");
 
-        // if (response.data != null) {
-        //   // drivers = response.data!;
-        //   // logger.log("drivers $drivers");
-        // }
+        showSuccessSnackbar(message: response.message!);
+        pageController.nextPage(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut);
       } else {
         logger.log("unable to add document ${response.data}");
         showErrorSnackbar(message: response.message!);
@@ -804,16 +824,23 @@ class ListVehicleController extends GetxController {
       isLoading.value = true;
       var data = dio.FormData();
       Future<dio.FormData> constructFormData() async {
-        List<dio.MultipartFile> files = [];
+        // List<dio.MultipartFile> files = [];
+        final formData = dio.FormData();
 
         for (var filePath in selectedVehiclePhotos) {
-          files.add(
-              await dio.MultipartFile.fromFile(filePath, filename: filePath));
+          formData.files.add(
+            // await dio.MultipartFile.fromFile(filePath, filename: filePath)
+            MapEntry(
+                'photo',
+                (await dio.MultipartFile.fromFile(
+                  filePath,
+                  filename: filePath,
+                ))),
+          );
         }
 
         data = dio.FormData.fromMap({
-          'files': files,
-          'insuranceType': insuranceCode.value,
+          'photo': formData,
         });
 
         logger.log("form field ${data.length}");
@@ -824,12 +851,11 @@ class ListVehicleController extends GetxController {
       final response = await partnerService.addCarPhoto(
           payload: formData, carID: carID.value);
       if (response.status == 'success' || response.status_code == 200) {
-        logger.log("car photos added ${response.data}");
-
-        // if (response.data != null) {
-        //   // drivers = response.data!;
-        //   // logger.log("drivers $drivers");
-        // }
+        logger.log("car photos added ${response.message}");
+        showSuccessSnackbar(message: response.message!);
+        pageController.nextPage(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut);
       } else {
         logger.log("unable to add car photos ${response.data}");
         showErrorSnackbar(message: response.message!);
@@ -842,4 +868,7 @@ class ListVehicleController extends GetxController {
       isLoading.value = false;
     }
   }
+
+  
+
 }

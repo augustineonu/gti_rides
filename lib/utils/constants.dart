@@ -376,6 +376,8 @@ class AppStrings {
   static String listYourVehicle = 'List your Vehicle';
   static String vehicleTypeSm = 'Vehicle type';
   static String vehicleInfo = 'Vehicle info';
+  static String vehicleInfoSubmitted = 'Vehicle information submitted';
+  static String thankYouForYourPatience = 'Thank you for your patience while we verify your documents.';
   static String documentation = 'Documentation  ';
   static String addPhotos = 'Add Photos';
   static String availability = ' Availability';

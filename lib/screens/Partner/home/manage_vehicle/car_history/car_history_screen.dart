@@ -25,10 +25,11 @@ class CarHistoryScreen extends GetView<CarHistoryController> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    final controller = Get.put(CarHistoryController());
     return Obx(
       () => Scaffold(
           backgroundColor: backgroundColor,
-          appBar: appBar(),
+          appBar: appBar(controller),
           body: body(size, context)),
       // }
     );
@@ -424,7 +425,7 @@ class CarHistoryScreen extends GetView<CarHistoryController> {
           );
   }
 
-  AppBar appBar() {
+  AppBar appBar(CarHistoryController controller ) {
     return gtiAppBar(
       onTap: () => controller.goBack(),
       leading: Transform.scale(

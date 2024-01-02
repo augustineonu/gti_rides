@@ -145,14 +145,11 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                         height: size.height / 0.80.sp,
                         child: PageView(
                           // itemCount: controller.pages.length,
+                          physics: NeverScrollableScrollPhysics(),
                           controller: controller.pageController,
                           onPageChanged: (value) {
                             controller.currentIndex.value = value;
                           },
-                          // itemBuilder: (context, index) {
-                          //   var page = controller.pages[index];
-                          //   return page;
-                          // },
                           children: <Widget>[
                             // Vehicle type page
                             vehicleTypePage(context, controller, size),
@@ -496,11 +493,15 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
           SizedBox(
             height: 50.sp,
           ),
-          GtiButton(
-            onTap: () {},
-            text: AppStrings.cont,
-            width: size.width,
-          ),
+          controller.isLoading1.isTrue
+              ? centerLoadingIcon()
+              : GtiButton(
+                  onTap: () {
+                    controller.addCarAvailability();
+                  },
+                  text: AppStrings.cont,
+                  width: size.width,
+                ),
         ],
       ),
     );
@@ -628,13 +629,15 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
           SizedBox(
             height: 100.sp,
           ),
-          GtiButton(
-            onTap: () {
-              controller.addCarAvailability();
-            },
-            text: AppStrings.cont,
-            width: size.width,
-          ),
+          controller.isLoading.isTrue
+              ? centerLoadingIcon()
+              : GtiButton(
+                  onTap: () {
+                    controller.addCarPhoto();
+                  },
+                  text: AppStrings.cont,
+                  width: size.width,
+                ),
         ],
       ),
     );
@@ -783,9 +786,9 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
             // vehicle inspection
             photoUploadWithTitle(size,
                 title: AppStrings.vehicleInspectionReport,
-                content: controller.selectedInspectionPhotoName.isNotEmpty ?
-                controller.selectedInspectionPhotoName.value :
-                 AppStrings.uploadDocument, onTap: () {
+                content: controller.selectedInspectionPhotoName.isNotEmpty
+                    ? controller.selectedInspectionPhotoName.value
+                    : AppStrings.uploadDocument, onTap: () {
               selectOptionSheet(size,
                   onSelectCamera: () => controller
                       .openInspectionCamera()
@@ -858,7 +861,6 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                     String transmissionCode =
                         selectedObject['transmissionCode'] as String;
                     controller.transmissionCode.value = transmissionCode;
-                   
                   }
                 }),
             SizedBox(
