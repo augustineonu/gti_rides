@@ -474,6 +474,7 @@ class AppStrings {
   static String contactCustomerCare = 'Contact customer care';
   static String addDriver = 'Add a driver';
   static String addNewDriver = 'Add a new driver';
+  static String editDriver = 'Edit driver details';
   static String driverFullName = 'Driver Full Name';
   static String driversNumber = "Driver's Number";
   static String driversEmail = "Driver's Email";

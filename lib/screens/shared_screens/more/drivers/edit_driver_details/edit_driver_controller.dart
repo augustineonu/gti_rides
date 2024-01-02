@@ -14,16 +14,32 @@ import 'package:dio/dio.dart' as dio;
 import 'package:gti_rides/utils/utils.dart';
 import 'package:image_picker/image_picker.dart';
 
-class DriversController extends GetxController {
-  Logger logger = Logger('DriversController');
-  DriversController() {
+class EditDriversController extends GetxController {
+  Logger logger = Logger('EditDriversController');
+  EditDriversController() {
     init();
   }
 
-  void init() async {
+  void init() async{
     logger.log('Controller initialized');
 
     await getDrivers();
+
+      Map<String, dynamic>? arguments = Get.arguments;
+
+    if (arguments != null) {
+      driverEmail.value = arguments['driverEmail'];
+      driverNumber.value = arguments['driverNumber'];
+      fullName.value = arguments['fullName'];
+      fullName.value = arguments['fullName'];
+      driverID.value = arguments['driverID'];
+
+      // Now you have access to the passed data (emailOrPhone)
+      logger.log('Received email or phone: $arguments');
+    }
+    fullNameController.text = fullName.value;
+    phoneNoController.text = driverNumber.value;
+    emailController.text = driverEmail.value;
   }
 
   RxList<dynamic>? drivers = <dynamic>[].obs;
@@ -48,6 +64,10 @@ class DriversController extends GetxController {
   Rx<String> exampleText = "".obs;
   Rx<String> pickedImagePath = "".obs;
   Rx<String> pickedImageName = "".obs;
+    Rx<String> driverEmail = ''.obs;
+  Rx<String> driverNumber = ''.obs;
+  Rx<String> fullName = ''.obs;
+  Rx<String> driverID = ''.obs;
 
   void obscurePassword() => showPassword.value = !showPassword.value;
   // update();
@@ -56,8 +76,9 @@ class DriversController extends GetxController {
   void goBack() => routeService.goBack();
   void goBack1() => routeService.goBack(closeOverlays: true);
   void routeToAddDriver() => routeService.gotoRoute(AppLinks.addDriver);
-  void routeToEditDriver({Object? arguments}) =>
-      routeService.gotoRoute(AppLinks.editDriver, arguments: arguments);
+  void routeToAddDriver1({Object? arguments}) => routeService.gotoRoute(AppLinks.addDriver,
+ arguments: arguments
+  );
   void routeToHome() => routeService.gotoRoute(AppLinks.carOwnerLanding);
 
   bool validateImageUpload() {
@@ -115,13 +136,13 @@ class DriversController extends GetxController {
           // formData.fields
           //     .add(MapEntry('expireDate', licenceExpiryDateController.text));
           data = dio.FormData.fromMap({
-            'files': [
+            'licenseUpload': [
               await dio.MultipartFile.fromFile(pickedImagePath.value,
                   filename: pickedImagePath.value)
             ],
-            'fullName': fullNameController.text,
-            'driverNumber': phoneNoController.text,
-            'driverEmail': emailController.text,
+            // 'fullName': fullNameController.text,
+            // 'driverNumber': phoneNoController.text,
+            // 'driverEmail': emailController.text,
             'licenseNumber': licenceNoController.text,
             'expireDate': licenceExpiryDateController.text
           });
@@ -142,21 +163,16 @@ class DriversController extends GetxController {
       }
 
       final formData = await constructFormData();
-      final response = await partnerService.addDriver(payload: formData);
+      final response = await partnerService.updateLicensePhoto(payload: formData,
+      driverID: driverID.value);
       if (response.status == 'success' || response.status_code == 200) {
-        logger.log("driver created ${response.data}");
+        logger.log("driver profile updated ${response.message!}");
+        showSuccessSnackbar(message: response.message!);
+        Future.delayed(const Duration(seconds: 2)).then((value) => 
+         routeService.goBack(closeOverlays: true));
 
-        successDialog(
-            title: AppStrings.driverAddedMessage,
-            body: AppStrings.thankYouForAddingDriver,
-            buttonTitle: AppStrings.cont,
-            onTap: goBack1);
-        // if (response.data != null) {
-        //   // drivers = response.data!;
-        //   // logger.log("drivers $drivers");
-        // }
       } else {
-        logger.log("unable to get drivers ${response.data}");
+        logger.log("unable to update drivers ${response.data}");
         showErrorSnackbar(message: response.message!);
         isLoading.value = false;
       }
@@ -184,6 +200,8 @@ class DriversController extends GetxController {
       logger.log("error  $exception");
     }
   }
+
+  
 
   @override
   void dispose() {

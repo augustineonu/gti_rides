@@ -749,40 +749,40 @@ class ListVehicleController extends GetxController {
           MapEntry(
             'document',
             (await dio.MultipartFile.fromFile(
-              selectedPhotos.value,
+              'selectedPhotos',
               filename: selectedPhotos.value,
             ))
                 .toString(),
           ),
           MapEntry(
-            'vehicleLicense',
+            'document',
             (await dio.MultipartFile.fromFile(
               selectedPhotos.value,
-              filename: selectedPhotos.value,
+              filename: 'vehicleLicense',
             ))
                 .toString(),
           ),
           MapEntry(
-            'roadWorthiness',
+            'document',
             (await dio.MultipartFile.fromFile(
               selectedRoadWorthinessPhoto.value,
-              filename: selectedRoadWorthinessPhoto.value,
+              filename: 'roadWorthiness',
             ))
                 .toString(),
           ),
           MapEntry(
-            'insuranceCertificate',
+            'document',
             (await dio.MultipartFile.fromFile(
               selectedInsurancePhotos.value,
-              filename: selectedInsurancePhotos.value,
+              filename: 'insuranceCertificate',
             ))
                 .toString(),
           ),
           MapEntry(
-            'inspectionReport',
+            'document',
             (await dio.MultipartFile.fromFile(
               selectedInspectionPhotos.value,
-              filename: selectedInspectionPhotos.value,
+              filename:'inspectionReport',
             ))
                 .toString(),
           ),

@@ -363,4 +363,18 @@ class PartnerService extends GetxController {
       rethrow;
     }
   }
+  Future<ApiResponseModel> updateLicensePhoto(
+      {required dio.FormData payload, required String driverID}) async {
+    try {
+      final result = await apiService.postRequestFile(
+        endpoint: '/user/partner/driver/updateLicense?driverID=$driverID',
+        data: payload,
+      );
+
+      return ApiResponseModel.fromJson(result);
+    } catch (err) {
+      logger.log(" Error: $err");
+      rethrow;
+    }
+  }
 }

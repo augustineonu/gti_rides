@@ -38,6 +38,7 @@ import 'package:gti_rides/screens/shared_screens/more/account_details/account_ve
 import 'package:gti_rides/screens/shared_screens/more/account_details/account_verification/phone/phone_verification.dart';
 import 'package:gti_rides/screens/shared_screens/more/drivers/add_driver_screen.dart';
 import 'package:gti_rides/screens/shared_screens/more/drivers/drivers_screen.dart';
+import 'package:gti_rides/screens/shared_screens/more/drivers/edit_driver_details/edit_driver_screen.dart';
 import 'package:gti_rides/screens/shared_screens/more/favorite/favorite_screen.dart';
 import 'package:gti_rides/screens/shared_screens/more/identity_verification/identity_verification.dart';
 import 'package:gti_rides/screens/shared_screens/more/identity_verification/screens/dob_screen.dart';
@@ -283,6 +284,10 @@ class AppRoutes {
     GetPage(
       name: AppLinks.dob,
       page: () => const DateOfBirthScreen(),
+    ),
+    GetPage(
+      name: AppLinks.editDriver,
+      page: () => const EditDriverScreen(),
     ),
   ];
 }

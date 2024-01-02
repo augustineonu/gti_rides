@@ -5,6 +5,7 @@ import 'package:gti_rides/models/list_response_model.dart';
 import 'package:gti_rides/models/user_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/logger.dart';
+import 'package:gti_rides/services/partner_service.dart';
 import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/utils/constants.dart';
@@ -40,6 +41,7 @@ class MoreController extends GetxController {
   RxBool isDone = false.obs;
   RxBool showPassword = false.obs;
   Rx<String> exampleText = "".obs;
+   RxList<dynamic>? drivers = <dynamic>[].obs;
 
   List<Map<String, dynamic>> profileOptions = [
     {
@@ -111,6 +113,27 @@ class MoreController extends GetxController {
       showErrorSnackbar(message: e.toString());
     }
   }
+
+
+    Future<void> getDrivers() async {
+    try {
+      final response = await partnerService.getDrivers();
+      if (response.status == 'success' || response.status_code == 200) {
+        logger.log("gotten drivers ${response.data}");
+        if (response.data != null) {
+          drivers?.value = response.data!;
+          logger.log("drivers $drivers");
+        }
+      } else {
+        logger.log("unable to get drivers ${response.data}");
+       
+      }
+    } catch (exception) {
+      logger.log("error  $exception");
+    }
+  }
+
+
 
   @override
   void dispose() {
