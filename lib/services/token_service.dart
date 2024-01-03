@@ -11,7 +11,7 @@ class TokenService {
   Logger logger = Logger('TokenService');
   Rx<TokenModel> tokens = TokenModel().obs;
   RxString accessToken = ''.obs;
-  RxString refreshToken = ''.obs;
+  // RxString refreshToken = ''.obs;
 
   static final TokenService _cache = TokenService._internal();
 
@@ -40,13 +40,15 @@ class TokenService {
     return true;
   }
 
-  bool setRefreshToken(token) {
-    refreshToken.value = token;
-    return true;
-  }
 
 
-// thi smethid is failling
+  // bool setRefreshToken(token) {
+  //   refreshToken.value = token;
+  //   return true;
+  // }
+
+
+
   Future<bool> getNewAccessToken() async {
     try {
       final ApiResponseModel result = await authService.getNewAccessToken(

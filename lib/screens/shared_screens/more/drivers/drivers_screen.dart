@@ -45,64 +45,68 @@ class DriversScreen extends GetView<DriversController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // for (var index = 0; index < controller.drivers!.length; index++)
-              ListView.builder(
-                  itemCount: controller.drivers!.length,
-                  shrinkWrap: true,
-                  physics: const ScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    final driver = controller.drivers![index];
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: InkWell(
-                        onTap: () {
-                          controller.routeToEditDriver(arguments: {
-                            "driverID": driver["driverID"],
-                            "driverEmail": driver["driverEmail"],
-                            "driverNumber": driver["driverNumber"],
-                            "fullName": driver["fullName"],
-                            "userID": driver["userID"]
-                          });
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              width: 250.sp,
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  textWidget(
-                                      text: "${index + 1}.",
-                                      style: getMediumStyle()),
-                                  SizedBox(
-                                    width: 6.sp,
+              controller.isFetchingDrivers.value
+                  ? centerLoadingIcon()
+                  : ListView.builder(
+                      itemCount: controller.drivers!.length,
+                      shrinkWrap: true,
+                      physics: const ScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        final driver = controller.drivers![index];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: InkWell(
+                            onTap: () {
+                              controller.routeToEditDriver(arguments: {
+                                "driverID": driver["driverID"],
+                                "driverEmail": driver["driverEmail"],
+                                "driverNumber": driver["driverNumber"],
+                                "fullName": driver["fullName"],
+                                "userID": driver["userID"]
+                              });
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(
+                                  width: 250.sp,
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      textWidget(
+                                          text: "${index + 1}.",
+                                          style: getMediumStyle()),
+                                      SizedBox(
+                                        width: 6.sp,
+                                      ),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            textWidget(
+                                                text: driver['fullName'],
+                                                style: getMediumStyle()),
+                                            textWidget(
+                                                text:
+                                                    "${driver['driverNumber']} | ${driver['driverEmail']}",
+                                                textOverflow:
+                                                    TextOverflow.visible,
+                                                style: getRegularStyle(
+                                                    fontSize: 10.sp)),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        textWidget(
-                                            text: driver['fullName'],
-                                            style: getMediumStyle()),
-                                        textWidget(
-                                            text:
-                                                "${driver['driverNumber']} | ${driver['driverEmail']}",
-                                            textOverflow: TextOverflow.visible,
-                                            style: getRegularStyle(
-                                                fontSize: 10.sp)),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                ),
+                                SvgPicture.asset(ImageAssets.pencilPlain)
+                              ],
                             ),
-                            SvgPicture.asset(ImageAssets.pencilPlain)
-                          ],
-                        ),
-                      ),
-                    );
-                  }),
+                          ),
+                        );
+                      }),
 
               const SizedBox(height: 74),
               addDriverButton(),

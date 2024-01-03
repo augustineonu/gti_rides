@@ -64,7 +64,7 @@ class MoreScreen extends StatelessWidget {
                         itemBuilder: (context, index) {
                           // show "My Drivers" only if user type is Owner
                           final option = controller.profileOptions[index];
-                          if (controller.user.value.userType == "owner") {
+                          if (controller.tokens.value.userType == "partner") {
                             return profileOptionsWIdget(
                               imageUrl: option['image'],
                               title: option['title'],

@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/route/app_links.dart';
+import 'package:gti_rides/services/auth_service.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/renter_service.dart';
+import 'package:gti_rides/services/token_service.dart';
 import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/utils.dart';
 
@@ -79,6 +81,8 @@ class PartnerHomeController extends GetxController {
       if (result.status == "success" || result.status_code == 200) {
         await showSuccessSnackbar(message: result.message!);
         logger.log("success message::: ${result.message}");
+        
+        await tokenService.getNewAccessToken();
         await routeService.offAllNamed(AppLinks.carRenterLanding);
       } else {
         await showErrorSnackbar(message: result.message!);

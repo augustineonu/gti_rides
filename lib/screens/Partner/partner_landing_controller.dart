@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:gti_rides/screens/shared_screens/more/more_controller.dart';
 import 'package:gti_rides/services/logger.dart';
 
 class PartnerLandingController extends GetxController {
@@ -17,6 +18,8 @@ class PartnerLandingController extends GetxController {
 
   @override
   void onInit() {
+    Get.delete<MoreController>();
+    Get.put<MoreController>(MoreController());
     super.onInit();
   }
 }

@@ -33,6 +33,7 @@ class DriversController extends GetxController {
   // late Timer timer;
   RxInt currentIndex = 0.obs;
   RxBool isLoading = false.obs;
+  RxBool isFetchingDrivers = false.obs;
 
   // late PageController cardPageController;
   ScrollController scrollController = ScrollController();
@@ -169,6 +170,7 @@ class DriversController extends GetxController {
   }
 
   Future<void> getDrivers() async {
+    isFetchingDrivers.value = true;
     try {
       final response = await partnerService.getDrivers();
       if (response.status == 'success' || response.status_code == 200) {
@@ -177,6 +179,7 @@ class DriversController extends GetxController {
           drivers?.value = response.data! as dynamic;
           logger.log("drivers $drivers");
         }
+        isFetchingDrivers.value = false;
       } else {
         logger.log("unable to get drivers ${response.data}");
       }
