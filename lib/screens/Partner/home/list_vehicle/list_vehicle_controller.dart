@@ -746,14 +746,7 @@ class ListVehicleController extends GetxController {
       var data1 = dio.FormData.fromMap({});
       Future<dio.FormData> constructFormData() async {
         data1.fields.addAll([
-          MapEntry(
-            'document',
-            (await dio.MultipartFile.fromFile(
-              'selectedPhotos',
-              filename: selectedPhotos.value,
-            ))
-                .toString(),
-          ),
+
           MapEntry(
             'document',
             (await dio.MultipartFile.fromFile(

@@ -306,10 +306,10 @@ class PartnerService extends GetxController {
       rethrow;
     }
   }
-  Future<ListResponseModel> getCars() async {
+  Future<ListResponseModel> getCars({required String queryType}) async {
     try {
       final result = await apiService.getRequest(
-        '/owner/cars/getCars',
+        '/user/partner/car/getAllCar?type=$queryType&skip=0&limit=10',
       );
       logger.log("result $result");
 

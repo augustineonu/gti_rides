@@ -97,6 +97,7 @@ class NormalInputTextWidget extends StatelessWidget {
         SizedBox(
           height: 3,
         ),
+        
         TextFormField(
           onTapOutside: (event) => FocusScope.of(context).unfocus(),
           controller: controller,

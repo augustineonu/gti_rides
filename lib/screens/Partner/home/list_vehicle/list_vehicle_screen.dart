@@ -196,16 +196,15 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
           Row(
             children: [
               Expanded(
-                child: NormalInputTextWidget(
-                  expectedVariable: 'field',
+                child: dateContainer(
+                  size,
+                  controller,
                   title: AppStrings.from,
-                  showCursor: false,
-                  hintText: controller.startDateTime.value.isEmpty
+                  color: controller.startDateTime.value.isEmpty ? grey1 : grey5,
+                  text: controller.startDateTime.value.isEmpty
                       ? AppStrings.dateTimeHintText
                       : controller.startDateTime.value,
                   onTap: () async {
-                    // final data = await controller
-                    //     .routeToSelectDate();
                     var data =
                         await Get.toNamed(AppLinks.chooseTripDate, arguments: {
                       "appBarTitle": AppStrings.selectAvailabilityDate,
@@ -222,11 +221,11 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
               ),
               SizedBox(width: 20.sp),
               Expanded(
-                child: NormalInputTextWidget(
-                  expectedVariable: 'field',
-                  title: AppStrings.to,
-                  showCursor: false,
-                  hintText: controller.endDateTime.value.isEmpty
+                child: dateContainer(
+                  size,
+                  controller,
+                  title: AppStrings.from,
+                  text: controller.endDateTime.value.isEmpty
                       ? AppStrings.dateTimeHintText
                       : controller.endDateTime.value,
                   onTap: () async {
@@ -248,6 +247,7 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
               ),
             ],
           ),
+        
           SizedBox(
             height: 24.sp,
           ),
@@ -255,7 +255,6 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
             expectedVariable: 'field',
             title: AppStrings.howMuchForAdvance,
             titleFontSize: 12.sp,
-            showCursor: false,
             hintText: AppStrings.amountHintText,
             textInputType: TextInputType.number,
             controller: controller.advanceAmountController,
@@ -267,7 +266,7 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
             expectedVariable: 'field',
             title: AppStrings.proposeRentalRate,
             titleFontSize: 12.sp,
-            showCursor: false,
+            showCursor: true,
             hintText: AppStrings.amountHintText,
             prefixIcon: Transform.scale(
                 scale: 0.3,
@@ -504,6 +503,50 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                 ),
         ],
       ),
+    );
+  }
+
+  Widget dateContainer(Size size, ListVehicleController controller,
+      {void Function()? onTap,
+      required String text,
+      required String title,
+      Color? color}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        textWidget(
+            text: title,
+            textOverflow: TextOverflow.visible,
+            style: getRegularStyle(fontSize: 14)),
+        SizedBox(
+          height: 3,
+        ),
+        GestureDetector(
+          onTap: onTap,
+          child: Container(
+            height: 45.h,
+            width: size.width,
+            constraints:
+                BoxConstraints.tightFor(width: size.width.sp, height: 45.sp),
+            // width: size.width,
+            margin: EdgeInsets.symmetric(vertical: 5.sp),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(
+                Radius.circular(4.r),
+              ),
+              border: Border.all(color: grey1),
+            ),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 5.sp, vertical: 10.sp),
+              child: Center(
+                child: textWidget(
+                    text: text,
+                    style: getRegularStyle(fontSize: 12.sp, color: color)),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
