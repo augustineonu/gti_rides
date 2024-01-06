@@ -145,7 +145,7 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                         height: size.height / 0.80.sp,
                         child: PageView(
                           // itemCount: controller.pages.length,
-                          physics: NeverScrollableScrollPhysics(),
+                          // physics: NeverScrollableScrollPhysics(),
                           controller: controller.pageController,
                           onPageChanged: (value) {
                             controller.currentIndex.value = value;
@@ -1094,16 +1094,17 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                     .toList(),
                 onChange: (selectedYear) {
                   print('Selected value: $selectedYear');
-                  controller.yearCode.value = selectedYear;
+                  // controller.yearCode.value = selectedYear;
                   // Find the brand object with the selected name
                   var selectedYearObject =
                       (controller.vehicleYear ?? []).firstWhere(
-                    (brand) => brand['yearName'] == selectedYear,
+                    (year) => year['yearName'] == selectedYear,
                     orElse: () => null,
                   );
                   if (selectedYearObject != null) {
                     String yearCode = selectedYearObject['yearCode'] as String;
                     controller.yearCode.value = yearCode;
+                    print("code>>>> ${yearCode}");
                   }
                 }),
             SizedBox(
@@ -1150,17 +1151,17 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                   }
                   var selectedStateObject =
                       (controller.states ?? []).firstWhere(
-                    (brand) => brand['stateName'] == selectedState,
+                    (state) => state['stateName'] == selectedState,
                     orElse: () => null,
                   );
                   if (selectedStateObject != null) {
                     String stateCode =
                         selectedStateObject['stateCode'] as String;
-                    String cityCode =
-                        selectedStateObject['stateCode'] as String;
+                    // String cityCode =
+                    //     selectedStateObject['stateCode'] as String;
                     controller.getCity(cityCode1: stateCode);
                     controller.stateCode.value = stateCode;
-                    controller.cityCode.value = cityCode;
+                    // controller.cityCode.value = cityCode;
                   }
                 }),
             SizedBox(
@@ -1178,12 +1179,12 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                 onChange: (selectedCity) {
                   print('Selected value: $selectedCity');
                   var selectedCityObject = (controller.cities ?? []).firstWhere(
-                    (brand) => brand['cityName'] == selectedCity,
+                    (city) => city['cityName'] == selectedCity,
                     orElse: () => null,
                   );
                   if (selectedCityObject != null) {
-                    String yearCode = selectedCityObject['cityCode'] as String;
-                    controller.yearCode.value = yearCode;
+                    String cityCode = selectedCityObject['cityCode'] as String;
+                    controller.cityCode.value = cityCode;
                   }
                 }),
             SizedBox(

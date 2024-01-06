@@ -58,10 +58,11 @@ class ManageVehicleScreen extends GetView<ManageVehicleController> {
                 SizedBox(
                   height: 24.sp,
                 ),
-                buildBody(context, size),
-                textWidget(
-                    text: controller.testString.value,
-                    style: getRegularStyle()),
+
+                Expanded(child: buildBody(context, size)),
+                // textWidget(
+                //     text: controller.testString.value,
+                //     style: getRegularStyle()),
               ],
             ),
           ),
@@ -294,186 +295,199 @@ class ManageVehicleScreen extends GetView<ManageVehicleController> {
   }
 
   Widget bookedCarsWidget(context, Size size) {
-    return Stack(
-      children: [
-        Container(
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-              border: Border.all(color: greyLight),
-              borderRadius: BorderRadius.all(Radius.circular(4.r))),
-          child: Row(
-            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Stack(
+    return controller.cars!.isEmpty
+        ? Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: textWidget(
+              text: 'You have not added any Cars yet :)',
+              style: getBoldStyle()),
+        )
+        : ListView.builder(
+      shrinkWrap: true,
+      physics: const ScrollPhysics(),
+      itemBuilder: (context, index) {
+        return Stack(
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                  border: Border.all(color: greyLight),
+                  borderRadius: BorderRadius.all(Radius.circular(4.r))),
+              child: Row(
+                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(4.r),
-                        bottomLeft: Radius.circular(4.r)),
-                    child: Image.asset(
-                      'assets/images/fav_car.png',
-                      fit: BoxFit.fitHeight,
-                    ),
-                  ),
-                  Positioned(
-                    left: 10,
-                    right: 10,
-                    top: 25,
-                    bottom: 25,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 5, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: black.withOpacity(0.4),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(2.r),
+                  Stack(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(4.r),
+                            bottomLeft: Radius.circular(4.r)),
+                        child: Image.asset(
+                          'assets/images/fav_car.png',
+                          fit: BoxFit.fitHeight,
                         ),
                       ),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 6, vertical: 4),
-                        decoration: BoxDecoration(
+                      Positioned(
+                        left: 10,
+                        right: 10,
+                        top: 25,
+                        bottom: 25,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 5, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: black.withOpacity(0.4),
                             borderRadius: BorderRadius.all(
                               Radius.circular(2.r),
                             ),
-                            border: Border.all(
-                              color: primaryColor,
-                            )),
-                        child: Center(
-                          child: textWidget(
-                            text: 'Car status: \n booked',
-                            textAlign: TextAlign.center,
-                            style: getLightStyle(
-                                    fontSize: 10.sp, color: primaryColor)
-                                .copyWith(fontWeight: FontWeight.w400),
                           ),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      // width: 135.sp,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          textWidget(
-                              text: 'Tesla Model Y', style: getBoldStyle()),
-                          const SizedBox(
-                            height: 3,
-                          ),
-                          Row(
-                            // crossAxisAlignment: alignment,
-                            children: [
-                              SvgPicture.asset(ImageAssets.naira),
-                              textWidget(
-                                  text: '100,000 ',
-                                  style: getMediumStyle(fontSize: 10.sp)
-                                      .copyWith(fontFamily: 'Neue')),
-                              // textWidget(
-                              //     text: ' x ', style: getMediumStyle(fontSize: 10.sp).copyWith(fontFamily: 'Neue')),
-                              SvgPicture.asset(
-                                ImageAssets.closeSmall,
-                                width: 7.sp,
-                                height: 7.sp,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 6, vertical: 4),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(2.r),
+                                ),
+                                border: Border.all(
+                                  color: primaryColor,
+                                )),
+                            child: Center(
+                              child: textWidget(
+                                text: 'Car status: \n booked',
+                                textAlign: TextAlign.center,
+                                style: getLightStyle(
+                                        fontSize: 10.sp, color: primaryColor)
+                                    .copyWith(fontWeight: FontWeight.w400),
                               ),
-                              textWidget(
-                                  text: ' 5days',
-                                  style: getMediumStyle(fontSize: 10.sp)
-                                      .copyWith(fontFamily: 'Neue')),
-                            ],
-                          ),
-
-                          /// Show the thumbs up and number trips
-                          //  Row(
-                          //       children: [
-                          //         SvgPicture.asset(
-                          //             ImageAssets.thumbsUpPrimaryColor),
-                          //         SizedBox(
-                          //           width: 5.sp,
-                          //         ),
-                          //         RichText(
-                          //           text: TextSpan(
-                          //               text: '97%',
-                          //               style: getMediumStyle(
-                          //                 fontSize: 12.sp,
-                          //               ),
-                          //               children: <TextSpan>[
-                          //                 TextSpan(
-                          //                   text: ' (66 trips)',
-                          //                   style: getLightStyle(
-                          //                       fontSize: 12.sp, color: grey2),
-                          //                 )
-                          //               ]),
-                          //         ),
-                          //       ],
-                          //     ),
-
-                          ////////
-                          const SizedBox(
-                            height: 10,
-                          ),
-
-                          textWidget(
-                            text: AppStrings.tripDate,
-                            // show AppStrings.aAvailabilityDate
-                            style: getRegularStyle(
-                              color: grey3,
-                              fontSize: 10.sp,
                             ),
                           ),
-
-                          const SizedBox(
-                            height: 3,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        ),
+                      )
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          // width: 135.sp,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               textWidget(
-                                  text: "wed, 1 Nov, 9:00am",
-                                  style: getMediumStyle(fontSize: 10.sp)
-                                      .copyWith(fontFamily: 'Neue')),
-                              SvgPicture.asset(
-                                ImageAssets.arrowForwardRounded,
-                                height: 8.sp,
-                                width: 8.sp,
+                                  text: 'Tesla Model Y', style: getBoldStyle()),
+                              const SizedBox(
+                                height: 3,
                               ),
+                              Row(
+                                // crossAxisAlignment: alignment,
+                                children: [
+                                  SvgPicture.asset(ImageAssets.naira),
+                                  textWidget(
+                                      text: '100,000 ',
+                                      style: getMediumStyle(fontSize: 10.sp)
+                                          .copyWith(fontFamily: 'Neue')),
+                                  // textWidget(
+                                  //     text: ' x ', style: getMediumStyle(fontSize: 10.sp).copyWith(fontFamily: 'Neue')),
+                                  SvgPicture.asset(
+                                    ImageAssets.closeSmall,
+                                    width: 7.sp,
+                                    height: 7.sp,
+                                  ),
+                                  textWidget(
+                                      text: ' 5days',
+                                      style: getMediumStyle(fontSize: 10.sp)
+                                          .copyWith(fontFamily: 'Neue')),
+                                ],
+                              ),
+        
+                              /// Show the thumbs up and number trips
+                              //  Row(
+                              //       children: [
+                              //         SvgPicture.asset(
+                              //             ImageAssets.thumbsUpPrimaryColor),
+                              //         SizedBox(
+                              //           width: 5.sp,
+                              //         ),
+                              //         RichText(
+                              //           text: TextSpan(
+                              //               text: '97%',
+                              //               style: getMediumStyle(
+                              //                 fontSize: 12.sp,
+                              //               ),
+                              //               children: <TextSpan>[
+                              //                 TextSpan(
+                              //                   text: ' (66 trips)',
+                              //                   style: getLightStyle(
+                              //                       fontSize: 12.sp, color: grey2),
+                              //                 )
+                              //               ]),
+                              //         ),
+                              //       ],
+                              //     ),
+        
+                              ////////
+                              const SizedBox(
+                                height: 10,
+                              ),
+        
                               textWidget(
-                                  text: "wed, 1 Nov, 9:00am",
-                                  style: getMediumStyle(fontSize: 10.sp)
-                                      .copyWith(fontFamily: 'Neue')),
+                                text: AppStrings.tripDate,
+                                // show AppStrings.aAvailabilityDate
+                                style: getRegularStyle(
+                                  color: grey3,
+                                  fontSize: 10.sp,
+                                ),
+                              ),
+        
+                              const SizedBox(
+                                height: 3,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  textWidget(
+                                      text: "wed, 1 Nov, 9:00am",
+                                      style: getMediumStyle(fontSize: 10.sp)
+                                          .copyWith(fontFamily: 'Neue')),
+                                  SvgPicture.asset(
+                                    ImageAssets.arrowForwardRounded,
+                                    height: 8.sp,
+                                    width: 8.sp,
+                                  ),
+                                  textWidget(
+                                      text: "wed, 1 Nov, 9:00am",
+                                      style: getMediumStyle(fontSize: 10.sp)
+                                          .copyWith(fontFamily: 'Neue')),
+                                ],
+                              ),
                             ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
-        Positioned(
-          right: 12.sp,
-          top: 12.sp,
-          child: InkWell(
-              onTap: () {
-                quickOptionsSheet(size);
-              },
-              child: SizedBox(
-                  height: 20,
-                  width: 20,
-                  child: SvgPicture.asset(ImageAssets.popUpMenu))),
-        ),
-      ],
+            ),
+            Positioned(
+              right: 12.sp,
+              top: 12.sp,
+              child: InkWell(
+                  onTap: () {
+                    quickOptionsSheet(size);
+                  },
+                  child: SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: SvgPicture.asset(ImageAssets.popUpMenu))),
+            ),
+          ],
+        );
+      }
     );
   }
 

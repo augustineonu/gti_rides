@@ -12,7 +12,9 @@ import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/utils.dart';
 import 'package:dio/dio.dart' as dio;
+import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mime/mime.dart';
 
 enum IdType { nationalId, passport, driverLicense }
 
@@ -156,33 +158,46 @@ class HomeAddressController extends GetxController {
     return true;
   }
 
+  // formData.fields.add(MapEntry(
+  //   'homeAddressProof',
+  //   await dio.MultipartFile.fromFile(
+  //     frontPagePath.value,
+  //     filename: frontPagePath.value,
+  //   ).toString(),
+  // ));
+
   Future<void> updateKyc() async {
     if (!updateFormKey.currentState!.validate() || !validateImageUpload()) {
       return;
     }
 
     isLoading.value = true;
+    final mimeTypeData =
+        lookupMimeType(frontPagePath.value, headerBytes: [0xFF, 0xD8])!
+            .split('/');
+    String fileName = frontPagePath.split('/').last;
 
     try {
       Future<dio.FormData> constructFormData() async {
         var formData = dio.FormData.fromMap({});
 
-        if (homeAddressController.text.isNotEmpty && frontPagePath.isNotEmpty) {
-          formData.fields
-              .add(MapEntry('homeAddress', homeAddressController.text));
-          formData.fields.add(MapEntry(
-            'homeAddressProof',
-            await dio.MultipartFile.fromFile(
-              frontPagePath.value,
-              filename: frontPagePath.value,
-            ).toString(),
-          ));
+        if (frontPagePath.isNotEmpty) {
+          formData = dio.FormData.fromMap({
+            'homeAddress': homeAddressController.text,
+            'homeAddressProof': await dio.MultipartFile.fromFile(
+                frontPagePath.value,
+                filename: fileName,
+                contentType: MediaType(mimeTypeData[0], mimeTypeData[1]))
+          });
         }
 
         return formData;
       }
 
       final formData = await constructFormData();
+      logger.log("PATCH REQUEST DATA:: ${formData.fields.toString()}");
+      logger.log("PATCH REQUEST DATA:: ${formData.files.toString()}");
+
       final result = await userService.updateKyc(payload: formData);
 
       if (result.status == "success" || result.status_code == 200) {

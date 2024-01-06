@@ -226,7 +226,7 @@ class ProfileScreen extends GetView<ProfileController> {
             width: 300.sp,
             text: AppStrings.saveDetails,
             // color: secondaryColor,
-            onTap: controller.updateProfile,
+            onTap: controller.updateProfile2,
             isLoading: controller.isLoading.value,
           );
   }

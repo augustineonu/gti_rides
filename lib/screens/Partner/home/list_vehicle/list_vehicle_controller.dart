@@ -14,8 +14,10 @@ import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/utils.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:dio/dio.dart' as dio;
+import 'package:mime/mime.dart';
 
 class ListVehicleController extends GetxController {
   Logger logger = Logger("Controller");
@@ -68,6 +70,7 @@ class ListVehicleController extends GetxController {
   Rx<String> selectedInspectionPhotos = ''.obs;
   Rx<String> selectedInspectionPhotoName = ''.obs;
   RxList<String> selectedVehiclePhotos = <String>[].obs;
+  Rx<String> selectedVehiclePhoto = ''.obs;
 
   GlobalKey<FormState> vehicleTypeFormKey = GlobalKey<FormState>();
   GlobalKey<FormState> vehicleInfoFormKey = GlobalKey<FormState>();
@@ -364,6 +367,7 @@ class ListVehicleController extends GetxController {
         await imageService.pickImage(source: ImageSource.camera);
     if (response != null) {
       selectedVehiclePhotos.add(response.imagePath);
+      selectedVehiclePhoto.value = response.imagePath;
     }
   }
 
@@ -372,6 +376,7 @@ class ListVehicleController extends GetxController {
         await imageService.pickImage(source: ImageSource.gallery);
     if (response != null) {
       selectedVehiclePhotos.add(response.imagePath);
+      selectedVehiclePhoto.value = (response.imagePath);
       routeService.goBack;
     }
   }
@@ -692,13 +697,14 @@ class ListVehicleController extends GetxController {
 
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("added availability ${response.data}");
-          showSuccessSnackbar(message: response.message!);
-       successDialog(title: AppStrings.vehicleInfoSubmitted,
-        body: AppStrings.thankYouForYourPatience,
-         buttonTitle: AppStrings.home, onTap: (){
-          routeService.goBack(closeOverlays: true);
-         });
-       
+        showSuccessSnackbar(message: response.message!);
+        successDialog(
+            title: AppStrings.vehicleInfoSubmitted,
+            body: AppStrings.thankYouForYourPatience,
+            buttonTitle: AppStrings.home,
+            onTap: () {
+              routeService.goBack(closeOverlays: true);
+            });
       } else {
         logger.log("unable to get drivers ${response.data}");
         showErrorSnackbar(message: response.message!);
@@ -706,7 +712,7 @@ class ListVehicleController extends GetxController {
       }
     } catch (exception) {
       logger.log("error  $exception");
-       showErrorSnackbar(message: exception.toString());
+      showErrorSnackbar(message: exception.toString());
     } finally {
       isLoading1.value = false;
     }
@@ -736,17 +742,67 @@ class ListVehicleController extends GetxController {
     return true;
   }
 
+  
+      // List<dio.MultipartFile> documentFiles = [];
+
+      // documentFiles.add(await dio.MultipartFile.fromFile(
+      //   selectedPhotos.value,
+      //   filename: 'vehicleLicense',
+      //   contentType: MediaType(mimeTypeData[0], mimeTypeData[1]),
+      // ));
+
+      // documentFiles.add(await dio.MultipartFile.fromFile(
+      //   selectedRoadWorthinessPhoto.value,
+      //   filename: 'roadWorthiness',
+      //   contentType: MediaType(roadMimeTypeData[0], roadMimeTypeData[1]),
+      // ));
+
+      // documentFiles.add(await dio.MultipartFile.fromFile(
+      //   selectedInsurancePhotos.value,
+      //   filename: 'insuranceCertificate',
+      //   contentType:
+      //       MediaType(insuranceMimeTypeData[0], insuranceMimeTypeData[1]),
+      // ));
+
+      // documentFiles.add(await dio.MultipartFile.fromFile(
+      //   selectedInspectionPhotos.value,
+      //   filename: 'inspectionReport',
+      //   contentType:
+      //       MediaType(inspectionMimeTypeData[0], inspectionMimeTypeData[1]),
+      // ));
+
+      // data1 = dio.FormData.fromMap({
+      //   'insuranceType': insuranceCode.value,
+      //   "document": documentFiles,
+      // });
+
+      // logger.log("form files ${data1.files.toList()}");
+      // logger.log("form field ${data1.fields.toList()}");
+
   Future<void> addCarDocument() async {
     if (!documentationFormKey.currentState!.validate() ||
         !validateImageUpload()) {
       return;
     }
+    final mimeTypeData =
+        lookupMimeType(selectedPhotos.value, headerBytes: [0xFF, 0xD8])!
+            .split('/');
+    final roadMimeTypeData = lookupMimeType(selectedRoadWorthinessPhoto.value,
+            headerBytes: [0xFF, 0xD8])!
+        .split('/');
+    final insuranceMimeTypeData = lookupMimeType(selectedInsurancePhotos.value,
+            headerBytes: [0xFF, 0xD8])!
+        .split('/');
+    final inspectionMimeTypeData = lookupMimeType(
+            selectedInspectionPhotos.value,
+            headerBytes: [0xFF, 0xD8])!
+        .split('/');
+
     try {
       isLoading.value = true;
       var data1 = dio.FormData.fromMap({});
       Future<dio.FormData> constructFormData() async {
         data1.fields.addAll([
-
           MapEntry(
             'document',
             (await dio.MultipartFile.fromFile(
@@ -775,22 +831,24 @@ class ListVehicleController extends GetxController {
             'document',
             (await dio.MultipartFile.fromFile(
               selectedInspectionPhotos.value,
-              filename:'inspectionReport',
+              filename: 'inspectionReport',
             ))
                 .toString(),
           ),
           MapEntry('insuranceType', insuranceCode.value)
         ]);
+        // data1.files.add(value)
 
         logger.log("form field ${data1.length}");
         return data1;
       }
 
+
       final formData = await constructFormData();
       final response = await partnerService.addCarDocument(
           payload: formData, carID: carID.value);
       if (response.status == 'success' || response.status_code == 200) {
-        logger.log("car document added ${response.data}");
+        logger.log("car document added ${response.message}");
 
         showSuccessSnackbar(message: response.message!);
         pageController.nextPage(
@@ -813,36 +871,74 @@ class ListVehicleController extends GetxController {
     if (!validateImageUpload1()) {
       return;
     }
+
+    final mimeTypeData =
+        lookupMimeType(selectedVehiclePhoto.value, headerBytes: [0xFF, 0xD8])!
+            .split('/');
+    String fileName = selectedVehiclePhoto.split('/').last;
+
     try {
       isLoading.value = true;
-      var data = dio.FormData();
-      Future<dio.FormData> constructFormData() async {
-        // List<dio.MultipartFile> files = [];
-        final formData = dio.FormData();
+      // var data = dio.FormData();
+      // Future<dio.FormData> constructFormData() async {
+      // List<dio.MultipartFile> files = [];
+      var formData = dio.FormData.fromMap({});
 
-        for (var filePath in selectedVehiclePhotos) {
-          formData.files.add(
-            // await dio.MultipartFile.fromFile(filePath, filename: filePath)
-            MapEntry(
-                'photo',
-                (await dio.MultipartFile.fromFile(
-                  filePath,
-                  filename: filePath,
-                ))),
-          );
-        }
+      // formData.files.add(
+      //   // await dio.MultipartFile.fromFile(filePath, filename: filePath)
+      //   MapEntry(
+      //       'photo',
+      //       (await dio.MultipartFile.fromFile(
+      //         filePath,
+      //         filename: filePath,
+      //       ))),
+      // );
+      // data = dio.FormData.fromMap({
+      //   'photo': formData,
+      // });
 
-        data = dio.FormData.fromMap({
-          'photo': formData,
-        });
+      // ***********************************************//
 
-        logger.log("form field ${data.length}");
-        return data;
+      //>>>>>>>>>>>>>>>>
+      // for (var filePath in selectedVehiclePhotos) {
+      //   formData = dio.FormData.fromMap({
+      //     'photos': await dio.MultipartFile.fromFile(
+      //       filePath,
+      //       filename: filePath,
+      //       contentType: MediaType(mimeTypeData[0], mimeTypeData[1]),
+      //     )
+      //   });
+      // }
+      List<dio.MultipartFile> files = [];
+
+      for (var filePath in selectedVehiclePhotos) {
+        final mimeTypeData =
+            lookupMimeType(filePath, headerBytes: [0xFF, 0xD8])!.split('/');
+        String fileName = filePath.split('/').last;
+
+        files.add(await dio.MultipartFile.fromFile(
+          filePath,
+          filename: fileName,
+          contentType: MediaType(mimeTypeData[0], mimeTypeData[1]),
+        ));
       }
 
-      final formData = await constructFormData();
+      formData = dio.FormData.fromMap({'photos': files});
+
+      // formData = dio.FormData.fromMap({
+      //   'photos': await dio.MultipartFile.fromFile(selectedVehiclePhoto.value,
+      //       filename: fileName,
+      //       contentType: MediaType(mimeTypeData[0], mimeTypeData[1]))
+      // });
+
+      logger.log("POST REQUEST DATA:: ${formData.fields.toString()}");
+      logger.log("POST REQUEST DATA:: ${formData.files.toString()}");
+      //   return data;
+      // }
+
+      // final formData = await constructFormData();
       final response = await partnerService.addCarPhoto(
-          payload: formData, carID: carID.value);
+          payload: formData, carID: 'Btpfxnm9qK');
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("car photos added ${response.message}");
         showSuccessSnackbar(message: response.message!);
@@ -861,7 +957,4 @@ class ListVehicleController extends GetxController {
       isLoading.value = false;
     }
   }
-
-  
-
 }
