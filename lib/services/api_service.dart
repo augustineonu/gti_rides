@@ -280,6 +280,7 @@ class ApiService {
   }) async {
     try {
       logger.log("POST REQUEST DATA:: ${data.fields.toString()}");
+      logger.log("POST REQUEST DATA:: ${data.files.toString()}");
       late Response response;
       response = await _dio.post(
         endpoint,
@@ -287,7 +288,7 @@ class ApiService {
         options: Options(
           headers: {
             'Authorization': 'Bearer ${tokenService.accessToken.value}',
-            // 'Content-Type': 'image/png'
+           'Content-Type': 'multipart/form-data'
           },
         ),
       );
@@ -307,7 +308,8 @@ class ApiService {
           options: Options(
             headers: {
               'Authorization': 'Bearer ${tokenService.accessToken.value}',
-              'Content-Type': 'image/png'
+              'Content-Type': 'multipart/form-data'
+
             },
           ),
         );

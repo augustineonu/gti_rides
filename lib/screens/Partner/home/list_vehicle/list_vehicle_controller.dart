@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -288,6 +290,34 @@ class ListVehicleController extends GetxController {
       selectedPhotoName.value = response.imagePath.split('/').last;
       selectedPhotos.value = (response.imagePath);
       logger.log("image path :: ${selectedPhotoName.value}");
+      // Extract the directory and file name
+      int lastSeparator = selectedPhotos.value.lastIndexOf('/');
+      String directory = lastSeparator != -1
+          ? selectedPhotos.value.substring(0, lastSeparator)
+          : selectedPhotos.value;
+      selectedPhotoName.value = 'vehicleLicense.png';
+
+      // Build the new path with the desired file name
+      String newPath = '$directory/$selectedPhotoName';
+      logger.log("Picked new path $newPath");
+
+      // Rename the file
+      File(selectedPhotos.value).renameSync(newPath);
+
+      // Now update the selectedPhotos value
+      selectedPhotos.value = newPath;
+      routeService.goBack;
+    }
+  }
+
+  Future<void> openGallery1() async {
+    ImageResponse? response =
+        await imageService.pickImage(source: ImageSource.gallery);
+    if (response != null) {
+      logger.log("Picked image $selectedPhotoName");
+      selectedPhotoName.value = response.imagePath.split('/').last;
+      selectedPhotos.value = (response.imagePath);
+      routeService.goBack;
     }
   }
 
@@ -295,9 +325,27 @@ class ListVehicleController extends GetxController {
     ImageResponse? response =
         await imageService.pickImage(source: ImageSource.gallery);
     if (response != null) {
-      logger.log("Picked image $selectedPhotoName");
-      selectedPhotoName.value = response.imagePath.split('/').last;
-      selectedPhotos.value = (response.imagePath);
+      logger.log("Picked image ${selectedPhotoName.value}");
+      selectedPhotos.value = response.imagePath;
+
+      // Extract the directory and file name
+      int lastSeparator = selectedPhotos.value.lastIndexOf('/');
+      String directory = lastSeparator != -1
+          ? selectedPhotos.value.substring(0, lastSeparator)
+          : selectedPhotos.value;
+
+      selectedPhotoName.value = 'vehicleLicense.png';
+
+      // Build the new path with the desired file name
+      String newPath = '$directory/$selectedPhotoName';
+      logger.log("Picked new path $newPath");
+
+      // Rename the file
+      File(selectedPhotos.value).renameSync(newPath);
+
+      // Now update the selectedPhotos value
+      selectedPhotos.value = newPath;
+      logger.log("selected photo ${selectedPhotos.value}");
       routeService.goBack;
     }
   }
@@ -309,6 +357,23 @@ class ListVehicleController extends GetxController {
       selectedRoadWorthinessPhoto.value = response.imagePath;
       selectedRoadWorthinessPhotoName.value =
           response.imagePath.split('/').last;
+
+      int lastSeparator = selectedRoadWorthinessPhoto.value.lastIndexOf('/');
+      String directory = lastSeparator != -1
+          ? selectedRoadWorthinessPhoto.value.substring(0, lastSeparator)
+          : selectedRoadWorthinessPhoto.value;
+      selectedRoadWorthinessPhotoName.value = 'roadWorthiness.png';
+
+      // Build the new path with the desired file name
+      String newPath = '$directory/$selectedRoadWorthinessPhotoName';
+      logger.log("Picked new path $newPath");
+
+      // Rename the file
+      File(selectedRoadWorthinessPhoto.value).renameSync(newPath);
+
+      // Now update the selectedPhotos value
+      selectedRoadWorthinessPhoto.value = newPath;
+      routeService.goBack;
     }
   }
 
@@ -317,9 +382,26 @@ class ListVehicleController extends GetxController {
         await imageService.pickImage(source: ImageSource.gallery);
     if (response != null) {
       selectedRoadWorthinessPhoto.value = response.imagePath;
+      logger.log(
+          "selectedRoadWorthinessPhoto: ${selectedRoadWorthinessPhoto.value}");
       selectedRoadWorthinessPhotoName.value =
           response.imagePath.split('/').last;
 
+      int lastSeparator = selectedRoadWorthinessPhoto.value.lastIndexOf('/');
+      String directory = lastSeparator != -1
+          ? selectedRoadWorthinessPhoto.value.substring(0, lastSeparator)
+          : selectedRoadWorthinessPhoto.value;
+      selectedRoadWorthinessPhotoName.value = 'roadWorthiness.png';
+
+      // Build the new path with the desired file name
+      String newPath = '$directory/$selectedRoadWorthinessPhotoName';
+      logger.log("Picked new path $newPath");
+
+      // Rename the file
+      File(selectedRoadWorthinessPhoto.value).renameSync(newPath);
+
+      // Now update the selectedPhotos value
+      selectedRoadWorthinessPhoto.value = newPath;
       routeService.goBack;
     }
   }
@@ -330,6 +412,23 @@ class ListVehicleController extends GetxController {
     if (response != null) {
       selectedInsurancePhotos.value = response.imagePath;
       selectedInsurancePhotoName.value = response.imagePath.split('/').last;
+
+      int lastSeparator = selectedInsurancePhotos.value.lastIndexOf('/');
+      String directory = lastSeparator != -1
+          ? selectedInsurancePhotos.value.substring(0, lastSeparator)
+          : selectedInsurancePhotos.value;
+      selectedInsurancePhotoName.value = 'insuranceCertificate.png';
+
+      // Build the new path with the desired file name
+      String newPath = '$directory/$selectedInsurancePhotoName';
+      logger.log("Picked new path $newPath");
+
+      // Rename the file
+      File(selectedInsurancePhotos.value).renameSync(newPath);
+
+      // Now update the selectedPhotos value
+      selectedInsurancePhotos.value = newPath;
+      routeService.goBack;
     }
   }
 
@@ -337,8 +436,24 @@ class ListVehicleController extends GetxController {
     ImageResponse? response =
         await imageService.pickImage(source: ImageSource.gallery);
     if (response != null) {
-      selectedInsurancePhotos.value = (response.imagePath);
+      selectedInsurancePhotos.value = response.imagePath;
       selectedInsurancePhotoName.value = response.imagePath.split('/').last;
+      
+        int lastSeparator = selectedInsurancePhotos.value.lastIndexOf('/');
+      String directory = lastSeparator != -1
+          ? selectedInsurancePhotos.value.substring(0, lastSeparator)
+          : selectedInsurancePhotos.value;
+      selectedInsurancePhotoName.value = 'insuranceCertificate.png';
+
+      // Build the new path with the desired file name
+      String newPath = '$directory/$selectedInsurancePhotoName';
+      logger.log("Picked new path $newPath");
+
+      // Rename the file
+      File(selectedInsurancePhotos.value).renameSync(newPath);
+
+      // Now update the selectedPhotos value
+      selectedInsurancePhotos.value = newPath;
       routeService.goBack;
     }
   }
@@ -349,6 +464,23 @@ class ListVehicleController extends GetxController {
     if (response != null) {
       selectedInspectionPhotos.value = (response.imagePath);
       selectedInspectionPhotoName.value = (response.imagePath).split('/').last;
+
+        int lastSeparator = selectedInspectionPhotos.value.lastIndexOf('/');
+      String directory = lastSeparator != -1
+          ? selectedInspectionPhotos.value.substring(0, lastSeparator)
+          : selectedInspectionPhotos.value;
+      selectedInspectionPhotoName.value = 'inspectionReport.png';
+
+      // Build the new path with the desired file name
+      String newPath = '$directory/$selectedInspectionPhotoName';
+      logger.log("Picked new path $newPath");
+
+      // Rename the file
+      File(selectedInspectionPhotos.value).renameSync(newPath);
+
+      // Now update the selectedPhotos value
+      selectedInspectionPhotos.value = newPath;
+      routeService.goBack;
     }
   }
 
@@ -358,6 +490,22 @@ class ListVehicleController extends GetxController {
     if (response != null) {
       selectedInspectionPhotos.value = (response.imagePath);
       selectedInspectionPhotoName.value = (response.imagePath).split('/').last;
+      
+         int lastSeparator = selectedInspectionPhotos.value.lastIndexOf('/');
+      String directory = lastSeparator != -1
+          ? selectedInspectionPhotos.value.substring(0, lastSeparator)
+          : selectedInspectionPhotos.value;
+      selectedInspectionPhotoName.value = 'inspectionReport.png';
+
+      // Build the new path with the desired file name
+      String newPath = '$directory/$selectedInspectionPhotoName';
+      logger.log("Picked new path $newPath");
+
+      // Rename the file
+      File(selectedInspectionPhotos.value).renameSync(newPath);
+
+      // Now update the selectedPhotos value
+      selectedInspectionPhotos.value = newPath;
       routeService.goBack;
     }
   }
@@ -742,46 +890,93 @@ class ListVehicleController extends GetxController {
     return true;
   }
 
-  
-      // List<dio.MultipartFile> documentFiles = [];
+  // List<dio.MultipartFile> documentFiles = [];
 
-      // documentFiles.add(await dio.MultipartFile.fromFile(
-      //   selectedPhotos.value,
-      //   filename: 'vehicleLicense',
-      //   contentType: MediaType(mimeTypeData[0], mimeTypeData[1]),
-      // ));
+  // documentFiles.add(await dio.MultipartFile.fromFile(
+  //   selectedPhotos.value,
+  //   filename: 'vehicleLicense',
+  //   contentType: MediaType(mimeTypeData[0], mimeTypeData[1]),
+  // ));
 
-      // documentFiles.add(await dio.MultipartFile.fromFile(
-      //   selectedRoadWorthinessPhoto.value,
-      //   filename: 'roadWorthiness',
-      //   contentType: MediaType(roadMimeTypeData[0], roadMimeTypeData[1]),
-      // ));
+  // documentFiles.add(await dio.MultipartFile.fromFile(
+  //   selectedRoadWorthinessPhoto.value,
+  //   filename: 'roadWorthiness',
+  //   contentType: MediaType(roadMimeTypeData[0], roadMimeTypeData[1]),
+  // ));
 
-      // documentFiles.add(await dio.MultipartFile.fromFile(
-      //   selectedInsurancePhotos.value,
-      //   filename: 'insuranceCertificate',
-      //   contentType:
-      //       MediaType(insuranceMimeTypeData[0], insuranceMimeTypeData[1]),
-      // ));
+  // documentFiles.add(await dio.MultipartFile.fromFile(
+  //   selectedInsurancePhotos.value,
+  //   filename: 'insuranceCertificate',
+  //   contentType:
+  //       MediaType(insuranceMimeTypeData[0], insuranceMimeTypeData[1]),
+  // ));
 
-      // documentFiles.add(await dio.MultipartFile.fromFile(
-      //   selectedInspectionPhotos.value,
-      //   filename: 'inspectionReport',
-      //   contentType:
-      //       MediaType(inspectionMimeTypeData[0], inspectionMimeTypeData[1]),
-      // ));
+  // documentFiles.add(await dio.MultipartFile.fromFile(
+  //   selectedInspectionPhotos.value,
+  //   filename: 'inspectionReport',
+  //   contentType:
+  //       MediaType(inspectionMimeTypeData[0], inspectionMimeTypeData[1]),
+  // ));
 
-      // data1 = dio.FormData.fromMap({
-      //   'insuranceType': insuranceCode.value,
-      //   "document": documentFiles,
-      // });
+  // data1 = dio.FormData.fromMap({
+  //   'insuranceType': insuranceCode.value,
+  //   "document": documentFiles,
+  // });
 
-      // logger.log("form files ${data1.files.toList()}");
-      // logger.log("form field ${data1.fields.toList()}");
+  // logger.log("form files ${data1.files.toList()}");
+  // logger.log("form field ${data1.fields.toList()}");
 
+//////////////
+  ///  var data1 = dio.FormData.fromMap({});
+
+  // Future<dio.FormData> constructFormData() async {
+  // data1.files.addAll([
+  //   MapEntry(
+  //     'document',
+  //     dio.MultipartFile.fromFileSync(
+  //       selectedPhotos.value,
+  //       filename: 'vehicleLicense',
+  //       contentType: MediaType(mimeTypeData[0], mimeTypeData[1]),
+  //     ),
+  //   ),
+  //   MapEntry(
+  //     'document',
+  //     dio.MultipartFile.fromFileSync(
+  //       selectedRoadWorthinessPhoto.value,
+  //       filename: 'roadWorthiness',
+  //       contentType: MediaType(roadMimeTypeData[0], roadMimeTypeData[1]),
+  //     ),
+  //   ),
+  //   MapEntry(
+  //     'document',
+  //     dio.MultipartFile.fromFileSync(
+  //       selectedInsurancePhotos.value,
+  //       filename: 'insuranceCertificate',
+  //       contentType:
+  //           MediaType(insuranceMimeTypeData[0], insuranceMimeTypeData[1]),
+  //     ),
+  //   ),
+  //   MapEntry(
+  //     'document',
+  //     dio.MultipartFile.fromFileSync(
+  //       selectedInspectionPhotos.value,
+  //       filename: 'inspectionReport',
+  //       contentType:
+  //           MediaType(inspectionMimeTypeData[0], inspectionMimeTypeData[1]),
+  //     ),
+  //   ),
+  // ]);
+  // data1.fields.add(MapEntry('insuranceType', insuranceCode.value));
+  // // data1.files.add(value)
+
+  // logger.log("form field ${data1.fields.toString()}");
+  // logger.log("form files ${data1.files.toString()}");
+  // //   return data1;
+  // // }
   Future<void> addCarDocument() async {
-    if (!documentationFormKey.currentState!.validate() ||
-        !validateImageUpload()) {
+    if (!documentationFormKey.currentState!.validate()
+        || !validateImageUpload()
+        ) {
       return;
     }
     final mimeTypeData =
@@ -800,53 +995,42 @@ class ListVehicleController extends GetxController {
 
     try {
       isLoading.value = true;
-      var data1 = dio.FormData.fromMap({});
-      Future<dio.FormData> constructFormData() async {
-        data1.fields.addAll([
-          MapEntry(
-            'document',
-            (await dio.MultipartFile.fromFile(
-              selectedPhotos.value,
-              filename: 'vehicleLicense',
-            ))
-                .toString(),
-          ),
-          MapEntry(
-            'document',
-            (await dio.MultipartFile.fromFile(
-              selectedRoadWorthinessPhoto.value,
-              filename: 'roadWorthiness',
-            ))
-                .toString(),
-          ),
-          MapEntry(
-            'document',
-            (await dio.MultipartFile.fromFile(
-              selectedInsurancePhotos.value,
-              filename: 'insuranceCertificate',
-            ))
-                .toString(),
-          ),
-          MapEntry(
-            'document',
-            (await dio.MultipartFile.fromFile(
-              selectedInspectionPhotos.value,
-              filename: 'inspectionReport',
-            ))
-                .toString(),
-          ),
-          MapEntry('insuranceType', insuranceCode.value)
-        ]);
-        // data1.files.add(value)
 
-        logger.log("form field ${data1.length}");
-        return data1;
-      }
-
-
-      final formData = await constructFormData();
+      // final formData = await constructFormData();
+      logger.log("file path:: ${selectedRoadWorthinessPhoto.value.toString()}");
       final response = await partnerService.addCarDocument(
-          payload: formData, carID: carID.value);
+          payload: dio.FormData.fromMap({
+            'insuranceType': insuranceCode.value,
+            // 'document': await dio.MultipartFile.fromFile(selectedPhotos.value,
+            //     filename: selectedPhotoName.value,
+            //     contentType: MediaType(mimeTypeData[0], mimeTypeData[1]))
+            'document': [
+              await dio.MultipartFile.fromFile(
+                selectedPhotos.value,
+                // filename: 'vehicleLicense',
+                contentType: MediaType(mimeTypeData[0], mimeTypeData[1]),
+              ),
+              await dio.MultipartFile.fromFile(
+                selectedRoadWorthinessPhoto.value,
+                // filename: 'roadWorthiness',
+                contentType:
+                    MediaType(roadMimeTypeData[0], roadMimeTypeData[1]),
+              ),
+              await dio.MultipartFile.fromFile(
+                selectedInsurancePhotos.value,
+                // filename: 'insuranceCertificate',
+                contentType: MediaType(
+                    insuranceMimeTypeData[0], insuranceMimeTypeData[1]),
+              ),
+              await dio.MultipartFile.fromFile(
+                selectedInspectionPhotos.value,
+                // filename: 'inspectionReport',
+                contentType: MediaType(
+                    inspectionMimeTypeData[0], inspectionMimeTypeData[1]),
+              ),
+            ]
+          }),
+          carID: carID.value);
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("car document added ${response.message}");
 
@@ -938,7 +1122,7 @@ class ListVehicleController extends GetxController {
 
       // final formData = await constructFormData();
       final response = await partnerService.addCarPhoto(
-          payload: formData, carID: 'Btpfxnm9qK');
+          payload: formData, carID: carID.value);
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("car photos added ${response.message}");
         showSuccessSnackbar(message: response.message!);

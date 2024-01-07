@@ -30,6 +30,7 @@ class ManageVehicleController extends GetxController {
   // variables
   RxBool isLoading = false.obs;
   RxBool isFetchingCars = false.obs;
+  RxBool isAvailable = false.obs;
   PageController pageController = PageController();
   RxInt selectedIndex = 0.obs;
   RxString testString = "".obs;
@@ -60,6 +61,9 @@ class ManageVehicleController extends GetxController {
   void goBack() => routeService.goBack();
   void routeToQuickEdit() => routeService.gotoRoute(AppLinks.quickEdit);
   void routeToCarHistory() => routeService.gotoRoute(AppLinks.carHistory);
+
+    void onToggleCarAvailability(bool value) => isAvailable.value = value;
+
 
   Future<void> getAllCars() async {
     isFetchingCars.value = true;

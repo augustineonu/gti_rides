@@ -237,6 +237,64 @@ Widget profileAvatar({
       }));
 }
 
+Widget carImage({
+  required String imgUrl,
+  // String? localImagePath,
+  double? width,
+  double? height,
+  double imageSizeWidth = 34.0,
+  double imageSizeHeight = 34.0,
+  BoxFit fit = BoxFit.cover,
+  double radius = 100,
+}) {
+  // if (localImagePath != null && localImagePath.isNotEmpty) {
+  //   print("Image widget: is running in background");
+  //   return Builder(builder: (context) {
+  //     return ClipRRect(
+  //       borderRadius: BorderRadius.circular(radius),
+  //       child: Image.file(
+  //         File(localImagePath),
+  //         width: width,
+  //         height: height,
+  //         fit: fit,
+  //       ),
+  //     );
+  //   });
+  // } else {
+    print("Image widget: :2   is running in background");
+    return CachedNetworkImage(
+      alignment: Alignment.center,
+      imageUrl: imgUrl,
+      imageBuilder: (context, imageProvider) => Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          image: DecorationImage(
+            image: imageProvider,
+            fit: fit,
+          ),
+        ),
+      ),
+      placeholder: (context, url) => SizedBox(
+        height: imageSizeHeight,
+        width: imageSizeWidth,
+        child: const Center(
+          child: CircularProgressIndicator(
+            color: Colors.blue,
+            value: 30,
+          ),
+        ),
+      ),
+      errorWidget: (context, url, error) => Image.asset(
+        'assets/images/fav_car.png',
+        height: imageSizeHeight,
+        width: imageSizeWidth,
+      ),
+    );
+  }
+// }
+
 Widget imageWidget({
   required String imgUrl,
   String? localImagePath,

@@ -5,11 +5,13 @@ import 'package:get/get.dart';
 import 'package:gti_rides/screens/Partner/home/manage_vehicle/manage_vehicle_controller.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
+import 'package:gti_rides/shared_widgets/switch_widget.dart';
 import 'package:gti_rides/shared_widgets/tab_indicator.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
+import 'package:gti_rides/utils/utils.dart';
 
 class ManageVehicleBinding extends Bindings {
   @override
@@ -73,27 +75,28 @@ class ManageVehicleScreen extends GetView<ManageVehicleController> {
   Widget buildBody(context, Size size) {
     switch (controller.selectedIndex.value) {
       case 0:
-        return allCarsWidget(context, size);
+        return allCars(context, size);
       case 1:
-        return bookedCarsWidget(context, size);
+        return bookedCars(context, size);
       default:
         return const SizedBox();
     }
   }
 
-  Widget allCarsWidget(context, Size size) {
+  Widget allCars(context, Size size) {
     return controller.cars!.isEmpty
         ? Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: textWidget(
-              text: 'You have not added any Cars yet :)',
-              style: getBoldStyle()),
-        )
+            padding: const EdgeInsets.all(8.0),
+            child: textWidget(
+                text: 'You have not added any Cars yet :)',
+                style: getBoldStyle()),
+          )
         : ListView.builder(
             shrinkWrap: true,
             physics: const ScrollPhysics(),
             itemCount: controller.cars!.length,
             itemBuilder: (context, index) {
+              var car = controller.cars?[index];
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Stack(
@@ -117,44 +120,49 @@ class ManageVehicleScreen extends GetView<ManageVehicleController> {
                                   fit: BoxFit.fitHeight,
                                 ),
                               ),
-                              Positioned(
-                                left: 10,
-                                right: 10,
-                                top: 25,
-                                bottom: 25,
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 5, vertical: 4),
-                                  decoration: BoxDecoration(
-                                    color: black.withOpacity(0.4),
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(2.r),
-                                    ),
-                                  ),
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 6, vertical: 4),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(2.r),
+                              car['status'] == 'pending' ||
+                                      car['status'] == "booked"
+                                  ? Positioned(
+                                      left: 10,
+                                      right: 10,
+                                      top: 25,
+                                      bottom: 25,
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 5, vertical: 4),
+                                        decoration: BoxDecoration(
+                                          color: black.withOpacity(0.4),
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(2.r),
+                                          ),
                                         ),
-                                        border: Border.all(
-                                          color: primaryColor,
-                                        )),
-                                    child: Center(
-                                      child: textWidget(
-                                        text: 'Car status: \n booked',
-                                        textAlign: TextAlign.center,
-                                        style: getLightStyle(
-                                                fontSize: 10.sp,
-                                                color: primaryColor)
-                                            .copyWith(
-                                                fontWeight: FontWeight.w400),
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 6, vertical: 4),
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(2.r),
+                                              ),
+                                              border: Border.all(
+                                                color: primaryColor,
+                                              )),
+                                          child: Center(
+                                            child: textWidget(
+                                              text:
+                                                  'Car status: \n ${car['status'] == 'pending' ? 'Pending' : "Booked"}',
+                                              textAlign: TextAlign.center,
+                                              style: getLightStyle(
+                                                      fontSize: 10.sp,
+                                                      color: primaryColor)
+                                                  .copyWith(
+                                                      fontWeight:
+                                                          FontWeight.w400),
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                ),
-                              )
+                                    )
+                                  : const SizedBox.shrink()
                             ],
                           ),
                           Padding(
@@ -171,7 +179,7 @@ class ManageVehicleScreen extends GetView<ManageVehicleController> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       textWidget(
-                                          text: 'Tesla Model Y',
+                                          text: "${car['brandModelName']}",
                                           style: getBoldStyle()),
                                       const SizedBox(
                                         height: 3,
@@ -181,20 +189,18 @@ class ManageVehicleScreen extends GetView<ManageVehicleController> {
                                         children: [
                                           SvgPicture.asset(ImageAssets.naira),
                                           textWidget(
-                                              text: '100,000 ',
+                                              text: car['pricePerDay'] ?? '0',
                                               style: getMediumStyle(
                                                       fontSize: 10.sp)
                                                   .copyWith(
                                                       fontFamily: 'Neue')),
-                                          // textWidget(
-                                          //     text: ' x ', style: getMediumStyle(fontSize: 10.sp).copyWith(fontFamily: 'Neue')),
-                                          SvgPicture.asset(
-                                            ImageAssets.closeSmall,
-                                            width: 7.sp,
-                                            height: 7.sp,
-                                          ),
+                                          // SvgPicture.asset(
+                                          //   ImageAssets.closeSmall,
+                                          //   width: 7.sp,
+                                          //   height: 7.sp,
+                                          // ),
                                           textWidget(
-                                              text: ' 5days',
+                                              text: '/day',
                                               style: getMediumStyle(
                                                       fontSize: 10.sp)
                                                   .copyWith(
@@ -233,7 +239,8 @@ class ManageVehicleScreen extends GetView<ManageVehicleController> {
                                       ),
 
                                       textWidget(
-                                        text: AppStrings.tripDate,
+                                        // text: AppStrings.tripDate,
+                                        text: AppStrings.availabilityDate,
                                         // show AppStrings.aAvailabilityDate
                                         style: getRegularStyle(
                                           color: grey3,
@@ -249,22 +256,30 @@ class ManageVehicleScreen extends GetView<ManageVehicleController> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           textWidget(
-                                              text: "wed, 1 Nov, 9:00am",
-                                              style: getMediumStyle(
-                                                      fontSize: 10.sp)
-                                                  .copyWith(
-                                                      fontFamily: 'Neue')),
+                                              text: car['startDate'] != null
+                                                  ? (car['startDate'])
+                                                  : '',
+                                              style:
+                                                  getMediumStyle(fontSize: 8.sp)
+                                                      .copyWith(
+                                                          fontFamily: 'Neue')),
+                                          SizedBox(
+                                            width: 3.w,
+                                          ),
                                           SvgPicture.asset(
                                             ImageAssets.arrowForwardRounded,
                                             height: 8.sp,
                                             width: 8.sp,
                                           ),
+                                          SizedBox(
+                                            width: 3.w,
+                                          ),
                                           textWidget(
-                                              text: "wed, 1 Nov, 9:00am",
-                                              style: getMediumStyle(
-                                                      fontSize: 10.sp)
-                                                  .copyWith(
-                                                      fontFamily: 'Neue')),
+                                              text: car['endDate'] ?? '',
+                                              style:
+                                                  getMediumStyle(fontSize: 8.sp)
+                                                      .copyWith(
+                                                          fontFamily: 'Neue')),
                                         ],
                                       ),
                                     ],
@@ -294,201 +309,248 @@ class ManageVehicleScreen extends GetView<ManageVehicleController> {
             });
   }
 
-  Widget bookedCarsWidget(context, Size size) {
+  Widget bookedCars(context, Size size) {
     return controller.cars!.isEmpty
         ? Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: textWidget(
-              text: 'You have not added any Cars yet :)',
-              style: getBoldStyle()),
-        )
+            padding: const EdgeInsets.all(8.0),
+            child: textWidget(
+                text: 'You have not booked any Cars yet :)',
+                style: getBoldStyle()),
+          )
         : ListView.builder(
-      shrinkWrap: true,
-      physics: const ScrollPhysics(),
-      itemBuilder: (context, index) {
-        return Stack(
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                  border: Border.all(color: greyLight),
-                  borderRadius: BorderRadius.all(Radius.circular(4.r))),
-              child: Row(
-                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Stack(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(4.r),
-                            bottomLeft: Radius.circular(4.r)),
-                        child: Image.asset(
-                          'assets/images/fav_car.png',
-                          fit: BoxFit.fitHeight,
-                        ),
+            shrinkWrap: true,
+            itemCount: 3,
+            physics: const ScrollPhysics(),
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Stack(
+                  children: [
+                    Container(
+                      height: 140.sp,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: greyLight),
+                          borderRadius: BorderRadius.all(Radius.circular(4.r))),
+                      child: Row(
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          
+                              Container(
+                                // color: red,
+                                height: size.height,
+                                width: 110,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage(
+                                            'assets/images/fav_car.png'),
+                                        fit: BoxFit.fitHeight)),
+                              ),
+                           
+                          
+                          // Stack(
+                          //   children: [
+                          //     ClipRRect(
+                          //       borderRadius: BorderRadius.only(
+                          //           topLeft: Radius.circular(4.r),
+                          //           bottomLeft: Radius.circular(4.r)),
+                          //       child: Image.asset(
+                          //         'assets/images/fav_car.png',
+                          //         fit: BoxFit.fitHeight,
+                          //       ),
+                          //     ),
+                          //     Positioned(
+                          //       left: 10,
+                          //       right: 10,
+                          //       top: 25,
+                          //       bottom: 25,
+                          //       child: Container(
+                          //         padding: const EdgeInsets.symmetric(
+                          //             horizontal: 5, vertical: 4),
+                          //         decoration: BoxDecoration(
+                          //           color: black.withOpacity(0.4),
+                          //           borderRadius: BorderRadius.all(
+                          //             Radius.circular(2.r),
+                          //           ),
+                          //         ),
+                          //         child: Container(
+                          //           padding: const EdgeInsets.symmetric(
+                          //               horizontal: 6, vertical: 4),
+                          //           decoration: BoxDecoration(
+                          //               borderRadius: BorderRadius.all(
+                          //                 Radius.circular(2.r),
+                          //               ),
+                          //               border: Border.all(
+                          //                 color: primaryColor,
+                          //               )),
+                          //           child: Center(
+                          //             child: textWidget(
+                          //               text: 'Car status: \n booked',
+                          //               textAlign: TextAlign.center,
+                          //               style: getLightStyle(
+                          //                       fontSize: 10.sp,
+                          //                       color: primaryColor)
+                          //                   .copyWith(
+                          //                       fontWeight: FontWeight.w400),
+                          //             ),
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     )
+                          //   ],
+                          // ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                              children: [
+                                textWidget(
+                                    text: 'Tesla Model Y',
+                                    style: getBoldStyle()),
+                                const SizedBox(
+                                  height: 3,
+                                ),
+                                Row(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        SvgPicture.asset(ImageAssets
+                                            .thumbsUpPrimaryColor),
+                                        SizedBox(
+                                          width: 5.sp,
+                                        ),
+                                        RichText(
+                                          text: TextSpan(
+                                              text: '20%',
+                                              style: getMediumStyle(
+                                                fontSize: 12.sp,
+                                              ),
+                                              children: <TextSpan>[
+                                                TextSpan(
+                                                  text: ' (15 trips)',
+                                                  style: getLightStyle(
+                                                      fontSize: 12.sp,
+                                                      color: grey2),
+                                                )
+                                              ]),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      // crossAxisAlignment: alignment,
+                                      children: [
+                                        SvgPicture.asset(
+                                            ImageAssets.naira),
+                                        textWidget(
+                                            // text: car['pricePerDay'] ?? '0',
+                                            text: 'per day',
+                                            style: getMediumStyle(
+                                                    fontSize: 10.sp)
+                                                .copyWith(
+                                                    fontFamily: 'Neue')),
+                                        textWidget(
+                                            text: '/day',
+                                            style: getMediumStyle(
+                                                    fontSize: 10.sp)
+                                                .copyWith(
+                                                    fontFamily: 'Neue')),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                                        
+                                ////////
+                                const SizedBox(
+                                  height: 6,
+                                ),
+                                                        
+                                textWidget(
+                                  text: AppStrings.availabilityDate,
+                                  // show AppStrings.aAvailabilityDate
+                                  style: getRegularStyle(
+                                    color: grey3,
+                                    fontSize: 10.sp,
+                                  ),
+                                ),
+                                                        
+                                const SizedBox(
+                                  height: 3,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    textWidget(
+                                        text: "wed, 1 Nov, 9:00am",
+                                        style:
+                                            getMediumStyle(fontSize: 8.sp)
+                                                .copyWith(
+                                                    fontFamily: 'Neue')),
+                                    SvgPicture.asset(
+                                      ImageAssets.arrowForwardRounded,
+                                      height: 8.sp,
+                                      width: 8.sp,
+                                    ),
+                                    textWidget(
+                                        text: "wed, 1 Nov, 9:00am",
+                                        style:
+                                            getMediumStyle(fontSize: 8.sp)
+                                                .copyWith(
+                                                    fontFamily: 'Neue')),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 6, horizontal: 4),
+                                      decoration: BoxDecoration(
+                                          color: primaryColorLight,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(2.r))),
+                                      child: Center(
+                                        child: textWidget(
+                                            text: AppStrings.available,
+                                            style: getRegularStyle(
+                                                fontSize: 10.sp)),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 8.sp,
+                                    ),
+                                    switchWidget(
+                                      context,
+                                      value: controller.isAvailable.value,
+                                      activeTrackColor: borderColor,
+                                      onChanged: (value) => controller
+                                          .onToggleCarAvailability(value),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                      Positioned(
-                        left: 10,
-                        right: 10,
-                        top: 25,
-                        bottom: 25,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 5, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: black.withOpacity(0.4),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(2.r),
-                            ),
-                          ),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 6, vertical: 4),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(2.r),
-                                ),
-                                border: Border.all(
-                                  color: primaryColor,
-                                )),
-                            child: Center(
-                              child: textWidget(
-                                text: 'Car status: \n booked',
-                                textAlign: TextAlign.center,
-                                style: getLightStyle(
-                                        fontSize: 10.sp, color: primaryColor)
-                                    .copyWith(fontWeight: FontWeight.w400),
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          // width: 135.sp,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              textWidget(
-                                  text: 'Tesla Model Y', style: getBoldStyle()),
-                              const SizedBox(
-                                height: 3,
-                              ),
-                              Row(
-                                // crossAxisAlignment: alignment,
-                                children: [
-                                  SvgPicture.asset(ImageAssets.naira),
-                                  textWidget(
-                                      text: '100,000 ',
-                                      style: getMediumStyle(fontSize: 10.sp)
-                                          .copyWith(fontFamily: 'Neue')),
-                                  // textWidget(
-                                  //     text: ' x ', style: getMediumStyle(fontSize: 10.sp).copyWith(fontFamily: 'Neue')),
-                                  SvgPicture.asset(
-                                    ImageAssets.closeSmall,
-                                    width: 7.sp,
-                                    height: 7.sp,
-                                  ),
-                                  textWidget(
-                                      text: ' 5days',
-                                      style: getMediumStyle(fontSize: 10.sp)
-                                          .copyWith(fontFamily: 'Neue')),
-                                ],
-                              ),
-        
-                              /// Show the thumbs up and number trips
-                              //  Row(
-                              //       children: [
-                              //         SvgPicture.asset(
-                              //             ImageAssets.thumbsUpPrimaryColor),
-                              //         SizedBox(
-                              //           width: 5.sp,
-                              //         ),
-                              //         RichText(
-                              //           text: TextSpan(
-                              //               text: '97%',
-                              //               style: getMediumStyle(
-                              //                 fontSize: 12.sp,
-                              //               ),
-                              //               children: <TextSpan>[
-                              //                 TextSpan(
-                              //                   text: ' (66 trips)',
-                              //                   style: getLightStyle(
-                              //                       fontSize: 12.sp, color: grey2),
-                              //                 )
-                              //               ]),
-                              //         ),
-                              //       ],
-                              //     ),
-        
-                              ////////
-                              const SizedBox(
-                                height: 10,
-                              ),
-        
-                              textWidget(
-                                text: AppStrings.tripDate,
-                                // show AppStrings.aAvailabilityDate
-                                style: getRegularStyle(
-                                  color: grey3,
-                                  fontSize: 10.sp,
-                                ),
-                              ),
-        
-                              const SizedBox(
-                                height: 3,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  textWidget(
-                                      text: "wed, 1 Nov, 9:00am",
-                                      style: getMediumStyle(fontSize: 10.sp)
-                                          .copyWith(fontFamily: 'Neue')),
-                                  SvgPicture.asset(
-                                    ImageAssets.arrowForwardRounded,
-                                    height: 8.sp,
-                                    width: 8.sp,
-                                  ),
-                                  textWidget(
-                                      text: "wed, 1 Nov, 9:00am",
-                                      style: getMediumStyle(fontSize: 10.sp)
-                                          .copyWith(fontFamily: 'Neue')),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
                     ),
-                  ),
-                ],
-              ),
-            ),
-            Positioned(
-              right: 12.sp,
-              top: 12.sp,
-              child: InkWell(
-                  onTap: () {
-                    quickOptionsSheet(size);
-                  },
-                  child: SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: SvgPicture.asset(ImageAssets.popUpMenu))),
-            ),
-          ],
-        );
-      }
-    );
+                    Positioned(
+                      right: 12.sp,
+                      top: 12.sp,
+                      child: InkWell(
+                          onTap: () {
+                            quickOptionsSheet(size);
+                          },
+                          child: SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: SvgPicture.asset(ImageAssets.popUpMenu))),
+                    ),
+                  ],
+                ),
+              );
+            });
   }
 
   Future<dynamic> quickOptionsSheet(Size size) {

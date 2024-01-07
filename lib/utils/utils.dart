@@ -53,6 +53,46 @@ String getTimeIn12HourFormat(DateTime dateTime) {
 //   return formatter.format(datetime);
 // }
 
+
+// "dd, MMM h:mma"
+
+String formatDateTime(String datetime) {
+  var formatter = DateFormat('dd, MMMM h:mma');
+  DateTime parsedDate = formatter.parse(datetime);
+  String formattedDate = DateFormat('dd, MMM h:mma').format(parsedDate);
+  return formattedDate;
+}
+String formatDateTime1(String datetime) {
+  // Remove the ordinal indicator ("th") from the day
+  String cleanedDate = datetime.replaceAllMapped(RegExp(r'(\d+)(st|nd|rd|th)'), (match) {
+    return match.group(1)!;
+  });
+
+  var formatter = DateFormat('dd, MMMM h:mma');
+  DateTime parsedDate = formatter.parse(cleanedDate);
+  String formattedDate = DateFormat('dd, MMM h:mma').format(parsedDate);
+  return formattedDate;
+}
+String formatDateTime2(String datetime) {
+  // Split the input string by spaces
+  List<String> parts = datetime.split(' ');
+
+  // Ensure that there are at least two parts (day and month)
+  if (parts.length >= 2) {
+    String day = parts[0];
+    String monthAbbreviation = parts[1].substring(0, 3);
+
+    // Join the day, comma, abbreviated month, and the rest of the string
+    String formattedDate = '$day $monthAbbreviation ${parts.sublist(2).join(' ')}';
+
+    return formattedDate;
+  }
+
+  // Return the original string if something goes wrong
+  return datetime;
+}
+
+
 // rteurns date as example 1 Nov
 String formatDate(DateTime datetime) {
   var formatter = DateFormat('dd MMM');

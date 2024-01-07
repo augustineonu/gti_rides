@@ -803,6 +803,7 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                     String insuranceCode =
                         selectedObject['insuranceCode'] as String;
                     controller.insuranceCode.value = insuranceCode;
+                    print("seleted insuranceCode:: ${controller.insuranceCode.value}");
                   }
                 }),
             SizedBox(
