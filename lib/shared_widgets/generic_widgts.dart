@@ -261,7 +261,6 @@ Widget carImage({
   //     );
   //   });
   // } else {
-    print("Image widget: :2   is running in background");
     return CachedNetworkImage(
       alignment: Alignment.center,
       imageUrl: imgUrl,
@@ -269,7 +268,7 @@ Widget carImage({
         width: width,
         height: height,
         decoration: BoxDecoration(
-          shape: BoxShape.circle,
+          shape: BoxShape.rectangle,
           image: DecorationImage(
             image: imageProvider,
             fit: fit,

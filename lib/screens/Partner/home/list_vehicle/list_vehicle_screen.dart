@@ -17,6 +17,7 @@ import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/shared_widgets/upload_image_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
+import 'package:gti_rides/utils/amount_formatter.dart';
 import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/utils.dart';
 import 'package:iconsax/iconsax.dart';
@@ -247,7 +248,7 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
               ),
             ],
           ),
-        
+
           SizedBox(
             height: 24.sp,
           ),
@@ -257,6 +258,10 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
             titleFontSize: 12.sp,
             hintText: AppStrings.amountHintText,
             textInputType: TextInputType.number,
+            inputFormatters: [
+              LengthLimitingTextInputFormatter(10),
+              NumberTextInputFormatter(),
+            ],
             controller: controller.advanceAmountController,
           ),
           SizedBox(
@@ -275,6 +280,10 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                   width: 10.sp,
                 )),
             textInputType: TextInputType.number,
+            inputFormatters: [
+              LengthLimitingTextInputFormatter(10),
+              NumberTextInputFormatter(),
+            ],
             controller: controller.rentPerDayController,
           ),
           SizedBox(
@@ -324,6 +333,11 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                   showCursor: false,
                   hintText: AppStrings.amountHintText,
                   controller: controller.discountPerDayController,
+                  textInputType: TextInputType.number,
+                  inputFormatters: [
+                    LengthLimitingTextInputFormatter(10),
+                    NumberTextInputFormatter(),
+                  ],
                 ),
               ),
             ],
@@ -803,7 +817,8 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                     String insuranceCode =
                         selectedObject['insuranceCode'] as String;
                     controller.insuranceCode.value = insuranceCode;
-                    print("seleted insuranceCode:: ${controller.insuranceCode.value}");
+                    print(
+                        "seleted insuranceCode:: ${controller.insuranceCode.value}");
                   }
                 }),
             SizedBox(
