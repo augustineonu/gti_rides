@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/screens/Partner/home/manage_vehicle/quick_edit/quick_edit_controller.dart';
+import 'package:gti_rides/shared_widgets/date_container.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/text_input_widgets/normal_text_input_widget.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
+import 'package:gti_rides/utils/amount_formatter.dart';
 import 'package:gti_rides/utils/constants.dart';
 
 class QuickEditBinding extends Bindings {
@@ -44,18 +48,21 @@ class QuickEditScreen extends GetView<QuickEditController> {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(4.r),
-                  bottomLeft: Radius.circular(4.r)),
-              child: Image.asset(
-                'assets/images/fav_car.png',
-                fit: BoxFit.fitHeight,
+            carImage(
+                borderRadius: const BorderRadius.all(Radius.circular(4)),
+                imgUrl: controller.photoUrl.value.isEmpty
+                    ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnKpMPFWYvaoInINJ44Qh4weo_z8nDwDUf8Q&usqp=CAU'
+                    : controller.photoUrl.value,
                 height: 33.sp,
-                width: 51.sp,
-              ),
+                width: 33.sp),
+            SizedBox(
+              width: 10.sp,
             ),
-            textWidget(text: 'Tesla Model Y', style: getBoldStyle()),
+            textWidget(
+                text: controller.brandModelName.value.isNotEmpty
+                    ? controller.brandModelName.value
+                    : '',
+                style: getBoldStyle()),
           ],
         ),
         SizedBox(
@@ -65,48 +72,99 @@ class QuickEditScreen extends GetView<QuickEditController> {
         SizedBox(
           height: 8.sp,
         ),
-        Row(
-          children: [
-            Expanded(
-              child: NormalInputTextWidget(
-                expectedVariable: 'field',
-                title: AppStrings.from,
-                hintText: AppStrings.dateTimeHintText,
+        Form(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          key: controller.amountFormKey,
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: NormalInputTextWidget(
+                      expectedVariable: 'field',
+                      title: AppStrings.from,
+                      fontSize: 12.sp,
+                      hintText: AppStrings.dateTimeHintText,
+                      readOnly: true,
+                      // showCursor: true,
+                      controller: controller.startDateController
+                        ..text = controller.startDateTime.value,
+                      onTap: () async {
+                        var data = await Get.toNamed(AppLinks.chooseTripDate,
+                            arguments: {
+                              "appBarTitle": AppStrings.quickEdit,
+                              "to": AppStrings.to,
+                              "from": AppStrings.from
+                            });
+
+                        // Handle the selected date here
+                        print('Selected Date page: $data');
+                        controller.startDateTime.value = data['start'];
+
+                        controller.endDateTime.value = data['end'] ?? '';
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    width: 20.sp,
+                  ),
+                  Expanded(
+                    child: NormalInputTextWidget(
+                      expectedVariable: 'field',
+                      title: AppStrings.to,
+                      hintText: AppStrings.dateTimeHintText,
+                      readOnly: true,
+                      // showCursor: true,
+                      fontSize: 12.sp,
+                      controller: controller.endDateController
+                        ..text = controller.endDateTime.value,
+                      onTap: () async {
+                        var data = await Get.toNamed(AppLinks.chooseTripDate,
+                            arguments: {
+                              "appBarTitle": AppStrings.quickEdit,
+                              "to": AppStrings.to,
+                              "from": AppStrings.from
+                            });
+
+                        // Handle the selected date here
+                        print('Selected Date page: $data');
+                        controller.startDateTime.value = data['start'];
+
+                        controller.endDateTime.value = data['end'] ?? '';
+                      },
+                    ),
+                  ),
+                ],
               ),
-            ),
-            SizedBox(
-              width: 20.sp,
-            ),
-            Expanded(
-              child: NormalInputTextWidget(
-                expectedVariable: 'field',
-                title: AppStrings.to,
-                hintText: AppStrings.dateTimeHintText,
+              SizedBox(
+                height: 24.sp,
               ),
-            ),
-          ],
-        ),
-        SizedBox(
-          height: 24.sp,
-        ),
-        NormalInputTextWidget(
-          expectedVariable: 'field',
-          prefixIcon: Transform.scale(
-            scale: 0.3,
-            child: SvgPicture.asset(
-              ImageAssets.naira,
-            ),
+              NormalInputTextWidget(
+                expectedVariable: 'field',
+                prefixIcon: Transform.scale(
+                  scale: 0.3,
+                  child: SvgPicture.asset(
+                    ImageAssets.naira,
+                  ),
+                ),
+                title: AppStrings.proposedPricePerDay,
+                hintText: AppStrings.amountHintText,
+                textInputType: TextInputType.number,
+                controller: controller.pricePerDayController,
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(10),
+                  NumberTextInputFormatter(),
+                ],
+              ),
+            ],
           ),
-          title: AppStrings.proposedPricePerDay,
-          hintText: AppStrings.amountHintText,
         ),
+
         SizedBox(
           height: 50.sp,
         ),
         saveButton(),
 
-        /// take out later on
-        textWidget(text: controller.testString.value, style: getRegularStyle()),
       ],
     );
   }
@@ -131,8 +189,8 @@ class QuickEditScreen extends GetView<QuickEditController> {
         : GtiButton(
             text: AppStrings.save,
             color: primaryColor,
-            onTap: () {},
-            // onTap: controller.routeToPhoneVerification,
+            // onTap: () {},
+            onTap: controller.quickEditCar,
             isLoading: controller.isLoading.value,
           );
   }

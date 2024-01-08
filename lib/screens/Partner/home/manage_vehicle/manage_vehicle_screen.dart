@@ -26,9 +26,23 @@ class ManageVehicleScreen extends GetView<ManageVehicleController> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    // final controller = Get.put<ManageVehicleController>(ManageVehicleController());
+    final controller = Get.find<ManageVehicleController>();
     return Obx(() => Scaffold(
-          appBar: appBar(),
+          // appBar: appBar(controller),
+        appBar: gtiAppBar(
+      onTap: controller.goBack,
+      leading: Transform.scale(
+          scale: 0.5,
+          child: SvgPicture.asset(
+            color: black,
+            ImageAssets.arrowLeft,
+          )),
+      centerTitle: true,
+      title: textWidget(
+          text: AppStrings.manageCars,
+          style: getMediumStyle().copyWith(fontWeight: FontWeight.w500)),
+      titleColor: iconColor(),
+    ),
           // body: body(size, context)),
           body: Padding(
             padding: EdgeInsets.only(left: 20.0.sp, right: 20.sp, top: 8.sp),
@@ -75,7 +89,7 @@ class ManageVehicleScreen extends GetView<ManageVehicleController> {
   Widget buildBody(context, Size size) {
     switch (controller.selectedIndex.value) {
       case 0:
-        return allCars(context, size);
+        return allCars(context, size, controller);
       case 1:
         return bookedCars(context, size);
       default:
@@ -83,7 +97,7 @@ class ManageVehicleScreen extends GetView<ManageVehicleController> {
     }
   }
 
-  Widget allCars(context, Size size) {
+  Widget allCars(context, Size size, controller) {
     return controller.cars!.isEmpty
         ? Padding(
             padding: const EdgeInsets.all(8.0),
@@ -98,12 +112,65 @@ class ManageVehicleScreen extends GetView<ManageVehicleController> {
             itemBuilder: (context, index) {
               var car = controller.cars?[index];
               return car['status'] == 'pending' || car['status'] == "booked"
-                  ? bookedOrPendingCars(
-                      context,
-                      size,
-                      car,
-                      imgUrl: car['photoUrl'],
-                    )
+                  ? bookedOrPendingCars(context, size, car,
+                      imgUrl: car['photoUrl'], onTapQuickOptions: () {
+                      Get.bottomSheet(
+                        SizedBox(
+                          height: size.height * 0.2.sp,
+                          width: size.width.sp,
+                          child: ListView.separated(
+                            shrinkWrap: true,
+                            padding: const EdgeInsets.all(20),
+                            itemCount: controller.quickOptions.length,
+                            itemBuilder: (context, index) {
+                              final option = controller.quickOptions[index];
+                              return InkWell(
+                                onTap: () {
+                                  switch (index) {
+                                    case 0:
+                                      deleteVehicleSheet(size);
+                                    case 1:
+                                      controller.routeToQuickEdit(arguments: {
+                                        "brandModelName": car["brandModelName"],
+                                        "photoUrl": car["photoUrl"],
+                                        "carID": car["carID"]
+                                      });
+                                    case 2:
+                                    case 3:
+                                      controller.routeToCarHistory();
+                                      break;
+                                    default:
+                                  }
+                                },
+                                child: Row(
+                                  children: [
+                                    SvgPicture.asset(option['imageUrl']!),
+                                    const SizedBox(
+                                      width: 6,
+                                    ),
+                                    textWidget(
+                                        text: option['title'],
+                                        style: getRegularStyle(
+                                            color: primaryColor)),
+                                  ],
+                                ),
+                              );
+                            },
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(
+                              height: 18,
+                            ),
+                          ),
+                        ),
+                        backgroundColor: backgroundColor,
+                        isScrollControlled: true,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(4.r),
+                              topRight: Radius.circular(4.r)),
+                        ),
+                      );
+                    })
                   // 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnKpMPFWYvaoInINJ44Qh4weo_z8nDwDUf8Q&usqp=CAU')
 
                   : Padding(
@@ -290,12 +357,8 @@ class ManageVehicleScreen extends GetView<ManageVehicleController> {
             });
   }
 
-  Widget bookedOrPendingCars(
-    BuildContext context,
-    Size size,
-    car, {
-    required String imgUrl,
-  }) {
+  Widget bookedOrPendingCars(BuildContext context, Size size, car,
+      {required String imgUrl, void Function()? onTapQuickOptions}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Stack(
@@ -528,9 +591,7 @@ class ManageVehicleScreen extends GetView<ManageVehicleController> {
             right: 12.sp,
             top: 12.sp,
             child: InkWell(
-                onTap: () {
-                  quickOptionsSheet(size);
-                },
+                onTap: onTapQuickOptions,
                 child: SizedBox(
                     height: 20,
                     width: 20,
@@ -844,7 +905,7 @@ class ManageVehicleScreen extends GetView<ManageVehicleController> {
     );
   }
 
-  AppBar appBar() {
+  AppBar appBar(ManageVehicleController controller) {
     return gtiAppBar(
       onTap: controller.goBack,
       leading: Transform.scale(

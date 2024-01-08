@@ -377,4 +377,19 @@ class PartnerService extends GetxController {
       rethrow;
     }
   }
+
+    Future<ApiResponseModel> carQuickEdit(
+      {required Map payload, required String carID}) async {
+    try {
+      final result = await apiService.postRequest(
+        endpoint: '/user/partner/car/carQuickEdit?carID=$carID',
+        data: payload,
+      );
+
+      return ApiResponseModel.fromJson(result);
+    } catch (err) {
+      logger.log(" Error: $err");
+      rethrow;
+    }
+  }
 }

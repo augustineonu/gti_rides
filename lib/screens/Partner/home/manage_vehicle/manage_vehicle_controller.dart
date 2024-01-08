@@ -59,7 +59,8 @@ class ManageVehicleController extends GetxController {
 
 // routing methods
   void goBack() => routeService.goBack();
-  void routeToQuickEdit() => routeService.gotoRoute(AppLinks.quickEdit);
+  void routeToQuickEdit({Object? arguments}) => routeService.gotoRoute(AppLinks.quickEdit,
+  arguments: arguments);
   void routeToCarHistory() => routeService.gotoRoute(AppLinks.carHistory);
 
     void onToggleCarAvailability(bool value) => isAvailable.value = value;

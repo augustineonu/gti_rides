@@ -105,6 +105,7 @@ class NormalInputTextWidget extends StatelessWidget {
           readOnly: readOnly!,
           onTap: onTap,
           maxLines: maxLines,
+          
           showCursor: showCursor,
                inputFormatters: inputFormatters,
           maxLength: maxLength,

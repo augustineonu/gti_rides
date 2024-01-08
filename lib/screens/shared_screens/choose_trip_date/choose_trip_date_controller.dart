@@ -105,7 +105,7 @@ class ChooseTripDateController extends GetxController {
   void queryListener() {}
 
   void goBack() => routeService.goBack();
-  void goBack1() => routeService.goBack(closeOverlays: true, result: {
+  void goBack1() => routeService.goBack( result: {
         "start":
             "${startDate} ${selectedStartHour}:${selectedStartMinute < 10 ? '0${selectedStartMinute}' : selectedStartMinute}${selectedStartAmPm.value == 0 ? "am" : "PM"}",
         "end":

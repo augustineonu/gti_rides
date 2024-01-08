@@ -245,7 +245,7 @@ Widget carImage({
   double imageSizeWidth = 34.0,
   double imageSizeHeight = 34.0,
   BoxFit fit = BoxFit.cover,
-  double radius = 100,
+  BorderRadiusGeometry? borderRadius
 }) {
   // if (localImagePath != null && localImagePath.isNotEmpty) {
   //   print("Image widget: is running in background");
@@ -268,6 +268,7 @@ Widget carImage({
         width: width,
         height: height,
         decoration: BoxDecoration(
+          borderRadius: borderRadius,
           shape: BoxShape.rectangle,
           image: DecorationImage(
             image: imageProvider,

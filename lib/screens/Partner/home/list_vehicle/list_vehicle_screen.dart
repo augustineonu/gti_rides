@@ -9,6 +9,7 @@ import 'package:gti_rides/models/drivers_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/screens/Partner/home/list_vehicle/list_vehicle_controller.dart';
 import 'package:gti_rides/services/route_service.dart';
+import 'package:gti_rides/shared_widgets/date_container.dart';
 import 'package:gti_rides/shared_widgets/dropdown_widget.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
@@ -199,7 +200,7 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
               Expanded(
                 child: dateContainer(
                   size,
-                  controller,
+                  
                   title: AppStrings.from,
                   color: controller.startDateTime.value.isEmpty ? grey1 : grey5,
                   text: controller.startDateTime.value.isEmpty
@@ -224,7 +225,7 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
               Expanded(
                 child: dateContainer(
                   size,
-                  controller,
+                  
                   title: AppStrings.from,
                   text: controller.endDateTime.value.isEmpty
                       ? AppStrings.dateTimeHintText
@@ -520,49 +521,7 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
     );
   }
 
-  Widget dateContainer(Size size, ListVehicleController controller,
-      {void Function()? onTap,
-      required String text,
-      required String title,
-      Color? color}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        textWidget(
-            text: title,
-            textOverflow: TextOverflow.visible,
-            style: getRegularStyle(fontSize: 14)),
-        SizedBox(
-          height: 3,
-        ),
-        GestureDetector(
-          onTap: onTap,
-          child: Container(
-            height: 45.h,
-            width: size.width,
-            constraints:
-                BoxConstraints.tightFor(width: size.width.sp, height: 45.sp),
-            // width: size.width,
-            margin: EdgeInsets.symmetric(vertical: 5.sp),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(4.r),
-              ),
-              border: Border.all(color: grey1),
-            ),
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 5.sp, vertical: 10.sp),
-              child: Center(
-                child: textWidget(
-                    text: text,
-                    style: getRegularStyle(fontSize: 12.sp, color: color)),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
+ 
 
   Future<dynamic> noDriverDialog(Size size, ListVehicleController controller) {
     return Get.dialog(StatefulBuilder(builder: (context, setState) {
