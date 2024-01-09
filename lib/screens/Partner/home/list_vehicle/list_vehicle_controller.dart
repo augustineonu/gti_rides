@@ -40,6 +40,7 @@ class ListVehicleController extends GetxController {
   RxList<dynamic>? cars = <dynamic>[].obs;
 
   RxBool isLoading = false.obs;
+  RxBool isFromManageCars = false.obs;
   RxBool isLoading1 = false.obs;
   RxBool isGettingBrands = false.obs;
   RxBool isAddingCar = false.obs;
@@ -98,7 +99,7 @@ class ListVehicleController extends GetxController {
   TextEditingController rentPerDayController = TextEditingController();
   TextEditingController discountPerDayController = TextEditingController();
   TextEditingController aboutVehicleController = TextEditingController();
-
+  RxInt initiPageIndex = 1.obs;
   ListVehicleController() {
     init();
   }
@@ -120,32 +121,29 @@ class ListVehicleController extends GetxController {
     if (arguments != null) {
       startDateTime.value = arguments['start'] ?? 'hmm';
       endDateTime.value = arguments['end'] ?? 'woo';
+      isFromManageCars.value = arguments['isFromManageCars'] ?? false;
 
       // Now you have access to the passed data (emailOrPhone)
       logger.log('Received data: $arguments');
+    }
+    if (isFromManageCars.value == true) {
+      currentIndex.value = 1;
+      pageController.addListener(() {
+        currentIndex.value = pageController.page?.round() ?? 0;
+        update();
+      });
     }
   }
 
   @override
   void onInit() async {
     logger.log("ListVehicleController oninti called");
-    pageController.addListener(() {
-      currentIndex.value = pageController.page?.round() ?? 0;
-      update();
-    });
+
+    // pageController = PageController(
+    //     initialPage: isFromManageCars.value
+    //         ? initiPageIndex.value = 1
+    //         : initiPageIndex.value);
     super.onInit();
-    // await getBrands();
-    // Access the arguments using Get.arguments
-    // Map<String, dynamic>? arguments = Get.arguments;
-
-    // if (arguments != null ) {
-    //   startDateTime.value = arguments['start'];
-    //   endDateTime.value = arguments['end'];
-
-    //   // Now you have access to the passed data (emailOrPhone)
-    //   logger.log('Received data: $arguments');
-    // }
-    // logger.log('Received data1: $arguments');
   }
 
   // variables
@@ -183,56 +181,6 @@ class ListVehicleController extends GetxController {
     AppStrings.tesla,
     AppStrings.toyota,
     AppStrings.volvo,
-  ];
-
-  // List<String> transmissions = [
-  //   AppStrings.allTransmission,
-  //   AppStrings.manual,
-  //   AppStrings.automatic,
-  // ];
-
-  List<String> features = [
-    AppStrings.allFeatures,
-    AppStrings.wheelchairAccessible,
-    AppStrings.allWheelDrive,
-    AppStrings.androidAuto,
-    AppStrings.androidAuto,
-    AppStrings.appleCarPlay,
-    AppStrings.auxInput,
-    AppStrings.backupCamera,
-    AppStrings.bikeRack,
-    AppStrings.blindSpotWarning,
-    AppStrings.bluetooth,
-    AppStrings.childSeat,
-    AppStrings.convertible,
-    AppStrings.gps,
-    AppStrings.heatedSeats,
-    AppStrings.keylessEntry,
-    AppStrings.petFriendly,
-    AppStrings.skiRack,
-    AppStrings.snowTiresChains,
-    AppStrings.sunroof,
-    AppStrings.usbCharger,
-    AppStrings.usbInput,
-  ];
-
-  List<String> vehicleTypes1 = [
-    AppStrings.allTypes,
-    AppStrings.cars,
-    AppStrings.suvs,
-    AppStrings.minivans,
-    AppStrings.trucks,
-    AppStrings.vans,
-    AppStrings.cargoVans,
-  ];
-  List<String> vehicleSeats1 = [
-    AppStrings.allSeat,
-    AppStrings.fourOrMore,
-    AppStrings.fiveOrMore,
-    AppStrings.sixOrMore,
-    AppStrings.sevenOrMore,
-    AppStrings.eightOrMore,
-    AppStrings.nineOrMore,
   ];
 
   List<Map<String, dynamic>> drivers1 = [
@@ -438,8 +386,8 @@ class ListVehicleController extends GetxController {
     if (response != null) {
       selectedInsurancePhotos.value = response.imagePath;
       selectedInsurancePhotoName.value = response.imagePath.split('/').last;
-      
-        int lastSeparator = selectedInsurancePhotos.value.lastIndexOf('/');
+
+      int lastSeparator = selectedInsurancePhotos.value.lastIndexOf('/');
       String directory = lastSeparator != -1
           ? selectedInsurancePhotos.value.substring(0, lastSeparator)
           : selectedInsurancePhotos.value;
@@ -465,7 +413,7 @@ class ListVehicleController extends GetxController {
       selectedInspectionPhotos.value = (response.imagePath);
       selectedInspectionPhotoName.value = (response.imagePath).split('/').last;
 
-        int lastSeparator = selectedInspectionPhotos.value.lastIndexOf('/');
+      int lastSeparator = selectedInspectionPhotos.value.lastIndexOf('/');
       String directory = lastSeparator != -1
           ? selectedInspectionPhotos.value.substring(0, lastSeparator)
           : selectedInspectionPhotos.value;
@@ -490,8 +438,8 @@ class ListVehicleController extends GetxController {
     if (response != null) {
       selectedInspectionPhotos.value = (response.imagePath);
       selectedInspectionPhotoName.value = (response.imagePath).split('/').last;
-      
-         int lastSeparator = selectedInspectionPhotos.value.lastIndexOf('/');
+
+      int lastSeparator = selectedInspectionPhotos.value.lastIndexOf('/');
       String directory = lastSeparator != -1
           ? selectedInspectionPhotos.value.substring(0, lastSeparator)
           : selectedInspectionPhotos.value;
@@ -974,9 +922,8 @@ class ListVehicleController extends GetxController {
   // //   return data1;
   // // }
   Future<void> addCarDocument() async {
-    if (!documentationFormKey.currentState!.validate()
-        || !validateImageUpload()
-        ) {
+    if (!documentationFormKey.currentState!.validate() ||
+        !validateImageUpload()) {
       return;
     }
     final mimeTypeData =

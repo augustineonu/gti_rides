@@ -22,9 +22,9 @@ class ManageVehicleBinding extends Bindings {
 }
 
 class ManageVehicleScreen extends StatelessWidget {
-   ManageVehicleScreen([Key? key]) : super(key: key);
-      
-        final controller = Get.put(ManageVehicleController());
+  ManageVehicleScreen([Key? key]) : super(key: key);
+
+  final controller = Get.put(ManageVehicleController());
 
   @override
   Widget build(BuildContext context) {
@@ -32,20 +32,20 @@ class ManageVehicleScreen extends StatelessWidget {
     // final controller = Get.find<ManageVehicleController>();
     return Obx(() => Scaffold(
           // appBar: appBar(controller),
-        appBar: gtiAppBar(
-      onTap: controller.goBack,
-      leading: Transform.scale(
-          scale: 0.5,
-          child: SvgPicture.asset(
-            color: black,
-            ImageAssets.arrowLeft,
-          )),
-      centerTitle: true,
-      title: textWidget(
-          text: AppStrings.manageCars,
-          style: getMediumStyle().copyWith(fontWeight: FontWeight.w500)),
-      titleColor: iconColor(),
-    ),
+          appBar: gtiAppBar(
+            onTap: controller.goBack,
+            leading: Transform.scale(
+                scale: 0.5,
+                child: SvgPicture.asset(
+                  color: black,
+                  ImageAssets.arrowLeft,
+                )),
+            centerTitle: true,
+            title: textWidget(
+                text: AppStrings.manageCars,
+                style: getMediumStyle().copyWith(fontWeight: FontWeight.w500)),
+            titleColor: iconColor(),
+          ),
           // body: body(size, context)),
           body: Padding(
             padding: EdgeInsets.only(left: 20.0.sp, right: 20.sp, top: 8.sp),
@@ -100,7 +100,7 @@ class ManageVehicleScreen extends StatelessWidget {
     }
   }
 
-  Widget allCars(context, Size size,ManageVehicleController controller) {
+  Widget allCars(context, Size size, ManageVehicleController controller) {
     return controller.cars!.isEmpty
         ? Padding(
             padding: const EdgeInsets.all(8.0),
@@ -116,7 +116,8 @@ class ManageVehicleScreen extends StatelessWidget {
               var car = controller.cars?[index];
               return car['status'] == 'pending' || car['status'] == "booked"
                   ? bookedOrPendingCars(context, size, car,
-                      imgUrl: car['photoUrl'], onTapQuickOptions: () {
+                      imgUrl: car['photoUrl'] != '' ? car['photoUrl'] : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnKpMPFWYvaoInINJ44Qh4weo_z8nDwDUf8Q&usqp=CAU', 
+                       onTapQuickOptions: () {
                       Get.bottomSheet(
                         SizedBox(
                           height: size.height * 0.2.sp,
@@ -131,7 +132,11 @@ class ManageVehicleScreen extends StatelessWidget {
                                 onTap: () {
                                   switch (index) {
                                     case 0:
-                                      deleteVehicleSheet(size);
+                                      deleteVehicleSheet(size,
+                                          carName: car['brandModelName'],
+                                          carNameBody: car['brandModelName'],
+                                          onTapContinue: () => controller
+                                              .deleteCar(carID: car['carID']));
                                     case 1:
                                       controller.routeToQuickEdit(arguments: {
                                         "brandModelName": car["brandModelName"],
@@ -139,14 +144,18 @@ class ManageVehicleScreen extends StatelessWidget {
                                         "carID": car["carID"]
                                       });
                                     case 2:
+                                    controller.routeToListVehicle(
+                                      arguments: {
+                                        "carID": car["carID"],
+                                        "isFromManageCars": true,
+                                      }
+                                    );
                                     case 3:
-                                      controller.routeToCarHistory(
-                                        arguments: {
+                                      controller.routeToCarHistory(arguments: {
                                         "brandModelName": car["brandModelName"],
                                         "photoUrl": car["photoUrl"],
                                         "carID": car["carID"]
-                                      }
-                                      );
+                                      });
                                       break;
                                     default:
                                   }
@@ -809,7 +818,7 @@ class ManageVehicleScreen extends StatelessWidget {
               onTap: () {
                 switch (index) {
                   case 0:
-                    deleteVehicleSheet(size);
+                  // deleteVehicleSheet(size);
                   case 1:
                     controller.routeToQuickEdit();
                   case 2:
@@ -846,7 +855,10 @@ class ManageVehicleScreen extends StatelessWidget {
     );
   }
 
-  Future<dynamic> deleteVehicleSheet(Size size) {
+  Future<dynamic> deleteVehicleSheet(Size size,
+      {required String carName,
+      required String carNameBody,
+      void Function()? onTapContinue}) {
     return Get.bottomSheet(
       SizedBox(
         height: size.height * 0.4.sp,
@@ -861,8 +873,7 @@ class ManageVehicleScreen extends StatelessWidget {
             child: Column(
               children: [
                 textWidget(
-                    text:
-                        AppStrings.areYouSureToDelete.trArgs(["Tesla Model Y"]),
+                    text: AppStrings.areYouSureToDelete.trArgs([carName]),
                     textAlign: TextAlign.center,
                     textOverflow: TextOverflow.visible,
                     style: getSemiBoldStyle()),
@@ -871,7 +882,7 @@ class ManageVehicleScreen extends StatelessWidget {
                 ),
                 textWidget(
                     text: AppStrings.everyDataWouldBeDeleted
-                        .trArgs(["Tesla Model Y"]),
+                        .trArgs([carNameBody]),
                     textAlign: TextAlign.center,
                     textOverflow: TextOverflow.visible,
                     style: getRegularStyle(color: grey3, fontSize: 12.sp)),
@@ -899,7 +910,7 @@ class ManageVehicleScreen extends StatelessWidget {
               GtiButton(
                 text: AppStrings.cont,
                 width: 150.sp,
-                onTap: () {},
+                onTap: onTapContinue,
               ),
             ],
           )

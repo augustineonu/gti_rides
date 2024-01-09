@@ -40,7 +40,9 @@ class CarHistoryScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     carImage(
-                        imgUrl: controller.photoUrl.value,
+                        imgUrl: controller.photoUrl.value.isNotEmpty
+                            ? controller.photoUrl.value
+                            : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnKpMPFWYvaoInINJ44Qh4weo_z8nDwDUf8Q&usqp=CAU',
                         borderRadius: BorderRadius.all(Radius.circular(4.r)),
                         height: 103.h,
                         width: size.width),
@@ -54,32 +56,39 @@ class CarHistoryScreen extends StatelessWidget {
                     divider(color: borderColor),
 
                     seeAllFeedbacks(
-                        feedbackCount: state[0]['feedbackCount'].toString() ?? "not set"),
+                        feedbackCount:
+                            state[0]['feedbackCount'].toString() ?? "not set"),
                     divider(color: borderColor),
                     earningsAndAllTrips(
-                      totalEarnings: state[0]['totalEarning'].toString()
-                    ),
+                        totalEarnings:
+                            state[0]['totalEarning'].toString() ?? ''),
                     divider(color: borderColor),
                     tripDate(
-                        startDate: state[0]['startDate'],
-                        endDate: state[0]['endDate']),
+                        startDate: state[0]['startDate'] ?? '',
+                        endDate: state[0]['endDate'] ?? ''),
                     divider(color: borderColor),
                     carBasics(
-                      carType: state[0]['type'][0]['typeName'] ?? '',
-                      carSeat: state[0]['seat'][0]['seatName'] ?? '',
+                      carType: state[0]['type'].isNotEmpty == true ?
+                       state[0]['type'][0]['typeName'] ?? '' : '',
+                      carSeat: state[0]['seat']?.isNotEmpty == true ? 
+                       state[0]['seat'][0]['seatName'] ?? '' : '',
                     ),
                     divider(color: borderColor),
                     carFetures(children: [
-                      for (var feature in state[0]['feature'])
-                        chipWidget(title: feature['featuresName'])
+                      for (var feature in state[0]['feature'] ?? [])
+                        chipWidget(title: feature['featuresName'] ?? '')
                     ]),
 
                     divider(color: borderColor),
                     transmission(
-                        transmission: state[0]['transmission'][0]
-                            ['transmissionName']),
+                      transmission: state.isNotEmpty &&
+                              state[0]['transmission']?.isNotEmpty == true
+                          ? state[0]['transmission']![0]['transmissionName'] ??
+                              ''
+                          : '',
+                    ),
                     divider(color: borderColor),
-                    aboutCar(aboutCar: state[0]['about']),
+                    aboutCar(aboutCar: state[0]['about'] ?? ''),
                     SizedBox(
                       height: size.height * 0.02,
                     ),
@@ -158,9 +167,7 @@ class CarHistoryScreen extends StatelessWidget {
     );
   }
 
-  Widget earningsAndAllTrips({
-    required String totalEarnings
-  }) {
+  Widget earningsAndAllTrips({required String totalEarnings}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
       child: Row(
@@ -177,7 +184,8 @@ class CarHistoryScreen extends StatelessWidget {
               SizedBox(
                 height: 5.sp,
               ),
-              Row(mainAxisAlignment: MainAxisAlignment.start,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 5.0),

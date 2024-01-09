@@ -437,6 +437,72 @@ class ApiService {
     }
   }
 
+
+    Future<dynamic> deleteRequest({
+    required String endpoint,
+    // Map? data,
+    String? token,
+  }) async {
+    try {
+      logger.log("DELETE REQUEST DATA:: $baseURL  $endpoint");
+      late Response response;
+      response = await _dio.delete(
+        endpoint,
+        // data: data,
+        // options: Options(
+        //   headers: {
+        //     'Authorization':
+        //         'Bearer ${token ?? tokenService.accessToken.value}',
+        //   },
+        // ),
+      );
+      logger.log("DELETE REQUEST RESPONSE:: $response");
+      final ApiResponseModel apiResponse =
+          ApiResponseModel.fromJson(response.data);
+      if (!endpoint.contains('auth')) {
+        if (apiResponse.status_code == 400) {
+          // if refresh token returns invalid token, log the user out
+          bool newAccessTokenResult = await tokenService.getNewAccessToken();
+          logger.log("HELLLL");
+          if (!newAccessTokenResult) {
+            logger.log("HELLLL22");
+            logger.log('Going to LOgin screen');
+            routeService.offAllNamed(AppLinks.login);
+            return;
+          }
+          response = await _dio.delete(
+            endpoint,
+            // data: data,
+            options: Options(
+              headers: {
+                'Authorization':
+                    'Bearer ${token ?? tokenService.accessToken.value}',
+              },
+            ),
+          );
+        } else if (apiResponse.status_code == 403) {
+          logger.log('Going to login screen');
+          logger.log("HELLLL33");
+          _logOut();
+          return;
+        }
+      }
+      logger.log('response${response.data}');
+      return response.data;
+    } on DioException catch (e) {
+      logger.log("DELETE REQUEST ERROR ($endpoint) :: ${e.response?.data}");
+      if (e.response?.data != null) {
+        return e.response?.data;
+      }
+      throw "An error occurred";
+    } on SocketException {
+      throw "seems you are offline";
+    } catch (error) {
+      throw error.toString();
+    }
+  }
+
+
   Future<void> _logOut() async {
     try {
       ///

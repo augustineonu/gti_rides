@@ -407,4 +407,19 @@ class PartnerService extends GetxController {
       rethrow;
     }
   }
+
+   Future<ApiResponseModel> deleteCar(
+      { required String carID}) async {
+    try {
+      final result = await apiService.deleteRequest(
+        endpoint: '/user/partner/car/deleteCar?carID=$carID',
+        
+      );
+
+      return ApiResponseModel.fromJson(result);
+    } catch (err) {
+      logger.log(" Error: $err");
+      rethrow;
+    }
+  }
 }

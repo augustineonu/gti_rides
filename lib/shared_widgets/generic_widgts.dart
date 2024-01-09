@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/renter/home/paint.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
+import 'package:gti_rides/shared_widgets/image_loader.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 
@@ -237,30 +238,30 @@ Widget profileAvatar({
       }));
 }
 
-Widget carImage({
-  required String imgUrl,
-  // String? localImagePath,
-  double? width,
-  double? height,
-  double imageSizeWidth = 34.0,
-  double imageSizeHeight = 34.0,
-  BoxFit fit = BoxFit.cover,
-  BorderRadiusGeometry? borderRadius
-}) {
-  // if (localImagePath != null && localImagePath.isNotEmpty) {
-  //   print("Image widget: is running in background");
-  //   return Builder(builder: (context) {
-  //     return ClipRRect(
-  //       borderRadius: BorderRadius.circular(radius),
-  //       child: Image.file(
-  //         File(localImagePath),
-  //         width: width,
-  //         height: height,
-  //         fit: fit,
-  //       ),
-  //     );
-  //   });
-  // } else {
+Widget carImage(
+    {required String imgUrl,
+    // String? localImagePath,
+    double? width,
+    double? height,
+    double imageSizeWidth = 34.0,
+    double imageSizeHeight = 34.0,
+    BoxFit fit = BoxFit.cover,
+    BorderRadiusGeometry? borderRadius}) {
+  if (imgUrl != null || imgUrl.isNotEmpty) {
+    // if (localImagePath != null && localImagePath.isNotEmpty) {
+    //   print("Image widget: is running in background");
+    //   return Builder(builder: (context) {
+    //     return ClipRRect(
+    //       borderRadius: BorderRadius.circular(radius),
+    //       child: Image.file(
+    //         File(localImagePath),
+    //         width: width,
+    //         height: height,
+    //         fit: fit,
+    //       ),
+    //     );
+    //   });
+    // } else {
     return CachedNetworkImage(
       alignment: Alignment.center,
       imageUrl: imgUrl,
@@ -271,7 +272,10 @@ Widget carImage({
           borderRadius: borderRadius,
           shape: BoxShape.rectangle,
           image: DecorationImage(
-            image: imageProvider,
+            image: SafeCachedNetworkImageProvider(
+              imgUrl,
+              fallbackImage: AssetImage('assets/images/fav_car.png'),
+            ),
             fit: fit,
           ),
         ),
@@ -292,7 +296,10 @@ Widget carImage({
         width: imageSizeWidth,
       ),
     );
+  } else {
+    return SizedBox();
   }
+}
 // }
 
 Widget imageWidget({
@@ -373,7 +380,6 @@ Widget imageWidget1(
           );
         }),
       ),
-      
       Positioned(
           right: -4,
           top: -6,
@@ -510,72 +516,74 @@ Future<dynamic> successDialog({
   required String buttonTitle,
   required void Function()? onTap,
 }) {
-  return Get.dialog(Dialog(
-    alignment: Alignment.topCenter,
-  
-    insetPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-    child: Stack(
-      children: [
-        Positioned(
-          top: 0,
-          child: SvgPicture.asset(
-            ImageAssets.successDialogBg,
-            alignment: Alignment.center,
-            // width: 200,
-            height: 350,
-          ),
-        ),
-        Container(
-          height: 400,
-          // width: 350.sp,
-          padding: EdgeInsets.symmetric(horizontal: 50, vertical: 30),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(6),
-          ),
-          // child: ,
-        ),
-        Positioned(
-          top: 60,
-          left: 0,
-          right: 0,
-          child: SvgPicture.asset(
-            ImageAssets.success,
-            alignment: Alignment.center,
-            // width: 200,
-            height: 110,
-          ),
-        ),
-        Positioned(
-          bottom: 35.sp,
-          right: 0,
-          left: 0,
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 25.sp),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                textWidget(
-                    text: title, style: getBoldStyle(color: primaryColor)),
-                SizedBox(
-                  height: 10,
-                ),
-                textWidget(
-                    text: body,
-                    textOverflow: TextOverflow.visible,
-                    textAlign: TextAlign.center,
-                    style: getRegularStyle()),
-                SizedBox(
-                  height: 30,
-                ),
-                GtiButton(
-                  text: buttonTitle,
-                  onTap: onTap,
-                )
-              ],
+  return Get.dialog(
+    Dialog(
+      alignment: Alignment.topCenter,
+      insetPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      child: Stack(
+        children: [
+          Positioned(
+            top: 0,
+            child: SvgPicture.asset(
+              ImageAssets.successDialogBg,
+              alignment: Alignment.center,
+              // width: 200,
+              height: 350,
             ),
           ),
-        ),
-      ],
+          Container(
+            height: 400,
+            // width: 350.sp,
+            padding: EdgeInsets.symmetric(horizontal: 50, vertical: 30),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6),
+            ),
+            // child: ,
+          ),
+          Positioned(
+            top: 60,
+            left: 0,
+            right: 0,
+            child: SvgPicture.asset(
+              ImageAssets.success,
+              alignment: Alignment.center,
+              // width: 200,
+              height: 110,
+            ),
+          ),
+          Positioned(
+            bottom: 35.sp,
+            right: 0,
+            left: 0,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 25.sp),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  textWidget(
+                      text: title, style: getBoldStyle(color: primaryColor)),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  textWidget(
+                      text: body,
+                      textOverflow: TextOverflow.visible,
+                      textAlign: TextAlign.center,
+                      style: getRegularStyle()),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  GtiButton(
+                    text: buttonTitle,
+                    onTap: onTap,
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     ),
-  ),  barrierDismissible: false,);
+    barrierDismissible: false,
+  );
 }

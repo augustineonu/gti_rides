@@ -23,8 +23,10 @@ class QuickEditBinding extends Bindings {
   }
 }
 
-class QuickEditScreen extends GetView<QuickEditController> {
-  const QuickEditScreen([Key? key]) : super(key: key);
+class QuickEditScreen extends StatelessWidget {
+   QuickEditScreen([Key? key]) : super(key: key);
+
+  final controller = Get.put(QuickEditController());
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;

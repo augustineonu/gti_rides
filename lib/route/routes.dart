@@ -247,7 +247,7 @@ class AppRoutes {
         binding: ManageVehicleBinding()),
     GetPage(
         name: AppLinks.quickEdit,
-        page: () => const QuickEditScreen(),
+        page: () =>  QuickEditScreen(),
         binding: QuickEditBinding()),
     GetPage(
         name: AppLinks.carHistory,

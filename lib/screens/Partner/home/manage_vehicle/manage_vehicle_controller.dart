@@ -6,6 +6,7 @@ import 'package:gti_rides/services/partner_service.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/utils/constants.dart';
+import 'package:gti_rides/utils/utils.dart';
 
 class ManageVehicleController extends GetxController {
   Logger logger = Logger("Controller");
@@ -31,6 +32,7 @@ class ManageVehicleController extends GetxController {
   // variables
   RxBool isLoading = false.obs;
   RxBool isFetchingCars = false.obs;
+  RxBool isDeletingCar = false.obs;
   RxBool isAvailable = false.obs;
   PageController pageController = PageController();
   RxInt selectedIndex = 0.obs;
@@ -61,27 +63,25 @@ class ManageVehicleController extends GetxController {
 
 // routing methods
   void goBack() => routeService.goBack();
-  void routeToQuickEdit({Object? arguments}) => routeService.gotoRoute(AppLinks.quickEdit,
+  void routeToQuickEdit({Object? arguments}) =>
+      routeService.gotoRoute(AppLinks.quickEdit, arguments: arguments);
+  void routeToCarHistory({Object? arguments}) =>
+      routeService.gotoRoute(AppLinks.carHistory, arguments: arguments);
+
+  void onToggleCarAvailability(bool value) => isAvailable.value = value;
+  void routeToListVehicle({Object? arguments})=> routeService.gotoRoute(AppLinks.listVehicle,
   arguments: arguments);
-  void routeToCarHistory({Object? arguments}) => routeService.gotoRoute(AppLinks.carHistory,
-  arguments: arguments);
-
-    void onToggleCarAvailability(bool value) => isAvailable.value = value;
-
-
   Future<void> getAllCars() async {
     isFetchingCars.value = true;
     try {
-      final response = await partnerService.getCars(
-        queryType: 'all'
-      );
+      final response = await partnerService.getCars(queryType: 'all');
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("gotten cars ${response.data}");
         if (response.data != null) {
           cars?.value = response.data!;
           logger.log("cars $cars");
         }
-         isFetchingCars.value = false;
+        isFetchingCars.value = false;
       } else {
         logger.log("unable to get cars ${response.data}");
       }
@@ -89,24 +89,45 @@ class ManageVehicleController extends GetxController {
       logger.log("error  $exception");
     }
   }
+
   Future<void> getBookedCars() async {
     isFetchingCars.value = true;
     try {
-      final response = await partnerService.getCars(
-        queryType: 'booked'
-      );
+      final response = await partnerService.getCars(queryType: 'booked');
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("gotten booked cars ${response.data}");
         if (response.data != null) {
           bookedCars?.value = response.data!;
           logger.log("booked cars $bookedCars");
         }
-         isFetchingCars.value = false;
+        isFetchingCars.value = false;
       } else {
         logger.log("unable to get booked cars ${response.data}");
       }
     } catch (exception) {
       logger.log("error  $exception");
+    }
+  }
+
+  Future<void> deleteCar({required String carID}) async {
+    isDeletingCar.value = true;
+    try {
+      final result = await partnerService.deleteCar(carID: carID);
+      if (result.status == "success") {
+        showSuccessSnackbar(message: result.message!);
+        isDeletingCar.value = false;
+           Future.delayed(const Duration(milliseconds: 1000), () {
+          routeService.goBack(closeOverlays: true);
+        });
+        
+      } else {
+        logger.log("error deleting car:: ${result.message}");
+        showErrorSnackbar(message: result.message ?? 'unable to delete car');
+      }
+    } catch (exception) {
+      isDeletingCar.value = false;
+      logger.log("error deleting car:: ${exception.toString()}");
+      showErrorSnackbar(message: exception.toString());
     }
   }
 }
