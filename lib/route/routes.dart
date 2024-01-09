@@ -243,7 +243,7 @@ class AppRoutes {
     ),
     GetPage(
         name: AppLinks.manageVehicle,
-        page: () => const ManageVehicleScreen(),
+        page: () =>  ManageVehicleScreen(),
         binding: ManageVehicleBinding()),
     GetPage(
         name: AppLinks.quickEdit,
@@ -251,7 +251,7 @@ class AppRoutes {
         binding: QuickEditBinding()),
     GetPage(
         name: AppLinks.carHistory,
-        page: () => const CarHistoryScreen(),
+        page: () => CarHistoryScreen(),
         binding: CarHistoryBinding()),
     GetPage(
         name: AppLinks.feedback,

@@ -392,4 +392,19 @@ class PartnerService extends GetxController {
       rethrow;
     }
   }
+
+    Future<ListResponseModel> getOnCar({required String carId}) async {
+    try {
+      final result = await apiService.getRequest(
+        '/user/partner/car/getOneCar?carID=$carId',
+      );
+      logger.log("result $result");
+
+      final decodedResult = json.decode(result);
+
+      return ListResponseModel.fromJson(decodedResult);
+    } catch (err) {
+      rethrow;
+    }
+  }
 }

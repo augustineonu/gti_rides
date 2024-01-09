@@ -20,97 +20,147 @@ class CarHistoryBinding extends Bindings {
   }
 }
 
-class CarHistoryScreen extends GetView<CarHistoryController> {
-  const CarHistoryScreen([Key? key]) : super(key: key);
+class CarHistoryScreen extends StatelessWidget {
+  CarHistoryScreen([Key? key]) : super(key: key);
+  final controller = Get.put(CarHistoryController());
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    final controller = Get.put(CarHistoryController());
     return Obx(
       () => Scaffold(
-          backgroundColor: backgroundColor,
-          appBar: appBar(controller),
-          body: body(size, context)),
+        backgroundColor: backgroundColor,
+        appBar: appBar(controller),
+        body: controller.obx(
+          (state) {
+            return SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: 20.sp),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    carImage(
+                        imgUrl: controller.photoUrl.value,
+                        borderRadius: BorderRadius.all(Radius.circular(4.r)),
+                        height: 103.h,
+                        width: size.width),
+                    SizedBox(height: 15.sp),
+                    // change this when the data is returned from the API
+                    tripsAndRating(
+                      tripCount: state![0]['tripsCount'].toString() ?? '200',
+                      rating: state[0]['percentage'].toString() ?? '100',
+                    ),
+                    SizedBox(height: 12.sp),
+                    divider(color: borderColor),
+
+                    seeAllFeedbacks(
+                        feedbackCount: state[0]['feedbackCount'].toString() ?? "not set"),
+                    divider(color: borderColor),
+                    earningsAndAllTrips(
+                      totalEarnings: state[0]['totalEarning'].toString()
+                    ),
+                    divider(color: borderColor),
+                    tripDate(
+                        startDate: state[0]['startDate'],
+                        endDate: state[0]['endDate']),
+                    divider(color: borderColor),
+                    carBasics(
+                      carType: state[0]['type'][0]['typeName'] ?? '',
+                      carSeat: state[0]['seat'][0]['seatName'] ?? '',
+                    ),
+                    divider(color: borderColor),
+                    carFetures(children: [
+                      for (var feature in state[0]['feature'])
+                        chipWidget(title: feature['featuresName'])
+                    ]),
+
+                    divider(color: borderColor),
+                    transmission(
+                        transmission: state[0]['transmission'][0]
+                            ['transmissionName']),
+                    divider(color: borderColor),
+                    aboutCar(aboutCar: state[0]['about']),
+                    SizedBox(
+                      height: size.height * 0.02,
+                    ),
+                    // continueButton(),
+                  ],
+                ));
+          },
+          onEmpty: Padding(
+            padding: EdgeInsets.symmetric(vertical: context.height * 0.3),
+            child: const Center(child: Text("Data is Empty")),
+          ),
+          onError: (e) => Padding(
+            padding: EdgeInsets.symmetric(
+                vertical: context.height * 0.3, horizontal: 20),
+            child: Center(
+              child: Text(
+                "exception $e",
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+          onLoading: Padding(
+            padding: EdgeInsets.symmetric(vertical: context.height * 0.3),
+            child: Center(child: centerLoadingIcon()),
+          ),
+        ),
+      ),
       // }
     );
   }
 
-  Widget body(Size size, context) {
-    return SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 20.sp),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(4.r)),
-              child: Image.asset(
-                "assets/images/car.png",
-                fit: BoxFit.contain,
-              ),
-            ),
-            SizedBox(height: 15.sp),
-            tripsAndRating(),
-            SizedBox(height: 12.sp),
-            divider(color: borderColor),
-
-            seeAllFeedbacks(),
-            divider(color: borderColor),
-            earningsAndAllTrips(),
-            divider(color: borderColor),
-            tripDate(),
-            divider(color: borderColor),
-            carBasics(),
-            divider(color: borderColor),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 14.sp, horizontal: 20.sp),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  textWidget(
-                      text: AppStrings.carFeatureCaps,
-                      style: getMediumStyle(fontSize: 12.sp, color: grey2)
-                          .copyWith(fontWeight: FontWeight.w500)),
-                  SizedBox(
-                    height: 10.sp,
-                  ),
-                  Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    alignment: WrapAlignment.spaceBetween,
-                    // direction: Axis.horizontal,
-                    runSpacing: 10,
-                    spacing: 14,
-                    children: [
-                      carFeatureBullet(text: '5 Seats'),
-                      carFeatureBullet(text: '4 Doors'),
-                      carFeatureBullet(text: AppStrings.appleCarPlay),
-                      carFeatureBullet(text: AppStrings.auxInput),
-                      carFeatureBullet(text: AppStrings.usbInput),
-                      carFeatureBullet(text: AppStrings.androidAuto),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-
-            divider(color: borderColor),
-            transmission(),
-            divider(color: borderColor),
-            aboutCar(),
-
-            textWidget(
-                text: controller.testString.value,
-                style: getMediumStyle(fontSize: 12.sp, color: grey2)
-                    .copyWith(fontWeight: FontWeight.w500)),
-            SizedBox(
-              height: size.height * 0.02,
-            ),
-            // continueButton(),
-          ],
-        ));
+  Widget carFetures({List<Widget> children = const <Widget>[]}) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 14.sp, horizontal: 0.sp),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              textWidget(
+                  text: AppStrings.carFeatureCaps,
+                  style: getMediumStyle(fontSize: 12.sp, color: grey2)
+                      .copyWith(fontWeight: FontWeight.w500)),
+            ],
+          ),
+          SizedBox(
+            height: 10.sp,
+          ),
+          Wrap(
+            crossAxisAlignment: WrapCrossAlignment.start,
+            alignment: WrapAlignment.spaceBetween,
+            direction: Axis.horizontal,
+            runSpacing: 10,
+            spacing: 0,
+            children: children,
+          ),
+        ],
+      ),
+    );
   }
 
-  Padding earningsAndAllTrips() {
+  Widget chipWidget({required String title}) {
+    return Chip(
+      labelPadding: EdgeInsets.all(4),
+      side: BorderSide.none,
+      color: const MaterialStatePropertyAll(backgroundColor),
+      backgroundColor: Colors.transparent,
+      surfaceTintColor: Colors.transparent,
+      label: textWidget(
+          text: title, style: getRegularStyle(fontSize: 10.sp, color: grey2)),
+      avatar: sqaureCheckBox(
+          padingWidth: 2.sp,
+          marginRight: 2.sp,
+          border: Border.all(color: primaryColor, width: 1.8),
+          color: primaryColor),
+    );
+  }
+
+  Widget earningsAndAllTrips({
+    required String totalEarnings
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
       child: Row(
@@ -118,6 +168,7 @@ class CarHistoryScreen extends GetView<CarHistoryController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               textWidget(
                   text: AppStrings.totalEarnings,
@@ -126,7 +177,7 @@ class CarHistoryScreen extends GetView<CarHistoryController> {
               SizedBox(
                 height: 5.sp,
               ),
-              Row(
+              Row(mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 5.0),
@@ -136,7 +187,7 @@ class CarHistoryScreen extends GetView<CarHistoryController> {
                     width: 2.sp,
                   ),
                   textWidget(
-                    text: '5,000,000',
+                    text: totalEarnings,
                     style: getMediumStyle().copyWith(
                       fontFamily: 'Neue',
                     ),
@@ -169,7 +220,9 @@ class CarHistoryScreen extends GetView<CarHistoryController> {
     );
   }
 
-  Widget seeAllFeedbacks() {
+  Widget seeAllFeedbacks({
+    required String feedbackCount,
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
       child: Row(
@@ -195,7 +248,7 @@ class CarHistoryScreen extends GetView<CarHistoryController> {
                     width: 5.sp,
                   ),
                   textWidget(
-                      text: '(66)',
+                      text: '($feedbackCount)',
                       style: getRegularStyle(fontSize: 12.sp, color: grey2)),
                 ],
               ),
@@ -225,7 +278,10 @@ class CarHistoryScreen extends GetView<CarHistoryController> {
     );
   }
 
-  Widget tripsAndRating() {
+  Widget tripsAndRating({
+    required String tripCount,
+    required String rating,
+  }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -233,7 +289,7 @@ class CarHistoryScreen extends GetView<CarHistoryController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             textWidget(
-                text: '66',
+                text: tripCount,
                 style: getRegularStyle(fontSize: 24.sp, color: primaryColor)),
             textWidget(
                 text: AppStrings.trips,
@@ -247,7 +303,7 @@ class CarHistoryScreen extends GetView<CarHistoryController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             textWidget(
-                text: '98.3%',
+                text: '$rating%',
                 style: getRegularStyle(fontSize: 24.sp, color: primaryColor)),
             textWidget(
                 text: AppStrings.carRating,
@@ -261,31 +317,34 @@ class CarHistoryScreen extends GetView<CarHistoryController> {
     );
   }
 
-  Widget aboutCar() {
+  Widget aboutCar({required String aboutCar}) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10.sp),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          textWidget(
-              text: AppStrings.aboutCarCaps,
-              style: getMediumStyle(fontSize: 12.sp, color: grey2)
-                  .copyWith(fontWeight: FontWeight.w500)),
-          SizedBox(
-            height: 10.sp,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              textWidget(
+                  text: AppStrings.aboutCarCaps,
+                  style: getMediumStyle(fontSize: 12.sp, color: grey2)
+                      .copyWith(fontWeight: FontWeight.w500)),
+              SizedBox(
+                height: 10.sp,
+              ),
+              textWidget(
+                  text: aboutCar,
+                  textOverflow: TextOverflow.visible,
+                  style: getMediumStyle(fontSize: 10.sp, color: grey2)
+                      .copyWith(fontWeight: FontWeight.w400)),
+            ],
           ),
-          textWidget(
-              text:
-                  "012 Kia Sportage are powered by a 2.4-liter inline-4-cylinder engine that produces 176 hp and 168 pound-feet of torque. A six-speed manual is the only transmission offered on base models, while all other versions come with a six-speed automatic with manual shift feature.",
-              textOverflow: TextOverflow.visible,
-              style: getMediumStyle(fontSize: 10.sp, color: grey2)
-                  .copyWith(fontWeight: FontWeight.w400)),
         ],
       ),
     );
   }
 
-  Widget transmission() {
+  Widget transmission({required String transmission}) {
     return Padding(
       padding: EdgeInsets.symmetric(
         vertical: 10.sp,
@@ -300,13 +359,16 @@ class CarHistoryScreen extends GetView<CarHistoryController> {
           SizedBox(
             height: 10.sp,
           ),
-          carFeatureBullet(text: AppStrings.automatic),
+          carFeatureBullet(text: transmission),
         ],
       ),
     );
   }
 
-  Widget carBasics() {
+  Widget carBasics({
+    required String carType,
+    required String carSeat,
+  }) {
     return Padding(
       padding: EdgeInsets.symmetric(
         vertical: 12.sp,
@@ -323,15 +385,15 @@ class CarHistoryScreen extends GetView<CarHistoryController> {
           ),
           Row(
             children: [
-              carFeatureBullet(text: '5 Seats'),
+              carFeatureBullet(text: carType),
+              // const SizedBox(
+              //   width: 10,
+              // ),
+              // carFeatureBullet(text: '4 Doors'),
               const SizedBox(
                 width: 10,
               ),
-              carFeatureBullet(text: '4 Doors'),
-              const SizedBox(
-                width: 10,
-              ),
-              carFeatureBullet(text: '31 MPG'),
+              carFeatureBullet(text: carSeat),
             ],
           ),
         ],
@@ -354,7 +416,10 @@ class CarHistoryScreen extends GetView<CarHistoryController> {
     );
   }
 
-  Widget tripDate() {
+  Widget tripDate({
+    required String startDate,
+    required String endDate,
+  }) {
     return Padding(
       padding: EdgeInsets.symmetric(
         vertical: 12.sp,
@@ -379,13 +444,13 @@ class CarHistoryScreen extends GetView<CarHistoryController> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   textWidget(
-                      text: 'Wed 1 Nov, 9:00am',
+                      text: startDate,
                       style: getMediumStyle(fontSize: 12.sp, color: grey3)),
                   SizedBox(
                     height: 5.sp,
                   ),
                   textWidget(
-                      text: 'Wed 1 Nov, 9:00am',
+                      text: endDate,
                       style: getMediumStyle(fontSize: 12.sp, color: grey3)),
                 ],
               ),
@@ -425,7 +490,7 @@ class CarHistoryScreen extends GetView<CarHistoryController> {
           );
   }
 
-  AppBar appBar(CarHistoryController controller ) {
+  AppBar appBar(CarHistoryController controller) {
     return gtiAppBar(
       onTap: () => controller.goBack(),
       leading: Transform.scale(
@@ -436,7 +501,7 @@ class CarHistoryScreen extends GetView<CarHistoryController> {
           )),
       centerTitle: true,
       title: textWidget(
-          text: 'Tesla Model Y',
+          text: controller.brandModelName.value,
           style: getMediumStyle().copyWith(fontWeight: FontWeight.w500)),
     );
   }

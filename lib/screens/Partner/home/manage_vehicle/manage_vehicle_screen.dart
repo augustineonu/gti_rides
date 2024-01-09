@@ -21,12 +21,15 @@ class ManageVehicleBinding extends Bindings {
   }
 }
 
-class ManageVehicleScreen extends GetView<ManageVehicleController> {
-  const ManageVehicleScreen([Key? key]) : super(key: key);
+class ManageVehicleScreen extends StatelessWidget {
+   ManageVehicleScreen([Key? key]) : super(key: key);
+      
+        final controller = Get.put(ManageVehicleController());
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    final controller = Get.find<ManageVehicleController>();
+    // final controller = Get.find<ManageVehicleController>();
     return Obx(() => Scaffold(
           // appBar: appBar(controller),
         appBar: gtiAppBar(
@@ -97,7 +100,7 @@ class ManageVehicleScreen extends GetView<ManageVehicleController> {
     }
   }
 
-  Widget allCars(context, Size size, controller) {
+  Widget allCars(context, Size size,ManageVehicleController controller) {
     return controller.cars!.isEmpty
         ? Padding(
             padding: const EdgeInsets.all(8.0),
@@ -137,7 +140,13 @@ class ManageVehicleScreen extends GetView<ManageVehicleController> {
                                       });
                                     case 2:
                                     case 3:
-                                      controller.routeToCarHistory();
+                                      controller.routeToCarHistory(
+                                        arguments: {
+                                        "brandModelName": car["brandModelName"],
+                                        "photoUrl": car["photoUrl"],
+                                        "carID": car["carID"]
+                                      }
+                                      );
                                       break;
                                     default:
                                   }

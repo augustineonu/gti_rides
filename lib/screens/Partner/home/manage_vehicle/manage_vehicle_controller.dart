@@ -17,6 +17,7 @@ class ManageVehicleController extends GetxController {
   void init() async {
     logger.log("ManageVehicleController Initialized");
     await getAllCars();
+    await getBookedCars();
   }
 
   @override
@@ -35,6 +36,7 @@ class ManageVehicleController extends GetxController {
   RxInt selectedIndex = 0.obs;
   RxString testString = "".obs;
   RxList<dynamic>? cars = <dynamic>[].obs;
+  RxList<dynamic>? bookedCars = <dynamic>[].obs;
 
   TextEditingController senderNameController = TextEditingController();
 
@@ -61,7 +63,8 @@ class ManageVehicleController extends GetxController {
   void goBack() => routeService.goBack();
   void routeToQuickEdit({Object? arguments}) => routeService.gotoRoute(AppLinks.quickEdit,
   arguments: arguments);
-  void routeToCarHistory() => routeService.gotoRoute(AppLinks.carHistory);
+  void routeToCarHistory({Object? arguments}) => routeService.gotoRoute(AppLinks.carHistory,
+  arguments: arguments);
 
     void onToggleCarAvailability(bool value) => isAvailable.value = value;
 
@@ -81,6 +84,26 @@ class ManageVehicleController extends GetxController {
          isFetchingCars.value = false;
       } else {
         logger.log("unable to get cars ${response.data}");
+      }
+    } catch (exception) {
+      logger.log("error  $exception");
+    }
+  }
+  Future<void> getBookedCars() async {
+    isFetchingCars.value = true;
+    try {
+      final response = await partnerService.getCars(
+        queryType: 'booked'
+      );
+      if (response.status == 'success' || response.status_code == 200) {
+        logger.log("gotten booked cars ${response.data}");
+        if (response.data != null) {
+          bookedCars?.value = response.data!;
+          logger.log("booked cars $bookedCars");
+        }
+         isFetchingCars.value = false;
+      } else {
+        logger.log("unable to get booked cars ${response.data}");
       }
     } catch (exception) {
       logger.log("error  $exception");
