@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:gti_rides/screens/Partner/home/partner_home_controller.dart';
 import 'package:gti_rides/screens/Partner/payment/payment_controller.dart';
 import 'package:gti_rides/screens/shared_screens/more/more_controller.dart';
 import 'package:gti_rides/services/logger.dart';
@@ -21,8 +22,10 @@ class PartnerLandingController extends GetxController {
   void onInit() {
     Get.delete<MoreController>();
     Get.delete<PaymentController>();
+    Get.delete<PartnerHomeController>();
     Get.put<MoreController>(MoreController());
     Get.put<PaymentController>(PaymentController());
+    Get.put<PartnerHomeController>(PartnerHomeController());
     super.onInit();
   }
 }

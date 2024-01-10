@@ -488,4 +488,5 @@ class AppStrings {
   static String uploadDriversLicenseHint = "Upload License";
   static String kindlyLoginWithCredToSetBiometrics = "Kindly login with credentials to setup Biometrics";
   static String selectAvailabilityDate = "Select availability date";
+  static String noListedCarsYet = "You have not Listed any cars yet";
 }

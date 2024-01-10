@@ -247,7 +247,7 @@ Widget carImage(
     double imageSizeHeight = 34.0,
     BoxFit fit = BoxFit.cover,
     BorderRadiusGeometry? borderRadius}) {
-  if (imgUrl != null || imgUrl.isNotEmpty) {
+  // if (imgUrl != null || imgUrl.isNotEmpty) {
     // if (localImagePath != null && localImagePath.isNotEmpty) {
     //   print("Image widget: is running in background");
     //   return Builder(builder: (context) {
@@ -265,6 +265,7 @@ Widget carImage(
     return CachedNetworkImage(
       alignment: Alignment.center,
       imageUrl: imgUrl,
+      fit: BoxFit.contain,
       imageBuilder: (context, imageProvider) => Container(
         width: width,
         height: height,
@@ -296,9 +297,9 @@ Widget carImage(
         width: imageSizeWidth,
       ),
     );
-  } else {
-    return SizedBox();
-  }
+  // } else {
+  //   return SizedBox();
+  // }
 }
 // }
 

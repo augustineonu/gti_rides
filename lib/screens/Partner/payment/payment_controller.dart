@@ -23,8 +23,10 @@ class PaymentController extends GetxController
     init();
   }
 
-  void init() {
+  void init() async{
     logger.log("PaymentController Initialized");
+    addedPaymentMethod.value == true;
+     await getBankAccount();
   }
 
   @override
@@ -34,7 +36,7 @@ class PaymentController extends GetxController
     });
     super.onInit();
     await getBanks();
-    await getBankAccount();
+   
     // addedPaymentMethod.value = true;
   }
 
@@ -94,6 +96,7 @@ class PaymentController extends GetxController
   }
 
   void goBack() => routeService.goBack();
+  void goBack1() => routeService.goBack(closeOverlays: true);
   void routeToQuickEdit() => routeService.gotoRoute(AppLinks.quickEdit);
   void routeToCarHistory() => routeService.gotoRoute(AppLinks.carHistory);
   void routeToCompletedTrip() => routeService.gotoRoute(AppLinks.completedTrip);
@@ -186,12 +189,14 @@ class PaymentController extends GetxController
       final response = await paymentService.getBankAccount();
 
       if (response.status == 'success' || response.status_code == 200) {
-        logger.log("gotten banks ${response.data}");
+        logger.log("gotten bank account ${response.data}");
         if (response.data != null && response.data!.isNotEmpty) {
           // listOfBanksAsMap = response.data!.cast<Map<String, dynamic>>();
+          addedPaymentMethod.value == true;
           change(response.data!, status: RxStatus.success());
           // logger.log("car history $carHistory");
         } else {
+          
           change(<dynamic>[].obs, status: RxStatus.empty());
         }
       } else {

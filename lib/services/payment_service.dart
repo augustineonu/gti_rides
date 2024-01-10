@@ -55,7 +55,7 @@ class PaymentService extends GetxController {
   Future<ListResponseModel> getBankAccount() async {
     try {
       final result = await apiService.getRequest(
-        'user/partner/payment/getBankAccount',
+        '/user/partner/payment/getBankAccount',
       );
       logger.log("bank account $result");
 

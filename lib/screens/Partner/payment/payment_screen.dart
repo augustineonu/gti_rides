@@ -82,7 +82,10 @@ class PaymentScreen extends GetView<PaymentController> {
         ));
   }
 
-  Widget buildBody(context, Size size) {
+  Widget buildBody(
+    BuildContext context,
+    Size size,
+  ) {
     switch (controller.selectedIndex.value) {
       case 0:
         // All payment
@@ -90,129 +93,150 @@ class PaymentScreen extends GetView<PaymentController> {
 
       case 1:
         // Completed trips
-        if (controller.addedPaymentMethod.value == true) {
-          return paymentMethod(size, context);
-        }
-        // return Container(
-        //   child: Text("loading"),
-        // );
+        // if (controller.addedPaymentMethod.value == true) {
+        //   return paymentMethod(size, context);
+        // }
+        // here i am checking for the current payment method, if the user wants to edit
+        // i show them the UI.
+        // i am also checking if the get bank account returns empty, that means the user
+        // haven't added  payment method, then i show then the empty payment method card
+        return controller.paymentMethodView.value == 1
+            ? addAccountForm(context, size)
+            : controller.obx(
+                (state) {
+                  return paymentMethod(size, context, state,
+                      onTapEditPaymentMethod: () async {
+                    controller.paymentMethodView.value = 1;
+                    controller.goBack();
+                  });
+                },
+                onEmpty: controller.paymentMethodView.value == 0
+                    ? noBankAddedCard(size)
+                    : addAccountForm(context, size),
+                onError: (e) => Padding(
+                  padding: EdgeInsets.symmetric(
+                      vertical: context.height * 0.1, horizontal: 20),
+                  child: Center(
+                    child: Text(
+                      "$e",
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+                onLoading: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 50),
+                  child: Center(child: centerLoadingIcon()),
+                ),
+              );
 
-        if (controller.paymentMethodView.value == 0) {
-          return noBankAddedCard(size);
-        } else {
-          return addAccounttForm(context, size);
-        }
+      // if (controller.paymentMethodView.value == 0) {
+      //   return noBankAddedCard(size);
+      // } else {
+      //   return addAccountForm(context, size);
+      // }
 
       default:
         return const SizedBox();
     }
   }
 
-  Widget paymentMethod(Size size,BuildContext context) {
-    return controller.obx(
-      (state) => ListView.builder(itemBuilder: (context, index) {
-        return Padding(
-          padding: EdgeInsets.symmetric(vertical: 5.0.sp, horizontal: 5),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget paymentMethod(Size size, BuildContext context, List<dynamic>? state,
+      {void Function()? onTapEditPaymentMethod}) {
+    return SizedBox(
+      height: 150,
+      child: ListView.builder(
+          itemCount: state!.length,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: EdgeInsets.symmetric(vertical: 5.0.sp, horizontal: 5),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SizedBox(
-                        width: 2.sp,
-                        height: 16.sp,
-                        child: const ColoredBox(
-                          color: primaryColor,
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 2.sp,
+                            height: 16.sp,
+                            child: const ColoredBox(
+                              color: primaryColor,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 7.sp,
+                          ),
+                          textWidget(
+                            text: state![0]['bankName'],
+                            style: getRegularStyle(fontSize: 10.sp),
+                          ),
+                        ],
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Get.bottomSheet(
+                            SizedBox(
+                              height: size.height * 0.1.sp,
+                              width: size.width.sp,
+                              child: InkWell(
+                                onTap: onTapEditPaymentMethod,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 18),
+                                  child: Row(
+                                    children: [
+                                      SvgPicture.asset(ImageAssets.pencilEdit),
+                                      const SizedBox(
+                                        width: 6,
+                                      ),
+                                      textWidget(
+                                          text: 'Edit',
+                                          style: getRegularStyle(
+                                              color: primaryColor)),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            backgroundColor: backgroundColor,
+                            isScrollControlled: true,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(4.r),
+                                  topRight: Radius.circular(4.r)),
+                            ),
+                          );
+                        },
+                        child: SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: SvgPicture.asset(ImageAssets.popUpMenu),
                         ),
-                      ),
-                      SizedBox(
-                        width: 7.sp,
-                      ),
-                      textWidget(
-                        text: state![0]['bankName'],
-                        style: getRegularStyle(fontSize: 10.sp),
                       ),
                     ],
                   ),
-                  InkWell(
-                    onTap: () {
-                      Get.bottomSheet(
-                        SizedBox(
-                          height: size.height * 0.1.sp,
-                          width: size.width.sp,
-                          child: InkWell(
-                            onTap: () {},
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 18),
-                              child: Row(
-                                children: [
-                                  SvgPicture.asset(ImageAssets.pencilEdit),
-                                  const SizedBox(
-                                    width: 6,
-                                  ),
-                                  textWidget(
-                                      text: 'Edit',
-                                      style:
-                                          getRegularStyle(color: primaryColor)),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        backgroundColor: backgroundColor,
-                        isScrollControlled: true,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(4.r),
-                              topRight: Radius.circular(4.r)),
-                        ),
-                      );
-                    },
-                    child: SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: SvgPicture.asset(ImageAssets.popUpMenu),
-                    ),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  textWidget(
+                    text: state[0]['fullName'] ?? '',
+                    style: getRegularStyle(fontSize: 12.sp, color: grey3),
+                  ),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  textWidget(
+                    text: state[0]['accountNumber'],
+                    style: getRegularStyle(fontSize: 16.sp),
                   ),
                 ],
               ),
-              textWidget(
-                text: state[0]['fullName'] ?? '',
-                style: getRegularStyle(fontSize: 12.sp),
-              ),
-              textWidget(
-                text: state[0]['accountNumber'],
-                style: getRegularStyle(fontSize: 16.sp),
-              ),
-            ],
-          ),
-        );
-      }),
-      onEmpty: Padding(
-        padding: EdgeInsets.symmetric(vertical: context.height * 0.3),
-        child: const Center(child: Text("Data is Empty")),
-      ),
-      onError: (e) => Padding(
-        padding: EdgeInsets.symmetric(
-            vertical: context.height * 0.3, horizontal: 20),
-        child: Center(
-          child: Text(
-            "$e",
-            textAlign: TextAlign.center,
-          ),
-        ),
-      ),
-      onLoading: Padding(
-        padding: EdgeInsets.symmetric(vertical: context.height * 0.3),
-        child: centerLoadingIcon(),
-      ),
+            );
+          }),
     );
   }
 
-  Column paymentsCard() {
+  Widget paymentsCard() {
     return Column(
       children: [
         Container(
@@ -359,7 +383,7 @@ class PaymentScreen extends GetView<PaymentController> {
     );
   }
 
-  Form addAccounttForm(context, Size size) {
+  Form addAccountForm(context, Size size) {
     return Form(
       autovalidateMode: AutovalidateMode.onUserInteraction,
       key: controller.paymentFormKey,

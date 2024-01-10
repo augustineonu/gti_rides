@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/Partner/home/partner_home_controller.dart';
 import 'package:gti_rides/screens/renter/widgets/build_carousel_dot.dart';
+import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/shared_widgets/car_availability_tag.dart';
 import 'package:gti_rides/shared_widgets/date_time_col_widget.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
@@ -16,6 +17,7 @@ import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
+import 'package:gti_rides/utils/utils.dart';
 import 'package:iconsax/iconsax.dart';
 
 class PartnerBinding extends Bindings {
@@ -43,6 +45,7 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
   RxBool showPassword = false.obs;
   late PageController cardPageController;
   ScrollController scrollController = ScrollController();
+  final GlobalKey pageViewKey = GlobalKey();
 
   @override
   void initState() {
@@ -59,7 +62,7 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
         currentIndex.value = 0;
       }
 
-      if (scrollController.hasClients) {
+      if (pageViewKey.currentState != null && scrollController.hasClients) {
         cardPageController.animateToPage(
           currentIndex.value,
           duration: const Duration(milliseconds: 1000),
@@ -81,35 +84,37 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final height = MediaQuery.of(context).size.height;
-    final controller =
-        Get.put<PartnerHomeController>(PartnerHomeController());
+    final controller = Get.put<PartnerHomeController>(PartnerHomeController());
     return Obx(
       () => Scaffold(
-        body: Stack(
-          children: [
-            SafeArea(
-              child: Column(
-                children: [
-                  appBar(size, controller),
-                  body(controller, size),
-                ],
+        body: RefreshIndicator(
+          onRefresh: controller.getAllCars,
+          child: Stack(
+            children: [
+              SafeArea(
+                child: Column(
+                  children: [
+                    appBar(size, controller),
+                    body(controller, size),
+                  ],
+                ),
               ),
-            ),
-            controller.isLoading.isTrue
-                ? Stack(
-                    children: [
-                      const Opacity(
-                        opacity: 0.5,
-                        child: ModalBarrier(
-                            dismissible: false, color: Colors.black),
-                      ),
-                      Center(
-                        child: Center(child: centerLoadingIcon()),
-                      ),
-                    ],
-                  )
-                : const SizedBox()
-          ],
+              controller.isLoading.isTrue
+                  ? Stack(
+                      children: [
+                        const Opacity(
+                          opacity: 0.5,
+                          child: ModalBarrier(
+                              dismissible: false, color: Colors.black),
+                        ),
+                        Center(
+                          child: Center(child: centerLoadingIcon()),
+                        ),
+                      ],
+                    )
+                  : const SizedBox()
+            ],
+          ),
         ),
       ),
     );
@@ -125,54 +130,78 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
           children: <Widget>[
             getCarListedCard(onTap: controller.routeTolistVehicle),
             manageListedVehicles(onTap: controller.routeToManageVehicle),
-            howGtiWorksCard(onTap: () {
-              controller.launchWebsite();
-            }, imageUrl: ImageAssets.guyWorks),
+            howGtiWorksCard(
+                onTap: () {
+                  controller.launchWebsite();
+                },
+                imageUrl: ImageAssets.guyWorks),
             // textWidget(
             //   text: AppStrings.recentViewCar,
             //   style: getRegularStyle(),
             // ),
-
-            SizedBox(
-              height: 235.sp,
-              width: size.width,
-              child: Stack(
-                children: [
-                  PageView(
-                    physics: const ScrollPhysics(),
-                    controller: cardPageController,
-                    onPageChanged: (int index) {
-                      currentIndex.value = index;
-                    },
-                    scrollDirection: Axis.horizontal,
+      
+            controller.obx(
+              (state) {
+                return SizedBox(
+                  height: 235.sp,
+                  width: size.width,
+                  child: Stack(
                     children: [
-                      carCardWidget(size),
-                      carCardWidget(size),
-                      carCardWidget(size),
-                    ],
-                  ),
-                  Positioned(
-                    bottom: 95.sp,
-                    right: 0,
-                    left: 0,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: List.generate(
-                        3,
-                        (index) => BuildCarouselDot(
-                          currentIndex: currentIndex.value,
-                          index: index,
+                      PageView(
+                        key: pageViewKey,
+                        physics: const ScrollPhysics(),
+                        controller: cardPageController,
+                        onPageChanged: (int index) {
+                          currentIndex.value = index;
+                        },
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          for(var car in state ?? [])
+                          carCardWidget(size,car ),
+                          // carCardWidget(size),
+                          // carCardWidget(size),
+                        ],
+                      ),
+                      Positioned(
+                        bottom: 95.sp,
+                        right: 0,
+                        left: 0,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: List.generate(
+                            3,
+                            (index) => BuildCarouselDot(
+                              currentIndex: currentIndex.value,
+                              index: index,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
+                );
+              },
+              onEmpty: Padding(
+                padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
+                child: Center(
+                    child: textWidget(
+                        text: AppStrings.noListedCarsYet, style: getMediumStyle())),
               ),
-            ),
-
-            Text(
-              controller.exampleText.value,
+              onError: (e) => Padding(
+                padding: EdgeInsets.symmetric(
+                    vertical: context.height * 0.1, horizontal: 20),
+                child: Center(
+                  child: Text(
+                    "$e",
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              onLoading: Padding(
+                padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
+                child: Center(child: centerLoadingIcon()),
+              ),
             ),
           ],
         ),
@@ -180,7 +209,7 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
     );
   }
 
-  Widget carCardWidget(Size size) {
+  Widget carCardWidget(Size size, dynamic car) {
     return SizedBox(
       width: size.width,
       child: Stack(
@@ -195,16 +224,22 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
             ),
             child: Column(
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(4.r),
-                    topLeft: Radius.circular(4.r),
-                  ),
-                  child: Image.asset(
-                    "assets/images/car.png",
-                    fit: BoxFit.contain,
-                  ),
-                ),
+                // ClipRRect(
+                //   borderRadius: BorderRadius.only(
+                //     topRight: Radius.circular(4.r),
+                //     topLeft: Radius.circular(4.r),
+                //   ),
+                //   child: Image.asset(
+                //     "assets/images/car.png",
+                //     fit: BoxFit.contain,
+                //   ),
+                // ),
+                carImage(
+                  height: 140,
+                  width: 400,
+                  imgUrl:  car['photoUrl'] != ''
+                          ? car['photoUrl']
+                          : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnKpMPFWYvaoInINJ44Qh4weo_z8nDwDUf8Q&usqp=CAU',),
                 Padding(
                   padding: const EdgeInsets.all(11.0),
                   child: Column(
@@ -213,21 +248,22 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           textWidget(
-                              text: '2019 KIA SPORTAGE',
+                              text: car['brandModelName'],
                               textOverflow: TextOverflow.visible,
                               style: getSemiBoldStyle(fontSize: 14.sp).copyWith(
                                 height: 1.2.sp,
                                 fontWeight: FontWeight.w600,
                                 // fontFamily: 'neue'
                               )),
-                          Row(
+                     car['status'] == 'booked'
+                              ?     Row(
                             children: [
                               SvgPicture.asset(ImageAssets.naira),
                               SizedBox(
                                 width: 2.sp,
                               ),
                               textWidget(
-                                text: '100,000 ',
+                                text: car['pricePerDay'] ?? '',
                                 style: getMediumStyle(fontSize: 12.sp).copyWith(
                                   fontFamily: 'Neue',
                                 ),
@@ -238,13 +274,13 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
                                 color: secondaryColor,
                               ),
                               textWidget(
-                                text: ' 5days',
+                                text: ' days',
                                 style: getMediumStyle(fontSize: 12.sp).copyWith(
                                   fontFamily: 'Neue',
                                 ),
                               ),
                             ],
-                          ),
+                          ) : const SizedBox(),
                         ],
                       ),
                       Row(
@@ -266,6 +302,7 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
                                         text: AppStrings.startDate,
                                         style: getLightStyle(
                                             fontSize: 7.sp, color: black)),
+                                            SizedBox(width: 5.sp,),
                                     textWidget(
                                         text: AppStrings.endDate,
                                         style: getLightStyle(
@@ -281,7 +318,9 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
                                   children: [
                                     dateTimeColWIdget(
                                       alignment: CrossAxisAlignment.start,
-                                      title: 'Wed, 1 Nov,',
+                                      title: formatMonthDay(car['startDate'] != null
+                                      ? (car['startDate'])
+                                      : ''),
                                       titleFontSize: 10.sp,
                                       subTitleFontSize: 10.sp,
                                       subTitleFontWeight: FontWeight.w500,
@@ -500,8 +539,8 @@ Widget appBar(Size size, PartnerHomeController controller) {
         profileAvatar(
           height: 40,
           width: 40,
-          imgUrl:
-              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ88joJfjwoaz_jWaMQhbZn2X11VHGBzWKiQg&usqp=CAU',
+          imgUrl: userService.user.value.profilePic!,
+          // 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ88joJfjwoaz_jWaMQhbZn2X11VHGBzWKiQg&usqp=CAU',
         ),
         switchProfileWidget(
             size: size,

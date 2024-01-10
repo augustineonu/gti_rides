@@ -77,12 +77,7 @@ Widget dropdownWidget(
                   return DropdownMenuItem(
                     value: item,
                     child: GestureDetector(
-                      // onTap: () {
-                      //   onChange(item);
-
-                      //   selectedValue = item;
-                      //   print("updated state ${selectedValue.toString()}");
-                      // },
+                  
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

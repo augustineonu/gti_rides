@@ -71,6 +71,7 @@ class ManageVehicleController extends GetxController {
   void onToggleCarAvailability(bool value) => isAvailable.value = value;
   void routeToListVehicle({Object? arguments})=> routeService.gotoRoute(AppLinks.listVehicle,
   arguments: arguments);
+  
   Future<void> getAllCars() async {
     isFetchingCars.value = true;
     try {

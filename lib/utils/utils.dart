@@ -59,6 +59,18 @@ String getTimeIn12HourFormat(DateTime dateTime) {
 
 
 // "dd, MMM h:mma"
+String formatMonthDay(String dateString) {
+  try {
+    DateTime dateTime = DateFormat('E, d MMM h:mma').parse(dateString);
+    String formattedDate = DateFormat('E, d MMM').format(dateTime);
+    return formattedDate;
+  } catch (e) {
+    // Handle the exception or simply return an empty string
+    return '';
+  }
+}
+
+
 
 String formatDateTime(String datetime) {
   var formatter = DateFormat('dd, MMMM h:mma');
@@ -77,6 +89,7 @@ String formatDateTime1(String datetime) {
   String formattedDate = DateFormat('dd, MMM h:mma').format(parsedDate);
   return formattedDate;
 }
+
 String formatDateTime2(String datetime) {
   // Split the input string by spaces
   List<String> parts = datetime.split(' ');

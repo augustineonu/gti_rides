@@ -51,7 +51,7 @@ class OtpVerificationController extends GetxController {
 
     if (arguments != null && arguments.containsKey('emailOrPhone')) {
       emailOrPhone = arguments['emailOrPhone'];
-      isResetPassword.value = arguments['isResetPassword'];
+      isResetPassword.value = arguments['isResetPassword'] ?? false;
 
       // Now you have access to the passed data (emailOrPhone)
       logger.log('Received email or phone: $emailOrPhone');

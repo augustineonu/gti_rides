@@ -47,42 +47,45 @@ class ManageVehicleScreen extends StatelessWidget {
             titleColor: iconColor(),
           ),
           // body: body(size, context)),
-          body: Padding(
-            padding: EdgeInsets.only(left: 20.0.sp, right: 20.sp, top: 8.sp),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  padding: EdgeInsets.all(6.sp),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: primaryColor),
-                      borderRadius: BorderRadius.all(Radius.circular(4.r))),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      tabIndicator(
-                          width: 150.sp,
-                          title: AppStrings.allCarsSm,
-                          selected: controller.selectedIndex.value == 0,
-                          onTap: () => controller.selectedIndex.value = 0),
-                      tabIndicator(
-                          width: 150.sp,
-                          title: AppStrings.booked,
-                          selected: controller.selectedIndex.value == 1,
-                          onTap: () => controller.selectedIndex.value = 1),
-                    ],
+          body: RefreshIndicator(
+            onRefresh: controller.getAllCars,
+            child: Padding(
+              padding: EdgeInsets.only(left: 20.0.sp, right: 20.sp, top: 8.sp),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    padding: EdgeInsets.all(6.sp),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: primaryColor),
+                        borderRadius: BorderRadius.all(Radius.circular(4.r))),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        tabIndicator(
+                            width: 150.sp,
+                            title: AppStrings.allCarsSm,
+                            selected: controller.selectedIndex.value == 0,
+                            onTap: () => controller.selectedIndex.value = 0),
+                        tabIndicator(
+                            width: 150.sp,
+                            title: AppStrings.booked,
+                            selected: controller.selectedIndex.value == 1,
+                            onTap: () => controller.selectedIndex.value = 1),
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: 24.sp,
-                ),
-
-                Expanded(child: buildBody(context, size)),
-                // textWidget(
-                //     text: controller.testString.value,
-                //     style: getRegularStyle()),
-              ],
+                  SizedBox(
+                    height: 24.sp,
+                  ),
+            
+                  Expanded(child: buildBody(context, size)),
+                  // textWidget(
+                  //     text: controller.testString.value,
+                  //     style: getRegularStyle()),
+                ],
+              ),
             ),
           ),
           // }
