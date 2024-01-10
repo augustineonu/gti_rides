@@ -147,7 +147,7 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                         height: size.height / 0.80.sp,
                         child: PageView(
                           // itemCount: controller.pages.length,
-                          // physics: NeverScrollableScrollPhysics(),
+                          physics: NeverScrollableScrollPhysics(),
                           controller: controller.pageController,
                           onPageChanged: (value) {
                             controller.currentIndex.value = value;
@@ -226,7 +226,7 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                 child: dateContainer(
                   size,
                   
-                  title: AppStrings.from,
+                  title: AppStrings.to,
                   text: controller.endDateTime.value.isEmpty
                       ? AppStrings.dateTimeHintText
                       : controller.endDateTime.value,

@@ -116,8 +116,10 @@ class ManageVehicleScreen extends StatelessWidget {
               var car = controller.cars?[index];
               return car['status'] == 'pending' || car['status'] == "booked"
                   ? bookedOrPendingCars(context, size, car,
-                      imgUrl: car['photoUrl'] != '' ? car['photoUrl'] : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnKpMPFWYvaoInINJ44Qh4weo_z8nDwDUf8Q&usqp=CAU', 
-                       onTapQuickOptions: () {
+                      imgUrl: car['photoUrl'] != ''
+                          ? car['photoUrl']
+                          : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnKpMPFWYvaoInINJ44Qh4weo_z8nDwDUf8Q&usqp=CAU',
+                      onTapQuickOptions: () {
                       Get.bottomSheet(
                         SizedBox(
                           height: size.height * 0.2.sp,
@@ -144,12 +146,10 @@ class ManageVehicleScreen extends StatelessWidget {
                                         "carID": car["carID"]
                                       });
                                     case 2:
-                                    controller.routeToListVehicle(
-                                      arguments: {
+                                      controller.routeToListVehicle(arguments: {
                                         "carID": car["carID"],
                                         "isFromManageCars": true,
-                                      }
-                                    );
+                                      });
                                     case 3:
                                       controller.routeToCarHistory(arguments: {
                                         "brandModelName": car["brandModelName"],
@@ -189,190 +189,175 @@ class ManageVehicleScreen extends StatelessWidget {
                         ),
                       );
                     })
-                  // 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnKpMPFWYvaoInINJ44Qh4weo_z8nDwDUf8Q&usqp=CAU')
+                  : allCarsWidget(context, size, controller, car);
+            });
+  }
 
-                  : Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Stack(
+  Widget allCarsWidget(BuildContext context, Size size,
+      ManageVehicleController controller, car) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Stack(
+        children: [
+          Container(
+            height: 140.sp,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+                border: Border.all(color: greyLight),
+                borderRadius: BorderRadius.all(Radius.circular(4.r))),
+            child: Row(
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  // color: red,
+                  height: size.height,
+                  width: 110,
+                  child: carImage(
+                      imgUrl:
+                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnKpMPFWYvaoInINJ44Qh4weo_z8nDwDUf8Q&usqp=CAU'),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      textWidget(text: 'Tesla Model Y', style: getBoldStyle()),
+                      const SizedBox(
+                        height: 3,
+                      ),
+                      Row(
                         children: [
-                          Container(
-                            height: 140.sp,
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
-                                border: Border.all(color: greyLight),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(4.r))),
-                            child: Row(
-                              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                SizedBox(
-                                  // color: red,
-                                  height: size.height,
-                                  width: 110,
-                                  child: carImage(
-                                      imgUrl:
-                                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnKpMPFWYvaoInINJ44Qh4weo_z8nDwDUf8Q&usqp=CAU'),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      textWidget(
-                                          text: 'Tesla Model Y',
-                                          style: getBoldStyle()),
-                                      const SizedBox(
-                                        height: 3,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              SvgPicture.asset(ImageAssets
-                                                  .thumbsUpPrimaryColor),
-                                              SizedBox(
-                                                width: 5.sp,
-                                              ),
-                                              RichText(
-                                                text: TextSpan(
-                                                    text: '20%',
-                                                    style: getMediumStyle(
-                                                      fontSize: 12.sp,
-                                                    ),
-                                                    children: <TextSpan>[
-                                                      TextSpan(
-                                                        text: ' (15 trips)',
-                                                        style: getLightStyle(
-                                                            fontSize: 12.sp,
-                                                            color: grey2),
-                                                      )
-                                                    ]),
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            // crossAxisAlignment: alignment,
-                                            children: [
-                                              SvgPicture.asset(
-                                                  ImageAssets.naira),
-                                              textWidget(
-                                                  // text: car['pricePerDay'] ?? '0',
-                                                  text: 'per day',
-                                                  style: getMediumStyle(
-                                                          fontSize: 10.sp)
-                                                      .copyWith(
-                                                          fontFamily: 'Neue')),
-                                              textWidget(
-                                                  text: '/day',
-                                                  style: getMediumStyle(
-                                                          fontSize: 10.sp)
-                                                      .copyWith(
-                                                          fontFamily: 'Neue')),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-
-                                      ////////
-                                      const SizedBox(
-                                        height: 6,
-                                      ),
-
-                                      textWidget(
-                                        text: AppStrings.availabilityDate,
-                                        // show AppStrings.aAvailabilityDate
-                                        style: getRegularStyle(
-                                          color: grey3,
-                                          fontSize: 10.sp,
-                                        ),
-                                      ),
-
-                                      const SizedBox(
-                                        height: 3,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          textWidget(
-                                              text: "wed, 1 Nov, 9:00am",
-                                              style:
-                                                  getMediumStyle(fontSize: 8.sp)
-                                                      .copyWith(
-                                                          fontFamily: 'Neue')),
-                                          SizedBox(
-                                            width: 3,
-                                          ),
-                                          SvgPicture.asset(
-                                            ImageAssets.arrowForwardRounded,
-                                            height: 8.sp,
-                                            width: 8.sp,
-                                          ),
-                                          SizedBox(
-                                            width: 3,
-                                          ),
-                                          textWidget(
-                                              text: "wed, 1 Nov, 9:00am",
-                                              style:
-                                                  getMediumStyle(fontSize: 8.sp)
-                                                      .copyWith(
-                                                          fontFamily: 'Neue')),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 6, horizontal: 4),
-                                            decoration: BoxDecoration(
-                                                color: primaryColorLight,
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(2.r))),
-                                            child: Center(
-                                              child: textWidget(
-                                                  text: AppStrings.available,
-                                                  style: getRegularStyle(
-                                                      fontSize: 10.sp)),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 8.sp,
-                                          ),
-                                          switchWidget(
-                                            context,
-                                            value: controller.isAvailable.value,
-                                            activeTrackColor: borderColor,
-                                            onChanged: (value) => controller
-                                                .onToggleCarAvailability(value),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
+                          Row(
+                            children: [
+                              SvgPicture.asset(
+                                  ImageAssets.thumbsUpPrimaryColor),
+                              SizedBox(
+                                width: 5.sp,
+                              ),
+                              RichText(
+                                text: TextSpan(
+                                    text: '20%',
+                                    style: getMediumStyle(
+                                      fontSize: 12.sp,
+                                    ),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: ' (15 trips)',
+                                        style: getLightStyle(
+                                            fontSize: 12.sp, color: grey2),
+                                      )
+                                    ]),
+                              ),
+                            ],
                           ),
-                          Positioned(
-                            right: 12.sp,
-                            top: 12.sp,
-                            child: InkWell(
-                                onTap: () {
-                                  quickOptionsSheet(size);
-                                },
-                                child: SizedBox(
-                                    height: 20,
-                                    width: 20,
-                                    child: SvgPicture.asset(
-                                        ImageAssets.popUpMenu))),
+                          Row(
+                            // crossAxisAlignment: alignment,
+                            children: [
+                              SvgPicture.asset(ImageAssets.naira),
+                              textWidget(
+                                  // text: car['pricePerDay'] ?? '0',
+                                  text: 'per day',
+                                  style: getMediumStyle(fontSize: 10.sp)
+                                      .copyWith(fontFamily: 'Neue')),
+                              textWidget(
+                                  text: '/day',
+                                  style: getMediumStyle(fontSize: 10.sp)
+                                      .copyWith(fontFamily: 'Neue')),
+                            ],
                           ),
                         ],
                       ),
-                    );
-            });
+
+                      ////////
+                      const SizedBox(
+                        height: 6,
+                      ),
+
+                      textWidget(
+                        text: AppStrings.availabilityDate,
+                        // show AppStrings.aAvailabilityDate
+                        style: getRegularStyle(
+                          color: grey3,
+                          fontSize: 10.sp,
+                        ),
+                      ),
+
+                      const SizedBox(
+                        height: 3,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          textWidget(
+                              text: "wed, 1 Nov, 9:00am",
+                              style: getMediumStyle(fontSize: 8.sp)
+                                  .copyWith(fontFamily: 'Neue')),
+                          SizedBox(
+                            width: 3,
+                          ),
+                          SvgPicture.asset(
+                            ImageAssets.arrowForwardRounded,
+                            height: 8.sp,
+                            width: 8.sp,
+                          ),
+                          SizedBox(
+                            width: 3,
+                          ),
+                          textWidget(
+                              text: "wed, 1 Nov, 9:00am",
+                              style: getMediumStyle(fontSize: 8.sp)
+                                  .copyWith(fontFamily: 'Neue')),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 6, horizontal: 4),
+                            decoration: BoxDecoration(
+                                color: primaryColorLight,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(2.r))),
+                            child: Center(
+                              child: textWidget(
+                                  text: AppStrings.available,
+                                  style: getRegularStyle(fontSize: 10.sp)),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 8.sp,
+                          ),
+                          switchWidget(
+                            context,
+                            value: controller.isAvailable.value,
+                            activeTrackColor: borderColor,
+                            onChanged: (value) =>
+                                controller.onToggleCarAvailability(value),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            right: 12.sp,
+            top: 12.sp,
+            child: InkWell(
+                onTap: () {
+                  quickOptionsSheet(size);
+                },
+                child: SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: SvgPicture.asset(ImageAssets.popUpMenu))),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget bookedOrPendingCars(BuildContext context, Size size, car,
@@ -609,11 +594,13 @@ class ManageVehicleScreen extends StatelessWidget {
             right: 12.sp,
             top: 12.sp,
             child: InkWell(
-                onTap: onTapQuickOptions,
-                child: SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: SvgPicture.asset(ImageAssets.popUpMenu))),
+              onTap: onTapQuickOptions,
+              child: SizedBox(
+                height: 20,
+                width: 20,
+                child: SvgPicture.asset(ImageAssets.popUpMenu),
+              ),
+            ),
           ),
         ],
       ),

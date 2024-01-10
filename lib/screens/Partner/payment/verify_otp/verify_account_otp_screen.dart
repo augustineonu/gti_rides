@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:gti_rides/screens/Partner/payment/payment_controller.dart';
+import 'package:gti_rides/screens/Partner/payment/verify_otp/verify_account_otp_controller.dart';
 import 'package:gti_rides/screens/shared_screens/more/account_details/account_verification/acount_verification_controller.dart';
 import 'package:gti_rides/screens/guest/otp_verification/otp_verification_controller.dart';
 import 'package:gti_rides/screens/guest/otp_verification/otp_widgets/otp_input.dart';
+import 'package:gti_rides/screens/shared_screens/more/account_details/account_verification/phone/phone_verification_controller.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
@@ -13,20 +14,21 @@ import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
 
-class VerifyOtpScreen extends GetView<PaymentController> {
+class VerifyOtpScreen extends GetView<VerifyAccountOtpController> {
   const VerifyOtpScreen([Key? key]) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
-    final controller = Get.put<PaymentController>(PaymentController());
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: backgroundColor,
-      appBar: appbar(),
-      body: body(context, size),
-    );
+    final controller =
+        Get.put<VerifyAccountOtpController>(VerifyAccountOtpController());
+    return Obx(() => Scaffold(
+          resizeToAvoidBottomInset: false,
+          backgroundColor: backgroundColor,
+          appBar: appbar(),
+          body: body(context, size),
+        ));
   }
 
   Widget body(BuildContext context, Size size) {
@@ -55,7 +57,7 @@ class VerifyOtpScreen extends GetView<PaymentController> {
                 ),
                 textWidget(
                   text:
-                      AppStrings.pleaseInputOtpEmail.trArgs(["Gti@gmail.com"]),
+                      AppStrings.pleaseInputOtpPhone.trArgs([controller.email]),
                   textOverflow: TextOverflow.visible,
                   style: getLightStyle(fontSize: 12.sp, color: grey2)
                       .copyWith(fontWeight: FontWeight.w300),
@@ -63,22 +65,25 @@ class VerifyOtpScreen extends GetView<PaymentController> {
                 SizedBox(
                   height: 40.sp,
                 ),
-
-                buildOTPPinPut(
+                Form(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  key: controller.otpFormKey,
+                  child: buildOTPPinPut(
                     controller: controller.pinController,
                     context: context,
-                     expectedVariable: 'otp',
+                    expectedVariable: 'otp',
                     focusNode: controller.focus,
-                    onCompleted: (pin) {}),
+                    onChanged: (pin) =>
+                        controller.isDoneIputtingPin.value = pin.length == 6,
+                    onCompleted: (pin) => pin.length == 6
+                        ? controller.isDoneIputtingPin.value = true
+                        : controller.isDoneIputtingPin.value = false,
+                  ),
+                ),
                 SizedBox(
                   height: 30.sp,
                 ),
                 clickToResendCode(),
-                SizedBox(
-                  height: 15.sp,
-                ),
-
-                // SizedBox(height: size.height * 0.02),
                 SizedBox(height: size.height * 0.04),
                 continueButton(),
               ],
@@ -91,7 +96,7 @@ class VerifyOtpScreen extends GetView<PaymentController> {
 
   AppBar appbar() {
     return gtiAppBar(
-      onTap: controller.goBack,
+      onTap: controller.goBack1,
       leading: Icon(
         Icons.arrow_back_rounded,
         color: black,
@@ -106,50 +111,23 @@ class VerifyOtpScreen extends GetView<PaymentController> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         TextButton(
-          onPressed: () {},
+          onPressed: () {
+            if (controller.isCountDownFinished.value) {
+              controller.resendOtp(emailOrPhone: controller.email);
+            } else {}
+          },
           child: RichText(
             text: TextSpan(children: <InlineSpan>[
               TextSpan(
                   text: AppStrings.resendOtp,
                   style: getRegularStyle(color: primaryColor)),
               TextSpan(
-                  text: "00:00",
+                  text: controller.countdownText.value,
                   style: getRegularStyle(color: greyShade1)
                       .copyWith(fontWeight: FontWeight.w500)),
             ]),
           ),
         ),
-      ],
-    );
-  }
-
-  Widget appLogo() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            textWidget(
-              text: "Welcome",
-              style: getBoldStyle(
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.w600,
-                  color: iconColor()),
-            ),
-            SizedBox(
-              height: 8.h,
-            ),
-            textWidget(
-              text: "Login to continue",
-              style: getBoldStyle(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w400,
-                  color: iconColor()),
-            ),
-          ],
-        ),
-        // SvgPicture.asset(ImageAssets.appLogo),
       ],
     );
   }
@@ -161,20 +139,17 @@ class VerifyOtpScreen extends GetView<PaymentController> {
             height: 45.sp,
             width: 300.sp,
             text: AppStrings.cont,
-            color: primaryColor,
-            onTap: () {
-              successDialog(
-                title: AppStrings.bankAccountAddedSuccess,
-                body: '',
-                buttonTitle: AppStrings.cont,
-                onTap: () {
-                  controller.addedPaymentMethod.value = true;
-                  // controller.goBack();
-                  Get.back(closeOverlays: true); // Pops back one route
-                  Get.back(closeOverlays: true); // Pops back another route
-                },
-              );
-            },
+            textColor: controller.isDoneIputtingPin.value
+                ? white
+                : black.withOpacity(0.3),
+            color: controller.isDoneIputtingPin.value
+                ? primaryColor
+                : primaryColorLight1,
+            onTap: !controller.isDoneIputtingPin.value
+                ? () {}
+                : () => controller.verifyOtp(
+                    // emailOrPhone: controller.email,
+                    otp: controller.pinController.text),
             isLoading: controller.isLoading.value,
           );
   }

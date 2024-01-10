@@ -24,7 +24,7 @@ class PartnerLandingPage extends StatelessWidget {
           Obx(() => bottomNavBar(context, controller)),
       body: Obx(() => IndexedStack(
             index: controller.tabIndex.value,
-            children: const [
+            children:  [
               PartnerHomeScreen(),
               RentHistoryScreen(),
               PaymentScreen(),

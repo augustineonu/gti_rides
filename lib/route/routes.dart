@@ -6,7 +6,7 @@ import 'package:gti_rides/screens/Partner/home/manage_vehicle/car_history/car_hi
 import 'package:gti_rides/screens/Partner/home/manage_vehicle/manage_vehicle_screen.dart';
 import 'package:gti_rides/screens/Partner/home/manage_vehicle/quick_edit/quick_edit_screen.dart';
 import 'package:gti_rides/screens/Partner/partner_landing_page.dart';
-import 'package:gti_rides/screens/Partner/payment/verify_otp_screen.dart';
+import 'package:gti_rides/screens/Partner/payment/verify_otp/verify_account_otp_screen.dart';
 import 'package:gti_rides/screens/Partner/rent_history/completed_trip/completed_trip_screen.dart';
 import 'package:gti_rides/screens/Partner/rent_history/feedbacks/feedbacks_screen.dart';
 import 'package:gti_rides/screens/Partner/rent_history/owner_trips/owner_trips_screen.dart';

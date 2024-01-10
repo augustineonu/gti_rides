@@ -7,14 +7,15 @@ import 'package:gti_rides/models/user_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/auth_service.dart';
 import 'package:gti_rides/services/logger.dart';
+import 'package:gti_rides/services/payment_service.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/services/token_service.dart';
 import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/utils/utils.dart';
 import 'package:dio/dio.dart' as dio;
 
-class PhoneVerificationController extends GetxController {
-  Logger logger = Logger('PhoneVerificationController');
+class VerifyAccountOtpController extends GetxController {
+  Logger logger = Logger('VerifyAccountOtpController');
   RxBool isLoading = false.obs;
   RxBool isDoneIputtingPin = false.obs;
   RxBool isCountDownFinished = false.obs;
@@ -27,13 +28,16 @@ class PhoneVerificationController extends GetxController {
   Rx<UserModel> user = UserModel().obs;
 
   String email = '';
-  String newPhoneNumber = '';
+  String fullName = '';
+  String bankName = '';
+  String bankCode = '';
+  String accountNumber = '';
   // RxBool isResetPassword = false.obs;
 
   late Timer timer;
   RxString countdownText = '2:00'.obs;
 
-  PhoneVerificationController() {
+  VerifyAccountOtpController() {
     init();
   }
 
@@ -56,13 +60,16 @@ class PhoneVerificationController extends GetxController {
     // Access the arguments using Get.arguments
     Map<String, dynamic>? arguments = Get.arguments;
 
-    if (arguments != null && arguments.containsKey('email')) {
+    if (arguments != null) {
       email = arguments['email'];
-      newPhoneNumber = arguments['newPhoneNumber'];
+      fullName = arguments['fullName'];
+      bankName = arguments['bankName'];
+      bankCode = arguments['bankCode'];
+      accountNumber = arguments['accountNumber'];
 
       // Now you have access to the passed data (emailOrPhone)
       logger.log('Received email: $email');
-      logger.log('Received newPhoneNumber: $newPhoneNumber');
+      logger.log('Received fullName: $fullName');
     }
   }
 
@@ -73,6 +80,7 @@ class PhoneVerificationController extends GetxController {
   }
 
   void goBack() => routeService.goBack();
+  void goBack1() => routeService.goBack(closeOverlays: true);
 
   void routeToforgotPassword() => routeService.gotoRoute(
         AppLinks.requestResetPassword,
@@ -95,37 +103,15 @@ class PhoneVerificationController extends GetxController {
       if (result.status == "success" || result.status_code == 200) {
         // backend needs to change result.message to "OTP Verified Success" to
         // match all OTP verifications
-        await showSuccessSnackbar(message: result.message!);
-        
-        // save new access token as backend sends new one when OTP is verified
+        // await showSuccessSnackbar(message: result.message!);
 
+        // save new access token as backend sends new one when OTP is verified
         await tokenService.setTokenModel(result.data);
         tokenService.setAccessToken(result.data["accessToken"]);
         logger.log("saved new token:: ${result.data["accessToken"]}");
         logger.log("access token:: ${tokenService.accessToken}");
-        var formData = dio.FormData.fromMap({
-          "phoneNumber": newPhoneNumber,
-        });
-        final response = await userService.updateProfile(payload: formData);
-        if (response.status == "success") {
-          pinController.clear();
-          // await userService.user.value.userId
 
-          // After OTP verification
-          if (user.value.userType == 'renter') {
-            // Navigate back to the renter landing page
-            routeService.offAllNamedUntill(AppLinks.carRenterLanding);
-          } else {
-            // Navigate back to the owner landing page
-            routeService.offAllNamedUntill(AppLinks.carOwnerLanding);
-          }
-
-          // await routeService.getOff(AppLinks.more);
-          // await routeService.offAllNamedUntill(AppLinks.more);
-        } else {
-          showErrorSnackbar(message: result.message!);
-          logger.log("error updating user profile ${response.message!}");
-        }
+        await addBankAccount();
 
         isLoading.value = false;
       } else {
@@ -140,10 +126,38 @@ class PhoneVerificationController extends GetxController {
     }
   }
 
+  Future<void> addBankAccount() async {
+    try {
+      final result = await paymentService.addBanAccount(data: {
+        "fullName": fullName,
+        "bankName": bankName,
+        "bankCode": bankCode,
+        "accountNumber": accountNumber,
+        "otp": pinController.text
+      });
+
+      if (result.status == "success" || result.status_code == 200) {
+        await showSuccessSnackbar(message:  'Success');
+
+        Future.delayed(const Duration(seconds: 3))
+            .then((value) => routeService.goBack(closeOverlays: true));
+
+        logger.log("bank account added:: ${result.data}");
+      } else {
+        showErrorSnackbar(message: result.message!);
+        logger.log("error adding bank account ${result.message!}");
+      }
+    } catch (e) {
+      logger.log("error: $e");
+      showErrorSnackbar(message: e.toString());
+    }
+  }
+
   Future<void> resendOtp({
     required String emailOrPhone,
   }) async {
     startCountdown();
+    pinController.clear();
     try {
       final result =
           await authService.resendOTP(payload: {"user": emailOrPhone});
@@ -164,6 +178,8 @@ class PhoneVerificationController extends GetxController {
   void startCountdown() {
     const duration = Duration(minutes: 2);
     int secondsRemaining = duration.inSeconds;
+    // need to test this more
+    isCountDownFinished.value = false;
     logger.log('Countdown started!');
 
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -200,5 +216,6 @@ class PhoneVerificationController extends GetxController {
     // TODO: implement onClose
     super.onClose();
     timer.cancel();
+    pinController.clear();
   }
 }

@@ -328,25 +328,25 @@ class CarHistoryScreen extends StatelessWidget {
   Widget aboutCar({required String aboutCar}) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10.sp),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Row(
             children: [
               textWidget(
                   text: AppStrings.aboutCarCaps,
                   style: getMediumStyle(fontSize: 12.sp, color: grey2)
                       .copyWith(fontWeight: FontWeight.w500)),
-              SizedBox(
-                height: 10.sp,
-              ),
-              textWidget(
-                  text: aboutCar,
-                  textOverflow: TextOverflow.visible,
-                  style: getMediumStyle(fontSize: 10.sp, color: grey2)
-                      .copyWith(fontWeight: FontWeight.w400)),
             ],
           ),
+          SizedBox(
+            height: 10.sp,
+          ),
+          textWidget(
+              text: aboutCar,
+              textOverflow: TextOverflow.visible,
+              style: getMediumStyle(fontSize: 10.sp, color: grey2)
+                  .copyWith(fontWeight: FontWeight.w400)),
         ],
       ),
     );

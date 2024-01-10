@@ -116,34 +116,45 @@ class ListVehicleController extends GetxController {
     await getInsuranceType();
     logger.log("oooooooooo");
     // Access the arguments using Get.arguments
-    Map<String, dynamic>? arguments = Get.arguments;
+  
+    // if (isFromManageCars.value == true) {
+    //   currentIndex.value = 1;
+
+    //   pageController = PageController(initialPage: currentIndex.value);
+
+    //   // pageController.addListener(() {
+    //     // currentIndex.value = pageController.page?.round() ?? 0;
+    //     update();
+    //   // });
+    // }
+  }
+
+  @override
+  void onInit() async {
+    logger.log("ListVehicleController");
+    super.onInit();
+      Map<String, dynamic>? arguments = Get.arguments;
 
     if (arguments != null) {
-      startDateTime.value = arguments['start'] ?? 'hmm';
-      endDateTime.value = arguments['end'] ?? 'woo';
+      startDateTime.value = arguments['start'] ?? 'date';
+      endDateTime.value = arguments['end'] ?? 'date';
       isFromManageCars.value = arguments['isFromManageCars'] ?? false;
-
+      carID.value = arguments['carID'];
       // Now you have access to the passed data (emailOrPhone)
       logger.log('Received data: $arguments');
     }
     if (isFromManageCars.value == true) {
       currentIndex.value = 1;
-      pageController.addListener(() {
-        currentIndex.value = pageController.page?.round() ?? 0;
-        update();
-      });
+
+      pageController = PageController(
+        initialPage: currentIndex.value
+      );
+
+      // pageController.addListener(() {
+      //   currentIndex.value = pageController.page?.round() ?? 0;
+      //   update();
+      // });
     }
-  }
-
-  @override
-  void onInit() async {
-    logger.log("ListVehicleController oninti called");
-
-    // pageController = PageController(
-    //     initialPage: isFromManageCars.value
-    //         ? initiPageIndex.value = 1
-    //         : initiPageIndex.value);
-    super.onInit();
   }
 
   // variables

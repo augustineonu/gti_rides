@@ -7,6 +7,7 @@ import 'package:gti_rides/services/google_sign_in_service.dart';
 import 'package:gti_rides/services/image_service.dart';
 import 'package:gti_rides/services/more_service.dart';
 import 'package:gti_rides/services/partner_service.dart';
+import 'package:gti_rides/services/payment_service.dart';
 import 'package:gti_rides/services/renter_service.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/services/storage_service.dart';
@@ -33,6 +34,7 @@ class AppBinding extends Bindings {
     Get.put(UserService());
     Get.put(MoreService());
     Get.put(PartnerService());
+    Get.put(PaymentService());
     // Get.put(AppService());
     // Get.put(FirebaseService());
     // Get.put(AgentService());

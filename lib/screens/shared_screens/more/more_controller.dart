@@ -7,6 +7,7 @@ import 'package:gti_rides/models/user_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/partner_service.dart';
+import 'package:gti_rides/services/payment_service.dart';
 import 'package:gti_rides/services/token_service.dart';
 import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
@@ -34,6 +35,8 @@ class MoreController extends GetxController {
     logger.log("User token && User type:: $tokens");
 
     await getBiometricProfile();
+    // paymentService.getBankAccount();
+
   }
 
   // late Timer timer;

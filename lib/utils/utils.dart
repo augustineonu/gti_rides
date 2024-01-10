@@ -29,6 +29,10 @@ String fetchErrorText({required String expectedTextVariable}) {
       return AppStrings.fieldIsRequiredError;
       case 'gender':
       return AppStrings.selectGenderError;
+      case 'bank':
+      return AppStrings.selectBankError;
+      case 'accountNumber':
+      return AppStrings.selectAccountNumberError;
     default:
       return AppStrings.isRequiredError;
   }
@@ -146,7 +150,7 @@ showErrorSnackbar({required String message, Color? color}) {
       message: message,
       isDismissible: false,
       backgroundColor: color ?? danger,
-      duration: const Duration(seconds: 4),
+      duration: const Duration(seconds: 3),
       margin: EdgeInsets.all(10),
       padding: EdgeInsets.all(20),
       borderRadius: 16.0,

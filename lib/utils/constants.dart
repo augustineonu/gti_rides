@@ -25,6 +25,7 @@ class AppStrings {
   static String createAccount = "Create account";
   static String fullName = "Full Name";
   static String nameHintText = "Surname and Last Name";
+  static String bankAccoutName = "Bank account Name";
   static String referralCode = "Referral Code ";
   static String referralCodeHint = "hhryryr";
   static String optional = "(Optional)";
@@ -50,6 +51,8 @@ class AppStrings {
   static String phoneIsRequiredError = "Phone is required";
   static String fieldIsRequiredError = "field cannot be empty";
   static String selectGenderError = "Kindly select gender";
+  static String selectBankError = "Kindly select bank";
+  static String selectAccountNumberError = "Kindly input bank account number";
   static String otpIsRequiredError = "Pin is required";
   static String isRequiredError = "Field is required";
   static String search = "Search";
