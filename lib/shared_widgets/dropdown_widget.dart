@@ -17,11 +17,7 @@ Widget dropdownWidget(
     Color? iconColor,
     void Function()? onTap,
     String? expectedVariable,
-    // double? radius,
-    // Color? arrow,
-    // Color? display,
-    // FontWeight? fontWeight,
-    // double? fontSize,
+
     }) {
   Map<String, dynamic>? selectedValue;
 
@@ -36,8 +32,6 @@ Widget dropdownWidget(
         height: 5.sp,
       ),
       SizedBox(
-        // height: 45.sp,
-        // padding: const EdgeInsets.symmetric(vertical: 5.0),
         child: GestureDetector(
           onTap: onTap,
           child: Material(

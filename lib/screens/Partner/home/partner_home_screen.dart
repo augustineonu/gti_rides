@@ -139,246 +139,279 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
             //   text: AppStrings.recentViewCar,
             //   style: getRegularStyle(),
             // ),
-      
-            controller.obx(
-              (state) {
-                return SizedBox(
-                  height: 235.sp,
-                  width: size.width,
-                  child: Stack(
-                    children: [
-                      PageView(
-                        key: pageViewKey,
-                        physics: const ScrollPhysics(),
-                        controller: cardPageController,
-                        onPageChanged: (int index) {
-                          currentIndex.value = index;
-                        },
-                        scrollDirection: Axis.horizontal,
-                        children: [
-                          for(var car in state ?? [])
-                          carCardWidget(size,car ),
-                          // carCardWidget(size),
-                          // carCardWidget(size),
-                        ],
+
+          
+               Builder(
+                 builder: (context) {
+                   return controller.obx(
+                      (state) {
+                        return SizedBox(
+                          height: 235.sp,
+                          width: size.width,
+                          child: Stack(
+                            children: [
+                              PageView(
+                                key: pageViewKey,
+                                physics: const ScrollPhysics(),
+                                controller: cardPageController,
+                                onPageChanged: (int index) {
+                                  currentIndex.value = index;
+                                },
+                                scrollDirection: Axis.horizontal,
+                                children: [
+                                  for (var car in state ?? [])
+                                    carCardWidget(size, car,
+                                        onTap: () =>
+                                            controller.routeToCarHistory(arguments: {
+                                              'brandModelName': car['brandModelName'],
+                                              'photoUrl': car['photoUrl'],
+                                              'carID': car['carID'],
+                                            })),
+                                ],
+                              ),
+                              Positioned(
+                                bottom: 95.sp,
+                                right: 0,
+                                left: 0,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: List.generate(
+                                    state!.length,
+                                    (index) => BuildCarouselDot(
+                                      currentIndex: currentIndex.value,
+                                      index: index,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      onEmpty: Padding(
+                        padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
+                        child: Center(
+                            child: textWidget(
+                                text: AppStrings.noListedCarsYet,
+                                style: getMediumStyle())),
                       ),
-                      Positioned(
-                        bottom: 95.sp,
-                        right: 0,
-                        left: 0,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: List.generate(
-                            3,
-                            (index) => BuildCarouselDot(
-                              currentIndex: currentIndex.value,
-                              index: index,
-                            ),
+                      onError: (e) => Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: context.height * 0.1, horizontal: 20),
+                        child: Center(
+                          child: Text(
+                            "$e",
+                            textAlign: TextAlign.center,
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                );
-              },
-              onEmpty: Padding(
-                padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
-                child: Center(
-                    child: textWidget(
-                        text: AppStrings.noListedCarsYet, style: getMediumStyle())),
-              ),
-              onError: (e) => Padding(
-                padding: EdgeInsets.symmetric(
-                    vertical: context.height * 0.1, horizontal: 20),
-                child: Center(
-                  child: Text(
-                    "$e",
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-              onLoading: Padding(
-                padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
-                child: Center(child: centerLoadingIcon()),
-              ),
-            ),
+                      onLoading: Padding(
+                        padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
+                        child: Center(child: centerLoadingIcon()),
+                      ),
+                    );
+                 }
+               ),
+              
+    
           ],
         ),
       ),
     );
   }
 
-  Widget carCardWidget(Size size, dynamic car) {
-    return SizedBox(
-      width: size.width,
-      child: Stack(
-        children: [
-          Card(
-            color: white,
-            surfaceTintColor: Colors.transparent,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(8.r),
+  Widget carCardWidget(Size size, dynamic car, {void Function()? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: SizedBox(
+        width: size.width,
+        child: Stack(
+          children: [
+            Card(
+              color: white,
+              surfaceTintColor: Colors.transparent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(8.r),
+                ),
               ),
-            ),
-            child: Column(
-              children: [
-                // ClipRRect(
-                //   borderRadius: BorderRadius.only(
-                //     topRight: Radius.circular(4.r),
-                //     topLeft: Radius.circular(4.r),
-                //   ),
-                //   child: Image.asset(
-                //     "assets/images/car.png",
-                //     fit: BoxFit.contain,
-                //   ),
-                // ),
-                carImage(
-                  height: 140,
-                  width: 400,
-                  imgUrl:  car['photoUrl'] != ''
-                          ? car['photoUrl']
-                          : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnKpMPFWYvaoInINJ44Qh4weo_z8nDwDUf8Q&usqp=CAU',),
-                Padding(
-                  padding: const EdgeInsets.all(11.0),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          textWidget(
-                              text: car['brandModelName'],
-                              textOverflow: TextOverflow.visible,
-                              style: getSemiBoldStyle(fontSize: 14.sp).copyWith(
-                                height: 1.2.sp,
-                                fontWeight: FontWeight.w600,
-                                // fontFamily: 'neue'
-                              )),
-                     car['status'] == 'booked'
-                              ?     Row(
-                            children: [
-                              SvgPicture.asset(ImageAssets.naira),
-                              SizedBox(
-                                width: 2.sp,
-                              ),
-                              textWidget(
-                                text: car['pricePerDay'] ?? '',
-                                style: getMediumStyle(fontSize: 12.sp).copyWith(
-                                  fontFamily: 'Neue',
-                                ),
-                              ),
-                              SvgPicture.asset(
-                                ImageAssets.close,
-                                height: 6,
-                                color: secondaryColor,
-                              ),
-                              textWidget(
-                                text: ' days',
-                                style: getMediumStyle(fontSize: 12.sp).copyWith(
-                                  fontFamily: 'Neue',
-                                ),
-                              ),
-                            ],
-                          ) : const SizedBox(),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(
-                            width: 145.sp,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  height: 6.sp,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    textWidget(
-                                        text: AppStrings.startDate,
-                                        style: getLightStyle(
-                                            fontSize: 7.sp, color: black)),
-                                            SizedBox(width: 5.sp,),
-                                    textWidget(
-                                        text: AppStrings.endDate,
-                                        style: getLightStyle(
-                                            fontSize: 7.sp, color: black)),
-                                    SizedBox(
-                                      width: 2.sp,
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    dateTimeColWIdget(
-                                      alignment: CrossAxisAlignment.start,
-                                      title: formatMonthDay(car['startDate'] != null
-                                      ? (car['startDate'])
-                                      : ''),
-                                      titleFontSize: 10.sp,
-                                      subTitleFontSize: 10.sp,
-                                      subTitleFontWeight: FontWeight.w500,
-                                      subTitle: '9:00am',
-                                    ),
-                                    SvgPicture.asset(
-                                      ImageAssets.arrowForwardRounded,
-                                      height: 10.sp,
-                                      width: 10.sp,
-                                      color: secondaryColor,
-                                    ),
-                                    dateTimeColWIdget(
+              child: Column(
+                children: [
+                  // ClipRRect(
+                  //   borderRadius: BorderRadius.only(
+                  //     topRight: Radius.circular(4.r),
+                  //     topLeft: Radius.circular(4.r),
+                  //   ),
+                  //   child: Image.asset(
+                  //     "assets/images/car.png",
+                  //     fit: BoxFit.contain,
+                  //   ),
+                  // ),
+                  carImage(
+                    height: 140,
+                    width: 400,
+                    imgUrl: car['photoUrl'] != ''
+                        ? car['photoUrl']
+                        : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnKpMPFWYvaoInINJ44Qh4weo_z8nDwDUf8Q&usqp=CAU',
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(11.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            textWidget(
+                                text: car['brandModelName'],
+                                textOverflow: TextOverflow.visible,
+                                style:
+                                    getSemiBoldStyle(fontSize: 14.sp).copyWith(
+                                  height: 1.2.sp,
+                                  fontWeight: FontWeight.w600,
+                                  // fontFamily: 'neue'
+                                )),
+                            car['status'] == 'booked'
+                                ? Row(
+                                    children: [
+                                      SvgPicture.asset(ImageAssets.naira),
+                                      SizedBox(
+                                        width: 2.sp,
+                                      ),
+                                      textWidget(
+                                        text: car['pricePerDay'] ?? 0.toString(),
+                                        style: getMediumStyle(fontSize: 12.sp)
+                                            .copyWith(
+                                          fontFamily: 'Neue',
+                                        ),
+                                      ),
+                                      SvgPicture.asset(
+                                        ImageAssets.close,
+                                        height: 6,
+                                        color: secondaryColor,
+                                      ),
+                                      textWidget(
+                                        text: ' days',
+                                        style: getMediumStyle(fontSize: 12.sp)
+                                            .copyWith(
+                                          fontFamily: 'Neue',
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : const SizedBox(),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: 145.sp,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    height: 6.sp,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      textWidget(
+                                          text: AppStrings.startDate,
+                                          style: getLightStyle(
+                                              fontSize: 7.sp, color: black)),
+                                      SizedBox(
+                                        width: 5.sp,
+                                      ),
+                                      textWidget(
+                                          text: AppStrings.endDate,
+                                          style: getLightStyle(
+                                              fontSize: 7.sp, color: black)),
+                                      SizedBox(
+                                        width: 2.sp,
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      dateTimeColWIdget(
                                         alignment: CrossAxisAlignment.start,
-                                        title: 'Wed, 1 Nov,',
+                                        title: extractMonthDay(
+                                            car['startDate'] != null
+                                                ? (car['startDate'])
+                                                : ''),
                                         titleFontSize: 10.sp,
                                         subTitleFontSize: 10.sp,
                                         subTitleFontWeight: FontWeight.w500,
-                                        subTitle: '9:00am'),
-                                  ],
+                                        subTitle: extractTime(
+                                            car['startDate'] != null
+                                                ? (car['startDate'])
+                                                : ''),
+                                      ),
+                                      SvgPicture.asset(
+                                        ImageAssets.arrowForwardRounded,
+                                        height: 10.sp,
+                                        width: 10.sp,
+                                        color: secondaryColor,
+                                      ),
+                                      dateTimeColWIdget(
+                                          alignment: CrossAxisAlignment.start,
+                                          title: extractMonthDay(
+                                              car['endDate'] != null
+                                                  ? (car['endDate'])
+                                                  : ''),
+                                          titleFontSize: 10.sp,
+                                          subTitleFontSize: 10.sp,
+                                          subTitleFontWeight: FontWeight.w500,
+                                          subTitle: extractTime(
+                                              car['startDate'] != null
+                                                  ? (car['startDate'])
+                                                  : '')),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                SvgPicture.asset(
+                                    ImageAssets.thumbsUpPrimaryColor),
+                                SizedBox(
+                                  width: 5.sp,
+                                ),
+                                RichText(
+                                  text: TextSpan(
+                                      text: '${car['percentageRate']}%',
+                                      style: getMediumStyle(
+                                        fontSize: 12.sp,
+                                      ),
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                          text: ' (${car['tripsCount']} trips)',
+                                          style: getLightStyle(
+                                            fontSize: 12.sp,
+                                          ),
+                                        )
+                                      ]),
                                 ),
                               ],
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              SvgPicture.asset(
-                                  ImageAssets.thumbsUpPrimaryColor),
-                              SizedBox(
-                                width: 5.sp,
-                              ),
-                              RichText(
-                                text: TextSpan(
-                                    text: '97%',
-                                    style: getMediumStyle(
-                                      fontSize: 12.sp,
-                                    ),
-                                    children: <TextSpan>[
-                                      TextSpan(
-                                        text: ' (66 trips)',
-                                        style: getLightStyle(
-                                          fontSize: 12.sp,
-                                        ),
-                                      )
-                                    ]),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ],
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          carAvailabilityTag(
-              status: '${AppStrings.carStatus} ${AppStrings.active}'),
-        ],
+            carAvailabilityTag(
+                status:
+                    '${AppStrings.carStatus} ${car['status'] == 'pending' ? AppStrings.pending : car['status'] == 'active' ? AppStrings.active : car['status']}'),
+          ],
+        ),
       ),
     );
   }
@@ -506,24 +539,6 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
             ImageAssets.greyCar,
             width: 190.sp,
           ),
-        ),
-      ],
-    );
-  }
-
-  Widget headerText() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        textWidget(
-            text: AppStrings.welcomeBack.trArgs(['Tade']),
-            style: getRegularStyle().copyWith(fontWeight: FontWeight.w400)),
-        SizedBox(
-          width: 5.sp,
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 3),
-          child: SvgPicture.asset(ImageAssets.wavingHand),
         ),
       ],
     );

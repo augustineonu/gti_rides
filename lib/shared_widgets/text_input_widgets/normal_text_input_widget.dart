@@ -30,6 +30,7 @@ class NormalInputTextWidget extends StatelessWidget {
   final EdgeInsetsGeometry? contentPadding;
   final void Function()? onTap;
   final void Function()? onEditingComplete;
+ final void Function(String)? onChanged;
   final Color? textColor;
   final double? fontSize;
   final int? maxLines;
@@ -59,6 +60,7 @@ class NormalInputTextWidget extends StatelessWidget {
     this.hintStyle,
     this.contentPadding,
     this.onTap,
+    this.onChanged,
     this.onEditingComplete,
     this.textColor,
     this.fontSize,
@@ -105,6 +107,7 @@ class NormalInputTextWidget extends StatelessWidget {
           keyboardType: textInputType ?? TextInputType.emailAddress,
           readOnly: readOnly!,
           onTap: onTap,
+          onChanged: onChanged,
           onEditingComplete: onEditingComplete,
           maxLines: maxLines,
           showCursor: showCursor,

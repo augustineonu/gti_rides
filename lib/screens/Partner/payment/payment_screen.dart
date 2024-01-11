@@ -31,52 +31,82 @@ class PaymentScreen extends GetView<PaymentController> {
     var size = MediaQuery.of(context).size;
     return Obx(() => Scaffold(
           // body: body(size, context)),
-          body: SafeArea(
-            child: Padding(
-              padding: EdgeInsets.only(left: 20.0.sp, right: 20.sp, top: 13.sp),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.symmetric(vertical: 10),
-                      padding: EdgeInsets.all(6.sp),
-                      decoration: BoxDecoration(
-                          border: Border.all(color: primaryColor),
-                          borderRadius: BorderRadius.all(Radius.circular(4.r))),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          tabIndicator(
-                              width: 150.sp,
-                              title: AppStrings.allApayment,
-                              selected: controller.selectedIndex.value == 0,
-                              onTap: () {
-                                controller.selectedIndex.value = 0;
-                                controller.paymentMethodView.value = 0;
-                              }),
-                          tabIndicator(
-                              width: 150.sp,
-                              title: controller.addedPaymentMethod.value
-                                  ? AppStrings.paymentAccount
-                                  : AppStrings.paymentMethod,
-                              // if user has added payment account show AppStrings.paymentAccount
-                              selected: controller.selectedIndex.value == 1,
-                              onTap: () => controller.selectedIndex.value = 1),
-                        ],
+          body: Stack(
+            children: [
+              SafeArea(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                            left: 20.0.sp, right: 20.sp, top: 13.sp),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.symmetric(vertical: 10),
+                                padding: EdgeInsets.all(6.sp),
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: primaryColor),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(4.r))),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    tabIndicator(
+                                        width: 150.sp,
+                                        title: AppStrings.allApayment,
+                                        selected:
+                                            controller.selectedIndex.value == 0,
+                                        onTap: () {
+                                          controller.selectedIndex.value = 0;
+                                          controller.paymentMethodView.value = 0;
+                                        }),
+                                    tabIndicator(
+                                        width: 150.sp,
+                                        title: controller.addedPaymentMethod.value
+                                            ? AppStrings.paymentAccount
+                                            : AppStrings.paymentMethod,
+                                        // if user has added payment account show AppStrings.paymentAccount
+                                        selected:
+                                            controller.selectedIndex.value == 1,
+                                        onTap: () {
+                                            controller.selectedIndex.value = 1;
+                                            controller.getBankAccount();
+                                        }
+                                            ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 24.sp,
+                              ),
+                              buildBody(context, size),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 24.sp,
-                    ),
-                    buildBody(context, size),
-                    textWidget(
-                        text: controller.testString.value,
-                        style: getRegularStyle()),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
+              controller.isFetchingAccountDetails.isTrue
+                  ? Stack(
+                      children: [
+                        const Opacity(
+                          opacity: 0.5,
+                          child: ModalBarrier(
+                              dismissible: false, color: Colors.black),
+                        ),
+                        Center(
+                          child: Center(child: centerLoadingIcon()),
+                        ),
+                      ],
+                    )
+                  : const SizedBox()
+            ],
           ),
           // }
         ));
@@ -104,6 +134,8 @@ class PaymentScreen extends GetView<PaymentController> {
             ? addAccountForm(context, size)
             : controller.obx(
                 (state) {
+                  controller.fullNameController.clear();
+                  controller.accountNumberController.clear();
                   return paymentMethod(size, context, state,
                       onTapEditPaymentMethod: () async {
                     controller.paymentMethodView.value = 1;
@@ -446,6 +478,12 @@ class PaymentScreen extends GetView<PaymentController> {
             onEditingComplete: () {
               print("editied value:: ");
               controller.resolveAccount();
+            },
+            onChanged: (value) {
+              if (value.length == 10) {
+                // Trigger the API call when the input length is 10
+                controller.resolveAccount();
+              }
             },
             inputFormatters: [
               LengthLimitingTextInputFormatter(10),

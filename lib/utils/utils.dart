@@ -59,16 +59,35 @@ String getTimeIn12HourFormat(DateTime dateTime) {
 
 
 // "dd, MMM h:mma"
-String formatMonthDay(String dateString) {
+String extractMonthDay(String dateString) {
   try {
-    DateTime dateTime = DateFormat('E, d MMM h:mma').parse(dateString);
-    String formattedDate = DateFormat('E, d MMM').format(dateTime);
+    // Split the input string by whitespace
+    List<String> parts = dateString.split(' ');
+
+    // Combine the day of the week, day of the month, and month
+    String formattedDate = '${parts[0]} ${parts[1]} ${parts[2]}';
+
     return formattedDate;
   } catch (e) {
     // Handle the exception or simply return an empty string
     return '';
   }
 }
+String extractTime(String dateString) {
+  try {
+    // Split the input string by whitespace
+    List<String> parts = dateString.split(' ');
+
+    // Combine the day of the week, day of the month, and month
+    String formattedDate = parts[3];
+
+    return formattedDate;
+  } catch (e) {
+    // Handle the exception or simply return an empty string
+    return '';
+  }
+}
+
 
 
 

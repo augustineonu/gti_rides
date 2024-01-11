@@ -65,7 +65,7 @@ class MoreScreen extends StatelessWidget {
                           // show "My Drivers" only if user type is Owner
                           final option = controller.profileOptions[index];
                           if (controller.tokens.value.userType == "partner") {
-                            return profileOptionsWIdget(
+                            return index == 1 ? SizedBox() : profileOptionsWIdget(
                               imageUrl: option['image'],
                               title: option['title'],
                               onTap: () {
@@ -81,6 +81,7 @@ class MoreScreen extends StatelessWidget {
                                 case 3:
                                   controller.routeToDrivers();
                                 case 4:
+                                controller.launchWebsite();
                                 case 5:
                                   controller.routeToReferralCode();
                                   break;

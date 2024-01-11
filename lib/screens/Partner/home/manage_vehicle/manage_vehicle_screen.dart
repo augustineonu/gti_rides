@@ -47,45 +47,42 @@ class ManageVehicleScreen extends StatelessWidget {
             titleColor: iconColor(),
           ),
           // body: body(size, context)),
-          body: RefreshIndicator(
-            onRefresh: controller.getAllCars,
-            child: Padding(
-              padding: EdgeInsets.only(left: 20.0.sp, right: 20.sp, top: 8.sp),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.symmetric(vertical: 10),
-                    padding: EdgeInsets.all(6.sp),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: primaryColor),
-                        borderRadius: BorderRadius.all(Radius.circular(4.r))),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        tabIndicator(
-                            width: 150.sp,
-                            title: AppStrings.allCarsSm,
-                            selected: controller.selectedIndex.value == 0,
-                            onTap: () => controller.selectedIndex.value = 0),
-                        tabIndicator(
-                            width: 150.sp,
-                            title: AppStrings.booked,
-                            selected: controller.selectedIndex.value == 1,
-                            onTap: () => controller.selectedIndex.value = 1),
-                      ],
-                    ),
+          body: Padding(
+            padding: EdgeInsets.only(left: 20.0.sp, right: 20.sp, top: 8.sp),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  padding: EdgeInsets.all(6.sp),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: primaryColor),
+                      borderRadius: BorderRadius.all(Radius.circular(4.r))),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      tabIndicator(
+                          width: 150.sp,
+                          title: AppStrings.allCarsSm,
+                          selected: controller.selectedIndex.value == 0,
+                          onTap: () => controller.selectedIndex.value = 0),
+                      tabIndicator(
+                          width: 150.sp,
+                          title: AppStrings.booked,
+                          selected: controller.selectedIndex.value == 1,
+                          onTap: () => controller.selectedIndex.value = 1),
+                    ],
                   ),
-                  SizedBox(
-                    height: 24.sp,
-                  ),
-            
-                  Expanded(child: buildBody(context, size)),
-                  // textWidget(
-                  //     text: controller.testString.value,
-                  //     style: getRegularStyle()),
-                ],
-              ),
+                ),
+                SizedBox(
+                  height: 24.sp,
+                ),
+
+                Expanded(child: buildBody(context, size)),
+                // textWidget(
+                //     text: controller.testString.value,
+                //     style: getRegularStyle()),
+              ],
             ),
           ),
           // }
@@ -103,97 +100,50 @@ class ManageVehicleScreen extends StatelessWidget {
     }
   }
 
-  Widget allCars(context, Size size, ManageVehicleController controller) {
-    return controller.cars!.isEmpty
-        ? Padding(
-            padding: const EdgeInsets.all(8.0),
+  Widget allCars(
+      BuildContext context, Size size, ManageVehicleController controller) {
+    return controller.obx(
+      (state) {
+        return ListView.builder(
+          shrinkWrap: true,
+          physics: const ScrollPhysics(),
+          itemCount: state!.length,
+          itemBuilder: (context, index) {
+            var car = state[index];
+            return car['status'] == 'pending' || car['status'] == "booked"
+                ? bookedOrPendingCars(
+                    context,
+                    size,
+                    car,
+                    imgUrl: car['photoUrl'] != ''
+                        ? car['photoUrl']
+                        : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnKpMPFWYvaoInINJ44Qh4weo_z8nDwDUf8Q&usqp=CAU',
+                  )
+                : allCarsWidget(context, size, controller, car);
+          },
+        );
+      },
+      onEmpty: Padding(
+        padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
+        child: Center(
             child: textWidget(
-                text: 'You have not added any Cars yet :)',
-                style: getBoldStyle()),
-          )
-        : ListView.builder(
-            shrinkWrap: true,
-            physics: const ScrollPhysics(),
-            itemCount: controller.cars!.length,
-            itemBuilder: (context, index) {
-              var car = controller.cars?[index];
-              return car['status'] == 'pending' || car['status'] == "booked"
-                  ? bookedOrPendingCars(context, size, car,
-                      imgUrl: car['photoUrl'] != ''
-                          ? car['photoUrl']
-                          : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnKpMPFWYvaoInINJ44Qh4weo_z8nDwDUf8Q&usqp=CAU',
-                      onTapQuickOptions: () {
-                      Get.bottomSheet(
-                        SizedBox(
-                          height: size.height * 0.2.sp,
-                          width: size.width.sp,
-                          child: ListView.separated(
-                            shrinkWrap: true,
-                            padding: const EdgeInsets.all(20),
-                            itemCount: controller.quickOptions.length,
-                            itemBuilder: (context, index) {
-                              final option = controller.quickOptions[index];
-                              return InkWell(
-                                onTap: () {
-                                  switch (index) {
-                                    case 0:
-                                      deleteVehicleSheet(size,
-                                          carName: car['brandModelName'],
-                                          carNameBody: car['brandModelName'],
-                                          onTapContinue: () => controller
-                                              .deleteCar(carID: car['carID']));
-                                    case 1:
-                                      controller.routeToQuickEdit(arguments: {
-                                        "brandModelName": car["brandModelName"],
-                                        "photoUrl": car["photoUrl"],
-                                        "carID": car["carID"]
-                                      });
-                                    case 2:
-                                      controller.routeToListVehicle(arguments: {
-                                        "carID": car["carID"],
-                                        "isFromManageCars": true,
-                                      });
-                                    case 3:
-                                      controller.routeToCarHistory(arguments: {
-                                        "brandModelName": car["brandModelName"],
-                                        "photoUrl": car["photoUrl"],
-                                        "carID": car["carID"]
-                                      });
-                                      break;
-                                    default:
-                                  }
-                                },
-                                child: Row(
-                                  children: [
-                                    SvgPicture.asset(option['imageUrl']!),
-                                    const SizedBox(
-                                      width: 6,
-                                    ),
-                                    textWidget(
-                                        text: option['title'],
-                                        style: getRegularStyle(
-                                            color: primaryColor)),
-                                  ],
-                                ),
-                              );
-                            },
-                            separatorBuilder: (context, index) =>
-                                const SizedBox(
-                              height: 18,
-                            ),
-                          ),
-                        ),
-                        backgroundColor: backgroundColor,
-                        isScrollControlled: true,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(4.r),
-                              topRight: Radius.circular(4.r)),
-                        ),
-                      );
-                    })
-                  : allCarsWidget(context, size, controller, car);
-            });
+                text: AppStrings.noListedCarsYet, style: getMediumStyle())),
+      ),
+      onError: (e) => Padding(
+        padding: EdgeInsets.symmetric(
+            vertical: context.height * 0.1, horizontal: 20),
+        child: Center(
+          child: Text(
+            "$e",
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ),
+      onLoading: Padding(
+        padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
+        child: Center(child: centerLoadingIcon()),
+      ),
+    );
   }
 
   Widget allCarsWidget(BuildContext context, Size size,
@@ -225,7 +175,9 @@ class ManageVehicleScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      textWidget(text: 'Tesla Model Y', style: getBoldStyle()),
+                      textWidget(
+                          text: '${car['brandModelName']}',
+                          style: getBoldStyle()),
                       const SizedBox(
                         height: 3,
                       ),
@@ -240,13 +192,13 @@ class ManageVehicleScreen extends StatelessWidget {
                               ),
                               RichText(
                                 text: TextSpan(
-                                    text: '20%',
+                                    text: '${car['percentageRate']}%',
                                     style: getMediumStyle(
                                       fontSize: 12.sp,
                                     ),
                                     children: <TextSpan>[
                                       TextSpan(
-                                        text: ' (15 trips)',
+                                        text: ' (${car['tripsCount']} trips)',
                                         style: getLightStyle(
                                             fontSize: 12.sp, color: grey2),
                                       )
@@ -259,8 +211,8 @@ class ManageVehicleScreen extends StatelessWidget {
                             children: [
                               SvgPicture.asset(ImageAssets.naira),
                               textWidget(
-                                  // text: car['pricePerDay'] ?? '0',
-                                  text: 'per day',
+                                  text: car['pricePerDay'] ?? '0',
+                                  // text: 'per day',
                                   style: getMediumStyle(fontSize: 10.sp)
                                       .copyWith(fontFamily: 'Neue')),
                               textWidget(
@@ -293,7 +245,9 @@ class ManageVehicleScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           textWidget(
-                              text: "wed, 1 Nov, 9:00am",
+                              text: car['startDate'] != null
+                                  ? (car['startDate'])
+                                  : '',
                               style: getMediumStyle(fontSize: 8.sp)
                                   .copyWith(fontFamily: 'Neue')),
                           SizedBox(
@@ -308,7 +262,9 @@ class ManageVehicleScreen extends StatelessWidget {
                             width: 3,
                           ),
                           textWidget(
-                              text: "wed, 1 Nov, 9:00am",
+                              text: car['endDate'] != null
+                                  ? (car['endDate'])
+                                  : '',
                               style: getMediumStyle(fontSize: 8.sp)
                                   .copyWith(fontFamily: 'Neue')),
                         ],
@@ -324,7 +280,9 @@ class ManageVehicleScreen extends StatelessWidget {
                                     BorderRadius.all(Radius.circular(2.r))),
                             child: Center(
                               child: textWidget(
-                                  text: AppStrings.available,
+                                  text: car['availability'] == 'notAvailable'
+                                      ? AppStrings.unavailable
+                                      : AppStrings.available,
                                   style: getRegularStyle(fontSize: 10.sp)),
                             ),
                           ),
@@ -364,7 +322,7 @@ class ManageVehicleScreen extends StatelessWidget {
   }
 
   Widget bookedOrPendingCars(BuildContext context, Size size, car,
-      {required String imgUrl, void Function()? onTapQuickOptions}) {
+      {required String imgUrl}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Stack(
@@ -486,13 +444,14 @@ class ManageVehicleScreen extends StatelessWidget {
                                       ),
                                       RichText(
                                         text: TextSpan(
-                                            text: '24%',
+                                            text: '${car['percentageRate']}%',
                                             style: getMediumStyle(
                                               fontSize: 10.sp,
                                             ),
                                             children: <TextSpan>[
                                               TextSpan(
-                                                text: ' (5 trips)',
+                                                text:
+                                                    ' (${car['tripsCount'] ?? '0'} trips)',
                                                 style: getLightStyle(
                                                     fontSize: 10.sp,
                                                     color: grey2),
@@ -580,7 +539,9 @@ class ManageVehicleScreen extends StatelessWidget {
                                 width: 3.w,
                               ),
                               textWidget(
-                                  text: car['endDate'] ?? '',
+                                  text: car['endDate'] != null
+                                      ? (car['endDate'])
+                                      : '',
                                   style: getMediumStyle(fontSize: 8.sp)
                                       .copyWith(fontFamily: 'Neue')),
                             ],
@@ -597,7 +558,74 @@ class ManageVehicleScreen extends StatelessWidget {
             right: 12.sp,
             top: 12.sp,
             child: InkWell(
-              onTap: onTapQuickOptions,
+              onTap: () {
+                Get.bottomSheet(
+                  SizedBox(
+                    height: size.height * 0.2.sp,
+                    width: size.width.sp,
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.all(20),
+                      itemCount: controller.quickOptions.length,
+                      itemBuilder: (context, index) {
+                        final option = controller.quickOptions[index];
+                        return InkWell(
+                          onTap: () {
+                            switch (index) {
+                              case 0:
+                                deleteVehicleSheet(size,
+                                    carName: car['brandModelName'],
+                                    carNameBody: car['brandModelName'],
+                                    onTapContinue: () => controller.deleteCar(
+                                        carID: car['carID']));
+                              case 1:
+                                controller.routeToQuickEdit(arguments: {
+                                  "brandModelName": car["brandModelName"],
+                                  "photoUrl": car["photoUrl"],
+                                  "carID": car["carID"]
+                                });
+                              case 2:
+                                controller.routeToListVehicle(arguments: {
+                                  "carID": car["carID"],
+                                  "isFromManageCars": true,
+                                });
+                              case 3:
+                                controller.routeToCarHistory(arguments: {
+                                  "brandModelName": car["brandModelName"],
+                                  "photoUrl": car["photoUrl"],
+                                  "carID": car["carID"]
+                                });
+                                break;
+                              default:
+                            }
+                          },
+                          child: Row(
+                            children: [
+                              SvgPicture.asset(option['imageUrl']!),
+                              const SizedBox(
+                                width: 6,
+                              ),
+                              textWidget(
+                                  text: option['title'],
+                                  style: getRegularStyle(color: primaryColor)),
+                            ],
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) => const SizedBox(
+                        height: 18,
+                      ),
+                    ),
+                  ),
+                  backgroundColor: backgroundColor,
+                  isScrollControlled: true,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(4.r),
+                        topRight: Radius.circular(4.r)),
+                  ),
+                );
+              },
               child: SizedBox(
                 height: 20,
                 width: 20,
@@ -611,7 +639,7 @@ class ManageVehicleScreen extends StatelessWidget {
   }
 
   Widget bookedCars(context, Size size) {
-    return controller.cars!.isEmpty
+    return controller.bookedCars!.isEmpty
         ? Padding(
             padding: const EdgeInsets.all(8.0),
             child: textWidget(
@@ -620,10 +648,19 @@ class ManageVehicleScreen extends StatelessWidget {
           )
         : ListView.builder(
             shrinkWrap: true,
-            itemCount: 3,
+            itemCount: controller.bookedCars!.length,
             physics: const ScrollPhysics(),
             itemBuilder: (context, index) {
-              return carWidget(context, size);
+              var car = controller.bookedCars?[index];
+              // return carWidget(context, size);
+              return bookedOrPendingCars(
+                context,
+                size,
+                car,
+                imgUrl: car['photoUrl'] != ''
+                    ? car['photoUrl']
+                    : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnKpMPFWYvaoInINJ44Qh4weo_z8nDwDUf8Q&usqp=CAU',
+              );
             });
   }
 

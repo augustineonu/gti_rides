@@ -430,7 +430,7 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                                 onChanged: (Driver? value) {
                                   controller.selectedItem1.value = value!;
                                   controller.selectedView.value =
-                                      value.fullName!;
+                                      value.fullName ?? '';
                                   controller.selectedDriverId.value =
                                       driver.driverId!;
 

@@ -43,6 +43,7 @@ class PaymentController extends GetxController
   // variables
   RxBool isLoading = false.obs;
   RxBool addedPaymentMethod = false.obs;
+  RxBool isFetchingAccountDetails = false.obs;
   PageController pageController = PageController();
   RxInt selectedIndex = 0.obs;
   RxString testString = "".obs;
@@ -183,6 +184,7 @@ class PaymentController extends GetxController
     }
   }
   Future<void> getBankAccount() async {
+    
     change(<dynamic>[].obs, status: RxStatus.loading());
 
     try {
@@ -217,6 +219,7 @@ class PaymentController extends GetxController
       // showErrorSnackbar(message: 'Kindly select input account number');
       return;
     }
+    isFetchingAccountDetails.value = true;
     try {
       final response = await paymentService.resolveAccount(
           accountNumber: accountNumberController.text,
@@ -227,6 +230,8 @@ class PaymentController extends GetxController
         if (response.data != null && response.data!.isNotEmpty) {
           accountName.value = response.data['account_name'];
           fullNameController.text = response.data['account_name'];
+
+          isFetchingAccountDetails.value = false;
         }
       } else {
         showErrorSnackbar(message: response.message!);
@@ -234,13 +239,24 @@ class PaymentController extends GetxController
       }
     } catch (exception) {
       logger.log("error  $exception");
+    } finally {
+      isFetchingAccountDetails.value = false;
     }
+  }
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+    fullNameController.clear();
+    accountNumberController.clear();
   }
 
   @override
   void dispose() {
     super.dispose();
     pinController.dispose();
+    fullNameController.dispose();
+    accountNumberController.dispose();
     focus
       ..removeListener(onFocusChange)
       ..dispose();

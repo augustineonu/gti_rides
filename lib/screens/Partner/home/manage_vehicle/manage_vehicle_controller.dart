@@ -8,7 +8,7 @@ import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/utils.dart';
 
-class ManageVehicleController extends GetxController {
+class ManageVehicleController extends GetxController with StateMixin<List<dynamic>>{
   Logger logger = Logger("Controller");
 
   ManageVehicleController() {
@@ -71,16 +71,21 @@ class ManageVehicleController extends GetxController {
   void onToggleCarAvailability(bool value) => isAvailable.value = value;
   void routeToListVehicle({Object? arguments})=> routeService.gotoRoute(AppLinks.listVehicle,
   arguments: arguments);
-  
+
   Future<void> getAllCars() async {
-    isFetchingCars.value = true;
+     change(<dynamic>[].obs, status: RxStatus.loading());
     try {
       final response = await partnerService.getCars(queryType: 'all');
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("gotten cars ${response.data}");
-        if (response.data != null) {
-          cars?.value = response.data!;
+        if (response.data == null || response.data!.isEmpty) {
+         
+           change(<dynamic>[].obs, status: RxStatus.empty());
           logger.log("cars $cars");
+        } else {
+           cars?.value = response.data!;
+           change(response.data!, status: RxStatus.success());
+          update();
         }
         isFetchingCars.value = false;
       } else {
@@ -88,6 +93,7 @@ class ManageVehicleController extends GetxController {
       }
     } catch (exception) {
       logger.log("error  $exception");
+       change(<dynamic>[].obs, status: RxStatus.error(exception.toString()));
     }
   }
 

@@ -22,8 +22,8 @@ class PartnerLandingController extends GetxController {
   void onInit() {
     Get.delete<MoreController>();
     Get.delete<PaymentController>();
-    Get.delete<PartnerHomeController>();
     Get.put<MoreController>(MoreController());
+    Get.delete<PartnerHomeController>();
     Get.put<PaymentController>(PaymentController());
     Get.put<PartnerHomeController>(PartnerHomeController());
     super.onInit();

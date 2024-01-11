@@ -240,7 +240,7 @@ class ProfileController extends GetxController {
         } else {
           formData = dio.FormData.fromMap({
             'fullName': fullNameController.text,
-          }); 
+          });
         }
         logger.log("form field ${formData.length}");
         return formData;
@@ -252,16 +252,17 @@ class ProfileController extends GetxController {
       final result = await userService.updateProfile(payload: formData);
 
       if (result.status == "success" || result.status_code == 200) {
-        await showSuccessSnackbar(message: result.message!);
         final response = await authService.getProfile();
         if (response.status == "success" || response.status_code == 200) {
           logger.log("refresh user details ${response.data.toString()}");
           final UserModel userModel = UserModel.fromJson(response.data?[0]);
           userService.setCurrentUser(userModel.toJson());
-          routeService.goBack;
         }
+        await showSuccessSnackbar(message: result.message!);
+        Future.delayed(Duration(seconds: 3))
+            .then((value) => routeService.goBack(closeOverlays: true));
         // routeService.offAllNamed(AppLinks.more);
-        routeService.goBack;
+        // routeService.goBack;
       } else {
         logger.log("error updating user: ${result.message}");
         await showErrorSnackbar(message: result.message!);

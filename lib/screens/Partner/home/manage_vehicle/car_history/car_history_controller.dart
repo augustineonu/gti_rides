@@ -27,7 +27,7 @@ class CarHistoryController extends GetxController
       // Now you have access to the passed data (emailOrPhone)
       logger.log('Received data $arguments');
     }
-     await getBookedCars();
+     await getCarHistory();
   }
 
   @override
@@ -76,7 +76,7 @@ class CarHistoryController extends GetxController
     update();
   }
 
-  Future<void> getBookedCars() async {
+  Future<void> getCarHistory() async {
     change(<String>[].obs, status: RxStatus.loading());
     try {
       final response = await partnerService.getOnCar(carId: carID.value);
