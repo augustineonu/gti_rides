@@ -142,10 +142,19 @@ class DriversController extends GetxController {
         return data;
       }
 
+      final newFormData = {
+        'fullName': fullNameController.text,
+        'driverNumber': phoneNoController.text,
+        'driverEmail': emailController.text,
+        'licenseNumber': licenceNoController.text,
+        'expireDate': licenceExpiryDateController.text,
+        'files': pickedImagePath.value,
+      };
+
       final formData = await constructFormData();
-      final response = await partnerService.addDriver(payload: formData);
+      final response = await partnerService.addDriver(payload: newFormData);
       if (response.status == 'success' || response.status_code == 200) {
-        logger.log("driver created ${response.data}");
+        logger.log("driver created ${response.message}");
 
         successDialog(
             title: AppStrings.driverAddedMessage,

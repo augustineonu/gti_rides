@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:gti_rides/services/api_exception.dart';
 import 'package:gti_rides/services/api_service.dart';
 import 'package:gti_rides/services/auth_service.dart';
 import 'package:gti_rides/services/biometric_service.dart';
@@ -35,6 +36,7 @@ class AppBinding extends Bindings {
     Get.put(MoreService());
     Get.put(PartnerService());
     Get.put(PaymentService());
+    Get.put(ApiExceptionService());
     // Get.put(AppService());
     // Get.put(FirebaseService());
     // Get.put(AgentService());

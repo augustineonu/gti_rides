@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart' as getx;
 import 'package:gti_rides/models/api_response_model.dart';
 import 'package:gti_rides/route/app_links.dart';
+import 'package:gti_rides/services/api_exception.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/services/token_service.dart';
 import 'package:gti_rides/utils/constants.dart';
@@ -42,7 +43,7 @@ class ApiService {
       InterceptorsWrapper(
         onRequest: (options, handler) {
           // Add the access token to the request header
-          
+
           options.headers['Authorization'] =
               'Bearer ${tokenService.accessToken.value}';
           return handler.next(options);
@@ -61,14 +62,15 @@ class ApiService {
             // Update the request header with the new access token
             e.requestOptions.headers['Authorization'] =
                 'Bearer ${tokenService.accessToken.value}';
-                
-                _dio.options.headers['Authorization'] =
+
+            _dio.options.headers['Authorization'] =
                 'Bearer ${tokenService.accessToken.value}';
 
             // Repeat the request with the updated header
             return handler.resolve(await _dio.fetch(e.requestOptions));
-          } else if(e.response?.statusCode == 403) {
+          } else if (e.response?.statusCode == 403) {
             logger.log("status code == 403");
+            //  _logOut();
           }
           return handler.next(e);
         },
@@ -82,6 +84,11 @@ class ApiService {
         // 'Authorization': 'Bearer $token',
       },
     );
+  }
+
+  String checkException(DioException error) {
+    String errorMessage = apiExceptionService.getException(error);
+    return errorMessage;
   }
 
   Future<dynamic> postRequest({
@@ -137,13 +144,17 @@ class ApiService {
       return response.data;
     } on DioException catch (e) {
       logger.log("POST REQUEST ERROR ($endpoint) :: ${e.response?.data}");
-      if (e.response?.data != null) {
-        return e.response?.data;
-      }
-      throw "An error occurred";
-    } on SocketException {
-      throw "seems you are offline";
-    } catch (error) {
+      checkException(e);
+
+      // if (e.response?.data != null) {
+      //   return e.response?.data;
+      // }
+      // throw "An error occurred";
+    }
+    // on SocketException {
+    //   throw "seems you are offline";
+    // }
+    catch (error) {
       throw error.toString();
     }
   }
@@ -274,7 +285,7 @@ class ApiService {
   //   }
   // }
 
-    Future<dynamic> postRequestFile({
+  Future<dynamic> postRequestFile({
     required String endpoint,
     required FormData data,
   }) async {
@@ -288,7 +299,7 @@ class ApiService {
         options: Options(
           headers: {
             'Authorization': 'Bearer ${tokenService.accessToken.value}',
-           'Content-Type': 'multipart/form-data'
+            'Content-Type': 'multipart/form-data'
           },
         ),
       );
@@ -309,7 +320,6 @@ class ApiService {
             headers: {
               'Authorization': 'Bearer ${tokenService.accessToken.value}',
               'Content-Type': 'multipart/form-data'
-
             },
           ),
         );
@@ -328,8 +338,7 @@ class ApiService {
     }
   }
 
-  
-    Future<dynamic> putRequestFile({
+  Future<dynamic> putRequestFile({
     required String endpoint,
     required FormData data,
   }) async {
@@ -343,9 +352,7 @@ class ApiService {
         options: Options(
           headers: {
             'Authorization': 'Bearer ${tokenService.accessToken.value}',
-
             'Content-Type': 'multipart/form-data'
-            
           },
         ),
       );
@@ -384,7 +391,6 @@ class ApiService {
     }
   }
 
-  
   Future<dynamic> getRequest(
     String endpoint,
   ) async {
@@ -437,8 +443,7 @@ class ApiService {
     }
   }
 
-
-    Future<dynamic> deleteRequest({
+  Future<dynamic> deleteRequest({
     required String endpoint,
     // Map? data,
     String? token,
@@ -501,7 +506,6 @@ class ApiService {
       throw error.toString();
     }
   }
-
 
   Future<void> _logOut() async {
     try {

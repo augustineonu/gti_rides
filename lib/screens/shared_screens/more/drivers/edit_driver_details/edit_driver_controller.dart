@@ -28,11 +28,11 @@ class EditDriversController extends GetxController {
       Map<String, dynamic>? arguments = Get.arguments;
 
     if (arguments != null) {
-      driverEmail.value = arguments['driverEmail'];
-      driverNumber.value = arguments['driverNumber'];
-      fullName.value = arguments['fullName'];
-      fullName.value = arguments['fullName'];
-      driverID.value = arguments['driverID'];
+      driverEmail.value = arguments['driverEmail'] ?? '';
+      driverNumber.value = arguments['driverNumber'] ?? '';
+      fullName.value = arguments['fullName'] ?? '';
+      fullName.value = arguments['fullName'] ?? '';
+      driverID.value = arguments['driverID'] ?? '';
 
       // Now you have access to the passed data (emailOrPhone)
       logger.log('Received email or phone: $arguments');
