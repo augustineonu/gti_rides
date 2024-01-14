@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart' as getx;
 import 'package:gti_rides/models/api_response_model.dart';
 import 'package:gti_rides/route/app_links.dart';
+import 'package:gti_rides/services/api_exception.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/services/token_service.dart';
 import 'package:gti_rides/utils/constants.dart';
@@ -42,7 +43,7 @@ class ApiService {
       InterceptorsWrapper(
         onRequest: (options, handler) {
           // Add the access token to the request header
-          
+
           options.headers['Authorization'] =
               'Bearer ${tokenService.accessToken.value}';
           return handler.next(options);
@@ -61,14 +62,15 @@ class ApiService {
             // Update the request header with the new access token
             e.requestOptions.headers['Authorization'] =
                 'Bearer ${tokenService.accessToken.value}';
-                
-                _dio.options.headers['Authorization'] =
+
+            _dio.options.headers['Authorization'] =
                 'Bearer ${tokenService.accessToken.value}';
 
             // Repeat the request with the updated header
             return handler.resolve(await _dio.fetch(e.requestOptions));
-          } else if(e.response?.statusCode == 403) {
+          } else if (e.response?.statusCode == 403) {
             logger.log("status code == 403");
+            //  _logOut();
           }
           return handler.next(e);
         },
@@ -82,6 +84,11 @@ class ApiService {
         // 'Authorization': 'Bearer $token',
       },
     );
+  }
+
+  String checkException(DioException error) {
+    String errorMessage = apiExceptionService.getException(error);
+    return errorMessage;
   }
 
   Future<dynamic> postRequest({
@@ -137,13 +144,17 @@ class ApiService {
       return response.data;
     } on DioException catch (e) {
       logger.log("POST REQUEST ERROR ($endpoint) :: ${e.response?.data}");
-      if (e.response?.data != null) {
-        return e.response?.data;
-      }
-      throw "An error occurred";
-    } on SocketException {
-      throw "seems you are offline";
-    } catch (error) {
+      checkException(e);
+
+      // if (e.response?.data != null) {
+      //   return e.response?.data;
+      // }
+      // throw "An error occurred";
+    }
+    // on SocketException {
+    //   throw "seems you are offline";
+    // }
+    catch (error) {
       throw error.toString();
     }
   }
@@ -274,12 +285,66 @@ class ApiService {
   //   }
   // }
 
-    Future<dynamic> putRequestFile({
+  Future<dynamic> postRequestFile({
+    required String endpoint,
+    required FormData data,
+  }) async {
+    try {
+      logger.log("POST REQUEST DATA:: ${data.fields.toString()}");
+      logger.log("POST REQUEST DATA:: ${data.files.toString()}");
+      late Response response;
+      response = await _dio.post(
+        endpoint,
+        data: data,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${tokenService.accessToken.value}',
+            'Content-Type': 'multipart/form-data'
+          },
+        ),
+      );
+      logger.log("POST REQUEST RESPONSE:: $response");
+      final ApiResponseModel apiResponse =
+          ApiResponseModel.fromJson(response.data);
+      if (apiResponse.status != "success" || apiResponse.status_code == 401) {
+        bool newAccessTokenResult = await tokenService.getNewAccessToken();
+        if (!newAccessTokenResult) {
+          logger.log('Going to welcome screen');
+          routeService.offAllNamed(AppLinks.login);
+          return;
+        }
+        response = await _dio.post(
+          endpoint,
+          data: data,
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer ${tokenService.accessToken.value}',
+              'Content-Type': 'multipart/form-data'
+            },
+          ),
+        );
+      }
+      return response.data;
+    } on DioException catch (e) {
+      logger.log("POST REQUEST ERROR ($endpoint) :: ${e.response?.data}");
+      if (e.response?.data != null) {
+        return e.response?.data;
+      }
+      throw "An error occurred";
+    } on SocketException {
+      throw "seems you are offline";
+    } catch (error) {
+      throw error.toString();
+    }
+  }
+
+  Future<dynamic> putRequestFile({
     required String endpoint,
     required FormData data,
   }) async {
     try {
       logger.log("PATCH REQUEST DATA:: ${data.fields.toString()}");
+      logger.log("PATCH REQUEST DATA:: ${data.files.toString()}");
       late Response response;
       response = await _dio.put(
         endpoint,
@@ -287,7 +352,7 @@ class ApiService {
         options: Options(
           headers: {
             'Authorization': 'Bearer ${tokenService.accessToken.value}',
-            // 'Content-Type': 'image/png'
+            'Content-Type': 'multipart/form-data'
           },
         ),
       );
@@ -307,7 +372,7 @@ class ApiService {
           options: Options(
             headers: {
               'Authorization': 'Bearer ${tokenService.accessToken.value}',
-              'Content-Type': 'image/png'
+              'Content-Type': 'multipart/form-data'
             },
           ),
         );
@@ -326,7 +391,6 @@ class ApiService {
     }
   }
 
-  
   Future<dynamic> getRequest(
     String endpoint,
   ) async {
@@ -368,6 +432,70 @@ class ApiService {
       return response.data;
     } on DioException catch (e) {
       logger.log("GET REQUEST ERROR ($endpoint) :: ${e.response?.data}");
+      if (e.response?.data != null) {
+        return e.response?.data;
+      }
+      throw "An error occurred";
+    } on SocketException {
+      throw "seems you are offline";
+    } catch (error) {
+      throw error.toString();
+    }
+  }
+
+  Future<dynamic> deleteRequest({
+    required String endpoint,
+    // Map? data,
+    String? token,
+  }) async {
+    try {
+      logger.log("DELETE REQUEST DATA:: $baseURL  $endpoint");
+      late Response response;
+      response = await _dio.delete(
+        endpoint,
+        // data: data,
+        // options: Options(
+        //   headers: {
+        //     'Authorization':
+        //         'Bearer ${token ?? tokenService.accessToken.value}',
+        //   },
+        // ),
+      );
+      logger.log("DELETE REQUEST RESPONSE:: $response");
+      final ApiResponseModel apiResponse =
+          ApiResponseModel.fromJson(response.data);
+      if (!endpoint.contains('auth')) {
+        if (apiResponse.status_code == 400) {
+          // if refresh token returns invalid token, log the user out
+          bool newAccessTokenResult = await tokenService.getNewAccessToken();
+          logger.log("HELLLL");
+          if (!newAccessTokenResult) {
+            logger.log("HELLLL22");
+            logger.log('Going to LOgin screen');
+            routeService.offAllNamed(AppLinks.login);
+            return;
+          }
+          response = await _dio.delete(
+            endpoint,
+            // data: data,
+            options: Options(
+              headers: {
+                'Authorization':
+                    'Bearer ${token ?? tokenService.accessToken.value}',
+              },
+            ),
+          );
+        } else if (apiResponse.status_code == 403) {
+          logger.log('Going to login screen');
+          logger.log("HELLLL33");
+          _logOut();
+          return;
+        }
+      }
+      logger.log('response${response.data}');
+      return response.data;
+    } on DioException catch (e) {
+      logger.log("DELETE REQUEST ERROR ($endpoint) :: ${e.response?.data}");
       if (e.response?.data != null) {
         return e.response?.data;
       }

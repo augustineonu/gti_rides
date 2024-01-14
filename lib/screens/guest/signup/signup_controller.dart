@@ -93,7 +93,7 @@ class SignUpController extends GetxController
         password: currentIndex.value == 0
             ? passwordController.text
             : ownerPasswordController.text,
-        userType: currentIndex.value == 0 ? 'renter' : 'owner',
+        userType: currentIndex.value == 0 ? 'renter' : 'partner',
       );
 
       logger.log("email ${signUpRequest.emailAddress}");

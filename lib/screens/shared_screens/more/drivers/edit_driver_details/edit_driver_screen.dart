@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/shared_screens/more/drivers/drivers_controller.dart';
+import 'package:gti_rides/screens/shared_screens/more/drivers/edit_driver_details/edit_driver_controller.dart';
 import 'package:gti_rides/shared_widgets/camera_option_sheet.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
@@ -14,12 +15,12 @@ import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
 
-class AddDriverScreen extends GetView<DriversController> {
-  const AddDriverScreen([Key? key]) : super(key: key);
+class EditDriverScreen extends GetView<EditDriversController> {
+  const EditDriverScreen([Key? key]) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    final controller = Get.put(DriversController());
+    final controller = Get.put(EditDriversController());
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: appBar(),
@@ -36,13 +37,13 @@ class AddDriverScreen extends GetView<DriversController> {
           child: SvgPicture.asset(ImageAssets.arrowLeft, color: black)),
       centerTitle: true,
       title: textWidget(
-          text: AppStrings.addNewDriver,
+          text: AppStrings.editDriver,
           style: getMediumStyle().copyWith(fontWeight: FontWeight.w500)),
       titleColor: iconColor(),
     );
   }
 
-  Widget body(Size size, context, {required DriversController controller}) {
+  Widget body(Size size, context, {required EditDriversController controller}) {
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 20,
@@ -58,16 +59,18 @@ class AddDriverScreen extends GetView<DriversController> {
                   NormalInputTextWidget(
                     expectedVariable: 'field',
                     title: AppStrings.driverFullName,
-                    hintText: AppStrings.fullNameHint,
+                    hintText: controller.fullName.value,
                     controller: controller.fullNameController,
+                    readOnly: true, showCursor: false,
                   ),
                   const SizedBox(height: 24),
                   NormalInputTextWidget(
                     expectedVariable: 'field',
                     title: AppStrings.driversNumber,
-                    hintText: AppStrings.phoneHintText,
+                    hintText: controller.driverNumber.value,
                     textInputType: TextInputType.phone,
                     controller: controller.phoneNoController,
+                    
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(11),
                     ],
@@ -76,9 +79,10 @@ class AddDriverScreen extends GetView<DriversController> {
                   NormalInputTextWidget(
                     expectedVariable: 'field',
                     title: AppStrings.driversEmail,
-                    hintText: AppStrings.emailHintText,
+                    hintText: controller.driverEmail.value,
                     controller: controller.emailController,
                     textInputType: TextInputType.emailAddress,
+                    readOnly: true, showCursor: false,
                   ),
                   const SizedBox(height: 24),
                   NormalInputTextWidget(

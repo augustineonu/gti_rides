@@ -18,13 +18,13 @@ class PartnerLandingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final PartnerLandingController controller =
-        Get.put(PartnerLandingController(), permanent: false);
+        Get.put(PartnerLandingController(),);
     return Scaffold(
       bottomNavigationBar:
           Obx(() => bottomNavBar(context, controller)),
       body: Obx(() => IndexedStack(
             index: controller.tabIndex.value,
-            children: const [
+            children:  [
               PartnerHomeScreen(),
               RentHistoryScreen(),
               PaymentScreen(),

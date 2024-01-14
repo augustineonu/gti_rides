@@ -29,6 +29,8 @@ class NormalInputTextWidget extends StatelessWidget {
   final TextStyle? hintStyle;
   final EdgeInsetsGeometry? contentPadding;
   final void Function()? onTap;
+  final void Function()? onEditingComplete;
+ final void Function(String)? onChanged;
   final Color? textColor;
   final double? fontSize;
   final int? maxLines;
@@ -36,38 +38,40 @@ class NormalInputTextWidget extends StatelessWidget {
   final int? maxLength;
   final bool? showCursor;
   final List<TextInputFormatter>? inputFormatters;
-  const NormalInputTextWidget(
-      {super.key,
-      this.controller,
-      this.labelText,
-       this.expectedVariable,
-      this.textInputType,
-      this.prefixIcon,
-      this.hintText,
-      this.hintTextColor,
-      this.readOnly = false,
-      this.fillColor,
-      this.filled = false,
-      required this.title,
-      this.hasRichTitle = false,
-      this.richTitle,
-      this.richSubTitle,
-      this.enabledBorder,
-      this.focusedBorder,
-      this.border,
-      this.hintStyle,
-      this.contentPadding,
-      this.onTap,
-      this.textColor,
-      this.fontSize,
-      this.maxLines = 1,
-      this.titleFontSize,
-      this.maxLength,
-      this.showCursor,
-      this.errorBorder,
-      this.inputFormatters,
-      this.initialValue = '',
-      });
+  const NormalInputTextWidget({
+    super.key,
+    this.controller,
+    this.labelText,
+    this.expectedVariable,
+    this.textInputType,
+    this.prefixIcon,
+    this.hintText,
+    this.hintTextColor,
+    this.readOnly = false,
+    this.fillColor,
+    this.filled = false,
+    required this.title,
+    this.hasRichTitle = false,
+    this.richTitle,
+    this.richSubTitle,
+    this.enabledBorder,
+    this.focusedBorder,
+    this.border,
+    this.hintStyle,
+    this.contentPadding,
+    this.onTap,
+    this.onChanged,
+    this.onEditingComplete,
+    this.textColor,
+    this.fontSize,
+    this.maxLines = 1,
+    this.titleFontSize,
+    this.maxLength,
+    this.showCursor,
+    this.errorBorder,
+    this.inputFormatters,
+    this.initialValue = '',
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +98,7 @@ class NormalInputTextWidget extends StatelessWidget {
                 text: title,
                 textOverflow: TextOverflow.visible,
                 style: getRegularStyle(fontSize: titleFontSize ?? 14)),
-        SizedBox(
+        const SizedBox(
           height: 3,
         ),
         TextFormField(
@@ -103,9 +107,14 @@ class NormalInputTextWidget extends StatelessWidget {
           keyboardType: textInputType ?? TextInputType.emailAddress,
           readOnly: readOnly!,
           onTap: onTap,
+          onChanged: onChanged,
+          onEditingComplete: onEditingComplete,
           maxLines: maxLines,
           showCursor: showCursor,
-               inputFormatters: inputFormatters,
+          inputFormatters: inputFormatters ??
+              [
+                LengthLimitingTextInputFormatter(25),
+              ],
           maxLength: maxLength,
           style: getRegularStyle(fontSize: fontSize ?? 16, color: textColor),
           decoration: InputDecoration(
@@ -149,7 +158,7 @@ class NormalInputTextWidget extends StatelessWidget {
                     Radius.circular(5.0.r),
                   ),
                 ),
-                errorBorder: errorBorder ?? 
+            errorBorder: errorBorder ??
                 OutlineInputBorder(
                   borderSide: BorderSide(
                     color: danger,
@@ -172,7 +181,8 @@ class NormalInputTextWidget extends StatelessWidget {
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return fetchErrorText(expectedTextVariable: expectedVariable ?? '');
+              return fetchErrorText(
+                  expectedTextVariable: expectedVariable ?? '');
             }
             return null;
           },

@@ -29,6 +29,10 @@ String fetchErrorText({required String expectedTextVariable}) {
       return AppStrings.fieldIsRequiredError;
       case 'gender':
       return AppStrings.selectGenderError;
+      case 'bank':
+      return AppStrings.selectBankError;
+      case 'accountNumber':
+      return AppStrings.selectAccountNumberError;
     default:
       return AppStrings.isRequiredError;
   }
@@ -52,6 +56,78 @@ String getTimeIn12HourFormat(DateTime dateTime) {
 //   var formatter = DateFormat('dd MMM yyyy');
 //   return formatter.format(datetime);
 // }
+
+
+// "dd, MMM h:mma"
+String extractMonthDay(String dateString) {
+  try {
+    // Split the input string by whitespace
+    List<String> parts = dateString.split(' ');
+
+    // Combine the day of the week, day of the month, and month
+    String formattedDate = '${parts[0]} ${parts[1]} ${parts[2]}';
+
+    return formattedDate;
+  } catch (e) {
+    // Handle the exception or simply return an empty string
+    return '';
+  }
+}
+String extractTime(String dateString) {
+  try {
+    // Split the input string by whitespace
+    List<String> parts = dateString.split(' ');
+
+    // Combine the day of the week, day of the month, and month
+    String formattedDate = parts[3];
+
+    return formattedDate;
+  } catch (e) {
+    // Handle the exception or simply return an empty string
+    return '';
+  }
+}
+
+
+
+
+String formatDateTime(String datetime) {
+  var formatter = DateFormat('dd, MMMM h:mma');
+  DateTime parsedDate = formatter.parse(datetime);
+  String formattedDate = DateFormat('dd, MMM h:mma').format(parsedDate);
+  return formattedDate;
+}
+String formatDateTime1(String datetime) {
+  // Remove the ordinal indicator ("th") from the day
+  String cleanedDate = datetime.replaceAllMapped(RegExp(r'(\d+)(st|nd|rd|th)'), (match) {
+    return match.group(1)!;
+  });
+
+  var formatter = DateFormat('dd, MMMM h:mma');
+  DateTime parsedDate = formatter.parse(cleanedDate);
+  String formattedDate = DateFormat('dd, MMM h:mma').format(parsedDate);
+  return formattedDate;
+}
+
+String formatDateTime2(String datetime) {
+  // Split the input string by spaces
+  List<String> parts = datetime.split(' ');
+
+  // Ensure that there are at least two parts (day and month)
+  if (parts.length >= 2) {
+    String day = parts[0];
+    String monthAbbreviation = parts[1].substring(0, 3);
+
+    // Join the day, comma, abbreviated month, and the rest of the string
+    String formattedDate = '$day $monthAbbreviation ${parts.sublist(2).join(' ')}';
+
+    return formattedDate;
+  }
+
+  // Return the original string if something goes wrong
+  return datetime;
+}
+
 
 // rteurns date as example 1 Nov
 String formatDate(DateTime datetime) {
@@ -106,7 +182,7 @@ showErrorSnackbar({required String message, Color? color}) {
       message: message,
       isDismissible: false,
       backgroundColor: color ?? danger,
-      duration: const Duration(seconds: 4),
+      duration: const Duration(seconds: 3),
       margin: EdgeInsets.all(10),
       padding: EdgeInsets.all(20),
       borderRadius: 16.0,

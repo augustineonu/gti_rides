@@ -77,6 +77,7 @@ class AppLinks {
   static const verifyAccountOtp = "/owner/home/payment/verifyOtp";
   static const drivers = "/more/drivers";
   static const addDriver = "/more/drivers/addDriver";
+  static const editDriver = "/more/drivers/addDriver/editDriver";
   static const changePasswordOtp = "/more/accountVerification/changePasswordOtp";
 
   // static const chatAction = "/user/chat/:key/:action";
@@ -136,6 +137,7 @@ class AppLinks {
     'addDriver': addDriver,
     'changePasswordOtp': changePasswordOtp,
     'dob': dob,
+    'editDriver': editDriver
     // 'trips': trips,
   };
 

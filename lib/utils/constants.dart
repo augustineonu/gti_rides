@@ -25,6 +25,7 @@ class AppStrings {
   static String createAccount = "Create account";
   static String fullName = "Full Name";
   static String nameHintText = "Surname and Last Name";
+  static String bankAccoutName = "Bank account Name";
   static String referralCode = "Referral Code ";
   static String referralCodeHint = "hhryryr";
   static String optional = "(Optional)";
@@ -50,6 +51,8 @@ class AppStrings {
   static String phoneIsRequiredError = "Phone is required";
   static String fieldIsRequiredError = "field cannot be empty";
   static String selectGenderError = "Kindly select gender";
+  static String selectBankError = "Kindly select bank";
+  static String selectAccountNumberError = "Kindly input bank account number";
   static String otpIsRequiredError = "Pin is required";
   static String isRequiredError = "Field is required";
   static String search = "Search";
@@ -376,6 +379,8 @@ class AppStrings {
   static String listYourVehicle = 'List your Vehicle';
   static String vehicleTypeSm = 'Vehicle type';
   static String vehicleInfo = 'Vehicle info';
+  static String vehicleInfoSubmitted = 'Vehicle information submitted';
+  static String thankYouForYourPatience = 'Thank you for your patience while we verify your documents.';
   static String documentation = 'Documentation  ';
   static String addPhotos = 'Add Photos';
   static String availability = ' Availability';
@@ -413,7 +418,7 @@ class AppStrings {
   static String howToTakePhoto =
       'Here is how to take nice picture of your vehicle';
   static String howMuchForAdvance =
-      'How much advance do you need for you to rent out your Vehicle?';
+      'How much advance notice do you need for you to rent out your Vehicle?';
   static String proposeRentalRate = 'Proposed Rental Rate (per day)';
   static String amountHintText = '0.0';
   static String discount = 'Discount';
@@ -472,6 +477,7 @@ class AppStrings {
   static String contactCustomerCare = 'Contact customer care';
   static String addDriver = 'Add a driver';
   static String addNewDriver = 'Add a new driver';
+  static String editDriver = 'Edit driver details';
   static String driverFullName = 'Driver Full Name';
   static String driversNumber = "Driver's Number";
   static String driversEmail = "Driver's Email";
@@ -481,4 +487,6 @@ class AppStrings {
   static String uploadDriversLicense = "Upload Driver's License";
   static String uploadDriversLicenseHint = "Upload License";
   static String kindlyLoginWithCredToSetBiometrics = "Kindly login with credentials to setup Biometrics";
+  static String selectAvailabilityDate = "Select availability date";
+  static String noListedCarsYet = "You have not Listed any cars yet";
 }

@@ -10,6 +10,7 @@ import 'package:gti_rides/models/user_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/renter_service.dart';
+import 'package:gti_rides/services/token_service.dart';
 import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/utils/constants.dart';
@@ -111,10 +112,11 @@ void launchWebsite() => openUrl(AppStrings.websiteUrl);
     isLoading.value = true;
     try {
       final result =
-          await renterService.switchProfile(payload: {"userType": "owner"});
+          await renterService.switchProfile(payload: {"userType": "partner"});
 
       if (result.status == "success" || result.status_code == 200) {
         await showSuccessSnackbar(message: result.message!);
+        await tokenService.getNewAccessToken();
         await routeService.offAllNamed(AppLinks.carOwnerLanding);
       } else {
         await showErrorSnackbar(message: result.message!);

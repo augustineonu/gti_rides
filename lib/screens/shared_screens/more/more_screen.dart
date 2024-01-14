@@ -64,8 +64,8 @@ class MoreScreen extends StatelessWidget {
                         itemBuilder: (context, index) {
                           // show "My Drivers" only if user type is Owner
                           final option = controller.profileOptions[index];
-                          if (controller.user.value.userType == "owner") {
-                            return profileOptionsWIdget(
+                          if (controller.tokens.value.userType == "partner") {
+                            return index == 1 ? SizedBox() : profileOptionsWIdget(
                               imageUrl: option['image'],
                               title: option['title'],
                               onTap: () {
@@ -81,6 +81,7 @@ class MoreScreen extends StatelessWidget {
                                 case 3:
                                   controller.routeToDrivers();
                                 case 4:
+                                controller.launchWebsite();
                                 case 5:
                                   controller.routeToReferralCode();
                                   break;
@@ -212,8 +213,9 @@ class MoreScreen extends StatelessWidget {
           ),
           profileAvatar(
             height: 40,
-            width: 40, imgUrl: controller.user.value.profilePic!,
-            // 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ88joJfjwoaz_jWaMQhbZn2X11VHGBzWKiQg&usqp=CAU',
+            width: 40, 
+            imgUrl: controller.user.value.profilePic!,
+          // imgUrl:  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ88joJfjwoaz_jWaMQhbZn2X11VHGBzWKiQg&usqp=CAU',
           ),
         ],
       ),

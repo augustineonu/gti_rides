@@ -15,27 +15,23 @@ Widget dropdownWidget(
     InputDecoration? decoration,
     required String title,
     Color? iconColor,
-    void Function()? onTap
-    // double? radius,
-    // Color? arrow,
-    // Color? display,
-    // FontWeight? fontWeight,
-    // double? fontSize,
+    void Function()? onTap,
+    String? expectedVariable,
+
     }) {
   Map<String, dynamic>? selectedValue;
 
   return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       textWidget(
         text: title,
-        style: getRegularStyle(fontSize: 12.sp),
+        style: getRegularStyle(fontSize: 14.sp),
       ),
       SizedBox(
         height: 5.sp,
       ),
       SizedBox(
-        height: 45.sp,
-        // padding: const EdgeInsets.symmetric(vertical: 5.0),
         child: GestureDetector(
           onTap: onTap,
           child: Material(
@@ -45,6 +41,13 @@ Widget dropdownWidget(
               alignedDropdown: true,
               child: DropdownButtonFormField<Map<String, dynamic>>(
                 isExpanded: true,
+                   validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return fetchErrorText(
+                        expectedTextVariable: expectedVariable ?? '');
+                  }
+                  return null;
+                },
                 hint: Text(
                   hintText!,
                   style: getRegularStyle(color: borderColor),
@@ -56,7 +59,8 @@ Widget dropdownWidget(
                             alignment: Alignment.centerLeft,
                             constraints: const BoxConstraints(minWidth: 100),
                             child: Text(
-                              selectedValue?['name'] ?? '',
+                              item['name'] ?? '',
+                              // selectedValue?['name'] ?? 'no bank',
                               style: getRegularStyle(),
                             ),
                           ))
@@ -67,17 +71,12 @@ Widget dropdownWidget(
                   return DropdownMenuItem(
                     value: item,
                     child: GestureDetector(
-                      onTap: () {
-                        onChange(item);
-
-                        selectedValue = item;
-                        print("updated state ${selectedValue.toString()}");
-                      },
+                  
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            item['name'] ?? '',
+                            item['name'] ?? 'yyyy',
                             style: getRegularStyle(
                               fontSize: 16,
                             ),

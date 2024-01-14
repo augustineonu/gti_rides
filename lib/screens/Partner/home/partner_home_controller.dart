@@ -3,21 +3,27 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/route/app_links.dart';
+import 'package:gti_rides/services/auth_service.dart';
 import 'package:gti_rides/services/logger.dart';
+import 'package:gti_rides/services/partner_service.dart';
 import 'package:gti_rides/services/renter_service.dart';
+import 'package:gti_rides/services/token_service.dart';
 import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/utils.dart';
 
 import '../../../services/route_service.dart';
 
-class PartnerHomeController extends GetxController {
+class PartnerHomeController extends GetxController
+    with StateMixin<List<dynamic>> {
   Logger logger = Logger('PartnerHomeController');
   late Timer timer;
   RxInt currentIndex = 0.obs;
   RxBool isLoading = false.obs;
+  // RxList<dynamic>? cars = <dynamic>[].obs;
 
   RxBool isDone = false.obs;
   RxBool showPassword = false.obs;
+  RxBool isFetchingCars = false.obs;
   Rx<String> exampleText = "example".obs;
   late PageController cardPageController;
   ScrollController scrollController = ScrollController();
@@ -25,18 +31,22 @@ class PartnerHomeController extends GetxController {
   TextEditingController emailOrPhoneController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  final cars = <dynamic>[].obs;
+
   PartnerHomeController() {
     init();
   }
 
-  void init() {
+  void init() async {
     logger.log('Controller initialized');
+    await getAllCars();
   }
 
   onPageChanged(int index) {}
   @override
   void onInit() {
     super.onInit();
+
     cardPageController = PageController(initialPage: 0);
 
     timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
@@ -64,13 +74,16 @@ class PartnerHomeController extends GetxController {
   void routeToLandingPage() =>
       routeService.gotoRoute(AppLinks.carRenterLanding);
   void routeToSearchCity() => routeService.gotoRoute(AppLinks.searchCity);
-  void routeToCarRenterLanding() => routeService.gotoRoute(AppLinks.carRenterLanding);
+  void routeToCarRenterLanding() =>
+      routeService.gotoRoute(AppLinks.carRenterLanding);
   void routeTolistVehicle() => routeService.gotoRoute(AppLinks.listVehicle);
   void routeToManageVehicle() => routeService.gotoRoute(AppLinks.manageVehicle);
+  void routeToCarHistory({Object? arguments}) =>
+      routeService.gotoRoute(AppLinks.carHistory, arguments: arguments);
 
   void launchWebsite() => openUrl(AppStrings.websiteUrl);
 
-   Future<void> switchProfileToRenter() async {
+  Future<void> switchProfileToRenter() async {
     isLoading.value = true;
     try {
       final result =
@@ -79,6 +92,8 @@ class PartnerHomeController extends GetxController {
       if (result.status == "success" || result.status_code == 200) {
         await showSuccessSnackbar(message: result.message!);
         logger.log("success message::: ${result.message}");
+
+        await tokenService.getNewAccessToken();
         await routeService.offAllNamed(AppLinks.carRenterLanding);
       } else {
         await showErrorSnackbar(message: result.message!);
@@ -91,6 +106,35 @@ class PartnerHomeController extends GetxController {
     }
   }
 
+  Future<void> getAllCars() async {
+    isFetchingCars.value = true;
+    change(<dynamic>[].obs, status: RxStatus.loading());
+    try {
+      final response = await partnerService.getCars(queryType: 'all');
+      if (response.status == 'success' || response.status_code == 200) {
+        logger.log("gotten cars ${response.data}");
+
+        if (response.data == null || response.data!.isEmpty) {
+          // If the list is empty
+          change(<dynamic>[].obs, status: RxStatus.empty());
+          [] = response.data!;
+          logger.log("cars $cars");
+        } else {
+          // If the list is not empty
+          change(response.data!, status: RxStatus.success());
+          cars.value = response.data!;
+          update();
+        }
+
+        // isFetchingCars.value = false;
+      } else {
+        logger.log("unable to get cars ${response.data}");
+      }
+    } catch (exception) {
+      logger.log("error  $exception");
+      change(<dynamic>[].obs, status: RxStatus.error(exception.toString()));
+    }
+  }
 
   @override
   void dispose() {

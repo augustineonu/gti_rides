@@ -96,6 +96,9 @@ class PhoneVerificationController extends GetxController {
         // backend needs to change result.message to "OTP Verified Success" to
         // match all OTP verifications
         await showSuccessSnackbar(message: result.message!);
+        
+        // save new access token as backend sends new one when OTP is verified
+
         await tokenService.setTokenModel(result.data);
         tokenService.setAccessToken(result.data["accessToken"]);
         logger.log("saved new token:: ${result.data["accessToken"]}");

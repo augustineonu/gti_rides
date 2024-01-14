@@ -209,7 +209,7 @@ class SignUpScreen extends GetView<SignUpController> {
               ],
             ),
           ),
-          ///// owner registration page
+          ///// renter registration page
           SingleChildScrollView(
             child: Form(
               autovalidateMode: AutovalidateMode.onUserInteraction,
