@@ -6,6 +6,7 @@ import 'package:gti_rides/app_bindings.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/route/routes.dart';
 import 'package:gti_rides/services/logger.dart';
+import 'package:gti_rides/services/network_controller.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/services/storage_service.dart';
 import 'package:gti_rides/services/user_service.dart';
@@ -23,6 +24,7 @@ void main() async {
       androidApiKey: 'android_sdk-3337cce19e6e590feed33d6b48f39eae825fcfd0');
  bool isNewUser = await determineUserStatus();
   runApp( GtiRides(isNewUser: isNewUser,));
+  // NetworkController.;
 }
 
   Future<bool> determineUserStatus() async{

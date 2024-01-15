@@ -7,6 +7,7 @@ import 'package:gti_rides/services/device_service.dart';
 import 'package:gti_rides/services/google_sign_in_service.dart';
 import 'package:gti_rides/services/image_service.dart';
 import 'package:gti_rides/services/more_service.dart';
+import 'package:gti_rides/services/network_controller.dart';
 import 'package:gti_rides/services/partner_service.dart';
 import 'package:gti_rides/services/payment_service.dart';
 import 'package:gti_rides/services/renter_service.dart';
@@ -37,6 +38,7 @@ class AppBinding extends Bindings {
     Get.put(PartnerService());
     Get.put(PaymentService());
     Get.put(ApiExceptionService());
+    Get.put(NetworkController(), permanent: true);
     // Get.put(AppService());
     // Get.put(FirebaseService());
     // Get.put(AgentService());

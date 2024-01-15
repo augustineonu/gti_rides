@@ -144,17 +144,15 @@ class ApiService {
       return response.data;
     } on DioException catch (e) {
       logger.log("POST REQUEST ERROR ($endpoint) :: ${e.response?.data}");
-      checkException(e);
+      // checkException(e);
 
-      // if (e.response?.data != null) {
-      //   return e.response?.data;
-      // }
-      // throw "An error occurred";
-    }
-    // on SocketException {
-    //   throw "seems you are offline";
-    // }
-    catch (error) {
+      if (e.response?.data != null) {
+        return e.response?.data;
+      }
+      throw "An error occurred";
+    } on SocketException {
+      throw "seems you are offline";
+    } catch (error) {
       throw error.toString();
     }
   }

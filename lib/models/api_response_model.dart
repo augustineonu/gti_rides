@@ -2,7 +2,7 @@
 import 'dart:convert';
 
 class ApiResponseModel {
-    final int status_code;
+    final dynamic status_code;
     final String status;
     final String? message;
     final dynamic data;
