@@ -239,7 +239,7 @@ class AppRoutes {
     ),
     GetPage(
       name: AppLinks.listVehicle,
-      page: () => const ListVehicleScreen(),
+      page: () =>  ListVehicleScreen(),
     ),
     GetPage(
         name: AppLinks.manageVehicle,

@@ -23,6 +23,7 @@ import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/utils.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:multiselect/multiselect.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 
 enum Fruit {
   apple,
@@ -38,143 +39,161 @@ class ListVehicleScreenBinding extends Bindings {
 }
 
 class ListVehicleScreen extends GetView<ListVehicleController> {
-  const ListVehicleScreen([Key? key]) : super(key: key);
+  ListVehicleScreen([Key? key]) : super(key: key);
+  final controller = Get.put<ListVehicleController>(ListVehicleController());
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    final controller = Get.put<ListVehicleController>(ListVehicleController());
     return Obx(() => Scaffold(
           appBar: appBar(controller),
           // body: body(size, context)),
           body: Padding(
             padding: EdgeInsets.only(left: 20.0.sp, right: 20.sp, top: 13.sp),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+            child: Stack(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: listingTracker(
-                          subTitle: AppStrings.vehicleType,
-                          child: Dash(
-                              direction: Axis.horizontal,
-                              length: 27.sp,
-                              dashLength: 2,
-                              dashThickness: 2,
-                              dashColor: primaryColor),
-                          isSelected: controller.currentIndex.value == 0,
-                        ),
-                      ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: listingTracker(
+                              subTitle: AppStrings.vehicleType,
+                              child: Dash(
+                                  direction: Axis.horizontal,
+                                  length: 27.sp,
+                                  dashLength: 2,
+                                  dashThickness: 2,
+                                  dashColor: primaryColor),
+                              isSelected: controller.currentIndex.value == 0,
+                            ),
+                          ),
 
-                      Expanded(
-                        child: listingTracker(
-                          subTitle: AppStrings.vehicleInfo,
-                          child: Dash(
-                              direction: Axis.horizontal,
-                              length: 27.sp,
-                              dashLength: 2,
-                              dashThickness: 2,
-                              dashColor: primaryColor),
-                          isSelected: controller.currentIndex.value == 1,
-                        ),
-                      ),
-                      // CustomPaint(painter: DrawDottedhorizontalline()),
+                          Expanded(
+                            child: listingTracker(
+                              subTitle: AppStrings.vehicleInfo,
+                              child: Dash(
+                                  direction: Axis.horizontal,
+                                  length: 27.sp,
+                                  dashLength: 2,
+                                  dashThickness: 2,
+                                  dashColor: primaryColor),
+                              isSelected: controller.currentIndex.value == 1,
+                            ),
+                          ),
+                          // CustomPaint(painter: DrawDottedhorizontalline()),
 
-                      Expanded(
-                        child: listingTracker(
-                          subTitle: AppStrings.documentation,
-                          child: Dash(
-                              direction: Axis.horizontal,
-                              length: 28.sp,
-                              dashLength: 2,
-                              dashThickness: 2,
-                              dashColor: primaryColor),
-                          isSelected: controller.currentIndex.value == 2,
-                        ),
-                      ),
-                      // CustomPaint(painter: DrawDottedhorizontalline()),
+                          Expanded(
+                            child: listingTracker(
+                              subTitle: AppStrings.documentation,
+                              child: Dash(
+                                  direction: Axis.horizontal,
+                                  length: 28.sp,
+                                  dashLength: 2,
+                                  dashThickness: 2,
+                                  dashColor: primaryColor),
+                              isSelected: controller.currentIndex.value == 2,
+                            ),
+                          ),
+                          // CustomPaint(painter: DrawDottedhorizontalline()),
 
-                      Expanded(
-                        child: listingTracker(
-                          subTitle: AppStrings.addPhotos,
-                          child: Dash(
-                              direction: Axis.horizontal,
-                              length: 28.sp,
-                              dashLength: 2,
-                              dashThickness: 2,
-                              dashColor: primaryColor),
-                          isSelected: controller.currentIndex.value == 3,
-                        ),
+                          Expanded(
+                            child: listingTracker(
+                              subTitle: AppStrings.addPhotos,
+                              child: Dash(
+                                  direction: Axis.horizontal,
+                                  length: 28.sp,
+                                  dashLength: 2,
+                                  dashThickness: 2,
+                                  dashColor: primaryColor),
+                              isSelected: controller.currentIndex.value == 3,
+                            ),
+                          ),
+                          Expanded(
+                            child: listingTracker(
+                              subTitle: AppStrings.availability,
+                              child: const Dash(
+                                  direction: Axis.horizontal,
+                                  length: 25,
+                                  dashLength: 4,
+                                  dashThickness: 2,
+                                  dashColor: Colors.transparent),
+                              isSelected: controller.currentIndex.value == 4,
+                            ),
+                          ),
+                        ],
                       ),
-                      Expanded(
-                        child: listingTracker(
-                          subTitle: AppStrings.availability,
-                          child: const Dash(
-                              direction: Axis.horizontal,
-                              length: 25,
-                              dashLength: 4,
-                              dashThickness: 2,
-                              dashColor: Colors.transparent),
-                          isSelected: controller.currentIndex.value == 4,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+
+                    // imageUploadWidget(
+                    //   title: AppStrings.uploadVehicleDoc,
+                    //   body: AppStrings.pleaseMakeSurePicAreClear,
+                    //   onTap: () {},
+                    // ),
+                    Flexible(
+                      fit: FlexFit.tight,
+                      child: SingleChildScrollView(
+                          child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          // stepper widget
+                          SizedBox(
+                            height: 20.sp,
+                          ),
+                          // pageview pages
+                          SizedBox(
+                            height: size.height / 0.80.sp,
+                            child: PageView(
+                              // itemCount: controller.pages.length,
+                              // physics: NeverScrollableScrollPhysics(),
+                              controller: controller.pageController,
+                              onPageChanged: (value) {
+                                controller.currentIndex.value = value;
+                              },
+                              children: <Widget>[
+                                // Vehicle type page
+                                vehicleTypePage(context, controller, size),
+
+                                // vehicle info page
+                                vehicleInfoPage(context, controller, size),
+
+                                // Documantation page
+                                documentationPage(context, controller, size),
+
+                                //Add photos page
+                                addPhotosPage(size, controller),
+                                availabilityPage(controller, context, size),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: size.height * 0.02,
+                          ),
+                          // continueButto
+                        ],
+                      )),
+                    ),
+                  ],
                 ),
-
-                // imageUploadWidget(
-                //   title: AppStrings.uploadVehicleDoc,
-                //   body: AppStrings.pleaseMakeSurePicAreClear,
-                //   onTap: () {},
-                // ),
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: SingleChildScrollView(
-                      child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      // stepper widget
-                      SizedBox(
-                        height: 20.sp,
-                      ),
-                      // pageview pages
-                      SizedBox(
-                        height: size.height / 0.80.sp,
-                        child: PageView(
-                          // itemCount: controller.pages.length,
-                          physics: NeverScrollableScrollPhysics(),
-                          controller: controller.pageController,
-                          onPageChanged: (value) {
-                            controller.currentIndex.value = value;
-                          },
-                          children: <Widget>[
-                            // Vehicle type page
-                            vehicleTypePage(context, controller, size),
-
-                            // vehicle info page
-                            vehicleInfoPage(context, controller, size),
-
-                            // Documantation page
-                            documentationPage(context, controller, size),
-
-                            //Add photos page
-                            addPhotosPage(size, controller),
-                            availabilityPage(controller, context, size),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: size.height * 0.02,
-                      ),
-                      // continueButto
-                    ],
-                  )),
-                ),
+                controller.isGettingyear.isTrue
+                    ? Stack(
+                        children: [
+                          const Opacity(
+                            opacity: 0.5,
+                            child: ModalBarrier(
+                                dismissible: false, color: Colors.transparent),
+                          ),
+                          Center(
+                            child: Center(child: centerLoadingIcon()),
+                          ),
+                        ],
+                      )
+                    : const SizedBox()
               ],
             ),
           ),
@@ -200,7 +219,6 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
               Expanded(
                 child: dateContainer(
                   size,
-                  
                   title: AppStrings.from,
                   color: controller.startDateTime.value.isEmpty ? grey1 : grey5,
                   text: controller.startDateTime.value.isEmpty
@@ -225,7 +243,6 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
               Expanded(
                 child: dateContainer(
                   size,
-                  
                   title: AppStrings.to,
                   text: controller.endDateTime.value.isEmpty
                       ? AppStrings.dateTimeHintText
@@ -521,8 +538,6 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
     );
   }
 
- 
-
   Future<dynamic> noDriverDialog(Size size, ListVehicleController controller) {
     return Get.dialog(StatefulBuilder(builder: (context, setState) {
       return Dialog(
@@ -590,17 +605,22 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
           ),
           ListView.separated(
             shrinkWrap: true,
-            itemCount: 5,
+            itemCount: controller.cameraInstructions.length,
             itemBuilder: (context, index) {
+              var instruction = controller.cameraInstructions[index];
               return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SvgPicture.asset(ImageAssets.kycCheck),
                   SizedBox(
                     width: 6.sp,
                   ),
-                  textWidget(
-                      text: "Please make the photos clear",
-                      style: getRegularStyle(fontSize: 12.sp)),
+                  Expanded(
+                    child: textWidget(
+                        text: instruction,
+                        style: getRegularStyle(fontSize: 12.sp), textOverflow: TextOverflow.visible,
+                        ),
+                  ),
                 ],
               );
             },
@@ -1040,6 +1060,10 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                     .toList(),
                 onChange: (selectedBrand) async {
                   print('Selected value: $selectedBrand');
+                  controller.vehicleYear!.clear();
+                  controller.vehicleYear!.value = [];
+                  print(
+                      "VEHICLE YEAR VALUE:: ${controller.vehicleYear!.value}");
 
                   // Find the brand object with the selected name
                   var selectedBrandObject =
@@ -1051,10 +1075,47 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                     String brandCode =
                         selectedBrandObject['brandCode'] as String;
                     await controller.getBrandModel(brandCode1: brandCode);
-                    // controller.brandCode.value = brandCode;
                   }
-                  // controller.getVehicleYear(brandCode: 'brandCode');
                 }),
+            // Center(
+            //   child: DropdownButtonHideUnderline(
+            //     child: DropdownButton2<String>(
+            //       isExpanded: true,
+            //       hint: Text(
+            //         'Select Item',
+            //         style: TextStyle(
+            //           fontSize: 14,
+            //           color: Theme.of(context).hintColor,
+            //         ),
+            //       ),
+            //       items: controller.items
+            //           .map((String item) => DropdownMenuItem<String>(
+            //                 value: item,
+            //                 child: Text(
+            //                   item,
+            //                   style: const TextStyle(
+            //                     fontSize: 14,
+            //                   ),
+            //                 ),
+            //               ))
+            //           .toList(),
+            //       value: controller.selectedValue?.value,
+            //       onChanged: (String? value) {
+            //         // setState(() {
+            //         controller.selectedValue?.value = value!;
+            //         // });
+            //       },
+            //       buttonStyleData: const ButtonStyleData(
+            //         padding: EdgeInsets.symmetric(horizontal: 16),
+            //         height: 40,
+            //         width: 140,
+            //       ),
+            //       menuItemStyleData: const MenuItemStyleData(
+            //         height: 40,
+            //       ),
+            //     ),
+            //   ),
+            // ),
             SizedBox(
               height: 24.sp,
             ),
@@ -1064,11 +1125,23 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                 title: AppStrings.whatIsTheModelOfVehicle,
                 iconColor: grey3,
                 expectedVariable: 'field',
+                // key: UniqueKey(),
+                //              var _value = itemList.isEmpty
+                // ? value
+                // : itemList.firstWhere((item) => item.value == value.value);
+                // selectedValue: controller.vehicleYear!.isEmpty
+                //     ? controller.yearName.value
+                //     : controller.vehicleYear!.firstWhere((year) =>
+                //         year["yearName"] == controller.yearName.value),
+                selectedValue: controller.yearName?.isEmpty != null
+                    ? controller.yearName?.value
+                    : controller.yearName?.value,
                 values: (controller.vehicleYear ?? [])
                     .map((year) => year['yearName'] as String)
                     .toList(),
                 onChange: (selectedYear) {
                   print('Selected value: $selectedYear');
+                  selectedYear = controller.yearName?.value;
                   // controller.yearCode.value = selectedYear;
                   // Find the brand object with the selected name
                   var selectedYearObject =
@@ -1077,7 +1150,9 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                     orElse: () => null,
                   );
                   if (selectedYearObject != null) {
+                    controller.yearName?.value = selectedYearObject['yearName'];
                     String yearCode = selectedYearObject['yearCode'] as String;
+                    print("Selected year name: ${controller.yearName?.value}");
                     controller.yearCode.value = yearCode;
                     print("code>>>> ${yearCode}");
                   }
@@ -1227,9 +1302,12 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                       border: Border.all(color: primaryColor),
                     ),
                     child: Center(
-                      child: SvgPicture.asset(
-                        ImageAssets.toyCar1,
-                        width: 33,
+                      child: Transform.scale(
+                        scale: 0.9,
+                        child: SvgPicture.asset(
+                          ImageAssets.toyCar1,
+                          // width: 33,
+                        ),
                       ),
                     ),
                   ),

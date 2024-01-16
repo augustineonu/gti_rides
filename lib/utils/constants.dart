@@ -320,7 +320,7 @@ class AppStrings {
   static String tapToChange = 'Tap to change';
   static String selectOption = 'Select option';
   static String camera = 'Camera';
-  static String gallery = 'Galerry';
+  static String gallery = 'Gallery ';
   static String remove = 'Remove';
   static String loginSettings = 'LOGIN SETTINGS';
   static String mobileNumber = 'Mobile Number';

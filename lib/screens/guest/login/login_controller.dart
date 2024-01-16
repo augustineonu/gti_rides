@@ -167,7 +167,7 @@ class LoginController extends GetxController
 
   Future<void> biometricLogin() async {
     final UserModel? userModel = await userService.getUserData();
-    logger.log("user:: ${userModel!.emailAddress!}");
+    logger.log("user:: ${userModel?.emailAddress ?? "NO USER FOUND"}");
 
     final authenticated = await biometricService.authenticate(
         message: 'Please authenticate to Login into your account');
@@ -185,7 +185,7 @@ class LoginController extends GetxController
         try {
           isLoading1.value = true;
           final response = await authService.biometricLogin(payload: {
-            "user": userModel.emailAddress!,
+            "user": userModel?.emailAddress!,
             "biometricID": deviceService.deviceId
           });
           if (response.status == "success" || response.status_code == 200) {

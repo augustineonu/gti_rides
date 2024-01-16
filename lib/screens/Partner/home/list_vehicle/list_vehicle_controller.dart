@@ -43,6 +43,8 @@ class ListVehicleController extends GetxController {
   RxBool isFromManageCars = false.obs;
   RxBool isLoading1 = false.obs;
   RxBool isGettingBrands = false.obs;
+  RxBool isGettingBrandModel = false.obs;
+  RxBool isGettingyear = false.obs;
   RxBool isAddingCar = false.obs;
   PageController pageController = PageController();
   RxInt currentIndex = 0.obs;
@@ -50,6 +52,7 @@ class ListVehicleController extends GetxController {
   RxString flagEmoji = '🇺🇸'.obs;
   RxString brandCode = ''.obs;
   RxString modelCode = ''.obs;
+  RxString? yearName;
   RxString yearCode = ''.obs;
   RxString vehicleTypeCode = ''.obs;
   RxString vehicleSeatCode = ''.obs;
@@ -158,6 +161,14 @@ class ListVehicleController extends GetxController {
   }
 
   // variables
+
+  List<String> cameraInstructions = [
+    "Ensure the car is thoroughly cleaned before taking photos",
+    "Use a high-quality camera or smartphone with a high-resolution camera",
+    "Take photos in good lighting to capture true colors and details",
+    "Capture all angles including front, back, sides, and interior",
+    "Highlight unique features and special upgrades"
+  ];
 
   List<String> vehicleBrands = [
     AppStrings.allBrand,
@@ -494,7 +505,8 @@ class ListVehicleController extends GetxController {
 
   Future<void> getBrands() async {
     try {
-      isGettingBrands.value = true;
+      //isGettingBrandModel.value = true;
+      vehicleYear!.clear();
       final response = await partnerService.getBrand();
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("gotten brands ${response.data}");
@@ -511,31 +523,48 @@ class ListVehicleController extends GetxController {
     }
   }
 
+  final RxList<String> items = [
+  'Item1',
+  'Item2',
+  'Item3',
+  'Item4',
+].obs;
+Rx<String>? selectedValue;
+
   Future<void> getVehicleYear(
       {required String brandCode, required String brandModelCode}) async {
     try {
-      isGettingBrands.value = true;
+      //isGettingBrands.value = true;
+      isGettingyear.value = true;
+      vehicleYear!.clear();
       final response = await partnerService.getVehicleYear(
           brandCode: brandCode, brandModelCode: brandModelCode);
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("gotten vehicle year ${response.data}");
         if (response.data != null && response.data != []) {
-          vehicleYear?.value = response.data!;
+          // vehicleYear?.value = response.data!;
+          vehicleYear!.assignAll(response.data!);
+          isGettingyear.value = false;
           logger.log("msg ${brands.value.data}");
+        } else {
+          logger.log("no vehicle year ${response.data}");
         }
       } else {
         logger.log("unable to get vehicle year ${response.data}");
         showErrorSnackbar(message: response.message!);
-        isGettingBrands.value = false;
+        isGettingyear.value = false;
       }
     } catch (exception) {
       logger.log("error  $exception");
+    } finally {
+      isGettingyear.value = false;
     }
   }
 
   Future<void> getBrandModel({required String brandCode1}) async {
     try {
-      isGettingBrands.value = true;
+      // isGettingBrandModel.value = true;
+      // vehicleYear!.clear();
       final response =
           await partnerService.getBrandModel(brandCode: brandCode1);
       if (response.status == 'success' || response.status_code == 200) {
@@ -561,7 +590,7 @@ class ListVehicleController extends GetxController {
 
   Future<void> getStates() async {
     try {
-      isGettingBrands.value = true;
+      //isGettingBrands.value = true;
       final response = await partnerService.getStates();
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("gotten states ${response.data}");
@@ -580,7 +609,7 @@ class ListVehicleController extends GetxController {
 
   Future<void> getCity({required String cityCode1}) async {
     try {
-      isGettingBrands.value = true;
+      //isGettingBrands.value = true;
       final response = await partnerService.getCity(cityCode: cityCode1);
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("gotten cities ${response.data}");
@@ -600,7 +629,7 @@ class ListVehicleController extends GetxController {
 
   Future<void> getTransmission() async {
     try {
-      isGettingBrands.value = true;
+      //isGettingBrands.value = true;
       final response = await partnerService.getTransmission();
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("gotten transmission ${response.data}");
@@ -619,7 +648,7 @@ class ListVehicleController extends GetxController {
 
   Future<void> getCarFeatures() async {
     try {
-      isGettingBrands.value = true;
+      //isGettingBrands.value = true;
       final response = await partnerService.getFeatures();
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("gotten car features ${response.data}");
@@ -638,7 +667,7 @@ class ListVehicleController extends GetxController {
 
   Future<void> getVehicleType() async {
     try {
-      isGettingBrands.value = true;
+      //isGettingBrands.value = true;
       final response = await partnerService.getVehicleType();
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("gotten vehicle Types ${response.data}");
@@ -657,7 +686,7 @@ class ListVehicleController extends GetxController {
 
   Future<void> getVehicleSeats() async {
     try {
-      isGettingBrands.value = true;
+      //isGettingBrands.value = true;
       final response = await partnerService.getVehicleSeats();
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("gotten vehicle seats ${response.data}");
@@ -676,7 +705,7 @@ class ListVehicleController extends GetxController {
 
   Future<void> getInsuranceType() async {
     try {
-      isGettingBrands.value = true;
+      //isGettingBrands.value = true;
       final response = await partnerService.getInsuranceType();
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("gotten insurance type ${response.data}");
@@ -695,7 +724,7 @@ class ListVehicleController extends GetxController {
 
   Future<void> getDrivers() async {
     try {
-      isGettingBrands.value = true;
+      //isGettingBrands.value = true;
       final response = await partnerService.getDrivers();
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("gotten drivers ${response.data}");

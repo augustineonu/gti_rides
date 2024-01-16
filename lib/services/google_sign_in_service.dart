@@ -1,7 +1,9 @@
+import 'dart:io';
+
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:gti_rides/services/logger.dart';
-
+import 'package:dio/dio.dart';
 
 GoogleSignInService get googleSignInService => Get.find();
 
@@ -33,6 +35,15 @@ class GoogleSignInService {
         "googleAccessToken": googleAccessToken,
         "googleId": googleId,
       };
+    } on DioException catch (e) {
+      logger.log("GOOGLE SIGNIN REQUEST ERROR :: ${e.response?.data}");
+
+      if (e.response?.data != null) {
+        return e.response?.data;
+      }
+      throw "An error occurred";
+    } on SocketException {
+      throw "seems you are offline";
     } catch (e) {
       rethrow;
     }

@@ -1,49 +1,52 @@
-
 import 'dart:convert';
 
 class ListResponseModel {
-    final int? status_code;
-    final String? status;
-    final String? message;
-     List<dynamic>? data;
+  final int? status_code;
+  final String? status;
+  final String? message;
+  List<dynamic>? data;
 
-    ListResponseModel({
-        this.status_code,
-        this.status,
-        this.message,
-        this.data,
-    });
+  ListResponseModel({
+    this.status_code,
+    this.status,
+    this.message,
+    this.data,
+  });
 
-    ListResponseModel copyWith({
-        int? status_code,
-        String? status,
-        String? message,
-        List<dynamic>? data,
-    }) => 
-        ListResponseModel(
-            status_code: status_code ?? this.status_code,
-            status: status ?? this.status,
-            message: message ?? this.message,
-            data: data ?? this.data,
-        );
+  ListResponseModel copyWith({
+    int? status_code,
+    String? status,
+    String? message,
+    List<dynamic>? data,
+  }) =>
+      ListResponseModel(
+        status_code: status_code ?? this.status_code,
+        status: status ?? this.status,
+        message: message ?? this.message,
+        data: data ?? this.data,
+      );
 
-    factory ListResponseModel.fromRawJson(String str) => ListResponseModel.fromJson(json.decode(str));
+  factory ListResponseModel.fromRawJson(String str) =>
+      ListResponseModel.fromJson(json.decode(str));
 
-    String toRawJson() => json.encode(toJson());
+  String toRawJson() => json.encode(toJson());
 
-    factory ListResponseModel.fromJson(Map<String, dynamic> json) => ListResponseModel(
+  factory ListResponseModel.fromJson(Map<String, dynamic> json) =>
+      ListResponseModel(
         status_code: json["status_code"],
         status: json["status"],
         message: json["message"],
-        data: json["data"] == null ? [] : List<dynamic>.from(json["data"]!.map((x) => x)),
-    );
+        data: json["data"] == null || json["data"] == []
+            ? []
+            : List<dynamic>.from(json["data"]!.map((x) => x)),
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "status_code": status_code,
         "status": status,
         "message": message,
         "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x)),
-    };
+      };
 }
 
 

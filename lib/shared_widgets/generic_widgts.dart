@@ -520,7 +520,7 @@ Future<dynamic> successDialog({
   return Get.dialog(
     Dialog(
       alignment: Alignment.topCenter,
-      insetPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       child: Stack(
         children: [
           Positioned(

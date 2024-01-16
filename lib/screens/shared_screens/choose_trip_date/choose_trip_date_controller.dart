@@ -110,5 +110,5 @@ class ChooseTripDateController extends GetxController {
             "${startDate} ${selectedStartHour}:${selectedStartMinute < 10 ? '0${selectedStartMinute}' : selectedStartMinute}${selectedStartAmPm.value == 0 ? "am" : "PM"}",
         "end":
             "${endDate} ${selectedEndHour}:${selectedEndMins < 10 ? '0${selectedEndMins}' : selectedEndMins}${selectedEndAmPm.value == 0 ? "am" : "PM"}"
-      });
+      }, closeOverlays: true);
 }

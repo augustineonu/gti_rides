@@ -153,17 +153,15 @@ Widget dropdownWidget1({
   required String? hintText,
   required List<String> values,
   required Function onChange,
+  String? selectedValue,
   InputDecoration? decoration,
   required String? title,
   Color? iconColor,
   void Function()? onTap,
   String? expectedVariable,
   bool multipleSelection = false,
-  // double? radius,
-  // Color? arrow,
-  // Color? display,
-  // FontWeight? fontWeight,
-  // double? fontSize,
+  Key? key,
+
 }) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -199,7 +197,7 @@ Widget dropdownWidget1({
                   hintText!,
                   style: getRegularStyle(color: borderColor),
                 ),
-                // value: selectedUserValue,
+                value: selectedValue,
                 selectedItemBuilder: (context) {
                   return values
                       .map((item) => Container(
@@ -229,7 +227,8 @@ Widget dropdownWidget1({
                               ),
                             ),
                           ],
-                        ) :   Text(
+                        ) : 
+                          Text(
                               item,
                               style: getRegularStyle(
                                 fontSize: 16,
@@ -238,6 +237,7 @@ Widget dropdownWidget1({
                       ),
                     )
                     .toList(),
+                    key: key,
                 style: Theme.of(context)
                     .textTheme
                     .titleLarge
