@@ -28,6 +28,7 @@ class ListVehicleController extends GetxController {
 
   Rx<ListResponseModel> brands = ListResponseModel().obs;
   RxList<dynamic>? vehicleYear = <dynamic>[].obs;
+  RxList<dynamic>? brandModel = <dynamic>[].obs;
   RxList<dynamic>? states = <dynamic>[].obs;
   RxList<dynamic>? cities = <dynamic>[].obs;
   RxList<dynamic>? transmissions = <dynamic>[].obs;
@@ -52,7 +53,9 @@ class ListVehicleController extends GetxController {
   RxString flagEmoji = '🇺🇸'.obs;
   RxString brandCode = ''.obs;
   RxString modelCode = ''.obs;
-  RxString? yearName;
+  // RxString? yearName;
+  RxString? modelName;
+  RxString? selectedBrand;
   RxString yearCode = ''.obs;
   RxString vehicleTypeCode = ''.obs;
   RxString vehicleSeatCode = ''.obs;
@@ -119,7 +122,7 @@ class ListVehicleController extends GetxController {
     await getInsuranceType();
     logger.log("oooooooooo");
     // Access the arguments using Get.arguments
-  
+
     // if (isFromManageCars.value == true) {
     //   currentIndex.value = 1;
 
@@ -136,7 +139,7 @@ class ListVehicleController extends GetxController {
   void onInit() async {
     logger.log("ListVehicleController");
     super.onInit();
-      Map<String, dynamic>? arguments = Get.arguments;
+    Map<String, dynamic>? arguments = Get.arguments;
 
     if (arguments != null) {
       startDateTime.value = arguments['start'] ?? 'date';
@@ -149,9 +152,7 @@ class ListVehicleController extends GetxController {
     if (isFromManageCars.value == true) {
       currentIndex.value = 1;
 
-      pageController = PageController(
-        initialPage: currentIndex.value
-      );
+      pageController = PageController(initialPage: currentIndex.value);
 
       // pageController.addListener(() {
       //   currentIndex.value = pageController.page?.round() ?? 0;
@@ -507,12 +508,13 @@ class ListVehicleController extends GetxController {
     try {
       //isGettingBrandModel.value = true;
       vehicleYear!.clear();
+      isGettingBrands.value =  true;
       final response = await partnerService.getBrand();
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("gotten brands ${response.data}");
         if (response.data != null && response.data != []) {
           brands.value.data = response.data;
-          logger.log("msg ${brands.value.data}");
+          logger.log("brands ${brands.value.data}");
         }
       } else {
         logger.log("unable to get brands ${response.data}");
@@ -520,16 +522,22 @@ class ListVehicleController extends GetxController {
       }
     } catch (exception) {
       logger.log("error  $exception");
+    } finally {
+      isGettingBrands.value = false;
     }
   }
 
   final RxList<String> items = [
-  'Item1',
-  'Item2',
-  'Item3',
-  'Item4',
-].obs;
-Rx<String>? selectedValue;
+    'Item1',
+    'Item2',
+    'Item3',
+    'Item4',
+  ].obs;
+  Rx<String>? selectedValue;
+  String? selectedValue1 = 'Select';
+  String? selectedYearValue = 'Select';
+  String? brandCode1;
+  String? brandModelCode;
 
   Future<void> getVehicleYear(
       {required String brandCode, required String brandModelCode}) async {
@@ -537,6 +545,7 @@ Rx<String>? selectedValue;
       //isGettingBrands.value = true;
       isGettingyear.value = true;
       vehicleYear!.clear();
+      selectedYearValue = 'Select';
       final response = await partnerService.getVehicleYear(
           brandCode: brandCode, brandModelCode: brandModelCode);
       if (response.status == 'success' || response.status_code == 200) {
@@ -563,20 +572,20 @@ Rx<String>? selectedValue;
 
   Future<void> getBrandModel({required String brandCode1}) async {
     try {
-      // isGettingBrandModel.value = true;
+      isGettingBrandModel.value = true;
       // vehicleYear!.clear();
       final response =
           await partnerService.getBrandModel(brandCode: brandCode1);
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("gotten brand model ${response.data}");
         if (response.data != null && response.data != []) {
-          // vehicleYear?.value = response.data!;
+          brandModel?.value = response.data!;
           logger.log("brand model ${response.data}");
-          brandCode.value = response.data!.first!["brandCode"];
-          modelCode.value = response.data!.first!["modelCode"];
+          isGettingBrandModel.value = false;
+          // brandCode.value = response.data!.first!["brandCode"];
+          // modelCode.value = response.data!.first!["modelCode"];
 
-          await getVehicleYear(
-              brandModelCode: modelCode.value, brandCode: brandCode.value);
+          // await getVehicleYear(brandModelCode: modelCode.value, brandCode: brandCode.value);
         }
       } else {
         logger.log("unable to get brand model ${response.data}");
@@ -585,6 +594,8 @@ Rx<String>? selectedValue;
       }
     } catch (exception) {
       logger.log("error  $exception");
+    } finally {
+      isGettingBrandModel.value = false;
     }
   }
 
@@ -961,6 +972,7 @@ Rx<String>? selectedValue;
   // logger.log("form files ${data1.files.toString()}");
   // //   return data1;
   // // }
+
   Future<void> addCarDocument() async {
     if (!documentationFormKey.currentState!.validate() ||
         !validateImageUpload()) {
@@ -1127,5 +1139,18 @@ Rx<String>? selectedValue;
     } finally {
       isLoading.value = false;
     }
+  }
+
+@override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+    
+  }
+
+   @override
+  void dispose() {
+    selectedValue1 = 'Select'; // Set it back to the default value
+    super.dispose();
   }
 }

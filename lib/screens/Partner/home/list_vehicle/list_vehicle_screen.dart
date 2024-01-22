@@ -1,3 +1,4 @@
+import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -38,9 +39,16 @@ class ListVehicleScreenBinding extends Bindings {
   }
 }
 
-class ListVehicleScreen extends GetView<ListVehicleController> {
-  ListVehicleScreen([Key? key]) : super(key: key);
+class ListVehicleScreen extends StatefulWidget {
+  const ListVehicleScreen([Key? key]) : super(key: key);
+
+  @override
+  State<ListVehicleScreen> createState() => _ListVehicleScreenState();
+}
+
+class _ListVehicleScreenState extends State<ListVehicleScreen> {
   final controller = Get.put<ListVehicleController>(ListVehicleController());
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -150,7 +158,7 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                             height: size.height / 0.80.sp,
                             child: PageView(
                               // itemCount: controller.pages.length,
-                              // physics: NeverScrollableScrollPhysics(),
+                              physics: NeverScrollableScrollPhysics(),
                               controller: controller.pageController,
                               onPageChanged: (value) {
                                 controller.currentIndex.value = value;
@@ -193,7 +201,21 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                           ),
                         ],
                       )
-                    : const SizedBox()
+                    : const SizedBox(),
+                controller.isGettingBrands.isTrue
+                    ? Stack(
+                        children: [
+                          const Opacity(
+                            opacity: 0.5,
+                            child: ModalBarrier(
+                                dismissible: false, color: Colors.transparent),
+                          ),
+                          Center(
+                            child: Center(child: centerLoadingIcon()),
+                          ),
+                        ],
+                      )
+                    : const SizedBox(),
               ],
             ),
           ),
@@ -617,9 +639,10 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                   ),
                   Expanded(
                     child: textWidget(
-                        text: instruction,
-                        style: getRegularStyle(fontSize: 12.sp), textOverflow: TextOverflow.visible,
-                        ),
+                      text: instruction,
+                      style: getRegularStyle(fontSize: 12.sp),
+                      textOverflow: TextOverflow.visible,
+                    ),
                   ),
                 ],
               );
@@ -654,11 +677,13 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
               for (var index = 0;
                   index < controller.selectedVehiclePhotos.length;
                   index++)
-                imageWidget1(
-                  onTap: () => controller.selectedVehiclePhotos.removeAt(index),
-                  localImagePath: controller.selectedVehiclePhotos[index],
-                  height: 30.sp,
-                  width: 30.sp,
+                Expanded(
+                  child: imageWidget1(
+                    onTap: () => controller.selectedVehiclePhotos.removeAt(index),
+                    localImagePath: controller.selectedVehiclePhotos[index],
+                    height: 30.sp,
+                    width: 30.sp,
+                  ),
                 ),
             ],
           ),
@@ -1062,6 +1087,7 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
                   print('Selected value: $selectedBrand');
                   controller.vehicleYear!.clear();
                   controller.vehicleYear!.value = [];
+                  controller.selectedValue1 = 'Select';
                   print(
                       "VEHICLE YEAR VALUE:: ${controller.vehicleYear!.value}");
 
@@ -1088,22 +1114,22 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
             //           color: Theme.of(context).hintColor,
             //         ),
             //       ),
-            //       items: controller.items
-            //           .map((String item) => DropdownMenuItem<String>(
-            //                 value: item,
-            //                 child: Text(
-            //                   item,
-            //                   style: const TextStyle(
-            //                     fontSize: 14,
-            //                   ),
-            //                 ),
-            //               ))
-            //           .toList(),
-            //       value: controller.selectedValue?.value,
+            //      items: controller.items
+            //   .map((String item) => DropdownMenuItem<String>(
+            //         value: item,
+            //         child: Text(
+            //           item,
+            //           style: const TextStyle(
+            //             fontSize: 14,
+            //           ),
+            //         ),
+            //       ))
+            //   .toList(),
+            //       value: controller.selectedValue1,
             //       onChanged: (String? value) {
-            //         // setState(() {
-            //         controller.selectedValue?.value = value!;
-            //         // });
+            //         setState(() {
+            //         controller.selectedValue1 = value!;
+            //         });
             //       },
             //       buttonStyleData: const ButtonStyleData(
             //         padding: EdgeInsets.symmetric(horizontal: 16),
@@ -1116,47 +1142,418 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
             //     ),
             //   ),
             // ),
+
+            // newDropdownWidget(
+            //     context: context,
+            //     hintText: 'Select',
+            //     title: AppStrings.whatIsTheBrandOfVehicle,
+            //     iconColor: grey3,
+            //     expectedVariable: 'field',
+            //     key: UniqueKey(),
+            //     //
+            //     selectedValue: controller.selectedValue1,
+            //     values: [''] +
+            //         (controller.brandModel ?? [])
+            //             .where((brandModel) =>
+            //                 brandModel is Map<String, dynamic> &&
+            //                 brandModel.containsKey('modelName'))
+            //             .map((brandModel) => brandModel['modelName'] as String)
+            //             .toList(),
+            //     onChange: (selectedBrand) async {
+            //       print('Selected value: $selectedBrand');
+            //       print("VEHICLE BRAND:: ");
+            //       setState(() {
+            //         controller.selectedValue1 = selectedBrand!;
+            //       });
+            //       // controller.selectedValue1 = selectedBrand;
+            //       Future.microtask(() {
+            //         print("VEHICLE BRAND:: ${controller.selectedValue1}");
+            //       });
+
+            // print("VEHICLE BRAND::${controller.selectedBrand?.value} ");
+
+            // // Find the brand object with the selected name
+            // var selectedBrandObject =
+            //     (controller.brandModel ?? []).firstWhere(
+            //   (brand) => brand['modelName'] == selectedBrand,
+            //   orElse: () => null,
+            // );
+
+            // if (selectedBrandObject != null) {
+            //   print("You have a brand ${selectedBrandObject}");
+            //   print("You have a brand>>>>");
+
+            //   controller.modelName?.value = selectedBrand;
+            //   controller.modelCode.value =
+            //       selectedBrandObject['modelCode'] as String;
+            //   controller.brandCode.value =
+            //       selectedBrandObject['brandCode'] as String;
+            //   String brandCode =
+            //       selectedBrandObject['brandCode'] as String;
+            //   String brandModelCode =
+            //       selectedBrandObject['modelCode'] as String;
+            //   // await contr oller.getBrandModel(brandCode1: brandCode);
+            //   print(
+            //       "Selected brand name: ${controller.modelName?.value}");
+
+            // await controller.getVehicleYear(
+            //     brandCode: brandCode, brandModelCode: brandModelCode);
+            // }
+            // }),
             SizedBox(
               height: 24.sp,
             ),
-            dropdownWidget1(
-                context: context,
-                hintText: 'Select',
-                title: AppStrings.whatIsTheModelOfVehicle,
-                iconColor: grey3,
-                expectedVariable: 'field',
-                // key: UniqueKey(),
-                //              var _value = itemList.isEmpty
-                // ? value
-                // : itemList.firstWhere((item) => item.value == value.value);
-                // selectedValue: controller.vehicleYear!.isEmpty
-                //     ? controller.yearName.value
-                //     : controller.vehicleYear!.firstWhere((year) =>
-                //         year["yearName"] == controller.yearName.value),
-                selectedValue: controller.yearName?.isEmpty != null
-                    ? controller.yearName?.value
-                    : controller.yearName?.value,
-                values: (controller.vehicleYear ?? [])
-                    .map((year) => year['yearName'] as String)
-                    .toList(),
-                onChange: (selectedYear) {
-                  print('Selected value: $selectedYear');
-                  selectedYear = controller.yearName?.value;
-                  // controller.yearCode.value = selectedYear;
-                  // Find the brand object with the selected name
-                  var selectedYearObject =
-                      (controller.vehicleYear ?? []).firstWhere(
-                    (year) => year['yearName'] == selectedYear,
-                    orElse: () => null,
-                  );
-                  if (selectedYearObject != null) {
-                    controller.yearName?.value = selectedYearObject['yearName'];
-                    String yearCode = selectedYearObject['yearCode'] as String;
-                    print("Selected year name: ${controller.yearName?.value}");
-                    controller.yearCode.value = yearCode;
-                    print("code>>>> ${yearCode}");
-                  }
-                }),
+            Row(
+              children: [
+                textWidget(
+                    text: "Select brand model",
+                    style: getRegularStyle(fontSize: 12.sp)),
+              ],
+            ),
+
+            controller.brandModel!.isEmpty
+                ? GestureDetector(
+                    onTap: () {
+                      // Handle tap if needed
+                    },
+                    child: Container(
+                      height: 45.h,
+                      width: size.width,
+                      constraints: BoxConstraints.tightFor(
+                        width: size.width.sp,
+                        height: 45.sp,
+                      ),
+                      margin: EdgeInsets.symmetric(vertical: 5.sp),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(4.r),
+                        ),
+                        border: Border.all(color: grey3),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 10.sp,
+                          vertical: 10.sp,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            textWidget(
+                              text: controller.selectedView.value,
+                              style: getRegularStyle(fontSize: 10.sp),
+                            ),
+                            const Icon(
+                              Iconsax.arrow_down_1,
+                              color: grey3,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                : PopupMenuButton<Map<String, dynamic>>(
+                    constraints: BoxConstraints(
+                      minWidth: 320.sp,
+                      maxHeight: 500,
+                      minHeight:
+                          50.0 + (controller.brandModel?.length ?? 0) * 30,
+                    ),
+                    surfaceTintColor: Colors.transparent,
+                    color: backgroundColor,
+                    onSelected: (selectedBrand) async {
+                      setState(() {
+                        controller.selectedValue1 = selectedBrand['modelName'];
+                        controller.modelName?.value =
+                            selectedBrand['modelName'];
+                        controller.modelCode.value =
+                            selectedBrand['modelCode'] as String;
+                        controller.brandCode.value =
+                            selectedBrand['brandCode'] as String;
+                        controller.brandCode1 =
+                            selectedBrand['brandCode'] as String;
+                        controller.brandModelCode =
+                            selectedBrand['modelCode'] as String;
+                        print(
+                            "Selected brand name: ${controller.modelName?.value}");
+
+                        print("Slected brand code ${controller.brandCode1}");
+                      });
+                      await controller.getVehicleYear(
+                          brandCode: controller.brandCode1!,
+                          brandModelCode: controller.brandModelCode!);
+                      print(
+                          "Slected brand valued ${controller.selectedValue1}");
+                      var selectedBrandObject =
+                          (controller.brandModel ?? []).firstWhere(
+                        (brand) => brand['modelName'] == selectedBrand,
+                        orElse: () => null,
+                      );
+                      if (selectedBrandObject != null) {
+                        print("object: " + selectedBrandObject);
+                      }
+                    },
+                    onOpened: () {
+                      // Handle when the menu is opened if needed
+                    },
+                    itemBuilder: (BuildContext context) {
+                      return List<
+                          PopupMenuEntry<Map<String, dynamic>>>.generate(
+                        controller.brandModel!.length,
+                        (int index) {
+                          final brandModel = controller.brandModel![index];
+
+                          return PopupMenuItem<Map<String, dynamic>>(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 10),
+                            value: brandModel,
+                            child: textWidget(
+                              text: brandModel['modelName'] as String,
+                              style: getRegularStyle(),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: Container(
+                      constraints: BoxConstraints.tightFor(
+                        width: size.width.sp,
+                        height: 45.sp,
+                      ),
+                      margin: EdgeInsets.symmetric(vertical: 5.sp),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(4.r)),
+                        border: Border.all(color: grey3),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          left: 18,
+                          right: 10,
+                          top: 10,
+                          bottom: 10,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            textWidget(
+                              text: controller.selectedValue1,
+                              style: getRegularStyle(
+                                  fontSize:
+                                      controller.selectedValue1 == 'Select'
+                                          ? 10.sp
+                                          : 14,
+                                  color: controller.selectedValue1 == 'Select'
+                                      ? borderColor
+                                      : black),
+                            ),
+                            const Icon(
+                              Iconsax.arrow_down_1,
+                              color: grey3,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+
+            SizedBox(
+              height: 24.sp,
+            ),
+            Row(
+              children: [
+                textWidget(
+                    text: AppStrings.whatIsTheModelOfVehicle,
+                    style: getRegularStyle(fontSize: 12.sp)),
+              ],
+            ),
+
+            controller.vehicleYear!.isEmpty
+                ? GestureDetector(
+                    onTap: () {
+                      // Handle tap if needed
+                    },
+                    child: Container(
+                      height: 45.h,
+                      width: size.width,
+                      constraints: BoxConstraints.tightFor(
+                        width: size.width.sp,
+                        height: 45.sp,
+                      ),
+                      margin: EdgeInsets.symmetric(vertical: 5.sp),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(4.r),
+                        ),
+                        border: Border.all(color: grey3),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 10.sp,
+                          vertical: 10.sp,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            textWidget(
+                              text: controller.selectedView.value,
+                              style: getRegularStyle(fontSize: 10.sp),
+                            ),
+                            const Icon(
+                              Iconsax.arrow_down_1,
+                              color: grey3,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                : PopupMenuButton<Map<String, dynamic>>(
+                    constraints: BoxConstraints(
+                      minWidth: 320.sp,
+                      maxHeight: 500,
+                      minHeight:
+                          50.0 + (controller.brandModel?.length ?? 0) * 30,
+                    ),
+                    surfaceTintColor: Colors.transparent,
+                    color: backgroundColor,
+                    onSelected: (selectedYear) async {
+                      setState(() {
+                        // controller.selectedYearValue = selectedYear['yearName'];
+                        // controller.yearName?.value = selectedYear['yearName'];
+                        // controller.yearCode.value =
+                        //     selectedYear['yearCode'] as String;
+                        // controller.brandCode.value =
+                        //     selectedYear['yearCode'] as String;
+                        // controller.brandCode1 =
+                        //     selectedBrand['brandCode'] as String;
+                        // controller.brandModelCode =
+                        //     selectedBrand['modelCode'] as String;
+                        // print(
+                        //     "Selected brand name: ${controller.modelName?.value}");
+
+                        // print("Slected brand code ${controller.brandCode1}");
+                        controller.selectedYearValue = selectedYear['yearName'];
+
+                        // selectedYear['yearName'] = controller.yearName?.value;
+                        controller.yearCode.value = selectedYear['yearCode'];
+                        // Find the brand object with the selected name
+                        var selectedYearObject =
+                            (controller.vehicleYear ?? []).firstWhere(
+                          (year) => year['yearName'] == selectedYear,
+                          orElse: () => null,
+                        );
+                        if (selectedYearObject != null) {
+                          // controller.yearName?.value =
+                          // selectedYearObject['yearName'];
+                          String yearCode =
+                              selectedYearObject['yearCode'] as String;
+                          // print(
+                          // "Selected year name: ${controller.yearName?.value}");
+                          // controller.yearCode.value = yearCode;
+                          print("code>>>> ${yearCode}");
+                        }
+                      });
+                    },
+                    onOpened: () {
+                      // Handle when the menu is opened if needed
+                    },
+                    itemBuilder: (BuildContext context) {
+                      return List<
+                          PopupMenuEntry<Map<String, dynamic>>>.generate(
+                        controller.vehicleYear!.length,
+                        (int index) {
+                          final vehicleYear = controller.vehicleYear![index];
+
+                          return PopupMenuItem<Map<String, dynamic>>(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 10),
+                            value: vehicleYear,
+                            child: textWidget(
+                              text: vehicleYear['yearName'] as String,
+                              style: getRegularStyle(),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: Container(
+                      constraints: BoxConstraints.tightFor(
+                        width: size.width.sp,
+                        height: 45.sp,
+                      ),
+                      margin: EdgeInsets.symmetric(vertical: 5.sp),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(4.r)),
+                        border: Border.all(color: grey3),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          left: 18,
+                          right: 10,
+                          top: 10,
+                          bottom: 10,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            textWidget(
+                              text: controller.selectedYearValue,
+                              style: getRegularStyle(
+                                  fontSize:
+                                      controller.selectedYearValue == 'Select'
+                                          ? 10.sp
+                                          : 14,
+                                  color:
+                                      controller.selectedYearValue == 'Select'
+                                          ? borderColor
+                                          : black),
+                            ),
+                            const Icon(
+                              Iconsax.arrow_down_1,
+                              color: grey3,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+            // dropdownWidget1(
+            //     context: context,
+            //     hintText: 'Select',
+            //     title: AppStrings.whatIsTheModelOfVehicle,
+            //     iconColor: grey3,
+            //     expectedVariable: 'field',
+            //     key: UniqueKey(),
+            //     //              var _value = itemList.isEmpty
+            //     // ? value
+            //     // : itemList.firstWhere((item) => item.value == value.value);
+            //     // selectedValue: controller.vehicleYear!.isEmpty
+            //     //     ? controller.yearName.value
+            //     //     : controller.vehicleYear!.firstWhere((year) =>
+            //     //         year["yearName"] == controller.yearName.value),
+            //     selectedValue: controller.yearName?.isEmpty != null
+            //         ? controller.yearName?.value
+            //         : controller.yearName?.value,
+            //     values: (controller.vehicleYear ?? [])
+            //         .map((year) => year['yearName'] as String)
+            //         .toList(),
+            //     onChange: (selectedYear) {
+            //       print('Selected value: $selectedYear');
+            //       selectedYear = controller.yearName?.value;
+            //       // controller.yearCode.value = selectedYear;
+            //       // Find the brand object with the selected name
+            //       var selectedYearObject =
+            //           (controller.vehicleYear ?? []).firstWhere(
+            //         (year) => year['yearName'] == selectedYear,
+            //         orElse: () => null,
+            //       );
+            //       if (selectedYearObject != null) {
+            //         controller.yearName?.value = selectedYearObject['yearName'];
+            //         String yearCode = selectedYearObject['yearCode'] as String;
+            //         print("Selected year name: ${controller.yearName?.value}");
+            //         controller.yearCode.value = yearCode;
+            //         print("code>>>> ${yearCode}");
+            //       }
+            //     }),
             SizedBox(
               height: 24.sp,
             ),
@@ -1271,7 +1668,6 @@ class ListVehicleScreen extends GetView<ListVehicleController> {
   }
 
   // dispathc page
-
   Widget listingTracker({
     required String subTitle,
     Widget? child,

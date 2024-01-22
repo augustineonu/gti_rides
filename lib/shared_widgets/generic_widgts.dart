@@ -368,25 +368,28 @@ Widget imageWidget1(
     BoxFit fit = BoxFit.cover,
     void Function()? onTap}) {
   // if (localImagePath != null && localImagePath.isNotEmpty) {
-  return Stack(
-    children: [
-      GestureDetector(
-        onTap: onTap,
-        child: Builder(builder: (context) {
-          return Image.file(
-            File(localImagePath!),
-            width: width,
-            height: height,
-            fit: fit,
-          );
-        }),
-      ),
-      Positioned(
-          right: -4,
-          top: -6,
-          child: Transform.scale(
-              scale: 0.4, child: SvgPicture.asset(ImageAssets.closeSmall))),
-    ],
+  return Padding(
+    padding: const EdgeInsets.all(2.0),
+    child: Stack(
+      children: [
+        GestureDetector(
+          onTap: onTap,
+          child: Builder(builder: (context) {
+            return Image.file(
+              File(localImagePath!),
+              width: width,
+              height: height,
+              fit: fit,
+            );
+          }),
+        ),
+        Positioned(
+            right: -4,
+            top: -6,
+            child: Transform.scale(
+                scale: 0.4, child: SvgPicture.asset(ImageAssets.closeSmall))),
+      ],
+    ),
   );
 }
 

@@ -9,6 +9,7 @@ class SplashController extends GetxController
     with GetSingleTickerProviderStateMixin {
   Logger logger = Logger('SplashController');
   final animationValue = 0.0.obs;
+    // Animation<double> fadeInFadeOut = 0.0;
   late AnimationController _animationController;
 
   SplashController() {
@@ -36,8 +37,7 @@ class SplashController extends GetxController
         AnimationController(vsync: this, duration: const Duration(seconds: 3));
     final animation = CurvedAnimation(
       parent: _animationController,
-      curve: Curves
-          .elasticIn, // Use a different curve for the desired animation effect
+      curve: Curves.easeInExpo, // Use a different curve for the desired animation effect
     );
 
     animation.addListener(() {

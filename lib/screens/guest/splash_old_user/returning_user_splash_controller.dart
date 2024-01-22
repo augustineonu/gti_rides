@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/models/auth/login_request_model.dart';
+import 'package:gti_rides/models/auth/token_model.dart';
 import 'package:gti_rides/models/user_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/device_service.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/services/storage_service.dart';
+import 'package:gti_rides/services/token_service.dart';
 import 'package:gti_rides/services/user_service.dart';
 
 class ReturningUserSplashController extends GetxController
@@ -14,7 +16,6 @@ class ReturningUserSplashController extends GetxController
   Logger logger = Logger('ReturningUserSplashController');
   final animationValue = 0.0.obs;
   late AnimationController _animationController;
-
 
   ReturningUserSplashController() {
     init();
@@ -24,48 +25,47 @@ class ReturningUserSplashController extends GetxController
     logger.log('Controller initialized');
     initAnimation();
     deviceService.getDeviceInfo();
-       
   }
 
   Future<void> getSavedUserModel() async {
     // final Agent? agentModel = await biometricService.getAgentModelData();
     final UserModel? userModel = await userService.getUserData();
+    final TokenModel? tokenModel = await tokenService.getTokensData();
     // final Tokens? tokens = await biometricService.getTokensData();
     if (userModel != null) {
-    //   // setup and move to home screen
-    //   agentService.setCurrentAgentModel(agentModel.toJson());
+      logger.log("User token: ${tokenModel!.accessToken}");
+
+      //   // setup and move to home screen
       userService.setCurrentUser(userModel.toJson());
-    //   tokenService.setTokenModel(tokens!.toJson());
-    //   tokenService.setAccessToken(tokens.accessToken);
-    //   tokenService.setRefreshToken(tokens.refreshToken);
+      tokenService.setTokenModel(tokenModel.toJson());
+      tokenService.setAccessToken(tokenModel.accessToken);
 
-      logger.log("User model >>: ${userModel!.toJson()}");
-      routeService.offAllNamed(AppLinks.login);
-    //   // get new access token
-    //   bool result = await tokenService.getNewAccessToken();
-    //   if (!result) {
-    //     // move to welcome screen
-    //     logger.log('Going to welcome screen');
-    //     routeService.offAllNamed(AppLinks.welcomeBack);
-    //     return;
-    //   }
-    //   // move to home screen
-    //   // if (agentModel.user!.isAgentOnline!) {
-    //   await socketService.openConnection();
-    //   if (userModel.isAgentOnline!) {
-    //     logger.log('Going to current Orders screen');
-    //     routeService.offAllNamed(AppLinks.currentOrders);
-    //     return;
-    //   }
-    //   logger.log('Going to home screen');
-    //   routeService.offAllNamed(AppLinks.agentHome);
+      logger.log("User model >>: ${userModel.toJson()}");
 
-    //   return;
+      //   // get new access token
+      bool result = await tokenService.getNewAccessToken();
+      if (!result) {
+        // move to welcome screen
+        logger.log('Going to Login screen');
+        routeService.offAllNamed(AppLinks.login);
+        return;
+      }
+      //   // move to home screen
+      if (userModel.userType.toString() == "renter") {
+        await routeService.gotoRoute(AppLinks.carRenterLanding);
+      } else {
+        await routeService.gotoRoute(AppLinks.carOwnerLanding);
+      }
+
+      logger.log('Going to home screen');
+      routeService.offAllNamed(AppLinks.agentHome);
+
+      return;
     } else {
-    //   // move to login screen
-    //   logger.log("going to login");
-    //   routeService.offAllNamed(AppLinks.login);
-    //   return;
+      // move to login screen
+      logger.log("going to login");
+      routeService.offAllNamed(AppLinks.login);
+      return;
     }
   }
 

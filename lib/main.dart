@@ -22,23 +22,25 @@ void main() async {
   await Intercom.instance.initialize('hivazykc',
       iosApiKey: 'ios_sdk-efac9e9f5fa7bf1e1bfb33d91f1cddd68b47f895',
       androidApiKey: 'android_sdk-3337cce19e6e590feed33d6b48f39eae825fcfd0');
- bool isNewUser = await determineUserStatus();
-  runApp( GtiRides(isNewUser: isNewUser,));
+  bool isNewUser = await determineUserStatus();
+  runApp(GtiRides(
+    isNewUser: isNewUser,
+  ));
   // NetworkController.;
 }
 
-  Future<bool> determineUserStatus() async{
-    final user = await userService.getUserData();
-    if(user == null){
-      return false;
-    } else {
-      return true;
-    }
+Future<bool> determineUserStatus() async {
+  final user = await userService.getUserData();
+  if (user == null) {
+    return false;
+  } else {
+    return true;
   }
+}
 
 class GtiRides extends StatefulWidget {
-   GtiRides({super.key, required this.isNewUser});
-   final bool isNewUser;
+  GtiRides({super.key, required this.isNewUser});
+  final bool isNewUser;
 
   @override
   State<GtiRides> createState() => _GtiRidesState();
@@ -67,7 +69,7 @@ class _GtiRidesState extends State<GtiRides> {
     precacheImage(const AssetImage(ImageAssets.onboarding_01), context);
     precacheImage(const AssetImage(ImageAssets.onboarding_02), context);
     precacheImage(const AssetImage(ImageAssets.onboarding03), context);
-logger.log("Second value:::: ${widget.isNewUser}");
+    logger.log("Second value:::: ${widget.isNewUser}");
 
     return ScreenUtilInit(
         designSize: selectedSize.size,
@@ -91,7 +93,9 @@ logger.log("Second value:::: ${widget.isNewUser}");
                 ),
               ),
             ),
-            initialRoute: widget.isNewUser ? AppLinks.returningUserSplash : AppLinks.splash,
+            initialRoute: widget.isNewUser
+                ? AppLinks.returningUserSplash
+                : AppLinks.splash,
             getPages: AppRoutes.pages,
             navigatorObservers: [RouteService(), RouteService().routeObserver],
             onInit: () {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/models/auth/login_request_model.dart';
+import 'package:gti_rides/models/auth/token_model.dart';
 import 'package:gti_rides/models/user_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/api_service.dart';
@@ -103,6 +104,9 @@ class LoginController extends GetxController
         //   'email': emailController.text,
         // });
       } else {
+        TokenModel tokenModel = TokenModel.fromJson(result.data);
+
+        tokenService.saveTokensData(tokenModel);
         tokenService.setTokenModel(result.data!);
         tokenService.setAccessToken(result.data!["accessToken"]);
         logger.log("set token:: ${result.data!["accessToken"]}");
@@ -127,7 +131,7 @@ class LoginController extends GetxController
           logger.log("user ${response.data.toString()}");
           final UserModel userModel = UserModel.fromJson(response.data?[0]);
           userService.setCurrentUser(userModel.toJson());
-          // persiste data
+          // persist data
           await userService.saveUserData(userModel);
           await showSuccessSnackbar(message: result.message!);
 
@@ -221,7 +225,7 @@ class LoginController extends GetxController
           logger.log("error rrr: $e");
           showErrorSnackbar(message: e.toString());
         } finally {
-           isLoading1.value = false;
+          isLoading1.value = false;
         }
       }
     } else if (biometrics.isEmpty) {

@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
@@ -6,19 +7,18 @@ import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/utils.dart';
 import 'package:iconsax/iconsax.dart';
 
-Widget dropdownWidget(
-    {required BuildContext context,
-    // required Map<String, dynamic>? selectedUserValue,
-    required String? hintText,
-    required List<Map<String, dynamic>> values,
-    required Function onChange,
-    InputDecoration? decoration,
-    required String title,
-    Color? iconColor,
-    void Function()? onTap,
-    String? expectedVariable,
-
-    }) {
+Widget dropdownWidget({
+  required BuildContext context,
+  // required Map<String, dynamic>? selectedUserValue,
+  required String? hintText,
+  required List<Map<String, dynamic>> values,
+  required Function onChange,
+  InputDecoration? decoration,
+  required String title,
+  Color? iconColor,
+  void Function()? onTap,
+  String? expectedVariable,
+}) {
   Map<String, dynamic>? selectedValue;
 
   return Column(
@@ -41,7 +41,7 @@ Widget dropdownWidget(
               alignedDropdown: true,
               child: DropdownButtonFormField<Map<String, dynamic>>(
                 isExpanded: true,
-                   validator: (value) {
+                validator: (value) {
                   if (value == null || value.isEmpty) {
                     return fetchErrorText(
                         expectedTextVariable: expectedVariable ?? '');
@@ -71,7 +71,6 @@ Widget dropdownWidget(
                   return DropdownMenuItem(
                     value: item,
                     child: GestureDetector(
-                  
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -161,7 +160,6 @@ Widget dropdownWidget1({
   String? expectedVariable,
   bool multipleSelection = false,
   Key? key,
-
 }) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -212,32 +210,36 @@ Widget dropdownWidget1({
                 },
                 items: values
                     .map(
-                      (item) => DropdownMenuItem(
+                      (item) => DropdownMenuItem<String>(
                         value: item,
-                        child: multipleSelection ? Row(
-                          children: [
-                            Checkbox(
-                              onChanged: (value) {},
-                              value: false,
-                            ),
-                            Text(
-                              item,
-                              style: getRegularStyle(
-                                fontSize: 16,
+                        onTap: (){
+                          print("Hello world");
+                        },
+                        child: multipleSelection
+                            ? Row(
+                                children: [
+                                  Checkbox(
+                                    onChanged: (value) {},
+                                    value: false,
+                                  ),
+                                  Text(
+                                    item,
+                                    style: getRegularStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Text(
+                                item,
+                                style: getRegularStyle(
+                                  fontSize: 16,
+                                ),
                               ),
-                            ),
-                          ],
-                        ) : 
-                          Text(
-                              item,
-                              style: getRegularStyle(
-                                fontSize: 16,
-                              ),
-                            ),
                       ),
                     )
                     .toList(),
-                    key: key,
+                key: key,
                 style: Theme.of(context)
                     .textTheme
                     .titleLarge
@@ -292,6 +294,82 @@ Widget dropdownWidget1({
                       // filled: true,
                       fillColor: Colors.transparent,
                     ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    ],
+  );
+}
+
+Widget newDropdownWidget({
+  required BuildContext context,
+  // required String? selectedUserValue,
+  required String? hintText,
+  required List<String> values,
+  required Function onChange,
+  String? selectedValue,
+  InputDecoration? decoration,
+  required String? title,
+  Color? iconColor,
+  void Function()? onTap,
+  String? expectedVariable,
+  bool multipleSelection = false,
+  Key? key,
+}) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      textWidget(
+        text: title,
+        style: getRegularStyle(fontSize: 12.sp),
+      ),
+      SizedBox(
+        height: 5.sp,
+      ),
+      SizedBox(
+        // height: 55.sp,
+        // padding: const EdgeInsets.symmetric(vertical: 5.0),
+        child: GestureDetector(
+          onTap: onTap,
+          child: Material(
+            borderOnForeground: false,
+            color: Colors.transparent,
+            child: ButtonTheme(
+              alignedDropdown: true,
+              child: DropdownButtonHideUnderline(
+                key: key,
+                child: DropdownButton2(
+                  hint: textWidget(text: 'Select', style: getRegularStyle()),
+                  value: selectedValue,
+                  onChanged: (String? value) => onChange(value),
+                  selectedItemBuilder: (context) {
+                    return values
+                        .map((item) => Container(
+                              alignment: Alignment.centerLeft,
+                              constraints: const BoxConstraints(minWidth: 100),
+                              child: Text(
+                                item,
+                                style: getRegularStyle(),
+                              ),
+                            ))
+                        .toList();
+                  },
+                  items: values
+                      .map(
+                        (item) => DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(
+                                  item,
+                                  style: getRegularStyle(
+                                    fontSize: 16,
+                                  ),
+                                ),
+                        ),
+                      )
+                      .toList(),
+                ),
               ),
             ),
           ),
@@ -396,4 +474,45 @@ class DropDownMenuWidget extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget mYDropdown(BuildContext context,
+    {required List<String> values, required Function onChange, String? value}) {
+  return Center(
+    child: DropdownButtonHideUnderline(
+      child: DropdownButton2<String>(
+        isExpanded: true,
+        hint: Text(
+          'Select Item',
+          style: TextStyle(
+            fontSize: 14,
+            color: Theme.of(context).hintColor,
+          ),
+        ),
+        items: values
+            .map((String item) => DropdownMenuItem<String>(
+                  value: item,
+                  child: Text(
+                    item,
+                    style: const TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                ))
+            .toList(),
+        value: value,
+        onChanged: (String? value) => onChange(value),
+        // });
+
+        buttonStyleData: const ButtonStyleData(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          height: 40,
+          width: 140,
+        ),
+        menuItemStyleData: const MenuItemStyleData(
+          height: 40,
+        ),
+      ),
+    ),
+  );
 }
