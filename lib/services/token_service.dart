@@ -64,6 +64,8 @@ class TokenService {
          await setTokenModel(result.data);
       setAccessToken(result.data["accessToken"]);
         return true;
+      } else {
+        logger.log("error fetching token");
       }
 
       await setTokenModel(result.data);

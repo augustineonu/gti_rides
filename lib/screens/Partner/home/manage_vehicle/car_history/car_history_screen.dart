@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/screens/Partner/home/manage_vehicle/car_history/car_history_controller.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
@@ -68,10 +69,12 @@ class CarHistoryScreen extends StatelessWidget {
                         endDate: state[0]['endDate'] ?? ''),
                     divider(color: borderColor),
                     carBasics(
-                      carType: state[0]['type'].isNotEmpty == true ?
-                       state[0]['type'][0]['typeName'] ?? '' : '',
-                      carSeat: state[0]['seat']?.isNotEmpty == true ? 
-                       state[0]['seat'][0]['seatName'] ?? '' : '',
+                      carType: state[0]['type'].isNotEmpty == true
+                          ? state[0]['type'][0]['typeName'] ?? ''
+                          : '',
+                      carSeat: state[0]['seat']?.isNotEmpty == true
+                          ? state[0]['seat'][0]['seatName'] ?? ''
+                          : '',
                     ),
                     divider(color: borderColor),
                     carFetures(children: [
@@ -464,7 +467,20 @@ class CarHistoryScreen extends StatelessWidget {
               ),
               const Spacer(),
               InkWell(
-                onTap: controller.routeToQuickEdit,
+                onTap: () async {
+                  controller.routeToQuickEdit();
+                // var result = await Get.toNamed(AppLinks.quickEdit, arguments: {
+                //     "startDate": controller.startDate.value,
+                //     "endDate": controller.endDate.value,
+                //     "pricePerDay": controller.pricePerDay.value,
+                //     "brandModelName": controller.brandModelName.value,
+                //     "photoUrl": controller.photoUrl.value,
+                //     "carID": controller.carID.value,
+                //   });
+                  // if (result != null) {
+                  //   Get.put(CarHistoryController());
+                  // }
+                },
                 child: Row(
                   children: [
                     textWidget(

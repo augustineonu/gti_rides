@@ -46,6 +46,7 @@ class AppStrings {
       "An error occurred accessing the exploer API. Try again Later";
   static String hasSeenIntro = 'hasSeenIntro';
   static String emailIsRequiredError = "email is required";
+  static String emailIsRequiredError1 = "email is not valid";
   static String passwordIsRequiredError = "password is required";
   static String fullNameRequiredError = "name is required";
   static String phoneIsRequiredError = "Phone is required";
@@ -488,5 +489,7 @@ class AppStrings {
   static String uploadDriversLicenseHint = "Upload License";
   static String kindlyLoginWithCredToSetBiometrics = "Kindly login with credentials to setup Biometrics";
   static String selectAvailabilityDate = "Select availability date";
+  static String selectDate = "Select date";
+  static String selectExpiryDate = "Select expiry date";
   static String noListedCarsYet = "You have not Listed any cars yet";
 }

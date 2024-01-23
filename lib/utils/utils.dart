@@ -17,6 +17,8 @@ String fetchErrorText({required String expectedTextVariable}) {
   switch (expectedTextVariable) {
     case "email":
       return AppStrings.emailIsRequiredError;
+      case ".com":
+      return AppStrings.emailIsRequiredError1;
     case "password":
       return AppStrings.passwordIsRequiredError;
     case 'phone':
@@ -49,6 +51,11 @@ String displayTimeago(DateTime dateTime) {
 String getTimeIn12HourFormat(DateTime dateTime) {
   String formattedTime = DateFormat('h:mm a').format(dateTime);
   return formattedTime;
+}
+
+String formatDate(DateTime datetime) {
+  var formatter = DateFormat('dd-MM-yyyy');
+  return formatter.format(datetime);
 }
 
 // String formatDate(DateTime datetime) {
@@ -130,7 +137,7 @@ String formatDateTime2(String datetime) {
 
 
 // rteurns date as example 1 Nov
-String formatDate(DateTime datetime) {
+String formatDateMonth(DateTime datetime) {
   var formatter = DateFormat('dd MMM');
   return formatter.format(datetime);
 }
@@ -223,6 +230,27 @@ showSuccessSnackbar({required String message, Color? color, Color? textColor}) {
     Logger('Utils').log("overlay context is null");
   }
 }
+
+  Object bottomSnackbar(
+      BuildContext context,
+      {
+        required String message
+      }) {
+        final overlayContext = Get.overlayContext;
+         if (overlayContext != null) {
+    return ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+      backgroundColor: primaryColor,
+      content: Text(
+        message,
+      ),
+      duration: Duration(milliseconds: 800),
+    ));
+     } else {
+      
+      Logger('Utils').log("overlay context is null");
+      return SizedBox();
+  }
+  }
 
 /**
  * Custom Alert Dialog

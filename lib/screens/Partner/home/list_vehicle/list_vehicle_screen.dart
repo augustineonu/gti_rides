@@ -158,7 +158,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                             height: size.height / 0.80.sp,
                             child: PageView(
                               // itemCount: controller.pages.length,
-                              physics: NeverScrollableScrollPhysics(),
+                              // physics: NeverScrollableScrollPhysics(),
                               controller: controller.pageController,
                               onPageChanged: (value) {
                                 controller.currentIndex.value = value;
@@ -188,6 +188,20 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     ),
                   ],
                 ),
+                controller.isFetchingCarDetails.isTrue
+                    ? Stack(
+                        children: [
+                          const Opacity(
+                            opacity: 0.5,
+                            child: ModalBarrier(
+                                dismissible: false, color: Colors.transparent),
+                          ),
+                          Center(
+                            child: Center(child: centerLoadingIcon()),
+                          ),
+                        ],
+                      )
+                    : const SizedBox(),
                 controller.isGettingyear.isTrue
                     ? Stack(
                         children: [
@@ -679,7 +693,8 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                   index++)
                 Expanded(
                   child: imageWidget1(
-                    onTap: () => controller.selectedVehiclePhotos.removeAt(index),
+                    onTap: () =>
+                        controller.selectedVehiclePhotos.removeAt(index),
                     localImagePath: controller.selectedVehiclePhotos[index],
                     height: 30.sp,
                     width: 30.sp,
@@ -904,6 +919,8 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                 hintText: 'Select',
                 title: AppStrings.vehicleTransmission,
                 iconColor: grey3,
+                selectedValue: controller.transmission.value.isNotEmpty ?
+                 controller.transmission.value : null,
                 values: (controller.transmissions ?? [])
                     .map((transmission) =>
                         transmission['transmissionName'] as String)
@@ -1079,6 +1096,10 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                 title: AppStrings.whatIsTheBrandOfVehicle,
                 iconColor: grey3,
                 expectedVariable: 'field',
+                selectedValue: controller.isFromManageCars.isTrue &&
+                        controller.brandName.value.isNotEmpty
+                    ? controller.brandName.value
+                    : null,
                 // values: controller.vehicleBrands,
                 values: (controller.brands.value.data ?? [])
                     .map((brand) => brand['brandName'] as String)
@@ -1169,9 +1190,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
             //       Future.microtask(() {
             //         print("VEHICLE BRAND:: ${controller.selectedValue1}");
             //       });
-
             // print("VEHICLE BRAND::${controller.selectedBrand?.value} ");
-
             // // Find the brand object with the selected name
             // var selectedBrandObject =
             //     (controller.brandModel ?? []).firstWhere(
@@ -1258,6 +1277,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                       minHeight:
                           50.0 + (controller.brandModel?.length ?? 0) * 30,
                     ),
+                    // initialValue: ,
                     surfaceTintColor: Colors.transparent,
                     color: backgroundColor,
                     onSelected: (selectedBrand) async {
@@ -1589,6 +1609,10 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                 title: AppStrings.whatStateAreYouIn,
                 iconColor: grey3,
                 expectedVariable: 'field',
+                selectedValue: controller.isFromManageCars.isTrue &&
+                        controller.state.value.isNotEmpty
+                    ? controller.state.value
+                    : null,
                 values: (controller.states ?? [])
                     .map((state) => state['stateName'] as String)
                     .toList(),
@@ -1620,6 +1644,10 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                 title: AppStrings.whatCityAreYouIn,
                 iconColor: grey3,
                 expectedVariable: 'field',
+                selectedValue: controller.isFromManageCars.isTrue &&
+                        controller.city.value.isNotEmpty
+                    ? controller.city.value
+                    : null,
                 values: (controller.cities ?? [])
                     .map((city) => city['cityName'] as String)
                     .toList(),

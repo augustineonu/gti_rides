@@ -21,10 +21,24 @@ class ManageVehicleBinding extends Bindings {
   }
 }
 
-class ManageVehicleScreen extends StatelessWidget {
+class ManageVehicleScreen extends StatefulWidget {
   ManageVehicleScreen([Key? key]) : super(key: key);
 
-  final controller = Get.put(ManageVehicleController());
+  @override
+  State<ManageVehicleScreen> createState() => _ManageVehicleScreenState();
+}
+
+class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
+  late ManageVehicleController controller = Get.put(ManageVehicleController());
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Get.delete<ManageVehicleController>();
+
+    controller = Get.put(ManageVehicleController());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -582,7 +596,11 @@ class ManageVehicleScreen extends StatelessWidget {
                                 controller.routeToQuickEdit(arguments: {
                                   "brandModelName": car["brandModelName"],
                                   "photoUrl": car["photoUrl"],
-                                  "carID": car["carID"]
+                                  "carID": car["carID"],
+                                  "start": car["startDate"],
+                                  "end": car["endDate"],
+                                  "enablePastDates": false,
+                                  "pricePerDay": car["pricePerDay"]
                                 });
                               case 2:
                                 controller.routeToListVehicle(arguments: {

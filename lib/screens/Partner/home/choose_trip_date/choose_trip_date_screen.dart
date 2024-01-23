@@ -110,14 +110,14 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
             ),
             Column(
               children: <Widget>[
-                Container(
-                    margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                    height: 50,
-                    child: Text(
-                        'StartRangeDate:' '${controller.selectedTimeText}')),
-                SizedBox(
-                    height: 50,
-                    child: Text('EndRangeDate:' '${controller.endDate}')),
+                // Container(
+                //     margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                //     height: 50,
+                //     child: Text(
+                //         'StartRangeDate:' '${controller.selectedTimeText}')),
+                // SizedBox(
+                //     height: 50,
+                //     child: Text('EndRangeDate:' '${controller.endDate}')),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.6,
                   child: SfDateRangePicker(

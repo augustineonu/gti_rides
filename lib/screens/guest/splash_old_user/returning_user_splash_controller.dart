@@ -36,29 +36,31 @@ class ReturningUserSplashController extends GetxController
       logger.log("User token: ${tokenModel!.accessToken}");
 
       //   // setup and move to home screen
-      userService.setCurrentUser(userModel.toJson());
-      tokenService.setTokenModel(tokenModel.toJson());
-      tokenService.setAccessToken(tokenModel.accessToken);
+      tokenService.saveTokensData(tokenModel);
+      // userService.setCurrentUser(userModel.toJson());
+      // tokenService.setTokenModel(tokenModel.toJson());
+      // tokenService.setAccessToken(tokenModel.accessToken);
 
       logger.log("User model >>: ${userModel.toJson()}");
+      routeService.offAllNamed(AppLinks.login);
 
       //   // get new access token
-      bool result = await tokenService.getNewAccessToken();
-      if (!result) {
-        // move to welcome screen
-        logger.log('Going to Login screen');
-        routeService.offAllNamed(AppLinks.login);
-        return;
-      }
+      // bool result = await tokenService.getNewAccessToken();
+      // if (!result) {
+      //   // move to welcome screen
+      //   logger.log('Going to Login screen');
+      //   routeService.offAllNamed(AppLinks.login);
+      //   return;
+      // }
       //   // move to home screen
-      if (userModel.userType.toString() == "renter") {
-        await routeService.gotoRoute(AppLinks.carRenterLanding);
-      } else {
-        await routeService.gotoRoute(AppLinks.carOwnerLanding);
-      }
+      // if (userModel.userType.toString() == "renter") {
+      //   await routeService.gotoRoute(AppLinks.carRenterLanding);
+      // } else {
+      //   await routeService.gotoRoute(AppLinks.carOwnerLanding);
+      // }
 
       logger.log('Going to home screen');
-      routeService.offAllNamed(AppLinks.agentHome);
+      // routeService.offAllNamed(AppLinks.agentHome);
 
       return;
     } else {

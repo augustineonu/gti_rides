@@ -13,6 +13,10 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 class ChooseTripDateController extends GetxController {
   Logger logger = Logger("Controller");
   RxBool isLoading = false.obs;
+  RxBool isSingleDateSelection = false.obs;
+  RxBool enablePastDates = true.obs;
+  RxBool toggleDaySelection = true.obs;
+  RxBool onCancelCalled = false.obs;
 
   final DateRangePickerController datePickerController =
       DateRangePickerController();
@@ -23,6 +27,7 @@ class ChooseTripDateController extends GetxController {
   TextEditingController locationController = TextEditingController();
   Rx<String> testString = "".obs;
   Rx<String> startDate = '0'.obs;
+  Rx<String?> selectedExpiryDate = ''.obs;
   Rx<String> endDate = '0'.obs;
   Rx<String> selectedTimeText = ''.obs;
   RxInt selectedStartHour = 0.obs;
@@ -62,8 +67,12 @@ class ChooseTripDateController extends GetxController {
 
     if (arguments != null) {
       appBarTitle.value = arguments['appBarTitle'];
-      to.value = arguments['to'];
-      from.value = arguments['from'];
+      to.value = arguments['to'] ?? '';
+      from.value = arguments['from'] ?? '';
+      isSingleDateSelection.value = arguments['isSingleDateSelection'] ?? false;
+      enablePastDates.value = arguments['enablePastDates'] ?? true;
+      logger.log("date ${arguments['enablePastDates']}");
+      logger.log("date ${enablePastDates.value}");
 
       // Now you have access to the passed data (emailOrPhone)
       logger.log('Received argument: $appBarTitle');
@@ -102,13 +111,38 @@ class ChooseTripDateController extends GetxController {
     logger.log("selected end date:: ${endDate.value}");
   }
 
+ void onSingleDateSelection(DateRangePickerSelectionChangedArgs args) {
+  if (args.value != null && args.value != '') {
+    selectedExpiryDate.value = formatDate(args.value!).toString();
+
+    logger.log("Selected args: ${args.value}");
+    logger.log("Selected date: ${selectedExpiryDate.value}");
+  } else {
+    // Handle the case when the date is unselected (null)
+    selectedExpiryDate.value = ''; // Or any default value you want
+    logger.log("Date unselected");
+  }
+}
+
+void resetDateSelection(context){
+  toggleDaySelection.value = true;
+  onCancelCalled.value = true;
+  bottomSnackbar(context, message: 'Selection cleared');
+  // selectedExpiryDate.value = '';
+}
+
+
   void queryListener() {}
 
   void goBack() => routeService.goBack();
-  void goBack1() => routeService.goBack( result: {
+  void goBack1() => routeService.goBack(result: {
         "start":
-            "${startDate} ${selectedStartHour}:${selectedStartMinute < 10 ? '0${selectedStartMinute}' : selectedStartMinute}${selectedStartAmPm.value == 0 ? "am" : "PM"}",
+            "$startDate $selectedStartHour:${selectedStartMinute < 10 ? '0$selectedStartMinute' : selectedStartMinute}${selectedStartAmPm.value == 0 ? "am" : "PM"}",
         "end":
-            "${endDate} ${selectedEndHour}:${selectedEndMins < 10 ? '0${selectedEndMins}' : selectedEndMins}${selectedEndAmPm.value == 0 ? "am" : "PM"}"
+            "$endDate $selectedEndHour:${selectedEndMins < 10 ? '0$selectedEndMins' : selectedEndMins}${selectedEndAmPm.value == 0 ? "am" : "PM"}"
+      
+      ,
+      "selectedExpiryDate": selectedExpiryDate.value,
+
       }, closeOverlays: true);
 }

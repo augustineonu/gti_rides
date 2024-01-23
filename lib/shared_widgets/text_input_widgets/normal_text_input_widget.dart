@@ -30,7 +30,8 @@ class NormalInputTextWidget extends StatelessWidget {
   final EdgeInsetsGeometry? contentPadding;
   final void Function()? onTap;
   final void Function()? onEditingComplete;
- final void Function(String)? onChanged;
+  final void Function(String)? onChanged;
+  final String? Function(String?)? validator;
   final Color? textColor;
   final double? fontSize;
   final int? maxLines;
@@ -61,6 +62,7 @@ class NormalInputTextWidget extends StatelessWidget {
     this.contentPadding,
     this.onTap,
     this.onChanged,
+    this.validator,
     this.onEditingComplete,
     this.textColor,
     this.fontSize,
@@ -107,7 +109,15 @@ class NormalInputTextWidget extends StatelessWidget {
           keyboardType: textInputType ?? TextInputType.emailAddress,
           readOnly: readOnly!,
           onTap: onTap,
-          onChanged: onChanged,
+          onChanged: onChanged ?? (value) {},
+          validator: validator ??
+              (value) {
+                if (value == null || value.isEmpty) {
+                  return fetchErrorText(
+                      expectedTextVariable: expectedVariable ?? '');
+                }
+                return null;
+              },
           onEditingComplete: onEditingComplete,
           maxLines: maxLines,
           showCursor: showCursor,
@@ -179,13 +189,6 @@ class NormalInputTextWidget extends StatelessWidget {
             //   style: Theme.of(context).textTheme.bodyLarge,
             // ),
           ),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return fetchErrorText(
-                  expectedTextVariable: expectedVariable ?? '');
-            }
-            return null;
-          },
         ),
       ],
     );

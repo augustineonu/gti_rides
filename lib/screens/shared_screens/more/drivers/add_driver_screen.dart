@@ -3,8 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/screens/shared_screens/more/drivers/drivers_controller.dart';
 import 'package:gti_rides/shared_widgets/camera_option_sheet.dart';
+import 'package:gti_rides/shared_widgets/date_container.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/text_input_widgets/normal_text_input_widget.dart';
@@ -13,6 +15,7 @@ import 'package:gti_rides/shared_widgets/upload_image_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
+import 'package:gti_rides/utils/utils.dart';
 
 class AddDriverScreen extends GetView<DriversController> {
   const AddDriverScreen([Key? key]) : super(key: key);
@@ -79,6 +82,16 @@ class AddDriverScreen extends GetView<DriversController> {
                     hintText: AppStrings.emailHintText,
                     controller: controller.emailController,
                     textInputType: TextInputType.emailAddress,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return fetchErrorText(expectedTextVariable: "field");
+                      }
+                      if (!value.contains('.com')) {
+                        return fetchErrorText(expectedTextVariable: '.com');
+                      }
+                      return null;
+                    },
+                    // initialValue: 'email',
                   ),
                   const SizedBox(height: 24),
                   NormalInputTextWidget(
@@ -92,12 +105,61 @@ class AddDriverScreen extends GetView<DriversController> {
                     ],
                   ),
                   const SizedBox(height: 24),
-                  NormalInputTextWidget(
-                    expectedVariable: 'field',
+                  // NormalInputTextWidget(
+                  //   expectedVariable: 'field',
+                  //   title: AppStrings.licenseExpireyDate,
+                  //   hintText: AppStrings.licenseExpireyDate,
+                  //   textInputType: TextInputType.none,
+                  //   controller: controller.licenceExpiryDateController,
+                  //   onTap: () async {
+                  //   // var data =
+                  //   //     await Get.toNamed(AppLinks.chooseTripDate, arguments: {
+                  //   //   "appBarTitle": AppStrings.selectExpiryDate,
+                  //   //   "isSingleDate": true
+                  //     var data =
+                  //       await Get.toNamed(AppLinks.chooseTripDate, arguments: {
+                  //     "appBarTitle": AppStrings.selectExpiryDate,
+                  //     "to": AppStrings.to,
+                  //     "from": AppStrings.from
+                  //   });
+
+                  //   // Handle the selected date here
+                  //   print('Selected Date page: $data');
+                  //   controller.selectedExpiryDate.value = data['selectedExpiryDate'] ?? '';
+                  //   // controller.endDateTime.value = data['end'] ?? '';
+
+                  //   print('Selected Expiry Date : ${data['selectedExpiryDate']}');
+                  // },
+                  // ),
+
+                  dateContainer(
+                    size,
+                    isCentered: true,
+                    alignment: Alignment.centerLeft,
                     title: AppStrings.licenseExpireyDate,
-                    hintText: AppStrings.licenseExpireyDate,
-                    textInputType: TextInputType.datetime,
-                    controller: controller.licenceExpiryDateController,
+                    color: controller.selectedExpiryDate.value.isEmpty
+                        ? grey1
+                        : grey5,
+                    text: controller.selectedExpiryDate.value.isEmpty
+                        ? AppStrings.dateTimeHintText
+                        : controller.selectedExpiryDate.value,
+                    onTap: () async {
+                      var data = await Get.toNamed(AppLinks.chooseTripDate,
+                          arguments: {
+                            "appBarTitle": AppStrings.selectExpiryDate,
+                            "enablePastDates": false,
+                            "isSingleDateSelection": true,
+                            "to": AppStrings.to,
+                            "from": AppStrings.from
+                          });
+
+                      // Handle the selected date here
+                      print('Selected Date page: $data');
+                      if (data != null && data['selectedExpiryDate'] != null) {
+                        controller.selectedExpiryDate.value =
+                            data['selectedExpiryDate'];
+                      }
+                    },
                   ),
                   const SizedBox(
                     height: 24,

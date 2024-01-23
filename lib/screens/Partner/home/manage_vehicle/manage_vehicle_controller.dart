@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/models/partner/car_list_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/partner_service.dart';
@@ -8,7 +9,8 @@ import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/utils.dart';
 
-class ManageVehicleController extends GetxController with StateMixin<List<dynamic>>{
+class ManageVehicleController extends GetxController
+    with StateMixin<List<dynamic>> {
   Logger logger = Logger("Controller");
 
   ManageVehicleController() {
@@ -26,10 +28,13 @@ class ManageVehicleController extends GetxController with StateMixin<List<dynami
     pageController.addListener(() {
       update();
     });
+    // Get.find<ManageVehicleController>().onInit();
+
     super.onInit();
   }
 
   // variables
+  RxList<CarData> carList = <CarData>[].obs;
   RxBool isLoading = false.obs;
   RxBool isFetchingCars = false.obs;
   RxBool isDeletingCar = false.obs;
@@ -63,28 +68,50 @@ class ManageVehicleController extends GetxController with StateMixin<List<dynami
 
 // routing methods
   void goBack() => routeService.goBack();
-  void routeToQuickEdit({Object? arguments}) =>
+  void routeToQuickEdit({Object? arguments}) {
+    if (Get.isBottomSheetOpen == true) {
+      Get.back();
+          Get.delete<ManageVehicleController>();
+
       routeService.gotoRoute(AppLinks.quickEdit, arguments: arguments);
-  void routeToCarHistory({Object? arguments}) =>
+    } else {
+      routeService.gotoRoute(AppLinks.quickEdit, arguments: arguments);
+    }
+  }
+
+  void routeToCarHistory({Object? arguments}) {
+    if (Get.isBottomSheetOpen == true) {
+      Get.back();
       routeService.gotoRoute(AppLinks.carHistory, arguments: arguments);
+    } else {
+      routeService.gotoRoute(AppLinks.carHistory, arguments: arguments);
+    }
+  }
 
   void onToggleCarAvailability(bool value) => isAvailable.value = value;
-  void routeToListVehicle({Object? arguments})=> routeService.gotoRoute(AppLinks.listVehicle,
-  arguments: arguments);
+  void routeToListVehicle({Object? arguments}) {
+    if (Get.isBottomSheetOpen == true) {
+      Get.back();
+      routeService.gotoRoute(AppLinks.listVehicle, arguments: arguments);
+    } else {
+      routeService.gotoRoute(AppLinks.listVehicle, arguments: arguments);
+    }
+  }
 
   Future<void> getAllCars() async {
-     change(<dynamic>[].obs, status: RxStatus.loading());
+    logger.log("get all cars called::::");
+    change(<dynamic>[].obs, status: RxStatus.loading());
     try {
       final response = await partnerService.getCars(queryType: 'all');
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("gotten cars ${response.data}");
         if (response.data == null || response.data!.isEmpty) {
-         
-           change(<dynamic>[].obs, status: RxStatus.empty());
+          change(<dynamic>[].obs, status: RxStatus.empty());
+          
           logger.log("cars $cars");
         } else {
-           cars?.value = response.data!;
-           change(response.data!, status: RxStatus.success());
+          cars?.value = response.data!;
+          change(response.data!, status: RxStatus.success());
           update();
         }
         isFetchingCars.value = false;
@@ -93,7 +120,7 @@ class ManageVehicleController extends GetxController with StateMixin<List<dynami
       }
     } catch (exception) {
       logger.log("error  $exception");
-       change(<dynamic>[].obs, status: RxStatus.error(exception.toString()));
+      change(<dynamic>[].obs, status: RxStatus.error(exception.toString()));
     }
   }
 
@@ -123,10 +150,9 @@ class ManageVehicleController extends GetxController with StateMixin<List<dynami
       if (result.status == "success") {
         showSuccessSnackbar(message: result.message!);
         isDeletingCar.value = false;
-           Future.delayed(const Duration(milliseconds: 1000), () {
+        Future.delayed(const Duration(milliseconds: 1000), () {
           routeService.goBack(closeOverlays: true);
         });
-        
       } else {
         logger.log("error deleting car:: ${result.message}");
         showErrorSnackbar(message: result.message ?? 'unable to delete car');
@@ -137,4 +163,10 @@ class ManageVehicleController extends GetxController with StateMixin<List<dynami
       showErrorSnackbar(message: exception.toString());
     }
   }
+
+  // @override
+  // void dispose() {
+  //   Get.delete<ManageVehicleController>();
+  //   super.dispose();
+  // }
 }

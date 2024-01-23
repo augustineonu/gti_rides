@@ -57,7 +57,10 @@ class ApiService {
               logger.log('Going to Login screen');
               routeService.offAllNamed(AppLinks.login);
               return;
-            }
+            } 
+            // else {
+            //   logger.log("result: token is false ");
+            // }
 
             // Update the request header with the new access token
             e.requestOptions.headers['Authorization'] =
@@ -399,9 +402,9 @@ class ApiService {
         endpoint,
         options: Options(
           responseType: ResponseType.plain,
-          // headers: {
-          //   'Authorization': 'Bearer ${tokenService.accessToken.value}',
-          // },
+          headers: {
+            'Authorization': 'Bearer ${tokenService.accessToken.value}',
+          },
         ),
       );
       logger.log("GET REQUEST RESPONSE ($endpoint) :: ${response.data}");

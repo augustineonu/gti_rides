@@ -3,9 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:gti_rides/models/drivers_model.dart';
+import 'package:gti_rides/models/drivers_model.dart' as driver;
 import 'package:gti_rides/models/image_response.dart';
 import 'package:gti_rides/models/list_response_model.dart';
+import 'package:gti_rides/models/partner/car_history_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/screens/Partner/home/list_vehicle/list_vehicle_screen.dart';
 import 'package:gti_rides/screens/shared_screens/more/drivers/drivers_controller.dart';
@@ -80,6 +81,11 @@ class ListVehicleController extends GetxController {
   Rx<String> selectedInspectionPhotoName = ''.obs;
   RxList<String> selectedVehiclePhotos = <String>[].obs;
   Rx<String> selectedVehiclePhoto = ''.obs;
+  Rx<String> userVin = ''.obs;
+  Rx<String> plateNumber = ''.obs;
+  Rx<String> state = ''.obs;
+  Rx<String> city = ''.obs;
+  Rx<String> brandName = ''.obs;
 
   GlobalKey<FormState> vehicleTypeFormKey = GlobalKey<FormState>();
   GlobalKey<FormState> vehicleInfoFormKey = GlobalKey<FormState>();
@@ -112,6 +118,20 @@ class ListVehicleController extends GetxController {
 
   void init() async {
     logger.log("ListVehicleController Initialized");
+    Map<String, dynamic>? arguments = Get.arguments;
+
+    if (arguments != null) {
+      startDateTime.value = arguments['start'] ?? 'date';
+      endDateTime.value = arguments['end'] ?? 'date';
+      isFromManageCars.value = arguments['isFromManageCars'] ?? false;
+      carID.value = arguments['carID'];
+      // Now you have access to the passed data (emailOrPhone)
+      logger.log('Received data: $arguments');
+      await getCarHistory();
+    }
+    vinController = TextEditingController(text: userVin.value);
+    plateNumberController = TextEditingController(text: plateNumber.value);
+    aboutVehicleController = TextEditingController(text: aboutCar.value);
     await getBrands();
     await getStates();
     await getTransmission();
@@ -120,14 +140,13 @@ class ListVehicleController extends GetxController {
     await getVehicleSeats();
     await getDrivers();
     await getInsuranceType();
+    // await getCarHistory();
     logger.log("oooooooooo");
     // Access the arguments using Get.arguments
 
     // if (isFromManageCars.value == true) {
     //   currentIndex.value = 1;
-
     //   pageController = PageController(initialPage: currentIndex.value);
-
     //   // pageController.addListener(() {
     //     // currentIndex.value = pageController.page?.round() ?? 0;
     //     update();
@@ -139,26 +158,16 @@ class ListVehicleController extends GetxController {
   void onInit() async {
     logger.log("ListVehicleController");
     super.onInit();
-    Map<String, dynamic>? arguments = Get.arguments;
 
-    if (arguments != null) {
-      startDateTime.value = arguments['start'] ?? 'date';
-      endDateTime.value = arguments['end'] ?? 'date';
-      isFromManageCars.value = arguments['isFromManageCars'] ?? false;
-      carID.value = arguments['carID'];
-      // Now you have access to the passed data (emailOrPhone)
-      logger.log('Received data: $arguments');
-    }
-    if (isFromManageCars.value == true) {
-      currentIndex.value = 1;
+    // if (isFromManageCars.value == true) {
+    //   currentIndex.value = 1;
 
-      pageController = PageController(initialPage: currentIndex.value);
-
-      // pageController.addListener(() {
-      //   currentIndex.value = pageController.page?.round() ?? 0;
-      //   update();
-      // });
-    }
+    pageController = PageController(initialPage: currentIndex.value);
+    // }
+    pageController.addListener(() {
+      currentIndex.value = pageController.page?.round() ?? 0;
+      update();
+    });
   }
 
   // variables
@@ -235,8 +244,8 @@ class ListVehicleController extends GetxController {
 
   RxString selectedView = 'select'.obs;
   ValueNotifier<Fruit> selectedItem = ValueNotifier<Fruit>(Fruit.apple);
-  Rx<Driver> selectedItem1 = Rx<Driver>(
-    Driver(
+  Rx<driver.Driver> selectedItem1 = Rx<driver.Driver>(
+    driver.Driver(
       fullName: 'John Doe',
       driverEmail: '08180065778 | johndoe@gmail.com',
     ),
@@ -245,7 +254,11 @@ class ListVehicleController extends GetxController {
 // routing methods
   void goBack() => routeService.goBack();
   void goBack1() => routeService.goBack(closeOverlays: true);
-  void routeToCreateDriver() => routeService.gotoRoute(AppLinks.addDriver);
+  void routeToCreateDriver() {
+    Get.back();
+    routeService.gotoRoute(AppLinks.addDriver);
+  }
+
   void routeToSelectDate() =>
       routeService.gotoRoute(AppLinks.chooseTripDate, arguments: {
         "appBarTitle": AppStrings.selectAvailabilityDate,
@@ -508,7 +521,7 @@ class ListVehicleController extends GetxController {
     try {
       //isGettingBrandModel.value = true;
       vehicleYear!.clear();
-      isGettingBrands.value =  true;
+      isGettingBrands.value = true;
       final response = await partnerService.getBrand();
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("gotten brands ${response.data}");
@@ -582,6 +595,7 @@ class ListVehicleController extends GetxController {
           brandModel?.value = response.data!;
           logger.log("brand model ${response.data}");
           isGettingBrandModel.value = false;
+          // selectedValue1 = response.data!.first['brandModelName'];
           // brandCode.value = response.data!.first!["brandCode"];
           // modelCode.value = response.data!.first!["modelCode"];
 
@@ -1141,14 +1155,73 @@ class ListVehicleController extends GetxController {
     }
   }
 
-@override
+  RxList<dynamic> carHistory = RxList<dynamic>();
+  RxList<CarHistory> carHistory1 = RxList<CarHistory>();
+  RxString startDate = ''.obs;
+  RxString endDate = ''.obs;
+  RxString pricePerDay = ''.obs;
+  Rx<bool> isFetchingCarDetails = false.obs;
+  Rx<String> aboutCar = ''.obs;
+  Rx<String> transmission = ''.obs;
+
+  Future<void> getCarHistory() async {
+    isFetchingCarDetails.value = true;
+    try {
+      final response = await partnerService.getOnCar(carId: carID.value);
+
+      if (response.status == 'success' || response.status_code == 200) {
+        logger.log("gotten car history ${response.data}");
+        if (response.data != null && response.data!.isNotEmpty) {
+          carHistory.value = response.data!;
+        //  carHistory1.value = List<CarHistoryData>.from(
+        //   response.data!.map((x) => CarHistoryData.fromJson(x)),
+        // ).cast<CarHistory>();
+        
+
+          isFetchingCarDetails.value = false;
+          userVin.value = carHistory[0]['vin'];
+          plateNumber.value = carHistory[0]['plateNumber'];
+          state.value = carHistory[0]['state'][0]["stateName"];
+          city.value = carHistory[0]['city'][0]["cityName"];
+          stateCode.value = carHistory[0]['state'][0]["stateCode"];
+          brandName.value = carHistory[0]['brand'][0]["brandName"];
+          brandCode.value = carHistory[0]['brand'][0]["brandCode"];
+
+          selectedValue1 = response.data![0]['brandModel'][0]['modelName'];
+          // vehicle info
+          aboutCar.value = carHistory[0]['about'];
+          transmission.value = carHistory[0]['transmission'];
+
+          await getCity(cityCode1: stateCode.value);
+          await getBrandModel(brandCode1: brandCode.value);
+
+          // startDate.value = response.data![0]['startDate'] ?? '';
+          // endDate.value = response.data!.first['endDate'] ?? '';
+          // pricePerDay.value = response.data!.first['pricePerDay'] ?? '';
+          // brandModelName.value = response.data!.first['brandModelName'] ?? '';
+          // photoUrl.value = response.data!.first['photoUrl'] ?? '';
+          // carID.value = response.data!.first['carID'];
+          logger.log("car history $carHistory");
+        } else {
+          showSuccessSnackbar(message: 'no data');
+        }
+      } else {
+        logger.log("unable to get car history ${response.data}");
+      }
+    } catch (exception) {
+      logger.log("error  $exception");
+    } finally {
+      isFetchingCarDetails.value = false;
+    }
+  }
+
+  @override
   void onClose() {
     // TODO: implement onClose
     super.onClose();
-    
   }
 
-   @override
+  @override
   void dispose() {
     selectedValue1 = 'Select'; // Set it back to the default value
     super.dispose();

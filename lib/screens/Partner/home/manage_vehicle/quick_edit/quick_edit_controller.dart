@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/models/drivers_model.dart';
+import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/screens/Partner/home/list_vehicle/list_vehicle_screen.dart';
+import 'package:gti_rides/screens/Partner/home/manage_vehicle/manage_vehicle_controller.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/partner_service.dart';
 import 'package:gti_rides/services/route_service.dart';
@@ -11,6 +13,7 @@ import 'package:gti_rides/utils/utils.dart';
 
 class QuickEditController extends GetxController {
   Logger logger = Logger("QuickEdit Controller");
+  final manageVehicleController = Get.put(ManageVehicleController());
 
   QuickEditController() {
     init();
@@ -25,12 +28,17 @@ class QuickEditController extends GetxController {
     Map<String, dynamic>? arguments = Get.arguments;
 
     if (arguments != null) {
-      brandModelName.value = arguments['brandModelName'];
-      photoUrl.value = arguments['photoUrl'];
+      brandModelName.value = arguments['brandModelName'] ?? '';
+      photoUrl.value = arguments['photoUrl'] ?? '';
       carID.value = arguments['carID'];
 
       startDateTime.value = arguments['start'] ?? '';
       endDateTime.value = arguments['end'] ?? '';
+      pricePerDay.value = arguments['pricePerDay'] ?? '';
+
+      // startDate.value = arguments["startDate"] ?? '';
+      // endDate.value = arguments["endDate"] ?? '';
+      enablePastDates.value = arguments['enablePastDates'] ?? true;
 
       // Now you have access to the passed data (emailOrPhone)
       logger.log('Received data $arguments');
@@ -39,11 +47,15 @@ class QuickEditController extends GetxController {
       update();
     });
     super.onInit();
+    startDateController = TextEditingController(text: startDateTime.value);
+    endDateController = TextEditingController(text: endDateTime.value);
+    pricePerDayController = TextEditingController(text: pricePerDay.value);
   }
 
   GlobalKey<FormState> amountFormKey = GlobalKey<FormState>();
   // variables
   RxBool isLoading = false.obs;
+  RxBool enablePastDates = true.obs;
   PageController pageController = PageController();
   RxInt selectedIndex = 0.obs;
   RxString testString = "".obs;
@@ -52,12 +64,14 @@ class QuickEditController extends GetxController {
   RxString carID = "".obs;
   RxString startDateTime = "".obs;
   RxString endDateTime = "".obs;
+  RxString pricePerDay = "".obs;
+  // RxString endDate = "".obs;
+  // RxString startDate = "".obs;
 
   TextEditingController senderNameController = TextEditingController();
-  TextEditingController pricePerDayController = TextEditingController();
-  TextEditingController startDateController =
-      TextEditingController(text: '01 Jan, 2024');
-  TextEditingController endDateController = TextEditingController();
+  late TextEditingController pricePerDayController;
+  late TextEditingController startDateController;
+  late TextEditingController endDateController;
 
   List<Map<String, String>> quickOptions = [
     {
@@ -80,6 +94,7 @@ class QuickEditController extends GetxController {
 
 // routing methods
   void goBack() => routeService.goBack();
+  void goBack1() => routeService.goBack(closeOverlays: true);
 
   Future<void> quickEditCar() async {
     if (!amountFormKey.currentState!.validate()) {
@@ -99,8 +114,15 @@ class QuickEditController extends GetxController {
       }, carID: carID.value);
       if (result.status == "success") {
         showSuccessSnackbar(message: result.message!);
+
+        // manageVehicleController.init();
         Future.delayed(const Duration(milliseconds: 1000), () {
-          Get.back(closeOverlays: true);
+          // Get.back(closeOverlays: true);
+          Get.offNamedUntil(
+            AppLinks.manageVehicle,
+            ModalRoute.withName(AppLinks.carOwnerLanding),
+          );
+          manageVehicleController.getAllCars();
         });
       } else {
         showErrorSnackbar(message: result.message!);

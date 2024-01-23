@@ -12,6 +12,7 @@ import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
+import 'package:gti_rides/utils/utils.dart';
 
 class SignUpScreenBinding extends Bindings {
   @override
@@ -152,6 +153,15 @@ class SignUpScreen extends GetView<SignUpController> {
                         title: AppStrings.email,
                         expectedVariable: "email",
                         hintText: AppStrings.emailHintText,
+                          validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return fetchErrorText(expectedTextVariable: "field");
+                      }
+                      if (!value.contains('.com')) {
+                        return fetchErrorText(expectedTextVariable: '.com');
+                      }
+                      return null;
+                    },
                         controller: controller.emailController,
                       ),
                       SizedBox(

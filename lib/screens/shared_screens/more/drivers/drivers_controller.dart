@@ -26,6 +26,18 @@ class DriversController extends GetxController {
     await getDrivers();
   }
 
+  @override
+  onInit() async {
+    super.onInit();
+
+    Map<String, dynamic>? arguments = Get.arguments;
+
+    if (arguments != null) {
+      licenceExpiryDateController =
+          TextEditingController(text: selectedExpiryDate.value);
+    }
+  }
+
   RxList<dynamic>? drivers = <dynamic>[].obs;
 
   GlobalKey<FormState> createDriverFormKey = GlobalKey<FormState>();
@@ -49,6 +61,9 @@ class DriversController extends GetxController {
   Rx<String> exampleText = "".obs;
   Rx<String> pickedImagePath = "".obs;
   Rx<String> pickedImageName = "".obs;
+  Rx<String> startDateTime = "".obs;
+  Rx<String> endDateTime = "".obs;
+  Rx<String> selectedExpiryDate = "".obs;
 
   void obscurePassword() => showPassword.value = !showPassword.value;
   // update();
@@ -207,5 +222,6 @@ class DriversController extends GetxController {
   void onClose() {
     // timer.cancel(); // Cancel the timer when the controller is disposed.
     super.onClose();
+    licenceExpiryDateController.text = selectedExpiryDate.value;
   }
 }

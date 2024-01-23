@@ -24,7 +24,7 @@ class QuickEditBinding extends Bindings {
 }
 
 class QuickEditScreen extends StatelessWidget {
-   QuickEditScreen([Key? key]) : super(key: key);
+  QuickEditScreen([Key? key]) : super(key: key);
 
   final controller = Get.put(QuickEditController());
   @override
@@ -79,65 +79,122 @@ class QuickEditScreen extends StatelessWidget {
           key: controller.amountFormKey,
           child: Column(
             children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: NormalInputTextWidget(
-                      expectedVariable: 'field',
-                      title: AppStrings.from,
-                      fontSize: 12.sp,
-                      hintText: AppStrings.dateTimeHintText,
-                      readOnly: true,
-                      // showCursor: true,
-                      controller: controller.startDateController
-                        ..text = controller.startDateTime.value,
-                      onTap: () async {
-                        var data = await Get.toNamed(AppLinks.chooseTripDate,
-                            arguments: {
-                              "appBarTitle": AppStrings.quickEdit,
-                              "to": AppStrings.to,
-                              "from": AppStrings.from
-                            });
+              // Row(
+              //   children: [
+              //     Expanded(
+              //       child: NormalInputTextWidget(
+              //         expectedVariable: 'field',
+              //         title: AppStrings.from,
+              //         fontSize: 12.sp,
+              //         hintText: AppStrings.dateTimeHintText,
+              //         readOnly: true,
+              //         // showCursor: true,
+              //         controller: controller.startDateController,
+              //           // ..text = controller.startDateTime.value,
+              //         onTap: () async {
+              //           var data = await Get.toNamed(AppLinks.chooseTripDate,
+              //               arguments: {
+              //                 "appBarTitle": AppStrings.quickEdit,
+              //                 "to": AppStrings.to,
+              //                 "from": AppStrings.from,
+              //                 "enablePastDates": false,
+              //               });
 
-                        // Handle the selected date here
-                        print('Selected Date page: $data');
-                        controller.startDateTime.value = data['start'];
+              //           // Handle the selected date here
+              //           print('Selected Date page: $data');
+              //           controller.startDateTime.value = data['start'] ?? '';
 
-                        controller.endDateTime.value = data['end'] ?? '';
-                      },
-                    ),
-                  ),
-                  SizedBox(
-                    width: 20.sp,
-                  ),
-                  Expanded(
-                    child: NormalInputTextWidget(
-                      expectedVariable: 'field',
-                      title: AppStrings.to,
-                      hintText: AppStrings.dateTimeHintText,
-                      readOnly: true,
-                      // showCursor: true,
-                      fontSize: 12.sp,
-                      controller: controller.endDateController
-                        ..text = controller.endDateTime.value,
-                      onTap: () async {
-                        var data = await Get.toNamed(AppLinks.chooseTripDate,
-                            arguments: {
-                              "appBarTitle": AppStrings.quickEdit,
-                              "to": AppStrings.to,
-                              "from": AppStrings.from
-                            });
+              //           controller.endDateTime.value = data['end'] ?? '';
+              //         },
+              //       ),
+              //     ),
+              //     SizedBox(
+              //       width: 20.sp,
+              //     ),
+              //     Expanded(
+              //       child: NormalInputTextWidget(
+              //         expectedVariable: 'field',
+              //         title: AppStrings.to,
+              //         hintText: AppStrings.dateTimeHintText,
+              //         readOnly: true,
+              //         // showCursor: true,
+              //         fontSize: 12.sp,
+              //         controller: controller.endDateController,
+              //           // ..text = controller.endDateTime.value,
+              //         onTap: () async {
+              //           var data = await Get.toNamed(AppLinks.chooseTripDate,
+              //               arguments: {
+              //                 "appBarTitle": AppStrings.quickEdit,
+              //                 "to": AppStrings.to,
+              //                 "from": AppStrings.from
+              //               });
 
-                        // Handle the selected date here
-                        print('Selected Date page: $data');
-                        controller.startDateTime.value = data['start'];
+              //           // Handle the selected date here
+              //           print('Selected Date page: $data');
+              //           controller.startDateTime.value = data['start'];
 
-                        controller.endDateTime.value = data['end'] ?? '';
-                      },
-                    ),
-                  ),
-                ],
+              //           controller.endDateTime.value = data['end'] ?? '';
+              //         },
+              //       ),
+              //     ),
+              //   ],
+              // ),
+
+                Row(
+            children: [
+              Expanded(
+                child: dateContainer(
+                  size,
+                  title: AppStrings.from,
+                  color: controller.startDateTime.value.isEmpty ? grey1 : grey5,
+                  text: controller.startDateTime.value.isEmpty
+                      ? AppStrings.dateTimeHintText
+                      : controller.startDateTime.value,
+                  onTap: () async {
+                    var data =
+                        await Get.toNamed(AppLinks.chooseTripDate, arguments: {
+                      "appBarTitle": AppStrings.quickEdit,
+                      "to": AppStrings.to,
+                      "from": AppStrings.from,
+                      "enablePastDates": false,
+                    });
+
+                    // Handle the selected date here
+                    print('Selected Date page: $data');
+                    controller.startDateTime.value = data['start'];
+                    controller.endDateTime.value = data['end'];
+                  },
+                ),
               ),
+              SizedBox(width: 20.sp),
+              Expanded(
+                child: dateContainer(
+                  size,
+                  title: AppStrings.to,
+                  text: controller.endDateTime.value.isEmpty
+                      ? AppStrings.dateTimeHintText
+                      : controller.endDateTime.value,
+                  onTap: () async {
+                    // final data = await controller
+                    //     .routeToSelectDate();
+                    var data =
+                        await Get.toNamed(AppLinks.chooseTripDate, arguments: {
+                      "appBarTitle": AppStrings.quickEdit,
+                      "to": AppStrings.to,
+                      "from": AppStrings.from,
+                      "enablePastDates": false,
+                    });
+
+                    // Handle the selected date here
+                    print('Selected Date page: $data');
+                    controller.startDateTime.value = data['start'];
+                    controller.endDateTime.value = data['end'];
+                  },
+                ),
+              ),
+            ],
+          ),
+
               SizedBox(
                 height: 24.sp,
               ),
@@ -153,6 +210,7 @@ class QuickEditScreen extends StatelessWidget {
                 hintText: AppStrings.amountHintText,
                 textInputType: TextInputType.number,
                 controller: controller.pricePerDayController,
+                  // ..text = controller.pricePerDay.value,
                 inputFormatters: [
                   LengthLimitingTextInputFormatter(10),
                   NumberTextInputFormatter(),
@@ -161,12 +219,10 @@ class QuickEditScreen extends StatelessWidget {
             ],
           ),
         ),
-
         SizedBox(
           height: 50.sp,
         ),
         saveButton(),
-
       ],
     );
   }
