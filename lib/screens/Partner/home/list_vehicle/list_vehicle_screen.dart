@@ -1,4 +1,3 @@
-import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,7 +23,6 @@ import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/utils.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:multiselect/multiselect.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 
 enum Fruit {
   apple,
@@ -690,22 +688,23 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                       .then((value) => routeService.goBack()));
             }
           }),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              for (var index = 0;
-                  index < controller.selectedVehiclePhotos.length;
-                  index++)
-                Expanded(
-                  child: imageWidget1(
-                    onTap: () =>
-                        controller.selectedVehiclePhotos.removeAt(index),
-                    localImagePath: controller.selectedVehiclePhotos[index],
-                    height: 30.sp,
-                    width: 30.sp,
-                  ),
+          SizedBox(
+            height: 50.sp,
+            child: ListView.builder(
+              shrinkWrap: true,
+              physics: const ScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              itemCount: controller.selectedVehiclePhotos.length,
+              itemBuilder: (context, index) => Padding(
+                padding: const EdgeInsets.only(right: 4.0), // Adjust as needed
+                child: imageWidget1(
+                  onTap: () => controller.selectedVehiclePhotos.removeAt(index),
+                  localImagePath: controller.selectedVehiclePhotos[index],
+                  height: 30.sp,
+                  width: 30.sp,
                 ),
-            ],
+              ),
+            ),
           ),
           SizedBox(
             height: 100.sp,
@@ -828,11 +827,12 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                 values: (controller.insurances?.value ?? [])
                     .map((insurance) => insurance['insuranceName'] as String)
                     .toList(),
-                selectedValue: controller.isFromManageCars.isTrue &&
+                selectedValue: controller.isFromManageCars.isTrue ||
                         controller.insurance.value.isNotEmpty
                     ? controller.insurance.value
                     : null,
                 onChange: (selectedInsurance) {
+                  controller.insurance.value = selectedInsurance;
                   print('Selected value: $selectedInsurance');
                   // Find the brand object with the selected name
                   var selectedObject =
@@ -917,9 +917,9 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                 hintText: AppStrings.writeHere,
                 maxLines: 3,
                 maxLength: 100,
-                inputFormatters:  [
-                LengthLimitingTextInputFormatter(100),
-              ],
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(100),
+                ],
                 textInputType: TextInputType.text,
                 controller: controller.aboutVehicleController,
                 titleFontSize: 12.sp),
@@ -931,7 +931,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                 hintText: 'Select',
                 title: AppStrings.vehicleTransmission,
                 iconColor: grey3,
-                selectedValue: controller.isFromManageCars.isTrue &&
+                selectedValue: controller.isFromManageCars.isTrue ||
                         controller.transmission.value.isNotEmpty
                     ? controller.transmission.value
                     : null,
@@ -941,6 +941,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                         transmission['transmissionName'] as String)
                     .toList(),
                 onChange: (selectedTransmission) {
+                  controller.transmission.value = selectedTransmission;
                   print('Selected value: $selectedTransmission');
                   print('Selected value1: $selectedTransmission');
 
@@ -1018,7 +1019,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                         fillColor: Colors.transparent),
                     onChanged: (List<dynamic> selectedFeatures) {
                       controller.selectedFeatures!.value = selectedFeatures;
-                      print("selected ${selectedFeatures}");
+                      print("selected $selectedFeatures");
 
                       // Find the feature objects with the selected names
                       var selectedObjects =
@@ -1065,11 +1066,12 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     .map((carType) => carType['typeName'] as String)
                     .toList(),
                 // key: UniqueKey(),
-                selectedValue: controller.isFromManageCars.isTrue &&
+                selectedValue: controller.isFromManageCars.isTrue ||
                         controller.vehicleType.isNotEmpty
                     ? controller.vehicleType.value
                     : null,
                 onChange: (selectedVehicleType) {
+                  controller.vehicleType.value = selectedVehicleType;
                   print('Selected value: $selectedVehicleType');
                   // Find the Vehicle Type object with the selected name
                   var selectedObject =
@@ -1096,11 +1098,12 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                 values: (controller.vehicleSeats?.value ?? [])
                     .map((seat) => seat["seatName"] as String)
                     .toList(),
-                selectedValue: controller.isFromManageCars.isTrue &&
+                selectedValue: controller.isFromManageCars.isTrue ||
                         controller.numberOfSeats.value.isNotEmpty
                     ? controller.numberOfSeats.value
                     : null,
                 onChange: (selectedNoOfSeat) {
+                  controller.numberOfSeats.value = selectedNoOfSeat;
                   print('Selected value: $selectedNoOfSeat');
 
                   // Find the seat Type object with the selected name
@@ -1148,7 +1151,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                 title: AppStrings.whatIsTheBrandOfVehicle,
                 iconColor: grey3,
                 expectedVariable: 'field',
-                selectedValue: controller.isFromManageCars.isTrue &&
+                selectedValue: controller.isFromManageCars.isTrue ||
                         controller.brandName.value.isNotEmpty
                     ? controller.brandName.value
                     : null,
@@ -1158,11 +1161,12 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     .toList(),
                 onChange: (selectedBrand) async {
                   print('Selected value: $selectedBrand');
+                  controller.brandName.value = selectedBrand;
                   controller.vehicleYear!.clear();
                   controller.vehicleYear!.value = [];
                   controller.selectedValue1 = 'Select';
                   print(
-                      "VEHICLE YEAR VALUE:: ${controller.vehicleYear!.value}");
+                      "VEHICLE YEAR VALUE:: ${controller.vehicleYear!.value} ${controller.brandName.value}");
 
                   // Find the brand object with the selected name
                   var selectedBrandObject =
@@ -1176,7 +1180,6 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     await controller.getBrandModel(brandCode1: brandCode);
                   }
                 }),
-
             SizedBox(
               height: 24.sp,
             ),
@@ -1187,7 +1190,6 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     style: getRegularStyle(fontSize: 12.sp)),
               ],
             ),
-
             if (controller.brandModel!.isEmpty &&
                 controller.selectedBrandModel.value == 'Select')
               GestureDetector(
@@ -1241,7 +1243,8 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                 color: backgroundColor,
                 onSelected: (selectedBrand) async {
                   setState(() {
-                    controller.selectedBrandModel.value = selectedBrand['modelName'];
+                    controller.selectedBrandModel.value =
+                        selectedBrand['modelName'];
                     controller.modelName?.value = selectedBrand['modelName'];
                     controller.modelCode.value =
                         selectedBrand['modelCode'] as String;
@@ -1332,7 +1335,6 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                   ),
                 ),
               ),
-
             SizedBox(
               height: 24.sp,
             ),
@@ -1343,7 +1345,6 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     style: getRegularStyle(fontSize: 12.sp)),
               ],
             ),
-
             controller.vehicleYear!.isEmpty &&
                     controller.selectedYearValue!.isEmpty
                 ? GestureDetector(
@@ -1428,7 +1429,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                           // print(
                           // "Selected year name: ${controller.yearName?.value}");
                           // controller.yearCode.value = yearCode;
-                          print("code>>>> ${yearCode}");
+                          print("code>>>> $yearCode");
                         }
                       });
                     },
@@ -1495,44 +1496,6 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                       ),
                     ),
                   ),
-            // dropdownWidget1(
-            //     context: context,
-            //     hintText: 'Select',
-            //     title: AppStrings.whatIsTheModelOfVehicle,
-            //     iconColor: grey3,
-            //     expectedVariable: 'field',
-            //     key: UniqueKey(),
-            //     //              var _value = itemList.isEmpty
-            //     // ? value
-            //     // : itemList.firstWhere((item) => item.value == value.value);
-            //     // selectedValue: controller.vehicleYear!.isEmpty
-            //     //     ? controller.yearName.value
-            //     //     : controller.vehicleYear!.firstWhere((year) =>
-            //     //         year["yearName"] == controller.yearName.value),
-            //     selectedValue: controller.yearName?.isEmpty != null
-            //         ? controller.yearName?.value
-            //         : controller.yearName?.value,
-            //     values: (controller.vehicleYear ?? [])
-            //         .map((year) => year['yearName'] as String)
-            //         .toList(),
-            //     onChange: (selectedYear) {
-            //       print('Selected value: $selectedYear');
-            //       selectedYear = controller.yearName?.value;
-            //       // controller.yearCode.value = selectedYear;
-            //       // Find the brand object with the selected name
-            //       var selectedYearObject =
-            //           (controller.vehicleYear ?? []).firstWhere(
-            //         (year) => year['yearName'] == selectedYear,
-            //         orElse: () => null,
-            //       );
-            //       if (selectedYearObject != null) {
-            //         controller.yearName?.value = selectedYearObject['yearName'];
-            //         String yearCode = selectedYearObject['yearCode'] as String;
-            //         print("Selected year name: ${controller.yearName?.value}");
-            //         controller.yearCode.value = yearCode;
-            //         print("code>>>> ${yearCode}");
-            //       }
-            //     }),
             SizedBox(
               height: 24.sp,
             ),
@@ -1568,7 +1531,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                 title: AppStrings.whatStateAreYouIn,
                 iconColor: grey3,
                 expectedVariable: 'field',
-                selectedValue: controller.isFromManageCars.isTrue &&
+                selectedValue: controller.isFromManageCars.isTrue ||
                         controller.state.value.isNotEmpty
                     ? controller.state.value
                     : null,
@@ -1576,6 +1539,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     .map((state) => state['stateName'] as String)
                     .toList(),
                 onChange: (selectedState) {
+                  controller.state.value = selectedState;
                   if (kDebugMode) {
                     print('Selected value: $selectedState');
                   }
@@ -1603,7 +1567,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                 title: AppStrings.whatCityAreYouIn,
                 iconColor: grey3,
                 expectedVariable: 'field',
-                selectedValue: controller.isFromManageCars.isTrue &&
+                selectedValue: controller.isFromManageCars.isTrue ||
                         controller.city.value.isNotEmpty
                     ? controller.city.value
                     : null,
@@ -1611,6 +1575,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     .map((city) => city['cityName'] as String)
                     .toList(),
                 onChange: (selectedCity) {
+                  controller.city.value = selectedCity;
                   print('Selected value: $selectedCity');
                   var selectedCityObject = (controller.cities ?? []).firstWhere(
                     (city) => city['cityName'] == selectedCity,

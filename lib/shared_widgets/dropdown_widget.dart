@@ -159,6 +159,8 @@ Widget dropdownWidget1({
   void Function()? onTap,
   String? expectedVariable,
   bool multipleSelection = false,
+  void Function(String?)? onSaved,
+
   Key? key,
 }) {
   return Column(
@@ -184,7 +186,9 @@ Widget dropdownWidget1({
               alignedDropdown: true,
               child: DropdownButtonFormField(
                 iconEnabledColor: red,
+                
                 isExpanded: true,
+                onSaved: onSaved,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return fetchErrorText(

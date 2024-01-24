@@ -1,16 +1,14 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:gti_rides/models/drivers_model.dart' as driver;
 import 'package:gti_rides/models/image_response.dart';
 import 'package:gti_rides/models/list_response_model.dart';
-import 'package:gti_rides/models/partner/car_history_model.dart';
 import 'package:gti_rides/models/partner/car_list_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/screens/Partner/home/list_vehicle/list_vehicle_screen.dart';
-import 'package:gti_rides/screens/shared_screens/more/drivers/drivers_controller.dart';
 import 'package:gti_rides/services/image_service.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/partner_service.dart';
@@ -20,7 +18,6 @@ import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/utils.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:dio/dio.dart' as dio;
 import 'package:mime/mime.dart';
 
 class ListVehicleController extends GetxController {
@@ -257,7 +254,17 @@ class ListVehicleController extends GetxController {
   );
 
 // routing methods
-  void goBack() => routeService.goBack();
+  void goBack() {
+    if (currentIndex.value > 0) {
+      currentIndex.value--;
+      pageController.previousPage(
+          duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+    } else {
+      // If already on the first page, pop the screen
+      routeService.goBack();
+    }
+  }
+
   void goBack1() => routeService.goBack(closeOverlays: true);
   void routeToCreateDriver() {
     Get.back();
@@ -786,8 +793,7 @@ class ListVehicleController extends GetxController {
         "plateNumber": plateNumberController.text,
         "stateCode": stateCode.value,
         "cityCode": cityCode.value,
-      }, param: isFromManageCars.isTrue ? "?carID=${carID.value}" : null
-      );
+      }, param: isFromManageCars.isTrue ? "?carID=${carID.value}" : '');
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("car added ${response.data}");
         if (response.data != null) {
@@ -795,9 +801,8 @@ class ListVehicleController extends GetxController {
           logger.log("carID ${brands.value.data}");
           carID.value = response.data!["carID"];
           showSuccessSnackbar(message: response.message!);
-          pageController.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut);
+          goToNextPage();
+          // getCarHistory();
         }
       } else {
         logger.log("unable to add car${response.data}");
@@ -810,6 +815,12 @@ class ListVehicleController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  void goToNextPage() {
+    currentIndex.value++;
+    pageController.nextPage(
+        duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
   }
 
   Future<void> addCarInfo() async {
@@ -832,9 +843,8 @@ class ListVehicleController extends GetxController {
         // cities?.value = response.data!;
         // logger.log("carID ${brands.value.data}");
         showSuccessSnackbar(message: response.message!);
-        pageController.nextPage(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut);
+        goToNextPage();
+        // getCarHistory();
         // }
       } else {
         logger.log("unable to add car info${response.data}");
@@ -1008,9 +1018,8 @@ class ListVehicleController extends GetxController {
         logger.log("car document added ${response.message}");
 
         showSuccessSnackbar(message: response.message!);
-        pageController.nextPage(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut);
+        goToNextPage();
+        // getCarHistory();
       } else {
         logger.log("unable to add document ${response.data}");
         showErrorSnackbar(message: response.message!);
@@ -1099,9 +1108,8 @@ class ListVehicleController extends GetxController {
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("car photos added ${response.message}");
         showSuccessSnackbar(message: response.message!);
-        pageController.nextPage(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut);
+        goToNextPage();
+        // getCarHistory();
       } else {
         logger.log("unable to add car photos ${response.data}");
         showErrorSnackbar(message: response.message!);
@@ -1134,13 +1142,13 @@ class ListVehicleController extends GetxController {
   RxList<String> features = <String>[].obs;
 
   String extractDocumentName(String? documentURL) {
-  if (documentURL == null || documentURL.isEmpty) {
-    return ''; // or throw an error, depending on your requirements
-  }
+    if (documentURL == null || documentURL.isEmpty) {
+      return ''; // or throw an error, depending on your requirements
+    }
 
-  final segments = documentURL.split('--');
-  return segments.last.split('?').first;
-}
+    final segments = documentURL.split('--');
+    return segments.last.split('?').first;
+  }
 
   Future<void> getCarHistory() async {
     isFetchingCarDetails.value = true;
@@ -1163,11 +1171,21 @@ class ListVehicleController extends GetxController {
           userVin.value = firstCar['vin'];
           plateNumber.value = firstCar['plateNumber'];
           state.value = firstCar['state'][0]["stateName"];
-          city.value = firstCar['city'][0]["cityName"];
-          stateCode.value = firstCar['state'][0]["stateCode"];
-          brandName.value = firstCar['brand'][0]["brandName"];
-          brandCode.value = firstCar['brand'][0]['brandCode'];
-          modelCode.value = firstCar['brandModel'][0]['modelCode'];
+          city.value = firstCar['city'].isNotEmpty
+              ? firstCar['city'][0]["cityName"]
+              : "";
+          stateCode.value = firstCar['state'].isNotEmpty
+              ? firstCar['state'][0]["stateCode"]
+              : '';
+          brandName.value = firstCar['brand'].isNotEmpty
+              ? firstCar['brand'][0]["brandName"]
+              : '';
+          brandCode.value = firstCar['brand'].isNotEmpty
+              ? firstCar['brand'][0]['brandCode']
+              : '';
+          modelCode.value = firstCar['brandModel'].isNotEmpty
+              ? firstCar['brandModel'][0]['modelCode']
+              : '';
 
           await getBrandModel(brandCode1: brandCode.value);
           await getVehicleYear(
@@ -1177,58 +1195,66 @@ class ListVehicleController extends GetxController {
           selectedBrandModel.value = firstCar['brandModel'][0]['modelName'];
 
           // vehicle info
-          aboutCar.value = firstCar['about'];
-          transmission.value = firstCar['transmission'][0]['transmissionName'];
-          transmissionCode.value =
-              firstCar["transmission"][0]["transmissionCode"];
+          aboutCar.value = firstCar['about'] ?? '';
+          transmission.value = firstCar['transmission'].isNotEmpty
+              ? firstCar['transmission'][0]['transmissionName']
+              : '';
+          transmissionCode.value = firstCar['transmission'].isNotEmpty
+              ? firstCar["transmission"][0]["transmissionCode"]
+              : '';
           logger.log("transmission code:: ${transmissionCode.value}");
 
-          selectedFeatures!.value = firstCar['feature']
-              .map((feature) => feature['featuresName'])
-              .toList();
+          selectedFeatures!.value = (firstCar['feature'] as List).isNotEmpty
+              ? (firstCar['feature'] as List)
+                  .map((feature) => feature['featuresName'])
+                  .toList()
+              : [];
+
           logger.log("features :: ${selectedFeatures!.value}");
 
-          featuresCode.value = firstCar['feature' as dynamic]
-              .map((feature) => feature['featuresCode' as dynamic])
-              .toList();
-          logger.log("features code:: ${featuresCode.value}");
+          featuresCode.value = (firstCar['feature'] as List).isNotEmpty
+              ? (firstCar['feature'] as List)
+                  .map((feature) => feature['featuresCode'])
+                  .toList()
+              : [];
 
-          vehicleType.value = firstCar["type"][0]["typeName"];
-          numberOfSeats.value = firstCar["seat"][0]["seatName"];
-          vehicleTypeCode.value = firstCar["type"][0]["typeCode"];
-          vehicleSeatCode.value = firstCar["seat"][0]["seatCode"];
+          logger.log("features code:: ${featuresCode.value}");
 
           // documentation
           insurance.value = firstCar["insurance"].isNotEmpty
               ? firstCar["insurance"][0]["insuranceName"]
               : '';
-              //4
+          //4
           final inspectionDocUrl = firstCar["document"].isNotEmpty
               ? firstCar['document'][0]["documentURL"]
               : null;
-              //2
+          //2
           final roadWorthinessDocUrl = firstCar["document"].isNotEmpty
-              ? firstCar['document'][1]["documentURL"] : null;
-              // 1
+              ? firstCar['document'][1]["documentURL"]
+              : null;
+          // 1
           final licenseDocUrl = firstCar["document"].isNotEmpty
-              ? firstCar['document'][2]["documentURL"] : null;
-              //3
+              ? firstCar['document'][2]["documentURL"]
+              : null;
+          //3
           final insuranceDocUrl = firstCar["document"].isNotEmpty
-              ? firstCar['document'][3]["documentURL"] : null;
-          
-           selectedInspectionPhotos.value = extractDocumentName(inspectionDocUrl);
-           selectedInspectionPhotoName.value = selectedInspectionPhotos.value;
-           
-          selectedRoadWorthinessPhoto.value = extractDocumentName(roadWorthinessDocUrl);
-          selectedRoadWorthinessPhotoName.value = selectedRoadWorthinessPhoto.value;
+              ? firstCar['document'][3]["documentURL"]
+              : null;
+
+          selectedInspectionPhotos.value =
+              extractDocumentName(inspectionDocUrl);
+          selectedInspectionPhotoName.value = selectedInspectionPhotos.value;
+
+          selectedRoadWorthinessPhoto.value =
+              extractDocumentName(roadWorthinessDocUrl);
+          selectedRoadWorthinessPhotoName.value =
+              selectedRoadWorthinessPhoto.value;
           selectedPhotos.value = extractDocumentName(licenseDocUrl);
           selectedPhotoName.value = selectedPhotos.value;
 
           selectedInsurancePhotos.value = extractDocumentName(insuranceDocUrl);
           selectedInsurancePhotoName.value = selectedInsurancePhotos.value;
 
-          // selectedInspectionPhotos.value = documentNameWithExtension;
-          // selectedInspectionPhotoName.value = documentNameWithExtension;
 
           logger.log("Document: ${selectedInspectionPhotos.value} ");
 
@@ -1246,6 +1272,18 @@ class ListVehicleController extends GetxController {
               : '';
 
           await getCity(cityCode1: stateCode.value);
+
+          vehicleType.value = firstCar["type"].isNotEmpty
+              ? firstCar["type"][0]["typeName"]
+              : '';
+          numberOfSeats.value = firstCar["seat"].isNotEmpty
+              ? firstCar["seat"][0]["seatName"]
+              : '';
+          vehicleTypeCode.value =
+              firstCar["type"] ? firstCar["type"][0]["typeCode"] : '';
+          vehicleSeatCode.value = firstCar["seat"].isNotEmpty
+              ? firstCar["seat"][0]["seatCode"]
+              : '';
 
           logger.log("car history $carHistory");
         } else {
