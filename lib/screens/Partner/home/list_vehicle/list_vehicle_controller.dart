@@ -59,7 +59,7 @@ class ListVehicleController extends GetxController {
   RxString? modelName;
   RxString? selectedBrand;
   RxString yearCode = ''.obs;
-  RxString vehicleTypeCode = ''.obs;
+  Rx<dynamic> vehicleTypeCode = ''.obs;
   RxString vehicleSeatCode = ''.obs;
   RxString stateCode = ''.obs;
   RxString cityCode = ''.obs;
@@ -1194,53 +1194,60 @@ class ListVehicleController extends GetxController {
 
           isFetchingCarDetails.value = false;
           userVin.value = carHistory[0]['vin'];
-          // plateNumber.value = carHistory[0]['plateNumber'];
-          // state.value = carHistory[0]['state'][0]["stateName"];
-          // city.value = carHistory[0]['city'][0]["cityName"];
-          // stateCode.value = carHistory[0]['state'][0]["stateCode"];
+          plateNumber.value = carHistory[0]['plateNumber'];
+          state.value = carHistory[0]['state'][0]["stateName"];
+          city.value = carHistory[0]['city'][0]["cityName"];
+          stateCode.value = carHistory[0]['state'][0]["stateCode"];
           brandName.value = carHistory[0]['brand'][0]["brandName"];
           brandCode.value = carHistory[0]['brand'][0]['brandCode'];
           modelCode.value = carHistory[0]['brandModel'][0]['modelCode'];
           await getBrandModel(brandCode1: brandCode.value);
-          await getVehicleYear(brandCode: brandCode.value, brandModelCode: modelCode.value);
+          await getVehicleYear(
+              brandCode: brandCode.value, brandModelCode: modelCode.value);
           selectedYearValue = carHistory[0]['modelYear'][0]["yearName"];
 
-          selectedBrandModel.value = response.data![0]['brandModel'][0]['modelName'];
+          selectedBrandModel.value =
+              response.data![0]['brandModel'][0]['modelName'];
           // vehicle info
           aboutCar.value = carHistory[0]['about'];
           transmission.value =
               carHistory[0]['transmission'][0]['transmissionName'];
-              transmissionCode.value = carHistory[0]["transmission"][0]["transmissionCode"];
-              logger.log("transmission code:: ${transmissionCode.value}");
+          transmissionCode.value =
+              carHistory[0]["transmission"][0]["transmissionCode"];
+          logger.log("transmission code:: ${transmissionCode.value}");
           selectedFeatures!.value = carHistory[0]['feature']
               .map((feature) => feature['featuresName'])
               .toList();
-               logger.log("features :: ${selectedFeatures!.value}");
+          logger.log("features :: ${selectedFeatures!.value}");
           featuresCode.value = carHistory[0]['feature' as dynamic]
               .map((feature) => feature['featuresCode' as dynamic])
               .toList();
-              logger.log("features code:: ${featuresCode.value}");
+          logger.log("features code:: ${featuresCode.value}");
           vehicleType.value = response.data![0]["type"][0]["typeName"];
           numberOfSeats.value = response.data![0]["seat"][0]["seatName"];
-          vehicleTypeCode.value = response.data![0]["type"]["typeCode"];
-          vehicleSeatCode.value = response.data![0]["seat"]["seatCode"];
+          vehicleTypeCode.value = response.data![0]["type"][0]["typeCode"];
+          vehicleSeatCode.value = response.data![0]["seat"][0]["seatCode"];
 
           // documentation
-          insurance.value = response.data![0]["insurance"][0]["insuranceName"];
+          insurance.value = response.data![0]["insurance"].isNotEmpty
+              ? response.data![0]["insurance"][0]["insuranceName"]
+              : '';
 
           // // availability
-           startDateTime.value = response.data![0]['startDate'] ?? '';
-          endDateTime.value = response.data!.first['endDate'] ?? '';
-          advanceAmount.value = response.data!.first['advanceDays'];
-          // pricePerDay.value = response.data!.first['pricePerDay'] ?? '';
-          // discountDays.value = response.data!.first['discountDays'] ?? '';
-          // discountPrice.value = response.data!.first['discountPrice'] ?? '';
-          // selectedView.value = response.data!.first?["driver"][0]["fullName"];
+          startDateTime.value = response.data!.first['startDate'] ?? '';
 
-          // await getCity(cityCode1: stateCode.value);
+          endDateTime.value = response.data!.first['endDate'] ?? '';
+          advanceAmount.value = response.data!.first['advanceDays'] ?? '';
+          pricePerDay.value = response.data!.first['pricePerDay'] ?? '';
+          discountDays.value = response.data!.first['discountDays'] ?? '';
+          discountPrice.value = response.data!.first['discountPrice'] ?? '';
+          selectedView.value = response.data?.first["driver"].isNotEmpty
+              ? response.data!.first?["driver"][0]?["fullName"]
+              : '';
+
+          await getCity(cityCode1: stateCode.value);
           // await getBrandModel(brandCode1: brandCode.value);
 
-         
           // brandModelName.value = response.data!.first['brandModelName'] ?? '';
           // photoUrl.value = response.data!.first['photoUrl'] ?? '';
           // carID.value = response.data!.first['carID'];
