@@ -161,10 +161,11 @@ class PartnerService extends GetxController {
     }
   }
 
-  Future<ApiResponseModel> addCar({required Map data}) async {
+  Future<ApiResponseModel> addCar({required Map data,
+  String? param}) async {
     try {
       final result = await apiService.postRequest(
-          endpoint: '/user/partner/car/addCar', data: data);
+          endpoint: '/user/partner/car/addCar$param', data: data);
       logger.log("result $result");
 
       return ApiResponseModel.fromJson(result);

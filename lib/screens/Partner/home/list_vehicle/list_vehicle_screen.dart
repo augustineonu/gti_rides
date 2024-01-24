@@ -1241,7 +1241,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                 color: backgroundColor,
                 onSelected: (selectedBrand) async {
                   setState(() {
-                    controller.selectedBrandModel = selectedBrand['modelName'];
+                    controller.selectedBrandModel.value = selectedBrand['modelName'];
                     controller.modelName?.value = selectedBrand['modelName'];
                     controller.modelCode.value =
                         selectedBrand['modelCode'] as String;

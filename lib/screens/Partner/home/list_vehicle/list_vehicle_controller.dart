@@ -786,7 +786,8 @@ class ListVehicleController extends GetxController {
         "plateNumber": plateNumberController.text,
         "stateCode": stateCode.value,
         "cityCode": cityCode.value,
-      });
+      }, param: isFromManageCars.isTrue ? "?carID=${carID.value}" : null
+      );
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("car added ${response.data}");
         if (response.data != null) {
@@ -945,52 +946,6 @@ class ListVehicleController extends GetxController {
   // logger.log("form field ${data1.fields.toList()}");
 
 //////////////
-  ///  var data1 = dio.FormData.fromMap({});
-
-  // Future<dio.FormData> constructFormData() async {
-  // data1.files.addAll([
-  //   MapEntry(
-  //     'document',
-  //     dio.MultipartFile.fromFileSync(
-  //       selectedPhotos.value,
-  //       filename: 'vehicleLicense',
-  //       contentType: MediaType(mimeTypeData[0], mimeTypeData[1]),
-  //     ),
-  //   ),
-  //   MapEntry(
-  //     'document',
-  //     dio.MultipartFile.fromFileSync(
-  //       selectedRoadWorthinessPhoto.value,
-  //       filename: 'roadWorthiness',
-  //       contentType: MediaType(roadMimeTypeData[0], roadMimeTypeData[1]),
-  //     ),
-  //   ),
-  //   MapEntry(
-  //     'document',
-  //     dio.MultipartFile.fromFileSync(
-  //       selectedInsurancePhotos.value,
-  //       filename: 'insuranceCertificate',
-  //       contentType:
-  //           MediaType(insuranceMimeTypeData[0], insuranceMimeTypeData[1]),
-  //     ),
-  //   ),
-  //   MapEntry(
-  //     'document',
-  //     dio.MultipartFile.fromFileSync(
-  //       selectedInspectionPhotos.value,
-  //       filename: 'inspectionReport',
-  //       contentType:
-  //           MediaType(inspectionMimeTypeData[0], inspectionMimeTypeData[1]),
-  //     ),
-  //   ),
-  // ]);
-  // data1.fields.add(MapEntry('insuranceType', insuranceCode.value));
-  // // data1.files.add(value)
-
-  // logger.log("form field ${data1.fields.toString()}");
-  // logger.log("form files ${data1.files.toString()}");
-  // //   return data1;
-  // // }
 
   Future<void> addCarDocument() async {
     if (!documentationFormKey.currentState!.validate() ||
@@ -1178,79 +1133,120 @@ class ListVehicleController extends GetxController {
   // Rx<String> brandCode = ''.obs;
   RxList<String> features = <String>[].obs;
 
+  String extractDocumentName(String? documentURL) {
+  if (documentURL == null || documentURL.isEmpty) {
+    return ''; // or throw an error, depending on your requirements
+  }
+
+  final segments = documentURL.split('--');
+  return segments.last.split('?').first;
+}
+
   Future<void> getCarHistory() async {
     isFetchingCarDetails.value = true;
+
     try {
       final response = await partnerService.getOnCar(carId: carID.value);
 
       if (response.status == 'success' || response.status_code == 200) {
-        logger.log("gotten car history ${response.data}");
-        if (response.data != null && response.data!.isNotEmpty) {
-          carHistory.value = response.data!;
-          //  carHistory1.value = List<CarHistoryData>.from(
-          //   response.data!.map((x) => CarHistoryData.fromJson(x)),
-          // ).cast<CarHistory>();
-          // carHistory1.value = response.data!.cast<CarData>();
+        final carData = response.data;
+
+        logger.log("gotten car history $carData");
+
+        if (carData != null && carData.isNotEmpty) {
+          carHistory.value = carData;
 
           isFetchingCarDetails.value = false;
-          userVin.value = carHistory[0]['vin'];
-          plateNumber.value = carHistory[0]['plateNumber'];
-          state.value = carHistory[0]['state'][0]["stateName"];
-          city.value = carHistory[0]['city'][0]["cityName"];
-          stateCode.value = carHistory[0]['state'][0]["stateCode"];
-          brandName.value = carHistory[0]['brand'][0]["brandName"];
-          brandCode.value = carHistory[0]['brand'][0]['brandCode'];
-          modelCode.value = carHistory[0]['brandModel'][0]['modelCode'];
+
+          final firstCar = carData.first;
+
+          userVin.value = firstCar['vin'];
+          plateNumber.value = firstCar['plateNumber'];
+          state.value = firstCar['state'][0]["stateName"];
+          city.value = firstCar['city'][0]["cityName"];
+          stateCode.value = firstCar['state'][0]["stateCode"];
+          brandName.value = firstCar['brand'][0]["brandName"];
+          brandCode.value = firstCar['brand'][0]['brandCode'];
+          modelCode.value = firstCar['brandModel'][0]['modelCode'];
+
           await getBrandModel(brandCode1: brandCode.value);
           await getVehicleYear(
               brandCode: brandCode.value, brandModelCode: modelCode.value);
-          selectedYearValue = carHistory[0]['modelYear'][0]["yearName"];
+          selectedYearValue = firstCar['modelYear'][0]["yearName"];
 
-          selectedBrandModel.value =
-              response.data![0]['brandModel'][0]['modelName'];
+          selectedBrandModel.value = firstCar['brandModel'][0]['modelName'];
+
           // vehicle info
-          aboutCar.value = carHistory[0]['about'];
-          transmission.value =
-              carHistory[0]['transmission'][0]['transmissionName'];
+          aboutCar.value = firstCar['about'];
+          transmission.value = firstCar['transmission'][0]['transmissionName'];
           transmissionCode.value =
-              carHistory[0]["transmission"][0]["transmissionCode"];
+              firstCar["transmission"][0]["transmissionCode"];
           logger.log("transmission code:: ${transmissionCode.value}");
-          selectedFeatures!.value = carHistory[0]['feature']
+
+          selectedFeatures!.value = firstCar['feature']
               .map((feature) => feature['featuresName'])
               .toList();
           logger.log("features :: ${selectedFeatures!.value}");
-          featuresCode.value = carHistory[0]['feature' as dynamic]
+
+          featuresCode.value = firstCar['feature' as dynamic]
               .map((feature) => feature['featuresCode' as dynamic])
               .toList();
           logger.log("features code:: ${featuresCode.value}");
-          vehicleType.value = response.data![0]["type"][0]["typeName"];
-          numberOfSeats.value = response.data![0]["seat"][0]["seatName"];
-          vehicleTypeCode.value = response.data![0]["type"][0]["typeCode"];
-          vehicleSeatCode.value = response.data![0]["seat"][0]["seatCode"];
+
+          vehicleType.value = firstCar["type"][0]["typeName"];
+          numberOfSeats.value = firstCar["seat"][0]["seatName"];
+          vehicleTypeCode.value = firstCar["type"][0]["typeCode"];
+          vehicleSeatCode.value = firstCar["seat"][0]["seatCode"];
 
           // documentation
-          insurance.value = response.data![0]["insurance"].isNotEmpty
-              ? response.data![0]["insurance"][0]["insuranceName"]
+          insurance.value = firstCar["insurance"].isNotEmpty
+              ? firstCar["insurance"][0]["insuranceName"]
               : '';
+              //4
+          final inspectionDocUrl = firstCar["document"].isNotEmpty
+              ? firstCar['document'][0]["documentURL"]
+              : null;
+              //2
+          final roadWorthinessDocUrl = firstCar["document"].isNotEmpty
+              ? firstCar['document'][1]["documentURL"] : null;
+              // 1
+          final licenseDocUrl = firstCar["document"].isNotEmpty
+              ? firstCar['document'][2]["documentURL"] : null;
+              //3
+          final insuranceDocUrl = firstCar["document"].isNotEmpty
+              ? firstCar['document'][3]["documentURL"] : null;
+          
+           selectedInspectionPhotos.value = extractDocumentName(inspectionDocUrl);
+           selectedInspectionPhotoName.value = selectedInspectionPhotos.value;
+           
+          selectedRoadWorthinessPhoto.value = extractDocumentName(roadWorthinessDocUrl);
+          selectedRoadWorthinessPhotoName.value = selectedRoadWorthinessPhoto.value;
+          selectedPhotos.value = extractDocumentName(licenseDocUrl);
+          selectedPhotoName.value = selectedPhotos.value;
 
+          selectedInsurancePhotos.value = extractDocumentName(insuranceDocUrl);
+          selectedInsurancePhotoName.value = selectedInsurancePhotos.value;
+
+          // selectedInspectionPhotos.value = documentNameWithExtension;
+          // selectedInspectionPhotoName.value = documentNameWithExtension;
+
+          logger.log("Document: ${selectedInspectionPhotos.value} ");
+
+          // selectedInspectionPhotos.value =
+          //     firstCar['document'][0]["documentURL"];
           // // availability
-          startDateTime.value = response.data!.first['startDate'] ?? '';
-
-          endDateTime.value = response.data!.first['endDate'] ?? '';
-          advanceAmount.value = response.data!.first['advanceDays'] ?? '';
-          pricePerDay.value = response.data!.first['pricePerDay'] ?? '';
-          discountDays.value = response.data!.first['discountDays'] ?? '';
-          discountPrice.value = response.data!.first['discountPrice'] ?? '';
-          selectedView.value = response.data?.first["driver"].isNotEmpty
-              ? response.data!.first?["driver"][0]?["fullName"]
+          startDateTime.value = firstCar['startDate'] ?? '';
+          endDateTime.value = firstCar['endDate'] ?? '';
+          advanceAmount.value = firstCar['advanceDays'] ?? '';
+          pricePerDay.value = firstCar['pricePerDay'] ?? '';
+          discountDays.value = firstCar['discountDays'] ?? '';
+          discountPrice.value = firstCar['discountPrice'] ?? '';
+          selectedView.value = firstCar["driver"].isNotEmpty
+              ? firstCar["driver"][0]["fullName"]
               : '';
 
           await getCity(cityCode1: stateCode.value);
-          // await getBrandModel(brandCode1: brandCode.value);
 
-          // brandModelName.value = response.data!.first['brandModelName'] ?? '';
-          // photoUrl.value = response.data!.first['photoUrl'] ?? '';
-          // carID.value = response.data!.first['carID'];
           logger.log("car history $carHistory");
         } else {
           showSuccessSnackbar(message: 'no data');
