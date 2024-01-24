@@ -7,6 +7,7 @@ import 'package:gti_rides/models/drivers_model.dart' as driver;
 import 'package:gti_rides/models/image_response.dart';
 import 'package:gti_rides/models/list_response_model.dart';
 import 'package:gti_rides/models/partner/car_history_model.dart';
+import 'package:gti_rides/models/partner/car_list_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/screens/Partner/home/list_vehicle/list_vehicle_screen.dart';
 import 'package:gti_rides/screens/shared_screens/more/drivers/drivers_controller.dart';
@@ -33,7 +34,7 @@ class ListVehicleController extends GetxController {
   RxList<dynamic>? states = <dynamic>[].obs;
   RxList<dynamic>? cities = <dynamic>[].obs;
   RxList<dynamic>? transmissions = <dynamic>[].obs;
-  RxList<String>? selectedFeatures = <String>[].obs;
+  RxList<dynamic>? selectedFeatures = <dynamic>[].obs;
   RxList<dynamic>? carFeatures = <dynamic>[].obs;
   RxList<dynamic>? vehicleTypes = <dynamic>[].obs;
   RxList<dynamic>? vehicleSeats = <dynamic>[].obs;
@@ -107,10 +108,11 @@ class ListVehicleController extends GetxController {
   TextEditingController kilogramController = TextEditingController();
   TextEditingController vinController = TextEditingController();
   TextEditingController plateNumberController = TextEditingController();
-  TextEditingController advanceAmountController = TextEditingController();
+  // TextEditingController advanceAmountController = TextEditingController();
   TextEditingController rentPerDayController = TextEditingController();
   TextEditingController discountPerDayController = TextEditingController();
   TextEditingController aboutVehicleController = TextEditingController();
+  Rx<String> advanceAmount = ''.obs;
   RxInt initiPageIndex = 1.obs;
   ListVehicleController() {
     init();
@@ -121,8 +123,8 @@ class ListVehicleController extends GetxController {
     Map<String, dynamic>? arguments = Get.arguments;
 
     if (arguments != null) {
-      startDateTime.value = arguments['start'] ?? 'date';
-      endDateTime.value = arguments['end'] ?? 'date';
+      startDateTime.value = arguments['start'] ?? '';
+      endDateTime.value = arguments['end'] ?? '';
       isFromManageCars.value = arguments['isFromManageCars'] ?? false;
       carID.value = arguments['carID'];
       // Now you have access to the passed data (emailOrPhone)
@@ -132,6 +134,8 @@ class ListVehicleController extends GetxController {
     vinController = TextEditingController(text: userVin.value);
     plateNumberController = TextEditingController(text: plateNumber.value);
     aboutVehicleController = TextEditingController(text: aboutCar.value);
+    rentPerDayController = TextEditingController(text: pricePerDay.value);
+    discountPerDayController = TextEditingController(text: discountPrice.value);
     await getBrands();
     await getStates();
     await getTransmission();
@@ -243,6 +247,7 @@ class ListVehicleController extends GetxController {
   ];
 
   RxString selectedView = 'select'.obs;
+  RxString selectedBrandModel = 'select'.obs;
   ValueNotifier<Fruit> selectedItem = ValueNotifier<Fruit>(Fruit.apple);
   Rx<driver.Driver> selectedItem1 = Rx<driver.Driver>(
     driver.Driver(
@@ -849,7 +854,7 @@ class ListVehicleController extends GetxController {
       final response = await partnerService.addCarAvailability(payload: {
         "startDate": startDateTime.value,
         "endDate": endDateTime.value,
-        "advanceDays": advanceAmountController.text,
+        "advanceDays": advanceAmount,
         "pricePerDay": rentPerDayController.text,
         "discountDays": discountNoOfDays.value,
         "discountPrice": discountPerDayController.text,
@@ -1156,13 +1161,20 @@ class ListVehicleController extends GetxController {
   }
 
   RxList<dynamic> carHistory = RxList<dynamic>();
-  RxList<CarHistory> carHistory1 = RxList<CarHistory>();
+  RxList<CarData> carHistory1 = RxList<CarData>();
   RxString startDate = ''.obs;
   RxString endDate = ''.obs;
   RxString pricePerDay = ''.obs;
   Rx<bool> isFetchingCarDetails = false.obs;
   Rx<String> aboutCar = ''.obs;
   Rx<String> transmission = ''.obs;
+  Rx<String> vehicleType = ''.obs;
+  Rx<String> numberOfSeats = ''.obs;
+  Rx<String> insurance = ''.obs;
+  Rx<String> discountDays = ''.obs;
+  Rx<String> discountPrice = ''.obs;
+  // Rx<String> brandCode = ''.obs;
+  RxList<String> features = <String>[].obs;
 
   Future<void> getCarHistory() async {
     isFetchingCarDetails.value = true;
@@ -1173,31 +1185,51 @@ class ListVehicleController extends GetxController {
         logger.log("gotten car history ${response.data}");
         if (response.data != null && response.data!.isNotEmpty) {
           carHistory.value = response.data!;
-        //  carHistory1.value = List<CarHistoryData>.from(
-        //   response.data!.map((x) => CarHistoryData.fromJson(x)),
-        // ).cast<CarHistory>();
-        
+          //  carHistory1.value = List<CarHistoryData>.from(
+          //   response.data!.map((x) => CarHistoryData.fromJson(x)),
+          // ).cast<CarHistory>();
+          // carHistory1.value = response.data!.cast<CarData>();
 
           isFetchingCarDetails.value = false;
           userVin.value = carHistory[0]['vin'];
-          plateNumber.value = carHistory[0]['plateNumber'];
-          state.value = carHistory[0]['state'][0]["stateName"];
-          city.value = carHistory[0]['city'][0]["cityName"];
-          stateCode.value = carHistory[0]['state'][0]["stateCode"];
+          // plateNumber.value = carHistory[0]['plateNumber'];
+          // state.value = carHistory[0]['state'][0]["stateName"];
+          // city.value = carHistory[0]['city'][0]["cityName"];
+          // stateCode.value = carHistory[0]['state'][0]["stateCode"];
           brandName.value = carHistory[0]['brand'][0]["brandName"];
-          brandCode.value = carHistory[0]['brand'][0]["brandCode"];
+          brandCode.value = carHistory[0]['brand'][0]['brandCode'];
+          modelCode.value = carHistory[0]['brandModel'][0]['modelCode'];
+          await getBrandModel(brandCode1: brandCode.value);
+          await getVehicleYear(brandCode: brandCode.value, brandModelCode: modelCode.value);
+          selectedYearValue = carHistory[0]['modelYear'][0]["yearName"];
 
-          selectedValue1 = response.data![0]['brandModel'][0]['modelName'];
+          selectedBrandModel.value = response.data![0]['brandModel'][0]['modelName'];
           // vehicle info
           aboutCar.value = carHistory[0]['about'];
-          transmission.value = carHistory[0]['transmission'];
+          transmission.value =
+              carHistory[0]['transmission'][0]['transmissionName'];
+          selectedFeatures!.value = carHistory[0]['feature']
+              .map((feature) => feature['featuresName'])
+              .toList();
+          vehicleType.value = response.data![0]["type"][0]["typeName"];
+          numberOfSeats.value = response.data![0]["seat"][0]["seatName"];
 
-          await getCity(cityCode1: stateCode.value);
-          await getBrandModel(brandCode1: brandCode.value);
+          // documentation
+          insurance.value = response.data![0]["insurance"][0]["insuranceName"];
 
-          // startDate.value = response.data![0]['startDate'] ?? '';
-          // endDate.value = response.data!.first['endDate'] ?? '';
+          // // availability
+          //  startDateTime.value = response.data![0]['startDate'] ?? '';
+          // endDateTime.value = response.data!.first['endDate'] ?? '';
+          // advanceAmount.value = response.data!.first['advanceDays'];
           // pricePerDay.value = response.data!.first['pricePerDay'] ?? '';
+          // discountDays.value = response.data!.first['discountDays'] ?? '';
+          // discountPrice.value = response.data!.first['discountPrice'] ?? '';
+          // selectedView.value = response.data!.first?["driver"][0]["fullName"];
+
+          // await getCity(cityCode1: stateCode.value);
+          // await getBrandModel(brandCode1: brandCode.value);
+
+         
           // brandModelName.value = response.data!.first['brandModelName'] ?? '';
           // photoUrl.value = response.data!.first['photoUrl'] ?? '';
           // carID.value = response.data!.first['carID'];

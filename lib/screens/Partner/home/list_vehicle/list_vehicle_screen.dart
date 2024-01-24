@@ -306,18 +306,29 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
           SizedBox(
             height: 24.sp,
           ),
-          NormalInputTextWidget(
-            expectedVariable: 'field',
-            title: AppStrings.howMuchForAdvance,
-            titleFontSize: 12.sp,
-            hintText: AppStrings.amountHintText,
-            textInputType: TextInputType.number,
-            inputFormatters: [
-              LengthLimitingTextInputFormatter(10),
-              NumberTextInputFormatter(),
-            ],
-            controller: controller.advanceAmountController,
-          ),
+
+          dropdownWidget1(
+              context: context,
+              hintText: 'Select',
+              title: AppStrings.howMuchForAdvance,
+              iconColor: grey3,
+              selectedValue: controller.isFromManageCars.isTrue &&
+                      controller.advanceAmount.value.isNotEmpty
+                  ?
+                  //  controller.advanceAmount.value
+                  "4 hours"
+                  : null,
+              values: <String>[
+                "4 hours",
+                "12 hours",
+                "24 hours",
+                "48 hours",
+                "72 hours"
+              ],
+              onChange: (value) {
+                print('Selected value: $value');
+                controller.advanceAmount.value = value;
+              }),
           SizedBox(
             height: 24.sp,
           ),
@@ -371,6 +382,10 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     hintText: 'Select',
                     title: AppStrings.chooseNuberOfDays,
                     iconColor: grey3,
+                    selectedValue: controller.isFromManageCars.isTrue &&
+                            controller.discountDays.isNotEmpty
+                        ? controller.discountDays.value
+                        : null,
                     values:
                         List.generate(20, (index) => (index + 1).toString()),
                     onChange: (value) {
@@ -402,17 +417,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
           textWidget(
               text: AppStrings.selectDriver,
               style: getRegularStyle(fontSize: 12.sp)),
-          // showPopUpMenu(controller, size),
-          //  InkWell(
-          //     onTap: () {
-          //     if (controller.drivers.isEmpty) {
-          //       print("Please select");
-          //     }
-          //   },
-          //   child: Container(
-          //     width: 200, height: 100,
-          //     color: red,
-          //   )),
+
           controller.drivers!.isEmpty
               ? GestureDetector(
                   onTap: () {
@@ -823,6 +828,10 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                 values: (controller.insurances?.value ?? [])
                     .map((insurance) => insurance['insuranceName'] as String)
                     .toList(),
+                selectedValue: controller.isFromManageCars.isTrue &&
+                        controller.insurance.value.isNotEmpty
+                    ? controller.insurance.value
+                    : null,
                 onChange: (selectedInsurance) {
                   print('Selected value: $selectedInsurance');
                   // Find the brand object with the selected name
@@ -919,8 +928,11 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                 hintText: 'Select',
                 title: AppStrings.vehicleTransmission,
                 iconColor: grey3,
-                selectedValue: controller.transmission.value.isNotEmpty ?
-                 controller.transmission.value : null,
+                selectedValue: controller.isFromManageCars.isTrue &&
+                        controller.transmission.value.isNotEmpty
+                    ? controller.transmission.value
+                    : null,
+                key: UniqueKey(),
                 values: (controller.transmissions ?? [])
                     .map((transmission) =>
                         transmission['transmissionName'] as String)
@@ -959,17 +971,52 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                 ButtonTheme(
                   alignedDropdown: true,
                   child: DropDownMultiSelect(
-                    onChanged: (List<String> selectedFeatures) {
+                    decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(
+                            horizontal: 14.sp, vertical: 13.sp),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: borderColor,
+                            width: 1.0.w,
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(4.0.r),
+                          ),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: red,
+                            width: 1.0.w,
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(4.0.r),
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: borderColor,
+                            width: 1.0.w,
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(4.0.r),
+                          ),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: secondaryColor,
+                            width: 1.0.w,
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(4.0.r),
+                          ),
+                        ),
+
+                        // filled: true,
+                        fillColor: Colors.transparent),
+                    onChanged: (List<dynamic> selectedFeatures) {
                       controller.selectedFeatures!.value = selectedFeatures;
                       print("selected ${selectedFeatures}");
 
-                      // Find the feature object with the selected name
-                      // var selectedObject =
-                      //     (controller.carFeatures?.value ?? []).firstWhere(
-                      //   (feature) =>
-                      //       feature['featuresName'] == selectedFeatures,
-                      //   orElse: () => null,
-                      // );
                       // Find the feature objects with the selected names
                       var selectedObjects =
                           (controller.carFeatures?.value ?? [])
@@ -987,13 +1034,6 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                       controller.featuresCode.value = featuresCodes;
                       print("selectedFeatures: $selectedFeatures");
                       print("featuresCodes: $featuresCodes");
-                      // if (selectedObject != null) {
-                      //   String featureCode =
-                      //       selectedObject['featuresCode'] as String;
-
-                      //   controller.featuresCode.value = featureCode;
-                      //   print("code $featureCode");
-                      // }
                     },
                     options: (controller.carFeatures?.value ?? [])
                         .map((feature) => feature['featuresName'] as String)
@@ -1021,6 +1061,11 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                 values: (controller.vehicleTypes?.value ?? [])
                     .map((carType) => carType['typeName'] as String)
                     .toList(),
+                // key: UniqueKey(),
+                selectedValue: controller.isFromManageCars.isTrue &&
+                        controller.vehicleType.isNotEmpty
+                    ? controller.vehicleType.value
+                    : null,
                 onChange: (selectedVehicleType) {
                   print('Selected value: $selectedVehicleType');
                   // Find the Vehicle Type object with the selected name
@@ -1048,6 +1093,10 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                 values: (controller.vehicleSeats?.value ?? [])
                     .map((seat) => seat["seatName"] as String)
                     .toList(),
+                selectedValue: controller.isFromManageCars.isTrue &&
+                        controller.numberOfSeats.value.isNotEmpty
+                    ? controller.numberOfSeats.value
+                    : null,
                 onChange: (selectedNoOfSeat) {
                   print('Selected value: $selectedNoOfSeat');
 
@@ -1124,101 +1173,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     await controller.getBrandModel(brandCode1: brandCode);
                   }
                 }),
-            // Center(
-            //   child: DropdownButtonHideUnderline(
-            //     child: DropdownButton2<String>(
-            //       isExpanded: true,
-            //       hint: Text(
-            //         'Select Item',
-            //         style: TextStyle(
-            //           fontSize: 14,
-            //           color: Theme.of(context).hintColor,
-            //         ),
-            //       ),
-            //      items: controller.items
-            //   .map((String item) => DropdownMenuItem<String>(
-            //         value: item,
-            //         child: Text(
-            //           item,
-            //           style: const TextStyle(
-            //             fontSize: 14,
-            //           ),
-            //         ),
-            //       ))
-            //   .toList(),
-            //       value: controller.selectedValue1,
-            //       onChanged: (String? value) {
-            //         setState(() {
-            //         controller.selectedValue1 = value!;
-            //         });
-            //       },
-            //       buttonStyleData: const ButtonStyleData(
-            //         padding: EdgeInsets.symmetric(horizontal: 16),
-            //         height: 40,
-            //         width: 140,
-            //       ),
-            //       menuItemStyleData: const MenuItemStyleData(
-            //         height: 40,
-            //       ),
-            //     ),
-            //   ),
-            // ),
 
-            // newDropdownWidget(
-            //     context: context,
-            //     hintText: 'Select',
-            //     title: AppStrings.whatIsTheBrandOfVehicle,
-            //     iconColor: grey3,
-            //     expectedVariable: 'field',
-            //     key: UniqueKey(),
-            //     //
-            //     selectedValue: controller.selectedValue1,
-            //     values: [''] +
-            //         (controller.brandModel ?? [])
-            //             .where((brandModel) =>
-            //                 brandModel is Map<String, dynamic> &&
-            //                 brandModel.containsKey('modelName'))
-            //             .map((brandModel) => brandModel['modelName'] as String)
-            //             .toList(),
-            //     onChange: (selectedBrand) async {
-            //       print('Selected value: $selectedBrand');
-            //       print("VEHICLE BRAND:: ");
-            //       setState(() {
-            //         controller.selectedValue1 = selectedBrand!;
-            //       });
-            //       // controller.selectedValue1 = selectedBrand;
-            //       Future.microtask(() {
-            //         print("VEHICLE BRAND:: ${controller.selectedValue1}");
-            //       });
-            // print("VEHICLE BRAND::${controller.selectedBrand?.value} ");
-            // // Find the brand object with the selected name
-            // var selectedBrandObject =
-            //     (controller.brandModel ?? []).firstWhere(
-            //   (brand) => brand['modelName'] == selectedBrand,
-            //   orElse: () => null,
-            // );
-
-            // if (selectedBrandObject != null) {
-            //   print("You have a brand ${selectedBrandObject}");
-            //   print("You have a brand>>>>");
-
-            //   controller.modelName?.value = selectedBrand;
-            //   controller.modelCode.value =
-            //       selectedBrandObject['modelCode'] as String;
-            //   controller.brandCode.value =
-            //       selectedBrandObject['brandCode'] as String;
-            //   String brandCode =
-            //       selectedBrandObject['brandCode'] as String;
-            //   String brandModelCode =
-            //       selectedBrandObject['modelCode'] as String;
-            //   // await contr oller.getBrandModel(brandCode1: brandCode);
-            //   print(
-            //       "Selected brand name: ${controller.modelName?.value}");
-
-            // await controller.getVehicleYear(
-            //     brandCode: brandCode, brandModelCode: brandModelCode);
-            // }
-            // }),
             SizedBox(
               height: 24.sp,
             ),
@@ -1230,150 +1185,150 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
               ],
             ),
 
-            controller.brandModel!.isEmpty
-                ? GestureDetector(
-                    onTap: () {
-                      // Handle tap if needed
-                    },
-                    child: Container(
-                      height: 45.h,
-                      width: size.width,
-                      constraints: BoxConstraints.tightFor(
-                        width: size.width.sp,
-                        height: 45.sp,
-                      ),
-                      margin: EdgeInsets.symmetric(vertical: 5.sp),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(4.r),
-                        ),
-                        border: Border.all(color: grey3),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 10.sp,
-                          vertical: 10.sp,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            textWidget(
-                              text: controller.selectedView.value,
-                              style: getRegularStyle(fontSize: 10.sp),
-                            ),
-                            const Icon(
-                              Iconsax.arrow_down_1,
-                              color: grey3,
-                            ),
-                          ],
-                        ),
-                      ),
+            if (controller.brandModel!.isEmpty &&
+                controller.selectedBrandModel.value == 'Select')
+              GestureDetector(
+                onTap: () {
+                  // Handle tap if needed
+                },
+                child: Container(
+                  height: 45.h,
+                  width: size.width,
+                  constraints: BoxConstraints.tightFor(
+                    width: size.width.sp,
+                    height: 45.sp,
+                  ),
+                  margin: EdgeInsets.symmetric(vertical: 5.sp),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(4.r),
                     ),
-                  )
-                : PopupMenuButton<Map<String, dynamic>>(
-                    constraints: BoxConstraints(
-                      minWidth: 320.sp,
-                      maxHeight: 500,
-                      minHeight:
-                          50.0 + (controller.brandModel?.length ?? 0) * 30,
+                    border: Border.all(color: grey3),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 10.sp,
+                      vertical: 10.sp,
                     ),
-                    // initialValue: ,
-                    surfaceTintColor: Colors.transparent,
-                    color: backgroundColor,
-                    onSelected: (selectedBrand) async {
-                      setState(() {
-                        controller.selectedValue1 = selectedBrand['modelName'];
-                        controller.modelName?.value =
-                            selectedBrand['modelName'];
-                        controller.modelCode.value =
-                            selectedBrand['modelCode'] as String;
-                        controller.brandCode.value =
-                            selectedBrand['brandCode'] as String;
-                        controller.brandCode1 =
-                            selectedBrand['brandCode'] as String;
-                        controller.brandModelCode =
-                            selectedBrand['modelCode'] as String;
-                        print(
-                            "Selected brand name: ${controller.modelName?.value}");
-
-                        print("Slected brand code ${controller.brandCode1}");
-                      });
-                      await controller.getVehicleYear(
-                          brandCode: controller.brandCode1!,
-                          brandModelCode: controller.brandModelCode!);
-                      print(
-                          "Slected brand valued ${controller.selectedValue1}");
-                      var selectedBrandObject =
-                          (controller.brandModel ?? []).firstWhere(
-                        (brand) => brand['modelName'] == selectedBrand,
-                        orElse: () => null,
-                      );
-                      if (selectedBrandObject != null) {
-                        print("object: " + selectedBrandObject);
-                      }
-                    },
-                    onOpened: () {
-                      // Handle when the menu is opened if needed
-                    },
-                    itemBuilder: (BuildContext context) {
-                      return List<
-                          PopupMenuEntry<Map<String, dynamic>>>.generate(
-                        controller.brandModel!.length,
-                        (int index) {
-                          final brandModel = controller.brandModel![index];
-
-                          return PopupMenuItem<Map<String, dynamic>>(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 10),
-                            value: brandModel,
-                            child: textWidget(
-                              text: brandModel['modelName'] as String,
-                              style: getRegularStyle(),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    child: Container(
-                      constraints: BoxConstraints.tightFor(
-                        width: size.width.sp,
-                        height: 45.sp,
-                      ),
-                      margin: EdgeInsets.symmetric(vertical: 5.sp),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(4.r)),
-                        border: Border.all(color: grey3),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          left: 18,
-                          right: 10,
-                          top: 10,
-                          bottom: 10,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        textWidget(
+                          text: controller.selectedBrandModel.value,
+                          style: getRegularStyle(fontSize: 10.sp),
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            textWidget(
-                              text: controller.selectedValue1,
-                              style: getRegularStyle(
-                                  fontSize:
-                                      controller.selectedValue1 == 'Select'
-                                          ? 10.sp
-                                          : 14,
-                                  color: controller.selectedValue1 == 'Select'
-                                      ? borderColor
-                                      : black),
-                            ),
-                            const Icon(
-                              Iconsax.arrow_down_1,
-                              color: grey3,
-                            ),
-                          ],
+                        const Icon(
+                          Iconsax.arrow_down_1,
+                          color: grey3,
                         ),
-                      ),
+                      ],
                     ),
                   ),
+                ),
+              )
+            else
+              PopupMenuButton<Map<String, dynamic>>(
+                constraints: BoxConstraints(
+                  minWidth: 320.sp,
+                  maxHeight: 500,
+                  minHeight: 50.0 + (controller.brandModel?.length ?? 0) * 30,
+                ),
+                // initialValue: ,
+                surfaceTintColor: Colors.transparent,
+                color: backgroundColor,
+                onSelected: (selectedBrand) async {
+                  setState(() {
+                    controller.selectedBrandModel = selectedBrand['modelName'];
+                    controller.modelName?.value = selectedBrand['modelName'];
+                    controller.modelCode.value =
+                        selectedBrand['modelCode'] as String;
+                    controller.brandCode.value =
+                        selectedBrand['brandCode'] as String;
+                    controller.brandCode1 =
+                        selectedBrand['brandCode'] as String;
+                    controller.brandModelCode =
+                        selectedBrand['modelCode'] as String;
+                    print(
+                        "Selected brand name: ${controller.modelName?.value}");
+
+                    print("Slected brand code ${controller.brandCode1}");
+                  });
+                  await controller.getVehicleYear(
+                      brandCode: controller.brandCode1!,
+                      brandModelCode: controller.brandModelCode!);
+                  print(
+                      "Slected brand valued ${controller.selectedBrandModel}");
+                  var selectedBrandObject =
+                      (controller.brandModel ?? []).firstWhere(
+                    (brand) => brand['modelName'] == selectedBrand,
+                    orElse: () => null,
+                  );
+                  if (selectedBrandObject != null) {
+                    print("object: " + selectedBrandObject);
+                  }
+                },
+                onOpened: () {
+                  // Handle when the menu is opened if needed
+                },
+                itemBuilder: (BuildContext context) {
+                  return List<PopupMenuEntry<Map<String, dynamic>>>.generate(
+                    controller.brandModel!.length,
+                    (int index) {
+                      final brandModel = controller.brandModel![index];
+
+                      return PopupMenuItem<Map<String, dynamic>>(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 10),
+                        value: brandModel,
+                        child: textWidget(
+                          text: brandModel['modelName'] as String,
+                          style: getRegularStyle(),
+                        ),
+                      );
+                    },
+                  );
+                },
+                child: Container(
+                  constraints: BoxConstraints.tightFor(
+                    width: size.width.sp,
+                    height: 45.sp,
+                  ),
+                  margin: EdgeInsets.symmetric(vertical: 5.sp),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(4.r)),
+                    border: Border.all(color: grey3),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      left: 18,
+                      right: 10,
+                      top: 10,
+                      bottom: 10,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        textWidget(
+                          text: controller.selectedBrandModel.value,
+                          style: getRegularStyle(
+                              fontSize: controller.selectedBrandModel.value ==
+                                      'Select'
+                                  ? 10.sp
+                                  : 14,
+                              color: controller.selectedBrandModel.value ==
+                                      'Select'
+                                  ? borderColor
+                                  : black),
+                        ),
+                        const Icon(
+                          Iconsax.arrow_down_1,
+                          color: grey3,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
 
             SizedBox(
               height: 24.sp,
@@ -1386,7 +1341,8 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
               ],
             ),
 
-            controller.vehicleYear!.isEmpty
+            controller.vehicleYear!.isEmpty &&
+                    controller.selectedYearValue!.isEmpty
                 ? GestureDetector(
                     onTap: () {
                       // Handle tap if needed
@@ -1414,7 +1370,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             textWidget(
-                              text: controller.selectedView.value,
+                              text: controller.selectedYearValue,
                               style: getRegularStyle(fontSize: 10.sp),
                             ),
                             const Icon(

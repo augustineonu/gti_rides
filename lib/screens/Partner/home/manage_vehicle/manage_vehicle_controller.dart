@@ -112,6 +112,8 @@ class ManageVehicleController extends GetxController
         } else {
           cars?.value = response.data!;
           change(response.data!, status: RxStatus.success());
+          
+          // change(response.data!.cast<CarData>(), status: RxStatus.success());
           update();
         }
         isFetchingCars.value = false;

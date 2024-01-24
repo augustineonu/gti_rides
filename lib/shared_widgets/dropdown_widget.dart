@@ -166,6 +166,7 @@ Widget dropdownWidget1({
     children: [
       textWidget(
         text: title,
+        textOverflow: TextOverflow.visible,
         style: getRegularStyle(fontSize: 12.sp),
       ),
       SizedBox(
