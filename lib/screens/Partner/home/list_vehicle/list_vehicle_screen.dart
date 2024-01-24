@@ -917,6 +917,9 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                 hintText: AppStrings.writeHere,
                 maxLines: 3,
                 maxLength: 100,
+                inputFormatters:  [
+                LengthLimitingTextInputFormatter(100),
+              ],
                 textInputType: TextInputType.text,
                 controller: controller.aboutVehicleController,
                 titleFontSize: 12.sp),

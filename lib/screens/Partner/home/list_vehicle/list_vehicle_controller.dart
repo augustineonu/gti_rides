@@ -64,7 +64,7 @@ class ListVehicleController extends GetxController {
   RxString stateCode = ''.obs;
   RxString cityCode = ''.obs;
   RxString transmissionCode = ''.obs;
-  RxList<String> featuresCode = <String>[].obs;
+  RxList<dynamic> featuresCode = <dynamic>[].obs;
   RxString insuranceCode = ''.obs;
   // Rx<String> pickedImagePath = ''.obs;
   Rx<String> startDateTime = ''.obs;
@@ -1173,6 +1173,8 @@ class ListVehicleController extends GetxController {
   Rx<String> insurance = ''.obs;
   Rx<String> discountDays = ''.obs;
   Rx<String> discountPrice = ''.obs;
+  // Rx<String> carType = ''.obs;
+  // Rx<String> seatCode = ''.obs;
   // Rx<String> brandCode = ''.obs;
   RxList<String> features = <String>[].obs;
 
@@ -1208,19 +1210,28 @@ class ListVehicleController extends GetxController {
           aboutCar.value = carHistory[0]['about'];
           transmission.value =
               carHistory[0]['transmission'][0]['transmissionName'];
+              transmissionCode.value = carHistory[0]["transmission"][0]["transmissionCode"];
+              logger.log("transmission code:: ${transmissionCode.value}");
           selectedFeatures!.value = carHistory[0]['feature']
               .map((feature) => feature['featuresName'])
               .toList();
+               logger.log("features :: ${selectedFeatures!.value}");
+          featuresCode.value = carHistory[0]['feature' as dynamic]
+              .map((feature) => feature['featuresCode' as dynamic])
+              .toList();
+              logger.log("features code:: ${featuresCode.value}");
           vehicleType.value = response.data![0]["type"][0]["typeName"];
           numberOfSeats.value = response.data![0]["seat"][0]["seatName"];
+          vehicleTypeCode.value = response.data![0]["type"]["typeCode"];
+          vehicleSeatCode.value = response.data![0]["seat"]["seatCode"];
 
           // documentation
           insurance.value = response.data![0]["insurance"][0]["insuranceName"];
 
           // // availability
-          //  startDateTime.value = response.data![0]['startDate'] ?? '';
-          // endDateTime.value = response.data!.first['endDate'] ?? '';
-          // advanceAmount.value = response.data!.first['advanceDays'];
+           startDateTime.value = response.data![0]['startDate'] ?? '';
+          endDateTime.value = response.data!.first['endDate'] ?? '';
+          advanceAmount.value = response.data!.first['advanceDays'];
           // pricePerDay.value = response.data!.first['pricePerDay'] ?? '';
           // discountDays.value = response.data!.first['discountDays'] ?? '';
           // discountPrice.value = response.data!.first['discountPrice'] ?? '';
