@@ -248,55 +248,55 @@ Widget carImage(
     BoxFit fit = BoxFit.cover,
     BorderRadiusGeometry? borderRadius}) {
   // if (imgUrl != null || imgUrl.isNotEmpty) {
-    // if (localImagePath != null && localImagePath.isNotEmpty) {
-    //   print("Image widget: is running in background");
-    //   return Builder(builder: (context) {
-    //     return ClipRRect(
-    //       borderRadius: BorderRadius.circular(radius),
-    //       child: Image.file(
-    //         File(localImagePath),
-    //         width: width,
-    //         height: height,
-    //         fit: fit,
-    //       ),
-    //     );
-    //   });
-    // } else {
-    return CachedNetworkImage(
-      alignment: Alignment.center,
-      imageUrl: imgUrl,
-      fit: BoxFit.contain,
-      imageBuilder: (context, imageProvider) => Container(
-        width: width,
-        height: height,
-        decoration: BoxDecoration(
-          borderRadius: borderRadius,
-          shape: BoxShape.rectangle,
-          image: DecorationImage(
-            image: SafeCachedNetworkImageProvider(
-              imgUrl,
-              fallbackImage: AssetImage('assets/images/fav_car.png'),
-            ),
-            fit: fit,
+  // if (localImagePath != null && localImagePath.isNotEmpty) {
+  //   print("Image widget: is running in background");
+  //   return Builder(builder: (context) {
+  //     return ClipRRect(
+  //       borderRadius: BorderRadius.circular(radius),
+  //       child: Image.file(
+  //         File(localImagePath),
+  //         width: width,
+  //         height: height,
+  //         fit: fit,
+  //       ),
+  //     );
+  //   });
+  // } else {
+  return CachedNetworkImage(
+    alignment: Alignment.center,
+    imageUrl: imgUrl,
+    fit: BoxFit.contain,
+    imageBuilder: (context, imageProvider) => Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        borderRadius: borderRadius,
+        shape: BoxShape.rectangle,
+        image: DecorationImage(
+          image: SafeCachedNetworkImageProvider(
+            imgUrl,
+            fallbackImage: const AssetImage('assets/images/fav_car.png'),
           ),
+          fit: fit,
         ),
       ),
-      placeholder: (context, url) => SizedBox(
-        height: imageSizeHeight,
-        width: imageSizeWidth,
-        child: const Center(
-          child: CircularProgressIndicator(
-            color: Colors.blue,
-            value: 30,
-          ),
+    ),
+    placeholder: (context, url) => SizedBox(
+      height: imageSizeHeight,
+      width: imageSizeWidth,
+      child: const Center(
+        child: CircularProgressIndicator(
+          color: Colors.blue,
+          value: 30,
         ),
       ),
-      errorWidget: (context, url, error) => Image.asset(
-        'assets/images/fav_car.png',
-        height: imageSizeHeight,
-        width: imageSizeWidth,
-      ),
-    );
+    ),
+    errorWidget: (context, url, error) => Image.asset(
+      'assets/images/fav_car.png',
+      height: imageSizeHeight,
+      width: imageSizeWidth,
+    ),
+  );
   // } else {
   //   return SizedBox();
   // }
@@ -345,7 +345,7 @@ Widget imageWidget({
       placeholder: (context, url) => SizedBox(
         height: imageSizeHeight,
         width: imageSizeWidth,
-        child: Center(
+        child: const Center(
           child: CircularProgressIndicator(
             color: Colors.blue,
             value: 50,
@@ -387,7 +387,11 @@ Widget imageWidget1(
             right: -4,
             top: -6,
             child: Transform.scale(
-                scale: 0.4, child: SvgPicture.asset(ImageAssets.closeSmall))),
+                scale: 0.4,
+                child: SvgPicture.asset(
+                  ImageAssets.closeSmall,
+                  color: red,
+                ))),
       ],
     ),
   );
@@ -538,7 +542,7 @@ Future<dynamic> successDialog({
           Container(
             height: 400,
             // width: 350.sp,
-            padding: EdgeInsets.symmetric(horizontal: 50, vertical: 30),
+            padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 30),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(6),
             ),
@@ -566,7 +570,7 @@ Future<dynamic> successDialog({
                 children: [
                   textWidget(
                       text: title, style: getBoldStyle(color: primaryColor)),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   textWidget(
@@ -574,7 +578,7 @@ Future<dynamic> successDialog({
                       textOverflow: TextOverflow.visible,
                       textAlign: TextAlign.center,
                       style: getRegularStyle()),
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
                   GtiButton(

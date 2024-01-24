@@ -696,7 +696,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
               scrollDirection: Axis.horizontal,
               itemCount: controller.selectedVehiclePhotos.length,
               itemBuilder: (context, index) => Padding(
-                padding: const EdgeInsets.only(right: 4.0), // Adjust as needed
+                padding: const EdgeInsets.only(right: 3.0), // Adjust as needed
                 child: imageWidget1(
                   onTap: () => controller.selectedVehiclePhotos.removeAt(index),
                   localImagePath: controller.selectedVehiclePhotos[index],
