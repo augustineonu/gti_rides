@@ -140,81 +140,78 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
             //   style: getRegularStyle(),
             // ),
 
-          
-               Builder(
-                 builder: (context) {
-                   return controller.obx(
-                      (state) {
-                        return SizedBox(
-                          height: 235.sp,
-                          width: size.width,
-                          child: Stack(
-                            children: [
-                              PageView(
-                                key: pageViewKey,
-                                physics: const ScrollPhysics(),
-                                controller: cardPageController,
-                                onPageChanged: (int index) {
-                                  currentIndex.value = index;
-                                },
-                                scrollDirection: Axis.horizontal,
-                                children: [
-                                  for (var car in state ?? [])
-                                    carCardWidget(size, car,
-                                        onTap: () =>
-                                            controller.routeToCarHistory(arguments: {
-                                              'brandModelName': car['brandModelName'],
-                                              'photoUrl': car['photoUrl'],
-                                              'carID': car['carID'],
-                                            })),
-                                ],
+            Builder(builder: (context) {
+              return controller.obx(
+                (state) {
+                  final visibleCars = state?.take(5).toList() ?? [];
+
+                  return SizedBox(
+                    height: 235.sp,
+                    width: size.width,
+                    child: Stack(
+                      children: [
+                        PageView(
+                          key: pageViewKey,
+                          physics: const ScrollPhysics(),
+                          controller: cardPageController,
+                          onPageChanged: (int index) {
+                            currentIndex.value = index;
+                          },
+                          scrollDirection: Axis.horizontal,
+                          children: [
+                            for (var car in visibleCars)
+                              carCardWidget(size, car,
+                                  onTap: () =>
+                                      controller.routeToCarHistory(arguments: {
+                                        'brandModelName': car['brandModelName'],
+                                        'photoUrl': car['photoUrl'],
+                                        'carID': car['carID'],
+                                      })),
+                          ],
+                        ),
+                        Positioned(
+                          bottom: 95.sp,
+                          right: 0,
+                          left: 0,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: List.generate(
+                              visibleCars.length,
+                              (index) => BuildCarouselDot(
+                                currentIndex: currentIndex.value,
+                                index: index,
                               ),
-                              Positioned(
-                                bottom: 95.sp,
-                                right: 0,
-                                left: 0,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: List.generate(
-                                    state!.length,
-                                    (index) => BuildCarouselDot(
-                                      currentIndex: currentIndex.value,
-                                      index: index,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                      onEmpty: Padding(
-                        padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
-                        child: Center(
-                            child: textWidget(
-                                text: AppStrings.noListedCarsYet,
-                                style: getMediumStyle())),
-                      ),
-                      onError: (e) => Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: context.height * 0.1, horizontal: 20),
-                        child: Center(
-                          child: Text(
-                            "$e",
-                            textAlign: TextAlign.center,
+                            ),
                           ),
                         ),
-                      ),
-                      onLoading: Padding(
-                        padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
-                        child: Center(child: centerLoadingIcon()),
-                      ),
-                    );
-                 }
-               ),
-              
-    
+                      ],
+                    ),
+                  );
+                },
+                onEmpty: Padding(
+                  padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
+                  child: Center(
+                      child: textWidget(
+                          text: AppStrings.noListedCarsYet,
+                          style: getMediumStyle())),
+                ),
+                onError: (e) => Padding(
+                  padding: EdgeInsets.symmetric(
+                      vertical: context.height * 0.1, horizontal: 20),
+                  child: Center(
+                    child: Text(
+                      "$e",
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+                onLoading: Padding(
+                  padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
+                  child: Center(child: centerLoadingIcon()),
+                ),
+              );
+            }),
           ],
         ),
       ),
@@ -279,7 +276,8 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
                                         width: 2.sp,
                                       ),
                                       textWidget(
-                                        text: car['pricePerDay'] ?? 0.toString(),
+                                        text:
+                                            car['pricePerDay'] ?? 0.toString(),
                                         style: getMediumStyle(fontSize: 12.sp)
                                             .copyWith(
                                           fontFamily: 'Neue',

@@ -433,6 +433,7 @@ class AppStrings {
   static String manageCars = 'Manage your cars';
   static String allCarsSm = 'All cars';
   static String booked = 'Booked';
+  static String back = 'Back';
   static String tripDate = 'Trip date';
   static String availabilityDate = 'Availability date';
   static String quickEdit = 'Quick edit';
@@ -492,4 +493,5 @@ class AppStrings {
   static String selectDate = "Select date";
   static String selectExpiryDate = "Select expiry date";
   static String noListedCarsYet = "You have not Listed any cars yet";
+  static String guideForTakingGreatPhotos = "Step by Step Guide for Capturing Great Car Photos for Your GTI Rides Listing";
 }

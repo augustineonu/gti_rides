@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:gti_rides/models/api_response_model.dart';
 import 'package:gti_rides/models/user_model.dart';
 import 'package:gti_rides/route/app_links.dart';
+import 'package:gti_rides/screens/Partner/payment/payment_controller.dart';
 import 'package:gti_rides/services/auth_service.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/payment_service.dart';
@@ -36,6 +37,8 @@ class VerifyAccountOtpController extends GetxController {
 
   late Timer timer;
   RxString countdownText = '2:00'.obs;
+
+  final paymentController = Get.put(PaymentController());
 
   VerifyAccountOtpController() {
     init();
@@ -138,6 +141,7 @@ class VerifyAccountOtpController extends GetxController {
 
       if (result.status == "success" || result.status_code == 200) {
         await showSuccessSnackbar(message:  'Success');
+        paymentController.getBankAccount();
 
         Future.delayed(const Duration(seconds: 3))
             .then((value) => routeService.goBack(closeOverlays: true));

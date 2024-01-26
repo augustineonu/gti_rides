@@ -156,7 +156,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                             height: size.height / 0.80.sp,
                             child: PageView(
                               // itemCount: controller.pages.length,
-                              // physics: NeverScrollableScrollPhysics(),
+                              physics: NeverScrollableScrollPhysics(),
                               controller: controller.pageController,
                               onPageChanged: (value) {
                                 controller.currentIndex.value = value;
@@ -312,9 +312,9 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
               iconColor: grey3,
               selectedValue: controller.isFromManageCars.isTrue &&
                       controller.advanceAmount.value.isNotEmpty
-                  ?
-                  //  controller.advanceAmount.value
-                  "4 hours"
+                  ? controller.advanceAmount.value.contains('hours')
+                      ? controller.advanceAmount.value
+                      : "4 hours"
                   : null,
               values: <String>[
                 "4 hours",
@@ -327,6 +327,8 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                 print('Selected value: $value');
                 controller.advanceAmount.value = value;
               }),
+         
+         
           SizedBox(
             height: 24.sp,
           ),
@@ -636,7 +638,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           textWidget(
-              text: AppStrings.howToTakePhoto,
+              text: AppStrings.guideForTakingGreatPhotos,
               textOverflow: TextOverflow.visible,
               style: getRegularStyle(fontSize: 12.sp)),
           SizedBox(
@@ -849,6 +851,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                         "seleted insuranceCode:: ${controller.insuranceCode.value}");
                   }
                 }),
+           
             SizedBox(
               height: 24.sp,
             ),
@@ -959,6 +962,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     controller.transmissionCode.value = transmissionCode;
                   }
                 }),
+           
             SizedBox(
               height: 24.sp,
             ),
@@ -1066,12 +1070,12 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     .map((carType) => carType['typeName'] as String)
                     .toList(),
                 // key: UniqueKey(),
-                selectedValue: controller.isFromManageCars.isTrue ||
-                        controller.vehicleType.isNotEmpty
+                selectedValue: controller.isFromManageCars.isTrue &&
+                        controller.vehicleType.value.isNotEmpty
                     ? controller.vehicleType.value
                     : null,
                 onChange: (selectedVehicleType) {
-                  controller.vehicleType.value = selectedVehicleType;
+                  // controller.vehicleType.value = selectedVehicleType;
                   print('Selected value: $selectedVehicleType');
                   // Find the Vehicle Type object with the selected name
                   var selectedObject =
@@ -1087,6 +1091,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     print("vehicle type code $selectedObject $vehicleTypeCode");
                   }
                 }),
+           
             SizedBox(
               height: 24.sp,
             ),
@@ -1119,6 +1124,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     controller.vehicleSeatCode.value = vehicleSeatCode;
                   }
                 }),
+           
             SizedBox(
               height: 50.sp,
             ),
@@ -1180,6 +1186,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     await controller.getBrandModel(brandCode1: brandCode);
                   }
                 }),
+            
             SizedBox(
               height: 24.sp,
             ),
@@ -1558,6 +1565,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     // controller.cityCode.value = cityCode;
                   }
                 }),
+           
             SizedBox(
               height: 24.sp,
             ),
@@ -1586,6 +1594,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     controller.cityCode.value = cityCode;
                   }
                 }),
+           
             SizedBox(
               height: 50.sp,
             ),

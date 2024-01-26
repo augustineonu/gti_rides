@@ -332,6 +332,7 @@ class PartnerService extends GetxController {
         endpoint: '/user/partner/car/addCarAvailability?carID=$carID',
         data: payload,
       );
+      logger.log("result:: ${result}");
 
       return ApiResponseModel.fromJson(result);
     } catch (err) {

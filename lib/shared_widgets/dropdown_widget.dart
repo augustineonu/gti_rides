@@ -18,8 +18,8 @@ Widget dropdownWidget({
   Color? iconColor,
   void Function()? onTap,
   String? expectedVariable,
+  Map<String, dynamic>? selectedValue,
 }) {
-  Map<String, dynamic>? selectedValue;
 
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,6 +48,7 @@ Widget dropdownWidget({
                   }
                   return null;
                 },
+                value: selectedValue,
                 hint: Text(
                   hintText!,
                   style: getRegularStyle(color: borderColor),
@@ -66,7 +67,7 @@ Widget dropdownWidget({
                           ))
                       .toList();
                 },
-                items: values.map((item) {
+                items: [...values, if (selectedValue != null) selectedValue!].map((item) {
                   bool isSelected = item == selectedValue;
                   return DropdownMenuItem(
                     value: item,
@@ -75,7 +76,7 @@ Widget dropdownWidget({
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            item['name'] ?? 'yyyy',
+                            item['name'] ?? '',
                             style: getRegularStyle(
                               fontSize: 16,
                             ),

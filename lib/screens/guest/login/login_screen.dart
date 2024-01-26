@@ -21,7 +21,9 @@ class LoginScreenBinding extends Bindings {
 }
 
 class LoginScreen extends GetView<LoginController> {
-  const LoginScreen({super.key});
+   LoginScreen({super.key});
+   @override
+     final controller = Get.put<LoginController>(LoginController());
 
   @override
   Widget build(BuildContext context) {

@@ -15,18 +15,18 @@ import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/utils.dart';
 
-class PaymentController extends GetxController
-    with StateMixin<List<dynamic>> {
+class PaymentController extends GetxController with StateMixin<List<dynamic>> {
   Logger logger = Logger("Controller");
 
   PaymentController() {
     init();
   }
 
-  void init() async{
+  void init() async {
     logger.log("PaymentController Initialized");
     addedPaymentMethod.value == true;
-     await getBankAccount();
+    await getBankAccount();
+    await getBankAccount();
   }
 
   @override
@@ -36,7 +36,7 @@ class PaymentController extends GetxController
     });
     super.onInit();
     await getBanks();
-   
+
     // addedPaymentMethod.value = true;
   }
 
@@ -51,6 +51,13 @@ class PaymentController extends GetxController
   Rx<String> bankName = ''.obs;
   Rx<String> bankCode = ''.obs;
   Rx<String> accountName = ''.obs;
+  Rx<Map<String, dynamic>>? selectedBank = Rx<Map<String, dynamic>>({});
+  // static Rx<Map<String, String>> ex = Rx<Map<String, String>>({
+  //   '50': "50",
+  //   '100': "100",
+  //   '150': "150",
+  //   '250': "250",
+  // });
 
   TextEditingController fullNameController = TextEditingController();
   TextEditingController accountNumberController = TextEditingController();
@@ -132,7 +139,7 @@ class PaymentController extends GetxController
         await showSuccessSnackbar(message: "Kindly verifyfy OTP to continue");
         paymentMethodView.value = 0;
         isLoading.value = false;
-        
+
         routeToVerifyOtp();
 
         // routeService.getOff(() => const PhoneVerificationScreen(), arguments: {
@@ -169,6 +176,11 @@ class PaymentController extends GetxController
         logger.log("gotten banks ${response.data}");
         if (response.data != null && response.data!.isNotEmpty) {
           listOfBanksAsMap = response.data!.cast<Map<String, dynamic>>();
+
+          // Sort the list alphabetically by the 'name' attribute
+          listOfBanksAsMap.sort((a, b) {
+            return a['name'].toLowerCase().compareTo(b['name'].toLowerCase());
+          });
           // response.data!.cast<BanksModel>();
           // change(response.data!.cast<BanksModel>(), status: RxStatus.success());
           // logger.log("car history $carHistory");
@@ -183,8 +195,8 @@ class PaymentController extends GetxController
       change(<BanksModel>[].obs, status: RxStatus.error(exception.toString()));
     }
   }
+
   Future<void> getBankAccount() async {
-    
     change(<dynamic>[].obs, status: RxStatus.loading());
 
     try {
@@ -195,10 +207,16 @@ class PaymentController extends GetxController
         if (response.data != null && response.data!.isNotEmpty) {
           // listOfBanksAsMap = response.data!.cast<Map<String, dynamic>>();
           addedPaymentMethod.value == true;
+          paymentMethodView.value == 0;
           change(response.data!, status: RxStatus.success());
+          fullNameController.text = response.data?.first['fullName'];
+          // fullNameController = TextEditingController(text: response.data?.first['fullName']);
+          accountNumberController.text = response.data?.first['accountNumber'];
+          selectedBank?.value = response.data?.first;
+          logger.log("fullName:: ${fullNameController.text}");
+
           // logger.log("car history $carHistory");
         } else {
-          
           change(<dynamic>[].obs, status: RxStatus.empty());
         }
       } else {
@@ -215,7 +233,7 @@ class PaymentController extends GetxController
       showErrorSnackbar(message: 'Kindly select bank');
       return;
     }
-     if (accountNumberController.text.isEmpty) {
+    if (accountNumberController.text.isEmpty) {
       // showErrorSnackbar(message: 'Kindly select input account number');
       return;
     }
@@ -243,6 +261,7 @@ class PaymentController extends GetxController
       isFetchingAccountDetails.value = false;
     }
   }
+
   @override
   void onClose() {
     // TODO: implement onClose

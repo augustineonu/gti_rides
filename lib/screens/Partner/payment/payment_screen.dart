@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -45,7 +46,8 @@ class PaymentScreen extends GetView<PaymentController> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Container(
-                                margin: const EdgeInsets.symmetric(vertical: 10),
+                                margin:
+                                    const EdgeInsets.symmetric(vertical: 10),
                                 padding: EdgeInsets.all(6.sp),
                                 decoration: BoxDecoration(
                                     border: Border.all(color: primaryColor),
@@ -62,21 +64,25 @@ class PaymentScreen extends GetView<PaymentController> {
                                             controller.selectedIndex.value == 0,
                                         onTap: () {
                                           controller.selectedIndex.value = 0;
-                                          controller.paymentMethodView.value = 0;
+                                          controller.paymentMethodView.value =
+                                              0;
+                                          // controller.fullNameController.clear();
+                                          // controller.accountNumberController
+                                          //     .clear();
                                         }),
                                     tabIndicator(
                                         width: 150.sp,
-                                        title: controller.addedPaymentMethod.value
-                                            ? AppStrings.paymentAccount
-                                            : AppStrings.paymentMethod,
+                                        title:
+                                            controller.addedPaymentMethod.value
+                                                ? AppStrings.paymentAccount
+                                                : AppStrings.paymentMethod,
                                         // if user has added payment account show AppStrings.paymentAccount
                                         selected:
                                             controller.selectedIndex.value == 1,
                                         onTap: () {
-                                            controller.selectedIndex.value = 1;
-                                            controller.getBankAccount();
-                                        }
-                                            ),
+                                          controller.selectedIndex.value = 1;
+                                          controller.getBankAccount();
+                                        }),
                                   ],
                                 ),
                               ),
@@ -122,7 +128,7 @@ class PaymentScreen extends GetView<PaymentController> {
         return paymentsCard();
 
       case 1:
-        // Completed trips
+        // Payment method
         // if (controller.addedPaymentMethod.value == true) {
         //   return paymentMethod(size, context);
         // }
@@ -134,8 +140,8 @@ class PaymentScreen extends GetView<PaymentController> {
             ? addAccountForm(context, size)
             : controller.obx(
                 (state) {
-                  controller.fullNameController.clear();
-                  controller.accountNumberController.clear();
+                  // controller.fullNameController.clear();
+                  // controller.accountNumberController.clear();
                   return paymentMethod(size, context, state,
                       onTapEditPaymentMethod: () async {
                     controller.paymentMethodView.value = 1;
@@ -422,24 +428,19 @@ class PaymentScreen extends GetView<PaymentController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          NormalInputTextWidget(
-            expectedVariable: 'fullName',
-            title: AppStrings.fullName,
-            hintText: AppStrings.bankAccoutName,
-            controller: controller.fullNameController,
-            readOnly: true,
-          ),
-          const SizedBox(
-            height: 22,
-          ),
           dropdownWidget(
             title: AppStrings.selectBank,
-            hintText: 'Select',
+            // hintText: 'Select',
+            hintText: controller.selectedBank!.value['bankName'] ?? 'Select',
             context: context,
             expectedVariable: 'bank',
             values: controller.listOfBanksAsMap,
+            // selectedValue: controller.selectedBank!.value.isNotEmpty
+            //     ? controller.selectedBank!.value
+            //     : null,
             onChange: (selectedBank) {
-              // controller.goBack();
+              controller.selectedBank!.value = selectedBank;
+
               print('Selected value: $selectedBank');
 
               var selectedObject =
@@ -450,16 +451,38 @@ class PaymentScreen extends GetView<PaymentController> {
               );
 
               if (selectedObject != null) {
-                //  print("bank object:: ${selectedObject}");
                 String bankCode = selectedObject['code'] as String;
                 String bankName = selectedObject['name'] as String;
                 controller.bankCode.value = bankCode;
                 controller.bankName.value = bankName;
-                // print("code:: ${bankCode}");
+
+                if (bankName != controller.selectedBank!.value['name']) {
+                  controller.fullNameController.clear();
+                  controller.accountNumberController.clear();
+
+                  // Check if accountNumberController is not empty before resolving
+                  if (controller.accountNumberController.text.isNotEmpty) {
+                    controller.resolveAccount();
+                  }
+                }
               }
-              controller.resolveAccount();
             },
           ),
+          // DropdownSearch<String>(
+          //   popupProps: PopupProps.menu(
+          //     showSelectedItems: true,
+          //     disabledItemFn: (String s) => s.startsWith('I'),
+          //   ),
+          //   items: ["Brazil", "Italia (Disabled)", "Tunisia", 'Canada'],
+          //   dropdownDecoratorProps: DropDownDecoratorProps(
+          //     dropdownSearchDecoration: InputDecoration(
+          //       labelText: "Menu mode",
+          //       hintText: "country in menu mode",
+          //     ),
+          //   ),
+          //   onChanged: print,
+          //   selectedItem: "Brazil",
+          // ),
           const SizedBox(
             height: 22,
           ),
@@ -488,6 +511,16 @@ class PaymentScreen extends GetView<PaymentController> {
             inputFormatters: [
               LengthLimitingTextInputFormatter(10),
             ],
+          ),
+          const SizedBox(
+            height: 22,
+          ),
+          NormalInputTextWidget(
+            expectedVariable: 'fullName',
+            title: AppStrings.fullName,
+            hintText: AppStrings.bankAccoutName,
+            controller: controller.fullNameController,
+            readOnly: true,
           ),
           SizedBox(
             height: size.height * 0.1.sp,

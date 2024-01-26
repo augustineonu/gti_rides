@@ -55,29 +55,26 @@ class TokenService {
 
 
   Future<bool> getNewAccessToken() async {
-    try {
-      final ApiResponseModel result = await authService.getNewAccessToken(
-            // accessToken: accessToken.value
-            );
-            logger.log("refresh token: ${result.data} ${result.status}");
-      if (result.status == 'success' || result.status_code == 200) {
-         await setTokenModel(result.data);
-      setAccessToken(result.data["accessToken"]);
-        return true;
-      } else {
-        logger.log("error fetching token");
-      }
-
+  try {
+    final ApiResponseModel result = await authService.getNewAccessToken(
+      // accessToken: accessToken.value
+    );
+    logger.log("refresh token: ${result.data} ${result.status}");
+    
+    if (result.status == 'success' || result.status_code == 200) {
       await setTokenModel(result.data);
       setAccessToken(result.data["accessToken"]);
-      // setRefreshToken(tokens.value.refreshToken);
-
-      return false;
-    } catch (error) {
-      logger.log("error getting refresh token ${error}");
+      return true;
+    } else {
+      logger.log("error fetching token");
       return false;
     }
+  } catch (error) {
+    logger.log("error getting refresh token ${error}");
+    return false;
   }
+}
+
 
     // Tokens
   Future<void> saveTokensData(TokenModel token) async {

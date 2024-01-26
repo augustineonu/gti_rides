@@ -73,7 +73,7 @@ class AppRoutes {
         transition: Transition.rightToLeftWithFade),
     GetPage(
         name: AppLinks.login,
-        page: () => const LoginScreen(),
+        page: () =>  LoginScreen(),
         binding: LoginScreenBinding(),
         transition: Transition.rightToLeftWithFade),
     GetPage(

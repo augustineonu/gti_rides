@@ -4,14 +4,14 @@ import 'dart:convert';
 class ApiResponseModel {
     final dynamic status_code;
     final String status;
-    final String? message;
+    final dynamic message;
     final dynamic data;
 
     ApiResponseModel({
         required this.status_code,
         required this.status,
         required this.message,
-        required this.data,
+         this.data,
     });
 
     factory ApiResponseModel.fromRawJson(String str) => ApiResponseModel.fromJson(json.decode(str));

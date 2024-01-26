@@ -862,15 +862,26 @@ class ListVehicleController extends GetxController {
   Future<void> addCarAvailability() async {
     try {
       isLoading1.value = true;
-      final response = await partnerService.addCarAvailability(payload: {
-        "startDate": startDateTime.value,
-        "endDate": endDateTime.value,
-        "advanceDays": advanceAmount,
-        "pricePerDay": rentPerDayController.text,
-        "discountDays": discountNoOfDays.value,
-        "discountPrice": discountPerDayController.text,
-        "driverID": selectedDriverId.value
-      }, carID: carID.value);
+      final response = await partnerService.addCarAvailability(
+          payload: {
+            "startDate": startDateTime.value,
+            "endDate": endDateTime.value,
+            "advanceDays": advanceAmount.value,
+            "pricePerDay": rentPerDayController.text,
+            "discountDays": discountNoOfDays.value,
+            "discountPrice": discountPerDayController.text,
+            "driverID": selectedDriverId.value
+          },
+          // {
+          //   "startDate": startDateTime.value,
+          //   "endDate": endDateTime.value,
+          //   "advanceDays": advanceAmount,
+          //   "pricePerDay": rentPerDayController.text,
+          //   "discountDays": discountNoOfDays.value,
+          //   "discountPrice": discountPerDayController.text,
+          //   "driverID": selectedDriverId.value
+          // },
+          carID: carID.value);
 
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("added availability ${response.data}");
@@ -878,12 +889,16 @@ class ListVehicleController extends GetxController {
         successDialog(
             title: AppStrings.vehicleInfoSubmitted,
             body: AppStrings.thankYouForYourPatience,
-            buttonTitle: AppStrings.home,
+            buttonTitle: AppStrings.back,
             onTap: () {
-              routeService.goBack(closeOverlays: true);
+              // routeService.goBack(closeOverlays: true);
+              Get.offNamedUntil(
+            AppLinks.manageVehicle,
+            ModalRoute.withName(AppLinks.carOwnerLanding),
+          );
             });
       } else {
-        logger.log("unable to get drivers ${response.data}");
+        logger.log("unable to add car availability ${response.data}");
         showErrorSnackbar(message: response.message!);
         isLoading1.value = false;
       }
@@ -1089,7 +1104,7 @@ class ListVehicleController extends GetxController {
         ));
       }
 
-      formData = dio.FormData.fromMap({'photos': files});
+      formData = dio.FormData.fromMap({'image': files});
 
       // formData = dio.FormData.fromMap({
       //   'photos': await dio.MultipartFile.fromFile(selectedVehiclePhoto.value,
@@ -1117,7 +1132,10 @@ class ListVehicleController extends GetxController {
       }
     } catch (exception) {
       logger.log("error  $exception");
-      showErrorSnackbar(message: exception.toString());
+      showErrorSnackbar(
+          message: exception.toString().contains('Map<String, dynamic>')
+              ? "Sorry, unknown error "
+              : exception.toString());
     } finally {
       isLoading.value = false;
     }
@@ -1254,7 +1272,6 @@ class ListVehicleController extends GetxController {
 
           selectedInsurancePhotos.value = extractDocumentName(insuranceDocUrl);
           selectedInsurancePhotoName.value = selectedInsurancePhotos.value;
-
 
           logger.log("Document: ${selectedInspectionPhotos.value} ");
 
