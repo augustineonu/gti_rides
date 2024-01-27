@@ -600,7 +600,8 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
                                   "start": car["startDate"],
                                   "end": car["endDate"],
                                   "enablePastDates": false,
-                                  "pricePerDay": car["pricePerDay"]
+                                  "pricePerDay": car["pricePerDay"],
+                                  "isFromManageCars": true
                                 });
                               case 2:
                                 controller.routeToListVehicle(arguments: {

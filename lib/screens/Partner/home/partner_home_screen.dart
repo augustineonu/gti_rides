@@ -38,6 +38,7 @@ class PartnerHomeScreen extends StatefulWidget {
 }
 
 class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
+  final controller = Get.put<PartnerHomeController>(PartnerHomeController());
   late Timer timer;
   RxInt currentIndex = 0.obs;
 
@@ -55,11 +56,15 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
     cardPageController = PageController(initialPage: 0);
 
     timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
-      if (currentIndex.value < 2) {
-        // currentIndex.value++;
+      if (currentIndex.value < 4) {
+        setState(() {
+          currentIndex.value++;
+        });
         print("next page ${currentIndex.value}>>>");
       } else {
-        currentIndex.value = 0;
+        setState(() {
+          currentIndex.value = 0;
+        });
       }
 
       if (pageViewKey.currentState != null && scrollController.hasClients) {
@@ -84,7 +89,6 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final height = MediaQuery.of(context).size.height;
-    final controller = Get.put<PartnerHomeController>(PartnerHomeController());
     return Obx(
       () => Scaffold(
         body: RefreshIndicator(
@@ -95,7 +99,118 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
                 child: Column(
                   children: [
                     appBar(size, controller),
-                    body(controller, size),
+                    // body(controller, size),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        controller: scrollController,
+                        padding: EdgeInsets.symmetric(
+                            vertical: 10.sp, horizontal: 16.sp),
+                        child: Column(
+                          // mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            getCarListedCard(
+                                onTap: controller.routeTolistVehicle),
+                            manageListedVehicles(
+                                onTap: controller.routeToManageVehicle),
+                            howGtiWorksCard(
+                                onTap: () {
+                                  controller.launchWebsite();
+                                },
+                                imageUrl: ImageAssets.guyWorks),
+                            // textWidget(
+                            //   text: AppStrings.recentViewCar,
+                            //   style: getRegularStyle(),
+                            // ),
+
+                            Builder(builder: (context) {
+                              return controller.obx(
+                                (state) {
+                                  final visibleCars =
+                                      state?.take(5).toList() ?? [];
+
+                                  return SizedBox(
+                                    height: 235.sp,
+                                    width: size.width,
+                                    child: Stack(
+                                      children: [
+                                        PageView(
+                                          key: pageViewKey,
+                                          physics: const ScrollPhysics(),
+                                          controller: cardPageController,
+                                          onPageChanged: (int index) {
+                                            setState(() {
+                                              currentIndex.value = index;
+                                            });
+                                          },
+                                          scrollDirection: Axis.horizontal,
+                                          children: [
+                                            for (var car in visibleCars)
+                                              carCardWidget(size, car,
+                                                  onTap: () => controller
+                                                          .routeToCarHistory(
+                                                              arguments: {
+                                                            'brandModelName': car[
+                                                                'brandModelName'],
+                                                            'photoUrl':
+                                                                car['photoUrl'],
+                                                            'carID':
+                                                                car['carID'],
+                                                          })),
+                                          ],
+                                        ),
+                                        Positioned(
+                                          bottom: 95.sp,
+                                          right: 0,
+                                          left: 0,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: List.generate(
+                                              visibleCars.length,
+                                              (index) => BuildCarouselDot(
+                                                currentIndex:
+                                                    currentIndex.value,
+                                                index: index,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                                onEmpty: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: context.height * 0.1),
+                                  child: Center(
+                                      child: textWidget(
+                                          text: AppStrings.noListedCarsYet,
+                                          style: getMediumStyle())),
+                                ),
+                                onError: (e) => Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: context.height * 0.1,
+                                      horizontal: 20),
+                                  child: Center(
+                                    child: Text(
+                                      "$e",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                                onLoading: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: context.height * 0.1),
+                                  child: Center(child: centerLoadingIcon()),
+                                ),
+                              );
+                            }),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

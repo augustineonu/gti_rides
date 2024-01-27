@@ -19,8 +19,8 @@ class CarHistoryController extends GetxController
     Map<String, dynamic>? arguments = Get.arguments;
 
     if (arguments != null) {
-      brandModelName.value = arguments['brandModelName'];
-      photoUrl.value = arguments['photoUrl'];
+      brandModelName.value = arguments['brandModelName'] ?? '';
+      photoUrl.value = arguments['photoUrl'] ?? '';
       carID.value = arguments['carID'];
 
       // Now you have access to the passed data (emailOrPhone)
@@ -75,12 +75,13 @@ class CarHistoryController extends GetxController
   }
   void routeToQuickEdit() =>
       routeService.gotoRoute(AppLinks.quickEdit, arguments: {
-        "startDate": startDate.value,
-        "endDate": endDate.value,
-        "pricePerDay": pricePerDay.value,
          "brandModelName": brandModelName.value,
          "photoUrl": photoUrl.value,
          "carID": carID.value,
+        "start": startDate.value,
+        "end": endDate.value,
+         "enablePastDates": false,
+        "pricePerDay": pricePerDay.value,
       });
 
   void onSelectInterState(bool value) => selectedInterState.value = value;
@@ -99,10 +100,10 @@ class CarHistoryController extends GetxController
     update();
   }
 
-  Future<void> getCarHistory() async {
+  Future<void> getCarHistory({String? modifiedCarID}) async {
     change(<String>[].obs, status: RxStatus.loading());
     try {
-      final response = await partnerService.getOnCar(carId: carID.value);
+      final response = await partnerService.getOnCar(carId: modifiedCarID ?? carID.value);
 
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("gotten car history ${response.data}");
@@ -112,7 +113,7 @@ class CarHistoryController extends GetxController
           startDate.value = response.data![0]['startDate'] ?? '';
           endDate.value = response.data!.first['endDate'] ?? '';
           pricePerDay.value = response.data!.first['pricePerDay'] ?? '';
-          brandModelName.value = response.data!.first['brandModelName'] ?? '';
+          brandModelName.value = response.data!.first['brandModel'][0]['modelName'] ?? '';
           photoUrl.value = response.data!.first['photoUrl'] ?? '';
           carID.value = response.data!.first['carID'];
           // logger.log("car history $carHistory");

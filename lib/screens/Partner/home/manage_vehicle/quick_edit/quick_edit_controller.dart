@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:gti_rides/models/drivers_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/screens/Partner/home/list_vehicle/list_vehicle_screen.dart';
+import 'package:gti_rides/screens/Partner/home/manage_vehicle/car_history/car_history_controller.dart';
 import 'package:gti_rides/screens/Partner/home/manage_vehicle/manage_vehicle_controller.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/partner_service.dart';
@@ -14,6 +15,7 @@ import 'package:gti_rides/utils/utils.dart';
 class QuickEditController extends GetxController {
   Logger logger = Logger("QuickEdit Controller");
   final manageVehicleController = Get.put(ManageVehicleController());
+  final carHistoryController = Get.put(CarHistoryController());
 
   QuickEditController() {
     init();
@@ -39,6 +41,7 @@ class QuickEditController extends GetxController {
       // startDate.value = arguments["startDate"] ?? '';
       // endDate.value = arguments["endDate"] ?? '';
       enablePastDates.value = arguments['enablePastDates'] ?? true;
+      isFromManageCars.value = arguments['isFromManageCars'] ?? false;
 
       // Now you have access to the passed data (emailOrPhone)
       logger.log('Received data $arguments');
@@ -65,6 +68,7 @@ class QuickEditController extends GetxController {
   RxString startDateTime = "".obs;
   RxString endDateTime = "".obs;
   RxString pricePerDay = "".obs;
+  Rx<bool> isFromManageCars = false.obs;
   // RxString endDate = "".obs;
   // RxString startDate = "".obs;
 
@@ -116,13 +120,23 @@ class QuickEditController extends GetxController {
         showSuccessSnackbar(message: result.message!);
 
         // manageVehicleController.init();
-        Future.delayed(const Duration(milliseconds: 1000), () {
+        Future.delayed(const Duration(milliseconds: 1000), () {})
+            .whenComplete(() {
           // Get.back(closeOverlays: true);
-          Get.offNamedUntil(
-            AppLinks.manageVehicle,
-            ModalRoute.withName(AppLinks.carOwnerLanding),
-          );
+          if (isFromManageCars.value) {
+            Get.offNamedUntil(
+              AppLinks.manageVehicle,
+              ModalRoute.withName(AppLinks.carOwnerLanding),
+            );
+          } else {
+            Get.offNamedUntil(AppLinks.carHistory,
+                ModalRoute.withName(AppLinks.carOwnerLanding),
+                arguments: {
+                  "carID": carID.value,
+                });
+          }
           manageVehicleController.getAllCars();
+          carHistoryController.getCarHistory(modifiedCarID: carID.value);
         });
       } else {
         showErrorSnackbar(message: result.message!);

@@ -50,7 +50,7 @@ class PartnerHomeController extends GetxController
     cardPageController = PageController(initialPage: 0);
 
     timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
-      if (currentIndex.value < 2) {
+      if (currentIndex.value < 4) {
         currentIndex.value++;
       } else {
         currentIndex.value = 0;
