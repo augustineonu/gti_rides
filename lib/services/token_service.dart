@@ -6,6 +6,7 @@ import 'package:gti_rides/models/api_response_model.dart';
 import 'package:gti_rides/models/auth/token_model.dart';
 import 'package:gti_rides/services/auth_service.dart';
 import 'package:gti_rides/services/logger.dart';
+import 'package:gti_rides/services/storage_service.dart';
 
 
 TokenService get tokenService => Get.find();
@@ -112,5 +113,12 @@ class TokenService {
   Future<void> deleteAccessToken() async {
     logger.log('Deleting Access token');
     await _secureStorage.delete(key: 'auth_access_token');
+  }
+
+
+   Future<void> clearAll() async {
+    logger.log('Deleting passcode');
+    await _secureStorage.deleteAll();
+    await storageService.insert("firstTimeLogin", true);
   }
 }

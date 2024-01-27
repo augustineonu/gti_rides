@@ -74,7 +74,9 @@ class MoreController extends GetxController {
   onPageChanged(int index) {}
 
   void obscurePassword() => showPassword.value = !showPassword.value;
-  void logOut() {
+  
+  Future<void> logOut() async {
+    await tokenService.clearAll();
     routeService.offAllNamed(AppLinks.login);
   }
   // update();
