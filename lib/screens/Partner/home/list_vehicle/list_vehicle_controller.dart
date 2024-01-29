@@ -54,7 +54,7 @@ class ListVehicleController extends GetxController {
   RxString modelCode = ''.obs;
   // RxString? yearName;
   RxString? modelName;
-  RxString? selectedBrand;
+  RxString? selectedBrand = 'Select'.obs;
   RxString yearCode = ''.obs;
   Rx<dynamic> vehicleTypeCode = ''.obs;
   RxString vehicleSeatCode = ''.obs;
@@ -111,6 +111,8 @@ class ListVehicleController extends GetxController {
   TextEditingController aboutVehicleController = TextEditingController();
   Rx<String> advanceAmount = ''.obs;
   RxInt initiPageIndex = 1.obs;
+
+  Rx<String>? errorMessage = ''.obs; 
   ListVehicleController() {
     init();
   }
@@ -252,6 +254,16 @@ class ListVehicleController extends GetxController {
       driverEmail: '08180065778 | johndoe@gmail.com',
     ),
   );
+
+
+    String? validateValue(String? value) {
+    // Perform your custom validation logic here
+    if (value == null || value.isEmpty) {
+      return 'Please select a valid option.';
+    }
+    // Add more validation rules as needed
+    return null;
+  }
 
 // routing methods
   void goBack() {
@@ -560,7 +572,7 @@ class ListVehicleController extends GetxController {
   ].obs;
   Rx<String>? selectedValue;
   String? selectedValue1 = 'Select';
-  String? selectedYearValue = 'Select';
+  Rx<String>? selectedYearValue = 'Select'.obs;
   String? brandCode1;
   String? brandModelCode;
 
@@ -570,7 +582,7 @@ class ListVehicleController extends GetxController {
       //isGettingBrands.value = true;
       isGettingyear.value = true;
       vehicleYear!.clear();
-      selectedYearValue = 'Select';
+      selectedYearValue!.value = 'Select';
       final response = await partnerService.getVehicleYear(
           brandCode: brandCode, brandModelCode: brandModelCode);
       if (response.status == 'success' || response.status_code == 200) {
@@ -780,6 +792,10 @@ class ListVehicleController extends GetxController {
 
   Future<void> addCar() async {
     if (!vehicleTypeFormKey.currentState!.validate()) {
+      return;
+    }
+    if(selectedBrandModel.value == 'Select' || selectedYearValue!.value == 'Select'){
+      showErrorSnackbar(message: 'All fields must be selected');
       return;
     }
 
@@ -1208,7 +1224,7 @@ class ListVehicleController extends GetxController {
           await getBrandModel(brandCode1: brandCode.value);
           await getVehicleYear(
               brandCode: brandCode.value, brandModelCode: modelCode.value);
-          selectedYearValue = firstCar['modelYear'][0]["yearName"];
+          selectedYearValue!.value = firstCar['modelYear'][0]["yearName"];
 
           selectedBrandModel.value = firstCar['brandModel'][0]['modelName'];
 

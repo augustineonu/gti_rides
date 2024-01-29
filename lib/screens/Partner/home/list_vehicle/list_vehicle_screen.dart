@@ -156,7 +156,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                             height: size.height / 0.80.sp,
                             child: PageView(
                               // itemCount: controller.pages.length,
-                              physics: NeverScrollableScrollPhysics(),
+                              // physics: NeverScrollableScrollPhysics(),
                               controller: controller.pageController,
                               onPageChanged: (value) {
                                 controller.currentIndex.value = value;
@@ -305,30 +305,29 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
             height: 24.sp,
           ),
 
-          dropdownWidget1(
-              context: context,
-              hintText: 'Select',
-              title: AppStrings.howMuchForAdvance,
-              iconColor: grey3,
-              selectedValue: controller.isFromManageCars.isTrue &&
-                      controller.advanceAmount.value.isNotEmpty
-                  ? controller.advanceAmount.value.contains('hours')
-                      ? controller.advanceAmount.value
-                      : "4 hours"
-                  : null,
-              values: <String>[
-                "4 hours",
-                "12 hours",
-                "24 hours",
-                "48 hours",
-                "72 hours"
-              ],
-              onChange: (value) {
-                print('Selected value: $value');
-                controller.advanceAmount.value = value;
-              }),
-         
-         
+          // dropdownWidget1(
+          //     context: context,
+          //     hintText: 'Select',
+          //     title: AppStrings.howMuchForAdvance,
+          //     iconColor: grey3,
+          //     selectedValue: controller.isFromManageCars.isTrue &&
+          //             controller.advanceAmount.value.isNotEmpty
+          //         ? controller.advanceAmount.value.contains('hours')
+          //             ? controller.advanceAmount.value
+          //             : "4 hours"
+          //         : null,
+          //     values: <String>[
+          //       "4 hours",
+          //       "12 hours",
+          //       "24 hours",
+          //       "48 hours",
+          //       "72 hours"
+          //     ],
+          //     onChange: (value) {
+          //       print('Selected value: $value');
+          //       controller.advanceAmount.value = value;
+          //     }),
+
           SizedBox(
             height: 24.sp,
           ),
@@ -376,23 +375,23 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
           ),
           Row(
             children: [
-              Expanded(
-                child: dropdownWidget1(
-                    context: context,
-                    hintText: 'Select',
-                    title: AppStrings.chooseNuberOfDays,
-                    iconColor: grey3,
-                    selectedValue: controller.isFromManageCars.isTrue &&
-                            controller.discountDays.isNotEmpty
-                        ? controller.discountDays.value
-                        : null,
-                    values:
-                        List.generate(20, (index) => (index + 1).toString()),
-                    onChange: (value) {
-                      print('Selected value: $value');
-                      controller.discountNoOfDays.value = value;
-                    }),
-              ),
+              // Expanded(
+              //   child: dropdownWidget1(
+              //       context: context,
+              //       hintText: 'Select',
+              //       title: AppStrings.chooseNuberOfDays,
+              //       iconColor: grey3,
+              //       selectedValue: controller.isFromManageCars.isTrue &&
+              //               controller.discountDays.isNotEmpty
+              //           ? controller.discountDays.value
+              //           : null,
+              //       values:
+              //           List.generate(20, (index) => (index + 1).toString()),
+              //       onChange: (value) {
+              //         print('Selected value: $value');
+              //         controller.discountNoOfDays.value = value;
+              //       }),
+              // ),
               SizedBox(width: 20.sp),
               Expanded(
                 child: NormalInputTextWidget(
@@ -820,38 +819,38 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
             SizedBox(
               height: 24.sp,
             ),
-            dropdownWidget1(
-                context: context,
-                hintText: 'Select',
-                title: AppStrings.selectInsuranceType,
-                iconColor: grey3,
-                expectedVariable: 'field',
-                values: (controller.insurances?.value ?? [])
-                    .map((insurance) => insurance['insuranceName'] as String)
-                    .toList(),
-                selectedValue: controller.isFromManageCars.isTrue ||
-                        controller.insurance.value.isNotEmpty
-                    ? controller.insurance.value
-                    : null,
-                onChange: (selectedInsurance) {
-                  controller.insurance.value = selectedInsurance;
-                  print('Selected value: $selectedInsurance');
-                  // Find the brand object with the selected name
-                  var selectedObject =
-                      (controller.insurances?.value ?? []).firstWhere(
-                    (insurance) =>
-                        insurance['insuranceName'] == selectedInsurance,
-                    orElse: () => null,
-                  );
-                  if (selectedObject != null) {
-                    String insuranceCode =
-                        selectedObject['insuranceCode'] as String;
-                    controller.insuranceCode.value = insuranceCode;
-                    print(
-                        "seleted insuranceCode:: ${controller.insuranceCode.value}");
-                  }
-                }),
-           
+            // dropdownWidget1(
+            //     context: context,
+            //     hintText: 'Select',
+            //     title: AppStrings.selectInsuranceType,
+            //     iconColor: grey3,
+            //     expectedVariable: 'field',
+            //     values: (controller.insurances?.value ?? [])
+            //         .map((insurance) => insurance['insuranceName'] as String)
+            //         .toList(),
+            //     selectedValue: controller.isFromManageCars.isTrue ||
+            //             controller.insurance.value.isNotEmpty
+            //         ? controller.insurance.value
+            //         : null,
+            //     onChange: (selectedInsurance) {
+            //       controller.insurance.value = selectedInsurance;
+            //       print('Selected value: $selectedInsurance');
+            //       // Find the brand object with the selected name
+            //       var selectedObject =
+            //           (controller.insurances?.value ?? []).firstWhere(
+            //         (insurance) =>
+            //             insurance['insuranceName'] == selectedInsurance,
+            //         orElse: () => null,
+            //       );
+            //       if (selectedObject != null) {
+            //         String insuranceCode =
+            //             selectedObject['insuranceCode'] as String;
+            //         controller.insuranceCode.value = insuranceCode;
+            //         print(
+            //             "seleted insuranceCode:: ${controller.insuranceCode.value}");
+            //       }
+            //     }),
+
             SizedBox(
               height: 24.sp,
             ),
@@ -929,40 +928,40 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
             SizedBox(
               height: 24.sp,
             ),
-            dropdownWidget1(
-                context: context,
-                hintText: 'Select',
-                title: AppStrings.vehicleTransmission,
-                iconColor: grey3,
-                selectedValue: controller.isFromManageCars.isTrue ||
-                        controller.transmission.value.isNotEmpty
-                    ? controller.transmission.value
-                    : null,
-                key: UniqueKey(),
-                values: (controller.transmissions ?? [])
-                    .map((transmission) =>
-                        transmission['transmissionName'] as String)
-                    .toList(),
-                onChange: (selectedTransmission) {
-                  controller.transmission.value = selectedTransmission;
-                  print('Selected value: $selectedTransmission');
-                  print('Selected value1: $selectedTransmission');
+            // dropdownWidget1(
+            //     context: context,
+            //     hintText: 'Select',
+            //     title: AppStrings.vehicleTransmission,
+            //     iconColor: grey3,
+            //     selectedValue: controller.isFromManageCars.isTrue ||
+            //             controller.transmission.value.isNotEmpty
+            //         ? controller.transmission.value
+            //         : null,
+            //     key: UniqueKey(),
+            //     values: (controller.transmissions ?? [])
+            //         .map((transmission) =>
+            //             transmission['transmissionName'] as String)
+            //         .toList(),
+            //     onChange: (selectedTransmission) {
+            //       controller.transmission.value = selectedTransmission;
+            //       print('Selected value: $selectedTransmission');
+            //       print('Selected value1: $selectedTransmission');
 
-                  // Find the brand object with the selected name
-                  var selectedObject =
-                      (controller.transmissions?.value ?? []).firstWhere(
-                    (transmission) =>
-                        transmission['transmissionName'] ==
-                        selectedTransmission,
-                    orElse: () => null,
-                  );
-                  if (selectedObject != null) {
-                    String transmissionCode =
-                        selectedObject['transmissionCode'] as String;
-                    controller.transmissionCode.value = transmissionCode;
-                  }
-                }),
-           
+            //       // Find the brand object with the selected name
+            //       var selectedObject =
+            //           (controller.transmissions?.value ?? []).firstWhere(
+            //         (transmission) =>
+            //             transmission['transmissionName'] ==
+            //             selectedTransmission,
+            //         orElse: () => null,
+            //       );
+            //       if (selectedObject != null) {
+            //         String transmissionCode =
+            //             selectedObject['transmissionCode'] as String;
+            //         controller.transmissionCode.value = transmissionCode;
+            //       }
+            //     }),
+
             SizedBox(
               height: 24.sp,
             ),
@@ -1061,70 +1060,70 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
             SizedBox(
               height: 24.sp,
             ),
-            dropdownWidget1(
-                context: context,
-                hintText: 'Select',
-                title: AppStrings.vehicleType,
-                iconColor: grey3,
-                values: (controller.vehicleTypes?.value ?? [])
-                    .map((carType) => carType['typeName'] as String)
-                    .toList(),
-                // key: UniqueKey(),
-                selectedValue: controller.isFromManageCars.isTrue &&
-                        controller.vehicleType.value.isNotEmpty
-                    ? controller.vehicleType.value
-                    : null,
-                onChange: (selectedVehicleType) {
-                  // controller.vehicleType.value = selectedVehicleType;
-                  print('Selected value: $selectedVehicleType');
-                  // Find the Vehicle Type object with the selected name
-                  var selectedObject =
-                      (controller.vehicleTypes?.value ?? []).firstWhere(
-                    (vehicleType) =>
-                        vehicleType['typeName'] == selectedVehicleType,
-                    orElse: () => null,
-                  );
-                  if (selectedObject != null) {
-                    String vehicleTypeCode =
-                        selectedObject['typeCode'] as String;
-                    controller.vehicleTypeCode.value = vehicleTypeCode;
-                    print("vehicle type code $selectedObject $vehicleTypeCode");
-                  }
-                }),
-           
+            // dropdownWidget1(
+            //     context: context,
+            //     hintText: 'Select',
+            //     title: AppStrings.vehicleType,
+            //     iconColor: grey3,
+            //     values: (controller.vehicleTypes?.value ?? [])
+            //         .map((carType) => carType['typeName'] as String)
+            //         .toList(),
+            //     // key: UniqueKey(),
+            //     selectedValue: controller.isFromManageCars.isTrue &&
+            //             controller.vehicleType.value.isNotEmpty
+            //         ? controller.vehicleType.value
+            //         : null,
+            //     onChange: (selectedVehicleType) {
+            //       // controller.vehicleType.value = selectedVehicleType;
+            //       print('Selected value: $selectedVehicleType');
+            //       // Find the Vehicle Type object with the selected name
+            //       var selectedObject =
+            //           (controller.vehicleTypes?.value ?? []).firstWhere(
+            //         (vehicleType) =>
+            //             vehicleType['typeName'] == selectedVehicleType,
+            //         orElse: () => null,
+            //       );
+            //       if (selectedObject != null) {
+            //         String vehicleTypeCode =
+            //             selectedObject['typeCode'] as String;
+            //         controller.vehicleTypeCode.value = vehicleTypeCode;
+            //         print("vehicle type code $selectedObject $vehicleTypeCode");
+            //       }
+            //     }),
+
             SizedBox(
               height: 24.sp,
             ),
-            dropdownWidget1(
-                context: context,
-                hintText: 'Select',
-                title: AppStrings.numberOfSeats,
-                iconColor: grey3,
-                values: (controller.vehicleSeats?.value ?? [])
-                    .map((seat) => seat["seatName"] as String)
-                    .toList(),
-                selectedValue: controller.isFromManageCars.isTrue ||
-                        controller.numberOfSeats.value.isNotEmpty
-                    ? controller.numberOfSeats.value
-                    : null,
-                onChange: (selectedNoOfSeat) {
-                  controller.numberOfSeats.value = selectedNoOfSeat;
-                  print('Selected value: $selectedNoOfSeat');
+            // dropdownWidget1(
+            //     context: context,
+            //     hintText: 'Select',
+            //     title: AppStrings.numberOfSeats,
+            //     iconColor: grey3,
+            //     values: (controller.vehicleSeats?.value ?? [])
+            //         .map((seat) => seat["seatName"] as String)
+            //         .toList(),
+            //     selectedValue: controller.isFromManageCars.isTrue ||
+            //             controller.numberOfSeats.value.isNotEmpty
+            //         ? controller.numberOfSeats.value
+            //         : null,
+            //     onChange: (selectedNoOfSeat) {
+            //       controller.numberOfSeats.value = selectedNoOfSeat;
+            //       print('Selected value: $selectedNoOfSeat');
 
-                  // Find the seat Type object with the selected name
-                  var selectedObject =
-                      (controller.vehicleSeats?.value ?? []).firstWhere(
-                    (vehicleSeat) =>
-                        vehicleSeat['seatName'] == selectedNoOfSeat,
-                    orElse: () => null,
-                  );
-                  if (selectedObject != null) {
-                    String vehicleSeatCode =
-                        selectedObject['seatCode'] as String;
-                    controller.vehicleSeatCode.value = vehicleSeatCode;
-                  }
-                }),
-           
+            //       // Find the seat Type object with the selected name
+            //       var selectedObject =
+            //           (controller.vehicleSeats?.value ?? []).firstWhere(
+            //         (vehicleSeat) =>
+            //             vehicleSeat['seatName'] == selectedNoOfSeat,
+            //         orElse: () => null,
+            //       );
+            //       if (selectedObject != null) {
+            //         String vehicleSeatCode =
+            //             selectedObject['seatCode'] as String;
+            //         controller.vehicleSeatCode.value = vehicleSeatCode;
+            //       }
+            //     }),
+
             SizedBox(
               height: 50.sp,
             ),
@@ -1167,6 +1166,10 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     .toList(),
                 onChange: (selectedBrand) async {
                   print('Selected value: $selectedBrand');
+                  if (selectedBrand != controller.brandName.value) {
+                    controller.selectedBrandModel.value = 'Select';
+                    controller.selectedYearValue!.value = 'Select';
+                  }
                   controller.brandName.value = selectedBrand;
                   controller.vehicleYear!.clear();
                   controller.vehicleYear!.value = [];
@@ -1186,7 +1189,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     await controller.getBrandModel(brandCode1: brandCode);
                   }
                 }),
-            
+
             SizedBox(
               height: 24.sp,
             ),
@@ -1239,108 +1242,126 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                 ),
               )
             else
-              PopupMenuButton<Map<String, dynamic>>(
-                constraints: BoxConstraints(
-                  minWidth: 320.sp,
-                  maxHeight: 500,
-                  minHeight: 50.0 + (controller.brandModel?.length ?? 0) * 30,
-                ),
-                // initialValue: ,
-                surfaceTintColor: Colors.transparent,
-                color: backgroundColor,
-                onSelected: (selectedBrand) async {
-                  setState(() {
-                    controller.selectedBrandModel.value =
-                        selectedBrand['modelName'];
-                    controller.modelName?.value = selectedBrand['modelName'];
-                    controller.modelCode.value =
-                        selectedBrand['modelCode'] as String;
-                    controller.brandCode.value =
-                        selectedBrand['brandCode'] as String;
-                    controller.brandCode1 =
-                        selectedBrand['brandCode'] as String;
-                    controller.brandModelCode =
-                        selectedBrand['modelCode'] as String;
-                    print(
-                        "Selected brand name: ${controller.modelName?.value}");
+              Column(
+                children: [
+                  PopupMenuButton<Map<String, dynamic>>(
+                    constraints: BoxConstraints(
+                      minWidth: 320.sp,
+                      maxHeight: 500,
+                      minHeight:
+                          50.0 + (controller.brandModel?.length ?? 0) * 30,
+                    ),
+                    // initialValue: ,
+                    surfaceTintColor: Colors.transparent,
+                    color: backgroundColor,
+                    onSelected: (selectedBrand) async {
+                      setState(() {
+                        // controller.errorMessage!.value = controller
+                        //     .validateValue(selectedBrand['modelName'])!;
+                        controller.selectedBrandModel.value =
+                            selectedBrand['modelName'];
+                        controller.modelName?.value =
+                            selectedBrand['modelName'];
+                        controller.modelCode.value =
+                            selectedBrand['modelCode'] as String;
+                        controller.brandCode.value =
+                            selectedBrand['brandCode'] as String;
+                        controller.brandCode1 =
+                            selectedBrand['brandCode'] as String;
+                        controller.brandModelCode =
+                            selectedBrand['modelCode'] as String;
+                        print(
+                            "Selected brand name: ${controller.modelName?.value}");
 
-                    print("Slected brand code ${controller.brandCode1}");
-                  });
-                  await controller.getVehicleYear(
-                      brandCode: controller.brandCode1!,
-                      brandModelCode: controller.brandModelCode!);
-                  print(
-                      "Slected brand valued ${controller.selectedBrandModel}");
-                  var selectedBrandObject =
-                      (controller.brandModel ?? []).firstWhere(
-                    (brand) => brand['modelName'] == selectedBrand,
-                    orElse: () => null,
-                  );
-                  if (selectedBrandObject != null) {
-                    print("object: " + selectedBrandObject);
-                  }
-                },
-                onOpened: () {
-                  // Handle when the menu is opened if needed
-                },
-                itemBuilder: (BuildContext context) {
-                  return List<PopupMenuEntry<Map<String, dynamic>>>.generate(
-                    controller.brandModel!.length,
-                    (int index) {
-                      final brandModel = controller.brandModel![index];
+                        print("Slected brand code ${controller.brandCode1}");
+                      });
+                      await controller.getVehicleYear(
+                          brandCode: controller.brandCode1!,
+                          brandModelCode: controller.brandModelCode!);
+                      print(
+                          "Slected brand valued ${controller.selectedBrandModel}");
+                      var selectedBrandObject =
+                          (controller.brandModel ?? []).firstWhere(
+                        (brand) => brand['modelName'] == selectedBrand,
+                        orElse: () => null,
+                      );
+                      if (selectedBrandObject != null) {
+                        print("object: " + selectedBrandObject);
+                      }
+                    },
+                    onOpened: () {
+                      // Handle when the menu is opened if needed
+                    },
+                    itemBuilder: (BuildContext context) {
+                      return List<
+                          PopupMenuEntry<Map<String, dynamic>>>.generate(
+                        controller.brandModel!.length,
+                        (int index) {
+                          final brandModel = controller.brandModel![index];
 
-                      return PopupMenuItem<Map<String, dynamic>>(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 10),
-                        value: brandModel,
-                        child: textWidget(
-                          text: brandModel['modelName'] as String,
-                          style: getRegularStyle(),
-                        ),
+                          return PopupMenuItem<Map<String, dynamic>>(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 10),
+                            value: brandModel,
+                            child: textWidget(
+                              text: brandModel['modelName'] as String,
+                              style: getRegularStyle(),
+                            ),
+                          );
+                        },
                       );
                     },
-                  );
-                },
-                child: Container(
-                  constraints: BoxConstraints.tightFor(
-                    width: size.width.sp,
-                    height: 45.sp,
-                  ),
-                  margin: EdgeInsets.symmetric(vertical: 5.sp),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(4.r)),
-                    border: Border.all(color: grey3),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      left: 18,
-                      right: 10,
-                      top: 10,
-                      bottom: 10,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        textWidget(
-                          text: controller.selectedBrandModel.value,
-                          style: getRegularStyle(
-                              fontSize: controller.selectedBrandModel.value ==
-                                      'Select'
-                                  ? 10.sp
-                                  : 14,
-                              color: controller.selectedBrandModel.value ==
-                                      'Select'
-                                  ? borderColor
-                                  : black),
+                    child: Container(
+                      constraints: BoxConstraints.tightFor(
+                        width: size.width.sp,
+                        height: 45.sp,
+                      ),
+                      margin: EdgeInsets.symmetric(vertical: 5.sp),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(4.r)),
+                        border: Border.all(color: grey3),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          left: 18,
+                          right: 10,
+                          top: 10,
+                          bottom: 10,
                         ),
-                        const Icon(
-                          Iconsax.arrow_down_1,
-                          color: grey3,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            textWidget(
+                              text: controller.selectedBrandModel.value,
+                              style: getRegularStyle(
+                                  fontSize:
+                                      controller.selectedBrandModel.value ==
+                                              'Select'
+                                          ? 10.sp
+                                          : 14,
+                                  color: controller.selectedBrandModel.value ==
+                                          'Select'
+                                      ? borderColor
+                                      : black),
+                            ),
+                            const Icon(
+                              Iconsax.arrow_down_1,
+                              color: grey3,
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
+                  // if (controller.errorMessage?.value != null)
+                  //   Padding(
+                  //     padding: const EdgeInsets.all(8.0),
+                  //     child: Text(
+                  //       controller.errorMessage!.value,
+                  //       style: TextStyle(color: Colors.red),
+                  //     ),
+                  //   ),
+                ],
               ),
             SizedBox(
               height: 24.sp,
@@ -1381,7 +1402,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             textWidget(
-                              text: controller.selectedYearValue,
+                              text: controller.selectedYearValue!.value,
                               style: getRegularStyle(fontSize: 10.sp),
                             ),
                             const Icon(
@@ -1418,7 +1439,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                         //     "Selected brand name: ${controller.modelName?.value}");
 
                         // print("Slected brand code ${controller.brandCode1}");
-                        controller.selectedYearValue = selectedYear['yearName'];
+                        controller.selectedYearValue!.value = selectedYear['yearName'];
 
                         // selectedYear['yearName'] = controller.yearName?.value;
                         controller.yearCode.value = selectedYear['yearCode'];
@@ -1483,14 +1504,14 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             textWidget(
-                              text: controller.selectedYearValue,
+                              text: controller.selectedYearValue!.value,
                               style: getRegularStyle(
                                   fontSize:
-                                      controller.selectedYearValue == 'Select'
+                                      controller.selectedYearValue!.value == 'Select'
                                           ? 10.sp
                                           : 14,
                                   color:
-                                      controller.selectedYearValue == 'Select'
+                                      controller.selectedYearValue!.value == 'Select'
                                           ? borderColor
                                           : black),
                             ),
@@ -1532,69 +1553,69 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
             SizedBox(
               height: 24.sp,
             ),
-            dropdownWidget1(
-                context: context,
-                hintText: 'Select',
-                title: AppStrings.whatStateAreYouIn,
-                iconColor: grey3,
-                expectedVariable: 'field',
-                selectedValue: controller.isFromManageCars.isTrue ||
-                        controller.state.value.isNotEmpty
-                    ? controller.state.value
-                    : null,
-                values: (controller.states ?? [])
-                    .map((state) => state['stateName'] as String)
-                    .toList(),
-                onChange: (selectedState) {
-                  controller.state.value = selectedState;
-                  if (kDebugMode) {
-                    print('Selected value: $selectedState');
-                  }
-                  var selectedStateObject =
-                      (controller.states ?? []).firstWhere(
-                    (state) => state['stateName'] == selectedState,
-                    orElse: () => null,
-                  );
-                  if (selectedStateObject != null) {
-                    String stateCode =
-                        selectedStateObject['stateCode'] as String;
-                    // String cityCode =
-                    //     selectedStateObject['stateCode'] as String;
-                    controller.getCity(cityCode1: stateCode);
-                    controller.stateCode.value = stateCode;
-                    // controller.cityCode.value = cityCode;
-                  }
-                }),
-           
+            // dropdownWidget1(
+            //     context: context,
+            //     hintText: 'Select',
+            //     title: AppStrings.whatStateAreYouIn,
+            //     iconColor: grey3,
+            //     expectedVariable: 'field',
+            //     selectedValue: controller.isFromManageCars.isTrue ||
+            //             controller.state.value.isNotEmpty
+            //         ? controller.state.value
+            //         : null,
+            //     values: (controller.states ?? [])
+            //         .map((state) => state['stateName'] as String)
+            //         .toList(),
+            //     onChange: (selectedState) {
+            //       controller.state.value = selectedState;
+            //       if (kDebugMode) {
+            //         print('Selected value: $selectedState');
+            //       }
+            //       var selectedStateObject =
+            //           (controller.states ?? []).firstWhere(
+            //         (state) => state['stateName'] == selectedState,
+            //         orElse: () => null,
+            //       );
+            //       if (selectedStateObject != null) {
+            //         String stateCode =
+            //             selectedStateObject['stateCode'] as String;
+            //         // String cityCode =
+            //         //     selectedStateObject['stateCode'] as String;
+            //         controller.getCity(cityCode1: stateCode);
+            //         controller.stateCode.value = stateCode;
+            //         // controller.cityCode.value = cityCode;
+            //       }
+            //     }),
+
             SizedBox(
               height: 24.sp,
             ),
-            dropdownWidget1(
-                context: context,
-                hintText: 'Select',
-                title: AppStrings.whatCityAreYouIn,
-                iconColor: grey3,
-                expectedVariable: 'field',
-                selectedValue: controller.isFromManageCars.isTrue ||
-                        controller.city.value.isNotEmpty
-                    ? controller.city.value
-                    : null,
-                values: (controller.cities ?? [])
-                    .map((city) => city['cityName'] as String)
-                    .toList(),
-                onChange: (selectedCity) {
-                  controller.city.value = selectedCity;
-                  print('Selected value: $selectedCity');
-                  var selectedCityObject = (controller.cities ?? []).firstWhere(
-                    (city) => city['cityName'] == selectedCity,
-                    orElse: () => null,
-                  );
-                  if (selectedCityObject != null) {
-                    String cityCode = selectedCityObject['cityCode'] as String;
-                    controller.cityCode.value = cityCode;
-                  }
-                }),
-           
+            // dropdownWidget1(
+            //     context: context,
+            //     hintText: 'Select',
+            //     title: AppStrings.whatCityAreYouIn,
+            //     iconColor: grey3,
+            //     expectedVariable: 'field',
+            //     selectedValue: controller.isFromManageCars.isTrue ||
+            //             controller.city.value.isNotEmpty
+            //         ? controller.city.value
+            //         : null,
+            //     values: (controller.cities ?? [])
+            //         .map((city) => city['cityName'] as String)
+            //         .toList(),
+            //     onChange: (selectedCity) {
+            //       controller.city.value = selectedCity;
+            //       print('Selected value: $selectedCity');
+            //       var selectedCityObject = (controller.cities ?? []).firstWhere(
+            //         (city) => city['cityName'] == selectedCity,
+            //         orElse: () => null,
+            //       );
+            //       if (selectedCityObject != null) {
+            //         String cityCode = selectedCityObject['cityCode'] as String;
+            //         controller.cityCode.value = cityCode;
+            //       }
+            //     }),
+
             SizedBox(
               height: 50.sp,
             ),

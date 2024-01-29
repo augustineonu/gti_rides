@@ -44,7 +44,7 @@ class CarHistoryData {
     final dynamic startDate;
     final List<Brand>? brand;
     final List<BrandModel>? brandModel;
-    final List<dynamic>? modelYear;
+    final List<ModelYear>? modelYear;
     final List<State>? state;
     final List<City>? city;
     final List<Type>? type;
@@ -113,7 +113,7 @@ class CarHistoryData {
         startDate: json["startDate"],
         brand: json["brand"] == null ? [] : List<Brand>.from(json["brand"]!.map((x) => Brand.fromJson(x))),
         brandModel: json["brandModel"] == null ? [] : List<BrandModel>.from(json["brandModel"]!.map((x) => BrandModel.fromJson(x))),
-        modelYear: json["modelYear"] == null ? [] : List<dynamic>.from(json["modelYear"]!.map((x) => x)),
+        modelYear: json["modelYear"] == null ? [] : List<ModelYear>.from(json["modelYear"]!.map((x) => ModelYear.fromJson(x))),
         state: json["state"] == null ? [] : List<State>.from(json["state"]!.map((x) => State.fromJson(x))),
         city: json["city"] == null ? [] : List<City>.from(json["city"]!.map((x) => City.fromJson(x))),
         type: json["type"] == null ? [] : List<Type>.from(json["type"]!.map((x) => Type.fromJson(x))),
@@ -211,6 +211,29 @@ class BrandModel {
         "modelName": modelName,
     };
 }
+
+class ModelYear {
+  final dynamic yearCode;
+  final dynamic yearName;
+
+  ModelYear({this.yearCode, this.yearName});
+
+
+  factory ModelYear.fromRawJson(String str) => ModelYear.fromJson(json.decode(str));
+
+    String toRawJson() => json.encode(toJson());
+
+    factory ModelYear.fromJson(Map<String, dynamic> json) => ModelYear(
+        yearCode: json["yearCode"],
+        yearName: json["yearName"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "yearCode": yearCode,
+        "yearName": yearName,
+    };
+}
+
 
 class City {
     final String? cityCode;

@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/models/partner/car_history_model.dart';
 import 'package:gti_rides/screens/renter/home/search_result/car_selection_result/car_selection_result_controller.dart';
 import 'package:gti_rides/screens/renter/widgets/car_availability_tag.dart';
+import 'package:gti_rides/shared_widgets/generic_car_widgets.dart';
 import 'package:gti_rides/shared_widgets/sqaure_check_box_widget.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
@@ -29,11 +31,10 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    return Obx(
-      () => Scaffold(
-          backgroundColor: backgroundColor,
-          appBar: appBar(),
-          body: body(size, context)),
+    return Scaffold(
+      backgroundColor: backgroundColor,
+      appBar: appBar(),
+      body: body(size, context),
       // }
     );
   }
@@ -54,313 +55,460 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
     );
   }
 
-  Widget body(Size size, context) {
-    return SingleChildScrollView(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        headerCard(size),
-        const SizedBox(
-          height: 10,
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.sp),
-          child: InkWell(
-            onTap: controller.routeToViewCar,
-            child: SizedBox(
-              height: 200.sp,
-              child: Stack(
-                children: [
-                  PageView(
-                    physics: const ScrollPhysics(),
-                    // controller: cardPageController,
-                    controller: PageController(),
-                    onPageChanged: (int index) {
-                      // currentIndex.value = index;
-                    },
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(4.r)),
-                        child: Image.asset(
-                          "assets/images/car.png",
-                          fit: BoxFit.fitHeight,
-                        ),
-                      ),
-                      ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(4.r)),
-                        child: Image.asset(
-                          "assets/images/car.png",
-                          fit: BoxFit.fitHeight,
-                        ),
-                      ),
-                      ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(4.r)),
-                        child: Image.asset(
-                          "assets/images/car.png",
-                          fit: BoxFit.fitHeight,
-                        ),
-                      ),
-                    ],
-                  ),
-                  carAvailabilityTag(
-                    status: AppStrings.available,
-                    positionLeft: 7,
-                    positionTop: 7,
-                  ),
-                  Positioned(
-                    bottom: 10,
-                    left: 7,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 5, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: black,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(2.r),
-                        ),
-                      ),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 6, vertical: 4),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(2.r),
+  Widget body(Size size, BuildContext context) {
+    return controller.obx(
+      (state) {
+        var car = state?.first;
+        return Obx(() {
+          return SingleChildScrollView(
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              headerCard(size, car),
+              const SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.sp),
+                child: InkWell(
+                  onTap: controller.routeToViewCar,
+                  child: SizedBox(
+                    height: 200.sp,
+                    child: Stack(
+                      children: [
+                        PageView(
+                          physics: const ScrollPhysics(),
+                          // controller: cardPageController,
+                          controller: PageController(),
+                          onPageChanged: (int index) {
+                            // currentIndex.value = index;
+                          },
+                          scrollDirection: Axis.horizontal,
+                          children: [
+                            ClipRRect(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(4.r)),
+                              child: Image.asset(
+                                "assets/images/car.png",
+                                fit: BoxFit.fitHeight,
+                              ),
                             ),
-                            border: Border.all(
-                              color: white,
-                            )),
-                        child: Center(
-                          child: textWidget(
-                            text: '1 of 10',
-                            style: getLightStyle(fontSize: 10.sp, color: white)
-                                .copyWith(fontWeight: FontWeight.w300),
+                            ClipRRect(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(4.r)),
+                              child: Image.asset(
+                                "assets/images/car.png",
+                                fit: BoxFit.fitHeight,
+                              ),
+                            ),
+                            ClipRRect(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(4.r)),
+                              child: Image.asset(
+                                "assets/images/car.png",
+                                fit: BoxFit.fitHeight,
+                              ),
+                            ),
+                          ],
+                        ),
+                        carAvailabilityTag(
+                          status: car?.availability == 'available'
+                              ? AppStrings.available
+                              : AppStrings.unavailable,
+                          positionLeft: 7,
+                          positionTop: 7,
+                        ),
+                        Positioned(
+                          bottom: 10,
+                          left: 7,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 5, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: black,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(2.r),
+                              ),
+                            ),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 6, vertical: 4),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(2.r),
+                                  ),
+                                  border: Border.all(
+                                    color: white,
+                                  )),
+                              child: Center(
+                                child: textWidget(
+                                  text: '1 of 10',
+                                  style: getLightStyle(
+                                          fontSize: 10.sp, color: white)
+                                      .copyWith(fontWeight: FontWeight.w300),
+                                ),
+                              ),
+                            ),
                           ),
                         ),
+                        Positioned(
+                            top: 7,
+                            right: 7,
+                            child: Row(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.all(10.sp),
+                                  decoration: BoxDecoration(
+                                      color: primaryColorDark.withOpacity(0.8),
+                                      shape: BoxShape.circle),
+                                  // child: SvgPicture.asset(ImageAssets.share),
+                                  child: Icon(
+                                    Remix.share_line,
+                                    color: primaryColor,
+                                    size: 18.sp,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 6,
+                                ),
+                                Container(
+                                  padding: EdgeInsets.all(10.sp),
+                                  decoration: BoxDecoration(
+                                      color: primaryColorDark.withOpacity(0.8),
+                                      shape: BoxShape.circle),
+                                  // child: SvgPicture.asset(ImageAssets.share),
+                                  child: Icon(
+                                    Remix.heart_3_line,
+                                    color: primaryColor,
+                                    size: 18.sp,
+                                  ),
+                                ),
+                              ],
+                            )),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: tripDate(
+                  startDate: '',
+                  endDate: '',
+                  trailling: InkWell(
+                    onTap: (){},
+                    child: SizedBox(
+                      height: 30,
+                      width: 60,
+                      child: Center(
+                        child: textWidget(
+                          text: AppStrings.change,
+                          style: getMediumStyle(fontSize: 12.sp, color: primaryColor)),
                       ),
                     ),
                   ),
-                  Positioned(
-                      top: 7,
-                      right: 7,
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(10.sp),
-                            decoration: BoxDecoration(
-                                color: primaryColorDark.withOpacity(0.8),
-                                shape: BoxShape.circle),
-                            // child: SvgPicture.asset(ImageAssets.share),
-                            child: Icon(
-                              Remix.share_line,
-                              color: primaryColor,
-                              size: 18.sp,
-                            ),
+                ),
+              ),
+              divider(color: borderColor),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: carBasics(
+                  carType: car?.type?[0].typeName ?? '',
+                  carSeat: car?.seat?[0].seatName ?? '',
+                ),
+              ),
+              divider(color: borderColor),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: carFetures(children: [
+                  for (Feature feature in car?.feature ?? [])
+                    chipWidget(title: feature.featuresName ?? '')
+                ]),
+              ),
+              divider(color: borderColor),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: transmission(
+                    transmission: car?.transmission?[0].transmissionName ?? ''),
+              ),
+              estimatedTotalAndContinue(),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: aboutCar(aboutCar: car?.about ?? ''),
+              ),
+              divider(color: borderColor),
+              ratingsAndReviews(size),
+              Column(
+                children: [
+                  Padding(
+                    padding:
+                        EdgeInsets.only(left: 20.sp, right: 10.sp, top: 10.sp),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: 230.sp,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              textWidget(
+                                  text: AppStrings.interState,
+                                  style: getMediumStyle(color: grey5)),
+                              textWidget(
+                                  text: AppStrings.goBeyondStateExtra,
+                                  textOverflow: TextOverflow.visible,
+                                  style: getLightStyle(
+                                      fontSize: 10.sp, color: grey2)),
+                            ],
                           ),
-                          const SizedBox(
-                            width: 6,
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(10.sp),
-                            decoration: BoxDecoration(
-                                color: primaryColorDark.withOpacity(0.8),
-                                shape: BoxShape.circle),
-                            // child: SvgPicture.asset(ImageAssets.share),
-                            child: Icon(
-                              Remix.heart_3_line,
-                              color: primaryColor,
-                              size: 18.sp,
-                            ),
-                          ),
-                        ],
-                      )),
+                        ),
+                        switchWidget(context,
+                            value: controller.selectedInterState.value,
+                            activeTrackColor: borderColor,
+                            onChanged: (value) =>
+                                controller.onSelectInterState(value)),
+                      ],
+                    ),
+                  ),
+                  interStateWidget(),
                 ],
               ),
-            ),
-          ),
-        ),
-
-        tripDate(),
-        divider(color: borderColor),
-        carBasics(),
-        divider(color: borderColor),
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 14.sp, horizontal: 20.sp),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              textWidget(
-                  text: AppStrings.carFeatureCaps,
-                  style: getMediumStyle(fontSize: 12.sp, color: grey2)
-                      .copyWith(fontWeight: FontWeight.w500)),
-              SizedBox(
-                height: 10.sp,
-              ),
-              Wrap(
-                crossAxisAlignment: WrapCrossAlignment.center,
-                alignment: WrapAlignment.spaceBetween,
-                // direction: Axis.horizontal,
-                runSpacing: 10,
-                spacing: 14,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  carFeatureBullet(text: '5 Seats'),
-                  carFeatureBullet(text: '4 Doors'),
-                  carFeatureBullet(text: AppStrings.appleCarPlay),
-                  carFeatureBullet(text: AppStrings.auxInput),
-                  carFeatureBullet(text: AppStrings.usbInput),
-                  carFeatureBullet(text: AppStrings.androidAuto),
-                ],
-              ),
-            ],
-          ),
-        ),
-        divider(color: borderColor),
-        transmission(),
-        estimatedTotalAndContinue(),
-        aboutCar(),
-        divider(color: borderColor),
-        ratingsAndReviews(size),
-
-        Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(left: 20.sp, right: 10.sp, top: 10.sp),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    width: 230.sp,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 15),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         textWidget(
-                            text: AppStrings.interState,
-                            style: getMediumStyle(color: grey5)),
-                        textWidget(
-                            text: AppStrings.goBeyondStateExtra,
-                            textOverflow: TextOverflow.visible,
-                            style:
-                                getLightStyle(fontSize: 10.sp, color: grey2)),
+                            text: AppStrings.driveOptionCaps,
+                            style: getBoldStyle(fontSize: 12.sp, color: grey2)
+                                .copyWith(fontWeight: FontWeight.w700)),
+                        Container(
+                          padding: const EdgeInsets.symmetric(vertical: 2),
+                          decoration: const BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(width: 1, color: borderColor),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                children: [
+                                  GtiButton(
+                                    text: AppStrings.chauffeur,
+                                    style: getRegularStyle(
+                                        color:
+                                            controller.currentIndex.value == 0
+                                                ? primaryColor
+                                                : grey1),
+                                    width: 150.sp,
+                                    height: 33.sp,
+                                    color: backgroundColor,
+                                    onTap: () {
+                                      controller.onPageChanged(0);
+                                    },
+                                  ),
+                                  Container(
+                                    height: 2,
+                                    width: 150.sp,
+                                    color: controller.currentIndex.value == 0
+                                        ? primaryColor
+                                        : Colors.transparent,
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  GtiButton(
+                                    text: AppStrings.selfDrive,
+                                    style: getRegularStyle(
+                                        color:
+                                            controller.currentIndex.value == 1
+                                                ? primaryColor
+                                                : grey1),
+                                    width: 150.sp,
+                                    height: 33.sp,
+                                    color: backgroundColor,
+                                    onTap: () {
+                                      controller.onPageChanged(1);
+                                    },
+                                  ),
+                                  Container(
+                                    height: 2,
+                                    width: 150.sp,
+                                    color: controller.currentIndex.value == 1
+                                        ? primaryColor
+                                        : Colors.transparent,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                  switchWidget(context,
-                      value: controller.selectedInterState.value,
-                      activeTrackColor: borderColor,
-                      onChanged: (value) =>
-                          controller.onSelectInterState(value)),
+                  // pages
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.5.sp,
+                    child: PageView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      controller: controller.pageController,
+                      onPageChanged: (int page) {
+                        controller.onPageChanged(page);
+                      },
+                      children: [
+                        /// chauffeur option
+                        chauffeurOptionPage(context),
+                        ///// cself drive option
+                        selfDriveOption(context),
+                      ],
+                    ),
+                  ),
                 ],
               ),
-            ),
-            interStateWidget(),
-          ],
+              SizedBox(
+                height: size.height * 0.02,
+              ),
+              continueButton(),
+              textWidget(
+                  text: controller.testString.value, style: getMediumStyle()),
+              SizedBox(
+                height: size.height * 0.02,
+              ),
+            ],
+          ));
+        });
+      },
+      onEmpty: Padding(
+        padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
+        child: Center(
+            child: textWidget(
+                text: AppStrings.noListedCarsYet, style: getMediumStyle())),
+      ),
+      onError: (e) => Padding(
+        padding: EdgeInsets.symmetric(
+            vertical: context.height * 0.1, horizontal: 20),
+        child: Center(
+          child: Text(
+            "$e",
+            textAlign: TextAlign.center,
+          ),
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      ),
+      onLoading: Padding(
+        padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
+        child: Center(child: centerLoadingIcon()),
+      ),
+    );
+  }
+
+  Padding headerCard(Size size, CarHistoryData? car) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20.sp),
+      child: Stack(
+        children: [
+          Container(
+            width: size.width,
+            padding: EdgeInsets.symmetric(vertical: 16.sp, horizontal: 50.sp),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(4.r),
+                ),
+                color: primaryColor),
+            child: SizedBox(
+              width: 80.sp,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   textWidget(
-                      text: AppStrings.driveOptionCaps,
-                      style: getBoldStyle(fontSize: 12.sp, color: grey2)
-                          .copyWith(fontWeight: FontWeight.w700)),
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 2),
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(width: 1, color: borderColor),
+                    text:
+                        "${car?.modelYear?[0].yearName} ${car?.brand?[0].brandName} ${car?.brandModel?[0].modelName}",
+                    style: getBoldStyle().copyWith(
+                      fontSize: 20.sp,
+                      color: white,
+                      fontFamily: 'Neue',
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8.sp,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(ImageAssets.thumbsUpPrimaryColor),
+                      SizedBox(
+                        width: 5.sp,
                       ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          children: [
-                            GtiButton(
-                              text: AppStrings.chauffeur,
-                              style: getRegularStyle(
-                                  color: controller.currentIndex.value == 0
-                                      ? primaryColor
-                                      : grey1),
-                              width: 150.sp,
-                              height: 33.sp,
-                              color: backgroundColor,
-                              onTap: () {
-                                controller.onPageChanged(0);
-                              },
+                      RichText(
+                        text: TextSpan(
+                            text: '${car?.percentage.toString()}%',
+                            style: getMediumStyle(
+                              fontSize: 12.sp,
                             ),
-                            Container(
-                              height: 2,
-                              width: 150.sp,
-                              color: controller.currentIndex.value == 0
-                                  ? primaryColor
-                                  : Colors.transparent,
+                            children: <TextSpan>[
+                              TextSpan(
+                                  text:
+                                      ' (${car?.tripsCount.toString()} trips)',
+                                  style: getLightStyle(
+                                    fontSize: 12.sp,
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      // navigate to desired screen
+                                    })
+                            ]),
+                      ),
+                      SizedBox(
+                        width: 5.sp,
+                      ),
+                      Row(
+                        children: [
+                          SvgPicture.asset(ImageAssets.tag),
+                          SvgPicture.asset(ImageAssets.naira),
+                          SizedBox(
+                            width: 2.sp,
+                          ),
+                          textWidget(
+                            text: '${car?.pricePerDay.toString()}/day',
+                            style: getMediumStyle(fontSize: 12.sp).copyWith(
+                              fontFamily: 'Neue',
                             ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            GtiButton(
-                              text: AppStrings.selfDrive,
-                              style: getRegularStyle(
-                                  color: controller.currentIndex.value == 1
-                                      ? primaryColor
-                                      : grey1),
-                              width: 150.sp,
-                              height: 33.sp,
-                              color: backgroundColor,
-                              onTap: () {
-                                controller.onPageChanged(1);
-                              },
-                            ),
-                            Container(
-                              height: 2,
-                              width: 150.sp,
-                              color: controller.currentIndex.value == 1
-                                  ? primaryColor
-                                  : Colors.transparent,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
-            // pages
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.5.sp,
-              child: PageView(
-                physics: const NeverScrollableScrollPhysics(),
-                controller: controller.pageController,
-                onPageChanged: (int page) {
-                  controller.onPageChanged(page);
-                },
-                children: [
-                  /// chauffeur option
-                  chauffeurOptionPage(context),
-                  ///// cself drive option
-                  selfDriveOption(context),
-                ],
-              ),
+          ),
+          Positioned(
+            left: 0,
+            top: 0,
+            bottom: 0,
+            child: SvgPicture.asset(
+              ImageAssets.carResultBg,
+              fit: BoxFit.fitHeight,
             ),
-          ],
-        ),
-
-        SizedBox(
-          height: size.height * 0.02,
-        ),
-        continueButton(),
-         SizedBox(
-          height: size.height * 0.02,
-        ),
-      ],
-    ));
+          ),
+          Positioned(
+            right: 0,
+            top: 0,
+            bottom: 0,
+            child: SvgPicture.asset(
+              ImageAssets.carResultBg1,
+              fit: BoxFit.fitHeight,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget selfDriveOption(context) {
@@ -729,29 +877,7 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
     );
   }
 
-  Widget aboutCar() {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 10.sp, horizontal: 20.sp),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          textWidget(
-              text: AppStrings.aboutCarCaps,
-              style: getMediumStyle(fontSize: 12.sp, color: grey2)
-                  .copyWith(fontWeight: FontWeight.w500)),
-          SizedBox(
-            height: 10.sp,
-          ),
-          textWidget(
-              text:
-                  "012 Kia Sportage are powered by a 2.4-liter inline-4-cylinder engine that produces 176 hp and 168 pound-feet of torque. A six-speed manual is the only transmission offered on base models, while all other versions come with a six-speed automatic with manual shift feature.",
-              textOverflow: TextOverflow.visible,
-              style: getMediumStyle(fontSize: 10.sp, color: grey2)
-                  .copyWith(fontWeight: FontWeight.w400)),
-        ],
-      ),
-    );
-  }
+ 
 
   Widget estimatedTotalAndContinue() {
     return Container(
@@ -818,56 +944,7 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
     );
   }
 
-  Widget transmission() {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 10.sp, horizontal: 20.sp),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          textWidget(
-              text: AppStrings.transmission,
-              style: getMediumStyle(fontSize: 12.sp, color: grey2)
-                  .copyWith(fontWeight: FontWeight.w500)),
-          SizedBox(
-            height: 10.sp,
-          ),
-          carFeatureBullet(text: AppStrings.automatic),
-        ],
-      ),
-    );
-  }
-
-  Widget carBasics() {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 14.sp, horizontal: 20.sp),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          textWidget(
-              text: AppStrings.carBasicsCaps,
-              style: getMediumStyle(fontSize: 12.sp, color: grey2)
-                  .copyWith(fontWeight: FontWeight.w500)),
-          SizedBox(
-            height: 10.sp,
-          ),
-          Row(
-            children: [
-              carFeatureBullet(text: '5 Seats'),
-              const SizedBox(
-                width: 10,
-              ),
-              carFeatureBullet(text: '4 Doors'),
-              const SizedBox(
-                width: 10,
-              ),
-              carFeatureBullet(text: '31 MPG'),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
+  
   Widget carFeatureBullet({required String text}) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -883,147 +960,7 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
     );
   }
 
-  Padding tripDate() {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 20.sp, horizontal: 20.sp),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          textWidget(
-              text: AppStrings.tripDateCaps,
-              style: getMediumStyle(fontSize: 12.sp, color: grey2)
-                  .copyWith(fontWeight: FontWeight.w500)),
-          SizedBox(
-            height: 10.sp,
-          ),
-          Row(
-            children: [
-              SvgPicture.asset(ImageAssets.calendar),
-              SizedBox(
-                width: 10.sp,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  textWidget(
-                      text: 'Wed 1 Nov, 9:00am',
-                      style: getMediumStyle(fontSize: 12.sp, color: grey3)),
-                  textWidget(
-                      text: 'Wed 1 Nov, 9:00am',
-                      style: getMediumStyle(fontSize: 12.sp, color: grey3)),
-                ],
-              ),
-              const Spacer(),
-              textWidget(
-                  text: AppStrings.change,
-                  style: getMediumStyle(fontSize: 12.sp, color: primaryColor)),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget headerCard(Size size) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.sp),
-      child: Stack(
-        children: [
-          Container(
-            width: size.width,
-            padding: EdgeInsets.symmetric(vertical: 16.sp, horizontal: 50.sp),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(4.r),
-                ),
-                color: primaryColor),
-            child: SizedBox(
-              width: 80.sp,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  textWidget(
-                    text: '2012 KIA Sportage',
-                    style: getBoldStyle().copyWith(
-                      fontSize: 20.sp,
-                      color: white,
-                      fontFamily: 'Neue',
-                    ),
-                  ),
-                  SizedBox(
-                    height: 8.sp,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(ImageAssets.thumbsUpPrimaryColor),
-                      SizedBox(
-                        width: 5.sp,
-                      ),
-                      RichText(
-                        text: TextSpan(
-                            text: '97%',
-                            style: getMediumStyle(
-                              fontSize: 12.sp,
-                            ),
-                            children: <TextSpan>[
-                              TextSpan(
-                                  text: ' (66 trips)',
-                                  style: getLightStyle(
-                                    fontSize: 12.sp,
-                                  ),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      // navigate to desired screen
-                                    })
-                            ]),
-                      ),
-                      SizedBox(
-                        width: 5.sp,
-                      ),
-                      Row(
-                        children: [
-                          SvgPicture.asset(ImageAssets.tag),
-                          SvgPicture.asset(ImageAssets.naira),
-                          SizedBox(
-                            width: 2.sp,
-                          ),
-                          textWidget(
-                            text: '100,000/day',
-                            style: getMediumStyle(fontSize: 12.sp).copyWith(
-                              fontFamily: 'Neue',
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            left: 0,
-            top: 0,
-            bottom: 0,
-            child: SvgPicture.asset(
-              ImageAssets.carResultBg,
-              fit: BoxFit.fitHeight,
-            ),
-          ),
-          Positioned(
-            right: 0,
-            top: 0,
-            bottom: 0,
-            child: SvgPicture.asset(
-              ImageAssets.carResultBg1,
-              fit: BoxFit.fitHeight,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+ 
 
   Widget continueButton() {
     return controller.isLoading.isTrue

@@ -9,6 +9,7 @@ import 'package:gti_rides/models/user_model.dart';
 
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/logger.dart';
+import 'package:gti_rides/services/partner_service.dart';
 import 'package:gti_rides/services/renter_service.dart';
 import 'package:gti_rides/services/token_service.dart';
 import 'package:gti_rides/services/user_service.dart';
@@ -18,7 +19,8 @@ import 'package:gti_rides/utils/utils.dart';
 
 import '../../../services/route_service.dart';
 
-class CarRenterHomeController extends GetxController {
+class CarRenterHomeController extends GetxController
+    with StateMixin<List<RecentCar>> {
   Logger logger = Logger('CarRenterHomeController');
   Rx<UserModel> user = UserModel().obs;
 
@@ -40,11 +42,12 @@ class CarRenterHomeController extends GetxController {
     init();
   }
 
-  void init() {
+  void init() async {
     logger.log('CarRenterHomeController initialized');
     user = userService.user;
 
     logger.log("USER: ${user.value.toJson()}");
+    await getRecentCars();
   }
 
   onPageChanged(int index) {}
@@ -103,10 +106,11 @@ class CarRenterHomeController extends GetxController {
   void routeToSearchCity() => routeService.gotoRoute(AppLinks.searchCity);
   void routeToCarOwnerLanding() =>
       routeService.offAllNamed(AppLinks.carOwnerLanding);
-  void routeToCarSelectionResult() =>
-      routeService.gotoRoute(AppLinks.carSelectionResult);
+  void routeToCarSelectionResult({Object? arguments}) =>
+      routeService.gotoRoute(AppLinks.carSelectionResult,
+      arguments: arguments);
 
-void launchWebsite() => openUrl(AppStrings.websiteUrl);
+  void launchWebsite() => openUrl(AppStrings.websiteUrl);
 
   Future<void> switchProfileToOwner() async {
     isLoading.value = true;
@@ -126,6 +130,38 @@ void launchWebsite() => openUrl(AppStrings.websiteUrl);
       showErrorSnackbar(message: e.toString());
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  Future<void> getRecentCars() async {
+    change(<RecentCar>[].obs, status: RxStatus.loading());
+    try {
+      final response = await renterService.getRecentCars();
+      if (response.status == 'success' || response.status_code == 200) {
+        logger.log("gotten cars ${response.data}");
+
+        if (response.data == null || response.data!.isEmpty) {
+          // If the list is empty
+          change(<RecentCar>[].obs, status: RxStatus.empty());
+          [] = response.data!;
+          // logger.log("cars $cars");
+        } else {
+          // If the list is not empty
+          List<RecentCar> recentCar = List<RecentCar>.from(
+            response.data!.map((car) => RecentCar.fromJson(car)),
+          );
+
+          logger.log("recnt:: ${recentCar[0].percentageRate.toString()}");
+
+          change(recentCar, status: RxStatus.success());
+          update();
+        }
+      } else {
+        logger.log("unable to get cars ${response.data}");
+      }
+    } catch (exception) {
+      logger.log("error  $exception");
+      change(<RecentCar>[].obs, status: RxStatus.error(exception.toString()));
     }
   }
 

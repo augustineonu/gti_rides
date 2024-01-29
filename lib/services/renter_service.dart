@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:gti_rides/models/api_response_model.dart';
+import 'package:gti_rides/models/list_response_model.dart';
 import 'package:gti_rides/models/user_model.dart';
 import 'package:gti_rides/services/api_service.dart';
 import 'package:gti_rides/services/logger.dart';
@@ -53,4 +56,35 @@ class RenterService {
   // Agent? getCurrentAgentModel() {
   //   return agentModel.value;
   // }
+
+   Future<ListResponseModel> getRecentCars() async {
+    try {
+      final result = await apiService.getRequest(
+        '/user/renter/car/getRecentCars?skip=0&limit=10',
+      );
+      logger.log("result $result");
+
+      final decodedResult = json.decode(result);
+
+      return ListResponseModel.fromJson(decodedResult);
+    } catch (err) {
+      rethrow;
+    }
+  }
+
+     Future<ListResponseModel> getOneCar({required String carId}) async {
+    try {
+      final result = await apiService.getRequest(
+        '/user/renter/car/getOneCar?carID=$carId',
+      );
+      logger.log("result $result");
+
+      final decodedResult = json.decode(result);
+
+      return ListResponseModel.fromJson(decodedResult);
+    } catch (err) {
+      rethrow;
+    }
+  }
+
 }

@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/screens/Partner/home/manage_vehicle/car_history/car_history_controller.dart';
+import 'package:gti_rides/shared_widgets/generic_car_widgets.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/sqaure_check_box_widget.dart';
@@ -66,7 +67,35 @@ class CarHistoryScreen extends StatelessWidget {
                     divider(color: borderColor),
                     tripDate(
                         startDate: state[0]['startDate'] ?? '',
-                        endDate: state[0]['endDate'] ?? ''),
+                        endDate: state[0]['endDate'] ?? '',
+                        trailling:  InkWell(
+                onTap: () async {
+                  controller.routeToQuickEdit();
+                // var result = await Get.toNamed(AppLinks.quickEdit, arguments: {
+                //     "startDate": controller.startDate.value,
+                //     "endDate": controller.endDate.value,
+                //     "pricePerDay": controller.pricePerDay.value,
+                //     "brandModelName": controller.brandModelName.value,
+                //     "photoUrl": controller.photoUrl.value,
+                //     "carID": controller.carID.value,
+                //   });
+                  // if (result != null) {
+                  //   Get.put(CarHistoryController());
+                  // }
+                },
+                child: Row(
+                  children: [
+                    textWidget(
+                        text: AppStrings.quickEdit,
+                        style: getMediumStyle(
+                            fontSize: 12.sp, color: primaryColor)),
+                    SizedBox(
+                      width: 6.sp,
+                    ),
+                    SvgPicture.asset(ImageAssets.pencilEdit),
+                  ],
+                ),
+              ),),
                     divider(color: borderColor),
                     carBasics(
                       carType: state[0]['type'].isNotEmpty == true
@@ -123,52 +152,6 @@ class CarHistoryScreen extends StatelessWidget {
     );
   }
 
-  Widget carFetures({List<Widget> children = const <Widget>[]}) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 14.sp, horizontal: 0.sp),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              textWidget(
-                  text: AppStrings.carFeatureCaps,
-                  style: getMediumStyle(fontSize: 12.sp, color: grey2)
-                      .copyWith(fontWeight: FontWeight.w500)),
-            ],
-          ),
-          SizedBox(
-            height: 10.sp,
-          ),
-          Wrap(
-            crossAxisAlignment: WrapCrossAlignment.start,
-            alignment: WrapAlignment.spaceBetween,
-            direction: Axis.horizontal,
-            runSpacing: 10,
-            spacing: 0,
-            children: children,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget chipWidget({required String title}) {
-    return Chip(
-      labelPadding: EdgeInsets.all(4),
-      side: BorderSide.none,
-      color: const MaterialStatePropertyAll(backgroundColor),
-      backgroundColor: Colors.transparent,
-      surfaceTintColor: Colors.transparent,
-      label: textWidget(
-          text: title, style: getRegularStyle(fontSize: 10.sp, color: grey2)),
-      avatar: sqaureCheckBox(
-          padingWidth: 2.sp,
-          marginRight: 2.sp,
-          border: Border.all(color: primaryColor, width: 1.8),
-          color: primaryColor),
-    );
-  }
 
   Widget earningsAndAllTrips({required String totalEarnings}) {
     return Padding(
@@ -328,178 +311,13 @@ class CarHistoryScreen extends StatelessWidget {
     );
   }
 
-  Widget aboutCar({required String aboutCar}) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 10.sp),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              textWidget(
-                  text: AppStrings.aboutCarCaps,
-                  style: getMediumStyle(fontSize: 12.sp, color: grey2)
-                      .copyWith(fontWeight: FontWeight.w500)),
-            ],
-          ),
-          SizedBox(
-            height: 10.sp,
-          ),
-          textWidget(
-              text: aboutCar,
-              textOverflow: TextOverflow.visible,
-              style: getMediumStyle(fontSize: 10.sp, color: grey2)
-                  .copyWith(fontWeight: FontWeight.w400)),
-        ],
-      ),
-    );
-  }
+ 
 
-  Widget transmission({required String transmission}) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        vertical: 10.sp,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          textWidget(
-              text: AppStrings.transmission,
-              style: getMediumStyle(fontSize: 12.sp, color: grey2)
-                  .copyWith(fontWeight: FontWeight.w500)),
-          SizedBox(
-            height: 10.sp,
-          ),
-          carFeatureBullet(text: transmission),
-        ],
-      ),
-    );
-  }
+ 
 
-  Widget carBasics({
-    required String carType,
-    required String carSeat,
-  }) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        vertical: 12.sp,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          textWidget(
-              text: AppStrings.carBasicsCaps,
-              style: getMediumStyle(fontSize: 12.sp, color: grey2)
-                  .copyWith(fontWeight: FontWeight.w500)),
-          SizedBox(
-            height: 10.sp,
-          ),
-          Row(
-            children: [
-              carFeatureBullet(text: carType),
-              // const SizedBox(
-              //   width: 10,
-              // ),
-              // carFeatureBullet(text: '4 Doors'),
-              const SizedBox(
-                width: 10,
-              ),
-              carFeatureBullet(text: carSeat),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
 
-  Widget carFeatureBullet({required String text}) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        sqaureCheckBox(
-            padingWidth: 2.sp,
-            marginRight: 4.sp,
-            border: Border.all(color: primaryColor, width: 1.6),
-            color: primaryColor),
-        textWidget(
-            text: text, style: getRegularStyle(fontSize: 10.sp, color: grey2)),
-      ],
-    );
-  }
 
-  Widget tripDate({
-    required String startDate,
-    required String endDate,
-  }) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        vertical: 12.sp,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          textWidget(
-              text: AppStrings.availabilityDate,
-              style: getMediumStyle(fontSize: 12.sp, color: grey2)
-                  .copyWith(fontWeight: FontWeight.w500)),
-          SizedBox(
-            height: 10.sp,
-          ),
-          Row(
-            children: [
-              SvgPicture.asset(ImageAssets.calendar),
-              SizedBox(
-                width: 10.sp,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  textWidget(
-                      text: startDate,
-                      style: getMediumStyle(fontSize: 12.sp, color: grey3)),
-                  SizedBox(
-                    height: 5.sp,
-                  ),
-                  textWidget(
-                      text: endDate,
-                      style: getMediumStyle(fontSize: 12.sp, color: grey3)),
-                ],
-              ),
-              const Spacer(),
-              InkWell(
-                onTap: () async {
-                  controller.routeToQuickEdit();
-                // var result = await Get.toNamed(AppLinks.quickEdit, arguments: {
-                //     "startDate": controller.startDate.value,
-                //     "endDate": controller.endDate.value,
-                //     "pricePerDay": controller.pricePerDay.value,
-                //     "brandModelName": controller.brandModelName.value,
-                //     "photoUrl": controller.photoUrl.value,
-                //     "carID": controller.carID.value,
-                //   });
-                  // if (result != null) {
-                  //   Get.put(CarHistoryController());
-                  // }
-                },
-                child: Row(
-                  children: [
-                    textWidget(
-                        text: AppStrings.quickEdit,
-                        style: getMediumStyle(
-                            fontSize: 12.sp, color: primaryColor)),
-                    SizedBox(
-                      width: 6.sp,
-                    ),
-                    SvgPicture.asset(ImageAssets.pencilEdit),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
+ 
 
   Widget continueButton() {
     return controller.isLoading.isTrue
