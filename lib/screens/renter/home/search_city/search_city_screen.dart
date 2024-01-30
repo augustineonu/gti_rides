@@ -1,4 +1,7 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -37,6 +40,7 @@ class SearchCityScreen extends GetView<SearchCityController> {
     return gtiAppBar(
         leading: null,
         hasLeading: false,
+        toolbarHeight: 65.sp,
         title: NormalInputTextWidget(
           controller: controller.searchCategoryController,
           hintText: "What City are you in?",
@@ -59,7 +63,15 @@ class SearchCityScreen extends GetView<SearchCityController> {
           title: '',
           // onTap: () => controller.routeToAddressInput(),
           enabledBorder: InputBorder.none,
-          focusedBorder: InputBorder.none,
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: primaryColor,
+              width: 1.0.w,
+            ),
+            borderRadius: BorderRadius.all(
+              Radius.circular(5.0.r),
+            ),
+          ),
           border: InputBorder.none,
         ),
         titleColor: iconColor(),
@@ -67,7 +79,7 @@ class SearchCityScreen extends GetView<SearchCityController> {
           InkWell(
             onTap: controller.goBack,
             child: Padding(
-              padding: const EdgeInsets.only(right: 16, top: 10),
+              padding: const EdgeInsets.only(right: 16, top: 15),
               child: textWidget(
                   text: AppStrings.cancel,
                   style: getRegularStyle(color: primaryColor)
@@ -78,126 +90,134 @@ class SearchCityScreen extends GetView<SearchCityController> {
   }
 
   Widget body(size, context) {
-    return SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 20.0.sp, vertical: 24.sp),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ListView.separated(
-              physics: const ScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: controller.filteredCity.isEmpty
-                  ? controller.cities.length
-                  : controller.filteredCity.length,
-              itemBuilder: (context, index) {
-                var page = controller.filteredCity.isEmpty
-                    ? controller.cities[index]
-                    : controller.filteredCity[index];
-                return InkWell(
-                  onTap: () {
-                    Get.bottomSheet(
-                      SizedBox(
-                        height: 310.sp,
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              left: 20.sp,
-                              right: 20.sp,
-                              top: 0.sp,
-                              bottom: 40.sp),
-                          child: SingleChildScrollView(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const SizedBox(height: 20),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    SvgPicture.asset(ImageAssets.dismiss),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 10.sp,
-                                ),
-                                NormalInputTextWidget(
-                                  title: AppStrings.location,
-                                  expectedVariable: "field",
-                                  hintText: "Surulere, Lagos",
-                                  controller: controller.locationController,
-                                ),
-                                SizedBox(
-                                  height: 10.sp,
-                                ),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: NormalInputTextWidget(
-                                        title: "From",
-                                        expectedVariable: "field",
-                                        hintText: "1 Nov, 9:00am",
-                                        controller: controller.fromController,
-                                        onTap: () =>
-                                            controller.routeToSelecteDate(),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 20.sp,
-                                    ),
-                                    Expanded(
-                                      child: NormalInputTextWidget(
-                                        title: "To",
-                                        expectedVariable: "field",
-                                        hintText: "5 Nov, 9:00am",
-                                        controller: controller.toController,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 20.sp,
-                                ),
-                                GtiButton(
-                                  text: AppStrings.search,
-                                  onTap: () => controller.routeToSearchResult(),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      backgroundColor: Colors.white,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(6.r),
-                            topRight: Radius.circular(6.r)),
-                      ),
-                    );
-                  },
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(ImageAssets.location),
-                      SizedBox(width: 20.w),
-                      textWidget(
-                        text: page,
-                        style: getMediumStyle(fontSize: 14.sp, color: grey3)
-                            .copyWith(fontWeight: FontWeight.w400),
-                      ),
-                    ],
-                  ),
-                ); // Display the widgets from filteredPages
-              },
-              separatorBuilder: (context, _) => SizedBox(height: 24.h),
-            ),
+    return controller.isFetchingStates.value
+        ? centerLoadingIcon()
+        : ListView.separated(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            physics: const ScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: controller.filteredStates.isEmpty
+                ? controller.states.length
+                : controller.filteredStates.length,
+            itemBuilder: (context, index) {
+              var page = controller.filteredStates.isEmpty
+                  ? controller.states[index].stateName
+                  : controller.filteredStates[index].stateName;
+              return InkWell(
+                onTap: () async {
+                  controller.selectedState.value = page!;
+                  controller.locationController.value.text =
+                      controller.selectedState.value;
 
-            SizedBox(
-              height: size.height * 0.02,
-            ),
-            // continueButton(),
-          ],
-        ));
+                  print(
+                      "selected:: ${controller.locationController.value.text} ");
+                },
+                child: Row(
+                  children: [
+                    SvgPicture.asset(ImageAssets.location),
+                    SizedBox(width: 20.w),
+                    textWidget(
+                      text: page,
+                      style: getMediumStyle(fontSize: 14.sp, color: grey3)
+                          .copyWith(fontWeight: FontWeight.w400),
+                    ),
+                  ],
+                ),
+              ); // Display the widgets from filteredPages
+            },
+            separatorBuilder: (context, _) => SizedBox(height: 24.h),
+          );
   }
+
+  //  await Get.bottomSheet(
+  //                   SizedBox(
+  //                     height: 310.sp,
+  //                     child: Padding(
+  //                       padding: EdgeInsets.only(
+  //                           left: 20.sp,
+  //                           right: 20.sp,
+  //                           top: 0.sp,
+  //                           bottom: 40.sp),
+  //                       child: SingleChildScrollView(
+  //                         child: Column(
+  //                           crossAxisAlignment: CrossAxisAlignment.stretch,
+  //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                           children: [
+  //                             const SizedBox(height: 20),
+  //                             Row(
+  //                               mainAxisAlignment: MainAxisAlignment.start,
+  //                               children: [
+  //                                 SvgPicture.asset(ImageAssets.dismiss),
+  //                               ],
+  //                             ),
+  //                             SizedBox(
+  //                               height: 10.sp,
+  //                             ),
+  //                             NormalInputTextWidget(
+  //                               title: AppStrings.location,
+  //                               expectedVariable: "field",
+  //                               hintText: "Surulere, Lagos",
+  //                               readOnly: true,
+  //                               controller: controller.locationController.value,
+  //                             ),
+  //                             SizedBox(
+  //                               height: 10.sp,
+  //                             ),
+  //                             Row(
+  //                               children: [
+  //                                 Expanded(
+  //                                   child: NormalInputTextWidget(
+  //                                     title: "From",
+  //                                     expectedVariable: "field",
+  //                                     hintText: "1 Nov, 9:00am",
+  //                                     controller: controller.fromController,
+  //                                     readOnly: true,
+  //                                     onTap: () {
+  //                                       SystemChannels.textInput
+  //                                           .invokeMethod('TextInput.hide');
+  //                                       controller.routeToSelecteDate();
+  //                                     },
+  //                                   ),
+  //                                 ),
+  //                                 SizedBox(
+  //                                   width: 20.sp,
+  //                                 ),
+  //                                 Expanded(
+  //                                   child: NormalInputTextWidget(
+  //                                     title: "To",
+  //                                     expectedVariable: "field",
+  //                                     hintText: "5 Nov, 9:00am",
+  //                                     readOnly: true,
+  //                                     controller: controller.toController,
+  //                                     onTap: () {
+  //                                       SystemChannels.textInput
+  //                                           .invokeMethod('TextInput.hide');
+  //                                       controller.routeToSelecteDate();
+  //                                     },
+  //                                   ),
+  //                                 ),
+  //                               ],
+  //                             ),
+  //                             SizedBox(
+  //                               height: 20.sp,
+  //                             ),
+  //                             GtiButton(
+  //                               text: AppStrings.search,
+  //                               onTap: () => controller.routeToSearchResult(),
+  //                             )
+  //                           ],
+  //                         ),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                   backgroundColor: Colors.white,
+  //                   elevation: 0,
+  //                   shape: RoundedRectangleBorder(
+  //                     borderRadius: BorderRadius.only(
+  //                         topLeft: Radius.circular(6.r),
+  //                         topRight: Radius.circular(6.r)),
+  //                   ),
+  //                 );
 
   Widget continueButton() {
     return controller.isLoading.isTrue

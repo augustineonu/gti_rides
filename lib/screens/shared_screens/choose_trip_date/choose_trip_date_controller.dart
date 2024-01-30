@@ -17,6 +17,7 @@ class ChooseTripDateController extends GetxController {
   RxBool enablePastDates = true.obs;
   RxBool toggleDaySelection = true.obs;
   RxBool onCancelCalled = false.obs;
+  RxBool isRenterHome = false.obs;
 
   final DateRangePickerController datePickerController =
       DateRangePickerController();
@@ -66,11 +67,12 @@ class ChooseTripDateController extends GetxController {
     Map<String, dynamic>? arguments = Get.arguments;
 
     if (arguments != null) {
-      appBarTitle.value = arguments['appBarTitle'];
+      appBarTitle.value = arguments['appBarTitle'] ?? "";
       to.value = arguments['to'] ?? '';
       from.value = arguments['from'] ?? '';
       isSingleDateSelection.value = arguments['isSingleDateSelection'] ?? false;
       enablePastDates.value = arguments['enablePastDates'] ?? true;
+      isRenterHome.value = arguments['isRenterHome'] ?? false;
       logger.log("date ${arguments['enablePastDates']}");
       logger.log("date ${enablePastDates.value}");
 
@@ -111,38 +113,34 @@ class ChooseTripDateController extends GetxController {
     logger.log("selected end date:: ${endDate.value}");
   }
 
- void onSingleDateSelection(DateRangePickerSelectionChangedArgs args) {
-  if (args.value != null && args.value != '') {
-    selectedExpiryDate.value = formatDate(args.value!).toString();
+  void onSingleDateSelection(DateRangePickerSelectionChangedArgs args) {
+    if (args.value != null && args.value != '') {
+      selectedExpiryDate.value = formatDate(args.value!).toString();
 
-    logger.log("Selected args: ${args.value}");
-    logger.log("Selected date: ${selectedExpiryDate.value}");
-  } else {
-    // Handle the case when the date is unselected (null)
-    selectedExpiryDate.value = ''; // Or any default value you want
-    logger.log("Date unselected");
+      logger.log("Selected args: ${args.value}");
+      logger.log("Selected date: ${selectedExpiryDate.value}");
+    } else {
+      // Handle the case when the date is unselected (null)
+      selectedExpiryDate.value = ''; // Or any default value you want
+      logger.log("Date unselected");
+    }
   }
-}
 
-void resetDateSelection(context){
-  toggleDaySelection.value = true;
-  onCancelCalled.value = true;
-  bottomSnackbar(context, message: 'Selection cleared');
-  // selectedExpiryDate.value = '';
-}
-
+  void resetDateSelection(context) {
+    toggleDaySelection.value = true;
+    onCancelCalled.value = true;
+    bottomSnackbar(context, message: 'Selection cleared');
+    // selectedExpiryDate.value = '';
+  }
 
   void queryListener() {}
 
   void goBack() => routeService.goBack();
-  void goBack1() => routeService.goBack(result: {
+  void goBack1({bool? closeOverlays = true}) => routeService.goBack(result: {
         "start":
             "$startDate $selectedStartHour:${selectedStartMinute < 10 ? '0$selectedStartMinute' : selectedStartMinute}${selectedStartAmPm.value == 0 ? "am" : "PM"}",
         "end":
-            "$endDate $selectedEndHour:${selectedEndMins < 10 ? '0$selectedEndMins' : selectedEndMins}${selectedEndAmPm.value == 0 ? "am" : "PM"}"
-      
-      ,
-      "selectedExpiryDate": selectedExpiryDate.value,
-
-      }, closeOverlays: true);
+            "$endDate $selectedEndHour:${selectedEndMins < 10 ? '0$selectedEndMins' : selectedEndMins}${selectedEndAmPm.value == 0 ? "am" : "PM"}",
+        "selectedExpiryDate": selectedExpiryDate.value,
+      }, closeOverlays: isRenterHome.value ? false : closeOverlays);
 }

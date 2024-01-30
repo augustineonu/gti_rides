@@ -25,11 +25,13 @@ AppBar gtiAppBar(
     bool? autoImplyLeading,
     bool? centerTitle,
     PreferredSizeWidget? bottom,
+    double? toolbarHeight,
     void Function()? onTap}) {
   return AppBar(
     elevation: 0.0,
     surfaceTintColor: primaryColor,
     backgroundColor: backgroundColor,
+    toolbarHeight: toolbarHeight,
     // backgroundColor: newBackgroundColor ?? whiteOrBlackColor(),
     centerTitle: centerTitle ?? true,
     automaticallyImplyLeading: autoImplyLeading ?? false,
