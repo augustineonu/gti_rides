@@ -5,6 +5,9 @@ import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/renter_service.dart';
 import 'package:gti_rides/services/route_service.dart';
+import 'package:gti_rides/utils/constants.dart';
+import 'package:intl/intl.dart';
+import 'package:share_plus/share_plus.dart';
 
 class CarSelectionResultController extends GetxController
     with StateMixin<List<CarHistoryData>> {
@@ -21,6 +24,7 @@ class CarSelectionResultController extends GetxController
       logger.log("Received data:: $arguments");
       carId.value = arguments!['carId'];
       await getCarHistory();
+      await getCarReview();
     }
   }
 
@@ -33,6 +37,7 @@ class CarSelectionResultController extends GetxController
 
   Map<String, dynamic>? arguments = Get.arguments;
 
+  ScrollController scrollController = ScrollController();
   TextEditingController interStateInputController = TextEditingController();
   TextEditingController escortSecurityNoInputController =
       TextEditingController();
@@ -44,14 +49,22 @@ class CarSelectionResultController extends GetxController
   RxBool selectedInterState = false.obs;
   RxBool selectedSecurityEscort = false.obs;
   RxBool selectedSelfPickUp = false.obs;
+  RxBool isLiked = false.obs;
+  RxBool isAddingFavCar = false.obs;
+  RxBool isDeletingFavCar = false.obs;
 
   Rx<String> testString = "Hello".obs;
   Rx<String> carId = "".obs;
+  Rx<String> startDateTime = "".obs;
+  Rx<String> endDateTime = "".obs;
+  RxList<dynamic>? reviews = <dynamic>[].obs;
 
   void goBack() => routeService.goBack();
   void routeToSearchFilter() => routeService.gotoRoute(AppLinks.searchFilter);
-  void routeToReviews() => routeService.gotoRoute(AppLinks.reviews);
-  void routeToViewCar() => routeService.gotoRoute(AppLinks.viewCar);
+  void routeToReviews() => routeService
+      .gotoRoute(AppLinks.reviews, arguments: {"carId": carId.value});
+  void routeToViewCar({Object? arguments}) =>
+      routeService.gotoRoute(AppLinks.viewCar, arguments: arguments);
   void routeToKycCheck() => routeService.gotoRoute(AppLinks.kycCheck);
 
   void onSelectInterState(bool value) => selectedInterState.value = value;
@@ -59,15 +72,49 @@ class CarSelectionResultController extends GetxController
       selectedSecurityEscort.value = value;
   void onSelectSelfPickUp(bool value) => selectedSelfPickUp.value = value;
 
+  void scrollToBottom() {
+    scrollController.animateTo(
+      scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  Future<void> shareRide() async {
+    Share.share('Book a ride at ${AppStrings.websiteUrl}');
+
+  }
+
   void onPageChanged(int value) {
     currentIndex.value = value;
     pageController.animateToPage(
       value,
       duration:
           const Duration(milliseconds: 500), // Adjust the duration as needed
-      curve: Curves.ease,
+      curve: Curves.easeIn,
     );
     update();
+  }
+
+  bool isRequestInProgress = false;
+
+  void onAddPhotoToFav({required String carId}) async {
+    if (!isRequestInProgress) {
+      isRequestInProgress = true;
+
+      isLiked.value = !isLiked.value;
+
+      if (isLiked.value) {
+        await favoriteCar(carId: carId);
+      } else {
+        await deleteFavoriteCar(carId: carId);
+      }
+
+      // Introduce a delay before allowing another request
+      Future.delayed(const Duration(seconds: 2), () {
+        isRequestInProgress = false;
+      });
+    }
   }
 
   Future<void> getCarHistory() async {
@@ -98,4 +145,74 @@ class CarSelectionResultController extends GetxController
           status: RxStatus.error(exception.toString()));
     }
   }
+
+  Future<void> favoriteCar({required String carId}) async {
+    isAddingFavCar.value = true;
+    try {
+      final response = await renterService.addFavoriteCar(carId: carId);
+      if (response.status == 'success' || response.status_code == 200) {
+        logger.log("Car added to favorites:: $response");
+      } else {
+        logger.log("Unable to add car to favorites:: $response");
+      }
+    } catch (exception) {
+      logger.log("error:: ${exception.toString()}");
+    } finally {
+      isAddingFavCar.value = false;
+    }
+  }
+
+  Future<void> deleteFavoriteCar({required String carId}) async {
+    isDeletingFavCar.value = true;
+    try {
+      final response = await renterService.deleteFavoriteCar(carId: carId);
+      if (response.status == 'success' || response.status_code == 200) {
+        logger.log("Car deleted from favorites:: ${response}");
+      } else {
+        logger.log("Unable to delete car from favorites:: ${response}");
+      }
+    } catch (exception) {
+      logger.log("error:: ${exception.toString()}");
+    } finally {
+      isDeletingFavCar.value = false;
+    }
+  }
+
+  Future<void> getCarReview() async {
+    // change(<CarHistoryData>[].obs, status: RxStatus.loading());
+    try {
+      final response = await renterService.getReview(carId: carId.value);
+      if (response.status == 'success' || response.status_code == 200) {
+        logger.log("car review::${response.data}");
+
+        if (response.data == null || response.data!.isEmpty) {
+          // If the list is empty
+          // change(<CarHistoryData>[].obs, status: RxStatus.empty());
+          reviews?.value = response.data!;
+        } else {
+          // If the list is not empty
+          reviews?.value = response.data!;
+
+          // change(carHistory, status: RxStatus.success());
+          update();
+        }
+      } else {
+        logger.log("unable to get car review ${response.data}");
+      }
+    } catch (exception) {
+      logger.log("error: ${exception.toString()}");
+    }
+  }
+
+
+  DateTime? parseFormattedDate(String formattedDate) {
+  try {
+    // Use a date format that matches your input string
+    final DateFormat dateFormat = DateFormat("EEE, dd MMM h:mma");
+    return dateFormat.parse(formattedDate);
+  } catch (e) {
+    return null;
+  }
+}
+
 }

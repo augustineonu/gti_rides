@@ -43,23 +43,29 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
   RxBool showPassword = false.obs;
   late PageController cardPageController;
   ScrollController scrollController = ScrollController();
+  final GlobalKey pageViewKey1 = GlobalKey();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     print("init called>>>");
+
     cardPageController = PageController(viewportFraction: 0.9, initialPage: 0);
 
     timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
-      if (currentIndex.value < 2) {
-        currentIndex.value++;
+      if (currentIndex.value < 4) {
+        setState(() {
+          currentIndex.value++;
+        });
         print("next page ${currentIndex.value}>>>");
       } else {
-        currentIndex.value = 0;
+        setState(() {
+          currentIndex.value = 0;
+        });
       }
 
-      if (scrollController.hasClients) {
+      if (pageViewKey1.currentState != null && scrollController.hasClients) {
         cardPageController.animateToPage(
           currentIndex.value,
           duration: const Duration(milliseconds: 1000),
@@ -68,6 +74,15 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
       }
     });
   }
+
+  @override
+void dispose() {
+  // Cancel the timer to prevent calling setState after dispose
+  timer.cancel();
+  cardPageController.dispose(); // Dispose of the PageController
+  scrollController.dispose(); // Dispose of the ScrollController
+  super.dispose();
+}
 
   @override
   Widget build(BuildContext context) {
@@ -160,140 +175,154 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
               height: 8,
             ),
             SizedBox(
-              height: 190.sp,
+              height: 205.sp,
               child: controller.obx(
-                (state) => Stack(
-                  children: [
-                    PageView(
-                      padEnds: false,
-                      physics: const ScrollPhysics(),
-                      controller: cardPageController,
-                      onPageChanged: (int index) {
-                        currentIndex.value = index;
-                      },
-                      scrollDirection: Axis.horizontal,
-                      children: List<Widget>.generate(state!.length, (index) {
-                        final car = controller.recentlyViewedCar[index];
-                        final recentCar = state[index];
+                (state) {
+                  final visibleCars = state?.take(5).toList() ?? [];
+                  return Stack(
+                    children: [
+                      PageView(
+                        key: pageViewKey1,
+                        padEnds: false,
+                        physics: const ScrollPhysics(),
+                        controller: cardPageController,
+                        onPageChanged: (int index) {
+                          setState(() {
+                            
+                          currentIndex.value = index;
+                          });
+                        },
+                        scrollDirection: Axis.horizontal,
+                        children:
+                            List<Widget>.generate(visibleCars.length, (index) {
+                          // final car = controller.recentlyViewedCar[index];
+                          final recentCar = visibleCars[index];
 
-                        return GestureDetector(
-                          onTap: () => controller.routeToCarSelectionResult(
-                              arguments: {"carId": recentCar.carId}),
-                          child: Container(
-                            // width: 350,
-                            margin: const EdgeInsets.only(right: 10),
-                            decoration: BoxDecoration(
-                                color: white,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(4.r),
-                                ),
-                                border: Border.all(color: borderColor)),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(4.r),
-                                      topLeft: Radius.circular(4.r)),
-                                  child: Image.asset(
-                                    car.imageUrl,
-                                    fit: BoxFit.contain,
+                          return GestureDetector(
+                            onTap: () => controller.routeToCarSelectionResult(
+                                arguments: {"carId": recentCar.carId}),
+                            child: Container(
+                              // width: 350,
+                              margin: const EdgeInsets.only(right: 10),
+                              decoration: BoxDecoration(
+                                  color: white,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(4.r),
                                   ),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.only(top: 10, left: 10),
-                                  child: textWidget(
-                                    // brand years is left to be added
-                                    text:
-                                        "${recentCar.brandName} ${recentCar.brandModelName}",
-                                    style: getMediumStyle().copyWith(
-                                        fontFamily: 'Neue',
-                                        fontWeight: FontWeight.w700),
+                                  border: Border.all(color: borderColor)),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // ClipRRect(
+                                  //   borderRadius: BorderRadius.only(
+                                  //       topRight: Radius.circular(4.r),
+                                  //       topLeft: Radius.circular(4.r)),
+                                  //   child: Image.asset(
+                                  //     car.imageUrl,
+                                  //     fit: BoxFit.contain,
+                                  //   ),
+                                  // ),
+                                  carImage(
+                                    imgUrl: recentCar.photoUrl,
+                                    height: 140,
+                                    width: 400,
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 10, right: 10, bottom: 10),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          SvgPicture.asset(
-                                              ImageAssets.thumbsUpGreen),
-                                          SizedBox(
-                                            width: 5.sp,
-                                          ),
-                                          RichText(
-                                            text: TextSpan(
-                                                // text: '${car.ratings}%',
-                                                text:
-                                                    '${recentCar.percentageRate.toString()}%',
-                                                style: getMediumStyle(
-                                                  fontSize: 12.sp,
-                                                ),
-                                                children: <TextSpan>[
-                                                  TextSpan(
-                                                    text:
-                                                        ' (${recentCar.tripsCount.toString()} trips)',
-                                                    style: getLightStyle(
-                                                        fontSize: 12.sp,
-                                                        color: grey2),
-                                                  )
-                                                ]),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          SvgPicture.asset(ImageAssets.tag),
-                                          SizedBox(
-                                            width: 2.sp,
-                                          ),
-                                          SvgPicture.asset(ImageAssets.naira),
-                                          SizedBox(
-                                            width: 2.sp,
-                                          ),
-                                          textWidget(
-                                            text:
-                                                '${recentCar.pricePerDay.toString() ?? ''}/day',
-                                            style: getMediumStyle().copyWith(
-                                              fontFamily: 'Neue',
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 10, left: 10),
+                                    child: textWidget(
+                                      // brand years is left to be added
+                                      text:
+                                          "${recentCar.brandName} ${recentCar.brandModelName}",
+                                      style: getMediumStyle().copyWith(
+                                          fontFamily: 'Neue',
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 10, right: 10, bottom: 10),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            SvgPicture.asset(
+                                                ImageAssets.thumbsUpGreen),
+                                            SizedBox(
+                                              width: 5.sp,
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
+                                            RichText(
+                                              text: TextSpan(
+                                                  // text: '${car.ratings}%',
+                                                  text:
+                                                      '${recentCar.percentageRate.toString()}%',
+                                                  style: getMediumStyle(
+                                                    fontSize: 12.sp,
+                                                  ),
+                                                  children: <TextSpan>[
+                                                    TextSpan(
+                                                      text:
+                                                          ' (${recentCar.tripsCount.toString()} trips)',
+                                                      style: getLightStyle(
+                                                          fontSize: 12.sp,
+                                                          color: grey2),
+                                                    )
+                                                  ]),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            SvgPicture.asset(ImageAssets.tag),
+                                            SizedBox(
+                                              width: 2.sp,
+                                            ),
+                                            SvgPicture.asset(ImageAssets.naira),
+                                            SizedBox(
+                                              width: 2.sp,
+                                            ),
+                                            textWidget(
+                                              text:
+                                                  '${recentCar.pricePerDay.toString() ?? ''}/day',
+                                              style: getMediumStyle().copyWith(
+                                                fontFamily: 'Neue',
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      }),
-                    ),
-                    Positioned(
-                      bottom: 70,
-                      right: 0,
-                      left: 0,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: List.generate(
-                          state.length,
-                          (index) => BuildCarouselDot(
-                            currentIndex: currentIndex.value,
-                            index: index,
+                          );
+                        }),
+                      ),
+                      Positioned(
+                        bottom: 70,
+                        right: 0,
+                        left: 0,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: List.generate(
+                            visibleCars.length,
+                            (index) => BuildCarouselDot(
+                              currentIndex: currentIndex.value,
+                              index: index,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  );
+                },
                 onEmpty: Padding(
                   padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
                   child: Center(

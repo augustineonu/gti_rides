@@ -71,11 +71,11 @@ class ReviewsScreen extends GetView<ReviewController> {
                         onTap: () => controller.selectedIndex.value = 0,
                         selected: controller.selectedIndex.value == 0),
                     reviewTypeBox(
-                        title: AppStrings.positiveR.trArgs(['2']),
+                        title: AppStrings.positiveR.trArgs(['0']),
                         onTap: () => controller.selectedIndex.value = 1,
                         selected: controller.selectedIndex.value == 1),
                     reviewTypeBox(
-                        title: AppStrings.negativeR.trArgs(['4']),
+                        title: AppStrings.negativeR.trArgs(['0']),
                         onTap: () => controller.selectedIndex.value = 2,
                         selected: controller.selectedIndex.value == 2),
                   ],

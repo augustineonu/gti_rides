@@ -66,6 +66,7 @@ class CarHistoryScreen extends StatelessWidget {
                             state[0]['totalEarning'].toString() ?? ''),
                     divider(color: borderColor),
                     tripDate(
+                      title: AppStrings.availabilityDate,
                         startDate: state[0]['startDate'] ?? '',
                         endDate: state[0]['endDate'] ?? '',
                         trailling:  InkWell(

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/Partner/home/manage_vehicle/manage_vehicle_controller.dart';
+import 'package:gti_rides/shared_widgets/generic_car_widgets.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/switch_widget.dart';
@@ -588,8 +589,11 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
                             switch (index) {
                               case 0:
                                 deleteVehicleSheet(size,
-                                    carName: car['brandModelName'],
-                                    carNameBody: car['brandModelName'],
+                                    title: AppStrings.areYouSureToDelete
+                                        .trArgs([car['brandModelName']]),
+                                    subTitle: AppStrings.everyDataWouldBeDeleted
+                                        .trArgs([car['brandModelName']]),
+                                      onTapCancel: controller.goBack,
                                     onTapContinue: () => controller.deleteCar(
                                         carID: car['carID']));
                               case 1:
@@ -891,76 +895,6 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
             height: 18,
           ),
         ),
-      ),
-      backgroundColor: backgroundColor,
-      isScrollControlled: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(4.r), topRight: Radius.circular(4.r)),
-      ),
-    );
-  }
-
-  Future<dynamic> deleteVehicleSheet(Size size,
-      {required String carName,
-      required String carNameBody,
-      void Function()? onTapContinue}) {
-    return Get.bottomSheet(
-      SizedBox(
-        height: size.height * 0.4.sp,
-        width: size.width.sp,
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          SvgPicture.asset(ImageAssets.warning),
-          SizedBox(
-            height: 15.sp,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 50.0),
-            child: Column(
-              children: [
-                textWidget(
-                    text: AppStrings.areYouSureToDelete.trArgs([carName]),
-                    textAlign: TextAlign.center,
-                    textOverflow: TextOverflow.visible,
-                    style: getSemiBoldStyle()),
-                SizedBox(
-                  height: 12.sp,
-                ),
-                textWidget(
-                    text: AppStrings.everyDataWouldBeDeleted
-                        .trArgs([carNameBody]),
-                    textAlign: TextAlign.center,
-                    textOverflow: TextOverflow.visible,
-                    style: getRegularStyle(color: grey3, fontSize: 12.sp)),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 22.sp,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              GtiButton(
-                text: AppStrings.cancel,
-                color: backgroundColor,
-                width: 150.sp,
-                hasBorder: true,
-                borderColor: primaryColor,
-                textColor: primaryColor,
-                onTap: controller.goBack,
-              ),
-              SizedBox(
-                width: 4.sp,
-              ),
-              GtiButton(
-                text: AppStrings.cont,
-                width: 150.sp,
-                onTap: onTapContinue,
-              ),
-            ],
-          )
-        ]),
       ),
       backgroundColor: backgroundColor,
       isScrollControlled: true,

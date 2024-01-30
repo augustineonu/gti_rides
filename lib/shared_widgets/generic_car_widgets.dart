@@ -2,6 +2,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/sqaure_check_box_widget.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
@@ -160,6 +162,7 @@ Widget carFetures({List<Widget> children = const <Widget>[]}) {
 
 
    Widget tripDate({
+    required String title,
     required String startDate,
     required String endDate,
     required Widget trailling
@@ -172,7 +175,7 @@ Widget carFetures({List<Widget> children = const <Widget>[]}) {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           textWidget(
-              text: AppStrings.availabilityDate,
+              text: title,
               style: getMediumStyle(fontSize: 12.sp, color: grey2)
                   .copyWith(fontWeight: FontWeight.w500)),
           SizedBox(
@@ -203,6 +206,78 @@ Widget carFetures({List<Widget> children = const <Widget>[]}) {
             ],
           ),
         ],
+      ),
+    );
+  }
+
+
+    Future<dynamic> deleteVehicleSheet(Size size,
+      {required String title,
+      required String subTitle,
+      void Function()? onTapContinue,
+      void Function()? onTapCancel,
+      }) {
+    return Get.bottomSheet(
+      SizedBox(
+        height: size.height * 0.4.sp,
+        width: size.width.sp,
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          SvgPicture.asset(ImageAssets.warning),
+          SizedBox(
+            height: 15.sp,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 50.0),
+            child: Column(
+              children: [
+                textWidget(
+                    text: title,
+                    textAlign: TextAlign.center,
+                    textOverflow: TextOverflow.visible,
+                    style: getSemiBoldStyle()),
+                SizedBox(
+                  height: 12.sp,
+                ),
+                textWidget(
+                    text: subTitle,
+                    textAlign: TextAlign.center,
+                    textOverflow: TextOverflow.visible,
+                    style: getRegularStyle(color: grey3, fontSize: 12.sp)),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 22.sp,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              GtiButton(
+                text: AppStrings.cancel,
+                color: backgroundColor,
+                width: 150.sp,
+                hasBorder: true,
+                borderColor: primaryColor,
+                textColor: primaryColor,
+                onTap: onTapCancel,
+              ),
+              SizedBox(
+                width: 4.sp,
+              ),
+              GtiButton(
+                text: AppStrings.cont,
+                width: 150.sp,
+                onTap: onTapContinue,
+              ),
+            ],
+          )
+        ]),
+      ),
+      backgroundColor: backgroundColor,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(4.r), topRight: Radius.circular(4.r)),
       ),
     );
   }

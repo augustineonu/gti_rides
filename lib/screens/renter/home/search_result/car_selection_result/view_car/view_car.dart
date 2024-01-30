@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/models/partner/car_history_model.dart';
 import 'package:gti_rides/screens/renter/home/search_result/car_selection_result/view_car/view_car_controller.dart';
 import 'package:gti_rides/screens/renter/widgets/car_availability_tag.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
@@ -21,7 +22,9 @@ class ViewCarBinding extends Bindings {
 }
 
 class ViewCarScreen extends GetView<ViewCarController> {
-  const ViewCarScreen([Key? key]) : super(key: key);
+  ViewCarScreen([Key? key]) : super(key: key);
+  @override
+  final controller = Get.put(ViewCarController());
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -55,18 +58,18 @@ class ViewCarScreen extends GetView<ViewCarController> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        textWidget(text: controller.testString(), style: getMediumStyle()),
+        // textWidget(text: controller.testString(), style: getMediumStyle()),
 
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.sp),
           child: InkWell(
             onTap: () {},
             child: SizedBox(
-              height: 207.sp,
+              height: 210.sp,
               child: Stack(
                 children: [
                   PageView(
-                    physics: const ScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
                     controller: controller.pageController,
                     // controller: PageController(),
                     onPageChanged: (int index) {
@@ -74,66 +77,82 @@ class ViewCarScreen extends GetView<ViewCarController> {
                     },
                     scrollDirection: Axis.horizontal,
                     children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(4.r)),
-                        child: Image.asset(
-                          "assets/images/car.png",
-                          fit: BoxFit.fitHeight,
-                        ),
-                      ),
-                      ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(4.r)),
-                        child: Image.asset(
-                          "assets/images/car.png",
-                          fit: BoxFit.fitHeight,
-                        ),
-                      ),
-                      ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(4.r)),
-                        child: Image.asset(
-                          "assets/images/car.png",
-                          fit: BoxFit.fitHeight,
-                        ),
-                      ),
+                      for (Photo? carPhoto in controller.photoList)
+                        if (carPhoto != null)
+                          GestureDetector(
+                            // onTap: () =>
+                            //     controller.routeToViewCar(arguments: {
+                            //   "photoList": car?.photo,
+                            // }),
+                            // would like to add a pinch zoom or so to this feature
+
+                            child: carImage(
+                              imgUrl: carPhoto.photoUrl!,
+                              height: 210.sp,
+                              width: 400.sp,
+                              fit: BoxFit.fitWidth,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(4.r)),
+                            ),
+                          ),
                     ],
                   ),
                   Positioned(
-                      left: 19,
+                      left: 13,
                       bottom: 0,
                       top: 0,
                       child: InkWell(
                         onTap: () {
-                          if (controller.currentIndex > 0) {
+                          if (controller.currentIndex.value > 0) {
                             controller.pageController.previousPage(
                               duration: Duration(milliseconds: 300),
                               curve: Curves.easeInOut,
                             );
                           }
+                          print("current index:: ${controller.currentIndex.value}");
                         },
-                        child: Icon(
-                          Iconsax.arrow_left_2,
-                          color: white,
-                          size: 24.sp,
+                        child: Container(
+                          height: 30,
+                          width: 30,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle
+                          ),
+                          child: Icon(
+                            
+                            Iconsax.arrow_left_2,
+                            color: white,
+                            size: 24.sp,
+                          ),
                         ),
                       )),
                   Positioned(
-                      right: 19,
+                      right: 13,
                       bottom: 0,
                       top: 0,
                       child: InkWell(
                         onTap: () {
-                          if (controller.currentIndex <
-                              controller.pageController.positions.length - 1) {
+                          if (controller.currentIndex.value <
+                              controller.photoList.length) {
                             controller.pageController.nextPage(
                               duration: Duration(milliseconds: 300),
                               curve: Curves.easeInOut,
                             );
                           }
                         },
-                        child: Icon(
-                          Iconsax.arrow_right_3,
-                          color: white,
-                          size: 24.sp,
+                        child: Container(
+                          height: 30,
+                          width: 30,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle
+                          ),
+
+                          child: Center(
+                            child: Icon(
+                              Iconsax.arrow_right_3,
+                              color: white,
+                              size: 24.sp,
+                            ),
+                          ),
                         ),
                       )),
                 ],
@@ -166,7 +185,7 @@ class ViewCarScreen extends GetView<ViewCarController> {
               child: Center(
                 child: textWidget(
                   text:
-                      '${controller.currentIndex} of ${controller.pageController.positions.length}',
+                      '${controller.currentIndex.value + 1} of ${controller.photoList.length}',
                   style: getLightStyle(fontSize: 10.sp, color: white)
                       .copyWith(fontWeight: FontWeight.w300),
                 ),

@@ -286,7 +286,7 @@ Widget carImage(
       width: imageSizeWidth,
       child: const Center(
         child: CircularProgressIndicator(
-          color: Colors.blue,
+          color: primaryColorLight,
           value: 30,
         ),
       ),

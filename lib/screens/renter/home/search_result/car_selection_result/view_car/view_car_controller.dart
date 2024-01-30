@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/models/partner/car_history_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
@@ -10,9 +11,15 @@ class ViewCarController extends GetxController {
   ViewCarController() {
     init();
   }
+  final Map<String, dynamic>? arguments = Get.arguments;
 
   void init() {
     logger.log("ViewCarController Initialized");
+
+    if (arguments != null) {
+      logger.log("received data:: $arguments");
+      photoList.value = arguments?["photoList"];
+    }
   }
 
   @override
@@ -27,6 +34,7 @@ class ViewCarController extends GetxController {
   PageController pageController = PageController();
 
   Rx<String> testString = 'hello world'.obs;
+  RxList<Photo> photoList = <Photo>[].obs;
 
   void goBack() => routeService.goBack();
 

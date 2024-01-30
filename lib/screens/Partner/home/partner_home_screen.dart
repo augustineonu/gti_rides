@@ -350,16 +350,6 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
               ),
               child: Column(
                 children: [
-                  // ClipRRect(
-                  //   borderRadius: BorderRadius.only(
-                  //     topRight: Radius.circular(4.r),
-                  //     topLeft: Radius.circular(4.r),
-                  //   ),
-                  //   child: Image.asset(
-                  //     "assets/images/car.png",
-                  //     fit: BoxFit.contain,
-                  //   ),
-                  // ),
                   carImage(
                     height: 140,
                     width: 400,

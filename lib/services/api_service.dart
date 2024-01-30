@@ -446,7 +446,7 @@ class ApiService {
 
   Future<dynamic> deleteRequest({
     required String endpoint,
-    // Map? data,
+    Map? data,
     String? token,
   }) async {
     try {
@@ -454,7 +454,7 @@ class ApiService {
       late Response response;
       response = await _dio.delete(
         endpoint,
-        // data: data,
+        data: data,
         // options: Options(
         //   headers: {
         //     'Authorization':
@@ -478,7 +478,7 @@ class ApiService {
           }
           response = await _dio.delete(
             endpoint,
-            // data: data,
+            data: data,
             options: Options(
               headers: {
                 'Authorization':

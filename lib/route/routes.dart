@@ -133,7 +133,7 @@ class AppRoutes {
     ),
     GetPage(
       name: AppLinks.viewCar,
-      page: () => const ViewCarScreen(),
+      page: () =>  ViewCarScreen(),
       binding: ViewCarBinding(),
     ),
     GetPage(
