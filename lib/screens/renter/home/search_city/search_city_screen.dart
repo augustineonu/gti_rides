@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/screens/renter/home/search_city/search_city_controller.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
@@ -31,7 +32,25 @@ class SearchCityScreen extends GetView<SearchCityController> {
       () => Scaffold(
           backgroundColor: backgroundColor,
           appBar: appBar(),
-          body: body(size, context)),
+          body: Stack(
+            children: [
+              body(size, context),
+              controller.isFetchingCars.value
+                  ? Stack(
+                      children: [
+                        const Opacity(
+                          opacity: 0.5,
+                          child: ModalBarrier(
+                              dismissible: false, color: Colors.transparent),
+                        ),
+                        Center(
+                          child: Center(child: centerLoadingIcon()),
+                        ),
+                      ],
+                    )
+                  : const SizedBox()
+            ],
+          )),
       // }
     );
   }
@@ -76,38 +95,210 @@ class SearchCityScreen extends GetView<SearchCityController> {
         ),
         titleColor: iconColor(),
         actions: [
-          InkWell(
-            onTap: controller.goBack,
-            child: Padding(
-              padding: const EdgeInsets.only(right: 16, top: 15),
-              child: textWidget(
-                  text: AppStrings.cancel,
-                  style: getRegularStyle(color: primaryColor)
-                      .copyWith(fontWeight: FontWeight.w400)),
+          Padding(
+            padding: const EdgeInsets.only(right: 5, top: 15),
+            child: InkWell(
+              onTap: controller.selectedType.value == LocationType.city
+                  ? controller.resetStateSelection
+                  : controller.goBack,
+              child: Container(
+                height: 65,
+                padding: const EdgeInsets.only(
+                  right: 10,
+                  top: 0,
+                ),
+                child: Center(
+                  child: textWidget(
+                      text: controller.selectedType.value == LocationType.city
+                          ? AppStrings.reset
+                          : AppStrings.cancel,
+                      style: getRegularStyle(color: primaryColor)
+                          .copyWith(fontWeight: FontWeight.w400)),
+                ),
+              ),
             ),
           )
         ]);
   }
 
   Widget body(size, context) {
-    return controller.isFetchingStates.value
+    return controller.isFetchingStates.value ||
+            controller.isFetchingCities.value
         ? centerLoadingIcon()
         : ListView.separated(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
             physics: const ScrollPhysics(),
             shrinkWrap: true,
-            itemCount: controller.filteredStates.isEmpty
-                ? controller.states.length
-                : controller.filteredStates.length,
+            itemCount: controller.filteredLocation.isEmpty
+                ? controller.locations.length
+                : controller.filteredLocation.length,
             itemBuilder: (context, index) {
-              var page = controller.filteredStates.isEmpty
-                  ? controller.states[index].stateName
-                  : controller.filteredStates[index].stateName;
+              var location = controller.filteredLocation.isEmpty
+                  ? controller.locations[index]
+                  : controller.filteredLocation[index];
               return InkWell(
                 onTap: () async {
-                  controller.selectedState.value = page!;
-                  controller.locationController.value.text =
-                      controller.selectedState.value;
+                  controller.selectedStateCode.value = location.code;
+                  // controller.selectedState.value = location.name;
+                  // controller.locationController.value.text = location.name;
+
+                  if (controller.selectedType.value == LocationType.state) {
+                    await controller.getCities();
+                    // controller.selectedType.value = LocationType.city;
+                    controller.selectedState.value = location.name;
+                  } else {
+                    controller.selectedCity.value = location.name;
+                    controller.onLocationSelected(location);
+                    // Handle city selection logic here
+                    print("city selected: ");
+                    await Get.bottomSheet(
+                      StatefulBuilder(builder: (context, setState) {
+                        return SizedBox(
+                          height: 310.sp,
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                left: 20.sp,
+                                right: 20.sp,
+                                top: 0.sp,
+                                bottom: 40.sp),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const SizedBox(height: 20),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      GestureDetector(
+                                          onTap: controller.goBack,
+                                          child: SvgPicture.asset(
+                                              ImageAssets.dismiss)),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 10.sp,
+                                  ),
+                                  NormalInputTextWidget(
+                                    title: AppStrings.location,
+                                    expectedVariable: "field",
+                                    hintText: "Surulere, Lagos",
+                                    readOnly: true,
+                                    controller:
+                                        controller.locationController.value,
+                                  ),
+                                  SizedBox(
+                                    height: 10.sp,
+                                  ),
+                                  Form(
+                                    key: controller.searchFormKey,
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: NormalInputTextWidget(
+                                            title: "From",
+                                            expectedVariable: "field",
+                                            hintText: "1 Nov, 9:00am",
+                                            controller:
+                                                controller.fromController.value
+                                                  ..text = controller
+                                                      .startDateTime.value,
+                                            readOnly: true,
+                                            fontSize: 12.sp,
+                                            onTap: () async {
+                                              SystemChannels.textInput
+                                                  .invokeMethod(
+                                                      'TextInput.hide');
+                                              // controller.routeToSelecteDate();
+                                              var data = await Get.toNamed(
+                                                  AppLinks.chooseTripDate,
+                                                  arguments: {
+                                                    "isRenterHome": true,
+                                                    "appBarTitle":
+                                                        AppStrings.tripDates,
+                                                    "from":
+                                                        AppStrings.startDate,
+                                                    "to": AppStrings.endDate,
+                                                    "enablePastDates": false,
+                                                  });
+                                              print("Received data:: $data");
+                                              controller.startDateTime.value =
+                                                  data['start'] ?? '';
+                                              controller.endDateTime.value =
+                                                  data['end'] ?? '';
+                                              controller.startDate.value =
+                                                  controller.extractDay(
+                                                      controller
+                                                          .startDateTime.value);
+                                              controller.endDate.value =
+                                                  controller.extractDayMonth(
+                                                      controller
+                                                          .endDateTime.value);
+                                              // print(
+                                              //     "formatted date:: $startDate");
+
+                                              WidgetsBinding.instance!
+                                                  .addPostFrameCallback((_) {
+                                                setState(() {});
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 20.sp,
+                                        ),
+                                        Expanded(
+                                          child: NormalInputTextWidget(
+                                            title: "To",
+                                            expectedVariable: "field",
+                                            hintText: "5 Nov, 9:00am",
+                                            readOnly: true,
+                                            fontSize: 12.sp,
+                                            controller: controller
+                                                .toController.value
+                                              ..text =
+                                                  controller.endDateTime.value,
+                                            onTap: () {
+                                              SystemChannels.textInput
+                                                  .invokeMethod(
+                                                      'TextInput.hide');
+                                              controller.routeToSelecteDate();
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 20.sp,
+                                  ),
+                                  controller.isFetchingCars.value
+                                      ? centerLoadingIcon()
+                                      : GtiButton(
+                                          text: AppStrings.search,
+                                          onTap: () {
+                                            controller.searchCars();
+                                            setState(() {});
+                                          },
+                                        )
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
+                      backgroundColor: Colors.white,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(6.r),
+                            topRight: Radius.circular(6.r)),
+                      ),
+                    );
+                  }
 
                   print(
                       "selected:: ${controller.locationController.value.text} ");
@@ -117,7 +308,7 @@ class SearchCityScreen extends GetView<SearchCityController> {
                     SvgPicture.asset(ImageAssets.location),
                     SizedBox(width: 20.w),
                     textWidget(
-                      text: page,
+                      text: location.name,
                       style: getMediumStyle(fontSize: 14.sp, color: grey3)
                           .copyWith(fontWeight: FontWeight.w400),
                     ),
@@ -128,96 +319,6 @@ class SearchCityScreen extends GetView<SearchCityController> {
             separatorBuilder: (context, _) => SizedBox(height: 24.h),
           );
   }
-
-  //  await Get.bottomSheet(
-  //                   SizedBox(
-  //                     height: 310.sp,
-  //                     child: Padding(
-  //                       padding: EdgeInsets.only(
-  //                           left: 20.sp,
-  //                           right: 20.sp,
-  //                           top: 0.sp,
-  //                           bottom: 40.sp),
-  //                       child: SingleChildScrollView(
-  //                         child: Column(
-  //                           crossAxisAlignment: CrossAxisAlignment.stretch,
-  //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                           children: [
-  //                             const SizedBox(height: 20),
-  //                             Row(
-  //                               mainAxisAlignment: MainAxisAlignment.start,
-  //                               children: [
-  //                                 SvgPicture.asset(ImageAssets.dismiss),
-  //                               ],
-  //                             ),
-  //                             SizedBox(
-  //                               height: 10.sp,
-  //                             ),
-  //                             NormalInputTextWidget(
-  //                               title: AppStrings.location,
-  //                               expectedVariable: "field",
-  //                               hintText: "Surulere, Lagos",
-  //                               readOnly: true,
-  //                               controller: controller.locationController.value,
-  //                             ),
-  //                             SizedBox(
-  //                               height: 10.sp,
-  //                             ),
-  //                             Row(
-  //                               children: [
-  //                                 Expanded(
-  //                                   child: NormalInputTextWidget(
-  //                                     title: "From",
-  //                                     expectedVariable: "field",
-  //                                     hintText: "1 Nov, 9:00am",
-  //                                     controller: controller.fromController,
-  //                                     readOnly: true,
-  //                                     onTap: () {
-  //                                       SystemChannels.textInput
-  //                                           .invokeMethod('TextInput.hide');
-  //                                       controller.routeToSelecteDate();
-  //                                     },
-  //                                   ),
-  //                                 ),
-  //                                 SizedBox(
-  //                                   width: 20.sp,
-  //                                 ),
-  //                                 Expanded(
-  //                                   child: NormalInputTextWidget(
-  //                                     title: "To",
-  //                                     expectedVariable: "field",
-  //                                     hintText: "5 Nov, 9:00am",
-  //                                     readOnly: true,
-  //                                     controller: controller.toController,
-  //                                     onTap: () {
-  //                                       SystemChannels.textInput
-  //                                           .invokeMethod('TextInput.hide');
-  //                                       controller.routeToSelecteDate();
-  //                                     },
-  //                                   ),
-  //                                 ),
-  //                               ],
-  //                             ),
-  //                             SizedBox(
-  //                               height: 20.sp,
-  //                             ),
-  //                             GtiButton(
-  //                               text: AppStrings.search,
-  //                               onTap: () => controller.routeToSearchResult(),
-  //                             )
-  //                           ],
-  //                         ),
-  //                       ),
-  //                     ),
-  //                   ),
-  //                   backgroundColor: Colors.white,
-  //                   elevation: 0,
-  //                   shape: RoundedRectangleBorder(
-  //                     borderRadius: BorderRadius.only(
-  //                         topLeft: Radius.circular(6.r),
-  //                         topRight: Radius.circular(6.r)),
-  //                   ),
-  //                 );
 
   Widget continueButton() {
     return controller.isLoading.isTrue

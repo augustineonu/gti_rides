@@ -74,7 +74,7 @@ class SearchResultScreen extends GetView<SearchResultController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             textWidget(
-                text: controller.testString.value, style: getMediumStyle()),
+                text: '', style: getMediumStyle()),
             ListView.separated(
               physics: const ScrollPhysics(),
               shrinkWrap: true,

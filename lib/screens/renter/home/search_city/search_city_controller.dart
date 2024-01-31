@@ -1,21 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/models/partner/car_list_model.dart';
+import 'package:gti_rides/models/renter/cars_model.dart';
 import 'package:gti_rides/models/renter/city_model.dart';
 import 'package:gti_rides/models/renter/state_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/partner_service.dart';
+import 'package:gti_rides/services/renter_service.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
+import 'package:gti_rides/utils/utils.dart';
+
+import '../../../../models/renter/location_model.dart';
+
+enum LocationType {
+  state,
+  city,
+}
 
 class SearchCityController extends GetxController {
   Logger logger = Logger("Controller");
+
+  Map<String, dynamic>? arguments = Get.arguments;
+  GlobalKey<FormState> searchFormKey = GlobalKey<FormState>();
+
   RxBool isLoading = false.obs;
   RxBool isFetchingStates = false.obs;
   RxBool isFetchingCities = false.obs;
+  RxBool isFetchingCars = false.obs;
   PageController pageController = PageController();
   RxInt currentIndex = 0.obs;
   RxString phoneCode = '1'.obs;
@@ -23,10 +39,16 @@ class SearchCityController extends GetxController {
   RxString selectedCity = ''.obs;
   RxString selectedState = ''.obs;
   RxString selectedcityCode = ''.obs;
+  RxString selectedStateCode = ''.obs;
+  RxString startDateTime = ''.obs;
+  RxString endDateTime = ''.obs;
+
+  RxString startDate = ''.obs;
+  RxString endDate = ''.obs;
 
   TextEditingController searchCategoryController = TextEditingController();
-  TextEditingController fromController = TextEditingController();
-  TextEditingController toController = TextEditingController();
+  Rx<TextEditingController> fromController = TextEditingController().obs;
+  Rx<TextEditingController> toController = TextEditingController().obs;
   Rx<TextEditingController> locationController =
       TextEditingController(text: '').obs;
 
@@ -36,6 +58,8 @@ class SearchCityController extends GetxController {
   RxList<StateData> filteredStates = <StateData>[].obs;
   RxList<StateData> states = <StateData>[].obs;
   RxList<CityData> cities = <CityData>[].obs;
+  Rx<LocationType> selectedType = LocationType.state.obs;
+  RxList<CarData> cars = <CarData>[].obs;
 
   SearchCityController() {
     init();
@@ -51,6 +75,15 @@ class SearchCityController extends GetxController {
 
   void init() {
     logger.log("SearchCityController Initialized");
+    if (arguments != null) {
+      logger.log('Received data $arguments');
+
+      startDateTime.value = arguments?['start'] ?? '';
+      endDateTime.value = arguments?['end'] ?? '';
+
+      fromController.value.text = startDateTime.value;
+      toController.value.text = endDateTime.value;
+    }
   }
 
   @override
@@ -65,8 +98,31 @@ class SearchCityController extends GetxController {
     super.onInit();
   }
 
+
+String extractDay(String inputDate) {
+  // Split the input date by comma and space
+  List<String> parts = inputDate.split(', ');
+
+  // Extract the day part
+  String day = parts[1].split(' ')[0];
+  // Return the extracted day
+  return day;
+}
+String extractDayMonth(String inputDate) {
+  // Split the input date by comma and space
+  List<String> parts = inputDate.split(', ');
+
+  // Extract the day part
+  String day = parts[1].split(' ')[0];
+    String month = parts[1].split(' ')[1];
+
+
+  // Return the extracted day
+  return '$day $month';
+}
+
   void queryListener() {
-    updateFilteredStates(searchCategoryController.text);
+    updateFilteredLocations(searchCategoryController.text);
   }
 
   // Update the filteredPages based on search input
@@ -100,7 +156,27 @@ class SearchCityController extends GetxController {
         "from": AppStrings.startDate,
         "to": AppStrings.endDate,
       });
-  void routeToSearchResult() => routeService.gotoRoute(AppLinks.searchResult);
+  void routeToSearchResult() {
+    if (!searchFormKey.currentState!.validate()) {
+      return;
+    }
+    routeService.gotoRoute(AppLinks.searchResult);
+  }
+
+  Future<void> resetStateSelection() async {
+    selectedType.value = LocationType.state;
+    await getStates();
+  }
+
+  Rx<Location> selectedLocation = Location('', '', '').obs;
+
+  void onLocationSelected(Location location) {
+    // selectedLocation.value = location;
+    String selectedLocation = '${location.name}, ${selectedState.value}';
+    locationController.value.text = selectedLocation;
+
+    logger.log(">>>>${locationController.value.text}");
+  }
 
   Future<void> getStates() async {
     // change(<FavoriteCarData>[].obs, status: RxStatus.loading());
@@ -122,6 +198,13 @@ class SearchCityController extends GetxController {
           );
 
           states.value = statesData;
+
+          List<Location> stateLocations = statesData
+              .map((stateData) =>
+                  Location(stateData.stateCode!, stateData.stateName!, 'state'))
+              .toList();
+
+          locations.assignAll([...stateLocations]);
 
           logger.log("states:: ${states}");
 
@@ -145,7 +228,7 @@ class SearchCityController extends GetxController {
     isFetchingCities.value = true;
     try {
       final response =
-          await partnerService.getCity(cityCode: selectedcityCode.value);
+          await partnerService.getCity(cityCode: selectedStateCode.value);
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("gotten cities  ${response.data}");
 
@@ -153,6 +236,11 @@ class SearchCityController extends GetxController {
           // If the list is empty
           // change(<FavoriteCarData>[].obs, status: RxStatus.empty());
           cities.value = [];
+          selectedType.value = LocationType.state;
+          showSuccessSnackbar(
+            title: 'Coverage for Location',
+            message: 'coming soon!',
+          );
           // logger.log("cars $cars");
         } else {
           // If the list is not empty
@@ -161,6 +249,14 @@ class SearchCityController extends GetxController {
           );
 
           cities.value = citiesData;
+
+          // Convert city data to Location
+          selectedType.value = LocationType.city;
+          List<Location> cityLocations = citiesData
+              .map((cityData) =>
+                  Location(cityData.cityCode!, cityData.cityName!, 'city'))
+              .toList();
+          locations.assignAll([...cityLocations]);
 
           logger.log("cities:: ${cities}");
 
@@ -176,6 +272,86 @@ class SearchCityController extends GetxController {
       // status: RxStatus.error(exception.toString()));
     } finally {
       isFetchingCities.value = false;
+    }
+  }
+
+  RxList<Location> locations = <Location>[].obs;
+  RxList<Location> filteredLocation = <Location>[].obs;
+
+  void updateFilteredLocations(String searchText) {
+    filteredLocation.clear(); // Clear the current filtered states
+
+    // Filter the states based on the search text
+    if (searchText.isEmpty) {
+      // If the search text is empty, show all states
+
+      filteredLocation.addAll([...locations]);
+      update();
+    } else {
+      // If the search text is not empty, filter states that match the search
+      filteredLocation.addAll(locations.where((location) =>
+          location.name.toLowerCase().contains(searchText.toLowerCase())));
+      update();
+    }
+  }
+
+  Future<void> searchCars() async {
+    if (!searchFormKey.currentState!.validate()) {
+      return;
+    }
+    isFetchingCars.value = true;
+    try {
+      final response = await renterService.searchCars(
+          stateCode: selectedStateCode.value, cityCode: selectedcityCode.value);
+      if (response.status == 'success' || response.status_code == 200) {
+        logger.log("gotten cars  ${response.data}");
+
+        if (response.data == null || response.data!.isEmpty) {
+          // If the list is empty
+          cars.value = [];
+          // selectedType.value = LocationType.state;
+          Get.back();
+          showSuccessSnackbar(
+            title: 'Cars for Location',
+            message: 'coming soon!',
+          );
+          // logger.log("cars $cars");
+        } else {
+          // If the list is not empty
+          List<CarData> carDataList = List<CarData>.from(
+            response.data!.map((car) => CarData.fromJson(car)),
+          );
+
+          cars.value = carDataList;
+
+          logger.log("cars:: ${cars}");
+          update();
+
+          // showSuccessSnackbar(
+          //   title: 'Cars for Location',
+          //   message: 'Available!',
+          // );
+          // isFetchingCars.value = false;
+          update();
+          routeService.gotoRoute(
+            AppLinks.searchResult,
+            arguments: {
+              "cars": cars,
+              "selectedState": selectedState.value,
+              "selectedCity": selectedCity.value,
+              "startDate": startDate.value,
+              "endDate": endDate.value
+
+            },
+          );
+        }
+      } else {
+        logger.log("unable to get city ${response.data}");
+      }
+    } catch (exception) {
+      logger.log("error  $exception");
+    } finally {
+      isFetchingCars.value = false;
     }
   }
 }

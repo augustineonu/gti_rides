@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -43,7 +45,8 @@ class SearchResultScreen extends GetView<SearchResultController> {
             child: SvgPicture.asset(ImageAssets.arrowLeft, color: black)),
         centerTitle: false,
         title: textWidget(
-            text: "Surulere, Lagos",
+            text:
+                "${controller.selectedCity.value}, ${controller.selectedState.value}",
             style: getMediumStyle().copyWith(fontWeight: FontWeight.w500)),
         titleColor: iconColor(),
         actions: [
@@ -58,8 +61,9 @@ class SearchResultScreen extends GetView<SearchResultController> {
                     child: verticalDivider(color: grey1),
                   ),
                   textWidget(
-                      text: "1 - 5 Nov",
-                      style: getRegularStyle(color: black)
+                      text:
+                          "${controller.startDate.value} - ${controller.endDate.value}",
+                      style: getRegularStyle(color: black, fontSize: 12.sp)
                           .copyWith(fontWeight: FontWeight.w500)),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8),
@@ -83,8 +87,9 @@ class SearchResultScreen extends GetView<SearchResultController> {
             ListView.separated(
               physics: const ScrollPhysics(),
               shrinkWrap: true,
-              itemCount: 3,
+              itemCount: controller.carListData!.length,
               itemBuilder: (context, index) {
+                var carData = controller.carListData![index];
                 return InkWell(
                   onTap: () => controller.routeToCarSelection(),
                   child: Container(
@@ -157,7 +162,8 @@ class SearchResultScreen extends GetView<SearchResultController> {
                         Padding(
                           padding: const EdgeInsets.only(top: 10, left: 10),
                           child: textWidget(
-                            text: '20212 KIA Sportage',
+                            text:
+                                '${carData.brandName ?? ''} ${carData.brandModelName}',
                             style: getMediumStyle().copyWith(
                                 fontFamily: 'Neue',
                                 fontWeight: FontWeight.w700),
@@ -182,13 +188,15 @@ class SearchResultScreen extends GetView<SearchResultController> {
                                       ),
                                       RichText(
                                         text: TextSpan(
-                                            text: '97%',
+                                            text:
+                                                '${carData.percentageRate.toString()}%',
                                             style: getMediumStyle(
                                               fontSize: 12.sp,
                                             ),
                                             children: <TextSpan>[
                                               TextSpan(
-                                                  text: ' (66 trips)',
+                                                  text:
+                                                      ' (${carData.tripsCount.toString()} trips)',
                                                   style: getLightStyle(
                                                       fontSize: 12.sp,
                                                       color: grey2),
@@ -211,7 +219,8 @@ class SearchResultScreen extends GetView<SearchResultController> {
                                         width: 5.sp,
                                       ),
                                       textWidget(
-                                        text: 'Surulere, Lagos state',
+                                        text:
+                                            '${controller.selectedCity.value}, ${controller.selectedState.value}',
                                         style: getMediumStyle().copyWith(
                                           fontFamily: 'Neue',
                                         ),
@@ -231,7 +240,7 @@ class SearchResultScreen extends GetView<SearchResultController> {
                                     width: 2.sp,
                                   ),
                                   textWidget(
-                                    text: '5,000/day',
+                                    text: '${carData.pricePerDay.toString()}/day',
                                     style: getMediumStyle().copyWith(
                                       fontFamily: 'Neue',
                                     ),
@@ -248,8 +257,7 @@ class SearchResultScreen extends GetView<SearchResultController> {
               },
               separatorBuilder: (context, _) => SizedBox(height: 24.h),
             ),
-            textWidget(
-                text: controller.testString.value, style: getMediumStyle()),
+            textWidget(text: "", style: getMediumStyle()),
             SizedBox(
               height: size.height * 0.02,
             ),

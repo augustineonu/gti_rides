@@ -34,7 +34,7 @@ class ManageVehicleController extends GetxController
   }
 
   // variables
-  RxList<CarData> carList = <CarData>[].obs;
+  RxList<CarListData> carList = <CarListData>[].obs;
   RxBool isLoading = false.obs;
   RxBool isFetchingCars = false.obs;
   RxBool isDeletingCar = false.obs;
@@ -113,7 +113,7 @@ class ManageVehicleController extends GetxController
           cars?.value = response.data!;
           change(response.data!, status: RxStatus.success());
           
-          // change(response.data!.cast<CarData>(), status: RxStatus.success());
+          // change(response.data!.cast<CarListData>(), status: RxStatus.success());
           update();
         }
         isFetchingCars.value = false;

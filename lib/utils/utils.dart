@@ -206,11 +206,12 @@ showErrorSnackbar({required String message, Color? color}) {
   }
 }
 
-showSuccessSnackbar({required String message, Color? color, Color? textColor}) {
+showSuccessSnackbar({required String message, String? title, Color? color, Color? textColor}) {
   final overlayContext = Get.overlayContext;
   if (overlayContext != null) {
     Get.rawSnackbar(
       snackPosition: SnackPosition.TOP,
+      title: title,
       message: message,
       isDismissible: false,
       backgroundColor: color ?? success,

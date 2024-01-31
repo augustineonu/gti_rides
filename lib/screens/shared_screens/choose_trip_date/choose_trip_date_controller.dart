@@ -135,12 +135,33 @@ class ChooseTripDateController extends GetxController {
 
   void queryListener() {}
 
-  void goBack() => routeService.goBack();
-  void goBack1({bool? closeOverlays = true}) => routeService.goBack(result: {
-        "start":
-            "$startDate $selectedStartHour:${selectedStartMinute < 10 ? '0$selectedStartMinute' : selectedStartMinute}${selectedStartAmPm.value == 0 ? "am" : "PM"}",
-        "end":
-            "$endDate $selectedEndHour:${selectedEndMins < 10 ? '0$selectedEndMins' : selectedEndMins}${selectedEndAmPm.value == 0 ? "am" : "PM"}",
-        "selectedExpiryDate": selectedExpiryDate.value,
-      }, closeOverlays: isRenterHome.value ? false : closeOverlays);
+  // void goBack() => routeService.goBack();
+  // void goBack1({bool? closeOverlays = true}) => routeService.goBack(result: {
+  //       "start":
+  //           "$startDate $selectedStartHour:${selectedStartMinute < 10 ? '0$selectedStartMinute' : selectedStartMinute}${selectedStartAmPm.value == 0 ? "am" : "PM"}",
+  //       "end":
+  //           "$endDate $selectedEndHour:${selectedEndMins < 10 ? '0$selectedEndMins' : selectedEndMins}${selectedEndAmPm.value == 0 ? "am" : "PM"}",
+  //       "selectedExpiryDate": selectedExpiryDate.value,
+  //     }, closeOverlays: !isRenterHome.value ? false : closeOverlays);
+
+  void goBack1({bool? closeOverlays = true}) {
+    Map<String, dynamic> result = {
+      "start":
+          "$startDate $selectedStartHour:${selectedStartMinute < 10 ? '0$selectedStartMinute' : selectedStartMinute}${selectedStartAmPm.value == 0 ? "am" : "PM"}",
+      "end":
+          "$endDate $selectedEndHour:${selectedEndMins < 10 ? '0$selectedEndMins' : selectedEndMins}${selectedEndAmPm.value == 0 ? "am" : "PM"}",
+      "selectedExpiryDate": selectedExpiryDate.value,
+    };
+
+    // Check if any of the values in the result map is null, and provide default values if so
+    result.forEach((key, value) {
+      if (value == null) {
+        result[key] = ''; // Provide an empty string as the default value
+      }
+    });
+
+    routeService.goBack(
+        result: result,
+        closeOverlays: !isRenterHome.value ? false : closeOverlays);
+  }
 }

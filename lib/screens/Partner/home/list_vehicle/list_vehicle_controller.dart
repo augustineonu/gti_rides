@@ -1158,7 +1158,7 @@ class ListVehicleController extends GetxController {
   }
 
   RxList<dynamic> carHistory = RxList<dynamic>();
-  RxList<CarData> carHistory1 = RxList<CarData>();
+  RxList<CarListData> carHistory1 = RxList<CarListData>();
   RxString startDate = ''.obs;
   RxString endDate = ''.obs;
   RxString pricePerDay = ''.obs;

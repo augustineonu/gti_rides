@@ -3,7 +3,7 @@ import 'dart:convert';
 class CarList {
     final int? statusCode;
     final String? status;
-    final List<CarData> data;
+    final List<CarListData> data;
 
     CarList({
         this.statusCode,
@@ -18,7 +18,7 @@ class CarList {
     factory CarList.fromJson(Map<String, dynamic> json) => CarList(
         statusCode: json["status_code"],
         status: json["status"],
-        data: json["data"] == null ? [] : List<CarData>.from(json["data"]!.map((x) => CarData.fromJson(x))),
+        data: json["data"] == null ? [] : List<CarListData>.from(json["data"]!.map((x) => CarListData.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -28,7 +28,7 @@ class CarList {
     };
 }
 
-class CarData {
+class CarListData {
     final dynamic carId;
     final dynamic availability;
     final dynamic plateNumber;
@@ -60,7 +60,7 @@ class CarData {
     final dynamic feedbackCount;
     final dynamic totalEarning;
 
-    CarData({
+    CarListData({
         this.carId,
         this.availability,
         this.plateNumber,
@@ -93,11 +93,11 @@ class CarData {
         this.totalEarning,
     });
 
-    factory CarData.fromRawJson(String str) => CarData.fromJson(json.decode(str));
+    factory CarListData.fromRawJson(String str) => CarListData.fromJson(json.decode(str));
 
     String toRawJson() => json.encode(toJson());
 
-    factory CarData.fromJson(Map<String, dynamic> json) => CarData(
+    factory CarListData.fromJson(Map<String, dynamic> json) => CarListData(
         carId: json["carID"],
         availability: json["availability"],
         plateNumber: json["plateNumber"],

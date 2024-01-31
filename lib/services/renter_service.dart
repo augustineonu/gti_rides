@@ -86,6 +86,7 @@ class RenterService {
       rethrow;
     }
   }
+
   Future<ListResponseModel> getReview({required String carId}) async {
     try {
       final result = await apiService.getRequest(
@@ -105,7 +106,7 @@ class RenterService {
     try {
       final result = await apiService.postRequest(
           endpoint: '/user/renter/car/addFavoriteCar', data: {"carID": carId});
-      logger.log("result $result");
+      // logger.log("result $result");
 
       return ApiResponseModel.fromJson(result);
     } catch (err) {
@@ -118,7 +119,7 @@ class RenterService {
       final result = await apiService.deleteRequest(
           endpoint: '/user/renter/car/deleteFavoriteCar',
           data: {"carID": carId});
-      logger.log("result $result");
+      // logger.log("result $result");
 
       return ApiResponseModel.fromJson(result);
     } catch (err) {
@@ -131,7 +132,25 @@ class RenterService {
       final result = await apiService.getRequest(
         '/user/renter/car/getFavoriteCars?skip=0&limit=100000',
       );
-      logger.log("result $result");
+      // logger.log("result $result");
+
+      final decodedResult = json.decode(result);
+
+      return ListResponseModel.fromJson(decodedResult);
+    } catch (err) {
+      rethrow;
+    }
+  }
+
+  Future<ListResponseModel> searchCars({
+    required String stateCode,
+    required String cityCode,
+  }) async {
+    try {
+      final result = await apiService.getRequest(
+        '/user/renter/car/getCars?stateCode=$stateCode&cityCode=$cityCode&skip=0&limit=1000000',
+      );
+      // logger.log("result $result");
 
       final decodedResult = json.decode(result);
 

@@ -52,24 +52,23 @@ class RouteService extends NavigatorObserver {
     // inspect(listStore.navRoutes);
   }
 
-  void goBack({Map<String, Object?>? result,
-  bool? closeOverlays = false}) {
+  void goBack({Map<String, Object?>? result, bool? closeOverlays = false}) {
     Future.delayed(Duration.zero, () {
-      Get.back(result: result,
-      closeOverlays: closeOverlays!
-      );
+      Get.back(result: result, closeOverlays: closeOverlays!);
     });
   }
 
-  Future<dynamic>? gotoRoute(String route, {Object? arguments}) {
+  Future<dynamic>? gotoRoute(String route,
+      {Object? arguments, Map<String, String>? parameters}) {
     logger.log('navigating to $route');
-    return Get.toNamed(route, arguments: arguments);
+    return Get.toNamed(route, arguments: arguments, parameters: parameters);
   }
 
   Future<dynamic>? getOff(Widget Function() page, {Object? arguments}) {
     logger.log('getting off one route and replacing a new route $page');
     return Get.off(page, arguments: arguments);
   }
+
   Future<dynamic>? offAllNamed(String route, {Object? arguments}) {
     logger.log('getting off all routes and navigating to $route');
     return Get.offAllNamed(route, arguments: arguments);
