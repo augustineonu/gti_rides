@@ -514,7 +514,7 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
     );
   }
 
-  Widget body(size, context, controller) {
+  Widget body(size, context, ChooseTripDateController controller) {
     return SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 20.0.sp, vertical: 24.sp),
         child: Column(
@@ -606,7 +606,7 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
                     todayHighlightColor: primaryColor,
                     controller: controller.datePickerController,
                     selectionMode: DateRangePickerSelectionMode.range,
-                    onCancel: controller.goBack,
+                    onCancel: controller.goBack1,
                     onSubmit: (value) async {
                       await Future.delayed(const Duration(seconds: 2));
                       showDialog(
@@ -908,16 +908,16 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
                                           ],
                                         ),
                                       ),
-                                      Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 20.sp),
-                                        child: GtiButton(
-                                          text: AppStrings.cont,
-                                          onTap: () {
-                                            controller.goBack1();
-                                          },
-                                        ),
-                                      ),
+                                      // Padding(
+                                      //   padding: EdgeInsets.symmetric(
+                                      //       horizontal: 20.sp),
+                                      //   child: GtiButton(
+                                      //     text: AppStrings.cont,
+                                      //     onTap: () {
+                                      //       // controller.goBack1();
+                                      //     },
+                                      //   ),
+                                      // ),
                                     ],
                                   ),
                                 ),
@@ -969,7 +969,10 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
 
   AppBar appBar(BuildContext context, ChooseTripDateController controller) {
     return gtiAppBar(
-        onTap: () => controller.goBack1(),
+        onTap: () {
+
+        controller.goBack1(closeOverlays: false);
+        }, 
         leading: Transform.scale(
             scale: 0.5,
             child: SvgPicture.asset(

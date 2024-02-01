@@ -123,7 +123,7 @@ class AppRoutes {
     ),
     GetPage(
       name: AppLinks.carSelectionResult,
-      page: () => const CarSelectionResultScreen(),
+      page: () => CarSelectionResultScreen(),
       binding: CarSelectionResultBinding(),
     ),
     GetPage(

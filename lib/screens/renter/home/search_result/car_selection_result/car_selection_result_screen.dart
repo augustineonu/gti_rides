@@ -28,7 +28,10 @@ class CarSelectionResultBinding extends Bindings {
 }
 
 class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
-  const CarSelectionResultScreen([Key? key]) : super(key: key);
+   CarSelectionResultScreen([Key? key]) : super(key: key);
+
+   @override
+     final controller = CarSelectionResultController();
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -62,352 +65,365 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
         var car = state?.first;
         return Obx(() {
           return SingleChildScrollView(
-            controller: controller.scrollController,
+              controller: controller.scrollController,
               child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              headerCard(size, car),
-              const SizedBox(
-                height: 10,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.sp),
-                child: SizedBox(
-                  height: 200.sp,
-                  child: Stack(
-                    children: [
-                      PageView(
-                        physics: const ScrollPhysics(),
-                        // controller: cardPageController,
-                        controller: PageController(),
-                        // onPageChanged: (int index) {
-                        //   // currentIndex.value = index;
-                        // },
-                        onPageChanged: (index) =>
-                            controller.onPageChanged(index),
-                        scrollDirection: Axis.horizontal,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  headerCard(size, car),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.sp),
+                    child: SizedBox(
+                      height: 200.sp,
+                      child: Stack(
                         children: [
-                          for (Photo? carPhoto in car?.photo ?? [])
-                            if (carPhoto != null)
-                              GestureDetector(
-                                onTap: () =>
-                                    controller.routeToViewCar(arguments: {
-                                  "photoList": car?.photo,
-                                }),
-                                child: carImage(
-                                  imgUrl: carPhoto.photoUrl!,
-                                  height: 200.sp,
-                                  width: 400.sp,
-                                  fit: BoxFit.fitWidth,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(4.r)),
-                                ),
-                              ),
-                        ],
-                      ),
-                      carAvailabilityTag(
-                        status: car?.availability == 'available'
-                            ? AppStrings.available
-                            : AppStrings.unavailable,
-                        positionLeft: 7,
-                        positionTop: 7,
-                      ),
-                      Positioned(
-                        bottom: 10,
-                        left: 7,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 5, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: black,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(2.r),
-                            ),
+                          PageView(
+                            physics: const ScrollPhysics(),
+                            // controller: cardPageController,
+                            controller: PageController(),
+                            // onPageChanged: (int index) {
+                            //   // currentIndex.value = index;
+                            // },
+                            onPageChanged: (index) =>
+                                controller.onPageChanged(index),
+                            scrollDirection: Axis.horizontal,
+                            children: [
+                              for (Photo? carPhoto in car?.photo ?? [])
+                                if (carPhoto != null)
+                                  GestureDetector(
+                                    onTap: () =>
+                                        controller.routeToViewCar(arguments: {
+                                      "photoList": car?.photo,
+                                    }),
+                                    child: carImage(
+                                      imgUrl: carPhoto.photoUrl!,
+                                      height: 200.sp,
+                                      width: 400.sp,
+                                      fit: BoxFit.fitWidth,
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(4.r)),
+                                    ),
+                                  ),
+                            ],
                           ),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 6, vertical: 4),
-                            decoration: BoxDecoration(
+                          carAvailabilityTag(
+                            status: car?.availability == 'available'
+                                ? AppStrings.available
+                                : AppStrings.unavailable,
+                            positionLeft: 7,
+                            positionTop: 7,
+                          ),
+                          Positioned(
+                            bottom: 10,
+                            left: 7,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 5, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: black,
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(2.r),
                                 ),
-                                border: Border.all(
-                                  color: white,
-                                )),
-                            child: Center(
-                              child: textWidget(
-                                text:
-                                    '${controller.currentIndex.value + 1} of ${car?.photo?.length}',
-                                style:
-                                    getLightStyle(fontSize: 10.sp, color: white)
+                              ),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 6, vertical: 4),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(2.r),
+                                    ),
+                                    border: Border.all(
+                                      color: white,
+                                    )),
+                                child: Center(
+                                  child: textWidget(
+                                    text:
+                                        '${controller.currentIndex.value + 1} of ${car?.photo?.length}',
+                                    style: getLightStyle(
+                                            fontSize: 10.sp, color: white)
                                         .copyWith(fontWeight: FontWeight.w300),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
+                          Positioned(
+                              top: 7,
+                              right: 7,
+                              child: Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: controller.shareRide,
+                                    child: Container(
+                                      padding: EdgeInsets.all(10.sp),
+                                      decoration: BoxDecoration(
+                                          color:
+                                              primaryColorDark.withOpacity(0.8),
+                                          shape: BoxShape.circle),
+                                      // child: SvgPicture.asset(ImageAssets.share),
+                                      child: Icon(
+                                        Remix.share_line,
+                                        color: primaryColor,
+                                        size: 18.sp,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 6,
+                                  ),
+                                  InkWell(
+                                    onTap: () => controller.onAddPhotoToFav(
+                                        carId: car?.carId),
+                                    child: Container(
+                                      padding: EdgeInsets.all(10.sp),
+                                      decoration: BoxDecoration(
+                                          color:
+                                              primaryColorDark.withOpacity(0.8),
+                                          shape: BoxShape.circle),
+                                      // child: SvgPicture.asset(ImageAssets.share),
+                                      child: Icon(
+                                        controller.isLiked.value
+                                            ? Remix.heart_3_fill
+                                            : Remix.heart_3_line,
+                                        color: primaryColor,
+                                        size: 18.sp,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: tripDate(
+                      title: AppStrings.tripDate,
+                      startDate: controller.startDateTime.value,
+                      endDate: controller.endDateTime.value,
+                      trailling: InkWell(
+                        onTap: () async {
+                          // final data = await controller
+                          //     .routeToSelectDate();
+                          var data = await Get.toNamed(AppLinks.chooseTripDate,
+                              arguments: {
+                                "appBarTitle": AppStrings.tripDate,
+                                "to": AppStrings.endDate,
+                                "from": AppStrings.startDate,
+                                "enablePastDates": false,
+                              });
+                          if (data != null) {
+                            // Handle the selected date here
+                            print('Selected Date page: $data');
+                            controller.startDateTime.value = data['start'];
+                            controller.endDateTime.value = data['end'];
+                            controller.differenceInDays.value = data["differenceInDays"];
+                           await  controller.getCarHistory();
+                          }
+                        },
+                        child: SizedBox(
+                          height: 30.sp,
+                          width: 70.sp,
+                          child: Center(
+                            child: textWidget(
+                                text: (controller.startDateTime.value == '' &&
+                                        controller.endDateTime.value == '')
+                                    ? AppStrings.selectDate
+                                    : AppStrings.change,
+                                style: getMediumStyle(
+                                    fontSize: 12.sp, color: primaryColor)),
+                          ),
                         ),
                       ),
-                      Positioned(
-                          top: 7,
-                          right: 7,
-                          child: Row(
-                            children: [
-                              GestureDetector(
-                                onTap: controller.shareRide,
-                                child: Container(
-                                  padding: EdgeInsets.all(10.sp),
-                                  decoration: BoxDecoration(
-                                      color: primaryColorDark.withOpacity(0.8),
-                                      shape: BoxShape.circle),
-                                  // child: SvgPicture.asset(ImageAssets.share),
-                                  child: Icon(
-                                    Remix.share_line,
-                                    color: primaryColor,
-                                    size: 18.sp,
-                                  ),
-                                ),
+                    ),
+                  ),
+                  divider(color: borderColor),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: carBasics(
+                      carType: car?.type?[0].typeName ?? '',
+                      carSeat: car?.seat?[0].seatName ?? '',
+                    ),
+                  ),
+                  divider(color: borderColor),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: carFetures(children: [
+                      for (Feature feature in car?.feature ?? [])
+                        chipWidget(title: feature.featuresName ?? '')
+                    ]),
+                  ),
+                  divider(color: borderColor),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: transmission(
+                        transmission:
+                            car?.transmission?[0].transmissionName ?? ''),
+                  ),
+
+                  estimatedTotalAndContinue(car),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: aboutCar(aboutCar: car?.about ?? ''),
+                  ),
+                  divider(color: borderColor),
+                  ratingsAndReviews(size, car),
+                  Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                            left: 20.sp, right: 10.sp, top: 10.sp),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: 230.sp,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  textWidget(
+                                      text: AppStrings.interState,
+                                      style: getMediumStyle(color: grey5)),
+                                  textWidget(
+                                      text: AppStrings.goBeyondStateExtra,
+                                      textOverflow: TextOverflow.visible,
+                                      style: getLightStyle(
+                                          fontSize: 10.sp, color: grey2)),
+                                ],
                               ),
-                              const SizedBox(
-                                width: 6,
-                              ),
-                              InkWell(
-                                onTap: () => controller.onAddPhotoToFav(
-                                    carId: car?.carId),
-                                child: Container(
-                                  padding: EdgeInsets.all(10.sp),
-                                  decoration: BoxDecoration(
-                                      color: primaryColorDark.withOpacity(0.8),
-                                      shape: BoxShape.circle),
-                                  // child: SvgPicture.asset(ImageAssets.share),
-                                  child: Icon(
-                                    controller.isLiked.value
-                                        ? Remix.heart_3_fill
-                                        : Remix.heart_3_line,
-                                    color: primaryColor,
-                                    size: 18.sp,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          )),
+                            ),
+                            switchWidget(context,
+                                value: controller.selectedInterState.value,
+                                activeTrackColor: borderColor,
+                                onChanged: (value) =>
+                                    controller.onSelectInterState(value)),
+                          ],
+                        ),
+                      ),
+                      interStateWidget(),
                     ],
                   ),
-                ),
-              ),
-             
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: tripDate(
-                  title: AppStrings.tripDate,
-                  startDate: controller.startDateTime.value,
-                  endDate: controller.endDateTime.value,
-                  trailling: InkWell(
-                    onTap: () async {
-                      // final data = await controller
-                      //     .routeToSelectDate();
-                      var data = await Get.toNamed(AppLinks.chooseTripDate,
-                          arguments: {
-                            "appBarTitle": AppStrings.tripDate,
-                            "to": AppStrings.endDate,
-                            "from": AppStrings.startDate,
-                            "enablePastDates": false,
-                          });
-
-                      // Handle the selected date here
-                      print('Selected Date page: $data');
-                      controller.startDateTime.value = data['start'];
-                      controller.endDateTime.value = data['end'];
-                    },
-                    child: SizedBox(
-                      height: 30.sp,
-                      width: 70.sp,
-                      child: Center(
-                        child: textWidget(
-                            text: (controller.startDateTime.value == '' &&
-                                    controller.endDateTime.value == '')
-                                ? AppStrings.selectDate
-                                : AppStrings.change,
-                            style: getMediumStyle(
-                                fontSize: 12.sp, color: primaryColor)),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              divider(color: borderColor),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: carBasics(
-                  carType: car?.type?[0].typeName ?? '',
-                  carSeat: car?.seat?[0].seatName ?? '',
-                ),
-              ),
-              divider(color: borderColor),
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: carFetures(children: [
-                  for (Feature feature in car?.feature ?? [])
-                    chipWidget(title: feature.featuresName ?? '')
-                ]),
-              ),
-              divider(color: borderColor),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: transmission(
-                    transmission: car?.transmission?[0].transmissionName ?? ''),
-              ),
-
-              estimatedTotalAndContinue(car),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: aboutCar(aboutCar: car?.about ?? ''),
-              ),
-              divider(color: borderColor),
-              ratingsAndReviews(size, car),
-              Column(
-                children: [
-                  Padding(
-                    padding:
-                        EdgeInsets.only(left: 20.sp, right: 10.sp, top: 10.sp),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          width: 230.sp,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              textWidget(
-                                  text: AppStrings.interState,
-                                  style: getMediumStyle(color: grey5)),
-                              textWidget(
-                                  text: AppStrings.goBeyondStateExtra,
-                                  textOverflow: TextOverflow.visible,
-                                  style: getLightStyle(
-                                      fontSize: 10.sp, color: grey2)),
-                            ],
-                          ),
-                        ),
-                        switchWidget(context,
-                            value: controller.selectedInterState.value,
-                            activeTrackColor: borderColor,
-                            onChanged: (value) =>
-                                controller.onSelectInterState(value)),
-                      ],
-                    ),
-                  ),
-                  interStateWidget(),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 15),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        textWidget(
-                            text: AppStrings.driveOptionCaps,
-                            style: getBoldStyle(fontSize: 12.sp, color: grey2)
-                                .copyWith(fontWeight: FontWeight.w700)),
-                        Container(
-                          padding: const EdgeInsets.symmetric(vertical: 2),
-                          decoration: const BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(width: 1, color: borderColor),
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 15),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            textWidget(
+                                text: AppStrings.driveOptionCaps,
+                                style:
+                                    getBoldStyle(fontSize: 12.sp, color: grey2)
+                                        .copyWith(fontWeight: FontWeight.w700)),
+                            Container(
+                              padding: const EdgeInsets.symmetric(vertical: 2),
+                              decoration: const BoxDecoration(
+                                border: Border(
+                                  bottom:
+                                      BorderSide(width: 1, color: borderColor),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  GtiButton(
-                                    text: AppStrings.chauffeur,
-                                    style: getRegularStyle(
+                                  Column(
+                                    children: [
+                                      GtiButton(
+                                        text: AppStrings.chauffeur,
+                                        style: getRegularStyle(
+                                            color:
+                                                controller.currentIndex.value ==
+                                                        0
+                                                    ? primaryColor
+                                                    : grey1),
+                                        width: 150.sp,
+                                        height: 33.sp,
+                                        color: backgroundColor,
+                                        onTap: () {
+                                          controller.onPageChanged(0);
+                                        },
+                                      ),
+                                      Container(
+                                        height: 2,
+                                        width: 150.sp,
                                         color:
                                             controller.currentIndex.value == 0
                                                 ? primaryColor
-                                                : grey1),
-                                    width: 150.sp,
-                                    height: 33.sp,
-                                    color: backgroundColor,
-                                    onTap: () {
-                                      controller.onPageChanged(0);
-                                    },
+                                                : Colors.transparent,
+                                      ),
+                                    ],
                                   ),
-                                  Container(
-                                    height: 2,
-                                    width: 150.sp,
-                                    color: controller.currentIndex.value == 0
-                                        ? primaryColor
-                                        : Colors.transparent,
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                children: [
-                                  GtiButton(
-                                    text: AppStrings.selfDrive,
-                                    style: getRegularStyle(
+                                  Column(
+                                    children: [
+                                      GtiButton(
+                                        text: AppStrings.selfDrive,
+                                        style: getRegularStyle(
+                                            color:
+                                                controller.currentIndex.value ==
+                                                        1
+                                                    ? primaryColor
+                                                    : grey1),
+                                        width: 150.sp,
+                                        height: 33.sp,
+                                        color: backgroundColor,
+                                        onTap: () {
+                                          controller.onPageChanged(1);
+                                        },
+                                      ),
+                                      Container(
+                                        height: 2,
+                                        width: 150.sp,
                                         color:
                                             controller.currentIndex.value == 1
                                                 ? primaryColor
-                                                : grey1),
-                                    width: 150.sp,
-                                    height: 33.sp,
-                                    color: backgroundColor,
-                                    onTap: () {
-                                      controller.onPageChanged(1);
-                                    },
-                                  ),
-                                  Container(
-                                    height: 2,
-                                    width: 150.sp,
-                                    color: controller.currentIndex.value == 1
-                                        ? primaryColor
-                                        : Colors.transparent,
+                                                : Colors.transparent,
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                      // pages
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.5.sp,
+                        child: PageView(
+                          physics: const NeverScrollableScrollPhysics(),
+                          controller: controller.pageController,
+                          onPageChanged: (int page) {
+                            controller.onPageChanged(page);
+                          },
+                          children: [
+                            /// chauffeur option
+                            chauffeurOptionPage(context),
+                            ///// cself drive option
+                            selfDriveOption(context),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                  // pages
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.5.sp,
-                    child: PageView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      controller: controller.pageController,
-                      onPageChanged: (int page) {
-                        controller.onPageChanged(page);
-                      },
-                      children: [
-                        /// chauffeur option
-                        chauffeurOptionPage(context),
-                        ///// cself drive option
-                        selfDriveOption(context),
-                      ],
-                    ),
+                    height: size.height * 0.02,
+                  ),
+                  continueButton(),
+                  // textWidget(
+                  // text: controller.testString.value, style: getMediumStyle()),
+                  SizedBox(
+                    height: size.height * 0.02,
                   ),
                 ],
-              ),
-              SizedBox(
-                height: size.height * 0.02,
-              ),
-              continueButton(),
-              // textWidget(
-              // text: controller.testString.value, style: getMediumStyle()),
-              SizedBox(
-                height: size.height * 0.02,
-              ),
-            ],
-          ));
+              ));
         });
       },
       onEmpty: Padding(
@@ -477,7 +493,7 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                       width: 2.sp,
                     ),
                     textWidget(
-                      text: '100,000/day',
+                      text: controller.estimatedTotal.value.toString(),
                       textOverflow: TextOverflow.ellipsis,
                       style: getMediumStyle(fontSize: 12.sp).copyWith(
                         fontFamily: 'Neue',

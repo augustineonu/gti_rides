@@ -45,6 +45,7 @@ class SearchCityController extends GetxController {
 
   RxString startDate = ''.obs;
   RxString endDate = ''.obs;
+  Rx<int> selectedDifferenceInDays = 0.obs;
 
   TextEditingController searchCategoryController = TextEditingController();
   Rx<TextEditingController> fromController = TextEditingController().obs;
@@ -340,7 +341,10 @@ String extractDayMonth(String inputDate) {
               "selectedState": selectedState.value,
               "selectedCity": selectedCity.value,
               "startDate": startDate.value,
-              "endDate": endDate.value
+              "endDate": endDate.value,
+              "startDateTime": startDateTime.value,
+              "endDateTime": endDateTime.value,
+              "differenceInDays": selectedDifferenceInDays.value
 
             },
           );
@@ -353,5 +357,12 @@ String extractDayMonth(String inputDate) {
     } finally {
       isFetchingCars.value = false;
     }
+  }
+
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+    isFetchingCars.value = false;
   }
 }

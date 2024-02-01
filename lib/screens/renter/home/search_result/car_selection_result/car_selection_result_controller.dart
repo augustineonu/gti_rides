@@ -11,11 +11,13 @@ import 'package:share_plus/share_plus.dart';
 
 class CarSelectionResultController extends GetxController
     with StateMixin<List<CarHistoryData>> {
+      
   Logger logger = Logger("Controller");
 
   CarSelectionResultController() {
     init();
   }
+  
 
   void init() async {
     logger.log("CarSelectionResultController Initialized");
@@ -23,6 +25,9 @@ class CarSelectionResultController extends GetxController
     if (arguments != null) {
       logger.log("Received data:: $arguments");
       carId.value = arguments!['carId'];
+      startDateTime.value = arguments!['startDateTime'] ?? '';
+      endDateTime.value = arguments!['endDateTime'] ?? '';
+      differenceInDays.value = arguments!['differenceInDays'] ?? 0;
       await getCarHistory();
       await getCarReview();
     }
@@ -34,6 +39,17 @@ class CarSelectionResultController extends GetxController
 
     super.onInit();
   }
+
+    @override
+  void onReady() { // called after the widget is rendered on screen
+    // showIntroDialog();
+    super.onReady();
+  }
+
+
+
+  
+  
 
   Map<String, dynamic>? arguments = Get.arguments;
 
@@ -58,6 +74,9 @@ class CarSelectionResultController extends GetxController
   Rx<String> startDateTime = "".obs;
   Rx<String> endDateTime = "".obs;
   RxList<dynamic>? reviews = <dynamic>[].obs;
+  Rx<int> differenceInDays = 0.obs;
+  Rx<String> pricePerDay = ''.obs;
+  Rx<int> estimatedTotal = 0.obs;
 
   void goBack() => routeService.goBack();
   void routeToSearchFilter() => routeService.gotoRoute(AppLinks.searchFilter);
@@ -132,6 +151,8 @@ class CarSelectionResultController extends GetxController
           List<CarHistoryData> carHistory = List<CarHistoryData>.from(
             response.data!.map((car) => CarHistoryData.fromJson(car)),
           );
+          pricePerDay.value = carHistory.first.pricePerDay;
+         estimatedTotal.value = await calculateEstimatedTotal(pricePerDay.value, differenceInDays.value);
 
           change(carHistory, status: RxStatus.success());
           update();
@@ -145,6 +166,25 @@ class CarSelectionResultController extends GetxController
           status: RxStatus.error(exception.toString()));
     }
   }
+
+Future<int> calculateEstimatedTotal(String pricePerDay, int difference) async {
+  try {
+    // Convert the pricePerDay string to double
+    int price = int.parse(pricePerDay.replaceAll(',', ''));
+
+    // Calculate the estimated total
+    int estimatedTotal = price * difference;
+
+    logger.log("Estimated total: ${estimatedTotal.toString()}");
+
+    return estimatedTotal;
+  } catch (e) {
+    // Handle the case where the conversion fails
+    logger.log("Error converting pricePerDay to double: $e");
+    return 0; // or any default value
+  }
+}
+
 
   Future<void> favoriteCar({required String carId}) async {
     isAddingFavCar.value = true;

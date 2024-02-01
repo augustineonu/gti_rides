@@ -40,6 +40,7 @@ class ChooseTripDateController extends GetxController {
   RxString appBarTitle = ''.obs;
   RxString to = ''.obs;
   RxString from = ''.obs;
+  Rx<int> selectedDifferenceInDays = 0.obs;
 
   RxString selectedAmPm = 'am'.obs;
 
@@ -54,9 +55,11 @@ class ChooseTripDateController extends GetxController {
   @override
   void onInit() async {
     final DateTime today = DateTime.now();
-    startDate.value = DateFormat('dd, MMMM').format(today).toString();
-    endDate.value =
-        DateFormat('dd, MMMM').format(today.add(Duration(days: 3))).toString();
+    // startDate.value = DateFormat('dd, MMMM').format(today).toString();
+    startDate.value = formatDayDate(today).toString();
+    endDate.value = formatDayDate(today.add(Duration(days: 3))).toString();
+    // endDate.value =
+    // DateFormat('dd, MMMM').format(today.add(Duration(days: 3))).toString();
     datePickerController.selectedRange =
         PickerDateRange(today, today.add(Duration(days: 3)));
     update();
@@ -73,6 +76,7 @@ class ChooseTripDateController extends GetxController {
       isSingleDateSelection.value = arguments['isSingleDateSelection'] ?? false;
       enablePastDates.value = arguments['enablePastDates'] ?? true;
       isRenterHome.value = arguments['isRenterHome'] ?? false;
+      // startDate.value = arguments['startDate'] ?? '';
       logger.log("date ${arguments['enablePastDates']}");
       logger.log("date ${enablePastDates.value}");
 
@@ -105,12 +109,36 @@ class ChooseTripDateController extends GetxController {
         '$formattedHour:${formattedMinute.toString().padLeft(2, '0')}$selectedAmPm';
   }
 
+  PickerDateRange? selectedDateRange;
+
   void selectionChanged(DateRangePickerSelectionChangedArgs args) {
     startDate.value = formatDayDate(args.value.startDate).toString();
     endDate.value =
         formatDayDate(args.value.endDate ?? args.value.startDate).toString();
     logger.log("selected start date:: ${startDate.value}");
     logger.log("selected end date:: ${endDate.value}");
+
+    if (args.value is PickerDateRange) {
+      selectedDateRange = args.value as PickerDateRange?;
+      print('Selected Range: ${selectedDateRange}');
+
+      if (selectedDateRange?.startDate != null &&
+          selectedDateRange?.endDate != null) {
+        // Calculate the difference
+        Duration difference = calculateDateDifference(
+            selectedDateRange!.startDate!,
+            selectedDateRange!.endDate ?? selectedDateRange!.startDate!);
+
+        selectedDifferenceInDays.value = difference.inDays;
+
+        print('Difference in days: ${difference.inDays}');
+      }
+    }
+  }
+
+  Duration calculateDateDifference(DateTime startDate, DateTime endDate) {
+    // Calculate the difference between two dates
+    return endDate.difference(startDate);
   }
 
   void onSingleDateSelection(DateRangePickerSelectionChangedArgs args) {
@@ -151,6 +179,7 @@ class ChooseTripDateController extends GetxController {
       "end":
           "$endDate $selectedEndHour:${selectedEndMins < 10 ? '0$selectedEndMins' : selectedEndMins}${selectedEndAmPm.value == 0 ? "am" : "PM"}",
       "selectedExpiryDate": selectedExpiryDate.value,
+      "differenceInDays": selectedDifferenceInDays.value
     };
 
     // Check if any of the values in the result map is null, and provide default values if so
@@ -163,5 +192,27 @@ class ChooseTripDateController extends GetxController {
     routeService.goBack(
         result: result,
         closeOverlays: !isRenterHome.value ? false : closeOverlays);
+  }
+
+  void goBack2() {
+    Map<String, dynamic> result = {
+      "start":
+          "$startDate $selectedStartHour:${selectedStartMinute < 10 ? '0$selectedStartMinute' : selectedStartMinute}${selectedStartAmPm.value == 0 ? "am" : "PM"}",
+      "end":
+          "$endDate $selectedEndHour:${selectedEndMins < 10 ? '0$selectedEndMins' : selectedEndMins}${selectedEndAmPm.value == 0 ? "am" : "PM"}",
+      "selectedExpiryDate": selectedExpiryDate.value,
+      "differenceInDays": selectedDifferenceInDays.value
+    };
+
+    // Check if any of the values in the result map is null, and provide default values if so
+    result.forEach((key, value) {
+      if (value == null) {
+        result[key] = ''; // Provide an empty string as the default value
+      }
+    });
+
+    routeService.goBack(
+      result: result,
+    );
   }
 }
