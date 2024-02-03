@@ -12,7 +12,7 @@ import 'package:gti_rides/shared_widgets/text_input_widgets/normal_text_input_wi
 import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
-import 'package:gti_rides/utils/amount_formatter.dart';
+import 'package:gti_rides/utils/figures_helpers.dart';
 import 'package:gti_rides/utils/constants.dart';
 
 class QuickEditBinding extends Bindings {

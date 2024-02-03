@@ -96,6 +96,56 @@ String extractTime(String dateString) {
 }
 
 
+String extractDay(String inputDate) {
+  // Split the input date by comma and space
+  List<String> parts = inputDate.split(', ');
+
+  // Extract the day part
+  String day = parts[1].split(' ')[0];
+  // Return the extracted day
+  return day;
+}
+String extractDayMonth(String inputDate) {
+  // Split the input date by comma and space
+  List<String> parts = inputDate.split(', ');
+
+  // Extract the day part
+  String day = parts[1].split(' ')[0];
+    String month = parts[1].split(' ')[1];
+
+
+  // Return the extracted day
+  return '$day $month';
+}
+
+String extractDayDateMonth(String inputDate) {
+  // Split the input date by comma and space
+  List<String> parts = inputDate.split(', ');
+
+  // Extract the day and date parts
+  String day = parts[0];
+  String date = parts[1].split(' ')[0];
+  String month = parts[1].split(' ')[1];
+
+  // Return the day, date, and month
+  return '$day, $date $month';
+}
+// String extractTime(String inputDate) {
+//   // Split the input date by comma and space
+//   List<String> parts = inputDate.split(', ');
+
+//   // Extract the day and date parts
+//   String day = parts[0];
+//   String date = parts[1].split(' ')[0];
+//   String month = parts[1].split(' ')[1];
+
+//   // Return the day, date, and month
+//   return '$day, $date $month';
+// }
+
+
+
+
 
 
 String formatDateTime(String datetime) {

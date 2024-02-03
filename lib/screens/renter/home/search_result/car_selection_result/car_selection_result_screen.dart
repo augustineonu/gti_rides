@@ -28,10 +28,10 @@ class CarSelectionResultBinding extends Bindings {
 }
 
 class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
-   CarSelectionResultScreen([Key? key]) : super(key: key);
+  CarSelectionResultScreen([Key? key]) : super(key: key);
 
-   @override
-     final controller = CarSelectionResultController();
+  @override
+  final controller = CarSelectionResultController();
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -222,8 +222,9 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                             print('Selected Date page: $data');
                             controller.startDateTime.value = data['start'];
                             controller.endDateTime.value = data['end'];
-                            controller.differenceInDays.value = data["differenceInDays"];
-                           await  controller.getCarHistory();
+                            controller.tripDays.value =
+                                data["differenceInDays"];
+                            await controller.getCarHistory();
                           }
                         },
                         child: SizedBox(
@@ -308,6 +309,7 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                       interStateWidget(),
                     ],
                   ),
+
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -340,24 +342,24 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                                         text: AppStrings.chauffeur,
                                         style: getRegularStyle(
                                             color:
-                                                controller.currentIndex.value ==
-                                                        0
+                                                controller.tripType.value == 0
                                                     ? primaryColor
                                                     : grey1),
                                         width: 150.sp,
                                         height: 33.sp,
                                         color: backgroundColor,
-                                        onTap: () {
-                                          controller.onPageChanged(0);
-                                        },
+                                        onTap: controller.tripType.value == 0
+                                            ? () {}
+                                            : () {
+                                                controller.onChangeTripType(0);
+                                              },
                                       ),
                                       Container(
                                         height: 2,
                                         width: 150.sp,
-                                        color:
-                                            controller.currentIndex.value == 0
-                                                ? primaryColor
-                                                : Colors.transparent,
+                                        color: controller.tripType.value == 0
+                                            ? primaryColor
+                                            : Colors.transparent,
                                       ),
                                     ],
                                   ),
@@ -367,24 +369,24 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                                         text: AppStrings.selfDrive,
                                         style: getRegularStyle(
                                             color:
-                                                controller.currentIndex.value ==
-                                                        1
+                                                controller.tripType.value == 1
                                                     ? primaryColor
                                                     : grey1),
                                         width: 150.sp,
                                         height: 33.sp,
                                         color: backgroundColor,
-                                        onTap: () {
-                                          controller.onPageChanged(1);
-                                        },
+                                        onTap: controller.tripType.value == 1
+                                            ? () {}
+                                            : () {
+                                                controller.onChangeTripType(1);
+                                              },
                                       ),
                                       Container(
                                         height: 2,
                                         width: 150.sp,
-                                        color:
-                                            controller.currentIndex.value == 1
-                                                ? primaryColor
-                                                : Colors.transparent,
+                                        color: controller.tripType.value == 1
+                                            ? primaryColor
+                                            : Colors.transparent,
                                       ),
                                     ],
                                   ),
@@ -618,213 +620,282 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
   }
 
   Widget selfDriveOption(context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Column(
+    return SingleChildScrollView(
+      child: Form(
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+                key: controller.selfDriveFormKey,
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: 16.sp,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: textWidget(
-                  text: AppStrings.youWillDrive,
-                  style: getLightStyle(fontSize: 10.sp, color: grey2)),
-            ),
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding:
-                      EdgeInsets.only(left: 20.sp, right: 10.sp, top: 10.sp),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: 255.sp,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            textWidget(
-                                text: AppStrings.selfPickUp,
-                                style: getMediumStyle(color: grey5)),
-                            textWidget(
-                                text: AppStrings.weWillSupplyYouAddress,
-                                textOverflow: TextOverflow.visible,
-                                style: getLightStyle(
-                                    fontSize: 10.sp, color: grey2)),
-                          ],
-                        ),
-                      ),
-                      switchWidget(context,
-                          value: controller.selectedSelfPickUp.value,
-                          activeTrackColor: borderColor,
-                          onChanged: (value) =>
-                              controller.onSelectSelfPickUp(value)),
-                    ],
-                  ),
+                SizedBox(
+                  height: 16.sp,
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.sp),
-                  child: Visibility(
-                    visible: controller.selectedSelfPickUp.value,
-                    child: NormalInputTextWidget(
-                      title: '',
-                      expectedVariable: "field",
-                      hintText: AppStrings.inPutAddressDropCar,
-                      textInputType: TextInputType.text,
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 5, horizontal: 10),
-                      controller: controller.selfPickUpInputController,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: textWidget(
+                      text: AppStrings.youWillDrive,
+                      style: getLightStyle(fontSize: 10.sp, color: grey2)),
+                ),
+                Column(
+                  children: [
+                    Padding(
+                      padding:
+                          EdgeInsets.only(left: 20.sp, right: 10.sp, top: 10.sp),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            width: 255.sp,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                textWidget(
+                                    text: AppStrings.selfPickUp,
+                                    style: getMediumStyle(color: grey5)),
+                                textWidget(
+                                    text: AppStrings.weWillSupplyYouAddress,
+                                    textOverflow: TextOverflow.visible,
+                                    style: getLightStyle(
+                                        fontSize: 10.sp, color: grey2)),
+                              ],
+                            ),
+                          ),
+                          switchWidget(context,
+                              value: controller.selectedSelfPickUp.value,
+                              activeTrackColor: borderColor,
+                              onChanged: (value) =>
+                                  controller.onSelectSelfPickUp(value)),
+                        ],
+                      ),
                     ),
-                  ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.sp),
+                      child: Visibility(
+                        visible: controller.selectedSelfPickUp.value,
+                        child: NormalInputTextWidget(
+                          title: '',
+                          expectedVariable: "field",
+                          hintText: AppStrings.inPutAddressDropCar,
+                          textInputType: TextInputType.text,
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 5, horizontal: 10),
+                          controller: controller.selfPickUpInputController,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 2.sp,
+                ),
+                Column(
+                  children: [
+                    Padding(
+                      padding:
+                          EdgeInsets.only(left: 20.sp, right: 10.sp, top: 10.sp),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            width: 255.sp,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                textWidget(
+                                    text: AppStrings.selfDropOff,
+                                    style: getMediumStyle(color: grey5)),
+                                textWidget(
+                                    text: AppStrings.weWillSupplyYouAddress,
+                                    textOverflow: TextOverflow.visible,
+                                    style: getLightStyle(
+                                        fontSize: 10.sp, color: grey2)),
+                              ],
+                            ),
+                          ),
+                          switchWidget(context,
+                              value: controller.selectedSelfDropOff.value,
+                              activeTrackColor: borderColor,
+                              onChanged: (value) =>
+                                  controller.onSelectSelfDropOff(value)),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.sp),
+                      child: Visibility(
+                        visible: controller.selectedSelfDropOff.value,
+                        child: NormalInputTextWidget(
+                          title: '',
+                          expectedVariable: "field",
+                          hintText: AppStrings.inPutAddressDropCar,
+                          textInputType: TextInputType.text,
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 5, horizontal: 10),
+                          controller: controller.selfDropOffInputController,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
+            Padding(
+              padding: EdgeInsets.only(left: 20.sp, right: 10.sp, top: 0.sp),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  textWidget(
+                      text: AppStrings.securityEscort,
+                      style: getMediumStyle(color: grey5)),
+                  switchWidget(context,
+                      value: controller.selectedSecurityEscort.value,
+                      activeTrackColor: borderColor,
+                      onChanged: (value) =>
+                          controller.onSelectSecurityEscort(value)),
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.sp),
+              child: Visibility(
+                visible: controller.selectedSecurityEscort.value,
+                child: NormalInputTextWidget(
+                  title: '',
+                  expectedVariable: "field",
+                  hintText: AppStrings.selectNoOfSecurity,
+                  textInputType: TextInputType.number,
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  controller: controller.escortSecurityNoInputController,
+                  onEditingComplete: controller.onChangeEscortNumber,
+                  onChanged: (value) => controller.onChangeEscortNumber(),
+                  // onChanged: (value) => controller.onChangeEscortNumber(value),
+                ),
+              ),
+            ),
             SizedBox(
-              height: 2.sp,
+              height: 10,
             ),
           ],
         ),
-        Padding(
-          padding: EdgeInsets.only(left: 20.sp, right: 10.sp, top: 0.sp),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              textWidget(
-                  text: AppStrings.securityEscort,
-                  style: getMediumStyle(color: grey5)),
-              switchWidget(context,
-                  value: controller.selectedSecurityEscort.value,
-                  activeTrackColor: borderColor,
-                  onChanged: (value) =>
-                      controller.onSelectSecurityEscort(value)),
-            ],
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.sp),
-          child: Visibility(
-            visible: controller.selectedSecurityEscort.value,
-            child: NormalInputTextWidget(
-              title: '',
-              expectedVariable: "field",
-              hintText: AppStrings.selectNoOfSecurity,
-              textInputType: TextInputType.number,
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-              controller: controller.escortSecurityNoInputController,
-            ),
-          ),
-        ),
-      ],
+      ),
     );
   }
 
   Widget chauffeurOptionPage(context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 16.sp,
-              ),
-              textWidget(
-                  text: AppStrings.ourDriverWillSupport,
-                  style: getLightStyle(fontSize: 10.sp, color: grey2)),
-              SizedBox(
-                height: 2.sp,
-              ),
-              NormalInputTextWidget(
-                title: '',
-                expectedVariable: "field",
-                hintText: AppStrings.inputAddressPickUp,
-                textInputType: TextInputType.text,
-                contentPadding:
-                    const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                controller: controller.interStateInputController,
-              ),
-              SizedBox(
-                height: 16.sp,
-              ),
-              textWidget(
-                text: AppStrings.yourRoute,
-                style: getMediumStyle(color: grey5),
-              ),
-              textWidget(
-                text: AppStrings.weWantToKnowTheRoute,
-                textOverflow: TextOverflow.visible,
-                style: getMediumStyle(fontSize: 10.sp, color: grey2),
-              ),
-              Row(
+    return Form(
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      key: controller.chauffeurFormKey,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: NormalInputTextWidget(
-                      title: AppStrings.from,
-                      expectedVariable: "",
-                      hintText: AppStrings.yourStart,
-                      textInputType: TextInputType.text,
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 5, horizontal: 10),
-                      // controller: controller.emailOrPhoneController,
-                    ),
+                  SizedBox(
+                    height: 16.sp,
+                  ),
+                  textWidget(
+                      text: AppStrings.ourDriverWillSupport,
+                      style: getLightStyle(fontSize: 10.sp, color: grey2)),
+                  SizedBox(
+                    height: 2.sp,
+                  ),
+                  NormalInputTextWidget(
+                    title: '',
+                    expectedVariable: "field",
+                    hintText: AppStrings.inputAddressPickUp,
+                    textInputType: TextInputType.text,
+                    contentPadding:
+                        const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                    controller: controller.interStateInputController,
                   ),
                   SizedBox(
-                    width: 15.sp,
+                    height: 16.sp,
                   ),
-                  Expanded(
-                    child: NormalInputTextWidget(
-                      title: AppStrings.to,
-                      expectedVariable: "",
-                      hintText: AppStrings.endRoute,
-                      textInputType: TextInputType.text,
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 5, horizontal: 10),
-                      // controller: controller.emailOrPhoneController,
-                    ),
+                  textWidget(
+                    text: AppStrings.yourRoute,
+                    style: getMediumStyle(color: grey5),
+                  ),
+                  textWidget(
+                    text: AppStrings.weWantToKnowTheRoute,
+                    textOverflow: TextOverflow.visible,
+                    style: getMediumStyle(fontSize: 10.sp, color: grey2),
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: NormalInputTextWidget(
+                          title: AppStrings.from,
+                          expectedVariable: "field",
+                          hintText: AppStrings.yourStart,
+                          textInputType: TextInputType.text,
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 5, horizontal: 10),
+                          controller: controller.startRouteController,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 15.sp,
+                      ),
+                      Expanded(
+                        child: NormalInputTextWidget(
+                          title: AppStrings.to,
+                          expectedVariable: "field",
+                          hintText: AppStrings.endRoute,
+                          textInputType: TextInputType.text,
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 5, horizontal: 10),
+                          controller: controller.endRouteController,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: 20.sp, right: 10.sp, top: 0.sp),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              textWidget(
-                  text: AppStrings.securityEscort,
-                  style: getMediumStyle(color: grey5)),
-              switchWidget(context,
-                  value: controller.selectedSecurityEscort.value,
-                  activeTrackColor: borderColor,
-                  onChanged: (value) =>
-                      controller.onSelectSecurityEscort(value)),
-            ],
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.sp),
-          child: Visibility(
-            visible: controller.selectedSecurityEscort.value,
-            child: NormalInputTextWidget(
-              title: '',
-              expectedVariable: "field",
-              hintText: AppStrings.selectNoOfSecurity,
-              textInputType: TextInputType.number,
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-              controller: controller.escortSecurityNoInputController,
             ),
-          ),
+            Padding(
+              padding: EdgeInsets.only(left: 20.sp, right: 10.sp, top: 0.sp),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  textWidget(
+                      text: AppStrings.securityEscort,
+                      style: getMediumStyle(color: grey5)),
+                  switchWidget(context,
+                      value: controller.selectedSecurityEscort.value,
+                      activeTrackColor: borderColor,
+                      onChanged: (value) =>
+                          controller.onSelectSecurityEscort(value)),
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.sp),
+              child: Visibility(
+                visible: controller.selectedSecurityEscort.value,
+                child: NormalInputTextWidget(
+                  title: '',
+                  expectedVariable: "field",
+                  hintText: AppStrings.selectNoOfSecurity,
+                  textInputType: TextInputType.number,
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  controller: controller.escortSecurityNoInputController,
+                  onEditingComplete: controller.onChangeEscortNumber,
+                  onChanged: (value) => controller.onChangeEscortNumber(),
+                ),
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
@@ -1012,7 +1083,7 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
             width: 300.sp,
             text: "continue".tr,
             color: primaryColor,
-            onTap: controller.routeToKycCheck,
+            onTap: controller.processCarBooking,
             // onTap: controller.routeToPhoneVerification,
             isLoading: controller.isLoading.value,
           );

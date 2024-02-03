@@ -18,7 +18,7 @@ import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/shared_widgets/upload_image_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
-import 'package:gti_rides/utils/amount_formatter.dart';
+import 'package:gti_rides/utils/figures_helpers.dart';
 import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/utils.dart';
 import 'package:iconsax/iconsax.dart';

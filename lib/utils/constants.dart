@@ -217,6 +217,7 @@ class AppStrings {
   static String securityEscort = "Security Escort";
   static String youWillDrive = "You will be able to drive yourself around";
   static String selfPickUp = "Self Pick Up";
+  static String selfDropOff = "Self Drop Off";
   static String weWillSupplyYouAddress =
       "We will supply you the address to pick up the car, turn off if you want us to bring the car to your location (This cost extra charges)";
   static String inPutAddressDropCar = "Input address we will drop the car";

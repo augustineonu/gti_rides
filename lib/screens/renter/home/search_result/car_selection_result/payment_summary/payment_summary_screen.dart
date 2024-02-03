@@ -58,8 +58,8 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
               children: [
                 dateTimeColWIdget(
                     alignment: CrossAxisAlignment.start,
-                    title: 'Wed, 1 Nov,',
-                    subTitle: '9:00am'),
+                    title: '${controller.formattedStartDayDateMonth.value},',
+                    subTitle: controller.formattedStartTime.value),
                 SvgPicture.asset(
                   ImageAssets.arrowForwardRounded,
                   height: 24.sp,
@@ -68,8 +68,8 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
                 ),
                 dateTimeColWIdget(
                     alignment: CrossAxisAlignment.end,
-                    title: 'Wed, 1 Nov,',
-                    subTitle: '9:00am'),
+                    title: '${controller.formattedEndDayDateMonth.value},',
+                    subTitle: controller.formattedEndTime.value),
               ],
             ),
             SizedBox(
@@ -87,22 +87,28 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
                   children: [
                     SvgPicture.asset(ImageAssets.naira),
                     textWidget(
-                        text: '100,000', style: getRegularStyle(color: grey5)),
+                        text: controller.pricePerDay.value,
+                        style: getRegularStyle(color: grey5)),
                     textWidget(text: ' x ', style: getRegularStyle()),
                     textWidget(
-                        text: '5days', style: getRegularStyle(color: grey5)),
+                        text:
+                            '${controller.tripData.value.tripsDays.toString()}days',
+                        style: getRegularStyle(color: grey5)),
                   ],
                 ),
                 Row(
                   children: [
                     SvgPicture.asset(ImageAssets.naira),
                     textWidget(
-                        text: '500,000', style: getRegularStyle(color: grey5)),
+                        text: controller.estimatedTotal.value,
+                        style: getRegularStyle(color: grey5)),
                   ],
                 ),
               ],
             ),
-            rowNairaText(title: 'VAT(7.5%)', subTitle: '1,000'),
+            rowNairaText(
+                title: 'VAT(${controller.vat.value}%)',
+                subTitle: controller.vatValue.value),
             rowNairaText(title: 'Pick up', subTitle: '10,000'),
             rowNairaText(title: 'Escort Service Fee', subTitle: '20,000'),
             rowNairaText(title: 'Drop off', subTitle: '10,000'),

@@ -77,7 +77,7 @@ class RenterService {
       final result = await apiService.getRequest(
         '/user/renter/car/getOneCar?carID=$carId',
       );
-      logger.log("result $result");
+      // logger.log("result $result");
 
       final decodedResult = json.decode(result);
 
@@ -149,6 +149,21 @@ class RenterService {
     try {
       final result = await apiService.getRequest(
         '/user/renter/car/getCars?stateCode=$stateCode&cityCode=$cityCode&skip=0&limit=1000000',
+      );
+      // logger.log("result $result");
+
+      final decodedResult = json.decode(result);
+
+      return ListResponseModel.fromJson(decodedResult);
+    } catch (err) {
+      rethrow;
+    }
+  }
+
+  Future<ListResponseModel> getTripAmountData() async {
+    try {
+      final result = await apiService.getRequest(
+        '/user/renter/trips/getTripsData',
       );
       // logger.log("result $result");
 

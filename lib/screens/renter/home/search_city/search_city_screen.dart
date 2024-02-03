@@ -14,6 +14,7 @@ import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
+import 'package:gti_rides/utils/utils.dart';
 
 class SearchCityBinding extends Bindings {
   @override
@@ -244,17 +245,19 @@ class SearchCityScreen extends GetView<SearchCityController> {
                                                             .endDateTime.value =
                                                         data['end'] ?? '';
                                                     controller.startDate.value =
-                                                        controller.extractDay(
-                                                            controller
-                                                                .startDateTime
-                                                                .value);
+                                                        extractDay(controller
+                                                            .startDateTime
+                                                            .value);
                                                     controller.endDate.value =
-                                                        controller
-                                                            .extractDayMonth(
-                                                                controller
-                                                                    .endDateTime
-                                                                    .value);
-                                                                    controller.selectedDifferenceInDays.value = data['differenceInDays'];
+                                                        extractDayMonth(
+                                                            controller
+                                                                .endDateTime
+                                                                .value);
+                                                    controller
+                                                            .selectedDifferenceInDays
+                                                            .value =
+                                                        data[
+                                                            'differenceInDays'];
 
                                                     WidgetsBinding.instance!
                                                         .addPostFrameCallback(

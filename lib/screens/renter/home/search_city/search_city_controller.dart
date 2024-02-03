@@ -100,27 +100,6 @@ class SearchCityController extends GetxController {
   }
 
 
-String extractDay(String inputDate) {
-  // Split the input date by comma and space
-  List<String> parts = inputDate.split(', ');
-
-  // Extract the day part
-  String day = parts[1].split(' ')[0];
-  // Return the extracted day
-  return day;
-}
-String extractDayMonth(String inputDate) {
-  // Split the input date by comma and space
-  List<String> parts = inputDate.split(', ');
-
-  // Extract the day part
-  String day = parts[1].split(' ')[0];
-    String month = parts[1].split(' ')[1];
-
-
-  // Return the extracted day
-  return '$day $month';
-}
 
   void queryListener() {
     updateFilteredLocations(searchCategoryController.text);
