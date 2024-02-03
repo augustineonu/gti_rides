@@ -25,8 +25,13 @@ class PaymentController extends GetxController with StateMixin<List<dynamic>> {
   void init() async {
     logger.log("PaymentController Initialized");
     addedPaymentMethod.value == true;
-    await getBankAccount();
-    await getBankAccount();
+     logger.log("User type:: ${userService.user.value.userType}");
+    if (userService.user.value.userType == "partner") {
+      await getBanks();
+      await getBankAccount();
+    // await getBankAccount();
+    }
+    
   }
 
   @override
@@ -35,7 +40,7 @@ class PaymentController extends GetxController with StateMixin<List<dynamic>> {
       update();
     });
     super.onInit();
-    await getBanks();
+   
 
     // addedPaymentMethod.value = true;
   }

@@ -17,7 +17,7 @@ class UserModel {
     final String? profilePic;
     final String? referralCode;
     final DateTime? registerDate;
-    final String? userType;
+     String? userType;
     final String? status;
 
     UserModel({

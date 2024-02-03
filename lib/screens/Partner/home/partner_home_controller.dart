@@ -8,6 +8,7 @@ import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/partner_service.dart';
 import 'package:gti_rides/services/renter_service.dart';
 import 'package:gti_rides/services/token_service.dart';
+import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/utils.dart';
 
@@ -92,9 +93,18 @@ class PartnerHomeController extends GetxController
       if (result.status == "success" || result.status_code == 200) {
         await showSuccessSnackbar(message: result.message!);
         logger.log("success message::: ${result.message}");
+        userService.user.value.userType = "renter";
 
-        await tokenService.getNewAccessToken();
-        await routeService.offAllNamed(AppLinks.carRenterLanding);
+        await tokenService
+            .getNewAccessToken()
+            .then(
+                (value) => routeService.offAllNamed(AppLinks.carRenterLanding))
+            .onError((error, stackTrace) async {
+          logger.log("Error switching user");
+          return showErrorSnackbar(message: "Error switching user");
+        });
+        // Future.delayed(Duration(seconds: 3));
+        // await ;
       } else {
         await showErrorSnackbar(message: result.message!);
       }

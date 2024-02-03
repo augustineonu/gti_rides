@@ -43,6 +43,7 @@ class ApiService {
       InterceptorsWrapper(
         onRequest: (options, handler) {
           // Add the access token to the request header
+          logger.log("request token:: ${tokenService.accessToken.value}");
 
           options.headers['Authorization'] =
               'Bearer ${tokenService.accessToken.value}';

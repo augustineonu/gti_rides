@@ -928,39 +928,39 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
             SizedBox(
               height: 24.sp,
             ),
-            // dropdownWidget1(
-            //     context: context,
-            //     hintText: 'Select',
-            //     title: AppStrings.vehicleTransmission,
-            //     iconColor: grey3,
-            //     selectedValue: controller.isFromManageCars.isTrue ||
-            //             controller.transmission.value.isNotEmpty
-            //         ? controller.transmission.value
-            //         : null,
-            //     key: UniqueKey(),
-            //     values: (controller.transmissions ?? [])
-            //         .map((transmission) =>
-            //             transmission['transmissionName'] as String)
-            //         .toList(),
-            //     onChange: (selectedTransmission) {
-            //       controller.transmission.value = selectedTransmission;
-            //       print('Selected value: $selectedTransmission');
-            //       print('Selected value1: $selectedTransmission');
+            dropdownWidget1(
+                context: context,
+                hintText: 'Select',
+                title: AppStrings.vehicleTransmission,
+                iconColor: grey3,
+                selectedValue: controller.isFromManageCars.isTrue &&
+                        controller.transmission.value.isNotEmpty
+                    ? controller.transmission.value
+                    : null,
+                key: UniqueKey(),
+                values: (controller.transmissions ?? [])
+                    .map((transmission) =>
+                        transmission['transmissionName'] as String)
+                    .toList(),
+                onChange: (selectedTransmission) {
+                  controller.transmission.value = selectedTransmission;
+                  print('Selected value: $selectedTransmission');
+                  print('Selected value1: $selectedTransmission');
 
-            //       // Find the brand object with the selected name
-            //       var selectedObject =
-            //           (controller.transmissions?.value ?? []).firstWhere(
-            //         (transmission) =>
-            //             transmission['transmissionName'] ==
-            //             selectedTransmission,
-            //         orElse: () => null,
-            //       );
-            //       if (selectedObject != null) {
-            //         String transmissionCode =
-            //             selectedObject['transmissionCode'] as String;
-            //         controller.transmissionCode.value = transmissionCode;
-            //       }
-            //     }),
+                  // Find the brand object with the selected name
+                  var selectedObject =
+                      (controller.transmissions?.value ?? []).firstWhere(
+                    (transmission) =>
+                        transmission['transmissionName'] ==
+                        selectedTransmission,
+                    orElse: () => null,
+                  );
+                  if (selectedObject != null) {
+                    String transmissionCode =
+                        selectedObject['transmissionCode'] as String;
+                    controller.transmissionCode.value = transmissionCode;
+                  }
+                }),
 
             SizedBox(
               height: 24.sp,
@@ -1060,69 +1060,70 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
             SizedBox(
               height: 24.sp,
             ),
-            // dropdownWidget1(
-            //     context: context,
-            //     hintText: 'Select',
-            //     title: AppStrings.vehicleType,
-            //     iconColor: grey3,
-            //     values: (controller.vehicleTypes?.value ?? [])
-            //         .map((carType) => carType['typeName'] as String)
-            //         .toList(),
-            //     // key: UniqueKey(),
-            //     selectedValue: controller.isFromManageCars.isTrue &&
-            //             controller.vehicleType.value.isNotEmpty
-            //         ? controller.vehicleType.value
-            //         : null,
-            //     onChange: (selectedVehicleType) {
-            //       // controller.vehicleType.value = selectedVehicleType;
-            //       print('Selected value: $selectedVehicleType');
-            //       // Find the Vehicle Type object with the selected name
-            //       var selectedObject =
-            //           (controller.vehicleTypes?.value ?? []).firstWhere(
-            //         (vehicleType) =>
-            //             vehicleType['typeName'] == selectedVehicleType,
-            //         orElse: () => null,
-            //       );
-            //       if (selectedObject != null) {
-            //         String vehicleTypeCode =
-            //             selectedObject['typeCode'] as String;
-            //         controller.vehicleTypeCode.value = vehicleTypeCode;
-            //         print("vehicle type code $selectedObject $vehicleTypeCode");
-            //       }
-            //     }),
+            dropdownWidget1(
+                context: context,
+                hintText: 'Select',
+                title: AppStrings.vehicleType,
+                iconColor: grey3,
+                values: (controller.vehicleTypes?.value ?? [])
+                    .map((carType) => carType['typeName'] as String)
+                    .toList(),
+                // key: UniqueKey(),
+                selectedValue: controller.isFromManageCars.isTrue &&
+                        controller.vehicleType.value.isNotEmpty
+                    ? controller.vehicleType.value
+                    : null,
+                onChange: (selectedVehicleType) {
+                  // controller.vehicleType.value = selectedVehicleType;
+                  print('Selected value: $selectedVehicleType');
+                  // Find the Vehicle Type object with the selected name
+                  var selectedObject =
+                      (controller.vehicleTypes?.value ?? []).firstWhere(
+                    (vehicleType) =>
+                        vehicleType['typeName'] == selectedVehicleType,
+                    orElse: () => null,
+                  );
+                  if (selectedObject != null) {
+                    String vehicleTypeCode =
+                        selectedObject['typeCode'] as String;
+                    controller.vehicleTypeCode.value = vehicleTypeCode;
+                    print("vehicle type code $selectedObject $vehicleTypeCode");
+                  }
+                }),
 
             SizedBox(
               height: 24.sp,
             ),
-            // dropdownWidget1(
-            //     context: context,
-            //     hintText: 'Select',
-            //     title: AppStrings.numberOfSeats,
-            //     iconColor: grey3,
-            //     values: (controller.vehicleSeats?.value ?? [])
-            //         .map((seat) => seat["seatName"] as String)
-            //         .toList(),
-            //     selectedValue: controller.isFromManageCars.isTrue ||
-            //             controller.numberOfSeats.value.isNotEmpty
-            //         ? controller.numberOfSeats.value
-            //         : null,
-            //     onChange: (selectedNoOfSeat) {
-            //       controller.numberOfSeats.value = selectedNoOfSeat;
-            //       print('Selected value: $selectedNoOfSeat');
+            dropdownWidget1(
+                context: context,
+                hintText: 'Select',
+                title: AppStrings.numberOfSeats,
+                iconColor: grey3,
+                values: (controller.vehicleSeats?.value ?? [])
+                    .map((seat) => seat["seatName"] as String)
+                    .toList(),
+                selectedValue: controller.isFromManageCars.isTrue &&
+                        controller.numberOfSeats.value.isNotEmpty
+                    ? controller.numberOfSeats.value
+                    : null,
+                onChange: (selectedNoOfSeat) {
+                  controller.numberOfSeats.value = selectedNoOfSeat;
+                  print('Selected value: $selectedNoOfSeat');
 
-            //       // Find the seat Type object with the selected name
-            //       var selectedObject =
-            //           (controller.vehicleSeats?.value ?? []).firstWhere(
-            //         (vehicleSeat) =>
-            //             vehicleSeat['seatName'] == selectedNoOfSeat,
-            //         orElse: () => null,
-            //       );
-            //       if (selectedObject != null) {
-            //         String vehicleSeatCode =
-            //             selectedObject['seatCode'] as String;
-            //         controller.vehicleSeatCode.value = vehicleSeatCode;
-            //       }
-            //     }),
+                  // Find the seat Type object with the selected name
+                  var selectedObject =
+                      (controller.vehicleSeats?.value ?? []).firstWhere(
+                    (vehicleSeat) =>
+                        vehicleSeat['seatName'] == selectedNoOfSeat,
+                    orElse: () => null,
+                  );
+                  if (selectedObject != null) {
+                    String vehicleSeatCode =
+                        selectedObject['seatCode'] as String;
+                    controller.vehicleSeatCode.value = vehicleSeatCode;
+                  }
+                }),
+            
 
             SizedBox(
               height: 50.sp,
@@ -1553,68 +1554,68 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
             SizedBox(
               height: 24.sp,
             ),
-            // dropdownWidget1(
-            //     context: context,
-            //     hintText: 'Select',
-            //     title: AppStrings.whatStateAreYouIn,
-            //     iconColor: grey3,
-            //     expectedVariable: 'field',
-            //     selectedValue: controller.isFromManageCars.isTrue ||
-            //             controller.state.value.isNotEmpty
-            //         ? controller.state.value
-            //         : null,
-            //     values: (controller.states ?? [])
-            //         .map((state) => state['stateName'] as String)
-            //         .toList(),
-            //     onChange: (selectedState) {
-            //       controller.state.value = selectedState;
-            //       if (kDebugMode) {
-            //         print('Selected value: $selectedState');
-            //       }
-            //       var selectedStateObject =
-            //           (controller.states ?? []).firstWhere(
-            //         (state) => state['stateName'] == selectedState,
-            //         orElse: () => null,
-            //       );
-            //       if (selectedStateObject != null) {
-            //         String stateCode =
-            //             selectedStateObject['stateCode'] as String;
-            //         // String cityCode =
-            //         //     selectedStateObject['stateCode'] as String;
-            //         controller.getCity(cityCode1: stateCode);
-            //         controller.stateCode.value = stateCode;
-            //         // controller.cityCode.value = cityCode;
-            //       }
-            //     }),
+            dropdownWidget1(
+                context: context,
+                hintText: 'Select',
+                title: AppStrings.whatStateAreYouIn,
+                iconColor: grey3,
+                expectedVariable: 'field',
+                selectedValue: controller.isFromManageCars.isTrue ||
+                        controller.state.value.isNotEmpty
+                    ? controller.state.value
+                    : null,
+                values: (controller.states ?? [])
+                    .map((state) => state['stateName'] as String)
+                    .toList(),
+                onChange: (selectedState) {
+                  controller.state.value = selectedState;
+                  if (kDebugMode) {
+                    print('Selected value: $selectedState');
+                  }
+                  var selectedStateObject =
+                      (controller.states ?? []).firstWhere(
+                    (state) => state['stateName'] == selectedState,
+                    orElse: () => null,
+                  );
+                  if (selectedStateObject != null) {
+                    String stateCode =
+                        selectedStateObject['stateCode'] as String;
+                    // String cityCode =
+                    //     selectedStateObject['stateCode'] as String;
+                    controller.getCity(cityCode1: stateCode);
+                    controller.stateCode.value = stateCode;
+                    // controller.cityCode.value = cityCode;
+                  }
+                }),
 
             SizedBox(
               height: 24.sp,
             ),
-            // dropdownWidget1(
-            //     context: context,
-            //     hintText: 'Select',
-            //     title: AppStrings.whatCityAreYouIn,
-            //     iconColor: grey3,
-            //     expectedVariable: 'field',
-            //     selectedValue: controller.isFromManageCars.isTrue ||
-            //             controller.city.value.isNotEmpty
-            //         ? controller.city.value
-            //         : null,
-            //     values: (controller.cities ?? [])
-            //         .map((city) => city['cityName'] as String)
-            //         .toList(),
-            //     onChange: (selectedCity) {
-            //       controller.city.value = selectedCity;
-            //       print('Selected value: $selectedCity');
-            //       var selectedCityObject = (controller.cities ?? []).firstWhere(
-            //         (city) => city['cityName'] == selectedCity,
-            //         orElse: () => null,
-            //       );
-            //       if (selectedCityObject != null) {
-            //         String cityCode = selectedCityObject['cityCode'] as String;
-            //         controller.cityCode.value = cityCode;
-            //       }
-            //     }),
+            dropdownWidget1(
+                context: context,
+                hintText: 'Select',
+                title: AppStrings.whatCityAreYouIn,
+                iconColor: grey3,
+                expectedVariable: 'field',
+                selectedValue: controller.isFromManageCars.isTrue ||
+                        controller.city.value.isNotEmpty
+                    ? controller.city.value
+                    : null,
+                values: (controller.cities ?? [])
+                    .map((city) => city['cityName'] as String)
+                    .toList(),
+                onChange: (selectedCity) {
+                  controller.city.value = selectedCity;
+                  print('Selected value: $selectedCity');
+                  var selectedCityObject = (controller.cities ?? []).firstWhere(
+                    (city) => city['cityName'] == selectedCity,
+                    orElse: () => null,
+                  );
+                  if (selectedCityObject != null) {
+                    String cityCode = selectedCityObject['cityCode'] as String;
+                    controller.cityCode.value = cityCode;
+                  }
+                }),
 
             SizedBox(
               height: 50.sp,

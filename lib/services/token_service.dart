@@ -65,6 +65,7 @@ class TokenService {
     if (result.status == 'success' || result.status_code == 200) {
       await setTokenModel(result.data);
       setAccessToken(result.data["accessToken"]);
+      // tokenService.accessToken.value = result.data["accessToken"];
       return true;
     } else {
       logger.log("error fetching token");

@@ -119,9 +119,18 @@ class CarRenterHomeController extends GetxController
           await renterService.switchProfile(payload: {"userType": "partner"});
 
       if (result.status == "success" || result.status_code == 200) {
+        userService.user.value.userType = "partner";
         await showSuccessSnackbar(message: result.message!);
-        await tokenService.getNewAccessToken();
-        await routeService.offAllNamed(AppLinks.carOwnerLanding);
+        // await tokenService.getNewAccessToken();
+        // await routeService.offAllNamed(AppLinks.carOwnerLanding);
+         await tokenService
+            .getNewAccessToken()
+            .then(
+                (value) => routeService.offAllNamed(AppLinks.carOwnerLanding))
+            .onError((error, stackTrace) async {
+          logger.log("Error switching user");
+          return showErrorSnackbar(message: "Error switching user");
+        });
       } else {
         await showErrorSnackbar(message: result.message!);
       }
