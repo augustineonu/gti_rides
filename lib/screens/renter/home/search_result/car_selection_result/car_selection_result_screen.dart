@@ -776,6 +776,28 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                 ),
               ),
             ),
+              // dropdownWidget1(
+              //   context: context,
+              //   hintText: 'Select',
+              //   title: AppStrings.howMuchForAdvance,
+              //   iconColor: grey3,
+              //   selectedValue: controller.isFromManageCars.isTrue &&
+              //           controller.advanceAmount.value.isNotEmpty
+              //       ? controller.advanceAmount.value.contains('hours')
+              //           ? controller.advanceAmount.value
+              //           : "4 hours"
+              //       : null,
+              //   values: <String>[
+              //     "4 hours",
+              //     "12 hours",
+              //     "24 hours",
+              //     "48 hours",
+              //     "72 hours"
+              //   ],
+              //   onChange: (value) {
+              //     print('Selected value: $value');
+              //     controller.advanceAmount.value = value;
+              //   }),
             SizedBox(
               height: 10,
             ),

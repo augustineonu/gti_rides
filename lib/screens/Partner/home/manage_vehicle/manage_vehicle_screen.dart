@@ -340,323 +340,333 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
       {required String imgUrl}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Stack(
-        children: [
-          Container(
-            height: 105,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-                border: Border.all(color: greyLight),
-                borderRadius: BorderRadius.all(Radius.circular(4.r))),
-            child: Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Stack(
-                  children: [
-                    SizedBox(
-                      // color: red,
-                      height: size.height,
-                      width: 110,
-                      child: carImage(imgUrl: imgUrl),
-                    ),
-                    Positioned(
-                      left: 10,
-                      right: 10,
-                      top: 25,
-                      bottom: 25,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 5, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: black.withOpacity(0.4),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(2.r),
-                          ),
-                        ),
+      child: InkWell(
+        onTap: () => controller.routeToCarHistory(arguments: {
+          "brandModelName": car["brandModelName"],
+          "photoUrl": car["photoUrl"],
+          "carID": car["carID"]
+        }),
+        child: Stack(
+          children: [
+            Container(
+              height: 105,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                  border: Border.all(color: greyLight),
+                  borderRadius: BorderRadius.all(Radius.circular(4.r))),
+              child: Row(
+                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Stack(
+                    children: [
+                      SizedBox(
+                        // color: red,
+                        height: size.height,
+                        width: 110,
+                        child: carImage(imgUrl: imgUrl),
+                      ),
+                      Positioned(
+                        left: 10,
+                        right: 10,
+                        top: 25,
+                        bottom: 25,
                         child: Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 6, vertical: 4),
+                              horizontal: 5, vertical: 4),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(2.r),
+                            color: black.withOpacity(0.4),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(2.r),
+                            ),
+                          ),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 6, vertical: 4),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(2.r),
+                                ),
+                                border: Border.all(
+                                  color: primaryColor,
+                                )),
+                            child: Center(
+                              child: textWidget(
+                                text:
+                                    'Car status: \n ${car['status'] == 'pending' ? 'Pending' : "Booked"}',
+                                textAlign: TextAlign.center,
+                                style: getLightStyle(
+                                        fontSize: 10.sp, color: primaryColor)
+                                    .copyWith(fontWeight: FontWeight.w400),
                               ),
-                              border: Border.all(
-                                color: primaryColor,
-                              )),
-                          child: Center(
-                            child: textWidget(
-                              text:
-                                  'Car status: \n ${car['status'] == 'pending' ? 'Pending' : "Booked"}',
-                              textAlign: TextAlign.center,
-                              style: getLightStyle(
-                                      fontSize: 10.sp, color: primaryColor)
-                                  .copyWith(fontWeight: FontWeight.w400),
                             ),
                           ),
                         ),
-                      ),
-                    )
-                  ],
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      // width: 140.sp,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          textWidget(
-                              text: "${car['brandModelName']}",
-                              style: getBoldStyle()),
-                          const SizedBox(
-                            height: 3,
-                          ),
-                          car['status'] == 'booked'
-                              ? Row(
-                                  children: [
-                                    SvgPicture.asset(
-                                      ImageAssets.naira,
-                                      height: 10.sp,
-                                    ),
-                                    textWidget(
-                                        text: car['pricePerDay'] ?? '',
-                                        // text: '5,000,000',
-                                        style: getMediumStyle(fontSize: 10.sp)
-                                            .copyWith(fontFamily: 'Neue'),
-                                        textOverflow: TextOverflow.ellipsis),
-                                    const SizedBox(
-                                      height: 6,
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 3, top: 2),
-                                      child: SvgPicture.asset(
-                                        ImageAssets.closeSmall,
-                                        width: 7.sp,
-                                        height: 7.sp,
-                                      ),
-                                    ),
-                                    textWidget(
-                                        // add the number of days for the trips when returned from the API
-                                        // car['numberOfDays']
-                                        text: 'day',
-                                        style: getMediumStyle(fontSize: 10.sp)
-                                            .copyWith(fontFamily: 'Neue')),
-                                  ],
-                                )
-                              : Row(
-                                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(children: [
+                      )
+                    ],
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                        // width: 140.sp,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            textWidget(
+                                text: "${car['brandModelName']}",
+                                style: getBoldStyle()),
+                            const SizedBox(
+                              height: 3,
+                            ),
+                            car['status'] == 'booked'
+                                ? Row(
+                                    children: [
                                       SvgPicture.asset(
-                                        ImageAssets.thumbsUpPrimaryColor,
+                                        ImageAssets.naira,
                                         height: 10.sp,
                                       ),
-                                      SizedBox(
-                                        width: 3.sp,
+                                      textWidget(
+                                          text: car['pricePerDay'] ?? '',
+                                          // text: '5,000,000',
+                                          style: getMediumStyle(fontSize: 10.sp)
+                                              .copyWith(fontFamily: 'Neue'),
+                                          textOverflow: TextOverflow.ellipsis),
+                                      const SizedBox(
+                                        height: 6,
                                       ),
-                                      RichText(
-                                        text: TextSpan(
-                                            text: '${car['percentageRate']}%',
-                                            style: getMediumStyle(
-                                              fontSize: 10.sp,
-                                            ),
-                                            children: <TextSpan>[
-                                              TextSpan(
-                                                text:
-                                                    ' (${car['tripsCount'] ?? '0'} trips)',
-                                                style: getLightStyle(
-                                                    fontSize: 10.sp,
-                                                    color: grey2),
-                                              )
-                                            ]),
-                                      )
-                                    ]),
-                                    SizedBox(
-                                      width: 10.sp,
-                                    ),
-                                    Row(
-                                      // crossAxisAlignment: alignment,
-                                      children: [
-                                        SvgPicture.asset(
-                                          ImageAssets.tag,
-                                          height: 12.sp,
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 3, top: 2),
+                                        child: SvgPicture.asset(
+                                          ImageAssets.closeSmall,
+                                          width: 7.sp,
+                                          height: 7.sp,
                                         ),
-                                        SizedBox(
-                                          width: 2.sp,
-                                        ),
+                                      ),
+                                      textWidget(
+                                          // add the number of days for the trips when returned from the API
+                                          // car['numberOfDays']
+                                          text: 'day',
+                                          style: getMediumStyle(fontSize: 10.sp)
+                                              .copyWith(fontFamily: 'Neue')),
+                                    ],
+                                  )
+                                : Row(
+                                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(children: [
                                         SvgPicture.asset(
-                                          ImageAssets.naira,
+                                          ImageAssets.thumbsUpPrimaryColor,
                                           height: 10.sp,
                                         ),
-                                        textWidget(
-                                            text: car['pricePerDay'] ?? '',
-                                            // text: '5,000,000',
-                                            style: getMediumStyle(
-                                                    fontSize: 10.sp)
-                                                .copyWith(fontFamily: 'Neue'),
-                                            textOverflow:
-                                                TextOverflow.ellipsis),
-                                        // SvgPicture.asset(
-                                        //   ImageAssets.closeSmall,
-                                        //   width: 7.sp,
-                                        //   height: 7.sp,
-                                        // ),
-                                        textWidget(
-                                            text: '/day',
-                                            style: getMediumStyle(
-                                                    fontSize: 10.sp)
-                                                .copyWith(fontFamily: 'Neue')),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          textWidget(
-                            // text: AppStrings.tripDate,
-                            text: car['status'] != 'booked'
-                                ? AppStrings.availabilityDate
-                                : AppStrings.tripDate,
-                            // show AppStrings.aAvailabilityDate
-                            style: getRegularStyle(
-                              color: grey3,
-                              fontSize: 10.sp,
+                                        SizedBox(
+                                          width: 3.sp,
+                                        ),
+                                        RichText(
+                                          text: TextSpan(
+                                              text: '${car['percentageRate']}%',
+                                              style: getMediumStyle(
+                                                fontSize: 10.sp,
+                                              ),
+                                              children: <TextSpan>[
+                                                TextSpan(
+                                                  text:
+                                                      ' (${car['tripsCount'] ?? '0'} trips)',
+                                                  style: getLightStyle(
+                                                      fontSize: 10.sp,
+                                                      color: grey2),
+                                                )
+                                              ]),
+                                        )
+                                      ]),
+                                      SizedBox(
+                                        width: 10.sp,
+                                      ),
+                                      Row(
+                                        // crossAxisAlignment: alignment,
+                                        children: [
+                                          SvgPicture.asset(
+                                            ImageAssets.tag,
+                                            height: 12.sp,
+                                          ),
+                                          SizedBox(
+                                            width: 2.sp,
+                                          ),
+                                          SvgPicture.asset(
+                                            ImageAssets.naira,
+                                            height: 10.sp,
+                                          ),
+                                          textWidget(
+                                              text: car['pricePerDay'] ?? '',
+                                              // text: '5,000,000',
+                                              style: getMediumStyle(
+                                                      fontSize: 10.sp)
+                                                  .copyWith(fontFamily: 'Neue'),
+                                              textOverflow:
+                                                  TextOverflow.ellipsis),
+                                          // SvgPicture.asset(
+                                          //   ImageAssets.closeSmall,
+                                          //   width: 7.sp,
+                                          //   height: 7.sp,
+                                          // ),
+                                          textWidget(
+                                              text: '/day',
+                                              style: getMediumStyle(
+                                                      fontSize: 10.sp)
+                                                  .copyWith(
+                                                      fontFamily: 'Neue')),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                            const SizedBox(
+                              height: 10,
                             ),
-                          ),
-                          const SizedBox(
-                            height: 3,
-                          ),
-                          Row(
-                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              // TODO:
-                              // add booked star and end date
-                              // car['booked'] ? car['bookedStartDate] : car['startDate]
-                              textWidget(
-                                  text: car['startDate'] != null
-                                      ? (car['startDate'])
-                                      : '',
-                                  style: getMediumStyle(fontSize: 8.sp)
-                                      .copyWith(fontFamily: 'Neue')),
-                              SizedBox(
-                                width: 3.w,
+                            textWidget(
+                              // text: AppStrings.tripDate,
+                              text: car['status'] != 'booked'
+                                  ? AppStrings.availabilityDate
+                                  : AppStrings.tripDate,
+                              // show AppStrings.aAvailabilityDate
+                              style: getRegularStyle(
+                                color: grey3,
+                                fontSize: 10.sp,
                               ),
-                              SvgPicture.asset(
-                                ImageAssets.arrowForwardRounded,
-                                height: 8.sp,
-                                width: 8.sp,
-                              ),
-                              SizedBox(
-                                width: 3.w,
-                              ),
-                              textWidget(
-                                  text: car['endDate'] != null
-                                      ? (car['endDate'])
-                                      : '',
-                                  style: getMediumStyle(fontSize: 8.sp)
-                                      .copyWith(fontFamily: 'Neue')),
-                            ],
-                          ),
-                        ],
+                            ),
+                            const SizedBox(
+                              height: 3,
+                            ),
+                            Row(
+                              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                // TODO:
+                                // add booked star and end date
+                                // car['booked'] ? car['bookedStartDate] : car['startDate]
+                                textWidget(
+                                    text: car['startDate'] != null
+                                        ? (car['startDate'])
+                                        : '',
+                                    style: getMediumStyle(fontSize: 8.sp)
+                                        .copyWith(fontFamily: 'Neue')),
+                                SizedBox(
+                                  width: 3.w,
+                                ),
+                                SvgPicture.asset(
+                                  ImageAssets.arrowForwardRounded,
+                                  height: 8.sp,
+                                  width: 8.sp,
+                                ),
+                                SizedBox(
+                                  width: 3.w,
+                                ),
+                                textWidget(
+                                    text: car['endDate'] != null
+                                        ? (car['endDate'])
+                                        : '',
+                                    style: getMediumStyle(fontSize: 8.sp)
+                                        .copyWith(fontFamily: 'Neue')),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ),
-          Positioned(
-            right: 12.sp,
-            top: 12.sp,
-            child: InkWell(
-              onTap: () {
-                Get.bottomSheet(
-                  SizedBox(
-                    height: size.height * 0.2.sp,
-                    width: size.width.sp,
-                    child: ListView.separated(
-                      shrinkWrap: true,
-                      padding: const EdgeInsets.all(20),
-                      itemCount: controller.quickOptions.length,
-                      itemBuilder: (context, index) {
-                        final option = controller.quickOptions[index];
-                        return InkWell(
-                          onTap: () {
-                            switch (index) {
-                              case 0:
-                                deleteVehicleSheet(size,
-                                    title: AppStrings.areYouSureToDelete
-                                        .trArgs([car['brandModelName']]),
-                                    subTitle: AppStrings.everyDataWouldBeDeleted
-                                        .trArgs([car['brandModelName']]),
-                                      onTapCancel: controller.goBack,
-                                    onTapContinue: () => controller.deleteCar(
-                                        carID: car['carID']));
-                              case 1:
-                                controller.routeToQuickEdit(arguments: {
-                                  "brandModelName": car["brandModelName"],
-                                  "photoUrl": car["photoUrl"],
-                                  "carID": car["carID"],
-                                  "start": car["startDate"],
-                                  "end": car["endDate"],
-                                  "enablePastDates": false,
-                                  "pricePerDay": car["pricePerDay"],
-                                  "isFromManageCars": true
-                                });
-                              case 2:
-                                controller.routeToListVehicle(arguments: {
-                                  "carID": car["carID"],
-                                  "isFromManageCars": true,
-                                });
-                              case 3:
-                                controller.routeToCarHistory(arguments: {
-                                  "brandModelName": car["brandModelName"],
-                                  "photoUrl": car["photoUrl"],
-                                  "carID": car["carID"]
-                                });
-                                break;
-                              default:
-                            }
-                          },
-                          child: Row(
-                            children: [
-                              SvgPicture.asset(option['imageUrl']!),
-                              const SizedBox(
-                                width: 6,
-                              ),
-                              textWidget(
-                                  text: option['title'],
-                                  style: getRegularStyle(color: primaryColor)),
-                            ],
-                          ),
-                        );
-                      },
-                      separatorBuilder: (context, index) => const SizedBox(
-                        height: 18,
-                      ),
-                    ),
-                  ),
-                  backgroundColor: backgroundColor,
-                  isScrollControlled: true,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(4.r),
-                        topRight: Radius.circular(4.r)),
-                  ),
-                );
-              },
-              child: SizedBox(
-                height: 20,
-                width: 20,
-                child: SvgPicture.asset(ImageAssets.popUpMenu),
+                ],
               ),
             ),
-          ),
-        ],
+            Positioned(
+              right: 12.sp,
+              top: 12.sp,
+              child: InkWell(
+                onTap: () {
+                  Get.bottomSheet(
+                    SizedBox(
+                      height: size.height * 0.2.sp,
+                      width: size.width.sp,
+                      child: ListView.separated(
+                        shrinkWrap: true,
+                        padding: const EdgeInsets.all(20),
+                        itemCount: controller.quickOptions.length,
+                        itemBuilder: (context, index) {
+                          final option = controller.quickOptions[index];
+                          return InkWell(
+                            onTap: () {
+                              switch (index) {
+                                case 0:
+                                  deleteVehicleSheet(size,
+                                      title: AppStrings.areYouSureToDelete
+                                          .trArgs([car['brandModelName']]),
+                                      subTitle: AppStrings
+                                          .everyDataWouldBeDeleted
+                                          .trArgs([car['brandModelName']]),
+                                      onTapCancel: controller.goBack,
+                                      onTapContinue: () => controller.deleteCar(
+                                          carID: car['carID']));
+                                case 1:
+                                  controller.routeToQuickEdit(arguments: {
+                                    "brandModelName": car["brandModelName"],
+                                    "photoUrl": car["photoUrl"],
+                                    "carID": car["carID"],
+                                    "start": car["startDate"],
+                                    "end": car["endDate"],
+                                    "enablePastDates": false,
+                                    "pricePerDay": car["pricePerDay"],
+                                    "isFromManageCars": true
+                                  });
+                                case 2:
+                                  controller.routeToListVehicle(arguments: {
+                                    "carID": car["carID"],
+                                    "isFromManageCars": true,
+                                  });
+                                case 3:
+                                  controller.routeToCarHistory(arguments: {
+                                    "brandModelName": car["brandModelName"],
+                                    "photoUrl": car["photoUrl"],
+                                    "carID": car["carID"]
+                                  });
+                                  break;
+                                default:
+                              }
+                            },
+                            child: Row(
+                              children: [
+                                SvgPicture.asset(option['imageUrl']!),
+                                const SizedBox(
+                                  width: 6,
+                                ),
+                                textWidget(
+                                    text: option['title'],
+                                    style:
+                                        getRegularStyle(color: primaryColor)),
+                              ],
+                            ),
+                          );
+                        },
+                        separatorBuilder: (context, index) => const SizedBox(
+                          height: 18,
+                        ),
+                      ),
+                    ),
+                    backgroundColor: backgroundColor,
+                    isScrollControlled: true,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(4.r),
+                          topRight: Radius.circular(4.r)),
+                    ),
+                  );
+                },
+                child: SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: SvgPicture.asset(ImageAssets.popUpMenu),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

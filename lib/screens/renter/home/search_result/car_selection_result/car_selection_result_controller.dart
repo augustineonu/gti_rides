@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:gti_rides/models/partner/car_history_model.dart';
 import 'package:gti_rides/models/renter/trip_amount_model.dart';
 import 'package:gti_rides/models/renter/trip_data_model.dart';
+import 'package:gti_rides/models/user/kyc_response_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/partner_service.dart';
@@ -11,6 +12,7 @@ import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/figures_helpers.dart';
+import 'package:gti_rides/utils/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -304,23 +306,33 @@ class CarSelectionResultController extends GetxController
     }
   }
 
+  // List of required KYC fields
+  List<String> requiredKycFields = [
+    "dateOfBirth",
+    "emergencyName",
+    // "emergencyNumber",
+    "gender",
+    "homeAddress",
+    "occupation",
+    "officeAddress",
+    "licenceNumber",
+  ];
+  // Function to check missing fields
+  List<String> getMissingKycFields(KycData kycData) {
+    List<String> missingKycFields = [];
+    for (String field in requiredKycFields) {
+      dynamic fieldValue = kycData.toJson()[field];
+      logger.log("field value:: $fieldValue");
+      bool isFieldPresent = fieldValue != null && fieldValue.isNotEmpty;
+      if (!isFieldPresent) {
+        missingKycFields.add(field);
+      }
+    }
+
+    return missingKycFields;
+  }
+
   Future<void> processCarBooking() async {
-    // here call get User KYC.
-    // if infor passes? take user to summary page, otherwise
-    // take user to KycCheckScreen
-    if (tripType.value == 0 && !chauffeurFormKey.currentState!.validate()) {
-      return;
-    }
-    if (tripType.value == 1 && !selfDriveFormKey.currentState!.validate()) {
-      return;
-    }
-
-    isLoading.value = true;
-    final kycResponse = await userService.getKycProfile();
-
-    // if user has KYC details, route to payment summary
-    // else take them to kyc screen
-
     TripData tripData = TripData(
         carID: carId.value,
         tripStartDate: startDateTime.value,
@@ -347,27 +359,91 @@ class CarSelectionResultController extends GetxController
         routeStart: tripType.value == 0 ? startRouteController.text : null,
         routeEnd: tripType.value == 0 ? endRouteController.text : null);
 
-    try {
-      routeService.gotoRoute(AppLinks.paymentSummary, arguments: {
-        "tripData": tripData,
-        "pricePerDay": pricePerDay.value,
-        "tripDays": tripDays.value,
-        "estimatedTotal": estimatedTotal.value,
-        "vatValue": formattedVatValue.value,
-        "vat": vatValue.value,
-        "cautionFee": tripType.value == 1 ? cautionFee.value : null,
-        "dropOffFee": tripType.value == 1 && selectedSelfDropOff.value
-            ? dropOffFee.value
-            : null,
-        "pickUp": tripType.value == 1 && selectedSelfPickUp.value
-            ? pickUpFee.value
-            : null,
-        "escortFee": selectedSecurityEscort.value ? totalEscortFee.value : null,
+    // here call get User KYC.
+    // if infor passes? take user to summary page, otherwise
+    // take user to KycCheckScreen
 
-        // "startDateTime": startDateTime.value,
-        // "endDateTime": endDateTime.value,
-      });
+    // if (tripType.value == 0 && !chauffeurFormKey.currentState!.validate()) {
+    //   return;
+    // }
+    // if (tripType.value == 1 && !selfDriveFormKey.currentState!.validate()) {
+    //   return;
+    // }
+
+    isLoading.value = true;
+    try {
+      final kycResponse = await userService.getKycProfile();
+
+      // if user has KYC details, route to payment summary
+      // else take them to kyc screen
+      if (kycResponse.status == 'success' || kycResponse.status_code == 200) {
+        if (kycResponse.data!.isEmpty || kycResponse.data == []) {
+          // route to kyc screen. All kyc
+        } else {
+          KycData kycData = KycData.fromJson(kycResponse.data?.first);
+
+          // Check missing fields and route accordingly
+          List<String> missingKycFields = getMissingKycFields(kycData);
+          if (missingKycFields.isEmpty) {
+            // All required fields are present, proceed to the payment screen
+            // ...
+            logger.log("All fields are present, proceed to the payment screen");
+            routeService.gotoRoute(AppLinks.paymentSummary, arguments: {
+              "tripData": tripData,
+              "pricePerDay": pricePerDay.value,
+              "tripDays": tripDays.value,
+              "estimatedTotal": estimatedTotal.value,
+              "vatValue": formattedVatValue.value,
+              "vat": vatValue.value,
+              "cautionFee": tripType.value == 1 ? cautionFee.value : null,
+              "dropOffFee": tripType.value == 1 && selectedSelfDropOff.value
+                  ? dropOffFee.value
+                  : null,
+              "pickUp": tripType.value == 1 && selectedSelfPickUp.value
+                  ? pickUpFee.value
+                  : null,
+              "escortFee":
+                  selectedSecurityEscort.value ? totalEscortFee.value : null,
+
+              // "startDateTime": startDateTime.value,
+              // "endDateTime": endDateTime.value,
+            });
+          } else {
+            // Some fields are missing, route to KYC screen with the list of missing fields
+            // ...
+            logger.log("Some fields are missing:: $missingKycFields");
+            showSuccessSnackbar(message: 'Kindly update KYC details');
+            routeService.gotoRoute(AppLinks.identityVerification, arguments: {
+              "isKycUpdate": true,
+              "appBarTitle": AppStrings.addToContinue,
+              "tripData": tripData,
+              "missingKycFields": missingKycFields,
+              "pricePerDay": pricePerDay.value,
+              "tripDays": tripDays.value,
+              "estimatedTotal": estimatedTotal.value,
+              "vatValue": formattedVatValue.value,
+              "vat": vatValue.value,
+              "cautionFee": tripType.value == 1 ? cautionFee.value : null,
+              "dropOffFee": tripType.value == 1 && selectedSelfDropOff.value
+                  ? dropOffFee.value
+                  : null,
+              "pickUp": tripType.value == 1 && selectedSelfPickUp.value
+                  ? pickUpFee.value
+                  : null,
+              "escortFee":
+                  selectedSecurityEscort.value ? totalEscortFee.value : null,
+
+              // "startDateTime": startDateTime.value,
+              // "endDateTime": endDateTime.value,
+            });
+          }
+        }
+      } else {
+        logger.log("Error fetching KYC detials:: ${kycResponse.data}");
+        showErrorSnackbar(message: kycResponse.message ?? "");
+      }
     } catch (exception) {
+      logger.log("Exception: $exception");
     } finally {
       isLoading.value = false;
     }
@@ -472,3 +548,63 @@ class CarSelectionResultController extends GetxController
     }
   }
 }
+
+
+//  Future<void> processBooking() async {
+//     // Sample KYC response data
+//     List<Map<String, dynamic>> kycData = [
+//       {
+//         // "dateOfBirth": "31-05-1996",
+//         "emergencyName": "john",
+//         "emergencyNumber": "12345679801",
+//         "emergencyRelationship": "brother",
+//         // "gender": "male",
+//         "homeAddress": "lekki",
+//         "occupation": "pm",
+//         "officeAddress": "Lagos",
+//         "licenceExpireDate": "23-05-2024",
+//         "licenceNumber": "1234567876",
+//         "homeAddressProof":
+//             "https://firebasestorage.googleapis.com/v0/b/gti-rides-backend.appspot.com/o/1706122532733--homeAddress.pdf?alt=media&token=b5784101-dd85-40e0-9513-7374c14d639d"
+//       }
+//     ];
+
+// // List of required KYC fields
+//     List<String> requiredKycFields = [
+//       "dateOfBirth",
+//       "emergencyName",
+//       // "emergencyNumber",
+//       "gender",
+//       "homeAddress",
+//       "occupation",
+//       "officeAddress",
+//       "licenceNumber",
+//     ];
+
+// // Function to check missing fields
+//     List<String> getMissingKycFields(List<Map<String, dynamic>> kycData) {
+//       List<String> missingKycFields = [];
+
+//       for (String field in requiredKycFields) {
+//         bool isFieldPresent =
+//             kycData.isNotEmpty && kycData[0].containsKey(field);
+//         if (!isFieldPresent) {
+//           missingKycFields.add(field);
+//         }
+//       }
+
+//       return missingKycFields;
+//     }
+
+// // Check missing fields and route accordingly
+//     List<String> missingKycFields = getMissingKycFields(kycData);
+//     if (missingKycFields.isEmpty) {
+//       // All required fields are present, proceed to the payment screen
+//       // ...
+//       logger.log("All fields are present, proceed to the payment screen");
+//     } else {
+//       // Some fields are missing, route to KYC screen with the list of missing fields
+//       // ...
+//       logger.log("Some fields are missing:: ${missingKycFields}");
+//     }
+//   }

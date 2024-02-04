@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/models/image_response.dart';
@@ -56,7 +58,7 @@ class HomeAddressController extends GetxController {
   PageController pageController = PageController();
   TextEditingController homeAddressController = TextEditingController();
   TextEditingController licenseNoController = TextEditingController();
-  TextEditingController expireyDateController = TextEditingController();
+  TextEditingController expiryDateController = TextEditingController();
   final animationValue = 0.0.obs;
   RxInt currentIndex = 0.obs;
   RxBool isLoading = false.obs;
@@ -69,6 +71,7 @@ class HomeAddressController extends GetxController {
   Rx<String> backImageName = ''.obs;
   Rx<String> frontPagePath = ''.obs;
   Rx<String> backPagePath = ''.obs;
+  Rx<String> selectedExpiryDate = "".obs;
 
   // list
   List<String> gender = [
@@ -80,17 +83,36 @@ class HomeAddressController extends GetxController {
   void routeToPaymentSummary() =>
       routeService.gotoRoute(AppLinks.paymentSummary);
 
-  void openCamera() async {
+  Future<void> openCamera() async {
     ImageResponse? response =
         await imageService.pickImage(source: ImageSource.camera);
     if (response != null) {
-      frontPagePath.value = response.imagePath;
-      frontImageName.value = response.imagePath.split('/').last;
-      logger.log("image path :: ${frontPagePath.value}");
+      backPagePath.value = response.imagePath;
+      backImageName.value = response.imagePath.split('/').last;
+      logger.log("image path :: ${backPagePath.value}");
+
+      // Extract the directory and file name
+      int lastSeparator = backPagePath.value.lastIndexOf('/');
+      String directory = lastSeparator != -1
+          ? backPagePath.value.substring(0, lastSeparator)
+          : backPagePath.value;
+      backImageName.value = 'licenceBack.png';
+
+      // Build the new path with the desired file name
+      String newPath = '$directory/$backImageName';
+      logger.log("Picked new path $newPath");
+
+      // Rename the file
+      File(backPagePath.value).renameSync(newPath);
+
+      // Now update the selectedPhotos value
+      backPagePath.value = newPath;
+      logger.log("selected photo ${backPagePath.value}");
+      routeService.goBack;
     }
   }
 
-  void openFrontCamera() async {
+  Future<void> openFrontCamera() async {
     ImageResponse? response =
         await imageService.pickImage(source: ImageSource.camera);
     if (response != null) {
@@ -98,6 +120,23 @@ class HomeAddressController extends GetxController {
       frontPagePath.value = response.imagePath;
       frontImageName.value = response.imagePath.split('/').last;
       logger.log("image path :: ${frontPagePath.value}");
+      // Extract the directory and file name
+      int lastSeparator = frontPagePath.value.lastIndexOf('/');
+      String directory = lastSeparator != -1
+          ? frontPagePath.value.substring(0, lastSeparator)
+          : frontPagePath.value;
+      frontImageName.value = 'licenceFront.png';
+
+      // Build the new path with the desired file name
+      String newPath = '$directory/$frontImageName';
+      logger.log("Picked new path $newPath");
+
+      // Rename the file
+      File(frontPagePath.value).renameSync(newPath);
+
+      // Now update the selectedPhotos value
+      frontPagePath.value = newPath;
+      logger.log("selected photo ${frontPagePath.value}");
     }
   }
 
@@ -113,13 +152,33 @@ class HomeAddressController extends GetxController {
     }
   }
 
-  void openFrontGallery() async {
+  Future<void> openFrontGallery() async {
     ImageResponse? response =
         await imageService.pickImage(source: ImageSource.gallery);
     if (response != null) {
       logger.log("imagePath $frontPagePath");
       frontPagePath.value = response.imagePath;
       frontImageName.value = response.imagePath.split('/').last;
+
+      // Extract the directory and file name
+      int lastSeparator = frontPagePath.value.lastIndexOf('/');
+      String directory = lastSeparator != -1
+          ? frontPagePath.value.substring(0, lastSeparator)
+          : frontPagePath.value;
+
+      frontImageName.value = 'licenceFront.png';
+
+      // Build the new path with the desired file name
+      String newPath = '$directory/$frontImageName';
+      logger.log("Picked new path $newPath");
+
+      // Rename the file
+      File(frontPagePath.value).renameSync(newPath);
+
+      // Now update the selectedPhotos value
+      frontPagePath.value = newPath;
+      logger.log("selected photo ${frontPagePath.value}");
+      routeService.goBack;
     }
   }
 
@@ -184,7 +243,7 @@ class HomeAddressController extends GetxController {
         if (frontPagePath.isNotEmpty) {
           formData = dio.FormData.fromMap({
             'homeAddress': homeAddressController.text,
-            'homeAddressProof': await dio.MultipartFile.fromFile(
+            'kycDocuments': await dio.MultipartFile.fromFile(
                 frontPagePath.value,
                 filename: fileName,
                 contentType: MediaType(mimeTypeData[0], mimeTypeData[1]))
@@ -239,18 +298,45 @@ class HomeAddressController extends GetxController {
     }
 
     isLoading.value = true;
+    final mimeTypeData =
+        lookupMimeType(frontPagePath.value, headerBytes: [0xFF, 0xD8])!
+            .split('/');
+    final roadMimeTypeData =
+        lookupMimeType(backPagePath.value, headerBytes: [0xFF, 0xD8])!
+            .split('/');
 
     try {
+      var newFormData = dio.FormData.fromMap({
+        "licenceNumber": licenseNoController.text,
+        "licenceExpireDate": expiryDateController.text,
+        "kycDocuments": [
+          await dio.MultipartFile.fromFile(
+            frontPagePath.value,
+            contentType: MediaType(
+              mimeTypeData[0],
+              mimeTypeData[1],
+            ),
+          ),
+          await dio.MultipartFile.fromFile(
+            backPagePath.value,
+            contentType: MediaType(
+              mimeTypeData[0],
+              mimeTypeData[1],
+            ),
+          ),
+        ]
+      });
+
       Future<dio.FormData> constructFormData() async {
         var formData = dio.FormData.fromMap({});
 
         if (licenseNoController.text.isNotEmpty &&
-            expireyDateController.text.isNotEmpty &&
+            expiryDateController.text.isNotEmpty &&
             frontPagePath.isNotEmpty) {
           formData.fields
               .add(MapEntry('drivingLicenceNumber', licenseNoController.text));
           formData.fields.add(
-              MapEntry('drivingLicenceExpireDate', expireyDateController.text));
+              MapEntry('drivingLicenceExpireDate', expiryDateController.text));
           formData.fields.add(MapEntry(
             'drivingLicenceFrontPage',
             await dio.MultipartFile.fromFile(
@@ -271,7 +357,7 @@ class HomeAddressController extends GetxController {
       }
 
       final formData = await constructFormData();
-      final result = await userService.updateKyc(payload: formData);
+      final result = await userService.updateKyc(payload: newFormData);
 
       if (result.status == "success" || result.status_code == 200) {
         routeService.goBack;
@@ -304,5 +390,12 @@ class HomeAddressController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  @override
+  void onClose() {
+    // timer.cancel(); // Cancel the timer when the controller is disposed.
+    super.onClose();
+    expiryDateController.text = selectedExpiryDate.value;
   }
 }

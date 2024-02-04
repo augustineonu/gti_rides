@@ -204,6 +204,7 @@ class SearchCityScreen extends GetView<SearchCityController> {
                                         autovalidateMode:
                                             AutovalidateMode.onUserInteraction,
                                         child: Row(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Expanded(
                                               child: NormalInputTextWidget(
@@ -303,8 +304,11 @@ class SearchCityScreen extends GetView<SearchCityController> {
                                           ? centerLoadingIcon()
                                           : GtiButton(
                                               text: AppStrings.search,
-                                              onTap: () {
-                                                controller.searchCars();
+                                              onTap: () async {
+                                                controller.isFetchingCars.value = true;
+                                                setState(() {});
+                                              await  controller.searchCars();
+                                                controller.isFetchingCars.value = false;
                                                 setState(() {});
                                               },
                                             )
@@ -345,16 +349,16 @@ class SearchCityScreen extends GetView<SearchCityController> {
             });
   }
 
-  Widget continueButton() {
-    return controller.isLoading.isTrue
-        ? centerLoadingIcon()
-        : GtiButton(
-            height: 50.sp,
-            width: 300.sp,
-            text: "continue".tr,
-            color: secondaryColor,
-            // onTap: controller.routeToPhoneVerification,
-            isLoading: controller.isLoading.value,
-          );
-  }
+  // Widget continueButton() {
+  //   return controller.isLoading.isTrue
+  //       ? centerLoadingIcon()
+  //       : GtiButton(
+  //           height: 50.sp,
+  //           width: 300.sp,
+  //           text: "continue".tr,
+  //           color: secondaryColor,
+  //           // onTap: controller.routeToPhoneVerification,
+  //           isLoading: controller.isLoading.value,
+  //         );
+  // }
 }

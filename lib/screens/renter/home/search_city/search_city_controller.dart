@@ -279,7 +279,7 @@ class SearchCityController extends GetxController {
     if (!searchFormKey.currentState!.validate()) {
       return;
     }
-    isFetchingCars.value = true;
+    // isFetchingCars.value = true;
     try {
       final response = await renterService.searchCars(
           stateCode: selectedStateCode.value, cityCode: selectedcityCode.value);

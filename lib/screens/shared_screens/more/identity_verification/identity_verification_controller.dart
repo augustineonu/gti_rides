@@ -36,6 +36,13 @@ class IdentityVerificationController extends GetxController {
 
     userKyc = userService.userKyc;
     logger.log("USER Kyc Details: ${userKyc.value.toJson()}");
+
+    if(arguments != null) {
+      logger.log("Received arguments: $arguments");
+      isKycUpdate.value = arguments?['isKycUpdate'] ??  false;
+      appBarTitle.value = arguments?['appBarTitle'] ?? '';
+
+    }
   }
 
   @override
@@ -52,8 +59,10 @@ class IdentityVerificationController extends GetxController {
     super.onReady();
   }
 
+  Map<String, dynamic>? arguments = Get.arguments;
+
   PageController pageController = PageController();
-  TextEditingController homeAddressController = TextEditingController();
+  // TextEditingController homeAddressController = TextEditingController();
   TextEditingController officeAddressController = TextEditingController();
   TextEditingController occupationController = TextEditingController();
   TextEditingController emergencyNumberController = TextEditingController();
@@ -68,11 +77,14 @@ class IdentityVerificationController extends GetxController {
   RxBool selectedNationalID = false.obs;
   RxBool selectedPassport = false.obs;
   RxBool selectedDriversLicense = false.obs;
+  Rx<String> selectedDateOfBirth = ''.obs;
 
   Rx<String> testString = 'hello world'.obs;
   Rx<String> selectedGender = ''.obs;
-  Rx<String> pickedImagePath = ''.obs;
+  // Rx<String> pickedImagePath = ''.obs;
   Rx<String> pickedImageName = ''.obs;
+  Rx<bool> isKycUpdate = false.obs;
+  Rx<String> appBarTitle = ''.obs;
 
   // list
   List<String> gender = [
@@ -95,7 +107,6 @@ class IdentityVerificationController extends GetxController {
 
   // void onSelectIdType() => selectedIdType.value = !selectedIdType.value;
 
-
   void onClickPrevious() {
     if (currentIndex > 0) {
       pageController.previousPage(
@@ -105,25 +116,25 @@ class IdentityVerificationController extends GetxController {
     }
   }
 
-  void openCamera() async {
-    ImageResponse? response =
-        await imageService.pickImage(source: ImageSource.camera);
-    if (response != null) {
-      // Check if pickedImagePath is not null before accessing its value
-      pickedImagePath.value = response.imagePath.split('/').last;
-      logger.log("image path :: ${pickedImagePath.value}");
-    }
-  }
+  // void openCamera() async {
+  //   ImageResponse? response =
+  //       await imageService.pickImage(source: ImageSource.camera);
+  //   if (response != null) {
+  //     // Check if pickedImagePath is not null before accessing its value
+  //     pickedImagePath.value = response.imagePath.split('/').last;
+  //     logger.log("image path :: ${pickedImagePath.value}");
+  //   }
+  // }
 
-  void openGallery() async {
-    ImageResponse? response =
-        await imageService.pickImage(source: ImageSource.gallery);
-    if (response != null) {
-      logger.log("imagePath $pickedImagePath");
-      pickedImagePath.value = response.imagePath;
-      pickedImageName.value = response.imagePath.split('/').last;
-    }
-  }
+  // void openGallery() async {
+  //   ImageResponse? response =
+  //       await imageService.pickImage(source: ImageSource.gallery);
+  //   if (response != null) {
+  //     logger.log("imagePath $pickedImagePath");
+  //     pickedImagePath.value = response.imagePath;
+  //     pickedImageName.value = response.imagePath.split('/').last;
+  //   }
+  // }
 
   Future<void> getBiometricProfile() async {
     try {
@@ -142,14 +153,14 @@ class IdentityVerificationController extends GetxController {
     }
   }
 
-  bool validateImageUpload() {
-    if (pickedImagePath.value.isEmpty) {
-      // Show an error message or handle it accordingly
-      showErrorSnackbar(message: 'Please upload an image.');
-      return false;
-    }
-    return true;
-  }
+  // bool validateImageUpload() {
+  //   if (pickedImagePath.value.isEmpty) {
+  //     // Show an error message or handle it accordingly
+  //     showErrorSnackbar(message: 'Please upload an image.');
+  //     return false;
+  //   }
+  //   return true;
+  // }
 
   Future<void> updateKyc() async {
     if (!updateFormKey.currentState!.validate()) {
@@ -172,20 +183,20 @@ class IdentityVerificationController extends GetxController {
               .add(MapEntry('occupation', occupationController.text));
         }
         // Check if imagePath is not empty before adding the image file to formData
-        if (pickedImagePath.value.isNotEmpty &&
-            homeAddressController.text.isNotEmpty) {
-          formData.fields.add(
-            MapEntry(
-              'file',
-              await dio.MultipartFile.fromFile(
-                pickedImagePath.value,
-                filename: pickedImagePath.value,
-              ).toString(),
-            ),
-          );
-          formData.fields
-              .add(MapEntry('homeAddress', homeAddressController.text));
-        }
+        // if (pickedImagePath.value.isNotEmpty &&
+        //     homeAddressController.text.isNotEmpty) {
+        //   formData.fields.add(
+        //     MapEntry(
+        //       'file',
+        //       await dio.MultipartFile.fromFile(
+        //         pickedImagePath.value,
+        //         filename: pickedImagePath.value,
+        //       ).toString(),
+        //     ),
+        //   );
+        //   formData.fields
+        //       .add(MapEntry('homeAddress', homeAddressController.text));
+        // }
 
         if (emergencyNameController.text.isNotEmpty &&
             emergencyNameController.text.isNotEmpty &&
@@ -201,10 +212,16 @@ class IdentityVerificationController extends GetxController {
           );
         }
 
-        if(selectedGender.isNotEmpty || selectedGender != null){
+        if (selectedGender.isNotEmpty || selectedGender.value != '') {
           formData.fields.add(
             MapEntry('gender', selectedGender.string),
           );
+          if (selectedDateOfBirth.value.isNotEmpty ||
+              selectedDateOfBirth.value != '') {
+            formData.fields.add(
+              MapEntry('dateOfBirth', selectedDateOfBirth.string),
+            );
+          }
         }
         return formData;
       }
@@ -227,11 +244,13 @@ class IdentityVerificationController extends GetxController {
             userKyc.refresh();
             update();
           }
-          routeService.goBack;
+          Future.delayed(Duration(seconds: 2))
+              .then((value) => routeService.goBack(closeOverlays: true));
+
           Navigator.pop;
         }
 
-        routeService.goBack;
+        // routeService.goBack;
       } else {
         logger.log("error updating user: ${result.message}");
         await showErrorSnackbar(message: result.message!);

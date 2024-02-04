@@ -67,7 +67,7 @@ class UserService {
 
   Future<ApiResponseModel> updateKyc({required FormData payload}) async {
     try {
-      final result = await apiService.putRequestFile(
+      final result = await apiService.postRequestFile(
         endpoint: '/user/profile/addKYC',
         data: payload,
       );

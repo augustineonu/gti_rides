@@ -41,7 +41,9 @@ class IdentityVerificationScreen
           child: SvgPicture.asset(ImageAssets.arrowLeft, color: black)),
       centerTitle: true,
       title: textWidget(
-          text: AppStrings.identityVerification,
+          text: controller.isKycUpdate.value
+              ? controller.appBarTitle.value
+              : AppStrings.identityVerification,
           style: getMediumStyle().copyWith(fontWeight: FontWeight.w500)),
       titleColor: iconColor(),
     );
@@ -51,8 +53,10 @@ class IdentityVerificationScreen
     final userKyc = controller.userKyc.value.data;
     return SingleChildScrollView(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          const SizedBox(height: 20),
+
           /// Identity verification
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -134,38 +138,52 @@ class IdentityVerificationScreen
                   : AppStrings.provideOccupation,
               onTap: controller.routeToOccupation),
 
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            child: Row(
-              children: [
-                SvgPicture.asset(
-                  ImageAssets.pencil,
-                  height: 18.sp,
+          controller.isKycUpdate.value
+              ? contButton(userKyc)
+              : Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 20),
+                      child: Row(
+                        children: [
+                          SvgPicture.asset(
+                            ImageAssets.pencil,
+                            height: 18.sp,
+                          ),
+                          const SizedBox(width: 6),
+                          textWidget(
+                              text: AppStrings.accountStatusCaps,
+                              style: getBoldStyle()),
+                        ],
+                      ),
+                    ),
+                    identityVerificationWidget(
+                        title: controller.user.value.status?.toLowerCase() ==
+                                "pending"
+                            ? AppStrings.pending
+                            : controller.user.value.status?.toLowerCase() ==
+                                    "approved"
+                                ? AppStrings.approved
+                                : AppStrings.suspended,
+                        titleColor:
+                            controller.user.value.status?.toLowerCase() ==
+                                    "pending"
+                                ? yellow
+                                : controller.user.value.status?.toLowerCase() ==
+                                        "approved"
+                                    ? green
+                                    : red,
+                        subTitle: controller.user.value.status?.toLowerCase() ==
+                                "pending"
+                            ? AppStrings.pendingApproval
+                            : controller.user.value.status?.toLowerCase() ==
+                                    "approved"
+                                ? AppStrings.youCanProceedToRent
+                                : AppStrings.accountSuspended,
+                        onTap: () {}),
+                  ],
                 ),
-                const SizedBox(width: 6),
-                textWidget(
-                    text: AppStrings.accountStatusCaps, style: getBoldStyle()),
-              ],
-            ),
-          ),
-          identityVerificationWidget(
-              title: controller.user.value.status?.toLowerCase() == "pending"
-                  ? AppStrings.pending
-                  : controller.user.value.status?.toLowerCase() == "approved"
-                      ? AppStrings.approved
-                      : AppStrings.suspended,
-              titleColor: controller.user.value.status?.toLowerCase() ==
-                      "pending"
-                  ? yellow
-                  : controller.user.value.status?.toLowerCase() == "approved"
-                      ? green
-                      : red,
-              subTitle: controller.user.value.status?.toLowerCase() == "pending"
-                  ? AppStrings.pendingApproval
-                  : controller.user.value.status?.toLowerCase() == "approved"
-                      ? AppStrings.youCanProceedToRent
-                      : AppStrings.accountSuspended,
-              onTap: () {}),
           SizedBox(
             height: size.height * 0.07,
           ),
@@ -205,16 +223,29 @@ class IdentityVerificationScreen
     );
   }
 
-  Widget saveButton() {
-    return controller.isLoading.isTrue
-        ? centerLoadingIcon()
-        : GtiButton(
-            height: 50.sp,
-            width: 300.sp,
-            text: AppStrings.save,
-            // color: secondaryColor,
-            onTap: () {},
-            isLoading: controller.isLoading.value,
-          );
+  Widget contButton(List<dynamic>? userKyc) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+      child: controller.isLoading.isTrue
+          ? centerLoadingIcon()
+          : GtiButton(
+              // height: 50.sp,
+              width: 300.sp,
+              text: AppStrings.cont,
+              // color: secondaryColor,
+              // isDisabled: true,
+              isDisabled: userKyc![0]["officeAddress"] == null ||
+                  userKyc[0]["homeAddress"] == null ||
+                  userKyc[0]["occupation"] == null ||
+                  userKyc[0]["dateOfBirth"] == null ||
+                  userKyc[0]["emergencyName"] == null ||
+                  userKyc[0]["gender"] == null || userKyc[0]["licenceNumber"] == null,
+
+              onTap: () {
+                print("lol");
+              },
+              isLoading: controller.isLoading.value,
+            ),
+    );
   }
 }

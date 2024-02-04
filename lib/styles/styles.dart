@@ -13,7 +13,7 @@ const secondaryColor = Color(0xff1A1300);
 const white = Color(0xFFFFFFFF);
 const darkBrown = Color(0xff1a1300);
 const success = Color(0xFF02C20F);
-const danger = Color(0xFFFF000D);
+const danger = Color(0xffBB0000);
 const shadowColor = Color(0X95E9EBF0);
 const disabledColor1 = Color(0x07675750);
 const black = Color(0xFF000000);
@@ -30,7 +30,7 @@ const grey5 = Color(0xff0A0A0A);
 const greyShade = Color(0xff333333);
 const greyShade1 = Color(0xff5E6368);
 const borderColor = Color(0xffD4D4D4);
-const yellow = Colors.yellow;
+const yellow = Color(0xFFE2CD0A);
 
 BoxDecoration boxDecoration(
     {double radius = 2,

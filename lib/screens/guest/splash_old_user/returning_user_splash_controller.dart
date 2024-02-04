@@ -4,12 +4,15 @@ import 'package:gti_rides/models/auth/login_request_model.dart';
 import 'package:gti_rides/models/auth/token_model.dart';
 import 'package:gti_rides/models/user_model.dart';
 import 'package:gti_rides/route/app_links.dart';
+import 'package:gti_rides/services/auth_service.dart';
 import 'package:gti_rides/services/device_service.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/services/storage_service.dart';
 import 'package:gti_rides/services/token_service.dart';
 import 'package:gti_rides/services/user_service.dart';
+import 'package:gti_rides/utils/utils.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class ReturningUserSplashController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -37,12 +40,39 @@ class ReturningUserSplashController extends GetxController
 
       //   // setup and move to home screen
       tokenService.saveTokensData(tokenModel);
+      tokenService.setAccessToken(tokenModel.accessToken);
+
+      bool hasExpired = JwtDecoder.isExpired(tokenModel.accessToken!);
+      logger.log("token status:: $hasExpired");
+
       // userService.setCurrentUser(userModel.toJson());
       // tokenService.setTokenModel(tokenModel.toJson());
       // tokenService.setAccessToken(tokenModel.accessToken);
 
       logger.log("User model >>: ${userModel.toJson()}");
-      routeService.offAllNamed(AppLinks.login);
+      if (hasExpired) {
+        routeService.offAllNamed(AppLinks.login);
+      } else {
+        final response = await authService.getProfile();
+        if (response.status == "success" || response.status_code == 200) {
+          // persist user data
+          logger.log("user ${response.data.toString()}");
+          final UserModel userModel = UserModel.fromJson(response.data?[0]);
+          userService.setCurrentUser(userModel.toJson());
+          // persist data
+          await userService.saveUserData(userModel);
+          // await showSuccessSnackbar(message: result.message!);
+
+          if (userModel.userType.toString() == "renter") {
+            await routeService.gotoRoute(AppLinks.carRenterLanding);
+          } else {
+            await routeService.gotoRoute(AppLinks.carOwnerLanding);
+          }
+        } else {
+          // showErrorSnackbar(message: "Kindly login");
+          routeService.offAllNamed(AppLinks.login);
+        }
+      }
 
       //   // get new access token
       // bool result = await tokenService.getNewAccessToken();

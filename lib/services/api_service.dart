@@ -31,8 +31,8 @@ class ApiService {
     _dio = Dio(
       BaseOptions(
         baseUrl: baseURL,
-        connectTimeout: Duration(seconds: 4),
-        receiveTimeout: Duration(seconds: 3),
+        connectTimeout: Duration(seconds: 60),
+        receiveTimeout: Duration(seconds: 60),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -50,6 +50,10 @@ class ApiService {
           return handler.next(options);
         },
         onError: (DioException e, handler) async {
+          // to be worked on later
+          //      if(e.type == DioExceptionType.connectionTimeout){
+          //   throw Exception("Connection  Timeout Exception");
+          // }
           if (e.response?.statusCode == 400) {
             // If a 401 response is received, refresh the access token
             // String newAccessToken = await refreshToken();
@@ -58,7 +62,7 @@ class ApiService {
               logger.log('Going to Login screen');
               routeService.offAllNamed(AppLinks.login);
               return;
-            } 
+            }
             // else {
             //   logger.log("result: token is false ");
             // }

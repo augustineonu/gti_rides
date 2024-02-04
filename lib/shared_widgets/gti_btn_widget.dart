@@ -8,6 +8,7 @@ class GtiButton extends StatelessWidget {
   final Color color;
   final Color disabledColor;
   final Color? textColor;
+  final Color? disabledTextColor;
   final String? text;
   final bool? isLoading;
   final bool hasIcon;
@@ -27,9 +28,10 @@ class GtiButton extends StatelessWidget {
   const GtiButton(
       {Key? key,
       this.onTap,
-      this.color =  primaryColor,
-      this.disabledColor = const Color(0xff828282),
+      this.color = primaryColor,
+      this.disabledColor = primaryColorLight,
       this.textColor,
+      this.disabledTextColor,
       this.text,
       this.isLoading = false,
       this.hasIcon = false,
@@ -82,8 +84,9 @@ class GtiButton extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: style ??
                       getBoldStyle(
-                          color:
-                              isDisabled ? disabledColor : textColor ?? white,
+                          color: isDisabled
+                              ? disabledTextColor
+                              : textColor ?? white,
                           fontSize: fontSize ?? 16,
                           fontWeight: FontWeight.w600)),
             ),

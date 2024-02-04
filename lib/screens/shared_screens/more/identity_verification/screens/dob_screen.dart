@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/screens/shared_screens/more/identity_verification/identity_verification_controller.dart';
 import 'package:gti_rides/screens/shared_screens/more/identity_verification/home_address/home_address_controller.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
@@ -57,6 +58,25 @@ class DateOfBirthScreen extends GetView<IdentityVerificationController> {
                   hintText: AppStrings.dateTimeHintText,
                   controller: controller.officeAddressController,
                   textInputType: TextInputType.datetime,
+                   readOnly: true,
+                    onTap: () async {
+                      var data = await Get.toNamed(AppLinks.chooseTripDate,
+                          arguments: {
+                            "appBarTitle": AppStrings.selectExpiryDate,
+                            "enablePastDates": false,
+                            "isSingleDateSelection": true,
+                            "to": AppStrings.to,
+                            "from": AppStrings.from
+                          });
+
+                      // Handle the selected date here
+                      print('Selected Date page: $data');
+                      if (data != null && data['selectedExpiryDate'] != null) {
+                        controller.selectedDateOfBirth.value =
+                            data['selectedExpiryDate'];
+                            print("value ${controller.selectedDateOfBirth.value}");
+                      }
+                    },
                 ),
               ),
               const SizedBox(height: 32),

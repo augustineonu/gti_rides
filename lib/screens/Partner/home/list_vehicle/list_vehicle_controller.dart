@@ -88,6 +88,7 @@ class ListVehicleController extends GetxController {
   GlobalKey<FormState> vehicleTypeFormKey = GlobalKey<FormState>();
   GlobalKey<FormState> vehicleInfoFormKey = GlobalKey<FormState>();
   GlobalKey<FormState> documentationFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> availabilityFormKey = GlobalKey<FormState>();
 
   TextEditingController senderNameController = TextEditingController();
   TextEditingController phoneNoController = TextEditingController();
@@ -109,6 +110,8 @@ class ListVehicleController extends GetxController {
   TextEditingController rentPerDayController = TextEditingController();
   TextEditingController discountPerDayController = TextEditingController();
   TextEditingController aboutVehicleController = TextEditingController();
+    Rx<TextEditingController> fromController = TextEditingController().obs;
+  Rx<TextEditingController> toController = TextEditingController().obs;
   Rx<String> advanceAmount = ''.obs;
   RxInt initiPageIndex = 1.obs;
 
@@ -318,16 +321,16 @@ class ListVehicleController extends GetxController {
     }
   }
 
-  Future<void> openGallery1() async {
-    ImageResponse? response =
-        await imageService.pickImage(source: ImageSource.gallery);
-    if (response != null) {
-      logger.log("Picked image $selectedPhotoName");
-      selectedPhotoName.value = response.imagePath.split('/').last;
-      selectedPhotos.value = (response.imagePath);
-      routeService.goBack;
-    }
-  }
+  // Future<void> openGallery1() async {
+  //   ImageResponse? response =
+  //       await imageService.pickImage(source: ImageSource.gallery);
+  //   if (response != null) {
+  //     logger.log("Picked image $selectedPhotoName");
+  //     selectedPhotoName.value = response.imagePath.split('/').last;
+  //     selectedPhotos.value = (response.imagePath);
+  //     routeService.goBack;
+  //   }
+  // }
 
   Future<void> openGallery() async {
     ImageResponse? response =
@@ -876,6 +879,12 @@ class ListVehicleController extends GetxController {
   }
 
   Future<void> addCarAvailability() async {
+     if (!availabilityFormKey.currentState!.validate()) {
+      return;
+    }
+    if(selectedView.value == 'select'){
+      showErrorSnackbar(message: 'Kindly select a driver');
+    }
     try {
       isLoading1.value = true;
       final response = await partnerService.addCarAvailability(

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/screens/shared_screens/more/identity_verification/home_address/home_address_controller.dart';
 import 'package:gti_rides/screens/shared_screens/more/identity_verification/identity_verification_controller.dart';
+import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/shared_widgets/camera_option_sheet.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
@@ -82,14 +85,37 @@ class ProofOfIdentityScreen extends GetView<HomeAddressController> {
                     hintText: AppStrings.inputDetails,
                     textInputType: TextInputType.number,
                     controller: controller.licenseNoController,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp(
+                          r'[0-9.]')), // Allow digits and a decimal point
+                    ],
                   ),
                   const SizedBox(height: 20),
                   NormalInputTextWidget(
                     title: AppStrings.licenseExpireyDate,
                     expectedVariable: "field",
                     hintText: AppStrings.inputDetails,
-                    textInputType: TextInputType.datetime,
-                    controller: controller.expireyDateController,
+                    textInputType: TextInputType.none,
+                    controller: controller.expiryDateController,
+                    readOnly: true,
+                    onTap: () async {
+                      var data = await Get.toNamed(AppLinks.chooseTripDate,
+                          arguments: {
+                            "appBarTitle": AppStrings.selectExpiryDate,
+                            "enablePastDates": false,
+                            "isSingleDateSelection": true,
+                            "to": AppStrings.to,
+                            "from": AppStrings.from
+                          });
+
+                      // Handle the selected date here
+                      print('Selected Date page: $data');
+                      if (data != null && data['selectedExpiryDate'] != null) {
+                        controller.selectedExpiryDate.value =
+                            data['selectedExpiryDate'];
+                            print("value ${controller.selectedExpiryDate.value}");
+                      }
+                    },
                   ),
                   const SizedBox(
                     height: 24,
@@ -102,8 +128,12 @@ class ProofOfIdentityScreen extends GetView<HomeAddressController> {
                     onTap: () {
                       selectCameraOptionSheet(
                         size,
-                        onCameraOpen: controller.openFrontCamera,
-                        onGelleryOpen: controller.openFrontGallery,
+                        onCameraOpen: () => controller
+                            .openFrontCamera()
+                            .then((value) => routeService.goBack()),
+                        onGelleryOpen: () => controller
+                            .openFrontGallery()
+                            .then((value) => routeService.goBack()),
                       );
                     },
                   ),
@@ -116,7 +146,9 @@ class ProofOfIdentityScreen extends GetView<HomeAddressController> {
                     onTap: () {
                       selectCameraOptionSheet(
                         size,
-                        onCameraOpen: controller.openCamera,
+                        onCameraOpen: () => controller
+                            .openCamera()
+                            .then((value) => routeService.goBack()),
                         onGelleryOpen: controller.openGallery,
                       );
                     },
