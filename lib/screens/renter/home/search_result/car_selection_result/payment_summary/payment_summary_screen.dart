@@ -19,8 +19,9 @@ class PaymentSummaryBinding extends Bindings {
 }
 
 class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
-  const PaymentSummaryScreen([Key? key]) : super(key: key);
-
+   PaymentSummaryScreen([Key? key]) : super(key: key);
+ @override
+  final controller = Get.put(PaymentSummaryController());
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -100,7 +101,7 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
                   children: [
                     SvgPicture.asset(ImageAssets.naira),
                     textWidget(
-                        text: controller.estimatedTotal.value,
+                        text: controller.tripDaysTotal.value,
                         style: getRegularStyle(color: grey5)),
                   ],
                 ),
@@ -109,35 +110,69 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
             rowNairaText(
                 title: 'VAT(${controller.vat.value}%)',
                 subTitle: controller.vatValue.value),
-            rowNairaText(title: 'Pick up', subTitle: '10,000'),
-            rowNairaText(title: 'Escort Service Fee', subTitle: '20,000'),
-            rowNairaText(title: 'Drop off', subTitle: '10,000'),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  // crossAxisAlignment: alignment,
-                  children: [
-                    textWidget(
-                        text: 'Caution Fee (Self drive)',
-                        style: getRegularStyle(color: grey5)),
-                  ],
-                ),
-                Row(
-                  children: [
-                    SvgPicture.asset(ImageAssets.naira),
-                    textWidget(
-                        text: '500,000', style: getRegularStyle(color: grey5)),
-                  ],
-                ),
-              ],
-            ),
-            SizedBox(
-              width: 180.sp,
-              child: textWidget(
-                  text: AppStrings.feeWillBeRefundedWhen,
-                  textOverflow: TextOverflow.visible,
-                  style: getLightStyle(fontSize: 10.sp, color: primaryColor)),
+            Visibility(
+                visible: controller.selectedSelfPickUp.value,
+                child: rowNairaText(
+                    title: 'Pick up',
+                    subTitle:
+                        controller.carSelectionController.pickUpFee.value)),
+           
+            Visibility(
+                visible:
+                    controller.selectedSelfDropOff.value,
+                child: rowNairaText(
+                    title: 'Drop off',
+                    subTitle: controller.carSelectionController.dropOffFee.value
+                            .toString() ??
+                        '')),
+            
+             Visibility(
+                visible: controller
+                    .selectedSecurityEscort.value,
+                child: rowNairaText(
+                    title: 'Escort Service Fee',
+                    subTitle: controller.totalEscortFee
+                            .toString() ??
+                        '')),
+            Visibility(
+              visible: controller.tripType.value == 1,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        // crossAxisAlignment: alignment,
+                        children: [
+                          textWidget(
+                              text: 'Caution Fee (Self drive)',
+                              style: getRegularStyle(color: grey5)),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          SvgPicture.asset(ImageAssets.naira),
+                          textWidget(
+                              text: controller
+                                      .carSelectionController.cautionFee.value
+                                      .toString() ??
+                                  '',
+                              style: getRegularStyle(color: grey5)),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    width: 180.sp,
+                    child: textWidget(
+                        text: AppStrings.feeWillBeRefundedWhen,
+                        textOverflow: TextOverflow.visible,
+                        style: getLightStyle(
+                            fontSize: 10.sp, color: primaryColor)),
+                  ),
+                ],
+              ),
             ),
             Container(
               margin: EdgeInsets.symmetric(vertical: 20),
@@ -162,7 +197,7 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
                         ImageAssets.naira,
                       ),
                       textWidget(
-                          text: '500,000',
+                          text: controller.estimatedTotal.value,
                           style: getRegularStyle().copyWith(
                               fontFamily: "Neue", fontWeight: FontWeight.w700)),
                     ],

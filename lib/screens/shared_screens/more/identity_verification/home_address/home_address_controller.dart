@@ -71,6 +71,8 @@ class HomeAddressController extends GetxController {
   Rx<String> backImageName = ''.obs;
   Rx<String> frontPagePath = ''.obs;
   Rx<String> backPagePath = ''.obs;
+  Rx<String> homeAddressPath = ''.obs;
+  Rx<String> homeAddressName = ''.obs;
   Rx<String> selectedExpiryDate = "".obs;
 
   // list
@@ -87,27 +89,57 @@ class HomeAddressController extends GetxController {
     ImageResponse? response =
         await imageService.pickImage(source: ImageSource.camera);
     if (response != null) {
-      backPagePath.value = response.imagePath;
-      backImageName.value = response.imagePath.split('/').last;
-      logger.log("image path :: ${backPagePath.value}");
+      homeAddressPath.value = response.imagePath;
+      homeAddressName.value = response.imagePath.split('/').last;
+      logger.log("image path :: ${homeAddressPath.value}");
 
       // Extract the directory and file name
-      int lastSeparator = backPagePath.value.lastIndexOf('/');
+      int lastSeparator = homeAddressPath.value.lastIndexOf('/');
       String directory = lastSeparator != -1
-          ? backPagePath.value.substring(0, lastSeparator)
-          : backPagePath.value;
-      backImageName.value = 'licenceBack.png';
+          ? homeAddressPath.value.substring(0, lastSeparator)
+          : homeAddressPath.value;
+      homeAddressName.value = 'homeAddress.png';
 
       // Build the new path with the desired file name
-      String newPath = '$directory/$backImageName';
+      String newPath = '$directory/$homeAddressName';
       logger.log("Picked new path $newPath");
 
       // Rename the file
-      File(backPagePath.value).renameSync(newPath);
+      File(homeAddressPath.value).renameSync(newPath);
 
       // Now update the selectedPhotos value
-      backPagePath.value = newPath;
-      logger.log("selected photo ${backPagePath.value}");
+      homeAddressPath.value = newPath;
+      logger.log("selected photo ${homeAddressPath.value}");
+      routeService.goBack;
+    }
+  }
+
+  Future<void> openGallery() async {
+    ImageResponse? response =
+        await imageService.pickImage(source: ImageSource.gallery);
+    if (response != null) {
+      logger.log("imagePath $frontPagePath");
+      homeAddressPath.value = response.imagePath;
+      homeAddressName.value = response.imagePath.split('/').last;
+      logger.log("image path :: ${homeAddressPath.value}");
+
+      // Extract the directory and file name
+      int lastSeparator = homeAddressPath.value.lastIndexOf('/');
+      String directory = lastSeparator != -1
+          ? homeAddressPath.value.substring(0, lastSeparator)
+          : homeAddressPath.value;
+      homeAddressName.value = 'homeAddress.png';
+
+      // Build the new path with the desired file name
+      String newPath = '$directory/$homeAddressName';
+      logger.log("Picked new path $newPath");
+
+      // Rename the file
+      File(homeAddressPath.value).renameSync(newPath);
+
+      // Now update the selectedPhotos value
+      homeAddressPath.value = newPath;
+      logger.log("selected photo ${homeAddressPath.value}");
       routeService.goBack;
     }
   }
@@ -137,18 +169,6 @@ class HomeAddressController extends GetxController {
       // Now update the selectedPhotos value
       frontPagePath.value = newPath;
       logger.log("selected photo ${frontPagePath.value}");
-    }
-  }
-
-  void openGallery() async {
-    ImageResponse? response =
-        await imageService.pickImage(source: ImageSource.gallery);
-    if (response != null) {
-      logger.log("imagePath $frontPagePath");
-      backPagePath.value = response.imagePath;
-      frontPagePath.value = response.imagePath;
-      backImageName.value = response.imagePath.split('/').last;
-      frontImageName.value = response.imagePath.split('/').last;
     }
   }
 
@@ -200,7 +220,7 @@ class HomeAddressController extends GetxController {
   }
 
   bool validateImageUpload() {
-    if (frontPagePath.value.isEmpty) {
+    if (homeAddressName.value.isEmpty) {
       // Show an error message or handle it accordingly
       showErrorSnackbar(message: 'Please upload an image.');
       return false;
@@ -232,21 +252,22 @@ class HomeAddressController extends GetxController {
 
     isLoading.value = true;
     final mimeTypeData =
-        lookupMimeType(frontPagePath.value, headerBytes: [0xFF, 0xD8])!
+        lookupMimeType(homeAddressPath.value, headerBytes: [0xFF, 0xD8])!
             .split('/');
-    String fileName = frontPagePath.split('/').last;
+    String fileName = homeAddressPath.split('/').last;
 
     try {
       Future<dio.FormData> constructFormData() async {
         var formData = dio.FormData.fromMap({});
 
-        if (frontPagePath.isNotEmpty) {
+        if (homeAddressPath.isNotEmpty) {
           formData = dio.FormData.fromMap({
             'homeAddress': homeAddressController.text,
-            'kycDocuments': await dio.MultipartFile.fromFile(
-                frontPagePath.value,
-                filename: fileName,
-                contentType: MediaType(mimeTypeData[0], mimeTypeData[1]))
+            'kycDocuments': [
+              await dio.MultipartFile.fromFile(homeAddressPath.value,
+                  filename: fileName,
+                  contentType: MediaType(mimeTypeData[0], mimeTypeData[1]))
+            ]
           });
         }
 
@@ -274,7 +295,8 @@ class HomeAddressController extends GetxController {
             userKyc.refresh();
             update();
           }
-          routeService.goBack;
+          Future.delayed(Duration(seconds: 3))
+              .then((value) => routeService.goBack(closeOverlays: true));
           Navigator.pop;
         }
 
@@ -374,7 +396,9 @@ class HomeAddressController extends GetxController {
             userKyc.refresh();
             update();
           }
-          routeService.goBack;
+          Future.delayed(Duration(seconds: 2))
+              .then((value) => routeService.goBack(closeOverlays: true));
+          // routeService.goBack;
           Navigator.pop;
         }
 

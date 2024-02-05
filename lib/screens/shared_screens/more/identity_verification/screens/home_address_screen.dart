@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/shared_screens/more/identity_verification/identity_verification_controller.dart';
 import 'package:gti_rides/screens/shared_screens/more/identity_verification/home_address/home_address_controller.dart';
+import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/sqaure_check_box_widget.dart';
@@ -61,8 +62,8 @@ class HomeAddressScreen extends GetView<HomeAddressController> {
                 const SizedBox(height: 32),
                 imageUploadWidget(
                   title: AppStrings.uploadDocumentToProveAddress,
-                  body: controller.frontImageName.value.isNotEmpty
-                      ? controller.frontImageName.value
+                  body: controller.homeAddressName.value.isNotEmpty
+                      ? controller.homeAddressName.value
                       : AppStrings.pleaseMakeSurePicIsClear,
                   onTap: () {
                     selectOptionSheet(size);
@@ -109,7 +110,7 @@ class HomeAddressScreen extends GetView<HomeAddressController> {
                   child: GtiButton(
                     width: 120.sp,
                     text: AppStrings.camera,
-                    onTap: () => controller.openCamera(),
+                    onTap: () => controller.openCamera().then((value) => routeService.goBack()),
                   ),
                 ),
                 const SizedBox(
@@ -119,7 +120,7 @@ class HomeAddressScreen extends GetView<HomeAddressController> {
                   child: GtiButton(
                     width: 120.sp,
                     text: AppStrings.gallery,
-                    onTap: controller.openGallery,
+                    onTap:()=> controller.openGallery().then((value) => routeService.goBack()),
                   ),
                 ),
               ],

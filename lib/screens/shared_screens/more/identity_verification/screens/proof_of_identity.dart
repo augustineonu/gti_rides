@@ -83,11 +83,13 @@ class ProofOfIdentityScreen extends GetView<HomeAddressController> {
                     title: AppStrings.driversLicenseNo,
                     expectedVariable: "number",
                     hintText: AppStrings.inputDetails,
-                    textInputType: TextInputType.number,
+                    textInputType: TextInputType.text,
                     controller: controller.licenseNoController,
                     inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(
-                          r'[0-9.]')), // Allow digits and a decimal point
+                      LengthLimitingTextInputFormatter(9),
+
+                      // FilteringTextInputFormatter.allow(RegExp(
+                      // r'[0-9.]')), // Allow digits and a decimal point
                     ],
                   ),
                   const SizedBox(height: 20),
@@ -96,13 +98,13 @@ class ProofOfIdentityScreen extends GetView<HomeAddressController> {
                     expectedVariable: "field",
                     hintText: AppStrings.inputDetails,
                     textInputType: TextInputType.none,
-                    controller: controller.expiryDateController,
+                    controller: controller.expiryDateController..text = controller.selectedExpiryDate.value,
                     readOnly: true,
                     onTap: () async {
                       var data = await Get.toNamed(AppLinks.chooseTripDate,
                           arguments: {
                             "appBarTitle": AppStrings.selectExpiryDate,
-                            "enablePastDates": false,
+                            "enablePastDates": true,
                             "isSingleDateSelection": true,
                             "to": AppStrings.to,
                             "from": AppStrings.from
@@ -113,7 +115,7 @@ class ProofOfIdentityScreen extends GetView<HomeAddressController> {
                       if (data != null && data['selectedExpiryDate'] != null) {
                         controller.selectedExpiryDate.value =
                             data['selectedExpiryDate'];
-                            print("value ${controller.selectedExpiryDate.value}");
+                        print("value ${controller.selectedExpiryDate.value}");
                       }
                     },
                   ),

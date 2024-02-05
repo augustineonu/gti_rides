@@ -35,7 +35,8 @@ AppBar gtiAppBar(
     // backgroundColor: newBackgroundColor ?? whiteOrBlackColor(),
     centerTitle: centerTitle ?? true,
     automaticallyImplyLeading: autoImplyLeading ?? false,
-    leading: hasLeading! ? GestureDetector(onTap: onTap, child: leading) : null,
+    leading: hasLeading! ? SizedBox(width: 20, height: 20,
+      child: GestureDetector(onTap: onTap, child: leading)) : null,
     iconTheme: IconThemeData(
       color: newIconColor,
       // color: newIconColor ?? iconColor(),

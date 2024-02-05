@@ -449,7 +449,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                       title: AppStrings.chooseNuberOfDays,
                       iconColor: grey3,
                       selectedValue: controller.isFromManageCars.isTrue &&
-                              controller.discountDays.isNotEmpty
+                              controller.discountDays.isNotEmpty 
                           ? controller.discountDays.value
                           : null,
                       values:

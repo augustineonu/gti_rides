@@ -73,8 +73,9 @@ class KycCheckScreen extends GetView<KycCheckController> {
           ),
           ListView.separated(
             shrinkWrap: true,
-            itemCount: 5,
+            itemCount: controller.displayKycFields.length,
             itemBuilder: (context, index) {
+              final missingKyc = controller.displayKycFields[index];
               return Row(
                 children: [
                   SvgPicture.asset(ImageAssets.kycCheck),
@@ -82,16 +83,16 @@ class KycCheckScreen extends GetView<KycCheckController> {
                     width: 6.sp,
                   ),
                   textWidget(
-                      text: AppStrings.profilePicture, style: getMediumStyle()),
+                      text: missingKyc, style: getMediumStyle()),
                 ],
               );
             },
             separatorBuilder: (context, _) => SizedBox(
-              height: 8.sp,
+              height: 15.sp,
             ),
           ),
 
-          textWidget(text: controller.testString(), style: getMediumStyle()),
+          // textWidget(text: controller.testString(), style: getMediumStyle()),
           Spacer(),
           continueButton(),
           SizedBox(

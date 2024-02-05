@@ -52,144 +52,152 @@ class IdentityVerificationScreen
   Widget body(Size size, context) {
     final userKyc = controller.userKyc.value.data;
     return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const SizedBox(height: 20),
-
-          /// Identity verification
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              children: [
-                SvgPicture.asset(ImageAssets.identityV),
-                const SizedBox(width: 6),
-                textWidget(
-                    text: AppStrings.identityVerificationCaps,
-                    style: getBoldStyle()),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-          identityVerificationWidget(
-              title: AppStrings.proofOfIdentity,
-              subTitle: userKyc != []
-                  ? userKyc![0]["drivingLicenceNumber"] != null
-                      ? AppStrings.driversLicense
-                      : AppStrings.addDocument
-                  : AppStrings.addDocument,
-              onTap: controller.routeToProofOfIdentity),
-          identityVerificationWidget(
-              title: AppStrings.gender,
-              subTitle: userKyc != []
-                  ? userKyc![0]["gender"] ?? AppStrings.selectGender
-                  : AppStrings.selectGender,
-              onTap: controller.routeToSelectGender),
-          identityVerificationWidget(
-              title: AppStrings.dob,
-              subTitle: userKyc != []
-                  ? userKyc![0]["dateOfBirth"] ?? AppStrings.provideDob
-                  : AppStrings.provideDob,
-              onTap: controller.routeToDob),
-          identityVerificationWidget(
-              title: AppStrings.emergencyContactDetails,
-              subTitle: userKyc != []
-                  ? (userKyc![0]["emergencyName"] != null &&
-                          userKyc![0]["emergencyNumber"] != null)
-                      ? "${userKyc![0]["emergencyName"]} - ${userKyc![0]["emergencyNumber"]}"
-                      : AppStrings.inputEmergencyDetails
-                  : AppStrings.inputEmergencyDetails,
-              onTap: controller.routeToEmergencyContact),
-
-          // address verification
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            child: Row(
-              children: [
-                SvgPicture.asset(
-                  ImageAssets.location1,
-                  height: 18.sp,
-                ),
-                const SizedBox(width: 6),
-                textWidget(
-                    text: AppStrings.addressVerificationCaps,
-                    style: getBoldStyle()),
-              ],
-            ),
-          ),
-          identityVerificationWidget(
-              title: AppStrings.homeAddress,
-              subTitle: userKyc != []
-                  ? userKyc![0]["homeAddress"] ?? AppStrings.provideHomeAddress
-                  : AppStrings.provideHomeAddress,
-              onTap: controller.routeToHomeAddress),
-
-          identityVerificationWidget(
-              title: AppStrings.officeAddress,
-              subTitle: userKyc != []
-                  ? userKyc![0]["officeAddress"] ?? AppStrings.addOfficeAddress
-                  : AppStrings.addOfficeAddress,
-              onTap: controller.routeToOfficeAddress),
-
-          identityVerificationWidget(
-              title: AppStrings.occupation,
-              subTitle: userKyc != []
-                  ? userKyc![0]["occupation"] ?? AppStrings.provideOccupation
-                  : AppStrings.provideOccupation,
-              onTap: controller.routeToOccupation),
-
-          controller.isKycUpdate.value
-              ? contButton(userKyc)
-              : Column(
+      child: GetBuilder<IdentityVerificationController>(
+        init: IdentityVerificationController(),
+        initState: (_) {},
+        builder: (_) {
+          return Column(
+            children: [
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 20),
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(
-                            ImageAssets.pencil,
-                            height: 18.sp,
-                          ),
-                          const SizedBox(width: 6),
-                          textWidget(
-                              text: AppStrings.accountStatusCaps,
-                              style: getBoldStyle()),
-                        ],
-                      ),
+                    SvgPicture.asset(ImageAssets.identityV),
+                    const SizedBox(width: 6),
+                    textWidget(
+                        text: AppStrings.identityVerificationCaps,
+                        style: getBoldStyle()),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 20),
+              identityVerificationWidget(
+                  title: AppStrings.proofOfIdentity,
+                  subTitle: userKyc != []
+                      ? userKyc![0]["licenceNumber"] != null
+                          ? AppStrings.driversLicense
+                          : AppStrings.addDocument
+                      : AppStrings.addDocument,
+                  onTap: controller.routeToProofOfIdentity),
+              identityVerificationWidget(
+                  title: AppStrings.gender,
+                  subTitle: userKyc != []
+                      ? userKyc![0]["gender"] ?? AppStrings.selectGender
+                      : AppStrings.selectGender,
+                  onTap: controller.routeToSelectGender),
+              identityVerificationWidget(
+                  title: AppStrings.dob,
+                  subTitle: userKyc != []
+                      ? userKyc![0]["dateOfBirth"] ?? AppStrings.provideDob
+                      : AppStrings.provideDob,
+                  onTap: controller.routeToDob),
+              identityVerificationWidget(
+                  title: AppStrings.emergencyContactDetails,
+                  subTitle: userKyc != []
+                      ? (userKyc![0]["emergencyName"] != null &&
+                              userKyc![0]["emergencyNumber"] != null)
+                          ? "${userKyc![0]["emergencyName"]} - ${userKyc![0]["emergencyNumber"]}"
+                          : AppStrings.inputEmergencyDetails
+                      : AppStrings.inputEmergencyDetails,
+                  onTap: controller.routeToEmergencyContact),
+
+              // address verification
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                child: Row(
+                  children: [
+                    SvgPicture.asset(
+                      ImageAssets.location1,
+                      height: 18.sp,
                     ),
-                    identityVerificationWidget(
-                        title: controller.user.value.status?.toLowerCase() ==
-                                "pending"
-                            ? AppStrings.pending
-                            : controller.user.value.status?.toLowerCase() ==
-                                    "approved"
-                                ? AppStrings.approved
-                                : AppStrings.suspended,
-                        titleColor:
-                            controller.user.value.status?.toLowerCase() ==
+                    const SizedBox(width: 6),
+                    textWidget(
+                        text: AppStrings.addressVerificationCaps,
+                        style: getBoldStyle()),
+                  ],
+                ),
+              ),
+              identityVerificationWidget(
+                  title: AppStrings.homeAddress,
+                  subTitle: userKyc != []
+                      ? userKyc![0]["homeAddress"] ??
+                          AppStrings.provideHomeAddress
+                      : AppStrings.provideHomeAddress,
+                  onTap: controller.routeToHomeAddress),
+
+              identityVerificationWidget(
+                  title: AppStrings.officeAddress,
+                  subTitle: userKyc != []
+                      ? userKyc![0]["officeAddress"] ??
+                          AppStrings.addOfficeAddress
+                      : AppStrings.addOfficeAddress,
+                  onTap: controller.routeToOfficeAddress),
+
+              identityVerificationWidget(
+                  title: AppStrings.occupation,
+                  subTitle: userKyc != []
+                      ? userKyc![0]["occupation"] ??
+                          AppStrings.provideOccupation
+                      : AppStrings.provideOccupation,
+                  onTap: controller.routeToOccupation),
+
+              controller.isKycUpdate.value
+                  ? contButton(userKyc)
+                  : Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 20),
+                          child: Row(
+                            children: [
+                              SvgPicture.asset(
+                                ImageAssets.pencil,
+                                height: 18.sp,
+                              ),
+                              const SizedBox(width: 6),
+                              textWidget(
+                                  text: AppStrings.accountStatusCaps,
+                                  style: getBoldStyle()),
+                            ],
+                          ),
+                        ),
+                        identityVerificationWidget(
+                            title: controller.user.value.status
+                                        ?.toLowerCase() ==
+                                    "pending"
+                                ? AppStrings.pending
+                                : controller.user.value.status?.toLowerCase() ==
+                                        "approved"
+                                    ? AppStrings.approved
+                                    : AppStrings.suspended,
+                            titleColor: controller.user.value.status
+                                        ?.toLowerCase() ==
                                     "pending"
                                 ? yellow
                                 : controller.user.value.status?.toLowerCase() ==
                                         "approved"
                                     ? green
                                     : red,
-                        subTitle: controller.user.value.status?.toLowerCase() ==
-                                "pending"
-                            ? AppStrings.pendingApproval
-                            : controller.user.value.status?.toLowerCase() ==
-                                    "approved"
-                                ? AppStrings.youCanProceedToRent
-                                : AppStrings.accountSuspended,
-                        onTap: () {}),
-                  ],
-                ),
-          SizedBox(
-            height: size.height * 0.07,
-          ),
-
-          // textWidget(text: controller.testString(), style: getMediumStyle()),
-        ],
+                            subTitle: controller.user.value.status
+                                        ?.toLowerCase() ==
+                                    "pending"
+                                ? AppStrings.pendingApproval
+                                : controller.user.value.status?.toLowerCase() ==
+                                        "approved"
+                                    ? AppStrings.youCanProceedToRent
+                                    : AppStrings.accountSuspended,
+                            onTap: () {}),
+                      ],
+                    ),
+              SizedBox(
+                height: size.height * 0.07,
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -239,11 +247,10 @@ class IdentityVerificationScreen
                   userKyc[0]["occupation"] == null ||
                   userKyc[0]["dateOfBirth"] == null ||
                   userKyc[0]["emergencyName"] == null ||
-                  userKyc[0]["gender"] == null || userKyc[0]["licenceNumber"] == null,
+                  userKyc[0]["gender"] == null ||
+                  userKyc[0]["licenceNumber"] == null,
 
-              onTap: () {
-                print("lol");
-              },
+              onTap: controller.proceedToPayment,
               isLoading: controller.isLoading.value,
             ),
     );

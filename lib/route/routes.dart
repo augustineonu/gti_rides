@@ -143,12 +143,12 @@ class AppRoutes {
     ),
     GetPage(
       name: AppLinks.updateKyc,
-      page: () => const UpdateKycScreen(),
+      page: () => UpdateKycScreen(),
       binding: UpdateKycBinding(),
     ),
     GetPage(
       name: AppLinks.paymentSummary,
-      page: () => const PaymentSummaryScreen(),
+      page: () =>  PaymentSummaryScreen(),
       binding: PaymentSummaryBinding(),
     ),
     GetPage(

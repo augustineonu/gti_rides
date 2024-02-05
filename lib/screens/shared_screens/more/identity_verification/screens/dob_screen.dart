@@ -56,17 +56,17 @@ class DateOfBirthScreen extends GetView<IdentityVerificationController> {
                   expectedVariable: 'field',
                   title: AppStrings.inputDob,
                   hintText: AppStrings.dateTimeHintText,
-                  controller: controller.officeAddressController,
+                  controller: controller.dobController..text = controller.selectedDateOfBirth.value,
                   textInputType: TextInputType.datetime,
                    readOnly: true,
                     onTap: () async {
                       var data = await Get.toNamed(AppLinks.chooseTripDate,
                           arguments: {
                             "appBarTitle": AppStrings.selectExpiryDate,
-                            "enablePastDates": false,
+                            "enablePastDates": true,
                             "isSingleDateSelection": true,
                             "to": AppStrings.to,
-                            "from": AppStrings.from
+                            "from": AppStrings.from,
                           });
 
                       // Handle the selected date here

@@ -52,8 +52,7 @@ class PaymentService extends GetxController {
       rethrow;
     }
   }
-  
-  
+
   Future<ListResponseModel> getBankAccount() async {
     try {
       final result = await apiService.getRequest(
@@ -87,12 +86,24 @@ class PaymentService extends GetxController {
     }
   }
 
-  Future<ApiResponseModel> addBanAccount({required Map<dynamic, dynamic>? data}) async {
+  Future<ApiResponseModel> addBanAccount(
+      {required Map<dynamic, dynamic>? data}) async {
     try {
       final result = await apiService.postRequest(
-        endpoint: '/user/partner/payment/addBankAccount',
-        data: data
-      );
+          endpoint: '/user/partner/payment/addBankAccount', data: data);
+
+      return ApiResponseModel.fromJson(result);
+    } catch (err) {
+      logger.log(" Error: $err");
+      rethrow;
+    }
+  }
+
+  Future<ApiResponseModel> addTrip(
+      {required Map<dynamic, dynamic>? data}) async {
+    try {
+      final result = await apiService.postRequest(
+          endpoint: '/user/renter/trips/addTrip', data: data);
 
       return ApiResponseModel.fromJson(result);
     } catch (err) {

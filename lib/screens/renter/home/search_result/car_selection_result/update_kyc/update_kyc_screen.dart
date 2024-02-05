@@ -19,7 +19,8 @@ class UpdateKycBinding extends Bindings {
 }
 
 class UpdateKycScreen extends GetView<UpdateKycController> {
-  const UpdateKycScreen([Key? key]) : super(key: key);
+  UpdateKycScreen([Key? key]) : super(key: key);
+  final controller = Get.put(UpdateKycController());
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -37,10 +38,7 @@ class UpdateKycScreen extends GetView<UpdateKycController> {
       onTap: () => controller.goBack(),
       leading: Transform.scale(
           scale: 0.5,
-          child: SvgPicture.asset(
-            ImageAssets.arrowLeft,
-          
-          color: black)),
+          child: SvgPicture.asset(ImageAssets.arrowLeft, color: black)),
       centerTitle: true,
       title: textWidget(
           text: AppStrings.addToContinue,

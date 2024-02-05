@@ -120,6 +120,7 @@ Future<String> formatAmount(double amount) async {
     // Format the number with commas
     final formatter = NumberFormat("#,##0.0", "en_US");
     String formattedAmount = formatter.format(amount);
+    logger.log("Formatted amount:: $formattedAmount");
 
     return formattedAmount;
   } catch (e) {

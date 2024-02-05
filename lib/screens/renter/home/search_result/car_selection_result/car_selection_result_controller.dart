@@ -29,12 +29,14 @@ class CarSelectionResultController extends GetxController
 
     if (arguments != null) {
       logger.log("Received data:: $arguments");
-      carId.value = arguments!['carId'];
+      carId.value = arguments!['carId'] ?? '';
       startDateTime.value = arguments!['startDateTime'] ?? '';
       endDateTime.value = arguments!['endDateTime'] ?? '';
       tripDays.value = arguments!['differenceInDays'] ?? 0;
       await getTripAmountData();
-      await getCarHistory();
+      if (carId.value != '') {
+        await getCarHistory();
+      }
       await getCarReview();
     }
   }
@@ -56,6 +58,7 @@ class CarSelectionResultController extends GetxController
   Map<String, dynamic>? arguments = Get.arguments;
   GlobalKey<FormState> chauffeurFormKey = GlobalKey();
   GlobalKey<FormState> selfDriveFormKey = GlobalKey();
+  Rx<TripData> tripData = TripData().obs;
 
   ScrollController scrollController = ScrollController();
   TextEditingController interStateInputController = TextEditingController();
@@ -87,6 +90,7 @@ class CarSelectionResultController extends GetxController
   Rx<int> tripDays = 0.obs;
   Rx<String> pricePerDay = ''.obs;
   Rx<String> estimatedTotal = '0.0'.obs;
+  Rx<String> tripDaysTotal = '0.0'.obs;
   Rx<String> initialEstimatedTotal = '0.0'.obs;
   Rx<double> total = 0.0.obs;
   Rx<int> tripType = 0.obs;
@@ -230,7 +234,8 @@ class CarSelectionResultController extends GetxController
             numberOfEscort: escortSecurityNoInputController.text,
           )
         : 0.0;
-    totalEscortFee.value = escortFeeTotal.toString();
+    totalEscortFee.value = await formatAmount(escortFeeTotal);
+    
 
     double sumTotal = await calculatePriceChangesDifference(
       total: initialEstimatedTotal.value,
@@ -245,27 +250,34 @@ class CarSelectionResultController extends GetxController
 
     var updatedTotalValue = escortFeeTotal + sumTotal;
 
-    estimatedTotal.value = await formatAmount(updatedTotalValue);
+    
 
     logger.log("new sum total:: ${estimatedTotal.value}");
+    logger.log(" new total:: ${updatedTotalValue}");
 
     double vatAmount = await calculateVAT(updatedTotalValue, vatValue.value);
+    logger.log("VAT total:: $vatAmount");
     formattedVatValue.value = await formatAmount(vatAmount);
+
+    // sum up vat plus updated total
+    updatedTotalValue = updatedTotalValue + vatAmount;
+    estimatedTotal.value = await formatAmount(updatedTotalValue);
+
+
+    
   }
 
-  Future<void> getEscortFee() async {
-    var sumTotal = await calculateEscortFee(
-      escortFee: escortFee.value,
-      numberOfEscort: escortSecurityNoInputController.text,
-      // initialEstimatedTotal: initialEstimatedTotal.value
-    );
-
-    estimatedTotal.value = await formatAmount(sumTotal);
-    logger.log("new sum total:: ${estimatedTotal.value}");
-
-    double vatAmount = await calculateVAT(sumTotal, vatValue.value);
-    formattedVatValue.value = await formatAmount(vatAmount);
-  }
+  // Future<void> getEscortFee() async {
+  //   var sumTotal = await calculateEscortFee(
+  //     escortFee: escortFee.value,
+  //     numberOfEscort: escortSecurityNoInputController.text,
+  //     // initialEstimatedTotal: initialEstimatedTotal.value
+  //   );
+  //   estimatedTotal.value = await formatAmount(sumTotal);
+  //   logger.log("new sum total:: ${estimatedTotal.value}");
+  //   double vatAmount = await calculateVAT(sumTotal, vatValue.value);
+  //   formattedVatValue.value = await formatAmount(vatAmount);
+  // }
 
   Future<void> getCarHistory() async {
     change(<CarHistoryData>[].obs, status: RxStatus.loading());
@@ -285,8 +297,12 @@ class CarSelectionResultController extends GetxController
           change(carHistory, status: RxStatus.success());
 
           pricePerDay.value = carHistory.first.pricePerDay;
+          //price per day total x no of days
           total.value =
               await calculateEstimatedTotal(pricePerDay.value, tripDays.value);
+
+          tripDaysTotal.value = await formatAmount(total.value);
+          //
           estimatedTotal.value = await formatAmount(total.value);
           // this value would be used to reset user selection
           initialEstimatedTotal.value = await formatAmount(total.value);
@@ -333,7 +349,7 @@ class CarSelectionResultController extends GetxController
   }
 
   Future<void> processCarBooking() async {
-    TripData tripData = TripData(
+    tripData.value = TripData(
         carID: carId.value,
         tripStartDate: startDateTime.value,
         tripEndDate: endDateTime.value,
@@ -389,21 +405,27 @@ class CarSelectionResultController extends GetxController
             // ...
             logger.log("All fields are present, proceed to the payment screen");
             routeService.gotoRoute(AppLinks.paymentSummary, arguments: {
-              "tripData": tripData,
+              "appBarTitle": AppStrings.addToContinue,
+              "tripData": tripData.value,
               "pricePerDay": pricePerDay.value,
               "tripDays": tripDays.value,
               "estimatedTotal": estimatedTotal.value,
+              "tripDaysTotal": tripDaysTotal.value,
               "vatValue": formattedVatValue.value,
+              "selectedSelfPickUp": selectedSelfPickUp.value,
+              "selectedSelfDropOff": selectedSelfDropOff.value,
+              "selectedSecurityEscort": selectedSecurityEscort.value,
               "vat": vatValue.value,
-              "cautionFee": tripType.value == 1 ? cautionFee.value : null,
+              "tripType": tripType.value,
+              "cautionFee": tripType.value == 1 ? cautionFee.value : '',
               "dropOffFee": tripType.value == 1 && selectedSelfDropOff.value
                   ? dropOffFee.value
                   : null,
               "pickUp": tripType.value == 1 && selectedSelfPickUp.value
                   ? pickUpFee.value
                   : null,
-              "escortFee":
-                  selectedSecurityEscort.value ? totalEscortFee.value : null,
+              "totalEscortFee":
+                  selectedSecurityEscort.value ? totalEscortFee.value : '',
 
               // "startDateTime": startDateTime.value,
               // "endDateTime": endDateTime.value,
@@ -413,25 +435,30 @@ class CarSelectionResultController extends GetxController
             // ...
             logger.log("Some fields are missing:: $missingKycFields");
             showSuccessSnackbar(message: 'Kindly update KYC details');
-            routeService.gotoRoute(AppLinks.identityVerification, arguments: {
-              "isKycUpdate": true,
+            routeService.gotoRoute(AppLinks.kycCheck, arguments: {
+              "isKycUpdate": true, //
               "appBarTitle": AppStrings.addToContinue,
-              "tripData": tripData,
-              "missingKycFields": missingKycFields,
-              "pricePerDay": pricePerDay.value,
-              "tripDays": tripDays.value,
-              "estimatedTotal": estimatedTotal.value,
-              "vatValue": formattedVatValue.value,
-              "vat": vatValue.value,
-              "cautionFee": tripType.value == 1 ? cautionFee.value : null,
+              "tripData": tripData.value, //
+              "missingKycFields": missingKycFields, //
+              "pricePerDay": pricePerDay.value, //
+              "tripDays": tripDays.value, //
+              "estimatedTotal": estimatedTotal.value, //
+              "tripDaysTotal": tripDaysTotal.value,
+              "vatValue": formattedVatValue.value, //
+               "selectedSelfPickUp": selectedSelfPickUp.value,
+              "selectedSelfDropOff": selectedSelfDropOff.value,
+              "selectedSecurityEscort": selectedSecurityEscort.value,
+              "vat": vatValue.value, //
+              "tripType": tripType.value,
+              "cautionFee": tripType.value == 1 ? cautionFee.value : '', //
               "dropOffFee": tripType.value == 1 && selectedSelfDropOff.value
                   ? dropOffFee.value
-                  : null,
-              "pickUp": tripType.value == 1 && selectedSelfPickUp.value
+                  : null, //
+              "pickUpFee": tripType.value == 1 && selectedSelfPickUp.value
                   ? pickUpFee.value
-                  : null,
-              "escortFee":
-                  selectedSecurityEscort.value ? totalEscortFee.value : null,
+                  : null, //
+              "totalEscortFee":
+                  selectedSecurityEscort.value ? totalEscortFee.value : '', //
 
               // "startDateTime": startDateTime.value,
               // "endDateTime": endDateTime.value,

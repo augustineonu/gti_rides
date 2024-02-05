@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/models/image_response.dart';
 import 'package:gti_rides/models/list_response_model.dart';
+import 'package:gti_rides/models/renter/trip_data_model.dart';
 import 'package:gti_rides/models/user_model.dart';
 import 'package:gti_rides/route/app_links.dart';
+import 'package:gti_rides/screens/renter/home/search_result/car_selection_result/car_selection_result_controller.dart';
 import 'package:gti_rides/services/auth_service.dart';
 import 'package:gti_rides/services/image_service.dart';
 import 'package:gti_rides/services/logger.dart';
@@ -23,6 +25,7 @@ class IdentityVerificationController extends GetxController {
   Rx<ListResponseModel> userKyc = ListResponseModel().obs;
 
   GlobalKey<FormState> updateFormKey = GlobalKey<FormState>();
+  final carSelectionController = Get.put(CarSelectionResultController());
 
   IdentityVerificationController() {
     init();
@@ -37,11 +40,31 @@ class IdentityVerificationController extends GetxController {
     userKyc = userService.userKyc;
     logger.log("USER Kyc Details: ${userKyc.value.toJson()}");
 
-    if(arguments != null) {
+    if (arguments != null) {
       logger.log("Received arguments: $arguments");
-      isKycUpdate.value = arguments?['isKycUpdate'] ??  false;
+      isKycUpdate.value = arguments?['isKycUpdate'] ?? false;
       appBarTitle.value = arguments?['appBarTitle'] ?? '';
+      tripData.value = arguments?["tripData"] as TripData;
+      logger.log("${tripData.value.carID}");
 
+      pricePerDay.value = arguments?["pricePerDay"] ?? '';
+      estimatedTotal.value = arguments?["estimatedTotal"] ?? '';
+      vatValue.value = arguments?["vatValue"] ?? '';
+      vat.value = arguments?["vat"] ?? '';
+      tripDaysTotal.value = arguments?["tripDaysTotal"] ?? '';
+      totalEscortFee.value = arguments?["totalEscortFee"] ?? '';
+      tripType.value = arguments?["tripType"] ?? 0;
+      selectedSelfPickUp.value = arguments?["selectedSelfPickUp"] ?? false;
+      selectedSelfDropOff.value = arguments?["selectedSelfDropOff"] ?? false;
+      selectedSecurityEscort.value =
+          arguments?["selectedSecurityEscort"] ?? false;
+
+      // tripDays.value = arguments?["tripDays"];
+      // cautionFee.value = arguments?["cautionFee"];
+      // dropOffFee.value = arguments?["dropOffFee"];
+      // cautionFee.value = arguments?["cautionFee"];
+      // pickUpFee.value = arguments?["pickUpFee"];
+      // escortFee.value = arguments?["escortFee"];
     }
   }
 
@@ -64,6 +87,7 @@ class IdentityVerificationController extends GetxController {
   PageController pageController = PageController();
   // TextEditingController homeAddressController = TextEditingController();
   TextEditingController officeAddressController = TextEditingController();
+  TextEditingController dobController = TextEditingController();
   TextEditingController occupationController = TextEditingController();
   TextEditingController emergencyNumberController = TextEditingController();
   TextEditingController emergencyNameController = TextEditingController();
@@ -83,8 +107,26 @@ class IdentityVerificationController extends GetxController {
   Rx<String> selectedGender = ''.obs;
   // Rx<String> pickedImagePath = ''.obs;
   Rx<String> pickedImageName = ''.obs;
+
   Rx<bool> isKycUpdate = false.obs;
   Rx<String> appBarTitle = ''.obs;
+  Rx<TripData> tripData = TripData().obs;
+  Rx<String> pricePerDay = ''.obs;
+  Rx<int> tripDays = 0.obs;
+  Rx<String> estimatedTotal = ''.obs;
+  Rx<String> formattedVatValue = ''.obs;
+  Rx<String> vatValue = ''.obs;
+  Rx<String> cautionFee = ''.obs;
+  Rx<String> vat = ''.obs;
+  Rx<String> dropOffFee = ''.obs;
+  Rx<String> pickUpFee = ''.obs;
+  Rx<String> escortFee = ''.obs;
+  Rx<String> tripDaysTotal = ''.obs;
+  RxBool selectedSecurityEscort = false.obs;
+  RxBool selectedSelfPickUp = false.obs;
+  RxBool selectedSelfDropOff = false.obs;
+  Rx<int> tripType = 0.obs;
+  Rx<String> totalEscortFee = ''.obs;
 
   // list
   List<String> gender = [
@@ -135,6 +177,36 @@ class IdentityVerificationController extends GetxController {
   //     pickedImageName.value = response.imagePath.split('/').last;
   //   }
   // }
+
+  void proceedToPayment() {
+    routeService.gotoRoute(AppLinks.paymentSummary, arguments: {
+      "tripData": tripData.value,
+      "pricePerDay": carSelectionController.pricePerDay.value,
+      "tripDays": carSelectionController.tripDays.value,
+      "estimatedTotal": estimatedTotal.value,
+      "vatValue": carSelectionController.formattedVatValue.value,
+      "vat": carSelectionController.vatValue.value,
+      "cautionFee":
+          carSelectionController.tripType.value == 1 ? cautionFee.value : null,
+      "dropOffFee": carSelectionController.tripType.value == 1 &&
+              carSelectionController.selectedSelfDropOff.value
+          ? dropOffFee.value
+          : null,
+      "pickUp": carSelectionController.tripType.value == 1 &&
+              carSelectionController.selectedSelfPickUp.value
+          ? pickUpFee.value
+          : null,
+      "totalEscortFee":  totalEscortFee.value,
+      "tripDaysTotal": tripDaysTotal.value,
+      "selectedSelfPickUp": selectedSelfPickUp.value,
+      "selectedSelfDropOff": selectedSelfDropOff.value,
+      "selectedSecurityEscort": selectedSecurityEscort.value,
+      "tripType": tripType.value,
+
+      // "startDateTime": startDateTime.value,
+      // "endDateTime": endDateTime.value,
+    });
+  }
 
   Future<void> getBiometricProfile() async {
     try {

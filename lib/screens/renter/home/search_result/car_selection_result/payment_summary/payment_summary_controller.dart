@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/models/renter/trip_data_model.dart';
 import 'package:gti_rides/route/app_links.dart';
+import 'package:gti_rides/screens/renter/home/search_result/car_selection_result/car_selection_result_controller.dart';
 import 'package:gti_rides/services/logger.dart';
+import 'package:gti_rides/services/payment_service.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/utils/utils.dart';
 
@@ -25,11 +27,20 @@ class PaymentSummaryController extends GetxController {
     if (arguments != null) {
       logger.log("Received data:: $arguments");
       logger.log("Received data:: ${arguments?["tripsData"]}");
-       tripData.value = arguments?["tripData"] as TripData;
-       pricePerDay.value = arguments?["pricePerDay"];
-       estimatedTotal.value = arguments?["estimatedTotal"];
-       vatValue.value = arguments?["vatValue"];
-       vat.value = arguments?["vat"];
+      tripData.value = arguments?["tripData"] as TripData;
+      logger.log("${tripData.value.carID}");
+
+      pricePerDay.value = arguments?["pricePerDay"];
+      estimatedTotal.value = arguments?["estimatedTotal"];
+      tripDaysTotal.value = arguments?["tripDaysTotal"];
+      vatValue.value = arguments?["vatValue"];
+      vat.value = arguments?["vat"];
+      selectedSelfPickUp.value = arguments?["selectedSelfPickUp"] ?? false;
+      selectedSelfDropOff.value = arguments?["selectedSelfDropOff"] ?? false;
+      selectedSecurityEscort.value =
+          arguments?["selectedSecurityEscort"] ?? false;
+      totalEscortFee.value = arguments?["totalEscortFee"] ?? '';
+      tripType.value = arguments?["tripType"] ?? 0;
 
       logger.log("Received data:: ${tripData.value.carID}");
       logger.log("Received data:: ${tripData.value.tripStartDate}");
@@ -49,6 +60,7 @@ class PaymentSummaryController extends GetxController {
 
   Map<String, dynamic>? arguments = Get.arguments;
   Rx<TripData> tripData = TripData().obs;
+  final carSelectionController = Get.put(CarSelectionResultController());
 
   final animationValue = 0.0.obs;
   RxInt currentIndex = 0.obs;
@@ -64,8 +76,14 @@ class PaymentSummaryController extends GetxController {
 
   Rx<String> pricePerDay = ''.obs;
   Rx<String> estimatedTotal = ''.obs;
+  Rx<String> tripDaysTotal = ''.obs;
   Rx<String> vatValue = ''.obs;
   Rx<String> vat = ''.obs;
+  Rx<bool> selectedSelfPickUp = false.obs;
+  Rx<bool> selectedSelfDropOff = false.obs;
+  Rx<bool> selectedSecurityEscort = false.obs;
+  Rx<String> totalEscortFee = ''.obs;
+  Rx<int> tripType = 0.obs;
 
   // bool args = Get.arguments;
 
@@ -106,4 +124,17 @@ class PaymentSummaryController extends GetxController {
 //   // Return the formatted date
 //   return '$day \n';
 // }
+
+Future<void> addTrip() async {
+  paymentService.addTrip(data: TripData(
+    carID: tripData.value.carID,
+    tripStartDate: tripData.value.tripStartDate,
+    tripEndDate: tripData.value.tripEndDate,
+    tripsDays: tripData.value.tripsDays,
+    tripType: tripData.value.tripType,
+    interState: tripData.value.interState,
+    interStateAddress: tripData.value.interStateAddress,
+    escort: tripData.value.escort,
+  ).toJson());
+}
 }
