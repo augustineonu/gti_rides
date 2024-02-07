@@ -180,6 +180,7 @@ class IdentityVerificationController extends GetxController {
 
   void proceedToPayment() {
     routeService.gotoRoute(AppLinks.paymentSummary, arguments: {
+      "isKycUpdate": isKycUpdate.value,
       "tripData": tripData.value,
       "pricePerDay": carSelectionController.pricePerDay.value,
       "tripDays": carSelectionController.tripDays.value,

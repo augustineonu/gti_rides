@@ -297,7 +297,7 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
                   // report trip to admin;
 
                   case 1:
-                    controller.routeToCarHistory();
+                    // controller.routeToCarHistory();
 
                     break;
                   default:

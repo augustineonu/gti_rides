@@ -174,4 +174,16 @@ class RenterService {
       rethrow;
     }
   }
+
+ Future<ApiResponseModel> addRecentCar({required String carId}) async {
+    try {
+      final result = await apiService.postRequest(
+          endpoint: '/user/renter/car/addRecentCar', data: {"carID": carId});
+      // logger.log("result $result");
+
+      return ApiResponseModel.fromJson(result);
+    } catch (err) {
+      rethrow;
+    }
+  }
 }

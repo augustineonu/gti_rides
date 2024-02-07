@@ -137,7 +137,8 @@ class CarSelectionResultController extends GetxController
     }
   }
 
-  void onChangeEscortNumber() async {
+  void onChangeEscortNumber({String? value}) async {
+    escortSecurityNoInputController.text = value!;
     await Future.delayed(const Duration(seconds: 2))
         .then((value) => updateEstimatedTotal());
   }
@@ -224,6 +225,7 @@ class CarSelectionResultController extends GetxController
   }
 
   // i can also try to reset all self drive values when Chauffeur is selected
+  Rx<double> updatedTotalValue = 0.0.obs;
   Future<void> updateEstimatedTotal() async {
     // double total = calculateEstimatedTotal(pricePerDay.value, tripDays.value);
 
@@ -235,7 +237,6 @@ class CarSelectionResultController extends GetxController
           )
         : 0.0;
     totalEscortFee.value = await formatAmount(escortFeeTotal);
-    
 
     double sumTotal = await calculatePriceChangesDifference(
       total: initialEstimatedTotal.value,
@@ -248,23 +249,30 @@ class CarSelectionResultController extends GetxController
       // escortFee: selectedSecurityEscort.value ? escortFee.value : '0',
     );
 
-    var updatedTotalValue = escortFeeTotal + sumTotal;
-
-    
+    updatedTotalValue.value = escortFeeTotal + sumTotal;
 
     logger.log("new sum total:: ${estimatedTotal.value}");
     logger.log(" new total:: ${updatedTotalValue}");
 
-    double vatAmount = await calculateVAT(updatedTotalValue, vatValue.value);
+    // double vatAmount = await calculateVAT(updatedTotalValue.value, vatValue.value);
+    // logger.log("VAT total:: $vatAmount");
+    // formattedVatValue.value = await formatAmount(vatAmount);
+
+    // // sum up vat plus updated total
+    // updatedTotalValue.value = updatedTotalValue.value + vatAmount;
+    // estimatedTotal.value = await formatAmount(updatedTotalValue.value);
+  }
+
+  Future<void> addGrandTotal() async {
+    double vatAmount =
+        await calculateVAT(updatedTotalValue.value, vatValue.value);
     logger.log("VAT total:: $vatAmount");
     formattedVatValue.value = await formatAmount(vatAmount);
 
     // sum up vat plus updated total
-    updatedTotalValue = updatedTotalValue + vatAmount;
-    estimatedTotal.value = await formatAmount(updatedTotalValue);
-
-
-    
+    updatedTotalValue.value = updatedTotalValue.value + vatAmount;
+    estimatedTotal.value = await formatAmount(updatedTotalValue.value);
+    logger.log("New estimated Total:: ${estimatedTotal.value}");
   }
 
   // Future<void> getEscortFee() async {
@@ -286,14 +294,17 @@ class CarSelectionResultController extends GetxController
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("car history::${response.data}");
 
-        if (response.data == null || response.data!.isEmpty) {
+        if (response.data?.isEmpty ?? true) {
           // If the list is empty
           change(<CarHistoryData>[].obs, status: RxStatus.empty());
         } else {
           // If the list is not empty
-          List<CarHistoryData> carHistory = List<CarHistoryData>.from(
-            response.data!.map((car) => CarHistoryData.fromJson(car)),
-          );
+          // List<CarHistoryData> carHistory = List<CarHistoryData>.from(
+          //   response.data!.map((car) => CarHistoryData.fromJson(car)),
+          // );
+          List<CarHistoryData> carHistory = response.data!
+            .map((car) => CarHistoryData.fromJson(car))
+            .toList();
           change(carHistory, status: RxStatus.success());
 
           pricePerDay.value = carHistory.first.pricePerDay;
@@ -385,6 +396,12 @@ class CarSelectionResultController extends GetxController
     // if (tripType.value == 1 && !selfDriveFormKey.currentState!.validate()) {
     //   return;
     // }
+    if(startDateTime.value.isEmpty && endDateTime.value.isEmpty){
+      showErrorSnackbar(message: 'Kindly select trip dates');
+      return;
+    }
+    await updateEstimatedTotal();
+    await addGrandTotal();
 
     isLoading.value = true;
     try {
@@ -445,7 +462,7 @@ class CarSelectionResultController extends GetxController
               "estimatedTotal": estimatedTotal.value, //
               "tripDaysTotal": tripDaysTotal.value,
               "vatValue": formattedVatValue.value, //
-               "selectedSelfPickUp": selectedSelfPickUp.value,
+              "selectedSelfPickUp": selectedSelfPickUp.value,
               "selectedSelfDropOff": selectedSelfDropOff.value,
               "selectedSecurityEscort": selectedSecurityEscort.value,
               "vat": vatValue.value, //

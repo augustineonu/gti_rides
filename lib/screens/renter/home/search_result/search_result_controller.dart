@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:gti_rides/models/partner/car_list_model.dart';
 import 'package:gti_rides/models/renter/cars_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/logger.dart';
+import 'package:gti_rides/services/renter_service.dart';
 import 'package:gti_rides/services/route_service.dart';
 
 class SearchResultController extends GetxController {
@@ -67,5 +67,21 @@ class SearchResultController extends GetxController {
       curve: Curves.easeIn,
     );
     update();
+  }
+
+    Future<void> addRecentCar({required String carId}) async {
+    isLoading.value = true;
+    try {
+      final response = await renterService.addRecentCar(carId: carId);
+      if (response.status == 'success' || response.status_code == 200) {
+        logger.log("Car added to recent:: $response");
+      } else {
+        logger.log("Unable to add car to recently viewed:: $response");
+      }
+    } catch (exception) {
+      logger.log("error:: ${exception.toString()}");
+    } finally {
+      isLoading.value = false;
+    }
   }
 }

@@ -52,7 +52,7 @@ class RouteService extends NavigatorObserver {
     // inspect(listStore.navRoutes);
   }
 
-  void goBack({Map<String, Object?>? result, bool? closeOverlays = false}) {
+  void goBack({result, bool? closeOverlays = false}) {
     Future.delayed(Duration.zero, () {
       Get.back(result: result, closeOverlays: closeOverlays!);
     });

@@ -7,6 +7,7 @@ import 'package:gti_rides/models/partner/car_history_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/screens/renter/home/search_result/car_selection_result/car_selection_result_controller.dart';
 import 'package:gti_rides/screens/renter/widgets/car_availability_tag.dart';
+import 'package:gti_rides/shared_widgets/dropdown_widget.dart';
 import 'package:gti_rides/shared_widgets/generic_car_widgets.dart';
 import 'package:gti_rides/shared_widgets/sqaure_check_box_widget.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
@@ -398,7 +399,11 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                       ),
                       // pages
                       SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.5.sp,
+                        height: controller.selectedSecurityEscort.value &&
+                                controller.selectedSelfDropOff.value &&
+                                controller.selectedSelfPickUp.value
+                            ? MediaQuery.of(context).size.height * 0.6.sp
+                            : MediaQuery.of(context).size.height * 0.5,
                         child: PageView(
                           physics: const NeverScrollableScrollPhysics(),
                           controller: controller.pageController,
@@ -495,7 +500,7 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                       width: 2.sp,
                     ),
                     textWidget(
-                      text: controller.estimatedTotal.value.toString(),
+                      text: controller.initialEstimatedTotal.value.toString(),
                       textOverflow: TextOverflow.ellipsis,
                       style: getMediumStyle(fontSize: 12.sp).copyWith(
                         fontFamily: 'Neue',
@@ -621,9 +626,10 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
 
   Widget selfDriveOption(context) {
     return SingleChildScrollView(
+      physics: NeverScrollableScrollPhysics(),
       child: Form(
         autovalidateMode: AutovalidateMode.onUserInteraction,
-                key: controller.selfDriveFormKey,
+        key: controller.selfDriveFormKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -642,8 +648,8 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                 Column(
                   children: [
                     Padding(
-                      padding:
-                          EdgeInsets.only(left: 20.sp, right: 10.sp, top: 10.sp),
+                      padding: EdgeInsets.only(
+                          left: 20.sp, right: 10.sp, top: 10.sp),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -694,8 +700,8 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                 Column(
                   children: [
                     Padding(
-                      padding:
-                          EdgeInsets.only(left: 20.sp, right: 10.sp, top: 10.sp),
+                      padding: EdgeInsets.only(
+                          left: 20.sp, right: 10.sp, top: 10.sp),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -758,46 +764,45 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                 ],
               ),
             ),
+            // Padding(
+            //   padding: EdgeInsets.symmetric(horizontal: 20.sp),
+            //   child: Visibility(
+            //     visible: controller.selectedSecurityEscort.value,
+            //     child: NormalInputTextWidget(
+            //       title: '',
+            //       expectedVariable: "field",
+            //       hintText: AppStrings.selectNoOfSecurity,
+            //       textInputType: TextInputType.number,
+            //       contentPadding:
+            //           const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+            //       controller: controller.escortSecurityNoInputController,
+            //       onEditingComplete: controller.onChangeEscortNumber,
+            //       onChanged: (value) => controller.onChangeEscortNumber(),
+            //       // onChanged: (value) => controller.onChangeEscortNumber(value),
+            //     ),
+            //   ),
+            // ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.sp),
               child: Visibility(
                 visible: controller.selectedSecurityEscort.value,
-                child: NormalInputTextWidget(
-                  title: '',
-                  expectedVariable: "field",
-                  hintText: AppStrings.selectNoOfSecurity,
-                  textInputType: TextInputType.number,
-                  contentPadding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                  controller: controller.escortSecurityNoInputController,
-                  onEditingComplete: controller.onChangeEscortNumber,
-                  onChanged: (value) => controller.onChangeEscortNumber(),
-                  // onChanged: (value) => controller.onChangeEscortNumber(value),
+                child: dropdownWidget1(
+                  context: context,
+                  hintText: 'Select',
+                  title: AppStrings.selectNoOfSecurity,
+                  iconColor: grey3,
+                  // selectedValue: controller.isFromManageCars.isTrue &&
+                  //         controller.advanceAmount.value.isNotEmpty
+                  //     ? controller.advanceAmount.value.contains('hours')
+                  //         ? controller.advanceAmount.value
+                  //         : "4 hours"
+                  //     : null,
+                  values: <String>["1", "2", '3', '4', '5', '6', '7', '8'],
+                  onChange: (value) =>
+                      controller.onChangeEscortNumber(value: value),
                 ),
               ),
             ),
-              // dropdownWidget1(
-              //   context: context,
-              //   hintText: 'Select',
-              //   title: AppStrings.howMuchForAdvance,
-              //   iconColor: grey3,
-              //   selectedValue: controller.isFromManageCars.isTrue &&
-              //           controller.advanceAmount.value.isNotEmpty
-              //       ? controller.advanceAmount.value.contains('hours')
-              //           ? controller.advanceAmount.value
-              //           : "4 hours"
-              //       : null,
-              //   values: <String>[
-              //     "4 hours",
-              //     "12 hours",
-              //     "24 hours",
-              //     "48 hours",
-              //     "72 hours"
-              //   ],
-              //   onChange: (value) {
-              //     print('Selected value: $value');
-              //     controller.advanceAmount.value = value;
-              //   }),
             SizedBox(
               height: 10,
             ),
@@ -898,20 +903,43 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                 ],
               ),
             ),
+            // Padding(
+            //   padding: EdgeInsets.symmetric(horizontal: 20.sp),
+            //   child: Visibility(
+            //     visible: controller.selectedSecurityEscort.value,
+            //     child: NormalInputTextWidget(
+            //       title: '',
+            //       expectedVariable: "field",
+            //       hintText: AppStrings.selectNoOfSecurity,
+            //       textInputType: TextInputType.number,
+            //       contentPadding:
+            //           const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+            //       controller: controller.escortSecurityNoInputController,
+            //       onEditingComplete: controller.onChangeEscortNumber,
+            //       onChanged: (value) => controller.onChangeEscortNumber(),
+            //     ),
+            //   ),
+            // ),
+
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.sp),
               child: Visibility(
                 visible: controller.selectedSecurityEscort.value,
-                child: NormalInputTextWidget(
-                  title: '',
-                  expectedVariable: "field",
-                  hintText: AppStrings.selectNoOfSecurity,
-                  textInputType: TextInputType.number,
-                  contentPadding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                  controller: controller.escortSecurityNoInputController,
-                  onEditingComplete: controller.onChangeEscortNumber,
-                  onChanged: (value) => controller.onChangeEscortNumber(),
+                child: dropdownWidget1(
+                  context: context,
+                  hintText: 'Select',
+                  title: AppStrings.selectNoOfSecurity,
+                  iconColor: grey3,
+                  expectedVariable: 'field',
+                  // selectedValue: controller.isFromManageCars.isTrue &&
+                  //         controller.advanceAmount.value.isNotEmpty
+                  //     ? controller.advanceAmount.value.contains('hours')
+                  //         ? controller.advanceAmount.value
+                  //         : "4 hours"
+                  //     : null,
+                  values: <String>["1", "2", '3', '4', '5', '6', '7', '8'],
+                  onChange: (value) =>
+                      controller.onChangeEscortNumber(value: value),
                 ),
               ),
             ),
@@ -1101,13 +1129,16 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
   Widget continueButton() {
     return controller.isLoading.isTrue
         ? centerLoadingIcon()
-        : GtiButton(
-            width: 300.sp,
-            text: "continue".tr,
-            color: primaryColor,
-            onTap: controller.processCarBooking,
-            // onTap: controller.routeToPhoneVerification,
-            isLoading: controller.isLoading.value,
+        : Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: GtiButton(
+              width: 400.sp,
+              text: "continue".tr,
+              color: primaryColor,
+              onTap: controller.processCarBooking,
+              // onTap: controller.routeToPhoneVerification,
+              isLoading: controller.isLoading.value,
+            ),
           );
   }
 }

@@ -97,12 +97,19 @@ class SearchResultScreen extends GetView<SearchResultController> {
                     itemBuilder: (context, index) {
                       var carData = controller.carListData![index];
                       return InkWell(
-                        onTap: () => controller.routeToCarSelection(arguments: {
-                          "carId": carData.carId,
-                          "startDateTime": controller.startDateTime.value,
-                          "endDateTime": controller.endDateTime.value,
-                          "differenceInDays": controller.differenceInDays.value
-                        }),
+                        onTap: () => controller
+                            .addRecentCar(carId: carData.carId)
+                            .then((value) =>
+                                controller.routeToCarSelection(arguments: {
+                                  "carId": carData.carId,
+                                  "startDateTime":
+                                      controller.startDateTime.value,
+                                  "endDateTime": controller.endDateTime.value,
+                                  "differenceInDays":
+                                      controller.differenceInDays.value
+                                }))
+                            .onError((error, stackTrace) =>
+                                printError(info: "Erro: $error")),
                         child: Container(
                           decoration: BoxDecoration(
                               color: white,

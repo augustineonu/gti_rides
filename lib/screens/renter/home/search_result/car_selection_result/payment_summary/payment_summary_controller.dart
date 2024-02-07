@@ -1,12 +1,17 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/models/renter/trip_data_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/screens/renter/home/search_result/car_selection_result/car_selection_result_controller.dart';
+import 'package:gti_rides/screens/renter/home/search_result/car_selection_result/payment_summary/payment_webview/payment_webiew.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/payment_service.dart';
 import 'package:gti_rides/services/route_service.dart';
+import 'package:gti_rides/shared_widgets/generic_widgts.dart';
+import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/utils.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PaymentSummaryController extends GetxController {
   Logger logger = Logger("Controller");
@@ -29,7 +34,8 @@ class PaymentSummaryController extends GetxController {
       logger.log("Received data:: ${arguments?["tripsData"]}");
       tripData.value = arguments?["tripData"] as TripData;
       logger.log("${tripData.value.carID}");
-
+      logger.log("${tripData.value}");
+      isKycUpdate.value = arguments?["isKycUpdate"] ?? false;
       pricePerDay.value = arguments?["pricePerDay"];
       estimatedTotal.value = arguments?["estimatedTotal"];
       tripDaysTotal.value = arguments?["tripDaysTotal"];
@@ -65,6 +71,7 @@ class PaymentSummaryController extends GetxController {
   final animationValue = 0.0.obs;
   RxInt currentIndex = 0.obs;
   RxBool isLoading = false.obs;
+  RxBool isCheckingPaymentStatus = false.obs;
   RxBool isComingFromTrips = false.obs;
   PageController pageController = PageController();
 
@@ -84,6 +91,7 @@ class PaymentSummaryController extends GetxController {
   Rx<bool> selectedSecurityEscort = false.obs;
   Rx<String> totalEscortFee = ''.obs;
   Rx<int> tripType = 0.obs;
+  Rx<bool> isKycUpdate = false.obs;
 
   // bool args = Get.arguments;
 
@@ -117,24 +125,61 @@ class PaymentSummaryController extends GetxController {
 //   // Extract the day and month parts
 //   String day = parts[1].split(' ')[1];
 //   // String month = parts[2];
-
 //   // Extract the time part
 //   // String time = parts[3];
-
 //   // Return the formatted date
 //   return '$day \n';
 // }
 
-Future<void> addTrip() async {
-  paymentService.addTrip(data: TripData(
-    carID: tripData.value.carID,
-    tripStartDate: tripData.value.tripStartDate,
-    tripEndDate: tripData.value.tripEndDate,
-    tripsDays: tripData.value.tripsDays,
-    tripType: tripData.value.tripType,
-    interState: tripData.value.interState,
-    interStateAddress: tripData.value.interStateAddress,
-    escort: tripData.value.escort,
-  ).toJson());
-}
+  Future<void> addTrip({BuildContext? context}) async {
+    isLoading.value = true;
+    try {
+      final response = await paymentService.addTrip(
+          data: TripData(
+        carID: tripData.value.carID,
+        tripStartDate: tripData.value.tripStartDate,
+        tripEndDate: tripData.value.tripEndDate,
+        tripsDays: tripData.value.tripsDays,
+        tripType: tripData.value.tripType,
+        interState: tripData.value.interState,
+        interStateAddress: tripData.value.interStateAddress,
+        escort: tripData.value.escort,
+        escortValue: tripData.value.escortValue,
+        pickUpType: tripData.value.pickUpType,
+        pickUpAddress: tripData.value.pickUpAddress,
+        dropOffType: tripData.value.dropOffType,
+        dropOffAddress: tripData.value.dropOffAddress,
+        routeStart: tripData.value.routeStart,
+        routeEnd: tripData.value.routeEnd,
+      ).toJson());
+
+      if (response.status == 'success' || response.status_code == 200) {
+        // call the flutterwave checkout URL
+        logger.log("Success: ${response.data}");
+        var url = response.data["link"];
+        var value =
+            await routeService.gotoRoute(AppLinks.paymentWebView, arguments: {
+          "checkoutUrl": url,
+        });
+
+        if (value != null && value == true) {
+          // payment success
+          successDialog(
+              title: AppStrings.paymentSuccessful,
+              body: AppStrings.contactYouSoon,
+              buttonTitle: AppStrings.home,
+              onTap: () => routeService.offAllNamed(AppLinks.carRenterLanding));
+        }
+        logger.log("Value is:: $value");
+      } else {
+        // error
+        logger.log("Error adding trip:: ${response.message ?? ''}");
+        showErrorSnackbar(message: response.message ?? '');
+      }
+    } catch (exception) {
+      logger.log("Exception:: ${exception.toString()}");
+    } finally {
+      isLoading.value = false;
+    }
+  }
 }

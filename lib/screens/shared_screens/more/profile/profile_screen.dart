@@ -141,31 +141,34 @@ class ProfileScreen extends GetView<ProfileController> {
               padding: const EdgeInsets.only(top: 20, bottom: 70),
               width: size.width,
               height: 220.sp,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  imageWidget(
-                    imageSizeWidth: 150.sp,
-                    imageSizeHeight: 120.sp,
-                    radius: 80,
-                    imgUrl:
-                        "https://img.freepik.com/premium-vector/avatar-profile-icon_188544-4755.jpg",
-                    localImagePath: controller.pickedImagePath.value.isNotEmpty
-                        ? controller.pickedImagePath.value
-                        : null,
-                    height: 65.sp,
-                    width: 65.sp,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      selectOptionSheet(size);
-                    },
-                    child: textWidget(
-                        text: AppStrings.tapToChange,
-                        style:
-                            getBoldStyle(fontSize: 16.sp, color: primaryColor)),
-                  )
-                ],
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    imageWidget(
+                      imageSizeWidth: 150.sp,
+                      imageSizeHeight: 120.sp,
+                      radius: 80,
+                      imgUrl:
+                          "https://img.freepik.com/premium-vector/avatar-profile-icon_188544-4755.jpg",
+                      localImagePath: controller.pickedImagePath.value.isNotEmpty
+                          ? controller.pickedImagePath.value
+                          : null,
+                      height: 65.sp,
+                      width: 65.sp,
+                    ),
+                    SizedBox(height: 30.sp,),
+                    InkWell(
+                      onTap: () {
+                        selectOptionSheet(size);
+                      },
+                      child: textWidget(
+                          text: AppStrings.tapToChange,
+                          style:
+                              getBoldStyle(fontSize: 16.sp, color: primaryColor)),
+                    )
+                  ],
+                ),
               ),
             )),
         backgroundColor: white,

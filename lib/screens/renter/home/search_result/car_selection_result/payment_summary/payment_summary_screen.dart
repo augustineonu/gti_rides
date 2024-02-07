@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -19,17 +21,35 @@ class PaymentSummaryBinding extends Bindings {
 }
 
 class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
-   PaymentSummaryScreen([Key? key]) : super(key: key);
- @override
+  PaymentSummaryScreen([Key? key]) : super(key: key);
+  @override
   final controller = Get.put(PaymentSummaryController());
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Obx(
-      () => Scaffold(
-          backgroundColor: backgroundColor,
-          appBar: appBar(),
-          body: body(size, context)),
+      () => Stack(
+        children: [
+          Scaffold(
+              backgroundColor: backgroundColor,
+              appBar: appBar(),
+              body: body(size, context)),
+          controller.isCheckingPaymentStatus.value
+              ? Stack(
+                  children: [
+                    const Opacity(
+                      opacity: 0.5,
+                      child:
+                          ModalBarrier(dismissible: false, color: Colors.black),
+                    ),
+                    Center(
+                      child: Center(child: centerLoadingIcon()),
+                    ),
+                  ],
+                )
+              : const SizedBox()
+        ],
+      ),
       // }
     );
   }
@@ -48,7 +68,7 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
     );
   }
 
-  Widget body(Size size, context) {
+  Widget body(size, BuildContext context) {
     return SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 20.sp, vertical: 10.sp),
         child: Column(
@@ -116,24 +136,18 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
                     title: 'Pick up',
                     subTitle:
                         controller.carSelectionController.pickUpFee.value)),
-           
             Visibility(
-                visible:
-                    controller.selectedSelfDropOff.value,
+                visible: controller.selectedSelfDropOff.value,
                 child: rowNairaText(
                     title: 'Drop off',
                     subTitle: controller.carSelectionController.dropOffFee.value
                             .toString() ??
                         '')),
-            
-             Visibility(
-                visible: controller
-                    .selectedSecurityEscort.value,
+            Visibility(
+                visible: controller.selectedSecurityEscort.value,
                 child: rowNairaText(
                     title: 'Escort Service Fee',
-                    subTitle: controller.totalEscortFee
-                            .toString() ??
-                        '')),
+                    subTitle: controller.totalEscortFee.toString() ?? '')),
             Visibility(
               visible: controller.tripType.value == 1,
               child: Column(
@@ -294,16 +308,12 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
                 //  controller.args
                 // ? AppStrings.proceedToPay
                 // :
-                AppStrings.sendRequest,
+                controller.isKycUpdate.value
+                    ? AppStrings.sendRequest
+                    : AppStrings.sendRequest,
             color: primaryColor,
             // onTap: controller.routeToUpdateKyc,
-            onTap: () {
-              successDialog(
-                  title: AppStrings.extendedTripSuccessMessage,
-                  body: AppStrings.extendedTripSuccessMessage1,
-                  buttonTitle: AppStrings.home,
-                  onTap: controller.routeToHome);
-            },
+            onTap: controller.addTrip,
             isLoading: controller.isLoading.value,
           );
   }
