@@ -16,10 +16,10 @@ class PaymentWebView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => Scaffold(
+    return  Scaffold(
           appBar: AppBar(
             
-            title: Text(controller.pageTitle.value),
+            title: Text("Checkout"),
             leading: Transform.scale(
           scale: 0.5,
           child: GestureDetector(
@@ -29,6 +29,6 @@ class PaymentWebView extends StatelessWidget {
           body: WebViewWidget(
             controller: controller.webViewController,
           ),
-        ));
+        );
   }
 }

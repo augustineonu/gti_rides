@@ -308,8 +308,8 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
                 //  controller.args
                 // ? AppStrings.proceedToPay
                 // :
-                controller.isKycUpdate.value
-                    ? AppStrings.sendRequest
+                controller.tripType.value == 0 
+                    ? AppStrings.proceedToPay
                     : AppStrings.sendRequest,
             color: primaryColor,
             // onTap: controller.routeToUpdateKyc,
