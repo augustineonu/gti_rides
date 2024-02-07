@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:gti_rides/models/renter/trip_data_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/screens/renter/home/search_result/car_selection_result/car_selection_result_controller.dart';
-import 'package:gti_rides/screens/renter/home/search_result/car_selection_result/payment_summary/payment_webview/payment_webiew.dart';
+import 'package:gti_rides/screens/renter/home/search_result/car_selection_result/payment_summary/webview_payment/payment_webiew.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/payment_service.dart';
 import 'package:gti_rides/services/route_service.dart';
@@ -131,6 +131,10 @@ class PaymentSummaryController extends GetxController {
 //   return '$day \n';
 // }
 
+  Future<void> addTripSelfDrive() async {
+    isLoading.value = true;
+  }
+
   Future<void> addTrip({BuildContext? context}) async {
     isLoading.value = true;
     try {
@@ -157,20 +161,29 @@ class PaymentSummaryController extends GetxController {
         // call the flutterwave checkout URL
         logger.log("Success: ${response.data}");
         var url = response.data["link"];
-        var value =
-            await routeService.gotoRoute(AppLinks.paymentWebView, arguments: {
-          "checkoutUrl": url,
-        });
-
-        if (value != null && value == true) {
-          // payment success
+        if (tripType.value == 1) {
           successDialog(
-              title: AppStrings.paymentSuccessful,
+              title: AppStrings.requestSentSuccessful,
               body: AppStrings.contactYouSoon,
               buttonTitle: AppStrings.home,
               onTap: () => routeService.offAllNamed(AppLinks.carRenterLanding));
+        } else {
+          var value =
+              await routeService.gotoRoute(AppLinks.paymentWebView, arguments: {
+            "checkoutUrl": url,
+          });
+
+          if (value != null && value == true) {
+            // payment success
+            successDialog(
+                title: AppStrings.paymentSuccessful,
+                body: AppStrings.weWillSendYouNotification,
+                buttonTitle: AppStrings.home,
+                onTap: () =>
+                    routeService.offAllNamed(AppLinks.carRenterLanding));
+          }
+          logger.log("Value is:: $value");
         }
-        logger.log("Value is:: $value");
       } else {
         // error
         logger.log("Error adding trip:: ${response.message ?? ''}");

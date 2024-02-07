@@ -303,8 +303,8 @@ class CarSelectionResultController extends GetxController
           //   response.data!.map((car) => CarHistoryData.fromJson(car)),
           // );
           List<CarHistoryData> carHistory = response.data!
-            .map((car) => CarHistoryData.fromJson(car))
-            .toList();
+              .map((car) => CarHistoryData.fromJson(car))
+              .toList();
           change(carHistory, status: RxStatus.success());
 
           pricePerDay.value = carHistory.first.pricePerDay;
@@ -333,20 +333,40 @@ class CarSelectionResultController extends GetxController
     }
   }
 
+  List<String> getRequiredKycFields(int tripType) {
+    if (tripType == 0) {
+      return ["dateOfBirth", "gender", "emergencyName"];
+    } else if (tripType == 1) {
+      return [
+        "dateOfBirth",
+        "emergencyName",
+        "gender",
+        "homeAddress",
+        "occupation",
+        "officeAddress",
+        "licenceNumber",
+      ];
+    } else {
+      return []; // Handle other trip types as needed
+    }
+  }
+
   // List of required KYC fields
-  List<String> requiredKycFields = [
-    "dateOfBirth",
-    "emergencyName",
-    // "emergencyNumber",
-    "gender",
-    "homeAddress",
-    "occupation",
-    "officeAddress",
-    "licenceNumber",
-  ];
+  // List<String> requiredKycFields = [
+  //   "dateOfBirth",
+  //   "emergencyName",
+  //   // "emergencyNumber",
+  //   "gender",
+  //   "homeAddress",
+  //   "occupation",
+  //   "officeAddress",
+  //   "licenceNumber",
+  // ];
   // Function to check missing fields
-  List<String> getMissingKycFields(KycData kycData) {
+  List<String> getMissingKycFields(KycData kycData, int tripType) {
     List<String> missingKycFields = [];
+    List<String> requiredKycFields =getRequiredKycFields(tripType);
+
     for (String field in requiredKycFields) {
       dynamic fieldValue = kycData.toJson()[field];
       logger.log("field value:: $fieldValue");
@@ -396,7 +416,7 @@ class CarSelectionResultController extends GetxController
     // if (tripType.value == 1 && !selfDriveFormKey.currentState!.validate()) {
     //   return;
     // }
-    if(startDateTime.value.isEmpty && endDateTime.value.isEmpty){
+    if (startDateTime.value.isEmpty && endDateTime.value.isEmpty) {
       showErrorSnackbar(message: 'Kindly select trip dates');
       return;
     }
@@ -416,7 +436,8 @@ class CarSelectionResultController extends GetxController
           KycData kycData = KycData.fromJson(kycResponse.data?.first);
 
           // Check missing fields and route accordingly
-          List<String> missingKycFields = getMissingKycFields(kycData);
+          List<String> missingKycFields =
+              getMissingKycFields(kycData, tripType.value);
           if (missingKycFields.isEmpty) {
             // All required fields are present, proceed to the payment screen
             // ...

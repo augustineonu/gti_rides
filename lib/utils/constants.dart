@@ -480,7 +480,9 @@ class AppStrings {
   static String bankAccountAddedSuccess = 'Bank account added successfully';
   static String payment = 'Payment';
   static String paymentSuccessful = 'Payment Successful';
+  static String requestSentSuccessful = 'Request Sent Successful';
   static String contactYouSoon = 'Your request will be reviewed. We will Contact you soon.';
+  static String weWillSendYouNotification = 'We will send you a notification with the necessary details.';
   static String rentHistory = 'Rent history';
   static String contactCustomerCare = 'Contact customer care';
   static String addDriver = 'Add a driver';

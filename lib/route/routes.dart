@@ -11,7 +11,7 @@ import 'package:gti_rides/screens/Partner/rent_history/completed_trip/completed_
 import 'package:gti_rides/screens/Partner/rent_history/feedbacks/feedbacks_screen.dart';
 import 'package:gti_rides/screens/Partner/rent_history/owner_trips/owner_trips_screen.dart';
 import 'package:gti_rides/screens/guest/splash_old_user/returning_user_splash_screen.dart';
-import 'package:gti_rides/screens/renter/home/search_result/car_selection_result/payment_summary/payment_webview/payment_webiew.dart';
+import 'package:gti_rides/screens/renter/home/search_result/car_selection_result/payment_summary/webview_payment/payment_webiew.dart';
 import 'package:gti_rides/screens/shared_screens/choose_trip_date/choose_trip_date_screen.dart';
 import 'package:gti_rides/screens/renter/home/search_city/search_city_screen.dart';
 import 'package:gti_rides/screens/renter/home/search_result/car_selection_result/car_selection_result_screen.dart';

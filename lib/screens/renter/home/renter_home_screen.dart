@@ -157,7 +157,7 @@ void dispose() {
         controller: scrollController,
         padding: EdgeInsets.symmetric(vertical: 10.sp, horizontal: 16.sp),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           // mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             headerText(controller),
@@ -378,7 +378,8 @@ void dispose() {
   Widget discoverCity({void Function()? onTap}) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 15.sp),
-      child: Stack(children: [
+      child: Stack(
+        children: [
         ClipRRect(
             borderRadius: BorderRadius.all(Radius.circular(4.r)),
             child: Image.asset(
