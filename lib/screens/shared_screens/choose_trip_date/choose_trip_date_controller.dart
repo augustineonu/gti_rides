@@ -62,6 +62,8 @@ class ChooseTripDateController extends GetxController {
     // DateFormat('dd, MMMM').format(today.add(Duration(days: 3))).toString();
     datePickerController.selectedRange =
         PickerDateRange(today, today.add(Duration(days: 3)));
+
+        selectedDifferenceInDays.value = 3;
     update();
 
     super.onInit();
