@@ -46,6 +46,7 @@ class OnboardingScreen extends GetView<OnboardingController> {
                             content.imageUrl,
                             // height: 218.h,
                             width: width.w,
+                            fit: BoxFit.fitWidth,
                           ),
                         ),
                         SizedBox(height: 40.0.h),
@@ -131,22 +132,7 @@ class OnboardingScreen extends GetView<OnboardingController> {
     );
   }
 
-  Widget appBar() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        SvgPicture.asset(ImageAssets.appLogoRide),
-        InkWell(
-          onTap: () {
-            controller.routeToLogin();
-          },
-          child: textWidget(
-              text: "skip_to_login".tr,
-              style: getMediumStyle(color: primaryColor)),
-        ),
-      ],
-    );
-  }
+
 
   buildDot(
     BuildContext context, {

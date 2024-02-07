@@ -38,6 +38,7 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
       Get.put<CarRenterHomeController>(CarRenterHomeController());
   late Timer timer;
   RxInt currentIndex = 0.obs;
+  RxList visibleCars = [].obs;
 
   RxBool isDone = false.obs;
   RxBool showPassword = false.obs;
@@ -51,10 +52,11 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
     super.initState();
     print("init called>>>");
 
-    cardPageController = PageController(viewportFraction: 0.9, initialPage: 0);
+    cardPageController = PageController(viewportFraction: calculateViewportFraction(), initialPage: 0);
 
     timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
-      if (currentIndex.value < 4) {
+      if (currentIndex.value < visibleCars.length) {
+        print("visible cars:: ${visibleCars}");
         setState(() {
           currentIndex.value++;
         });
@@ -73,6 +75,16 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
         );
       }
     });
+  }
+
+  double calculateViewportFraction() {
+    if (visibleCars.value.length == 1) {
+      // If there is only one visible car, set the viewport to fill the screen width
+      return 1.0;
+    } else {
+      // If there are more than one visible cars, use the initial set value
+      return 0.9;
+    }
   }
 
   @override
@@ -178,7 +190,7 @@ void dispose() {
               height: 205.sp,
               child: controller.obx(
                 (state) {
-                  final visibleCars = state?.take(5).toList() ?? [];
+                  visibleCars.value = state?.take(5).toList() ?? [];
                   return Stack(
                     children: [
                       PageView(
@@ -225,8 +237,8 @@ void dispose() {
                                   // ),
                                   carImage(
                                     imgUrl: recentCar.photoUrl,
-                                    height: 140,
-                                    width: 400,
+                                    height: 140.sp,
+                                    width: 400.sp,
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(
@@ -323,6 +335,8 @@ void dispose() {
                     ],
                   );
                 },
+
+
                 onEmpty: Padding(
                   padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
                   child: Center(
@@ -379,12 +393,13 @@ void dispose() {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 15.sp),
       child: Stack(
+        alignment: Alignment.center,
         children: [
         ClipRRect(
             borderRadius: BorderRadius.all(Radius.circular(4.r)),
             child: Image.asset(
               ImageAssets.ladyHandout,
-              fit: BoxFit.cover,
+              fit: BoxFit.fitHeight,
               height: 260.sp,
             )),
         Positioned(

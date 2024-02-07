@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:gti_rides/services/auth_service.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
+import 'package:gti_rides/services/token_service.dart';
 import 'package:gti_rides/utils/utils.dart';
 
 import '../../../route/app_links.dart';
@@ -87,6 +88,7 @@ class OtpVerificationController extends GetxController {
         if (isResetPassword.value) {
           await showSuccessSnackbar(message: result.message!);
           pinController.clear();
+           tokenService.setAccessToken(result.data!['accessToken']);
           await routeService.gotoRoute(AppLinks.resetPassword,
               arguments: {"accessToken": result.data!['accessToken']});
           isLoading.value = false;

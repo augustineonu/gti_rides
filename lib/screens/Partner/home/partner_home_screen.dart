@@ -523,7 +523,7 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
     return InkWell(
       onTap: onTap,
       child: Container(
-        height: 66.sp,
+        height: 70.sp,
         //width: size.width,
         margin: EdgeInsets.symmetric(vertical: 20.sp),
         decoration: BoxDecoration(
@@ -533,48 +533,52 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
             ),
             image: const DecorationImage(
                 alignment: Alignment.centerRight,
-                image: AssetImage(ImageAssets.manageListedBg))),
+                image: AssetImage(ImageAssets.manageListedBg,
+                ), fit: BoxFit.fitHeight)),
 
         child: Row(children: [
-          ClipRRect(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(4.r),
-                bottomLeft: Radius.circular(4.r)),
-            child: Image.asset(
-              ImageAssets.steering1,
-              fit: BoxFit.fitHeight,
+          Container(
+            // width: 66.sp, // Set the width equal to the desired height
+            height: double.infinity,
+            child: ClipRRect(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(4.r),
+                  bottomLeft: Radius.circular(4.r)),
+              child: Image.asset(
+                ImageAssets.steering1,
+                fit: BoxFit.fitHeight,
+              ),
             ),
           ),
           // SizedBox(
           //   width: 10.sp,),
-          SizedBox(
+          Container(
             width: 147.sp,
             height: 66.sp,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 10, top: 2, bottom: 5),
-              child: Column(
-                children: [
-                  textWidget(
-                      text: AppStrings.manageListedVehicles,
+            padding: EdgeInsets.only(left: 10, top: 2, bottom: 5),
+
+            child: Column(
+              children: [
+                textWidget(
+                    text: AppStrings.manageListedVehicles,
+                    textOverflow: TextOverflow.visible,
+                    style: getSemiBoldStyle(fontSize: 15.sp).copyWith(
+                        height: 1.2.sp,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'neue')),
+                SizedBox(
+                  height: 2.sp,
+                ),
+                Expanded(
+                  child: textWidget(
+                      text: AppStrings.manageYourVehicleAViailability,
                       textOverflow: TextOverflow.visible,
-                      style: getSemiBoldStyle(fontSize: 15.sp).copyWith(
-                          height: 1.2.sp,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'neue')),
-                  SizedBox(
-                    height: 2.sp,
-                  ),
-                  Expanded(
-                    child: textWidget(
-                        text: AppStrings.manageYourVehicleAViailability,
-                        textOverflow: TextOverflow.visible,
-                        style: getLightStyle(fontSize: 10.sp).copyWith(
-                          fontWeight: FontWeight.w400,
-                          height: 1.2.sp,
-                        )),
-                  ),
-                ],
-              ),
+                      style: getLightStyle(fontSize: 10.sp).copyWith(
+                        fontWeight: FontWeight.w400,
+                        height: 1.2.sp,
+                      )),
+                ),
+              ],
             ),
           )
         ]),

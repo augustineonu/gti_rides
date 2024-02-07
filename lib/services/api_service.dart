@@ -28,6 +28,8 @@ class ApiService {
   }
 
   Future<void> init() async {
+    logger.log("Initializing Dio");
+
     _dio = Dio(
       BaseOptions(
         baseUrl: baseURL,
@@ -54,6 +56,8 @@ class ApiService {
           //      if(e.type == DioExceptionType.connectionTimeout){
           //   throw Exception("Connection  Timeout Exception");
           // }
+          logger.log("Dio error: ${e.message}, Status code: ${e.response?.statusCode}");
+
           if (e.response?.statusCode == 400) {
             // If a 401 response is received, refresh the access token
             // String newAccessToken = await refreshToken();
@@ -84,6 +88,8 @@ class ApiService {
         },
       ),
     );
+    logger.log("Dio initialization completed");
+
   }
 
   Options get options {
@@ -110,12 +116,12 @@ class ApiService {
       response = await _dio.post(
         endpoint,
         data: data,
-        // options: Options(
-        //   headers: {
-        //     'Authorization':
-        //         'Bearer ${token ?? tokenService.accessToken.value}',
-        //   },
-        // ),
+        options: Options(
+          headers: {
+            'Authorization':
+                'Bearer ${token ?? tokenService.accessToken.value}',
+          },
+        ),
       );
       logger.log("POST REQUEST RESPONSE:: $response");
       final ApiResponseModel apiResponse =

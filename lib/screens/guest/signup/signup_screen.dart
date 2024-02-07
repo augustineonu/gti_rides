@@ -172,8 +172,10 @@ class SignUpScreen extends GetView<SignUpController> {
                         expectedVariable: "phone",
                         hintText: AppStrings.phoneHintText,
                         controller: controller.phoneNoController,
+                         textInputType: TextInputType.phone,
                          inputFormatters: [
                       LengthLimitingTextInputFormatter(11),
+                           FilteringTextInputFormatter.digitsOnly
                     ],
                       ),
                       SizedBox(
@@ -254,6 +256,7 @@ class SignUpScreen extends GetView<SignUpController> {
                     textInputType: TextInputType.phone,
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(11),
+                      FilteringTextInputFormatter.digitsOnly
                     ],
                     controller: controller.ownerPhoneNoController,
                   ),
