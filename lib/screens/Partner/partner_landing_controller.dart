@@ -13,7 +13,7 @@ class PartnerLandingController extends GetxController {
   PartnerLandingController() {
     logger.log('Controller initialized');
   }
-  var tabIndex = 0.obs;
+  Rx<int> tabIndex = 0.obs;
 
   void changeTabIndex(int index) {
     tabIndex.value = index;
@@ -21,9 +21,9 @@ class PartnerLandingController extends GetxController {
 
   @override
   void onInit() {
-    Get.delete<MoreController>();
+    // Get.delete<MoreController>();
     Get.delete<PaymentController>();
-    Get.put<MoreController>(MoreController());
+    // Get.put<MoreController>(MoreController());
     Get.delete<PartnerHomeController>();
     Get.put<PaymentController>(PaymentController());
     Get.put<PartnerHomeController>(PartnerHomeController());

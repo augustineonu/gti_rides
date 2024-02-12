@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/Partner/home/partner_home_controller.dart';
+import 'package:gti_rides/screens/Partner/partner_landing_controller.dart';
 import 'package:gti_rides/screens/renter/widgets/build_carousel_dot.dart';
 import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/shared_widgets/car_availability_tag.dart';
@@ -227,7 +228,7 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
                         ),
                       ],
                     )
-                  : const SizedBox()
+                  : const SizedBox.shrink()
             ],
           ),
         ),
@@ -337,7 +338,7 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
     return GestureDetector(
       onTap: onTap,
       child: SizedBox(
-        width: size.width,
+        width: size.width.sp,
         child: Stack(
           children: [
             Card(
@@ -351,8 +352,8 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
               child: Column(
                 children: [
                   carImage(
-                    height: 140,
-                    width: 400,
+                    height: 140.sp,
+                    width: size.width.sp,
                     imgUrl: car['photoUrl'] != ''
                         ? car['photoUrl']
                         : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnKpMPFWYvaoInINJ44Qh4weo_z8nDwDUf8Q&usqp=CAU',
@@ -533,8 +534,10 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
             ),
             image: const DecorationImage(
                 alignment: Alignment.centerRight,
-                image: AssetImage(ImageAssets.manageListedBg,
-                ), fit: BoxFit.fitHeight)),
+                image: AssetImage(
+                  ImageAssets.manageListedBg,
+                ),
+                fit: BoxFit.fitHeight)),
 
         child: Row(children: [
           Container(
@@ -554,33 +557,30 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
           //   width: 10.sp,),
           Container(
             width: 147.sp,
-            height: 66.sp,
-            padding: EdgeInsets.only(left: 10, top: 2, bottom: 5),
-
+            height: 68.sp,
+            padding: const EdgeInsets.only(left: 10, top: 2, bottom: 5),
             child: Column(
               children: [
                 textWidget(
                     text: AppStrings.manageListedVehicles,
                     textOverflow: TextOverflow.visible,
-                    style: getSemiBoldStyle(fontSize: 15.sp).copyWith(
+                    style: getSemiBoldStyle(fontSize: 14.sp).copyWith(
                         height: 1.2.sp,
                         fontWeight: FontWeight.w600,
                         fontFamily: 'neue')),
                 SizedBox(
                   height: 2.sp,
                 ),
-                Expanded(
-                  child: textWidget(
-                      text: AppStrings.manageYourVehicleAViailability,
-                      textOverflow: TextOverflow.visible,
-                      style: getLightStyle(fontSize: 10.sp).copyWith(
-                        fontWeight: FontWeight.w400,
-                        height: 1.2.sp,
-                      )),
-                ),
+                textWidget(
+                    text: AppStrings.manageYourVehicleAViailability,
+                    textOverflow: TextOverflow.visible,
+                    style: getLightStyle(fontSize: 10.sp).copyWith(
+                      fontWeight: FontWeight.w400,
+                      height: 1.2.sp,
+                    )),
               ],
             ),
-          )
+          ),
         ]),
       ),
     );
@@ -653,16 +653,23 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
 }
 
 Widget appBar(Size size, PartnerHomeController controller) {
+  final landingController = Get.put(PartnerLandingController());
+
   return Padding(
     padding: const EdgeInsets.only(left: 16, top: 10, bottom: 10),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        profileAvatar(
-          height: 40,
-          width: 40,
-          imgUrl: userService.user.value.profilePic!,
-          // 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ88joJfjwoaz_jWaMQhbZn2X11VHGBzWKiQg&usqp=CAU',
+        GestureDetector(
+          onTap: () {
+            landingController.tabIndex.value = 3;
+          },
+          child: profileAvatar(
+            height: 40,
+            width: 40,
+            imgUrl: userService.user.value.profilePic!,
+            // 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ88joJfjwoaz_jWaMQhbZn2X11VHGBzWKiQg&usqp=CAU',
+          ),
         ),
         switchProfileWidget(
             size: size,

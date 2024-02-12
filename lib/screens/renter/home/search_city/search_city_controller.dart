@@ -186,7 +186,7 @@ class SearchCityController extends GetxController {
 
           locations.assignAll([...stateLocations]);
 
-          logger.log("states:: ${states}");
+          logger.log("states:: ${locations.value}");
 
           // change(favoriteCar, status: RxStatus.success());
           update();

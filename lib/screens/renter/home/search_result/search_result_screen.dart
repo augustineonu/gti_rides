@@ -125,44 +125,68 @@ class SearchResultScreen extends GetView<SearchResultController> {
                                 height: 150.sp,
                                 child: Stack(
                                   children: [
-                                    PageView(
-                                      physics: const ScrollPhysics(),
-                                      // controller: cardPageController,
+                                    // PageView(
+                                    //   physics: const ScrollPhysics(),
+                                    //   // controller: cardPageController,
+                                    //   controller: controller.pageControllers[index],
+                                    //   onPageChanged: (int index) =>
+                                    //       controller.onPageChanged1(index),
+                                    //   scrollDirection: Axis.horizontal,
+                                    //   children: [
+                                    //     for (Photo? carPhoto
+                                    //         in carData.photo!.take(5))
+                                    //       if (carPhoto != null)
+                                    //         carImage(
+                                    //           imgUrl: carPhoto.photoUrl!,
+                                    //           height: 200.sp,
+                                    //           width: 400.sp,
+                                    //           fit: BoxFit.fitWidth,
+                                    //           borderRadius: BorderRadius.only(
+                                    //               topLeft: Radius.circular(4.r),
+                                    //               topRight:
+                                    //                   Radius.circular(4.r)),
+                                    //         ),
+                                    //   ],
+                                    // ),
+
+                                    PageView.builder(
                                       controller: controller.pageController,
-                                      onPageChanged: (int index) =>
-                                          controller.onPageChanged(index),
-                                      scrollDirection: Axis.horizontal,
-                                      children: [
-                                        for (Photo? carPhoto
-                                            in carData.photo!.take(5))
-                                          if (carPhoto != null)
-                                            carImage(
-                                              imgUrl: carPhoto.photoUrl!,
-                                              height: 200.sp,
-                                              width: 400.sp,
-                                              fit: BoxFit.fitWidth,
-                                              borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(4.r),
-                                                  topRight:
-                                                      Radius.circular(4.r)),
-                                            ),
-                                      ],
+                                      physics: ScrollPhysics(),
+                                      itemCount: carData.photo!.take(5).length,
+                                      onPageChanged: (int value) {
+                                        controller.currentIndex.value = value;
+                                      },
+                                      itemBuilder: (context, index) {
+                                        final carPhoto = carData.photo![index];
+                                        return carImage(
+                                          imgUrl: carPhoto.photoUrl!,
+                                          height: 200.sp,
+                                          width: 400.sp,
+                                          fit: BoxFit.fitWidth,
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(4.r),
+                                              topRight: Radius.circular(4.r)),
+                                        );
+                                      },
                                     ),
-                                    Positioned(
-                                      bottom: 10,
-                                      right: 0,
-                                      left: 0,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: List.generate(
-                                          carData.photo!.take(5).length,
-                                          (index) => BuildCarouselDot(
-                                            currentIndex:
-                                                controller.currentIndex.value,
-                                            index: index,
+
+                                    Obx(
+                                      () => Positioned(
+                                        bottom: 10,
+                                        right: 0,
+                                        left: 0,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: List.generate(
+                                            carData.photo!.take(5).length,
+                                            (index) => BuildCarouselDot(
+                                              currentIndex:
+                                                  controller.currentIndex.value,
+                                              index: index,
+                                            ),
                                           ),
                                         ),
                                       ),

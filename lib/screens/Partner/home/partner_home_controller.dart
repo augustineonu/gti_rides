@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/route/app_links.dart';
+import 'package:gti_rides/screens/Partner/partner_landing_controller.dart';
 import 'package:gti_rides/services/auth_service.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/partner_service.dart';
@@ -31,6 +32,9 @@ class PartnerHomeController extends GetxController
 
   TextEditingController emailOrPhoneController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  // PartnerLandingController landingController =
+      // Get.put<PartnerLandingController>(PartnerLandingController());
+      final landingController = PartnerLandingController();
 
   final cars = <dynamic>[].obs;
 

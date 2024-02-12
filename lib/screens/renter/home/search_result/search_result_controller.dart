@@ -22,6 +22,8 @@ class SearchResultController extends GetxController {
   Rx<String> startDateTime = ''.obs;
   Rx<String> endDateTime = ''.obs;
   Rx<int> differenceInDays = 0.obs;
+    late List<PageController> pageControllers;
+
 
   SearchResultController() {
     init();
@@ -49,6 +51,10 @@ class SearchResultController extends GetxController {
     update();
 
     super.onInit();
+    pageControllers = List.generate(
+      carListData!.length,
+      (index) => PageController(),
+    );
   }
 
   void goBack({closeOverlays = true}) => routeService.goBack();
@@ -68,6 +74,19 @@ class SearchResultController extends GetxController {
     );
     update();
   }
+
+ void onPageChanged1(int index) {
+  if (index >= 0 && index < pageControllers.length) {
+    currentIndex.value = index;
+    pageControllers[index].animateToPage(
+      index,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeIn,
+    );
+    update();
+  }
+}
+
 
     Future<void> addRecentCar({required String carId}) async {
     isLoading.value = true;

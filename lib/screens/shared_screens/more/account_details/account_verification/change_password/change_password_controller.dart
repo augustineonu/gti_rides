@@ -168,6 +168,14 @@ class ChangePhoneController extends GetxController {
   }
 
   Future<void> sendOtp() async {
+     if (!passwordInputFormKey.currentState!.validate()) {
+      return;
+    }
+    if (newPasswordController.text != confirmPasswordController.text) {
+      showErrorSnackbar(message: "Passwords do not match");
+      return;
+    }
+
     startCountdown();
     try {
       final result = await authService

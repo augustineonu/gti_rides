@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -21,9 +22,9 @@ class LoginScreenBinding extends Bindings {
 }
 
 class LoginScreen extends GetView<LoginController> {
-   LoginScreen({super.key});
-   @override
-     final controller = Get.put<LoginController>(LoginController());
+  LoginScreen({super.key});
+  @override
+  final controller = Get.put<LoginController>(LoginController());
 
   @override
   Widget build(BuildContext context) {
@@ -92,15 +93,18 @@ class LoginScreen extends GetView<LoginController> {
                       title: AppStrings.emailOrPhone,
                       expectedVariable: "email",
                       hintText: AppStrings.emailHintText,
-                        validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return fetchErrorText(expectedTextVariable: "field");
-                      }
-                      if (!value.contains('.com')) {
-                        return fetchErrorText(expectedTextVariable: '.com');
-                      }
-                      return null;
-                    },
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(45),
+                      ],
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return fetchErrorText(expectedTextVariable: "field");
+                        }
+                        if (!value.contains('.com')) {
+                          return fetchErrorText(expectedTextVariable: '.com');
+                        }
+                        return null;
+                      },
                       controller: controller.emailOrPhoneController,
                     ),
                     SizedBox(

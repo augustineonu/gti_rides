@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/renter/home/renter_home_controller.dart';
+import 'package:gti_rides/screens/renter/landing_controller.dart';
 import 'package:gti_rides/screens/renter/widgets/build_carousel_dot.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/how_gti_works_widget.dart';
@@ -52,7 +53,8 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
     super.initState();
     print("init called>>>");
 
-    cardPageController = PageController(viewportFraction: calculateViewportFraction(), initialPage: 0);
+    cardPageController = PageController(
+        viewportFraction: calculateViewportFraction(), initialPage: 0);
 
     timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
       if (currentIndex.value < visibleCars.length) {
@@ -88,13 +90,13 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
   }
 
   @override
-void dispose() {
-  // Cancel the timer to prevent calling setState after dispose
-  timer.cancel();
-  cardPageController.dispose(); // Dispose of the PageController
-  scrollController.dispose(); // Dispose of the ScrollController
-  super.dispose();
-}
+  void dispose() {
+    // Cancel the timer to prevent calling setState after dispose
+    timer.cancel();
+    cardPageController.dispose(); // Dispose of the PageController
+    scrollController.dispose(); // Dispose of the ScrollController
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -137,15 +139,22 @@ void dispose() {
   }
 
   Widget appBar(Size size, CarRenterHomeController controller) {
+    final renterController = Get.put(RenterLandingController());
     return Padding(
       padding: const EdgeInsets.only(left: 16, top: 10, bottom: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          profileAvatar(
-              height: 40, width: 40, imgUrl: controller.user.value.profilePic!
-              // 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ88joJfjwoaz_jWaMQhbZn2X11VHGBzWKiQg&usqp=CAU',
-              ),
+          GestureDetector(
+            onTap: () {
+              print("Hellor world");
+              renterController.tabIndex.value = 3;
+            },
+            child: profileAvatar(
+                height: 40, width: 40, imgUrl: controller.user.value.profilePic!
+                // 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ88joJfjwoaz_jWaMQhbZn2X11VHGBzWKiQg&usqp=CAU',
+                ),
+          ),
           switchProfileWidget(
               size: size,
               title: AppStrings.renter,
@@ -200,8 +209,7 @@ void dispose() {
                         controller: cardPageController,
                         onPageChanged: (int index) {
                           setState(() {
-                            
-                          currentIndex.value = index;
+                            currentIndex.value = index;
                           });
                         },
                         scrollDirection: Axis.horizontal,
@@ -226,19 +234,10 @@ void dispose() {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  // ClipRRect(
-                                  //   borderRadius: BorderRadius.only(
-                                  //       topRight: Radius.circular(4.r),
-                                  //       topLeft: Radius.circular(4.r)),
-                                  //   child: Image.asset(
-                                  //     car.imageUrl,
-                                  //     fit: BoxFit.contain,
-                                  //   ),
-                                  // ),
                                   carImage(
                                     imgUrl: recentCar.photoUrl,
                                     height: 140.sp,
-                                    width: 400.sp,
+                                    width: size.width.sp,
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(
@@ -335,8 +334,6 @@ void dispose() {
                     ],
                   );
                 },
-
-
                 onEmpty: Padding(
                   padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
                   child: Center(
@@ -390,11 +387,10 @@ void dispose() {
   }
 
   Widget discoverCity({void Function()? onTap}) {
-    return Padding(
+    return Container(
+      width: MediaQuery.of(context).size.width.sp,
       padding: EdgeInsets.symmetric(vertical: 15.sp),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
+      child: Stack(alignment: Alignment.center, children: [
         ClipRRect(
             borderRadius: BorderRadius.all(Radius.circular(4.r)),
             child: Image.asset(

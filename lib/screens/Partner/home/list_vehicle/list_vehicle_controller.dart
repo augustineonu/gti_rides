@@ -835,11 +835,16 @@ class ListVehicleController extends GetxController {
       isLoading.value = false;
     }
   }
+    ScrollController scrollController = ScrollController();
+
 
   void goToNextPage() {
     currentIndex.value++;
+    scrollController.position.maxScrollExtent;
     pageController.nextPage(
         duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+ 
+ 
   }
 
   Future<void> addCarInfo() async {

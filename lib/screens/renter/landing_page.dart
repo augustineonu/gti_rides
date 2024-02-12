@@ -17,7 +17,7 @@ class RenterLandingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final RenterLandingController controller =
-        Get.put(RenterLandingController(), permanent: false);
+        Get.put(RenterLandingController(),);
     return Scaffold(
       bottomNavigationBar:
           Obx(() => bottomNavBar(context, controller)),

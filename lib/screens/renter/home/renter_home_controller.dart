@@ -37,6 +37,7 @@ class CarRenterHomeController extends GetxController
 
   TextEditingController emailOrPhoneController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  
 
   CarRenterHomeController() {
     init();

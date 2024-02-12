@@ -38,6 +38,10 @@ class ApiService {
         headers: {
           'Content-Type': 'application/json',
         },
+        validateStatus: (int? status) {
+          return status != null;
+          // return status != null && status >= 200 && status < 300;
+        },
       ),
     );
 
@@ -56,7 +60,8 @@ class ApiService {
           //      if(e.type == DioExceptionType.connectionTimeout){
           //   throw Exception("Connection  Timeout Exception");
           // }
-          logger.log("Dio error: ${e.message}, Status code: ${e.response?.statusCode}");
+          logger.log(
+              "Dio error: ${e.message}, Status code: ${e.response?.statusCode}");
 
           if (e.response?.statusCode == 400) {
             // If a 401 response is received, refresh the access token
@@ -67,14 +72,10 @@ class ApiService {
               routeService.offAllNamed(AppLinks.login);
               return;
             }
-            // else {
-            //   logger.log("result: token is false ");
-            // }
-
             // Update the request header with the new access token
             e.requestOptions.headers['Authorization'] =
                 'Bearer ${tokenService.accessToken.value}';
-
+            //
             _dio.options.headers['Authorization'] =
                 'Bearer ${tokenService.accessToken.value}';
 
@@ -89,7 +90,6 @@ class ApiService {
       ),
     );
     logger.log("Dio initialization completed");
-
   }
 
   Options get options {
@@ -433,9 +433,9 @@ class ApiService {
           endpoint,
           options: Options(
             responseType: ResponseType.plain,
-            // headers: {
-            //   'Authorization': 'Bearer ${tokenService.accessToken.value}',
-            // },
+            headers: {
+              'Authorization': 'Bearer ${tokenService.accessToken.value}',
+            },
           ),
         );
         // apiResponse = ApiResponseModel.fromJson(response.data);

@@ -10,7 +10,7 @@ class RenterLandingController extends GetxController {
   RenterLandingController() {
     logger.log('Controller initialized');
   }
-  var tabIndex = 0.obs;
+  Rx<int> tabIndex = 0.obs;
 
   void changeTabIndex(int index) {
     tabIndex.value = index;

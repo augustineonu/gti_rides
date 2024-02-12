@@ -144,15 +144,17 @@ class SearchCityScreen extends GetView<SearchCityController> {
                       : controller.filteredLocation[index];
                   return InkWell(
                     onTap: () async {
-                      controller.selectedStateCode.value = location.code;
                       // controller.selectedState.value = location.name;
                       // controller.locationController.value.text = location.name;
 
                       if (controller.selectedType.value == LocationType.state) {
+                      controller.selectedStateCode.value = location.code;
                         await controller.getCities();
                         // controller.selectedType.value = LocationType.city;
                         controller.selectedState.value = location.name;
                       } else {
+                        controller.selectedcityCode.value = location.code;
+                        print("City code:: ${controller.selectedcityCode.value}");
                         controller.selectedCity.value = location.name;
                         controller.onLocationSelected(location);
                         // Handle city selection logic here

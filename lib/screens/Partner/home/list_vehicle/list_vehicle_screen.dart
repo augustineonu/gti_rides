@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -143,6 +144,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     Flexible(
                       fit: FlexFit.tight,
                       child: SingleChildScrollView(
+                        controller: controller.scrollController,
                           child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -1034,6 +1036,107 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
             SizedBox(
               height: 24.sp,
             ),
+            // Column(
+            //   crossAxisAlignment: CrossAxisAlignment.start,
+            //   children: [
+            //     textWidget(
+            //       text: AppStrings.vehicleFeatures,
+            //       style: getRegularStyle(fontSize: 12.sp),
+            //     ),
+            //     SizedBox(
+            //       height: 5.sp,
+            //     ),
+            //     ButtonTheme(
+            //       alignedDropdown: true,
+            //       child: DropDownMultiSelect(
+            //         validator: (selectedItems) {
+            //           if (selectedItems == null || selectedItems.isEmpty) {
+            //             return "Required field";
+            //           } else if (selectedItems.contains("Brazil")) {
+            //             return "Invalid item";
+            //           } else {
+            //             return ''; // No error
+            //           }
+            //         },
+            //         decoration: InputDecoration(
+            //             contentPadding: EdgeInsets.symmetric(
+            //                 horizontal: 14.sp, vertical: 13.sp),
+            //             enabledBorder: OutlineInputBorder(
+            //               borderSide: BorderSide(
+            //                 color: borderColor,
+            //                 width: 1.0.w,
+            //               ),
+            //               borderRadius: BorderRadius.all(
+            //                 Radius.circular(4.0.r),
+            //               ),
+            //             ),
+            //             errorBorder: OutlineInputBorder(
+            //               borderSide: BorderSide(
+            //                 color: red,
+            //                 width: 1.0.w,
+            //               ),
+            //               borderRadius: BorderRadius.all(
+            //                 Radius.circular(4.0.r),
+            //               ),
+            //             ),
+            //             focusedBorder: OutlineInputBorder(
+            //               borderSide: BorderSide(
+            //                 color: borderColor,
+            //                 width: 1.0.w,
+            //               ),
+            //               borderRadius: BorderRadius.all(
+            //                 Radius.circular(4.0.r),
+            //               ),
+            //             ),
+            //             border: OutlineInputBorder(
+            //               borderSide: BorderSide(
+            //                 color: secondaryColor,
+            //                 width: 1.0.w,
+            //               ),
+            //               borderRadius: BorderRadius.all(
+            //                 Radius.circular(4.0.r),
+            //               ),
+            //             ),
+
+            //             // filled: true,
+            //             fillColor: Colors.transparent),
+            //         onChanged: (List<dynamic> selectedFeatures) {
+            //           controller.selectedFeatures!.value = selectedFeatures;
+            //           print("selected $selectedFeatures");
+
+            //           // Find the feature objects with the selected names
+            //           var selectedObjects =
+            //               (controller.carFeatures?.value ?? [])
+            //                   .where(
+            //                     (feature) => selectedFeatures
+            //                         .contains(feature['featuresName']),
+            //                   )
+            //                   .toList();
+            //           // Extract featuresCode from selected objects
+            //           List<String> featuresCodes = selectedObjects
+            //               .map((feature) => feature['featuresCode'] as String)
+            //               .toList();
+
+            //           // Assign the lists to corresponding controller variables
+            //           controller.featuresCode.value = featuresCodes;
+            //           print("selectedFeatures: $selectedFeatures");
+            //           print("featuresCodes: $featuresCodes");
+            //         },
+            //         options: (controller.carFeatures?.value ?? [])
+            //             .map((feature) => feature['featuresName'] as String)
+            //             .toList(),
+            //         selectedValues: controller.selectedFeatures!.value,
+            //         whenEmpty: 'Select',
+            //         isDense: true,
+            //         enabled: true,
+            //         icon: const Icon(
+            //           Iconsax.arrow_down_1,
+            //           color: grey3,
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -1044,94 +1147,114 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                 SizedBox(
                   height: 5.sp,
                 ),
-                ButtonTheme(
-                  alignedDropdown: true,
-                  child: DropDownMultiSelect(
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return fetchErrorText(expectedTextVariable: 'field');
-                      }
-                      return '';
-                    },
-                    decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(
-                            horizontal: 14.sp, vertical: 13.sp),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: borderColor,
-                            width: 1.0.w,
-                          ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(4.0.r),
-                          ),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: red,
-                            width: 1.0.w,
-                          ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(4.0.r),
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: borderColor,
-                            width: 1.0.w,
-                          ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(4.0.r),
-                          ),
-                        ),
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: secondaryColor,
-                            width: 1.0.w,
-                          ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(4.0.r),
-                          ),
-                        ),
-
-                        // filled: true,
-                        fillColor: Colors.transparent),
-                    onChanged: (List<dynamic> selectedFeatures) {
-                      controller.selectedFeatures!.value = selectedFeatures;
-                      print("selected $selectedFeatures");
-
-                      // Find the feature objects with the selected names
-                      var selectedObjects =
-                          (controller.carFeatures?.value ?? [])
-                              .where(
-                                (feature) => selectedFeatures
-                                    .contains(feature['featuresName']),
-                              )
-                              .toList();
-                      // Extract featuresCode from selected objects
-                      List<String> featuresCodes = selectedObjects
-                          .map((feature) => feature['featuresCode'] as String)
-                          .toList();
-
-                      // Assign the lists to corresponding controller variables
-                      controller.featuresCode.value = featuresCodes;
-                      print("selectedFeatures: $selectedFeatures");
-                      print("featuresCodes: $featuresCodes");
-                    },
-                    options: (controller.carFeatures?.value ?? [])
-                        .map((feature) => feature['featuresName'] as String)
-                        .toList(),
-                    selectedValues: controller.selectedFeatures!.value,
-                    whenEmpty: 'Select',
-                    isDense: true,
-                    enabled: true,
-                    icon: const Icon(
+                DropdownSearch<dynamic>.multiSelection(
+                  clearButtonProps: ClearButtonProps(
+                    color: primaryColor,
+                  ),
+                  items: (controller.carFeatures?.value ?? [])
+                      .map((feature) => feature['featuresName'] as String)
+                      .toList(),
+                  dropdownButtonProps: DropdownButtonProps(
+                    splashColor: primaryColor,
+                    focusColor: primaryColor,
+                    color: primaryColor,
+                    icon: Icon(
                       Iconsax.arrow_down_1,
                       color: grey3,
                     ),
                   ),
+                  popupProps:  PopupPropsMultiSelection.menu(
+                    constraints: BoxConstraints(minHeight: 200.sp, maxHeight: 300.sp),
+                    menuProps: MenuProps(
+                      backgroundColor: backgroundColor,
+                    )
+                      // showSelectedItems: true,
+
+                      ),
+                  onChanged: (List<dynamic> selectedFeatures) {
+                    controller.selectedFeatures!.value = selectedFeatures;
+                    print("selected $selectedFeatures");
+
+                    // Find the feature objects with the selected names
+                    var selectedObjects = (controller.carFeatures?.value ?? [])
+                        .where(
+                          (feature) => selectedFeatures
+                              .contains(feature['featuresName']),
+                        )
+                        .toList();
+                    // Extract featuresCode from selected objects
+                    List<String> featuresCodes = selectedObjects
+                        .map((feature) => feature['featuresCode'] as String)
+                        .toList();
+
+                    // Assign the lists to corresponding controller variables
+                    controller.featuresCode.value = featuresCodes;
+                    print("selectedFeatures: $selectedFeatures");
+                    print("featuresCodes: $featuresCodes");
+                  },
+                  selectedItems: controller.selectedFeatures!.value,
+                  validator: (selectedItems) {
+                    if (selectedItems == null || selectedItems.isEmpty) {
+                      return "Required field";
+                    } else if (selectedItems.contains("Brazil")) {
+                      return "Invalid item";
+                    } else {
+                      return null; // No error
+                    }
+                  },
+                  dropdownDecoratorProps: DropDownDecoratorProps(),
+                  // decoration: InputDecoration(
+                  //   contentPadding: EdgeInsets.symmetric(horizontal: 14.sp, vertical: 13.sp),
+                  //   enabledBorder: OutlineInputBorder(
+                  //     borderSide: BorderSide(
+                  //       color: borderColor,
+                  //       width: 1.0.w,
+                  //     ),
+                  //     borderRadius: BorderRadius.all(
+                  //       Radius.circular(4.0.r),
+                  //     ),
+                  //   ),
+                  //   errorBorder: OutlineInputBorder(
+                  //     borderSide: BorderSide(
+                  //       color: red,
+                  //       width: 1.0.w,
+                  //     ),
+                  //     borderRadius: BorderRadius.all(
+                  //       Radius.circular(4.0.r),
+                  //     ),
+                  //   ),
+                  //   focusedBorder: OutlineInputBorder(
+                  //     borderSide: BorderSide(
+                  //       color: borderColor,
+                  //       width: 1.0.w,
+                  //     ),
+                  //     borderRadius: BorderRadius.all(
+                  //       Radius.circular(4.0.r),
+                  //     ),
+                  //   ),
+                  //   border: OutlineInputBorder(
+                  //     borderSide: BorderSide(
+                  //       color: secondaryColor,
+                  //       width: 1.0.w,
+                  //     ),
+                  //     borderRadius: BorderRadius.all(
+                  //       Radius.circular(4.0.r),
+                  //     ),
+                  //   ),
+                  //   // filled: true,
+                  //   fillColor: Colors.transparent,
+                  // ),
+                  // whenEmpty: 'Select',
+                  // isDense: true,
+                  enabled: true,
+                  // icon: const Icon(
+                  //   Iconsax.arrow_down_1,
+                  //   color: grey3,
+                  // ),
                 ),
               ],
             ),
+
             SizedBox(
               height: 24.sp,
             ),
@@ -1753,7 +1876,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     ),
                     child: Center(
                       child: Transform.scale(
-                        scale: 0.9,
+                        scale: 0.9.sp,
                         child: SvgPicture.asset(
                           ImageAssets.toyCar1,
                           // width: 33,

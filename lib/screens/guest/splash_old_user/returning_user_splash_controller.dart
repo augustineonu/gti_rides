@@ -51,7 +51,24 @@ class ReturningUserSplashController extends GetxController
 
       logger.log("User model >>: ${userModel.toJson()}");
       if (hasExpired) {
+        
+
         routeService.offAllNamed(AppLinks.login);
+              // get new access token
+      // bool result = await tokenService.getNewAccessToken();
+      // if (!result) {
+      //   // move to welcome screen
+      //   logger.log('Going to Login screen');
+      //   routeService.offAllNamed(AppLinks.login);
+      //   return;
+      // }
+      //   // move to home screen
+      // if (userModel.userType.toString() == "renter") {
+      //   await routeService.gotoRoute(AppLinks.carRenterLanding);
+      // } else {
+      //   await routeService.gotoRoute(AppLinks.carOwnerLanding);
+      // }
+
       } else {
         final response = await authService.getProfile();
         if (response.status == "success" || response.status_code == 200) {
@@ -74,20 +91,7 @@ class ReturningUserSplashController extends GetxController
         }
       }
 
-      //   // get new access token
-      // bool result = await tokenService.getNewAccessToken();
-      // if (!result) {
-      //   // move to welcome screen
-      //   logger.log('Going to Login screen');
-      //   routeService.offAllNamed(AppLinks.login);
-      //   return;
-      // }
-      //   // move to home screen
-      // if (userModel.userType.toString() == "renter") {
-      //   await routeService.gotoRoute(AppLinks.carRenterLanding);
-      // } else {
-      //   await routeService.gotoRoute(AppLinks.carOwnerLanding);
-      // }
+  
 
       logger.log('Going to home screen');
       // routeService.offAllNamed(AppLinks.agentHome);
