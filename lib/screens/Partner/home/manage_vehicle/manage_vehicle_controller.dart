@@ -71,7 +71,7 @@ class ManageVehicleController extends GetxController
   void routeToQuickEdit({Object? arguments}) {
     if (Get.isBottomSheetOpen == true) {
       Get.back();
-          Get.delete<ManageVehicleController>();
+      Get.delete<ManageVehicleController>();
 
       routeService.gotoRoute(AppLinks.quickEdit, arguments: arguments);
     } else {
@@ -107,12 +107,12 @@ class ManageVehicleController extends GetxController
         logger.log("gotten cars ${response.data}");
         if (response.data == null || response.data!.isEmpty) {
           change(<dynamic>[].obs, status: RxStatus.empty());
-          
+
           logger.log("cars $cars");
         } else {
           cars?.value = response.data!;
           change(response.data!, status: RxStatus.success());
-          
+
           // change(response.data!.cast<CarListData>(), status: RxStatus.success());
           update();
         }
@@ -152,9 +152,15 @@ class ManageVehicleController extends GetxController
       if (result.status == "success") {
         showSuccessSnackbar(message: result.message!);
         isDeletingCar.value = false;
-        Future.delayed(const Duration(milliseconds: 1000), () {
-          routeService.goBack(closeOverlays: true);
-        });
+        update();
+        // Future.delayed(const Duration(milliseconds: 1000), () {
+        // routeService.goBack(closeOverlays: true);
+        // });
+           Get.offNamedUntil(
+            AppLinks.manageVehicle,
+            ModalRoute.withName(AppLinks.carOwnerLanding),
+          );
+
       } else {
         logger.log("error deleting car:: ${result.message}");
         showErrorSnackbar(message: result.message ?? 'unable to delete car');

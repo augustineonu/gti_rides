@@ -144,47 +144,48 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     Flexible(
                       fit: FlexFit.tight,
                       child: SingleChildScrollView(
-                        controller: controller.scrollController,
+                          controller: controller.scrollController,
                           child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          // stepper widget
-                          SizedBox(
-                            height: 20.sp,
-                          ),
-                          // pageview pages
-                          SizedBox(
-                            height: size.height / 0.80.sp,
-                            child: PageView(
-                              // itemCount: controller.pages.length,
-                              // physics: NeverScrollableScrollPhysics(),
-                              controller: controller.pageController,
-                              onPageChanged: (value) {
-                                controller.currentIndex.value = value;
-                              },
-                              children: <Widget>[
-                                // Vehicle type page
-                                vehicleTypePage(context, controller, size),
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              // stepper widget
+                              SizedBox(
+                                height: 20.sp,
+                              ),
+                              // pageview pages
+                              SizedBox(
+                                height: size.height / 0.85.sp,
+                                child: PageView(
+                                  // itemCount: controller.pages.length,
+                                  physics: ScrollPhysics(),
+                                  controller: controller.pageController,
+                                  onPageChanged: (value) {
+                                    controller.currentIndex.value = value;
+                                  },
+                                  children: <Widget>[
+                                    // Vehicle type page
+                                    vehicleTypePage(context, controller, size),
 
-                                // vehicle info page
-                                vehicleInfoPage(context, controller, size),
+                                    // vehicle info page
+                                    vehicleInfoPage(context, controller, size),
 
-                                // Documantation page
-                                documentationPage(context, controller, size),
+                                    // Documantation page
+                                    documentationPage(
+                                        context, controller, size),
 
-                                //Add photos page
-                                addPhotosPage(size, controller),
-                                availabilityPage(controller, context, size),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: size.height * 0.02,
-                          ),
-                          // continueButto
-                        ],
-                      )),
+                                    //Add photos page
+                                    addPhotosPage(size, controller),
+                                    availabilityPage(controller, context, size),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: size.height * 0.02,
+                              ),
+                              // continueButto
+                            ],
+                          )),
                     ),
                   ],
                 ),
@@ -747,7 +748,9 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
               richTitle: true,
               title: AppStrings.uploadVehiclePhotos,
               content: AppStrings.uploadDocument, onTap: () {
-            if (controller.selectedVehiclePhotos.length == 10) {
+            if (controller.selectedVehiclePhotos.length +
+                    controller.apiFetchedPhotos.length ==
+                10) {
               showErrorSnackbar(
                   message: 'You cannot upload more than 10 photos');
             } else {
@@ -763,20 +766,51 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
           SizedBox(
             height: 50.sp,
             child: ListView.builder(
-              shrinkWrap: true,
-              physics: const ScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              itemCount: controller.selectedVehiclePhotos.length,
-              itemBuilder: (context, index) => Padding(
-                padding: const EdgeInsets.only(right: 3.0), // Adjust as needed
-                child: imageWidget1(
-                  onTap: () => controller.selectedVehiclePhotos.removeAt(index),
-                  localImagePath: controller.selectedVehiclePhotos[index],
-                  height: 30.sp,
-                  width: 30.sp,
+                shrinkWrap: true,
+                physics: const ScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+                itemCount: controller.selectedVehiclePhotos.length +
+                    controller.apiFetchedPhotos.length,
+                itemBuilder: (context, index) {
+                  if (index < controller.selectedVehiclePhotos.length) {
+                    // Display selected photos
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 3.0),
+                      child: imageWidget1(
+                        onTap: () =>
+                            controller.selectedVehiclePhotos.removeAt(index),
+                        localImagePath: controller.selectedVehiclePhotos[index],
+                        height: 30.sp,
+                        width: 30.sp,
+                      ),
+                    );
+                  } else {
+                    // Display fetched photos
+                    int fetchedIndex =
+                        index - controller.selectedVehiclePhotos.length;
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 3.0),
+                      child: imageWidget1(
+                        onTap: () => controller.deleteFetchedPhoto(controller
+                            .apiFetchedPhotos[fetchedIndex].photoCode!),
+                        networkImagePath:
+                            controller.apiFetchedPhotos[fetchedIndex].photoUrl,
+                        height: 30.sp,
+                        width: 30.sp,
+                      ),
+                    );
+                  }
+                }
+                // Padding(
+                //   padding: const EdgeInsets.only(right: 3.0), // Adjust as needed
+                //   child: imageWidget1(
+                //     onTap: () => controller.selectedVehiclePhotos.removeAt(index),
+                //     localImagePath: controller.selectedVehiclePhotos[index],
+                //     height: 30.sp,
+                //     width: 30.sp,
+                //   ),
+                // ),
                 ),
-              ),
-            ),
           ),
           SizedBox(
             height: 100.sp,
@@ -1163,11 +1197,12 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                       color: grey3,
                     ),
                   ),
-                  popupProps:  PopupPropsMultiSelection.menu(
-                    constraints: BoxConstraints(minHeight: 200.sp, maxHeight: 300.sp),
-                    menuProps: MenuProps(
-                      backgroundColor: backgroundColor,
-                    )
+                  popupProps: PopupPropsMultiSelection.menu(
+                      constraints:
+                          BoxConstraints(minHeight: 200.sp, maxHeight: 300.sp),
+                      menuProps: MenuProps(
+                        backgroundColor: backgroundColor,
+                      )
                       // showSelectedItems: true,
 
                       ),

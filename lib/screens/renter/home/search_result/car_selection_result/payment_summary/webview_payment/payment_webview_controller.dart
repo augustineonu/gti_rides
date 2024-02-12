@@ -42,26 +42,24 @@ class PaymentWebViewController extends GetxController {
             logger.log("URL  >> 1:: ${url}");
           },
           onWebResourceError: (WebResourceError error) {},
-          onUrlChange: (UrlChange url){
+          onUrlChange: (UrlChange url) {
             logger.log("onChnaged URL:: ${url.url.toString()}");
-            if(url.url!.toLowerCase().contains('completed'.toLowerCase())){
+            if (url.url!.toLowerCase().contains('completed'.toLowerCase())) {
               routeService.goBack(result: true);
               // Navigator.pop(context)
-              
             }
             // https://webhook.site/9d0b00ba-9a69-44fa-a43d-a82c33c36fdc?status=completed&tx_ref=OOXVipNTuVwvtcN&transaction_id=1247735467
-
-
           },
           onNavigationRequest: (NavigationRequest request) {
             logger.log("URL:: ${request.url}");
             if (request.url.startsWith('https://webhook.site/')) {
               // showErrorSnackbar(message: "message");
-               if(request.url.toLowerCase().contains('completed'.toLowerCase())){
-              routeService.goBack(result: true);
-              // Navigator.pop(context)
-              
-            }
+              if (request.url
+                  .toLowerCase()
+                  .contains('completed'.toLowerCase())) {
+                routeService.goBack(result: true);
+                // Navigator.pop(context)
+              }
               return NavigationDecision.prevent;
             }
             return NavigationDecision.navigate;
@@ -82,6 +80,5 @@ class PaymentWebViewController extends GetxController {
   Rx<int> pageProgress = 0.obs;
   WebViewController webViewController = WebViewController();
 
-    void goBack() => routeService.goBack();
-
+  void goBack() => routeService.goBack();
 }

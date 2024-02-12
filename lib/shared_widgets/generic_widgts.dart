@@ -364,13 +364,14 @@ Widget imageWidget({
   }
 }
 
-Widget imageWidget1(
-    {String? localImagePath,
-    double? width,
-    double? height,
-    BoxFit fit = BoxFit.cover,
-    void Function()? onTap}) {
-  // if (localImagePath != null && localImagePath.isNotEmpty) {
+Widget imageWidget1({
+  String? localImagePath,
+  String? networkImagePath,
+  double? width,
+  double? height,
+  BoxFit fit = BoxFit.cover,
+  void Function()? onTap,
+}) {
   return Padding(
     padding: const EdgeInsets.all(2.0),
     child: Stack(
@@ -378,27 +379,49 @@ Widget imageWidget1(
         GestureDetector(
           onTap: onTap,
           child: Builder(builder: (context) {
-            return Image.file(
-              File(localImagePath!),
-              width: width,
-              height: height,
-              fit: fit,
-            );
+            if (networkImagePath != null && networkImagePath.isNotEmpty) {
+              // Display network image if available
+              return Image.network(
+                networkImagePath,
+                width: width,
+                height: height,
+                fit: fit,
+              );
+            } else if (localImagePath != null && localImagePath.isNotEmpty) {
+              // Display local image if available
+              return Image.file(
+                File(localImagePath),
+                width: width,
+                height: height,
+                fit: fit,
+              );
+            } else {
+              // Placeholder or default image when neither local nor network image is available
+              return Container(
+                width: width,
+                height: height,
+                color: Colors.grey, // Placeholder color or add a default image
+              );
+            }
           }),
         ),
-        Positioned(
+        if (onTap != null && (localImagePath != null || networkImagePath != null))
+          Positioned(
             right: -4,
             top: -6,
             child: Transform.scale(
-                scale: 0.4,
-                child: SvgPicture.asset(
-                  ImageAssets.closeSmall,
-                  color: red,
-                ))),
+              scale: 0.4,
+              child: SvgPicture.asset(
+                ImageAssets.closeSmall,
+                color: red,
+              ),
+            ),
+          ),
       ],
     ),
   );
 }
+
 
 Widget profileImageWidget({
   required String imgUrl,

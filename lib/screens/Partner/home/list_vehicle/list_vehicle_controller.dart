@@ -39,6 +39,7 @@ class ListVehicleController extends GetxController {
   RxList<dynamic>? drivers = <dynamic>[].obs;
   RxList<dynamic>? cars = <dynamic>[].obs;
 
+  RxBool isDeletingCarPhoto = false.obs;
   RxBool isLoading = false.obs;
   RxBool isFromManageCars = false.obs;
   RxBool isLoading1 = false.obs;
@@ -78,6 +79,9 @@ class ListVehicleController extends GetxController {
   Rx<String> selectedInspectionPhotos = ''.obs;
   Rx<String> selectedInspectionPhotoName = ''.obs;
   RxList<String> selectedVehiclePhotos = <String>[].obs;
+  RxList<Photo> apiFetchedPhotos =
+      <Photo>[].obs; // List of Photo objects from the API
+
   Rx<String> selectedVehiclePhoto = ''.obs;
   Rx<String> userVin = ''.obs;
   Rx<String> plateNumber = ''.obs;
@@ -110,12 +114,12 @@ class ListVehicleController extends GetxController {
   TextEditingController rentPerDayController = TextEditingController();
   TextEditingController discountPerDayController = TextEditingController();
   TextEditingController aboutVehicleController = TextEditingController();
-    Rx<TextEditingController> fromController = TextEditingController().obs;
+  Rx<TextEditingController> fromController = TextEditingController().obs;
   Rx<TextEditingController> toController = TextEditingController().obs;
   Rx<String> advanceAmount = ''.obs;
   RxInt initiPageIndex = 1.obs;
 
-  Rx<String>? errorMessage = ''.obs; 
+  Rx<String>? errorMessage = ''.obs;
   ListVehicleController() {
     init();
   }
@@ -258,8 +262,7 @@ class ListVehicleController extends GetxController {
     ),
   );
 
-
-    String? validateValue(String? value) {
+  String? validateValue(String? value) {
     // Perform your custom validation logic here
     if (value == null || value.isEmpty) {
       return 'Please select a valid option.';
@@ -530,13 +533,35 @@ class ListVehicleController extends GetxController {
     }
   }
 
+  // Future<void> openVehiclePhotoGallery() async {
+  //   ImageResponse? response =
+  //       await imageService.pickImage(source: ImageSource.gallery);
+  //   if (response != null) {
+  //     selectedVehiclePhotos.add(response.imagePath);
+  //     selectedVehiclePhoto.value = (response.imagePath);
+  //     routeService.goBack;
+  //   }
+  // }
+
+  final int maxAllowedPhotos = 10;
+
   Future<void> openVehiclePhotoGallery() async {
-    ImageResponse? response =
-        await imageService.pickImage(source: ImageSource.gallery);
-    if (response != null) {
-      selectedVehiclePhotos.add(response.imagePath);
-      selectedVehiclePhoto.value = (response.imagePath);
-      routeService.goBack;
+    List<ImageResponse> responses = await imageService.pickMultipleImages();
+
+    if (responses != null) {
+      for (ImageResponse response in responses) {
+        // Check if the maximum allowed photos limit is reached
+        if (selectedVehiclePhotos.length + apiFetchedPhotos.length <
+            maxAllowedPhotos) {
+          selectedVehiclePhotos.add(response.imagePath);
+        } else {
+          // Notify the user that the limit is reached
+          showErrorSnackbar(
+            message: 'You cannot upload more than $maxAllowedPhotos photos',
+          );
+          break; // Break the loop if the limit is reached
+        }
+      }
     }
   }
 
@@ -797,7 +822,8 @@ class ListVehicleController extends GetxController {
     if (!vehicleTypeFormKey.currentState!.validate()) {
       return;
     }
-    if(selectedBrandModel.value == 'Select' || selectedYearValue!.value == 'Select'){
+    if (selectedBrandModel.value == 'Select' ||
+        selectedYearValue!.value == 'Select') {
       showErrorSnackbar(message: 'All fields must be selected');
       return;
     }
@@ -835,16 +861,16 @@ class ListVehicleController extends GetxController {
       isLoading.value = false;
     }
   }
-    ScrollController scrollController = ScrollController();
 
+  ScrollController scrollController = ScrollController();
 
   void goToNextPage() {
     currentIndex.value++;
-    scrollController.position.maxScrollExtent;
+    // scrollController.position.maxScrollExtent;
+    scrollController.jumpTo(0.0);
+
     pageController.nextPage(
         duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
- 
- 
   }
 
   Future<void> addCarInfo() async {
@@ -884,10 +910,10 @@ class ListVehicleController extends GetxController {
   }
 
   Future<void> addCarAvailability() async {
-     if (!availabilityFormKey.currentState!.validate()) {
+    if (!availabilityFormKey.currentState!.validate()) {
       return;
     }
-    if(selectedView.value == 'select'){
+    if (selectedView.value == 'select') {
       showErrorSnackbar(message: 'Kindly select a driver');
     }
     try {
@@ -923,9 +949,9 @@ class ListVehicleController extends GetxController {
             onTap: () {
               // routeService.goBack(closeOverlays: true);
               Get.offNamedUntil(
-            AppLinks.manageVehicle,
-            ModalRoute.withName(AppLinks.carOwnerLanding),
-          );
+                AppLinks.manageVehicle,
+                ModalRoute.withName(AppLinks.carOwnerLanding),
+              );
             });
       } else {
         logger.log("unable to add car availability ${response.data}");
@@ -957,7 +983,7 @@ class ListVehicleController extends GetxController {
       // Show an error message or handle it accordingly
       showErrorSnackbar(message: 'Please upload an image.');
       return false;
-    } else if (selectedVehiclePhotos.length < 6) {
+    } else if (selectedVehiclePhotos.length + apiFetchedPhotos.length < 6) {
       showErrorSnackbar(message: 'Kindly upload more photos.');
       return false;
     }
@@ -1198,6 +1224,25 @@ class ListVehicleController extends GetxController {
     return segments.last.split('?').first;
   }
 
+  Future<void> deleteFetchedPhoto(String photoCode) async {
+    isDeletingCarPhoto.value = true;
+    // You might want to call an API to delete the photo on the server as well
+
+    try {
+      final response = await partnerService.deleteCarPhoto(carID: photoCode);
+      if (response.status == 'success' || response.status_code == 200) {
+        apiFetchedPhotos.removeWhere((photo) => photo.photoCode == photoCode);
+        showSuccessSnackbar(message: 'Photo deleted successfully');
+      } else {
+        logger.log("Unable to delete car photo");
+      }
+    } catch (e) {
+      logger.log("eror:: ${e.toString()}");
+    } finally {
+      isDeletingCarPhoto.value = false;
+    }
+  }
+
   Future<void> getCarHistory() async {
     isFetchingCarDetails.value = true;
 
@@ -1215,6 +1260,7 @@ class ListVehicleController extends GetxController {
           isFetchingCarDetails.value = false;
 
           final firstCar = carData.first;
+          CarListData carListData = CarListData.fromJson(response.data?.first);
 
           userVin.value = firstCar['vin'];
           plateNumber.value = firstCar['plateNumber'];
@@ -1234,11 +1280,19 @@ class ListVehicleController extends GetxController {
           modelCode.value = firstCar['brandModel'].isNotEmpty
               ? firstCar['brandModel'][0]['modelCode']
               : '';
+          yearCode.value = firstCar['modelYear'].isNotEmpty
+              ? firstCar['modelYear'][0]['yearCode']
+              : '';
+          cityCode.value = firstCar['city'].isNotEmpty
+              ? firstCar['city'][0]['cityCode']
+              : '';
 
           await getBrandModel(brandCode1: brandCode.value);
           await getVehicleYear(
               brandCode: brandCode.value, brandModelCode: modelCode.value);
-          selectedYearValue!.value = firstCar['modelYear'][0]["yearName"];
+          selectedYearValue!.value = firstCar['modelYear'].isNotEmpty
+              ? firstCar['modelYear'][0]["yearName"]
+              : '';
 
           selectedBrandModel.value = firstCar['brandModel'][0]['modelName'];
 
@@ -1269,36 +1323,43 @@ class ListVehicleController extends GetxController {
           logger.log("features code:: ${featuresCode.value}");
 
           // documentation
-          insurance.value = firstCar["insurance"].isNotEmpty
-              ? firstCar["insurance"][0]["insuranceName"]
-              : '';
-          //4
-          final inspectionDocUrl = firstCar["document"].isNotEmpty
-              ? firstCar['document'][0]["documentURL"]
-              : null;
-          //2
-          final roadWorthinessDocUrl = firstCar["document"].isNotEmpty
-              ? firstCar['document'][1]["documentURL"]
-              : null;
+          // insurance.value = firstCar["insurance"].isNotEmpty
+          //     ? firstCar["insurance"][0]["insuranceName"]
+          //     : '';
+          // //4
+          // final inspectionDocUrl = firstCar["document"].isNotEmpty
+          //     ? firstCar['document'][0]["documentURL"]
+          //     : null;
+          // //2
+          // final roadWorthinessDocUrl = firstCar["document"].isNotEmpty
+          //     ? firstCar['document'][1]["documentURL"]
+          //     : null;
           // 1
-          final licenseDocUrl = firstCar["document"].isNotEmpty
-              ? firstCar['document'][2]["documentURL"]
-              : null;
+          // final licenseDocUrl = firstCar["document"].isNotEmpty
+          //     ? firstCar['document'][2]["documentURL"]
+          //     : null;
+          final licenseDocUrl = carListData.document?[0].documentUrl;
+          final inspectionDocUrl = carListData.document?[1].documentUrl;
+          final insuranceDocUrl = carListData.document?[2].documentUrl;
+          final roadWorthinessDocUrl = carListData.document?[3].documentUrl;
+          
+
           //3
-          final insuranceDocUrl = firstCar["document"].isNotEmpty
-              ? firstCar['document'][3]["documentURL"]
-              : null;
+          // final insuranceDocUrl = firstCar["document"].isNotEmpty
+          //     ? firstCar['document'][3]["documentURL"]
+          //     : null;
 
           selectedInspectionPhotos.value =
               extractDocumentName(inspectionDocUrl);
           selectedInspectionPhotoName.value = selectedInspectionPhotos.value;
 
+          selectedPhotos.value = extractDocumentName(licenseDocUrl);
+          selectedPhotoName.value = selectedPhotos.value;
+
           selectedRoadWorthinessPhoto.value =
               extractDocumentName(roadWorthinessDocUrl);
           selectedRoadWorthinessPhotoName.value =
               selectedRoadWorthinessPhoto.value;
-          selectedPhotos.value = extractDocumentName(licenseDocUrl);
-          selectedPhotoName.value = selectedPhotos.value;
 
           selectedInsurancePhotos.value = extractDocumentName(insuranceDocUrl);
           selectedInsurancePhotoName.value = selectedInsurancePhotos.value;
@@ -1326,11 +1387,15 @@ class ListVehicleController extends GetxController {
           numberOfSeats.value = firstCar["seat"].isNotEmpty
               ? firstCar["seat"][0]["seatName"]
               : '';
-          vehicleTypeCode.value =
-              firstCar["type"] ? firstCar["type"][0]["typeCode"] : '';
+          vehicleTypeCode.value = firstCar["type"].isNotEmpty
+              ? firstCar["type"][0]["typeCode"]
+              : '';
           vehicleSeatCode.value = firstCar["seat"].isNotEmpty
               ? firstCar["seat"][0]["seatCode"]
               : '';
+
+          apiFetchedPhotos.assignAll(carListData.photo ?? []);
+          logger.log("photos:: ${apiFetchedPhotos}");
 
           logger.log("car history $carHistory");
         } else {

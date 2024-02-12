@@ -93,7 +93,13 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
                   height: 24.sp,
                 ),
 
-                Expanded(child: buildBody(context, size)),
+                GetBuilder<ManageVehicleController>(
+                  init: ManageVehicleController(),
+                  initState: (_) {},
+                  builder: (_) {
+                    return Expanded(child: buildBody(context, size));
+                  },
+                ),
                 // textWidget(
                 //     text: controller.testString.value,
                 //     style: getRegularStyle()),
@@ -355,6 +361,7 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
           "photoUrl": car["photoUrl"],
           "carID": car["carID"]
         }),
+        // onLongPress: ,
         child: Stack(
           children: [
             Container(

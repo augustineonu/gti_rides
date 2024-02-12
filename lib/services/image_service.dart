@@ -36,5 +36,29 @@ Future<ImageResponse?> pickImage({required ImageSource source}) async {
   }
 }
 
+Future<List<ImageResponse>> pickMultipleImages() async {
+    try {
+      final ImagePicker imagePicker = ImagePicker();
+      List<XFile>? imageFileList = await imagePicker.pickMultiImage();
+
+      List<ImageResponse> responses = [];
+
+      if (imageFileList != null && imageFileList.isNotEmpty) {
+        for (XFile imageFile in imageFileList) {
+          Uint8List selectedImageBytes = await imageFile.readAsBytes();
+          String selectedImagePath = imageFile.path;
+
+          responses.add(ImageResponse(
+            imagePath: selectedImagePath,
+          ));
+        }
+      }
+
+      return responses;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
 
 }
