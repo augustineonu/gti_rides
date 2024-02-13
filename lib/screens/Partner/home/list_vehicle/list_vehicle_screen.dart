@@ -158,7 +158,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                                 height: size.height / 0.85.sp,
                                 child: PageView(
                                   // itemCount: controller.pages.length,
-                                  physics: NeverScrollableScrollPhysics(),
+                                  physics: ScrollPhysics(),
                                   controller: controller.pageController,
                                   onPageChanged: (value) {
                                     controller.currentIndex.value = value;
@@ -1184,6 +1184,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                 DropdownSearch<dynamic>.multiSelection(
                   clearButtonProps: ClearButtonProps(
                     color: primaryColor,
+                    
                   ),
                   items: (controller.carFeatures?.value ?? [])
                       .map((feature) => feature['featuresName'] as String)
@@ -1198,8 +1199,12 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     ),
                   ),
                   popupProps: PopupPropsMultiSelection.menu(
+                    // selectionWidget: (context, item, isSelected) {
+                      
+                    // },
                       constraints:
                           BoxConstraints(minHeight: 200.sp, maxHeight: 300.sp),
+                          favoriteItemProps: FavoriteItemProps(),
                       menuProps: MenuProps(
                         backgroundColor: backgroundColor,
                       )
@@ -1237,7 +1242,47 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                       return null; // No error
                     }
                   },
-                  dropdownDecoratorProps: DropDownDecoratorProps(),
+                  dropdownDecoratorProps: DropDownDecoratorProps(
+                    dropdownSearchDecoration: InputDecoration(
+                      iconColor: red, suffixIconColor: red,
+                    contentPadding: EdgeInsets.symmetric(horizontal: 5.sp, vertical: 7.sp),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: borderColor,
+                        width: 1.0.w,
+                      ),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(4.0.r),
+                      ),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: red,
+                        width: 1.0.w,
+                      ),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(4.0.r),
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: borderColor,
+                        width: 1.0.w,
+                      ),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(4.0.r),
+                      ),
+                    ),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: secondaryColor,
+                        width: 1.0.w,
+                      ),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(4.0.r),
+                      ),
+                    
+                  ),
                   // decoration: InputDecoration(
                   //   contentPadding: EdgeInsets.symmetric(horizontal: 14.sp, vertical: 13.sp),
                   //   enabledBorder: OutlineInputBorder(
@@ -1286,7 +1331,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                   //   Iconsax.arrow_down_1,
                   //   color: grey3,
                   // ),
-                ),
+                ),),),
               ],
             ),
 

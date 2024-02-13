@@ -432,7 +432,7 @@ class PartnerService extends GetxController {
       {required Map payload, required String carID}) async {
     try {
       final result = await apiService.putRequest(
-        endpoint: '/usr/partner/car/addAvailability?carID=$carID',
+        endpoint: '/user/partner/car/addAvailability?carID=$carID',
         data: payload,
       );
       logger.log("toggle car availability response: ${result}");

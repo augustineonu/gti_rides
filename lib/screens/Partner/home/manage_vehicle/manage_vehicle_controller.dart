@@ -91,7 +91,7 @@ class ManageVehicleController extends GetxController
  Future<void> onToggleCarAvailability(bool value, {required String carId}) async {
   try {
     // Determine the payload based on the desired availability state
-    final String availabilityPayload = value ? "available" : "unavailable";
+    final String availabilityPayload = value ? "available" : "notAvailable";
 
     final response = await partnerService.toggleCarAvailability(
       payload: {"availability": availabilityPayload},
@@ -100,6 +100,7 @@ class ManageVehicleController extends GetxController
 
     if (response.status == 'success' || response.status_code == 200) {
       // isAvailable.value = value;
+      getAllCars();
       
       update();
 
