@@ -205,16 +205,18 @@ class CarSelectionResultController extends GetxController
 
   bool isRequestInProgress = false;
 
-  void onAddPhotoToFav({required String carId}) async {
+  Future<void> onAddCarToFav({required String carId, bool? carStatus}) async {
     if (!isRequestInProgress) {
       isRequestInProgress = true;
 
-      isLiked.value = !isLiked.value;
+      isLiked.value = carStatus!;
 
       if (isLiked.value) {
-        await favoriteCar(carId: carId);
-      } else {
         await deleteFavoriteCar(carId: carId);
+        update();
+      } else {
+        await favoriteCar(carId: carId);
+        update();
       }
 
       // Introduce a delay before allowing another request
@@ -410,12 +412,12 @@ class CarSelectionResultController extends GetxController
     // if infor passes? take user to summary page, otherwise
     // take user to KycCheckScreen
 
-    // if (tripType.value == 0 && !chauffeurFormKey.currentState!.validate()) {
-    //   return;
-    // }
-    // if (tripType.value == 1 && !selfDriveFormKey.currentState!.validate()) {
-    //   return;
-    // }
+    if (tripType.value == 0 && !chauffeurFormKey.currentState!.validate()) {
+      return;
+    }
+    if (tripType.value == 1 && !selfDriveFormKey.currentState!.validate()) {
+      return;
+    }
     if (startDateTime.value.isEmpty && endDateTime.value.isEmpty) {
       showErrorSnackbar(message: 'Kindly select trip dates');
       return;

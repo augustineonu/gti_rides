@@ -427,6 +427,22 @@ class PartnerService extends GetxController {
       rethrow;
     }
   }
+
+   Future<ApiResponseModel> toggleCarAvailability(
+      {required Map payload, required String carID}) async {
+    try {
+      final result = await apiService.putRequest(
+        endpoint: '/usr/partner/car/addAvailability?carID=$carID',
+        data: payload,
+      );
+      logger.log("toggle car availability response: ${result}");
+
+      return ApiResponseModel.fromJson(result);
+    } catch (err) {
+      logger.log("toggle car ava Error: $err");
+      rethrow;
+    }
+  }
    Future<ApiResponseModel> deleteCarPhoto(
       { required String carID}) async {
     try {

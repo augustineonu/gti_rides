@@ -55,6 +55,7 @@ class CarHistoryData {
     final List<Document>? document;
     final List<Photo>? photo;
     final List<Feature>? feature;
+    final bool? favorite;
     final dynamic tripsCount;
     final dynamic percentage;
     final dynamic feedbackCount;
@@ -87,6 +88,7 @@ class CarHistoryData {
         this.document,
         this.photo,
         this.feature,
+        this.favorite,
         this.tripsCount,
         this.percentage,
         this.feedbackCount,
@@ -124,6 +126,7 @@ class CarHistoryData {
         document: json["document"] == null ? [] : List<Document>.from(json["document"]!.map((x) => Document.fromJson(x))),
         photo: json["photo"] == null ? [] : List<Photo>.from(json["photo"]!.map((x) => Photo.fromJson(x))),
         feature: json["feature"] == null ? [] : List<Feature>.from(json["feature"]!.map((x) => Feature.fromJson(x))),
+        favorite: json["favorite"],
         tripsCount: json["tripsCount"],
         percentage: json["percentage"],
         feedbackCount: json["feedbackCount"],
@@ -157,6 +160,7 @@ class CarHistoryData {
         "document": document == null ? [] : List<dynamic>.from(document!.map((x) => x.toJson())),
         "photo": photo == null ? [] : List<dynamic>.from(photo!.map((x) => x.toJson())),
         "feature": feature == null ? [] : List<dynamic>.from(feature!.map((x) => x.toJson())),
+        "favorite": favorite,
         "tripsCount": tripsCount,
         "percentage": percentage,
         "feedbackCount": feedbackCount,

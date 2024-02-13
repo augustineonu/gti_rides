@@ -32,7 +32,7 @@ class PartnerHomeController extends GetxController
 
   TextEditingController emailOrPhoneController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-      final landingController = PartnerLandingController();
+      // final landingController = PartnerLandingController();
 
   final cars = <dynamic>[].obs;
 

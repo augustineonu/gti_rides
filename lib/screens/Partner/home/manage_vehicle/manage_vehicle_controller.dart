@@ -88,7 +88,30 @@ class ManageVehicleController extends GetxController
     }
   }
 
-  void onToggleCarAvailability(bool value) => isAvailable.value = value;
+ Future<void> onToggleCarAvailability(bool value, {required String carId}) async {
+  try {
+    // Determine the payload based on the desired availability state
+    final String availabilityPayload = value ? "available" : "unavailable";
+
+    final response = await partnerService.toggleCarAvailability(
+      payload: {"availability": availabilityPayload},
+      carID: carId,
+    );
+
+    if (response.status == 'success' || response.status_code == 200) {
+      // isAvailable.value = value;
+      
+      update();
+
+    } else {
+      logger.log("error: ${response.message ?? " error message"}");
+    }
+  } catch (e) {
+    logger.log("error: changing car availability");
+  }
+}
+
+
   void routeToListVehicle({Object? arguments}) {
     if (Get.isBottomSheetOpen == true) {
       Get.back();
@@ -156,11 +179,10 @@ class ManageVehicleController extends GetxController
         // Future.delayed(const Duration(milliseconds: 1000), () {
         // routeService.goBack(closeOverlays: true);
         // });
-           Get.offNamedUntil(
-            AppLinks.manageVehicle,
-            ModalRoute.withName(AppLinks.carOwnerLanding),
-          );
-
+        Get.offNamedUntil(
+          AppLinks.manageVehicle,
+          ModalRoute.withName(AppLinks.carOwnerLanding),
+        );
       } else {
         logger.log("error deleting car:: ${result.message}");
         showErrorSnackbar(message: result.message ?? 'unable to delete car');

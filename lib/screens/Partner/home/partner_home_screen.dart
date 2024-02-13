@@ -40,6 +40,8 @@ class PartnerHomeScreen extends StatefulWidget {
 
 class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
   final controller = Get.put<PartnerHomeController>(PartnerHomeController());
+    final landingController = Get.put(PartnerLandingController());
+
   late Timer timer;
   RxInt currentIndex = 0.obs;
 
@@ -99,7 +101,7 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
               SafeArea(
                 child: Column(
                   children: [
-                    appBar(size, controller),
+                    appBar(size, controller, landingController: landingController),
                     // body(controller, size),
                     Expanded(
                       child: SingleChildScrollView(
@@ -652,8 +654,9 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
   }
 }
 
-Widget appBar(Size size, PartnerHomeController controller) {
-  final landingController = Get.put(PartnerLandingController());
+Widget appBar(Size size, PartnerHomeController controller,{
+  PartnerLandingController? landingController
+}) {
 
   return Padding(
     padding: const EdgeInsets.only(left: 16, top: 10, bottom: 10),
@@ -662,7 +665,7 @@ Widget appBar(Size size, PartnerHomeController controller) {
       children: [
         GestureDetector(
           onTap: () {
-            landingController.tabIndex.value = 3;
+            landingController!.tabIndex.value = 3;
           },
           child: profileAvatar(
             height: 40,

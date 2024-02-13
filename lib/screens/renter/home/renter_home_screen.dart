@@ -37,6 +37,7 @@ class CarRenterHomeScreen extends StatefulWidget {
 class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
   final controller =
       Get.put<CarRenterHomeController>(CarRenterHomeController());
+      
   late Timer timer;
   RxInt currentIndex = 0.obs;
   RxList visibleCars = [].obs;

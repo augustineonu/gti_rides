@@ -173,11 +173,11 @@ class ApiService {
 
   Future<dynamic> putRequest({
     required String endpoint,
-    required Map data,
+    required Map? data,
   }) async {
     try {
       late Response response;
-      logger.log("PATCH REQUEST DATA:: $data");
+      logger.log("PATCH REQUEST DATA:: $data $endpoint");
 
       // Function to make the actual request
       Future<void> makeRequest() async {

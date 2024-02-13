@@ -62,49 +62,54 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
             titleColor: iconColor(),
           ),
           // body: body(size, context)),
-          body: Padding(
-            padding: EdgeInsets.only(left: 20.0.sp, right: 20.sp, top: 8.sp),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  padding: EdgeInsets.all(6.sp),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: primaryColor),
-                      borderRadius: BorderRadius.all(Radius.circular(4.r))),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      tabIndicator(
-                          width: 150.sp,
-                          title: AppStrings.allCarsSm,
-                          selected: controller.selectedIndex.value == 0,
-                          onTap: () => controller.selectedIndex.value = 0),
-                      tabIndicator(
-                          width: 150.sp,
-                          title: AppStrings.booked,
-                          selected: controller.selectedIndex.value == 1,
-                          onTap: () => controller.selectedIndex.value = 1),
-                    ],
-                  ),
+          body: GetBuilder<ManageVehicleController>(
+            init: ManageVehicleController(),
+            initState: (_) {},
+            builder: (_) {
+              return Padding(
+                padding:
+                    EdgeInsets.only(left: 20.0.sp, right: 20.sp, top: 8.sp),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.symmetric(vertical: 10),
+                      padding: EdgeInsets.all(6.sp),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: primaryColor),
+                          borderRadius: BorderRadius.all(Radius.circular(4.r))),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          tabIndicator(
+                            width: 150.sp,
+                            title: AppStrings.allCarsSm,
+                            selected: controller.selectedIndex.value == 0,
+                            onTap: () {
+                              controller.selectedIndex.value = 0;
+                              setState(() {});
+                            },
+                          ),
+                          tabIndicator(
+                            width: 150.sp,
+                            title: AppStrings.booked,
+                            selected: controller.selectedIndex.value == 1,
+                            onTap: () {
+                              controller.selectedIndex.value = 1;
+                              setState(() {});
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 24.sp,
+                    ),
+                    Expanded(child: buildBody(context, size)),
+                  ],
                 ),
-                SizedBox(
-                  height: 24.sp,
-                ),
-
-                GetBuilder<ManageVehicleController>(
-                  init: ManageVehicleController(),
-                  initState: (_) {},
-                  builder: (_) {
-                    return Expanded(child: buildBody(context, size));
-                  },
-                ),
-                // textWidget(
-                //     text: controller.testString.value,
-                //     style: getRegularStyle()),
-              ],
-            ),
+              );
+            },
           ),
           // }
         ));
@@ -125,22 +130,28 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
       BuildContext context, Size size, ManageVehicleController controller) {
     return controller.obx(
       (state) {
-        return ListView.builder(
-          shrinkWrap: true,
-          physics: const ScrollPhysics(),
-          itemCount: state!.length,
-          itemBuilder: (context, index) {
-            var car = state[index];
-            return car['status'] == 'pending' || car['status'] == "booked"
-                ? bookedOrPendingCars(
-                    context,
-                    size,
-                    car,
-                    imgUrl: car['photoUrl'] != ''
-                        ? car['photoUrl']
-                        : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnKpMPFWYvaoInINJ44Qh4weo_z8nDwDUf8Q&usqp=CAU',
-                  )
-                : allCarsWidget(context, size, controller, car);
+        return GetBuilder<ManageVehicleController>(
+          init: ManageVehicleController(),
+          initState: (_) {},
+          builder: (_) {
+            return ListView.builder(
+              shrinkWrap: true,
+              physics: const ScrollPhysics(),
+              itemCount: state!.length,
+              itemBuilder: (context, index) {
+                var car = state[index];
+                return car['status'] == 'pending' || car['status'] == "booked"
+                    ? bookedOrPendingCars(
+                        context,
+                        size,
+                        car,
+                        imgUrl: car['photoUrl'] != ''
+                            ? car['photoUrl']
+                            : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnKpMPFWYvaoInINJ44Qh4weo_z8nDwDUf8Q&usqp=CAU',
+                      )
+                    : allCarsWidget(context, size, controller, car);
+              },
+            );
           },
         );
       },
@@ -169,14 +180,14 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
 
   Widget allCarsWidget(BuildContext context, Size size,
       ManageVehicleController controller, car) {
-    return InkWell(
-      onTap: () => controller.routeToCarHistory(arguments: {
-        "brandModelName": car["brandModelName"],
-        "photoUrl": car["photoUrl"],
-        "carID": car["carID"]
-      }),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: InkWell(
+        onTap: () => controller.routeToCarHistory(arguments: {
+          "brandModelName": car["brandModelName"],
+          "photoUrl": car["photoUrl"],
+          "carID": car["carID"]
+        }),
         child: Stack(
           children: [
             Container(
@@ -226,7 +237,8 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
                                       ),
                                       children: <TextSpan>[
                                         TextSpan(
-                                          text: ' (${car['tripsCount']} trips)',
+                                          text:
+                                              ' (${car['tripsCount']} trips) ',
                                           style: getLightStyle(
                                               fontSize: 12.sp, color: grey2),
                                         )
@@ -318,12 +330,16 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
                             SizedBox(
                               width: 8.sp,
                             ),
+                            //
                             switchWidget(
                               context,
-                              value: controller.isAvailable.value,
+                              value: car["availability"] == 'available'
+                                  ? true
+                                  : false,
                               activeTrackColor: borderColor,
                               onChanged: (value) =>
-                                  controller.onToggleCarAvailability(value),
+                                  controller.onToggleCarAvailability(value,
+                                      carId: car["carID"]),
                             ),
                           ],
                         ),
@@ -338,7 +354,82 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
               top: 12.sp,
               child: InkWell(
                   onTap: () {
-                    quickOptionsSheet(size);
+                    Get.bottomSheet(
+                      SizedBox(
+                        height: size.height * 0.2.sp,
+                        width: size.width.sp,
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.all(20),
+                          itemCount: controller.quickOptions.length,
+                          itemBuilder: (context, index) {
+                            final option = controller.quickOptions[index];
+                            return InkWell(
+                              onTap: () {
+                                switch (index) {
+                                  case 0:
+                                    deleteVehicleSheet(size,
+                                        title: AppStrings.areYouSureToDelete
+                                            .trArgs([car['brandModelName']]),
+                                        subTitle: AppStrings
+                                            .everyDataWouldBeDeleted
+                                            .trArgs([car['brandModelName']]),
+                                        onTapCancel: controller.goBack,
+                                        onTapContinue: () => controller
+                                            .deleteCar(carID: car['carID']));
+                                  case 1:
+                                    controller.routeToQuickEdit(arguments: {
+                                      "brandModelName": car["brandModelName"],
+                                      "photoUrl": car["photoUrl"],
+                                      "carID": car["carID"],
+                                      "start": car["startDate"],
+                                      "end": car["endDate"],
+                                      "enablePastDates": false,
+                                      "pricePerDay": car["pricePerDay"],
+                                      "isFromManageCars": true
+                                    });
+                                  case 2:
+                                    controller.routeToListVehicle(arguments: {
+                                      "carID": car["carID"],
+                                      "isFromManageCars": true,
+                                    });
+                                  case 3:
+                                    controller.routeToCarHistory(arguments: {
+                                      "brandModelName": car["brandModelName"],
+                                      "photoUrl": car["photoUrl"],
+                                      "carID": car["carID"]
+                                    });
+                                    break;
+                                  default:
+                                }
+                              },
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset(option['imageUrl']!),
+                                  const SizedBox(
+                                    width: 6,
+                                  ),
+                                  textWidget(
+                                      text: option['title'],
+                                      style:
+                                          getRegularStyle(color: primaryColor)),
+                                ],
+                              ),
+                            );
+                          },
+                          separatorBuilder: (context, index) => const SizedBox(
+                            height: 18,
+                          ),
+                        ),
+                      ),
+                      backgroundColor: backgroundColor,
+                      isScrollControlled: true,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(4.r),
+                            topRight: Radius.circular(4.r)),
+                      ),
+                    );
                   },
                   child: SizedBox(
                       height: 20,
@@ -687,30 +778,56 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
     );
   }
 
-  Widget bookedCars(context, Size size) {
-    return controller.bookedCars!.isEmpty
-        ? Padding(
-            padding: const EdgeInsets.all(8.0),
+  Widget bookedCars(
+    BuildContext context,
+    Size size,
+  ) {
+    return controller.obx(
+      (state) => state!.where((car) => car['status'] == 'booked').isEmpty
+          ? Center(
+              child: textWidget(
+                  text: AppStrings.noBookedCarsYet, style: getMediumStyle()))
+          : ListView.builder(
+              shrinkWrap: true,
+              itemCount:
+                  state!.where((car) => car['status'] == 'booked').length,
+              physics: const ScrollPhysics(),
+              itemBuilder: (context, index) {
+                var bookedCars =
+                    state.where((car) => car['status'] == 'pending').toList();
+                var car = bookedCars[index];
+
+                // return carWidget(context, size);
+                return bookedOrPendingCars(
+                  context,
+                  size,
+                  car,
+                  imgUrl: car['photoUrl'] != ''
+                      ? car['photoUrl']
+                      : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnKpMPFWYvaoInINJ44Qh4weo_z8nDwDUf8Q&usqp=CAU',
+                );
+              }),
+      onEmpty: Padding(
+        padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
+        child: Center(
             child: textWidget(
-                text: 'You have not booked any Cars yet :)',
-                style: getBoldStyle()),
-          )
-        : ListView.builder(
-            shrinkWrap: true,
-            itemCount: controller.bookedCars!.length,
-            physics: const ScrollPhysics(),
-            itemBuilder: (context, index) {
-              var car = controller.bookedCars?[index];
-              // return carWidget(context, size);
-              return bookedOrPendingCars(
-                context,
-                size,
-                car,
-                imgUrl: car['photoUrl'] != ''
-                    ? car['photoUrl']
-                    : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnKpMPFWYvaoInINJ44Qh4weo_z8nDwDUf8Q&usqp=CAU',
-              );
-            });
+                text: AppStrings.noListedCarsYet, style: getMediumStyle())),
+      ),
+      onError: (e) => Padding(
+        padding: EdgeInsets.symmetric(
+            vertical: context.height * 0.1, horizontal: 20),
+        child: Center(
+          child: Text(
+            "$e",
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ),
+      onLoading: Padding(
+        padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
+        child: Center(child: centerLoadingIcon()),
+      ),
+    );
   }
 
   Widget carWidget(BuildContext context, Size size) {
@@ -847,13 +964,13 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
                           SizedBox(
                             width: 8.sp,
                           ),
-                          switchWidget(
-                            context,
-                            value: controller.isAvailable.value,
-                            activeTrackColor: borderColor,
-                            onChanged: (value) =>
-                                controller.onToggleCarAvailability(value),
-                          ),
+                          switchWidget(context,
+                              value: controller.isAvailable.value,
+                              activeTrackColor: borderColor,
+                              onChanged: (value) {}
+                              // onChanged: (value) =>
+                              // controller.onToggleCarAvailability(value),
+                              ),
                         ],
                       ),
                     ],

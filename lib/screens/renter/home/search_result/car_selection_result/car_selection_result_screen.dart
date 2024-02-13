@@ -176,8 +176,8 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                                     width: 6,
                                   ),
                                   InkWell(
-                                    onTap: () => controller.onAddPhotoToFav(
-                                        carId: car?.carId),
+                                    onTap: () => controller.onAddCarToFav(
+                                        carId: car?.carId, carStatus: car?.favorite),
                                     child: Container(
                                       padding: EdgeInsets.all(10.sp),
                                       decoration: BoxDecoration(
@@ -186,7 +186,7 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                                           shape: BoxShape.circle),
                                       // child: SvgPicture.asset(ImageAssets.share),
                                       child: Icon(
-                                        controller.isLiked.value
+                                        car?.favorite == true
                                             ? Remix.heart_3_fill
                                             : Remix.heart_3_line,
                                         color: primaryColor,
@@ -856,6 +856,8 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                     style: getMediumStyle(fontSize: 10.sp, color: grey2),
                   ),
                   Row(
+                    // mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
                         child: NormalInputTextWidget(
