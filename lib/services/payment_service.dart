@@ -103,7 +103,7 @@ class PaymentService extends GetxController {
       {required Map<dynamic, dynamic>? data}) async {
     try {
       final result = await apiService.postRequest(
-          endpoint: '/user/renter/trips/addTrip', data: data);
+          endpoint: '/user/renter/trip/addTrip', data: data);
 
       return ApiResponseModel.fromJson(result);
     } catch (err) {
