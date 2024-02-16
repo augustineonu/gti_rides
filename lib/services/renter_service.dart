@@ -163,7 +163,7 @@ class RenterService {
   Future<ListResponseModel> getTripAmountData() async {
     try {
       final result = await apiService.getRequest(
-        '/user/renter/trips/getTripsData',
+        '/user/renter/trip/getTripsData',
       );
       // logger.log("result $result");
 

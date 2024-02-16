@@ -58,7 +58,7 @@ dependencies:
   flutter_dash: ^1.0.0
   get_storage: ^2.1.1
   geolocator: ^10.0.0
-  multiselect: ^0.1.0
+  # multiselect: ^0.1.0
   http_parser: ^4.0.2
   share_plus: ^7.2.1
   local_auth: ^2.1.7
@@ -81,6 +81,10 @@ dependencies:
   dropdown_search: ^5.0.6
   jwt_decoder: ^2.0.1
   webview_flutter: ^4.5.0
+
+  multiselect:
+   git:
+     url: https://github.com/augustineonu/multiselect_dropdown.git
   
 
 dev_dependencies:

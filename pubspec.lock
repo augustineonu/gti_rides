@@ -912,10 +912,11 @@ packages:
   multiselect:
     dependency: "direct main"
     description:
-      name: multiselect
-      sha256: "8d0c4a7b89bee6c5e5e4a25ecba68c796dafc1917492d5606f0caa3947d5905a"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: "22260ab5b9a8e202c63172cc290cccf96badd5fe"
+      url: "https://github.com/augustineonu/multiselect_dropdown.git"
+    source: git
     version: "0.1.0"
   navigation_builder:
     dependency: transitive

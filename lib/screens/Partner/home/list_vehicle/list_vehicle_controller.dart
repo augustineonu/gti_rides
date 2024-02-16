@@ -877,6 +877,10 @@ class ListVehicleController extends GetxController {
     if (!vehicleInfoFormKey.currentState!.validate()) {
       return;
     }
+    if(selectedFeatures!.isEmpty){
+      showErrorSnackbar(message: "Car Features is empty");
+      return;
+    }
     try {
       isLoading.value = true;
       final response = await partnerService.addCarInfo(data: {

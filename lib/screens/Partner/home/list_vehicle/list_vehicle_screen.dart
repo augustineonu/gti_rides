@@ -711,7 +711,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
           textWidget(
               text: AppStrings.guideForTakingGreatPhotos,
               textOverflow: TextOverflow.visible,
-              style: getRegularStyle(fontSize: 12.sp)),
+              style: getMediumStyle(fontSize: 14.sp)),
           SizedBox(
             height: 14.sp,
           ),
@@ -1070,107 +1070,6 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
             SizedBox(
               height: 24.sp,
             ),
-            // Column(
-            //   crossAxisAlignment: CrossAxisAlignment.start,
-            //   children: [
-            //     textWidget(
-            //       text: AppStrings.vehicleFeatures,
-            //       style: getRegularStyle(fontSize: 12.sp),
-            //     ),
-            //     SizedBox(
-            //       height: 5.sp,
-            //     ),
-            //     ButtonTheme(
-            //       alignedDropdown: true,
-            //       child: DropDownMultiSelect(
-            //         validator: (selectedItems) {
-            //           if (selectedItems == null || selectedItems.isEmpty) {
-            //             return "Required field";
-            //           } else if (selectedItems.contains("Brazil")) {
-            //             return "Invalid item";
-            //           } else {
-            //             return ''; // No error
-            //           }
-            //         },
-            //         decoration: InputDecoration(
-            //             contentPadding: EdgeInsets.symmetric(
-            //                 horizontal: 14.sp, vertical: 13.sp),
-            //             enabledBorder: OutlineInputBorder(
-            //               borderSide: BorderSide(
-            //                 color: borderColor,
-            //                 width: 1.0.w,
-            //               ),
-            //               borderRadius: BorderRadius.all(
-            //                 Radius.circular(4.0.r),
-            //               ),
-            //             ),
-            //             errorBorder: OutlineInputBorder(
-            //               borderSide: BorderSide(
-            //                 color: red,
-            //                 width: 1.0.w,
-            //               ),
-            //               borderRadius: BorderRadius.all(
-            //                 Radius.circular(4.0.r),
-            //               ),
-            //             ),
-            //             focusedBorder: OutlineInputBorder(
-            //               borderSide: BorderSide(
-            //                 color: borderColor,
-            //                 width: 1.0.w,
-            //               ),
-            //               borderRadius: BorderRadius.all(
-            //                 Radius.circular(4.0.r),
-            //               ),
-            //             ),
-            //             border: OutlineInputBorder(
-            //               borderSide: BorderSide(
-            //                 color: secondaryColor,
-            //                 width: 1.0.w,
-            //               ),
-            //               borderRadius: BorderRadius.all(
-            //                 Radius.circular(4.0.r),
-            //               ),
-            //             ),
-
-            //             // filled: true,
-            //             fillColor: Colors.transparent),
-            //         onChanged: (List<dynamic> selectedFeatures) {
-            //           controller.selectedFeatures!.value = selectedFeatures;
-            //           print("selected $selectedFeatures");
-
-            //           // Find the feature objects with the selected names
-            //           var selectedObjects =
-            //               (controller.carFeatures?.value ?? [])
-            //                   .where(
-            //                     (feature) => selectedFeatures
-            //                         .contains(feature['featuresName']),
-            //                   )
-            //                   .toList();
-            //           // Extract featuresCode from selected objects
-            //           List<String> featuresCodes = selectedObjects
-            //               .map((feature) => feature['featuresCode'] as String)
-            //               .toList();
-
-            //           // Assign the lists to corresponding controller variables
-            //           controller.featuresCode.value = featuresCodes;
-            //           print("selectedFeatures: $selectedFeatures");
-            //           print("featuresCodes: $featuresCodes");
-            //         },
-            //         options: (controller.carFeatures?.value ?? [])
-            //             .map((feature) => feature['featuresName'] as String)
-            //             .toList(),
-            //         selectedValues: controller.selectedFeatures!.value,
-            //         whenEmpty: 'Select',
-            //         isDense: true,
-            //         enabled: true,
-            //         icon: const Icon(
-            //           Iconsax.arrow_down_1,
-            //           color: grey3,
-            //         ),
-            //       ),
-            //     ),
-            //   ],
-            // ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -1181,160 +1080,264 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                 SizedBox(
                   height: 5.sp,
                 ),
-                DropdownSearch<dynamic>.multiSelection(
-                  clearButtonProps: ClearButtonProps(
-                    color: primaryColor,
-                    
-                  ),
-                  items: (controller.carFeatures?.value ?? [])
-                      .map((feature) => feature['featuresName'] as String)
-                      .toList(),
-                  dropdownButtonProps: DropdownButtonProps(
-                    splashColor: primaryColor,
-                    focusColor: primaryColor,
-                    color: primaryColor,
-                    icon: Icon(
+                ButtonTheme(
+                  alignedDropdown: true,
+                  child: DropDownMultiSelect<dynamic>(
+                    // validator: (selectedItems) {
+                    //   if (selectedItems == null || selectedItems.isEmpty) {
+                    //     return "Required field";
+                    //   } else if (selectedItems is String &&
+                    //       selectedItems.isNotEmpty) {
+                    //     return null;
+                    //   } else {
+                    //     return null; // No error
+                    //   }
+                    // },
+                    decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(
+                            horizontal: 14.sp, vertical: 13.sp),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: borderColor,
+                            width: 1.0.w,
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(4.0.r),
+                          ),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: red,
+                            width: 1.0.w,
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(4.0.r),
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: borderColor,
+                            width: 1.0.w,
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(4.0.r),
+                          ),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: secondaryColor,
+                            width: 1.0.w,
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(4.0.r),
+                          ),
+                        ),
+
+                        // filled: true,
+                        fillColor: Colors.transparent),
+                    onChanged: (List<dynamic> selectedFeatures) {
+                      controller.selectedFeatures!.value = selectedFeatures;
+                      print("selected $selectedFeatures");
+
+                      // Find the feature objects with the selected names
+                      var selectedObjects =
+                          (controller.carFeatures?.value ?? [])
+                              .where(
+                                (feature) => selectedFeatures
+                                    .contains(feature['featuresName']),
+                              )
+                              .toList();
+                      // Extract featuresCode from selected objects
+                      List<String> featuresCodes = selectedObjects
+                          .map((feature) => feature['featuresCode'] as String)
+                          .toList();
+
+                      // Assign the lists to corresponding controller variables
+                      controller.featuresCode.value = featuresCodes;
+                      print("selectedFeatures: $selectedFeatures");
+                      print("featuresCodes: $featuresCodes");
+                    },
+                    options: (controller.carFeatures?.value ?? [])
+                        .map((feature) => feature['featuresName'] as String)
+                        .toList(),
+                    selectedValues: controller.selectedFeatures!.value,
+                    whenEmpty: 'Select',
+                    isDense: true,
+                    enabled: true,
+                    icon: const Icon(
                       Iconsax.arrow_down_1,
                       color: grey3,
                     ),
                   ),
-                  popupProps: PopupPropsMultiSelection.menu(
-                    // selectionWidget: (context, item, isSelected) {
-                      
-                    // },
-                      constraints:
-                          BoxConstraints(minHeight: 200.sp, maxHeight: 300.sp),
-                          favoriteItemProps: FavoriteItemProps(),
-                      menuProps: MenuProps(
-                        backgroundColor: backgroundColor,
-                      )
-                      // showSelectedItems: true,
-
-                      ),
-                  onChanged: (List<dynamic> selectedFeatures) {
-                    controller.selectedFeatures!.value = selectedFeatures;
-                    print("selected $selectedFeatures");
-
-                    // Find the feature objects with the selected names
-                    var selectedObjects = (controller.carFeatures?.value ?? [])
-                        .where(
-                          (feature) => selectedFeatures
-                              .contains(feature['featuresName']),
-                        )
-                        .toList();
-                    // Extract featuresCode from selected objects
-                    List<String> featuresCodes = selectedObjects
-                        .map((feature) => feature['featuresCode'] as String)
-                        .toList();
-
-                    // Assign the lists to corresponding controller variables
-                    controller.featuresCode.value = featuresCodes;
-                    print("selectedFeatures: $selectedFeatures");
-                    print("featuresCodes: $featuresCodes");
-                  },
-                  selectedItems: controller.selectedFeatures!.value,
-                  validator: (selectedItems) {
-                    if (selectedItems == null || selectedItems.isEmpty) {
-                      return "Required field";
-                    } else if (selectedItems.contains("Brazil")) {
-                      return "Invalid item";
-                    } else {
-                      return null; // No error
-                    }
-                  },
-                  dropdownDecoratorProps: DropDownDecoratorProps(
-                    dropdownSearchDecoration: InputDecoration(
-                      iconColor: red, suffixIconColor: red,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 5.sp, vertical: 7.sp),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: borderColor,
-                        width: 1.0.w,
-                      ),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(4.0.r),
-                      ),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: red,
-                        width: 1.0.w,
-                      ),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(4.0.r),
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: borderColor,
-                        width: 1.0.w,
-                      ),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(4.0.r),
-                      ),
-                    ),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: secondaryColor,
-                        width: 1.0.w,
-                      ),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(4.0.r),
-                      ),
-                    
-                  ),
-                  // decoration: InputDecoration(
-                  //   contentPadding: EdgeInsets.symmetric(horizontal: 14.sp, vertical: 13.sp),
-                  //   enabledBorder: OutlineInputBorder(
-                  //     borderSide: BorderSide(
-                  //       color: borderColor,
-                  //       width: 1.0.w,
-                  //     ),
-                  //     borderRadius: BorderRadius.all(
-                  //       Radius.circular(4.0.r),
-                  //     ),
-                  //   ),
-                  //   errorBorder: OutlineInputBorder(
-                  //     borderSide: BorderSide(
-                  //       color: red,
-                  //       width: 1.0.w,
-                  //     ),
-                  //     borderRadius: BorderRadius.all(
-                  //       Radius.circular(4.0.r),
-                  //     ),
-                  //   ),
-                  //   focusedBorder: OutlineInputBorder(
-                  //     borderSide: BorderSide(
-                  //       color: borderColor,
-                  //       width: 1.0.w,
-                  //     ),
-                  //     borderRadius: BorderRadius.all(
-                  //       Radius.circular(4.0.r),
-                  //     ),
-                  //   ),
-                  //   border: OutlineInputBorder(
-                  //     borderSide: BorderSide(
-                  //       color: secondaryColor,
-                  //       width: 1.0.w,
-                  //     ),
-                  //     borderRadius: BorderRadius.all(
-                  //       Radius.circular(4.0.r),
-                  //     ),
-                  //   ),
-                  //   // filled: true,
-                  //   fillColor: Colors.transparent,
-                  // ),
-                  // whenEmpty: 'Select',
-                  // isDense: true,
-                  enabled: true,
-                  // icon: const Icon(
-                  //   Iconsax.arrow_down_1,
-                  //   color: grey3,
-                  // ),
-                ),),),
+                ),
               ],
             ),
+            // Column(
+            //   crossAxisAlignment: CrossAxisAlignment.start,
+            //   children: [
+            //     textWidget(
+            //       text: AppStrings.vehicleFeatures,
+            //       style: getRegularStyle(fontSize: 12.sp),
+            //     ),
+            //     SizedBox(
+            //       height: 5.sp,
+            //     ),
+            //     DropdownSearch<dynamic>.multiSelection(
+            //       clearButtonProps: ClearButtonProps(
+            //         color: primaryColor,
+            //       ),
+            //       items: (controller.carFeatures?.value ?? [])
+            //           .map((feature) => feature['featuresName'] as String)
+            //           .toList(),
+            //       dropdownButtonProps: DropdownButtonProps(
+            //         splashColor: primaryColor,
+            //         focusColor: primaryColor,
+            //         color: primaryColor,
+            //         icon: Icon(
+            //           Iconsax.arrow_down_1,
+            //           color: grey3,
+            //         ),
+            //       ),
+            //       popupProps: PopupPropsMultiSelection.menu(
+                    
+            //           // selectionWidget: (context, item, isSelected) {
 
+            //           // },
+            //           constraints:
+            //               BoxConstraints(minHeight: 200.sp, maxHeight: 300.sp),
+            //           favoriteItemProps: FavoriteItemProps(),
+            //           menuProps: MenuProps(
+            //             backgroundColor: backgroundColor,
+            //           )
+            //           // showSelectedItems: true,
+
+            //           ),
+                  
+            //       onChanged: (List<dynamic> selectedFeatures) {
+            //         controller.selectedFeatures!.value = selectedFeatures;
+            //         print("selected $selectedFeatures");
+
+            //         // Find the feature objects with the selected names
+            //         var selectedObjects = (controller.carFeatures?.value ?? [])
+            //             .where(
+            //               (feature) => selectedFeatures
+            //                   .contains(feature['featuresName']),
+            //             )
+            //             .toList();
+            //         // Extract featuresCode from selected objects
+            //         List<String> featuresCodes = selectedObjects
+            //             .map((feature) => feature['featuresCode'] as String)
+            //             .toList();
+
+            //         // Assign the lists to corresponding controller variables
+            //         controller.featuresCode.value = featuresCodes;
+            //         print("selectedFeatures: $selectedFeatures");
+            //         print("featuresCodes: $featuresCodes");
+            //       },
+            //       selectedItems: controller.selectedFeatures!.value,
+            //       validator: (selectedItems) {
+            //         if (selectedItems == null || selectedItems.isEmpty) {
+            //           return "Required field";
+            //         } else if (selectedItems.contains("Brazil")) {
+            //           return "Invalid item";
+            //         } else {
+            //           return null; // No error
+            //         }
+            //       },
+            //       dropdownDecoratorProps: DropDownDecoratorProps(
+            //         dropdownSearchDecoration: InputDecoration(
+            //           iconColor: red, suffixIconColor: red,
+            //           contentPadding: EdgeInsets.symmetric(
+            //               horizontal: 5.sp, vertical: 7.sp),
+            //           enabledBorder: OutlineInputBorder(
+            //             borderSide: BorderSide(
+            //               color: borderColor,
+            //               width: 1.0.w,
+            //             ),
+            //             borderRadius: BorderRadius.all(
+            //               Radius.circular(4.0.r),
+            //             ),
+            //           ),
+            //           errorBorder: OutlineInputBorder(
+            //             borderSide: BorderSide(
+            //               color: red,
+            //               width: 1.0.w,
+            //             ),
+            //             borderRadius: BorderRadius.all(
+            //               Radius.circular(4.0.r),
+            //             ),
+            //           ),
+            //           focusedBorder: OutlineInputBorder(
+            //             borderSide: BorderSide(
+            //               color: borderColor,
+            //               width: 1.0.w,
+            //             ),
+            //             borderRadius: BorderRadius.all(
+            //               Radius.circular(4.0.r),
+            //             ),
+            //           ),
+            //           border: OutlineInputBorder(
+            //             borderSide: BorderSide(
+            //               color: secondaryColor,
+            //               width: 1.0.w,
+            //             ),
+            //             borderRadius: BorderRadius.all(
+            //               Radius.circular(4.0.r),
+            //             ),
+            //           ),
+            //           // decoration: InputDecoration(
+            //           //   contentPadding: EdgeInsets.symmetric(horizontal: 14.sp, vertical: 13.sp),
+            //           //   enabledBorder: OutlineInputBorder(
+            //           //     borderSide: BorderSide(
+            //           //       color: borderColor,
+            //           //       width: 1.0.w,
+            //           //     ),
+            //           //     borderRadius: BorderRadius.all(
+            //           //       Radius.circular(4.0.r),
+            //           //     ),
+            //           //   ),
+            //           //   errorBorder: OutlineInputBorder(
+            //           //     borderSide: BorderSide(
+            //           //       color: red,
+            //           //       width: 1.0.w,
+            //           //     ),
+            //           //     borderRadius: BorderRadius.all(
+            //           //       Radius.circular(4.0.r),
+            //           //     ),
+            //           //   ),
+            //           //   focusedBorder: OutlineInputBorder(
+            //           //     borderSide: BorderSide(
+            //           //       color: borderColor,
+            //           //       width: 1.0.w,
+            //           //     ),
+            //           //     borderRadius: BorderRadius.all(
+            //           //       Radius.circular(4.0.r),
+            //           //     ),
+            //           //   ),
+            //           //   border: OutlineInputBorder(
+            //           //     borderSide: BorderSide(
+            //           //       color: secondaryColor,
+            //           //       width: 1.0.w,
+            //           //     ),
+            //           //     borderRadius: BorderRadius.all(
+            //           //       Radius.circular(4.0.r),
+            //           //     ),
+            //           //   ),
+            //           //   // filled: true,
+            //           //   fillColor: Colors.transparent,
+            //           // ),
+            //           // whenEmpty: 'Select',
+            //           // isDense: true,
+            //           enabled: true,
+            //           // icon: const Icon(
+            //           //   Iconsax.arrow_down_1,
+            //           //   color: grey3,
+            //           // ),
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
             SizedBox(
               height: 24.sp,
             ),
