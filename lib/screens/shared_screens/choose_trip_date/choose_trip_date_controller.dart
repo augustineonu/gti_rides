@@ -43,6 +43,8 @@ class ChooseTripDateController extends GetxController {
   Rx<int> selectedDifferenceInDays = 0.obs;
 
   RxString selectedAmPm = 'am'.obs;
+  DateTime? rawStartTime;
+  DateTime? rawEndTime;
 
   ChooseTripDateController() {
     init();
@@ -58,12 +60,15 @@ class ChooseTripDateController extends GetxController {
     // startDate.value = DateFormat('dd, MMMM').format(today).toString();
     startDate.value = formatDayDate(today).toString();
     endDate.value = formatDayDate(today.add(Duration(days: 3))).toString();
+    
+    rawStartTime = today;
+    rawEndTime = today.add(Duration(days: 3));
     // endDate.value =
     // DateFormat('dd, MMMM').format(today.add(Duration(days: 3))).toString();
     datePickerController.selectedRange =
         PickerDateRange(today, today.add(Duration(days: 3)));
 
-        selectedDifferenceInDays.value = 3;
+    selectedDifferenceInDays.value = 3;
     update();
 
     super.onInit();
@@ -115,6 +120,11 @@ class ChooseTripDateController extends GetxController {
 
   void selectionChanged(DateRangePickerSelectionChangedArgs args) {
     startDate.value = formatDayDate(args.value.startDate).toString();
+    rawStartTime = args.value.startDate;
+    rawEndTime = args.value.endDate;
+    update();
+
+    logger.log("Raw start date: ${args.value.startDate}");
     endDate.value =
         formatDayDate(args.value.endDate ?? args.value.startDate).toString();
     logger.log("selected start date:: ${startDate.value}");
@@ -141,6 +151,23 @@ class ChooseTripDateController extends GetxController {
   Duration calculateDateDifference(DateTime startDate, DateTime endDate) {
     // Calculate the difference between two dates
     return endDate.difference(startDate);
+  }
+
+  void addRawTime() {
+    rawStartTime = addHoursAndMinutes(
+        dateTime: rawStartTime!,
+        hours: selectedStartHour.value,
+        minutes: selectedStartMinute.value,
+        isAM: selectedStartAmPm.value == 0 ? true : false);
+
+    rawEndTime = addHoursAndMinutes(
+        dateTime: rawEndTime!,
+        hours: selectedEndHour.value,
+        minutes: selectedEndMins.value,
+        isAM: selectedEndAmPm.value == 0 ? true : false);
+        logger.log("Raw start time:: $rawStartTime");
+        logger.log("Raw end time:: $rawEndTime");
+   goBack1();
   }
 
   void onSingleDateSelection(DateRangePickerSelectionChangedArgs args) {
@@ -181,7 +208,9 @@ class ChooseTripDateController extends GetxController {
       "end":
           "$endDate $selectedEndHour:${selectedEndMins < 10 ? '0$selectedEndMins' : selectedEndMins}${selectedEndAmPm.value == 0 ? "am" : "PM"}",
       "selectedExpiryDate": selectedExpiryDate.value,
-      "differenceInDays": selectedDifferenceInDays.value
+      "differenceInDays": selectedDifferenceInDays.value,
+      "rawStartTime": rawStartTime,
+      "rawEndTime": rawEndTime
     };
 
     // Check if any of the values in the result map is null, and provide default values if so

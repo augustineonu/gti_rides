@@ -197,7 +197,7 @@ class IdentityVerificationController extends GetxController {
               carSelectionController.selectedSelfPickUp.value
           ? pickUpFee.value
           : null,
-      "totalEscortFee":  totalEscortFee.value,
+      "totalEscortFee": totalEscortFee.value,
       "tripDaysTotal": tripDaysTotal.value,
       "selectedSelfPickUp": selectedSelfPickUp.value,
       "selectedSelfDropOff": selectedSelfDropOff.value,
@@ -289,15 +289,18 @@ class IdentityVerificationController extends GetxController {
           formData.fields.add(
             MapEntry('gender', selectedGender.string),
           );
-          if (selectedDateOfBirth.value.isNotEmpty ||
-              selectedDateOfBirth.value != '') {
-            formData.fields.add(
-              MapEntry('dateOfBirth', selectedDateOfBirth.string),
-            );
-          }
         }
+        if (selectedDateOfBirth.value.isNotEmpty) {
+          formData.fields.add(
+            MapEntry('dateOfBirth', selectedDateOfBirth.value),
+          );
+        }
+
         return formData;
       }
+
+      var formData1 =
+          dio.FormData.fromMap({'dateOfBirth': selectedDateOfBirth.value});
 
       final formData = await constructFormData();
       final result = await userService.updateKyc(payload: formData);

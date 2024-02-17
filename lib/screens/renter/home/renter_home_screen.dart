@@ -16,6 +16,7 @@ import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/helpers.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:shimmer/shimmer.dart';
 
 class CarRenterBinding extends Bindings {
   @override
@@ -37,7 +38,7 @@ class CarRenterHomeScreen extends StatefulWidget {
 class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
   final controller =
       Get.put<CarRenterHomeController>(CarRenterHomeController());
-      
+
   late Timer timer;
   RxInt currentIndex = 0.obs;
   RxList visibleCars = [].obs;
@@ -353,8 +354,18 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
                   ),
                 ),
                 onLoading: Padding(
-                  padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
-                  child: Center(child: centerLoadingIcon()),
+                  // padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  // child: Center(child: centerLoadingIcon()),
+                  child: Shimmer.fromColors(
+                      child: Container(
+                        height: 200,
+                        decoration: BoxDecoration(
+                          color: grey1,
+                        ),
+                      ),
+                      baseColor: grey1.withOpacity(0.1),
+                      highlightColor: grey3.withOpacity(0.2)),
                 ),
               ),
             ),

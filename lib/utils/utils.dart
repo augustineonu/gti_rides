@@ -17,7 +17,7 @@ String fetchErrorText({required String expectedTextVariable}) {
   switch (expectedTextVariable) {
     case "email":
       return AppStrings.emailIsRequiredError;
-      case ".com":
+    case ".com":
       return AppStrings.emailIsRequiredError1;
     case "password":
       return AppStrings.passwordIsRequiredError;
@@ -29,11 +29,11 @@ String fetchErrorText({required String expectedTextVariable}) {
       return AppStrings.fullNameRequiredError;
     case 'field':
       return AppStrings.fieldIsRequiredError;
-      case 'gender':
+    case 'gender':
       return AppStrings.selectGenderError;
-      case 'bank':
+    case 'bank':
       return AppStrings.selectBankError;
-      case 'accountNumber':
+    case 'accountNumber':
       return AppStrings.selectAccountNumberError;
     default:
       return AppStrings.isRequiredError;
@@ -54,16 +54,19 @@ String getTimeIn12HourFormat(DateTime dateTime) {
 }
 
 String formatDate(DateTime datetime) {
-  var formatter = DateFormat('dd-MM-yyyy');
+  var formatter = DateFormat('yyyy/MM/dd');
   return formatter.format(datetime);
 }
+// DateTime formatDate1(DateTime datetime) {
+//   var formatter = DateFormat('dd-MM-yyyy');
+//   return formatter.format(datetime.toIso8601String());
+// }
 
 // String formatDate(DateTime datetime) {
 //   // var formatter = DateFormat('yyyy-MM-dd');
 //   var formatter = DateFormat('dd MMM yyyy');
 //   return formatter.format(datetime);
 // }
-
 
 // "dd, MMM h:mma"
 String extractMonthDay(String dateString) {
@@ -80,6 +83,7 @@ String extractMonthDay(String dateString) {
     return '';
   }
 }
+
 String extractTime(String dateString) {
   try {
     // Split the input string by whitespace
@@ -95,7 +99,6 @@ String extractTime(String dateString) {
   }
 }
 
-
 String extractDay(String inputDate) {
   // Split the input date by comma and space
   List<String> parts = inputDate.split(', ');
@@ -105,14 +108,14 @@ String extractDay(String inputDate) {
   // Return the extracted day
   return day;
 }
+
 String extractDayMonth(String inputDate) {
   // Split the input date by comma and space
   List<String> parts = inputDate.split(', ');
 
   // Extract the day part
   String day = parts[1].split(' ')[0];
-    String month = parts[1].split(' ')[1];
-
+  String month = parts[1].split(' ')[1];
 
   // Return the extracted day
   return '$day $month';
@@ -143,20 +146,17 @@ String extractDayDateMonth(String inputDate) {
 //   return '$day, $date $month';
 // }
 
-
-
-
-
-
 String formatDateTime(String datetime) {
   var formatter = DateFormat('dd, MMMM h:mma');
   DateTime parsedDate = formatter.parse(datetime);
   String formattedDate = DateFormat('dd, MMM h:mma').format(parsedDate);
   return formattedDate;
 }
+
 String formatDateTime1(String datetime) {
   // Remove the ordinal indicator ("th") from the day
-  String cleanedDate = datetime.replaceAllMapped(RegExp(r'(\d+)(st|nd|rd|th)'), (match) {
+  String cleanedDate =
+      datetime.replaceAllMapped(RegExp(r'(\d+)(st|nd|rd|th)'), (match) {
     return match.group(1)!;
   });
 
@@ -176,7 +176,8 @@ String formatDateTime2(String datetime) {
     String monthAbbreviation = parts[1].substring(0, 3);
 
     // Join the day, comma, abbreviated month, and the rest of the string
-    String formattedDate = '$day $monthAbbreviation ${parts.sublist(2).join(' ')}';
+    String formattedDate =
+        '$day $monthAbbreviation ${parts.sublist(2).join(' ')}';
 
     return formattedDate;
   }
@@ -185,6 +186,15 @@ String formatDateTime2(String datetime) {
   return datetime;
 }
 
+DateTime addHoursAndMinutes(
+    {required DateTime dateTime,required int hours,required int minutes,
+    required bool isAM}) {
+  int totalHours = hours;
+  if (!isAM && dateTime.hour < 12) {
+    totalHours += 12;
+  }
+  return dateTime.add(Duration(hours: totalHours, minutes: minutes));
+}
 
 // rteurns date as example 1 Nov
 String formatDateMonth(DateTime datetime) {
@@ -256,7 +266,8 @@ showErrorSnackbar({required String message, Color? color}) {
   }
 }
 
-showSuccessSnackbar({required String message, String? title, Color? color, Color? textColor}) {
+showSuccessSnackbar(
+    {required String message, String? title, Color? color, Color? textColor}) {
   final overlayContext = Get.overlayContext;
   if (overlayContext != null) {
     Get.rawSnackbar(
@@ -282,26 +293,21 @@ showSuccessSnackbar({required String message, String? title, Color? color, Color
   }
 }
 
-  Object bottomSnackbar(
-      BuildContext context,
-      {
-        required String message
-      }) {
-        final overlayContext = Get.overlayContext;
-         if (overlayContext != null) {
-    return ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+Object bottomSnackbar(BuildContext context, {required String message}) {
+  final overlayContext = Get.overlayContext;
+  if (overlayContext != null) {
+    return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: primaryColor,
       content: Text(
         message,
       ),
       duration: Duration(milliseconds: 800),
     ));
-     } else {
-      
-      Logger('Utils').log("overlay context is null");
-      return SizedBox();
+  } else {
+    Logger('Utils').log("overlay context is null");
+    return SizedBox();
   }
-  }
+}
 
 /**
  * Custom Alert Dialog
@@ -377,6 +383,7 @@ Widget showShimmerLoader() {
     separatorBuilder: (context, index) => const SizedBox(height: 10),
   );
 }
+
 // https://www.gtiautos.com/
 void openUrl(String url) async {
   if (!await launchUrl(Uri.parse(url))) {

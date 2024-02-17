@@ -175,13 +175,49 @@ class RenterService {
     }
   }
 
- Future<ApiResponseModel> addRecentCar({required String carId}) async {
+  Future<ListResponseModel> getCarTrip({
+    required String carID,
+    required DateTime startDate,
+    required DateTime endDate,
+  }) async {
+    try {
+      final result = await apiService.getRequest(
+        '/renter/trip/checkCarTrip?carID=$carID&startDate=$startDate&endDate=$endDate',
+      );
+      // logger.log("result $result");
+
+      final decodedResult = json.decode(result);
+
+      return ListResponseModel.fromJson(decodedResult);
+    } catch (err) {
+      rethrow;
+    }
+  }
+
+  Future<ApiResponseModel> addRecentCar({required String carId}) async {
     try {
       final result = await apiService.postRequest(
           endpoint: '/user/renter/car/addRecentCar', data: {"carID": carId});
       // logger.log("result $result");
 
       return ApiResponseModel.fromJson(result);
+    } catch (err) {
+      rethrow;
+    }
+  }
+
+  Future<ListResponseModel> getAllTrips({
+    required String status,
+  }) async {
+    try {
+      final result = await apiService.getRequest(
+        '/user/renter/trip/getAllTrips?status=$status',
+      );
+      // logger.log("result $result");
+
+      final decodedResult = json.decode(result);
+
+      return ListResponseModel.fromJson(decodedResult);
     } catch (err) {
       rethrow;
     }

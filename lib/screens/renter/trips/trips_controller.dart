@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/models/rating_model.dart';
+import 'package:gti_rides/models/renter/pending_trips_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/logger.dart';
+import 'package:gti_rides/services/renter_service.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/utils/constants.dart';
 
-class TripsController extends GetxController {
+class TripsController extends GetxController with StateMixin<PendingTripsData> {
   Logger logger = Logger("Controller");
 
   TripsController() {
@@ -38,6 +40,8 @@ class TripsController extends GetxController {
   RxInt currentIndex = 0.obs;
   RxInt selectedIndex = 0.obs;
   RxBool isLoading = false.obs;
+  RxBool isGettingPendingTrips = false.obs;
+  RxBool isGettingActiveTrips = false.obs;
   RxBool isExpanded = false.obs;
   PageController pageController = PageController();
 
@@ -56,6 +60,9 @@ class TripsController extends GetxController {
 
   List<int> selectedIndices = [];
   List<RatingItem> ratings1 = List<RatingItem>.empty(growable: true);
+  RxList<PendingTripsData> pendingTrips = <PendingTripsData>[].obs;
+  RxList<PendingTripsData> activeTrips = <PendingTripsData>[].obs;
+  RxList<PendingTripsData> completedTrips = <PendingTripsData>[].obs;
 
   //  methods
   void goBack() => routeService.goBack();
@@ -111,5 +118,50 @@ class TripsController extends GetxController {
     }
 
     update();
+  }
+
+  Future<void> getPendingTrips() async {
+    RxStatus.loading();
+    ///////
+    // try {
+    final response = await renterService.getAllTrips(status: 'pending');
+    if (response.status == 'success' || response.status_code == 200) {
+      pendingTrips.value = response.data!.cast<PendingTripsData>();
+    } else {
+      logger.log("Unable to get pending trips");
+      // return false;
+    }
+    // } catch (e) {
+    // logger.log("some error occured $e");
+    // return false;
+    // }
+  }
+  RxString activeTripsErrorMessage = ''.obs;
+  RxBool activeTripHasError = false.obs;
+  RxBool activeTripsLoaded = false.obs;
+
+  Future<void> getActiveTrips() async {
+    isGettingActiveTrips.value = true; ///////
+    try {
+      final response = await renterService.getAllTrips(status: 'active');
+      if (response.status == 'success' || response.status_code == 200) {
+        activeTrips.value = response.data!.cast<PendingTripsData>();
+        activeTripsLoaded.value = true;
+      } else {
+        logger.log("Unable to get active trips");
+        // return false;
+      }
+    } catch (e) {
+      logger.log("some error occured $e");
+    }
+  }
+
+  Future<void> getTrips() async {
+    // isGettingTrips.value = true;
+
+    await Future.wait([
+      getPendingTrips(),
+      getActiveTrips(),
+    ]);
   }
 }

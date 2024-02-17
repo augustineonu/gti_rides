@@ -73,14 +73,17 @@ class IdentityVerificationScreen
               ),
 
               const SizedBox(height: 20),
-              identityVerificationWidget(
-                  title: AppStrings.proofOfIdentity,
-                  subTitle: userKyc != []
-                      ? userKyc![0]["licenceNumber"] != null
-                          ? AppStrings.driversLicense
-                          : AppStrings.addDocument
-                      : AppStrings.addDocument,
-                  onTap: controller.routeToProofOfIdentity),
+              Visibility(
+                visible: controller.tripData.value.tripType == 'self drive',
+                child: identityVerificationWidget(
+                    title: AppStrings.proofOfIdentity,
+                    subTitle: userKyc != []
+                        ? userKyc![0]["licenceNumber"] != null
+                            ? AppStrings.driversLicense
+                            : AppStrings.addDocument
+                        : AppStrings.addDocument,
+                    onTap: controller.routeToProofOfIdentity),
+              ),
               identityVerificationWidget(
                   title: AppStrings.gender,
                   subTitle: userKyc != []
@@ -104,46 +107,55 @@ class IdentityVerificationScreen
                   onTap: controller.routeToEmergencyContact),
 
               // address verification
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: Row(
+              Visibility(
+                visible: controller.tripData.value.tripType == 'self drive',
+                child: Column(
                   children: [
-                    SvgPicture.asset(
-                      ImageAssets.location1,
-                      height: 18.sp,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 20),
+                      child: Row(
+                        children: [
+                          SvgPicture.asset(
+                            ImageAssets.location1,
+                            height: 18.sp,
+                          ),
+                          const SizedBox(width: 6),
+                          textWidget(
+                              text: AppStrings.addressVerificationCaps,
+                              style: getBoldStyle()),
+                        ],
+                      ),
                     ),
-                    const SizedBox(width: 6),
-                    textWidget(
-                        text: AppStrings.addressVerificationCaps,
-                        style: getBoldStyle()),
+                    identityVerificationWidget(
+                        title: AppStrings.homeAddress,
+                        subTitle: userKyc != []
+                            ? userKyc![0]["homeAddress"] ??
+                                AppStrings.provideHomeAddress
+                            : AppStrings.provideHomeAddress,
+                        onTap: controller.routeToHomeAddress),
+                    identityVerificationWidget(
+                        title: AppStrings.officeAddress,
+                        subTitle: userKyc != []
+                            ? userKyc![0]["officeAddress"] ??
+                                AppStrings.addOfficeAddress
+                            : AppStrings.addOfficeAddress,
+                        onTap: controller.routeToOfficeAddress),
+                    identityVerificationWidget(
+                        title: AppStrings.occupation,
+                        subTitle: userKyc != []
+                            ? userKyc![0]["occupation"] ??
+                                AppStrings.provideOccupation
+                            : AppStrings.provideOccupation,
+                        onTap: controller.routeToOccupation),
                   ],
                 ),
               ),
-              identityVerificationWidget(
-                  title: AppStrings.homeAddress,
-                  subTitle: userKyc != []
-                      ? userKyc![0]["homeAddress"] ??
-                          AppStrings.provideHomeAddress
-                      : AppStrings.provideHomeAddress,
-                  onTap: controller.routeToHomeAddress),
-
-              identityVerificationWidget(
-                  title: AppStrings.officeAddress,
-                  subTitle: userKyc != []
-                      ? userKyc![0]["officeAddress"] ??
-                          AppStrings.addOfficeAddress
-                      : AppStrings.addOfficeAddress,
-                  onTap: controller.routeToOfficeAddress),
-
-              identityVerificationWidget(
-                  title: AppStrings.occupation,
-                  subTitle: userKyc != []
-                      ? userKyc![0]["occupation"] ??
-                          AppStrings.provideOccupation
-                      : AppStrings.provideOccupation,
-                  onTap: controller.routeToOccupation),
-
+              Visibility(
+                  visible: controller.tripData.value.tripType == 'chauffeur',
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.4,
+                  )),
               controller.isKycUpdate.value
                   ? contButton(userKyc)
                   : Column(
@@ -212,7 +224,7 @@ class IdentityVerificationScreen
         InkWell(
           onTap: onTap,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -242,13 +254,18 @@ class IdentityVerificationScreen
               text: AppStrings.cont,
               // color: secondaryColor,
               // isDisabled: true,
-              isDisabled: userKyc![0]["officeAddress"] == null ||
-                  userKyc[0]["homeAddress"] == null ||
-                  userKyc[0]["occupation"] == null ||
-                  userKyc[0]["dateOfBirth"] == null ||
-                  userKyc[0]["emergencyName"] == null ||
-                  userKyc[0]["gender"] == null ||
-                  userKyc[0]["licenceNumber"] == null,
+              isDisabled: controller.tripData.value.tripType == 'chauffeur' &&
+                      userKyc![0]['dateOfBirth'] != null &&
+                      userKyc[0]["emergencyName"] != null &&
+                      userKyc[0]["gender"] != null
+                  ? false
+                  : userKyc![0]["officeAddress"] == null ||
+                      userKyc[0]["homeAddress"] == null ||
+                      userKyc[0]["occupation"] == null ||
+                      userKyc[0]["dateOfBirth"] == null ||
+                      userKyc[0]["emergencyName"] == null ||
+                      userKyc[0]["gender"] == null ||
+                      userKyc[0]["licenceNumber"] == null,
 
               onTap: controller.proceedToPayment,
               isLoading: controller.isLoading.value,
