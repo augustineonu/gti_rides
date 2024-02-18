@@ -503,5 +503,6 @@ class AppStrings {
   static String noListedCarsYet = "You have not Listed any cars yet";
   static String noBookedCarsYet = "You have not Booked any cars yet";
   static String noAddedCarsToFav = "You have not added any Cars to Favorite yet";
+  static String noViewedCarsYet = "You have not viewed any Cars yet";
   static String guideForTakingGreatPhotos = "Step by Step Guide for Capturing Great Car Photos for Your GTI Rides Listing";
 }

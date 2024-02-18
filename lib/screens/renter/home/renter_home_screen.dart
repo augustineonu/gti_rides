@@ -340,7 +340,7 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
                   padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
                   child: Center(
                       child: textWidget(
-                          text: AppStrings.noListedCarsYet,
+                          text: AppStrings.noViewedCarsYet,
                           style: getMediumStyle())),
                 ),
                 onError: (e) => Padding(

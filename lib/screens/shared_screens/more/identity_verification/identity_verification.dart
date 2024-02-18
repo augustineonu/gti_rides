@@ -74,7 +74,10 @@ class IdentityVerificationScreen
 
               const SizedBox(height: 20),
               Visibility(
-                visible: controller.tripData.value.tripType == 'self drive',
+                visible: controller.isKycUpdate.isTrue &&
+                        controller.tripData.value.tripType == 'self drive'
+                    ? true 
+                    : true,
                 child: identityVerificationWidget(
                     title: AppStrings.proofOfIdentity,
                     subTitle: userKyc != []
@@ -108,7 +111,10 @@ class IdentityVerificationScreen
 
               // address verification
               Visibility(
-                visible: controller.tripData.value.tripType == 'self drive',
+                visible:  controller.isKycUpdate.isTrue &&
+                        controller.tripData.value.tripType == 'self drive'
+                    ? true 
+                    : true,
                 child: Column(
                   children: [
                     Padding(
