@@ -60,11 +60,10 @@ class ChooseTripDateController extends GetxController {
     // startDate.value = DateFormat('dd, MMMM').format(today).toString();
     startDate.value = formatDayDate(today).toString();
     endDate.value = formatDayDate(today.add(Duration(days: 3))).toString();
-    
+
     rawStartTime = today;
     rawEndTime = today.add(Duration(days: 3));
-    // endDate.value =
-    // DateFormat('dd, MMMM').format(today.add(Duration(days: 3))).toString();
+
     datePickerController.selectedRange =
         PickerDateRange(today, today.add(Duration(days: 3)));
 
@@ -122,6 +121,7 @@ class ChooseTripDateController extends GetxController {
     startDate.value = formatDayDate(args.value.startDate).toString();
     rawStartTime = args.value.startDate;
     rawEndTime = args.value.endDate;
+
     update();
 
     logger.log("Raw start date: ${args.value.startDate}");
@@ -165,9 +165,9 @@ class ChooseTripDateController extends GetxController {
         hours: selectedEndHour.value,
         minutes: selectedEndMins.value,
         isAM: selectedEndAmPm.value == 0 ? true : false);
-        logger.log("Raw start time:: $rawStartTime");
-        logger.log("Raw end time:: $rawEndTime");
-   goBack1();
+    logger.log("Raw start time:: $rawStartTime");
+    logger.log("Raw end time:: $rawEndTime");
+    goBack1();
   }
 
   void onSingleDateSelection(DateRangePickerSelectionChangedArgs args) {
@@ -202,6 +202,22 @@ class ChooseTripDateController extends GetxController {
   //     }, closeOverlays: !isRenterHome.value ? false : closeOverlays);
 
   void goBack1({bool? closeOverlays = true}) {
+    if (selectedStartHour.value == 0) {
+      rawStartTime = addHoursAndMinutes(
+          dateTime: rawStartTime!,
+          hours: selectedStartHour.value,
+          minutes: selectedStartMinute.value,
+          isAM: selectedStartAmPm.value == 0 ? true : false);
+
+      rawEndTime = addHoursAndMinutes(
+          dateTime: rawEndTime!,
+          hours: selectedEndHour.value,
+          minutes: selectedEndMins.value,
+          isAM: selectedEndAmPm.value == 0 ? true : false);
+      logger.log("Raw start time:: $rawStartTime");
+      logger.log("Raw end time:: $rawEndTime");
+    }
+
     Map<String, dynamic> result = {
       "start":
           "$startDate $selectedStartHour:${selectedStartMinute < 10 ? '0$selectedStartMinute' : selectedStartMinute}${selectedStartAmPm.value == 0 ? "am" : "PM"}",

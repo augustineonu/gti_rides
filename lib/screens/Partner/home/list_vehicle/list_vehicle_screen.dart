@@ -325,7 +325,9 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                           arguments: {
                             "appBarTitle": AppStrings.selectAvailabilityDate,
                             "to": AppStrings.to,
-                            "from": AppStrings.from
+                            "from": AppStrings.from,
+                            "rawStartTime": controller.rawStartTime,
+                            "rawEndTime": controller.rawEndTime 
                           });
 
                       // Handle the selected date here
@@ -356,7 +358,9 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                           arguments: {
                             "appBarTitle": AppStrings.selectAvailabilityDate,
                             "to": AppStrings.to,
-                            "from": AppStrings.from
+                            "from": AppStrings.from,
+                            "rawStartTime": controller.rawStartTime,
+                            "rawEndTime": controller.rawEndTime 
                           });
 
                       // Handle the selected date here

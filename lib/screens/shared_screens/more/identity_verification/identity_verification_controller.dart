@@ -44,7 +44,10 @@ class IdentityVerificationController extends GetxController {
       logger.log("Received arguments: $arguments");
       isKycUpdate.value = arguments?['isKycUpdate'] ?? false;
       appBarTitle.value = arguments?['appBarTitle'] ?? '';
+      if(arguments!.containsKey('tripsData')){
+
       tripData.value = arguments?["tripData"] as TripData;
+      }
       logger.log("${tripData.value.carID}");
 
       pricePerDay.value = arguments?["pricePerDay"] ?? '';
@@ -298,9 +301,6 @@ class IdentityVerificationController extends GetxController {
 
         return formData;
       }
-
-      var formData1 =
-          dio.FormData.fromMap({'dateOfBirth': selectedDateOfBirth.value});
 
       final formData = await constructFormData();
       final result = await userService.updateKyc(payload: formData);

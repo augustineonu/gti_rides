@@ -186,15 +186,30 @@ String formatDateTime2(String datetime) {
   return datetime;
 }
 
-DateTime addHoursAndMinutes(
-    {required DateTime dateTime,required int hours,required int minutes,
-    required bool isAM}) {
+DateTime addHoursAndMinutes({
+  required DateTime dateTime,
+  required int hours,
+  required int minutes,
+  required bool isAM,
+}) {
   int totalHours = hours;
   if (!isAM && dateTime.hour < 12) {
     totalHours += 12;
   }
-  return dateTime.add(Duration(hours: totalHours, minutes: minutes));
+
+  // DateTime result = dateTime.add(Duration(hours: totalHours, minutes: minutes));
+
+  DateTime result = DateTime(dateTime.year, 
+  dateTime.month, dateTime.day, totalHours, minutes);
+
+  print("Input DateTime: $dateTime");
+  print("Added Hours: $totalHours");
+  print("Added Minutes: $minutes");
+  print("Result DateTime: $result");
+
+  return result;
 }
+
 
 // rteurns date as example 1 Nov
 String formatDateMonth(DateTime datetime) {

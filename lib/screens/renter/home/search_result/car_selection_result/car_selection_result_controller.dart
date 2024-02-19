@@ -1,6 +1,3 @@
-import 'dart:ffi';
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/models/partner/car_history_model.dart';
@@ -8,7 +5,6 @@ import 'package:gti_rides/models/renter/trip_amount_model.dart';
 import 'package:gti_rides/models/renter/trip_data_model.dart';
 import 'package:gti_rides/models/user/kyc_response_model.dart';
 import 'package:gti_rides/route/app_links.dart';
-import 'package:gti_rides/screens/renter/trips/choose_single_trip_date/choose_single_trip_date_controller.dart';
 import 'package:gti_rides/screens/shared_screens/choose_trip_date/choose_trip_date_controller.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/partner_service.dart';
@@ -61,7 +57,6 @@ class CarSelectionResultController extends GetxController
   }
 
   Map<String, dynamic>? arguments = Get.arguments;
-  final controller = Get.put(ChooseTripDateController());
   GlobalKey<FormState> chauffeurFormKey = GlobalKey();
   GlobalKey<FormState> selfDriveFormKey = GlobalKey();
   Rx<TripData> tripData = TripData().obs;
@@ -373,7 +368,7 @@ class CarSelectionResultController extends GetxController
   // Function to check missing fields
   List<String> getMissingKycFields(KycData kycData, int tripType) {
     List<String> missingKycFields = [];
-    List<String> requiredKycFields = getRequiredKycFields(tripType);
+    List<String> requiredKycFields =getRequiredKycFields(tripType);
 
     for (String field in requiredKycFields) {
       dynamic fieldValue = kycData.toJson()[field];
@@ -387,14 +382,16 @@ class CarSelectionResultController extends GetxController
     return missingKycFields;
   }
 
-  RxString carNotAvailable = ''.obs;
+    RxString carNotAvailable = ''.obs;
+        // final controller = Get.put(ChooseTripDateController());
 
+// raw date should be passed from previous screen 
   Future<bool> checkCarAvailability() async {
     try {
       final response = await renterService.getCarTrip(
           carID: carId.value,
-          startDate: controller.rawStartTime!,
-          endDate: controller.rawEndTime!);
+          startDate: DateTime.now(),
+          endDate: DateTime.now());
       if (response.status == 'success' || response.status_code == 200) {
         if (response.data!.isEmpty) {
           return true;
@@ -452,7 +449,6 @@ class CarSelectionResultController extends GetxController
     if (tripType.value == 1 && !selfDriveFormKey.currentState!.validate()) {
       return;
     }
-
     if (startDateTime.value.isEmpty && endDateTime.value.isEmpty) {
       showErrorSnackbar(message: 'Kindly select trip dates');
       return;
@@ -462,11 +458,6 @@ class CarSelectionResultController extends GetxController
 
     isLoading.value = true;
     try {
-      final isCarAvailable = await checkCarAvailability();
-      if (!isCarAvailable) {
-        showSuccessSnackbar(message: carNotAvailable.value);
-        return;
-      }
       final kycResponse = await userService.getKycProfile();
 
       // if user has KYC details, route to payment summary
@@ -654,9 +645,6 @@ class CarSelectionResultController extends GetxController
       return null;
     }
   }
-
-   
-
 }
 
 

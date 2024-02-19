@@ -84,6 +84,7 @@ class HomeAddressController extends GetxController {
   void goBack() => routeService.goBack();
   void routeToPaymentSummary() =>
       routeService.gotoRoute(AppLinks.paymentSummary);
+  RxBool isLicenseUpload = false.obs;
 
   Future<void> openCamera() async {
     ImageResponse? response =
@@ -98,7 +99,8 @@ class HomeAddressController extends GetxController {
       String directory = lastSeparator != -1
           ? homeAddressPath.value.substring(0, lastSeparator)
           : homeAddressPath.value;
-      homeAddressName.value = 'homeAddress.png';
+      homeAddressName.value =
+          isLicenseUpload.value ? 'LicenseBack.png' : 'homeAddress.png';
 
       // Build the new path with the desired file name
       String newPath = '$directory/$homeAddressName';
@@ -128,7 +130,8 @@ class HomeAddressController extends GetxController {
       String directory = lastSeparator != -1
           ? homeAddressPath.value.substring(0, lastSeparator)
           : homeAddressPath.value;
-      homeAddressName.value = 'homeAddress.png';
+      homeAddressName.value =
+          isLicenseUpload.value ? 'LicenseBack.png' : 'homeAddress.png';
 
       // Build the new path with the desired file name
       String newPath = '$directory/$homeAddressName';
@@ -229,7 +232,7 @@ class HomeAddressController extends GetxController {
   }
 
   bool validateIdentityUpload() {
-    if (frontPagePath.value.isEmpty && backPagePath.value.isEmpty) {
+    if (frontPagePath.value.isEmpty && homeAddressName.value.isEmpty) {
       // Show an error message or handle it accordingly
       showErrorSnackbar(message: 'Please upload an image.');
       return false;
@@ -323,8 +326,8 @@ class HomeAddressController extends GetxController {
     final mimeTypeData =
         lookupMimeType(frontPagePath.value, headerBytes: [0xFF, 0xD8])!
             .split('/');
-    final roadMimeTypeData =
-        lookupMimeType(backPagePath.value, headerBytes: [0xFF, 0xD8])!
+    final backPageMimeTypeData =
+        lookupMimeType(homeAddressPath.value, headerBytes: [0xFF, 0xD8])!
             .split('/');
 
     try {
@@ -340,10 +343,10 @@ class HomeAddressController extends GetxController {
             ),
           ),
           await dio.MultipartFile.fromFile(
-            backPagePath.value,
+            homeAddressPath.value,
             contentType: MediaType(
-              mimeTypeData[0],
-              mimeTypeData[1],
+              backPageMimeTypeData[0],
+              backPageMimeTypeData[1],
             ),
           ),
         ]
@@ -369,8 +372,8 @@ class HomeAddressController extends GetxController {
           formData.fields.add(MapEntry(
             'drivingLicenceBackPage',
             await dio.MultipartFile.fromFile(
-              backPagePath.value,
-              filename: backPagePath.value,
+              homeAddressPath.value,
+              filename: homeAddressPath.value,
             ).toString(),
           ));
         }
@@ -378,7 +381,7 @@ class HomeAddressController extends GetxController {
         return formData;
       }
 
-      final formData = await constructFormData();
+      // final formData = await constructFormData();
       final result = await userService.updateKyc(payload: newFormData);
 
       if (result.status == "success" || result.status_code == 200) {

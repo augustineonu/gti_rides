@@ -142,10 +142,11 @@ class ProofOfIdentityScreen extends GetView<HomeAddressController> {
                   const SizedBox(height: 16),
                   imageUploadWidget(
                     title: AppStrings.uploadBackView,
-                    body: controller.backImageName.value.isNotEmpty
-                        ? controller.backImageName.value
+                    body: controller.homeAddressName.value.isNotEmpty
+                        ? controller.homeAddressName.value
                         : AppStrings.pleaseMakeSurePicIsClear,
                     onTap: () {
+                      controller.isLicenseUpload.value = true;
                       selectCameraOptionSheet(
                         size,
                         onCameraOpen: () => controller

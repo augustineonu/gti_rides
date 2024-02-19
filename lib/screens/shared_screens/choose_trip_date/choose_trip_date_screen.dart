@@ -80,8 +80,10 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
                             }
                           : (value) async {
                               Get.dialog(
+                                
                                 StatefulBuilder(builder: (context, setState) {
                                   return Dialog(
+                                    
                                     backgroundColor: white,
                                     insetPadding: const EdgeInsets.all(0),
                                     shape: RoundedRectangleBorder(
@@ -397,6 +399,7 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
                                     ),
                                   );
                                 }),
+                                barrierDismissible: false,
                               );
                               await Future.delayed(const Duration(seconds: 1));
                             },

@@ -118,6 +118,8 @@ class ListVehicleController extends GetxController {
   Rx<TextEditingController> toController = TextEditingController().obs;
   Rx<String> advanceAmount = ''.obs;
   RxInt initiPageIndex = 1.obs;
+  DateTime? rawStartTime;
+  DateTime? rawEndTime;
 
   Rx<String>? errorMessage = ''.obs;
   ListVehicleController() {
@@ -877,7 +879,7 @@ class ListVehicleController extends GetxController {
     if (!vehicleInfoFormKey.currentState!.validate()) {
       return;
     }
-    if(selectedFeatures!.isEmpty){
+    if (selectedFeatures!.isEmpty) {
       showErrorSnackbar(message: "Car Features is empty");
       return;
     }
@@ -1342,11 +1344,18 @@ class ListVehicleController extends GetxController {
           // final licenseDocUrl = firstCar["document"].isNotEmpty
           //     ? firstCar['document'][2]["documentURL"]
           //     : null;
-          final licenseDocUrl = carListData.document?[0].documentUrl;
-          final inspectionDocUrl = carListData.document?[1].documentUrl;
-          final insuranceDocUrl = carListData.document?[2].documentUrl;
-          final roadWorthinessDocUrl = carListData.document?[3].documentUrl;
-          
+          final licenseDocUrl =
+              carListData.document != null && carListData.document!.isNotEmpty
+                  ? carListData.document![0].documentUrl
+                  : null;
+          // final licenseDocUrl = carListData.document?[0].documentUrl;
+          final inspectionDocUrl = carListData.document != null && carListData.document!.isNotEmpty
+                  ?  carListData.document![1].documentUrl : null;
+          final insuranceDocUrl = carListData.document != null && carListData.document!.isNotEmpty
+                  ?  carListData.document![2].documentUrl : null;
+
+          final roadWorthinessDocUrl = carListData.document != null && carListData.document!.isNotEmpty
+                  ?  carListData.document![3].documentUrl : null;
 
           //3
           // final insuranceDocUrl = firstCar["document"].isNotEmpty
