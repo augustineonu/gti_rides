@@ -327,13 +327,15 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                             "to": AppStrings.to,
                             "from": AppStrings.from,
                             "rawStartTime": controller.rawStartTime,
-                            "rawEndTime": controller.rawEndTime 
+                            "rawEndTime": controller.rawEndTime
                           });
 
                       // Handle the selected date here
                       print('Selected Date page: $data');
                       controller.startDateTime.value = data['start'];
                       controller.endDateTime.value = data['end'];
+                      controller.rawStartTime = data['rawStartTime'];
+                      controller.rawEndTime = data['rawEndTime'];
                     },
                   ),
                 ),
@@ -360,13 +362,15 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                             "to": AppStrings.to,
                             "from": AppStrings.from,
                             "rawStartTime": controller.rawStartTime,
-                            "rawEndTime": controller.rawEndTime 
+                            "rawEndTime": controller.rawEndTime,
                           });
 
                       // Handle the selected date here
                       print('Selected Date page: $data');
                       controller.startDateTime.value = data['start'];
                       controller.endDateTime.value = data['end'];
+                      controller.rawStartTime = data['rawStartTime'];
+                      controller.rawEndTime = data['rawEndTime'];
                     },
                   ),
                 ),
@@ -383,9 +387,9 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                 title: AppStrings.howMuchForAdvance,
                 iconColor: grey3,
                 selectedValue: controller.isFromManageCars.isTrue &&
-                        controller.advanceAmount.value.isNotEmpty
-                    ? controller.advanceAmount.value.contains('hours')
-                        ? controller.advanceAmount.value
+                        controller.advanceTime.value.isNotEmpty
+                    ? controller.advanceTime.value.contains('hours')
+                        ? controller.advanceTime.value
                         : "4 hours"
                     : null,
                 values: <String>[
@@ -397,7 +401,8 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                 ],
                 onChange: (value) {
                   print('Selected value: $value');
-                  controller.advanceAmount.value = value;
+                  controller.advanceTime.value = value;
+                  print("selected day ${controller.advanceTime.value}");
                 }),
 
             SizedBox(
@@ -462,8 +467,9 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                       values:
                           List.generate(20, (index) => (index + 1).toString()),
                       onChange: (value) {
-                        print('Selected value: $value');
                         controller.discountNoOfDays.value = value;
+                        print(
+                            'Selected value: $value ${controller.discountNoOfDays.value}');
                       }),
                 ),
                 SizedBox(width: 20.sp),
@@ -537,6 +543,12 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     onSelected: (value) {},
                     onOpened: () {},
                     itemBuilder: (BuildContext context) {
+                      if (controller.drivers?.isNotEmpty == true) {
+                        // Set selectedDriverId to the driverId of the first driver
+                        controller.selectedDriverId.value =
+                            controller.drivers?[0]['driverID'];
+                      }
+
                       return List<PopupMenuEntry<Driver>>.generate(
                         controller.drivers!.length,
                         (int index) {
@@ -546,7 +558,6 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                                 ['driverEmail'],
                             driverId: controller.drivers?[index]['driverID'],
                           );
-
                           return PopupMenuItem(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 5, horizontal: 0),
@@ -1203,7 +1214,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
             //         ),
             //       ),
             //       popupProps: PopupPropsMultiSelection.menu(
-                    
+
             //           // selectionWidget: (context, item, isSelected) {
 
             //           // },
@@ -1216,7 +1227,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
             //           // showSelectedItems: true,
 
             //           ),
-                  
+
             //       onChanged: (List<dynamic> selectedFeatures) {
             //         controller.selectedFeatures!.value = selectedFeatures;
             //         print("selected $selectedFeatures");

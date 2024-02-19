@@ -116,7 +116,7 @@ class ListVehicleController extends GetxController {
   TextEditingController aboutVehicleController = TextEditingController();
   Rx<TextEditingController> fromController = TextEditingController().obs;
   Rx<TextEditingController> toController = TextEditingController().obs;
-  Rx<String> advanceAmount = ''.obs;
+  Rx<String> advanceTime = ''.obs;
   RxInt initiPageIndex = 1.obs;
   DateTime? rawStartTime;
   DateTime? rawEndTime;
@@ -926,9 +926,9 @@ class ListVehicleController extends GetxController {
       isLoading1.value = true;
       final response = await partnerService.addCarAvailability(
           payload: {
-            "startDate": startDateTime.value,
-            "endDate": endDateTime.value,
-            "advanceDays": advanceAmount.value,
+            "startDate": rawStartTime,
+            "endDate": rawEndTime,
+            "advanceDays": advanceTime.value,
             "pricePerDay": rentPerDayController.text,
             "discountDays": discountNoOfDays.value,
             "discountPrice": discountPerDayController.text,
@@ -1384,7 +1384,7 @@ class ListVehicleController extends GetxController {
           // // availability
           startDateTime.value = firstCar['startDate'] ?? '';
           endDateTime.value = firstCar['endDate'] ?? '';
-          advanceAmount.value = firstCar['advanceDays'] ?? '';
+          advanceTime.value = firstCar['advanceDays'] ?? '';
           pricePerDay.value = firstCar['pricePerDay'] ?? '';
           discountDays.value = firstCar['discountDays'] ?? '';
           discountPrice.value = firstCar['discountPrice'] ?? '';
