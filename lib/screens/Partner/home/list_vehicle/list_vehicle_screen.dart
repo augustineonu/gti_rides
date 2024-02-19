@@ -332,10 +332,12 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
 
                       // Handle the selected date here
                       print('Selected Date page: $data');
-                      controller.startDateTime.value = data['start'];
-                      controller.endDateTime.value = data['end'];
-                      controller.rawStartTime = data['rawStartTime'];
-                      controller.rawEndTime = data['rawEndTime'];
+                      if (data != null) {
+                        controller.startDateTime.value = data['start'] ?? '';
+                        controller.endDateTime.value = data['end'] ?? '';
+                        controller.rawStartTime = data['rawStartTime'] ?? '';
+                        controller.rawEndTime = data['rawEndTime'] ?? '';
+                      }
                     },
                   ),
                 ),
@@ -366,11 +368,13 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                           });
 
                       // Handle the selected date here
-                      print('Selected Date page: $data');
-                      controller.startDateTime.value = data['start'];
-                      controller.endDateTime.value = data['end'];
-                      controller.rawStartTime = data['rawStartTime'];
-                      controller.rawEndTime = data['rawEndTime'];
+                      if (data != null) {
+                        print('Selected Date page: $data');
+                        controller.startDateTime.value = data['start'];
+                        controller.endDateTime.value = data['end'];
+                        controller.rawStartTime = data['rawStartTime'];
+                        controller.rawEndTime = data['rawEndTime'];
+                      }
                     },
                   ),
                 ),
@@ -467,9 +471,9 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                       values:
                           List.generate(20, (index) => (index + 1).toString()),
                       onChange: (value) {
-                        controller.discountNoOfDays.value = value;
+                        controller.discountDays.value = value;
                         print(
-                            'Selected value: $value ${controller.discountNoOfDays.value}');
+                            'Selected value: $value ${controller.discountDays.value}');
                       }),
                 ),
                 SizedBox(width: 20.sp),

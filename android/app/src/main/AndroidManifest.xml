@@ -1,10 +1,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- <uses-permission android:name="android.permission.INTERNET" /> -->
+    <!-- <uses-permission android:name="android.permission.VIBRATE" /> -->
     <application
         android:label="gti_rides"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         
         >
+      <!-- <service android:name=".MessagingService">
+       <intent-filter>
+         <action android:name="com.google.firebase.MESSAGING_EVENT" />
+       </intent-filter>
+      </service> -->
         
     <!-- android:name=".MyApp"  -->
         <activity

@@ -67,7 +67,7 @@ class ListVehicleController extends GetxController {
   // Rx<String> pickedImagePath = ''.obs;
   Rx<String> startDateTime = ''.obs;
   Rx<String> endDateTime = ''.obs;
-  Rx<String> discountNoOfDays = ''.obs;
+  // Rx<String> discountNoOfDays = ''.obs;
   Rx<String> selectedDriverId = ''.obs;
   Rx<String> carID = ''.obs;
   Rx<String> selectedPhotos = ''.obs;
@@ -926,11 +926,11 @@ class ListVehicleController extends GetxController {
       isLoading1.value = true;
       final response = await partnerService.addCarAvailability(
           payload: {
-            "startDate": rawStartTime,
-            "endDate": rawEndTime,
+            "startDate": rawStartTime!.toIso8601String(),
+            "endDate": rawEndTime!.toIso8601String(),
             "advanceDays": advanceTime.value,
             "pricePerDay": rentPerDayController.text,
-            "discountDays": discountNoOfDays.value,
+            "discountDays": discountDays.value,
             "discountPrice": discountPerDayController.text,
             "driverID": selectedDriverId.value
           },
@@ -1387,10 +1387,14 @@ class ListVehicleController extends GetxController {
           advanceTime.value = firstCar['advanceDays'] ?? '';
           pricePerDay.value = firstCar['pricePerDay'] ?? '';
           discountDays.value = firstCar['discountDays'] ?? '';
+          // discountNoOfDays
           discountPrice.value = firstCar['discountPrice'] ?? '';
           selectedView.value = firstCar["driver"].isNotEmpty
               ? firstCar["driver"][0]["fullName"]
               : '';
+              // TODO:
+              selectedDriverId.value = (carListData.driver!.isNotEmpty ?
+              carListData.driver!.first.driverID : '')!;
 
           await getCity(cityCode1: stateCode.value);
 

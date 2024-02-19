@@ -76,26 +76,34 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
     switch (controller.selectedIndex.value) {
       case 0:
         // Active trips
-        return cardWidget(
-          context,
-          size,
-          title: 'Tesla Model Y',
-          amount: '100,000 ',
-          noOfDays: '5days',
-          startDateTime: "wed, 1 Nov, 9:00am",
-          endDateTime: "wed, 1 Nov, 9:00am",
-          trailling: Positioned(
-            right: 12.sp,
-            top: 12.sp,
-            child: InkWell(
-                onTap: () {
-                  quickOptionsSheet(size);
-                },
-                child: SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: SvgPicture.asset(ImageAssets.popUpMenu))),
-          ),
+        return ListView.separated(
+          physics: ScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: 3,
+          itemBuilder: (context, index) {
+            return cardWidget(
+              context,
+              size,
+              title: 'Tesla Model Y',
+              amount: '100,000 ',
+              noOfDays: '5days',
+              startDateTime: "wed, 1 Nov, 9:00am",
+              endDateTime: "wed, 1 Nov, 9:00am",
+              trailling: Positioned(
+                right: 12.sp,
+                top: 12.sp,
+                child: InkWell(
+                    onTap: () {
+                      quickOptionsSheet(size);
+                    },
+                    child: SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: SvgPicture.asset(ImageAssets.popUpMenu))),
+              ),
+            );
+          },
+          separatorBuilder: (context, _) => const SizedBox(height: 15),
         );
 
       case 1:
@@ -118,7 +126,7 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
                     text: AppStrings.completed,
                     style:
                         getRegularStyle(fontSize: 10.sp, color: primaryColor)),
-              const  Icon(
+                const Icon(
                   Iconsax.arrow_right_3,
                   color: primaryColor,
                   size: 12,

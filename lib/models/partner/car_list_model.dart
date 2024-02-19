@@ -261,6 +261,7 @@ class Document {
 }
 
 class Driver {
+    final String? driverID;
     final String? driverEmail;
     final String? driverNumber;
     final String? expireDate;
@@ -269,6 +270,7 @@ class Driver {
     final String? licenseUpload;
 
     Driver({
+      this.driverID,
         this.driverEmail,
         this.driverNumber,
         this.expireDate,
@@ -282,6 +284,7 @@ class Driver {
     String toRawJson() => json.encode(toJson());
 
     factory Driver.fromJson(Map<String, dynamic> json) => Driver(
+        driverID: json["driverID"],
         driverEmail: json["driverEmail"],
         driverNumber: json["driverNumber"],
         expireDate: json["expireDate"],
@@ -291,6 +294,7 @@ class Driver {
     );
 
     Map<String, dynamic> toJson() => {
+      "driverID": driverID,
         "driverEmail": driverEmail,
         "driverNumber": driverNumber,
         "expireDate": expireDate,

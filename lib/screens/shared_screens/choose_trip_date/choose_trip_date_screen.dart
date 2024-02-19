@@ -178,7 +178,7 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
                                                                     value);
                                                             setState(() {});
                                                           },
-                                                          childCount: 61,
+                                                          childCount: 60,
                                                           builder:
                                                               (context, index) {
                                                             bool isSelected =
@@ -314,7 +314,7 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
                                                                     value);
                                                             setState(() {});
                                                           },
-                                                          childCount: 61,
+                                                          childCount: 60,
                                                           builder:
                                                               (context, index) {
                                                             bool isSelected =

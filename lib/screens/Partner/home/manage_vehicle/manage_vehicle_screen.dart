@@ -286,7 +286,7 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
                           children: [
                             textWidget(
                                 text: car['startDate'] != null
-                                    ? (car['startDate'])
+                                    ? formateDate(date: (car['startDate'])) 
                                     : '',
                                 style: getMediumStyle(fontSize: 8.sp)
                                     .copyWith(fontFamily: 'Neue')),
@@ -303,7 +303,7 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
                             ),
                             textWidget(
                                 text: car['endDate'] != null
-                                    ? (car['endDate'])
+                                    ? formateDate(date: car['endDate'])
                                     : '',
                                 style: getMediumStyle(fontSize: 8.sp)
                                     .copyWith(fontFamily: 'Neue')),
@@ -652,7 +652,7 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
                                 // car['booked'] ? car['bookedStartDate] : car['startDate]
                                 textWidget(
                                     text: car['startDate'] != null
-                                        ? (car['startDate'])
+                                        ? formateDate(date: car['startDate'])
                                         : '',
                                     style: getMediumStyle(fontSize: 8.sp)
                                         .copyWith(fontFamily: 'Neue')),
@@ -669,7 +669,7 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
                                 ),
                                 textWidget(
                                     text: car['endDate'] != null
-                                        ? (car['endDate'])
+                                        ? formateDate(date: car['endDate'])
                                         : '',
                                     style: getMediumStyle(fontSize: 8.sp)
                                         .copyWith(fontFamily: 'Neue')),

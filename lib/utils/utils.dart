@@ -199,8 +199,8 @@ DateTime addHoursAndMinutes({
 
   // DateTime result = dateTime.add(Duration(hours: totalHours, minutes: minutes));
 
-  DateTime result = DateTime(dateTime.year, 
-  dateTime.month, dateTime.day, totalHours, minutes);
+  DateTime result = DateTime(
+      dateTime.year, dateTime.month, dateTime.day, totalHours, minutes);
 
   print("Input DateTime: $dateTime");
   print("Added Hours: $totalHours");
@@ -209,7 +209,6 @@ DateTime addHoursAndMinutes({
 
   return result;
 }
-
 
 // rteurns date as example 1 Nov
 String formatDateMonth(DateTime datetime) {
@@ -236,6 +235,18 @@ String formatDateTimeOrTime(DateTime dateTime) {
     return '${dateFormat.format(dateTime)} ${timeFormat.format(dateTime)}';
   }
 }
+
+String formateDate({required String date}) {
+  try {
+    DateTime dateTime = DateTime.parse(date);
+    String formattedDate = DateFormat('E, d MMM, h:mma').format(dateTime);
+    return formattedDate;
+  } catch (e) {
+    // Return the original string if parsing fails
+    return date;
+  }
+}
+
 
 String formatDateTimeOrTimeAgo(DateTime dateTime) {
   final now = DateTime.now();
