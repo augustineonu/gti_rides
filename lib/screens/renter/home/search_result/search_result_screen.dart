@@ -151,10 +151,17 @@ class SearchResultScreen extends GetView<SearchResultController> {
 
                                     PageView.builder(
                                       controller: controller.pageController,
-                                      physics: ScrollPhysics(),
+                                      physics: const ScrollPhysics(),
                                       itemCount: carData.photo!.take(5).length,
+
                                       onPageChanged: (int value) {
+
                                         controller.currentIndex.value = value;
+                                        controller.updateIndex.value = index;
+
+
+
+
                                       },
                                       itemBuilder: (context, index) {
                                         final carPhoto = carData.photo![index];
@@ -171,25 +178,45 @@ class SearchResultScreen extends GetView<SearchResultController> {
                                     ),
 
                                     Obx(
-                                      () => Positioned(
-                                        bottom: 10,
-                                        right: 0,
-                                        left: 0,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: List.generate(
-                                            carData.photo!.take(5).length,
-                                            (index) => BuildCarouselDot(
-                                              currentIndex:
-                                                  controller.currentIndex.value,
-                                              index: index,
+                                      () => controller.updateIndex.value ==
+                                              index
+                                          ? Positioned(
+                                              bottom: 10,
+                                              right: 0,
+                                              left: 0,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: List.generate(
+                                                  carData.photo!.take(5).length,
+                                                  (index) => BuildCarouselDot(
+                                                    currentIndex: controller
+                                                        .currentIndex.value,
+                                                    index: index,
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                          : Positioned(
+                                              bottom: 10,
+                                              right: 0,
+                                              left: 0,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: List.generate(
+                                                  carData.photo!.take(5).length,
+                                                  (index) => BuildCarouselDot(
+                                                    currentIndex: 0,
+                                                    index: index,
+                                                  ),
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                        ),
-                                      ),
                                     ),
                                     carAvailabilityTag(
                                         positionRight: 7.sp,

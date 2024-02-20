@@ -13,6 +13,7 @@ import 'package:gti_rides/shared_widgets/date_time_col_widget.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/how_gti_works_widget.dart';
+import 'package:gti_rides/shared_widgets/shimmer_loading/box_shimmer.dart';
 import 'package:gti_rides/shared_widgets/switch_profile_widget.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
@@ -40,7 +41,7 @@ class PartnerHomeScreen extends StatefulWidget {
 
 class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
   final controller = Get.put<PartnerHomeController>(PartnerHomeController());
-    final landingController = Get.put(PartnerLandingController());
+  final landingController = Get.put(PartnerLandingController());
 
   late Timer timer;
   RxInt currentIndex = 0.obs;
@@ -101,7 +102,8 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
               SafeArea(
                 child: Column(
                   children: [
-                    appBar(size, controller, landingController: landingController),
+                    appBar(size, controller,
+                        landingController: landingController),
                     // body(controller, size),
                     Expanded(
                       child: SingleChildScrollView(
@@ -203,11 +205,7 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
                                     ),
                                   ),
                                 ),
-                                onLoading: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: context.height * 0.1),
-                                  child: Center(child: centerLoadingIcon()),
-                                ),
+                                onLoading: boxShimmer(height: 200.sp),
                               );
                             }),
                           ],
@@ -654,10 +652,8 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
   }
 }
 
-Widget appBar(Size size, PartnerHomeController controller,{
-  PartnerLandingController? landingController
-}) {
-
+Widget appBar(Size size, PartnerHomeController controller,
+    {PartnerLandingController? landingController}) {
   return Padding(
     padding: const EdgeInsets.only(left: 16, top: 10, bottom: 10),
     child: Row(

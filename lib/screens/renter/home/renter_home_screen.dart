@@ -9,6 +9,7 @@ import 'package:gti_rides/screens/renter/landing_controller.dart';
 import 'package:gti_rides/screens/renter/widgets/build_carousel_dot.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/how_gti_works_widget.dart';
+import 'package:gti_rides/shared_widgets/shimmer_loading/box_shimmer.dart';
 import 'package:gti_rides/shared_widgets/switch_profile_widget.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
@@ -353,19 +354,8 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
                     ),
                   ),
                 ),
-                onLoading: Padding(
-                  // padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  // child: Center(child: centerLoadingIcon()),
-                  child: Shimmer.fromColors(
-                      child: Container(
-                        height: 200,
-                        decoration: BoxDecoration(
-                          color: grey1,
-                        ),
-                      ),
-                      baseColor: grey1.withOpacity(0.1),
-                      highlightColor: grey3.withOpacity(0.2)),
+                onLoading: boxShimmer(
+                  height: 200.sp
                 ),
               ),
             ),
@@ -378,6 +368,8 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
       ),
     );
   }
+
+
 
   Widget headerText(CarRenterHomeController controller) {
     return Row(
@@ -403,13 +395,16 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
       width: MediaQuery.of(context).size.width.sp,
       padding: EdgeInsets.symmetric(vertical: 15.sp),
       child: Stack(alignment: Alignment.center, children: [
-        ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(4.r)),
-            child: Image.asset(
-              ImageAssets.ladyHandout,
-              fit: BoxFit.fitHeight,
-              height: 260.sp,
-            )),
+        SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: ClipRRect(
+              borderRadius: BorderRadius.all(Radius.circular(4.r)),
+              child: Image.asset(
+                ImageAssets.ladyHandout,
+                fit: BoxFit.fitHeight,
+                height: 260.sp,
+              )),
+        ),
         Positioned(
           bottom: 30.sp,
           left: 15,

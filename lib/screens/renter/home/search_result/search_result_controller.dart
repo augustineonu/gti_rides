@@ -23,6 +23,8 @@ class SearchResultController extends GetxController {
   Rx<String> endDateTime = ''.obs;
   Rx<int> differenceInDays = 0.obs;
     late List<PageController> pageControllers;
+    RxInt updateIndex = 0.obs;
+
 
 
   SearchResultController() {
