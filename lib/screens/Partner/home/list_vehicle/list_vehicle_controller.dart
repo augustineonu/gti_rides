@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ import 'package:gti_rides/utils/utils.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
+import 'package:path_provider/path_provider.dart';
 
 class ListVehicleController extends GetxController {
   Logger logger = Logger("Controller");
@@ -924,26 +926,15 @@ class ListVehicleController extends GetxController {
     }
     try {
       isLoading1.value = true;
-      final response = await partnerService.addCarAvailability(
-          payload: {
-            "startDate": rawStartTime!.toIso8601String(),
-            "endDate": rawEndTime!.toIso8601String(),
-            "advanceDays": advanceTime.value,
-            "pricePerDay": rentPerDayController.text,
-            "discountDays": discountDays.value,
-            "discountPrice": discountPerDayController.text,
-            "driverID": selectedDriverId.value
-          },
-          // {
-          //   "startDate": startDateTime.value,
-          //   "endDate": endDateTime.value,
-          //   "advanceDays": advanceAmount,
-          //   "pricePerDay": rentPerDayController.text,
-          //   "discountDays": discountNoOfDays.value,
-          //   "discountPrice": discountPerDayController.text,
-          //   "driverID": selectedDriverId.value
-          // },
-          carID: carID.value);
+      final response = await partnerService.addCarAvailability(payload: {
+        "startDate": rawStartTime!.toIso8601String(),
+        "endDate": rawEndTime!.toIso8601String(),
+        "advanceDays": advanceTime.value,
+        "pricePerDay": rentPerDayController.text,
+        "discountDays": discountDays.value,
+        "discountPrice": discountPerDayController.text,
+        "driverID": selectedDriverId.value
+      }, carID: carID.value);
 
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("added availability ${response.data}");
@@ -1033,6 +1024,36 @@ class ListVehicleController extends GetxController {
   // logger.log("form field ${data1.fields.toList()}");
 
 //////////////
+  ///
+  Future<void> downloadAndSaveImage(
+      String url, String fileName, Function(String) onDownloadComplete) async {
+    try {
+      final response = await dio.Dio().get<Uint8List>(
+        url,
+        options: dio.Options(responseType: dio.ResponseType.bytes),
+      );
+      logger.log("Photo downloaded: ${response.data}");
+
+      final directory = await getApplicationDocumentsDirectory();
+      final filePath = '${directory.path}/$fileName';
+
+      logger.log("Saving to file path: $filePath");
+
+      final file = File(filePath);
+      await file.writeAsBytes(response.data!, flush: true);
+
+      // Rename the file
+      File(filePath).renameSync('${directory.path}/$fileName');
+
+      // Invoke the callback with the new local file path
+      onDownloadComplete(filePath);
+
+      // Continue with further operations after the download is complete
+    } catch (e) {
+      // Handle any errors or exceptions that occur during the process
+      print("Error downloading and saving image: $e");
+    }
+  }
 
   Future<void> addCarDocument() async {
     if (!documentationFormKey.currentState!.validate() ||
@@ -1329,56 +1350,67 @@ class ListVehicleController extends GetxController {
           logger.log("features code:: ${featuresCode.value}");
 
           // documentation
-          // insurance.value = firstCar["insurance"].isNotEmpty
-          //     ? firstCar["insurance"][0]["insuranceName"]
-          //     : '';
-          // //4
-          // final inspectionDocUrl = firstCar["document"].isNotEmpty
-          //     ? firstCar['document'][0]["documentURL"]
-          //     : null;
-          // //2
-          // final roadWorthinessDocUrl = firstCar["document"].isNotEmpty
-          //     ? firstCar['document'][1]["documentURL"]
-          //     : null;
-          // 1
-          // final licenseDocUrl = firstCar["document"].isNotEmpty
-          //     ? firstCar['document'][2]["documentURL"]
-          //     : null;
+          insurance.value = firstCar["insurance"].isNotEmpty
+              ? firstCar["insurance"][0]["insuranceName"]
+              : '';
+          insuranceCode.value = firstCar["insurance"].isNotEmpty
+              ? firstCar["insurance"][0]["insuranceCode"]
+              : '';
+
           final licenseDocUrl =
+              carListData.document != null && carListData.document!.isNotEmpty
+                  ? carListData.document![3].documentUrl
+                  : null;
+          final inspectionDocUrl =
+              carListData.document != null && carListData.document!.isNotEmpty
+                  ? carListData.document![1].documentUrl
+                  : null;
+          final insuranceDocUrl =
               carListData.document != null && carListData.document!.isNotEmpty
                   ? carListData.document![0].documentUrl
                   : null;
-          // final licenseDocUrl = carListData.document?[0].documentUrl;
-          final inspectionDocUrl = carListData.document != null && carListData.document!.isNotEmpty
-                  ?  carListData.document![1].documentUrl : null;
-          final insuranceDocUrl = carListData.document != null && carListData.document!.isNotEmpty
-                  ?  carListData.document![2].documentUrl : null;
 
-          final roadWorthinessDocUrl = carListData.document != null && carListData.document!.isNotEmpty
-                  ?  carListData.document![3].documentUrl : null;
+          final roadWorthinessDocUrl =
+              carListData.document != null && carListData.document!.isNotEmpty
+                  ? carListData.document![2].documentUrl
+                  : null;
+          // vehicle License
+          await downloadAndSaveImage(licenseDocUrl!, 'vehicleLicense.png',
+              (filePath) {
+            selectedPhotos.value = filePath;
+            selectedPhotoName.value = 'vehicleLicense.png';
 
-          //3
-          // final insuranceDocUrl = firstCar["document"].isNotEmpty
-          //     ? firstCar['document'][3]["documentURL"]
-          //     : null;
+            logger.log("extracted name: ${selectedPhotoName.value}");
+          });
+          // vehicle inspection
+          await downloadAndSaveImage(inspectionDocUrl!, 'inspectionReport.png',
+              (filePath) {
+            selectedInspectionPhotos.value = filePath;
+            selectedInspectionPhotoName.value = 'inspectionReport.png';
 
-          selectedInspectionPhotos.value =
-              extractDocumentName(inspectionDocUrl);
-          selectedInspectionPhotoName.value = selectedInspectionPhotos.value;
+            logger.log("extracted name: ${selectedInspectionPhotos.value}");
+          });
+       
+          // roadWorthiness
+          await downloadAndSaveImage(
+              roadWorthinessDocUrl!, 'roadWorthiness.png', (filePath) {
+            selectedRoadWorthinessPhoto.value = filePath;
+            selectedRoadWorthinessPhotoName.value = 'roadWorthiness.png';
 
-          selectedPhotos.value = extractDocumentName(licenseDocUrl);
-          selectedPhotoName.value = selectedPhotos.value;
+            logger.log(
+                "extracted name: ${selectedRoadWorthinessPhotoName.value}");
+          });
+      
+          // insurance photos
 
-          selectedRoadWorthinessPhoto.value =
-              extractDocumentName(roadWorthinessDocUrl);
-          selectedRoadWorthinessPhotoName.value =
-              selectedRoadWorthinessPhoto.value;
+          await downloadAndSaveImage(
+              insuranceDocUrl!, 'insuranceCertificate.png', (filePath) {
+            selectedInsurancePhotos.value = filePath;
+            selectedInsurancePhotoName.value = 'insuranceCertificate.png';
 
-          selectedInsurancePhotos.value = extractDocumentName(insuranceDocUrl);
-          selectedInsurancePhotoName.value = selectedInsurancePhotos.value;
-
-          logger.log("Document: ${selectedInspectionPhotos.value} ");
-
+            logger.log("extracted name: ${selectedInsurancePhotos.value}");
+          });
+       
           // selectedInspectionPhotos.value =
           //     firstCar['document'][0]["documentURL"];
           // // availability
@@ -1392,9 +1424,10 @@ class ListVehicleController extends GetxController {
           selectedView.value = firstCar["driver"].isNotEmpty
               ? firstCar["driver"][0]["fullName"]
               : '';
-              // TODO:
-              selectedDriverId.value = (carListData.driver!.isNotEmpty ?
-              carListData.driver!.first.driverID : '')!;
+          // TODO:
+          selectedDriverId.value = (carListData.driver!.isNotEmpty
+              ? carListData.driver!.first.driverID
+              : '')!;
 
           await getCity(cityCode1: stateCode.value);
 

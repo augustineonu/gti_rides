@@ -943,37 +943,37 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
             SizedBox(
               height: 24.sp,
             ),
-            // dropdownWidget1(
-            //     context: context,
-            //     hintText: 'Select',
-            //     title: AppStrings.selectInsuranceType,
-            //     iconColor: grey3,
-            //     expectedVariable: 'field',
-            //     values: (controller.insurances?.value ?? [])
-            //         .map((insurance) => insurance['insuranceName'] as String)
-            //         .toList(),
-            //     selectedValue: controller.isFromManageCars.isTrue ||
-            //             controller.insurance.value.isNotEmpty
-            //         ? controller.insurance.value
-            //         : null,
-            //     onChange: (selectedInsurance) {
-            //       controller.insurance.value = selectedInsurance;
-            //       print('Selected value: $selectedInsurance');
-            //       // Find the brand object with the selected name
-            //       var selectedObject =
-            //           (controller.insurances?.value ?? []).firstWhere(
-            //         (insurance) =>
-            //             insurance['insuranceName'] == selectedInsurance,
-            //         orElse: () => null,
-            //       );
-            //       if (selectedObject != null) {
-            //         String insuranceCode =
-            //             selectedObject['insuranceCode'] as String;
-            //         controller.insuranceCode.value = insuranceCode;
-            //         print(
-            //             "seleted insuranceCode:: ${controller.insuranceCode.value}");
-            //       }
-            //     }),
+            dropdownWidget1(
+                context: context,
+                hintText: 'Select',
+                title: AppStrings.selectInsuranceType,
+                iconColor: grey3,
+                expectedVariable: 'field',
+                values: (controller.insurances?.value ?? [])
+                    .map((insurance) => insurance['insuranceName'] as String)
+                    .toList(),
+                selectedValue: controller.isFromManageCars.isTrue &&
+                        controller.insurance.value.isNotEmpty
+                    ? controller.insurance.value
+                    : null,
+                onChange: (selectedInsurance) {
+                  controller.insurance.value = selectedInsurance;
+                  print('Selected value: $selectedInsurance');
+                  // Find the brand object with the selected name
+                  var selectedObject =
+                      (controller.insurances?.value ?? []).firstWhere(
+                    (insurance) =>
+                        insurance['insuranceName'] == selectedInsurance,
+                    orElse: () => null,
+                  );
+                  if (selectedObject != null) {
+                    String insuranceCode =
+                        selectedObject['insuranceCode'] as String;
+                    controller.insuranceCode.value = insuranceCode;
+                    print(
+                        "seleted insuranceCode:: ${controller.insuranceCode.value}");
+                  }
+                }),
 
             SizedBox(
               height: 24.sp,
