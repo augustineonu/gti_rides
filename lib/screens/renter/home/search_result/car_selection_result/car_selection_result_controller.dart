@@ -34,6 +34,10 @@ class CarSelectionResultController extends GetxController
       startDateTime.value = arguments!['startDateTime'] ?? '';
       endDateTime.value = arguments!['endDateTime'] ?? '';
       tripDays.value = arguments!['differenceInDays'] ?? 0;
+
+      rawStartTime = arguments?["rawStartTime"] ?? DateTime.now();
+      rawEndTime = arguments?["rawEndTime"] ?? DateTime.now();
+
       await getTripAmountData();
       if (carId.value != '') {
         await getCarHistory();
@@ -116,6 +120,8 @@ class CarSelectionResultController extends GetxController
   // Rx<String> pickUp = ''.obs;
   Rx<String> vatValue = ''.obs;
   Rx<String> formattedVatValue = ''.obs;
+  DateTime? rawStartTime;
+  DateTime? rawEndTime;
 
   void goBack() => routeService.goBack();
   void routeToSearchFilter() => routeService.gotoRoute(AppLinks.searchFilter);
@@ -368,7 +374,7 @@ class CarSelectionResultController extends GetxController
   // Function to check missing fields
   List<String> getMissingKycFields(KycData kycData, int tripType) {
     List<String> missingKycFields = [];
-    List<String> requiredKycFields =getRequiredKycFields(tripType);
+    List<String> requiredKycFields = getRequiredKycFields(tripType);
 
     for (String field in requiredKycFields) {
       dynamic fieldValue = kycData.toJson()[field];
@@ -382,16 +388,14 @@ class CarSelectionResultController extends GetxController
     return missingKycFields;
   }
 
-    RxString carNotAvailable = ''.obs;
-        // final controller = Get.put(ChooseTripDateController());
+  RxString carNotAvailable = ''.obs;
+  // final controller = Get.put(ChooseTripDateController());
 
-// raw date should be passed from previous screen 
+// raw date should be passed from previous screen
   Future<bool> checkCarAvailability() async {
     try {
       final response = await renterService.getCarTrip(
-          carID: carId.value,
-          startDate: DateTime.now(),
-          endDate: DateTime.now());
+          carID: carId.value, startDate: rawStartTime!, endDate: rawEndTime!);
       if (response.status == 'success' || response.status_code == 200) {
         if (response.data!.isEmpty) {
           return true;
@@ -646,7 +650,6 @@ class CarSelectionResultController extends GetxController
     }
   }
 }
-
 
 //  Future<void> processBooking() async {
 //     // Sample KYC response data

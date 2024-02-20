@@ -106,7 +106,9 @@ class SearchResultScreen extends GetView<SearchResultController> {
                                       controller.startDateTime.value,
                                   "endDateTime": controller.endDateTime.value,
                                   "differenceInDays":
-                                      controller.differenceInDays.value
+                                      controller.differenceInDays.value,
+                                  "rawStartTime": controller.rawStartTime,
+                                  "rawEndTime": controller.rawEndTime
                                 }))
                             .onError((error, stackTrace) =>
                                 printError(info: "Erro: $error")),
@@ -153,15 +155,9 @@ class SearchResultScreen extends GetView<SearchResultController> {
                                       controller: controller.pageController,
                                       physics: const ScrollPhysics(),
                                       itemCount: carData.photo!.take(5).length,
-
                                       onPageChanged: (int value) {
-
                                         controller.currentIndex.value = value;
                                         controller.updateIndex.value = index;
-
-
-
-
                                       },
                                       itemBuilder: (context, index) {
                                         final carPhoto = carData.photo![index];

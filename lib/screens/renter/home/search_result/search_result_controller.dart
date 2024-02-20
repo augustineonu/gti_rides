@@ -24,7 +24,8 @@ class SearchResultController extends GetxController {
   Rx<int> differenceInDays = 0.obs;
     late List<PageController> pageControllers;
     RxInt updateIndex = 0.obs;
-
+    DateTime? rawStartTime;
+  DateTime? rawEndTime;
 
 
   SearchResultController() {
@@ -45,6 +46,8 @@ class SearchResultController extends GetxController {
       startDateTime.value = arguments?['startDateTime'] ?? '';
       endDateTime.value = arguments?['endDateTime'] ?? '';
       differenceInDays.value = arguments?["differenceInDays"] ?? 0;
+      rawStartTime = arguments?["rawStartTime"] ?? DateTime.now();
+      rawEndTime = arguments?["rawEndTime"] ?? DateTime.now();
     }
   }
 

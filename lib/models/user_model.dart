@@ -10,15 +10,15 @@ UserModel userModelFromJson(String str) => UserModel.fromJson(json.decode(str));
 String userModelToJson(UserModel data) => json.encode(data.toJson());
 
 class UserModel {
-    final String? userId;
-    final String? emailAddress;
-    final String ?fullName;
-    final String? phoneNumber;
-    final String? profilePic;
-    final String? referralCode;
+    final dynamic userId;
+    final dynamic emailAddress;
+    final dynamic fullName;
+    final dynamic phoneNumber;
+    final dynamic profilePic;
+    final dynamic referralCode;
     final DateTime? registerDate;
-     String? userType;
-    final String? status;
+     dynamic userType;
+    final dynamic status;
 
     UserModel({
          this.userId,

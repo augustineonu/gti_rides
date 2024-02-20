@@ -261,6 +261,8 @@ class SearchCityScreen extends GetView<SearchCityController> {
                                                             .value =
                                                         data[
                                                             'differenceInDays'];
+                                                            controller.rawStartTime = data['rawStartTime'];
+                                                            controller.rawEndTime = data['rawEndTime'];
 
                                                     WidgetsBinding.instance!
                                                         .addPostFrameCallback(
@@ -287,12 +289,59 @@ class SearchCityScreen extends GetView<SearchCityController> {
                                                     .toController.value
                                                   ..text = controller
                                                       .endDateTime.value,
-                                                onTap: () {
-                                                  SystemChannels.textInput
-                                                      .invokeMethod(
-                                                          'TextInput.hide');
-                                                  controller
-                                                      .routeToSelecteDate();
+                                               onTap: () async {
+                                                  // SystemChannels.textInput
+                                                  //     .invokeMethod(
+                                                  //         'TextInput.hide');
+                                                  // controller.routeToSelecteDate();
+                                                  var data = await Get.toNamed(
+                                                      AppLinks.chooseTripDate,
+                                                      arguments: {
+                                                        "isRenterHome": true,
+                                                        "appBarTitle":
+                                                            AppStrings
+                                                                .tripDates,
+                                                        "from": AppStrings
+                                                            .startDate,
+                                                        "to":
+                                                            AppStrings.endDate,
+                                                        "enablePastDates":
+                                                            false,
+                                                      });
+                                                  print(
+                                                      "Received data:: $data");
+                                                  if (data != null) {
+                                                    controller.startDateTime
+                                                            .value =
+                                                        data['start'] ?? '';
+                                                    controller
+                                                            .endDateTime.value =
+                                                        data['end'] ?? '';
+                                                    controller.startDate.value =
+                                                        extractDay(controller
+                                                            .startDateTime
+                                                            .value);
+                                                    controller.endDate.value =
+                                                        extractDayMonth(
+                                                            controller
+                                                                .endDateTime
+                                                                .value);
+                                                    controller
+                                                            .selectedDifferenceInDays
+                                                            .value =
+                                                        data[
+                                                            'differenceInDays'];
+                                                            controller.rawStartTime = data['rawStartTime'];
+                                                            controller.rawEndTime = data['rawEndTime'];
+
+                                                    WidgetsBinding.instance!
+                                                        .addPostFrameCallback(
+                                                            (_) {
+                                                      setState(() {});
+                                                    });
+                                                  }
+                                                  // print(
+                                                  //     "formatted date:: $startDate");
                                                 },
                                               ),
                                             ),

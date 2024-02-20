@@ -177,7 +177,8 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                                   ),
                                   InkWell(
                                     onTap: () => controller.onAddCarToFav(
-                                        carId: car?.carId, carStatus: car?.favorite),
+                                        carId: car?.carId,
+                                        carStatus: car?.favorite),
                                     child: Container(
                                       padding: EdgeInsets.all(10.sp),
                                       decoration: BoxDecoration(
@@ -225,6 +226,8 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                             controller.endDateTime.value = data['end'];
                             controller.tripDays.value =
                                 data["differenceInDays"];
+                            controller.rawStartTime = data['rawStartTime'];
+                            controller.rawEndTime = data['rawEndTime'];
                             await controller.getCarHistory();
                           }
                         },
@@ -543,7 +546,7 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                     text:
                         "${car?.modelYear?[0].yearName} ${car?.brand?[0].brandName} ${car?.brandModel?[0].modelName}",
                     style: getBoldStyle().copyWith(
-                      fontSize: 20.sp,
+                      fontSize: 18.sp,
                       color: white,
                       fontFamily: 'Neue',
                     ),

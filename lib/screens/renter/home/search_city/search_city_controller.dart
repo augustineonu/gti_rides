@@ -46,6 +46,8 @@ class SearchCityController extends GetxController {
   RxString startDate = ''.obs;
   RxString endDate = ''.obs;
   Rx<int> selectedDifferenceInDays = 0.obs;
+  DateTime? rawStartTime;
+  DateTime? rawEndTime;
 
   TextEditingController searchCategoryController = TextEditingController();
   Rx<TextEditingController> fromController = TextEditingController().obs;
@@ -98,8 +100,6 @@ class SearchCityController extends GetxController {
 
     super.onInit();
   }
-
-
 
   void queryListener() {
     updateFilteredLocations(searchCategoryController.text);
@@ -323,8 +323,9 @@ class SearchCityController extends GetxController {
               "endDate": endDate.value,
               "startDateTime": startDateTime.value,
               "endDateTime": endDateTime.value,
-              "differenceInDays": selectedDifferenceInDays.value
-
+              "differenceInDays": selectedDifferenceInDays.value,
+              "rawStartTime": rawStartTime,
+              "rawEndTime": rawEndTime
             },
           );
         }
