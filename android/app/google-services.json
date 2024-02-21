@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "834484120579",
+    "firebase_url": "https://gti-rides-default-rtdb.firebaseio.com",
     "project_id": "gti-rides",
     "storage_bucket": "gti-rides.appspot.com"
   },
