@@ -296,6 +296,8 @@ class CarSelectionResultController extends GetxController
   //   formattedVatValue.value = await formatAmount(vatAmount);
   // }
 
+  List<CarHistoryData>? carHistory;
+
   Future<void> getCarHistory() async {
     change(<CarHistoryData>[].obs, status: RxStatus.loading());
     try {
@@ -311,12 +313,12 @@ class CarSelectionResultController extends GetxController
           // List<CarHistoryData> carHistory = List<CarHistoryData>.from(
           //   response.data!.map((car) => CarHistoryData.fromJson(car)),
           // );
-          List<CarHistoryData> carHistory = response.data!
+          carHistory = response.data!
               .map((car) => CarHistoryData.fromJson(car))
               .toList();
           change(carHistory, status: RxStatus.success());
 
-          pricePerDay.value = carHistory.first.pricePerDay;
+          pricePerDay.value = carHistory?.first.pricePerDay;
           //price per day total x no of days
           total.value =
               await calculateEstimatedTotal(pricePerDay.value, tripDays.value);
@@ -457,10 +459,21 @@ class CarSelectionResultController extends GetxController
       showErrorSnackbar(message: 'Kindly select trip dates');
       return;
     }
+    if (carHistory?.first.availability != "available ".toLowerCase()) {
+      showSuccessSnackbar(message: "Car not available");
+      return;
+    }
     await updateEstimatedTotal();
     await addGrandTotal();
 
     isLoading.value = true;
+    var isCarAvailable = await checkCarAvailability();
+    if (!isCarAvailable) {
+      showSuccessSnackbar(message: carNotAvailable.value);
+      isLoading.value = false;
+      return;
+      
+    }
     try {
       final kycResponse = await userService.getKycProfile();
 

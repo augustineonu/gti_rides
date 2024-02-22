@@ -52,6 +52,7 @@ class ImageAssets {
   static const String key = "$SVG_PATH/key.svg";
   static const String logOut = "$SVG_PATH/log_out.svg";
   static const String accessCheck = "$SVG_PATH/Vector.svg";
+  static const String pending = "$SVG_PATH/pending.svg";
   static const String cardBgSmallLeft = "$SVG_PATH/card_bg_small_left.svg";
   static const String cardBgSmallRight = "$SVG_PATH/card_bg_small_right.svg";
   static const String notAvailable = "$SVG_PATH/not_available.svg";
@@ -114,5 +115,6 @@ class ImageAssets {
   static const String ladyPick = "$IMAGE_PATH/lady_picks.png";
   static const String moreFrame = "$IMAGE_PATH/more_frame.png";
   static const String rentVehicleBg = "$IMAGE_PATH/rent_vehicle_bg.png'";
+  static const String pending1 = "$IMAGE_PATH/pending1.png";
 
 }

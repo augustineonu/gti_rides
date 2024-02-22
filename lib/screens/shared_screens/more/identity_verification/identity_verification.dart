@@ -9,6 +9,7 @@ import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
+import 'package:gti_rides/utils/utils.dart';
 
 class IdentityVerifiationBinding extends Bindings {
   @override
@@ -74,9 +75,8 @@ class IdentityVerificationScreen
 
               const SizedBox(height: 20),
               Visibility(
-                visible: controller.isKycUpdate.isTrue &&
-                        controller.tripData.value.tripType == 'self drive'
-                    ? true 
+                visible: controller.isKycUpdate.isTrue
+                    ? controller.tripData.value.tripType == 'self drive'
                     : true,
                 child: identityVerificationWidget(
                     title: AppStrings.proofOfIdentity,
@@ -96,7 +96,7 @@ class IdentityVerificationScreen
               identityVerificationWidget(
                   title: AppStrings.dob,
                   subTitle: userKyc != []
-                      ? userKyc![0]["dateOfBirth"] ?? AppStrings.provideDob
+                      ? formatDate1(date: userKyc![0]["dateOfBirth"]) ?? AppStrings.provideDob
                       : AppStrings.provideDob,
                   onTap: controller.routeToDob),
               identityVerificationWidget(
@@ -111,9 +111,8 @@ class IdentityVerificationScreen
 
               // address verification
               Visibility(
-                visible:  controller.isKycUpdate.isTrue &&
-                        controller.tripData.value.tripType == 'self drive'
-                    ? true 
+                visible: controller.isKycUpdate.isTrue
+                    ? controller.tripData.value.tripType == 'self drive'
                     : true,
                 child: Column(
                   children: [
@@ -183,28 +182,23 @@ class IdentityVerificationScreen
                           ),
                         ),
                         identityVerificationWidget(
-                            title: controller.user.value.status
-                                        ?.toLowerCase() ==
-                                    "pending"
-                                ? AppStrings.pending
-                                : controller.user.value.status?.toLowerCase() ==
-                                        "approved"
-                                    ? AppStrings.approved
-                                    : AppStrings.suspended,
-                            titleColor: controller.user.value.status
-                                        ?.toLowerCase() ==
-                                    "pending"
+                            title:
+                                // controller.user.value.status
+                                //             ?.toLowerCase() ==
+                                //         "pending"
+                                controller.user.value.status == false
+                                    ? AppStrings.pending
+                                    : controller.user.value.status == true
+                                        ? AppStrings.approved
+                                        : AppStrings.suspended,
+                            titleColor: controller.user.value.status == false
                                 ? yellow
-                                : controller.user.value.status?.toLowerCase() ==
-                                        "approved"
+                                : controller.user.value.status == true
                                     ? green
                                     : red,
-                            subTitle: controller.user.value.status
-                                        ?.toLowerCase() ==
-                                    "pending"
+                            subTitle: controller.user.value.status == false
                                 ? AppStrings.pendingApproval
-                                : controller.user.value.status?.toLowerCase() ==
-                                        "approved"
+                                : controller.user.value.status == true
                                     ? AppStrings.youCanProceedToRent
                                     : AppStrings.accountSuspended,
                             onTap: () {}),

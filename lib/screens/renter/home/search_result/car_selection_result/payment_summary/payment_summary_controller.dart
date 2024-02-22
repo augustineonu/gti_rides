@@ -160,7 +160,7 @@ class PaymentSummaryController extends GetxController {
       if (response.status == 'success' || response.status_code == 200) {
         // call the flutterwave checkout URL
         logger.log("Success: ${response.data}");
-        var url = response.data["link"];
+        
         if (tripType.value == 1) {
           successDialog(
               title: AppStrings.requestSentSuccessful,
@@ -168,6 +168,7 @@ class PaymentSummaryController extends GetxController {
               buttonTitle: AppStrings.home,
               onTap: () => routeService.offAllNamed(AppLinks.carRenterLanding));
         } else {
+          var url = response.data["link"];
           var value =
               await routeService.gotoRoute(AppLinks.paymentWebView, arguments: {
             "checkoutUrl": url,
@@ -191,6 +192,7 @@ class PaymentSummaryController extends GetxController {
       }
     } catch (exception) {
       logger.log("Exception:: ${exception.toString()}");
+      showErrorSnackbar(message: "message: $exception");
     } finally {
       isLoading.value = false;
     }

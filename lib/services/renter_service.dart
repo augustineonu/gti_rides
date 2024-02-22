@@ -182,7 +182,7 @@ class RenterService {
   }) async {
     try {
       final result = await apiService.getRequest(
-        '/renter/trip/checkCarTrip?carID=$carID&startDate=$startDate&endDate=$endDate',
+        '/user/renter/trip/checkCarTrips?carID=$carID&startDate=$startDate&endDate=$endDate',
       );
       // logger.log("result $result");
 
@@ -207,11 +207,11 @@ class RenterService {
   }
 
   Future<ListResponseModel> getAllTrips({
-    required String status,
+    String? status,
   }) async {
     try {
       final result = await apiService.getRequest(
-        '/user/renter/trip/getAllTrips?status=$status',
+        '/user/renter/trip/getAllTrips?status=&skip=0&limit=1000',
       );
       // logger.log("result $result");
 

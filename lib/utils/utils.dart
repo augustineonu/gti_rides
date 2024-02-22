@@ -222,6 +222,17 @@ String formatDayDate(DateTime datetime) {
   return formatter.format(datetime);
 }
 
+// returns as 9:00am
+String formatTime(DateTime time) {
+  try {
+    var formatter = DateFormat('h:mm a');
+    return formatter.format(time);
+  } catch (e) {
+    print("unable to format time $e");
+    return time.toIso8601String();
+  }
+}
+
 String formatDateTimeOrTime(DateTime dateTime) {
   final now = DateTime.now();
   final dateFormat = DateFormat('MMM d, y');
@@ -236,6 +247,7 @@ String formatDateTimeOrTime(DateTime dateTime) {
   }
 }
 
+// wed, 1 Nov, 9:00am
 String formateDate({required String date}) {
   try {
     DateTime dateTime = DateTime.parse(date);
@@ -247,6 +259,17 @@ String formateDate({required String date}) {
   }
 }
 
+// 02 - 05 - 2013
+String formatDate1({required String date}) {
+  try {
+    DateTime dateTime = DateTime.parse(date);
+    String formattedDate = DateFormat('dd - MM - yyyy').format(dateTime);
+    return formattedDate;
+  } catch (e) {
+    // Return the original string if parsing fails
+    return date;
+  }
+}
 
 String formatDateTimeOrTimeAgo(DateTime dateTime) {
   final now = DateTime.now();

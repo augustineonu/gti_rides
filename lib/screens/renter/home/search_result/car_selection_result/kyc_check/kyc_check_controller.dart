@@ -36,6 +36,7 @@ class KycCheckController extends GetxController {
           .toList();
       appBarTitle.value = arguments?["appBarTitle"];
       tripData.value = arguments?["tripData"] as TripData;
+      logger.log("trip data:: ${tripData.value.tripType ?? 'lol'}");
       logger.log("${tripData.value.carID}");
       pricePerDay.value = arguments?["pricePerDay"];
       estimatedTotal.value = arguments?["estimatedTotal"];

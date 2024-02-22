@@ -34,12 +34,12 @@ class NotificationService {
   }
 
   final androidChannel = const AndroidNotificationChannel(
-    "quickly_drop_channel3",
-    "quickly_drop_agent",
+    "gti_rides_channel1",
+    "gti_rides",
     description: "This channel is used for important notification",
     importance: Importance.high,
     playSound: true,
-    sound: RawResourceAndroidNotificationSound("quicklydrop_not_sound"),
+    sound: RawResourceAndroidNotificationSound("gti_rides_sound"),
   );
 
   Future<void> handleMessage(RemoteMessage? message) async {
@@ -58,6 +58,7 @@ class NotificationService {
         totalNotifications.value++;
 
         if (notification.title!.toLowerCase().contains("order")) {
+          logger.log("Notification:: ${notification.body ?? "unknown"}");
           // check if user accept order is true/ false
           // route to current order or awaiting order screen
           // routeService.offAllNamed(AppLinks.currentOrders, arguments: {
@@ -65,6 +66,7 @@ class NotificationService {
           //   "body": pushNotification.body,
           // });
         } else {
+           logger.log("Notification:: ${notification.body ?? "unknown"}");
           // routeService.offAllNamed(AppLinks.notification, arguments: {
           //   "title": pushNotification.title,
           //   "body": pushNotification.body,
@@ -138,7 +140,7 @@ class NotificationService {
                       htmlFormatContent: true),
                 ),
                 iOS: const DarwinNotificationDetails(
-                    sound: "quicklydrop_not_sound.aiff",
+                    sound: "gti_rides_sound.mp3",
                     presentSound: true),
               ),
               payload: jsonEncode(message.toMap()));

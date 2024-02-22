@@ -8,7 +8,8 @@ import 'package:gti_rides/services/renter_service.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/utils/constants.dart';
 
-class TripsController extends GetxController with StateMixin<PendingTripsData> {
+class TripsController extends GetxController
+    with StateMixin<List<PendingTripsData>> {
   Logger logger = Logger("Controller");
 
   TripsController() {
@@ -20,8 +21,9 @@ class TripsController extends GetxController with StateMixin<PendingTripsData> {
   }
 
   @override
-  void onInit() {
+  void onInit() async{
     super.onInit();
+    // await getAllTrips();
     // Initialize your ratings list with default values
     ratings1 = List<RatingItem>.generate(
       ratings.length, // Use your desired length
@@ -30,10 +32,11 @@ class TripsController extends GetxController with StateMixin<PendingTripsData> {
   }
 
   @override
-  void onReady() {
+  void onReady() async {
     // TODO: implement onReady
     lastDateTimeController.value.text = '1 Nov, 9:00am'.obs.toString();
     super.onReady();
+    await getAllTrips();
   }
 
   final animationValue = 0.0.obs;
@@ -120,22 +123,53 @@ class TripsController extends GetxController with StateMixin<PendingTripsData> {
     update();
   }
 
-  Future<void> getPendingTrips() async {
-    RxStatus.loading();
-    ///////
-    // try {
-    final response = await renterService.getAllTrips(status: 'pending');
-    if (response.status == 'success' || response.status_code == 200) {
-      pendingTrips.value = response.data!.cast<PendingTripsData>();
-    } else {
-      logger.log("Unable to get pending trips");
-      // return false;
+  Future<void> getAllTrips() async {
+    // RxStatus.loading();
+    change([], status: RxStatus.loading());
+    try {
+      final response = await renterService.getAllTrips();
+
+      if (response.status == 'success' || response.status_code == 200) {
+        logger.log("All Trips:: ${response.data}");
+        List<PendingTripsData> trips = List<PendingTripsData>.from(
+            response.data!.map((trip) => PendingTripsData.fromJson(trip)));
+
+        if (trips.isEmpty) {
+          change([], status: RxStatus.empty());
+        } else {
+          // Clear existing lists
+          pendingTrips.clear();
+          activeTrips.clear();
+          completedTrips.clear();
+
+          // Iterate through trips and assign to appropriate lists based on status
+          for (PendingTripsData trip in trips) {
+            switch (trip.status) {
+              case 'pending':
+                pendingTrips.add(trip);
+                break;
+              case 'active':
+                activeTrips.add(trip);
+                break;
+              case 'completed':
+                completedTrips.add(trip);
+                break;
+              default:
+                // Handle other status types if needed
+                break;
+            }
+          }
+          change(trips, status: RxStatus.success());
+        }
+      } else {
+        logger.log("Unable to get trips");
+      }
+    } catch (e) {
+      change([], status: RxStatus.error('Unable to get trips'));
+      logger.log("Error occurred while getting trips: $e");
     }
-    // } catch (e) {
-    // logger.log("some error occured $e");
-    // return false;
-    // }
   }
+
   RxString activeTripsErrorMessage = ''.obs;
   RxBool activeTripHasError = false.obs;
   RxBool activeTripsLoaded = false.obs;
@@ -154,14 +188,5 @@ class TripsController extends GetxController with StateMixin<PendingTripsData> {
     } catch (e) {
       logger.log("some error occured $e");
     }
-  }
-
-  Future<void> getTrips() async {
-    // isGettingTrips.value = true;
-
-    await Future.wait([
-      getPendingTrips(),
-      getActiveTrips(),
-    ]);
   }
 }

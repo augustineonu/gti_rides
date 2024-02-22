@@ -218,7 +218,7 @@ class SearchResultScreen extends GetView<SearchResultController> {
                                         positionRight: 7.sp,
                                         positionTop: 6.sp,
                                         status: carData.availability ==
-                                                'available'.toLowerCase()
+                                                'available '.toLowerCase()
                                             ? AppStrings.available
                                             : AppStrings.unavailable),
                                   ],

@@ -44,9 +44,9 @@ class IdentityVerificationController extends GetxController {
       logger.log("Received arguments: $arguments");
       isKycUpdate.value = arguments?['isKycUpdate'] ?? false;
       appBarTitle.value = arguments?['appBarTitle'] ?? '';
-      if(arguments!.containsKey('tripsData')){
-
-      tripData.value = arguments?["tripData"] as TripData;
+      if (arguments!.containsKey('tripData')) {
+        tripData.value = arguments?["tripData"] as TripData;
+        logger.log("trip data:: ${tripData.value.tripType ?? 'lol'}");
       }
       logger.log("${tripData.value.carID}");
 
