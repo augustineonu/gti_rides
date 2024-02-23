@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/models/drivers_model.dart';
+import 'package:gti_rides/models/renter/pending_trips_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/screens/Partner/home/list_vehicle/list_vehicle_screen.dart';
 import 'package:gti_rides/services/logger.dart';
@@ -8,7 +9,7 @@ import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/utils/constants.dart';
 
-class RentHistoryController extends GetxController {
+class RentHistoryController extends GetxController with StateMixin<List<PendingTripsData>> {
   Logger logger = Logger("Controller");
 
   RentHistoryController() {
@@ -34,6 +35,8 @@ class RentHistoryController extends GetxController {
   RxString testString = "".obs;
 
   TextEditingController senderNameController = TextEditingController();
+  RxList<PendingTripsData> activeTrips = <PendingTripsData>[].obs;
+  RxList<PendingTripsData> completedTrips = <PendingTripsData>[].obs;
 
   List<Map<String, String>> quickOptions = [
     {

@@ -6,6 +6,7 @@ import 'package:gti_rides/screens/Partner/home/manage_vehicle/manage_vehicle_con
 import 'package:gti_rides/screens/Partner/rent_history/rent_history_controller.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
+import 'package:gti_rides/shared_widgets/shimmer_loading/box_shimmer.dart';
 import 'package:gti_rides/shared_widgets/tab_indicator.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
@@ -19,6 +20,8 @@ class RentHistoryBinding extends Bindings {
     // TODO: implement dependencies
     Get.put<RentHistoryController>(RentHistoryController());
   }
+
+  // final controller = RentHistoryController();
 }
 
 class RentHistoryScreen extends GetView<RentHistoryController> {
@@ -60,7 +63,7 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
                   SizedBox(
                     height: 24.sp,
                   ),
-                  buildBody(context, size),
+                  buildBody(controller, context, size),
                   textWidget(
                       text: controller.testString.value,
                       style: getRegularStyle()),
@@ -72,70 +75,143 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
         ));
   }
 
-  Widget buildBody(context, Size size) {
+  Widget buildBody(
+      RentHistoryController controller, BuildContext context, Size size) {
     switch (controller.selectedIndex.value) {
       case 0:
         // Active trips
-        return ListView.separated(
-          physics: ScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: 3,
-          itemBuilder: (context, index) {
-            return cardWidget(
-              context,
-              size,
-              title: 'Tesla Model Y',
-              amount: '100,000 ',
-              noOfDays: '5days',
-              startDateTime: "wed, 1 Nov, 9:00am",
-              endDateTime: "wed, 1 Nov, 9:00am",
-              trailling: Positioned(
-                right: 12.sp,
-                top: 12.sp,
-                child: InkWell(
-                    onTap: () {
-                      quickOptionsSheet(size);
-                    },
-                    child: SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: SvgPicture.asset(ImageAssets.popUpMenu))),
-              ),
-            );
-          },
-          separatorBuilder: (context, _) => const SizedBox(height: 15),
-        );
+        // return controller.obx(
+        //   (state) {
+        //     return ListView.separated(
+        //       physics: ScrollPhysics(),
+        //       shrinkWrap: true,
+        //       itemCount: 3,
+        //       itemBuilder: (context, index) {
+        //         return cardWidget(
+        //           context,
+        //           size,
+        //           title: 'Tesla Model Y',
+        //           amount: '100,000 ',
+        //           noOfDays: '5days',
+        //           startDateTime: "wed, 1 Nov, 9:00am",
+        //           endDateTime: "wed, 1 Nov, 9:00am",
+        //           trailling: Positioned(
+        //             right: 12.sp,
+        //             top: 12.sp,
+        //             child: InkWell(
+        //                 onTap: () {
+        //                   quickOptionsSheet(size);
+        //                 },
+        //                 child: SizedBox(
+        //                     height: 20,
+        //                     width: 20,
+        //                     child: SvgPicture.asset(ImageAssets.popUpMenu))),
+        //           ),
+        //         );
+        //       },
+        //       separatorBuilder: (context, _) => const SizedBox(height: 15),
+        //     );
+        //   },
+        //   onEmpty: Padding(
+        //     padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
+        //     child: Center(
+        //         child: textWidget(
+        //             textOverflow: TextOverflow.visible,
+        //             textAlign: TextAlign.center,
+        //             text: AppStrings.noActiveTripsYet,
+        //             style: getExtraBoldStyle(fontSize: 18.sp))),
+        //   ),
+        //   onError: (e) => Padding(
+        //     padding: EdgeInsets.symmetric(
+        //         vertical: context.height * 0.1, horizontal: 20),
+        //     child: Center(
+        //       child: Text(
+        //         "$e",
+        //         textAlign: TextAlign.center,
+        //       ),
+        //     ),
+        //   ),
+        //   onLoading: boxShimmer(height: 200.sp),
+        // );
 
+
+        return Padding(
+            padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
+            child: Center(
+                child: textWidget(
+                    textOverflow: TextOverflow.visible,
+                    textAlign: TextAlign.center,
+                    text: AppStrings.noActiveOrderYet,
+                    style: getExtraBoldStyle(fontSize: 18.sp))),
+          );
       case 1:
         // Completed trips
-        return cardWidget(
-          context,
-          size,
-          title: 'Tesla Model Y',
-          amount: '100,000 ',
-          noOfDays: '5days',
-          startDateTime: "wed, 1 Nov, 9:00am",
-          endDateTime: "wed, 1 Nov, 9:00am",
-          trailling: Positioned(
-            right: 7.sp,
-            top: 11.sp,
-            child: InkWell(
-              onTap: controller.routeToCompletedTrip,
-              child: Row(children: [
-                textWidget(
-                    text: AppStrings.completed,
-                    style:
-                        getRegularStyle(fontSize: 10.sp, color: primaryColor)),
-                const Icon(
-                  Iconsax.arrow_right_3,
-                  color: primaryColor,
-                  size: 12,
-                )
-              ]),
-            ),
-          ),
-        );
-
+        // return controller.obx(
+        //   (statet) {
+        //     return cardWidget(
+        //       context,
+        //       size,
+        //       title: 'Tesla Model Y',
+        //       amount: '100,000 ',
+        //       noOfDays: '5days',
+        //       startDateTime: "wed, 1 Nov, 9:00am",
+        //       endDateTime: "wed, 1 Nov, 9:00am",
+        //       trailling: Positioned(
+        //         right: 7.sp,
+        //         top: 11.sp,
+        //         child: InkWell(
+        //           onTap: controller.routeToCompletedTrip,
+        //           child: Row(children: [
+        //             textWidget(
+        //                 text: AppStrings.completed,
+        //                 style: getRegularStyle(
+        //                     fontSize: 10.sp, color: primaryColor)),
+        //             const Icon(
+        //               Iconsax.arrow_right_3,
+        //               color: primaryColor,
+        //               size: 12,
+        //             )
+        //           ]),
+        //         ),
+        //       ),
+        //     );
+        //   },
+        //   onEmpty: Padding(
+        //     padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
+        //     child: Center(
+        //         child: textWidget(
+        //             textOverflow: TextOverflow.visible,
+        //             textAlign: TextAlign.center,
+        //             text: AppStrings.noCompletedTripYet,
+        //             style: getExtraBoldStyle(fontSize: 18.sp),
+                    
+        //             ),
+        //             ),
+        //   ),
+        //   onError: (e) => Padding(
+        //     padding: EdgeInsets.symmetric(
+        //         vertical: context.height * 0.1, horizontal: 20),
+        //     child: Center(
+        //       child: Text(
+        //         "$e",
+        //         textAlign: TextAlign.center,
+        //       ),
+        //     ),
+        //   ),
+        //   onLoading: boxShimmer(height: 200.sp),
+        // );
+        return Padding(
+            padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
+            child: Center(
+                child: textWidget(
+                    textOverflow: TextOverflow.visible,
+                    textAlign: TextAlign.center,
+                    text: AppStrings.noCompletedOrderYet,
+                    style: getExtraBoldStyle(fontSize: 18.sp),
+                    
+                    ),
+                    ),
+          );
       default:
         return const SizedBox();
     }

@@ -473,6 +473,7 @@ class AppStrings {
   static String paymentAccount = 'Payment account';
   static String paymentMethod = 'Payment method';
   static String youHaveNoAccountAdded = 'You have no account added yet';
+  static String youHaveNoPaymentRecord = 'You have no payment record';
   static String addInfo = 'Add info';
   static String selectBank = 'Select bank';
   static String bankAccountNumber = 'Bank account number';
@@ -502,6 +503,11 @@ class AppStrings {
   static String selectExpiryDate = "Select expiry date";
   static String noListedCarsYet = "You have not Listed any cars yet";
   static String noBookedCarsYet = "You have not Booked any cars yet";
+  static String noPendingCarsYet = "You have no Pending Trips yet";
+  static String noActiveTripsYet = "You have no Active Trips yet";
+  static String noActiveOrderYet = "You have no Active Order yet";
+  static String noCompletedTripYet = "You have no Completed Trips yet";
+  static String noCompletedOrderYet = "You have no Completed Order yet";
   static String noAddedCarsToFav = "You have not added any Cars to Favorite yet";
   static String noViewedCarsYet = "You have not viewed any Cars yet";
   static String guideForTakingGreatPhotos = "Step by Step Guide for Capturing Great Car Photos for Your GTI Rides Listing";

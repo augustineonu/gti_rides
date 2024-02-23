@@ -12,6 +12,7 @@ import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
+import 'package:gti_rides/utils/utils.dart';
 import 'package:iconsax/iconsax.dart';
 
 class CarHistoryBinding extends Bindings {
@@ -67,8 +68,8 @@ class CarHistoryScreen extends StatelessWidget {
                     divider(color: borderColor),
                     tripDate(
                       title: AppStrings.availabilityDate,
-                        startDate: state[0]['startDate'] ?? '',
-                        endDate: state[0]['endDate'] ?? '',
+                        startDate: formateDate(date: state[0]['startDate'] ?? ''),
+                        endDate: formateDate(date: state[0]['endDate'] ?? ''),
                         trailling:  InkWell(
                 onTap: () async {
                   controller.routeToQuickEdit();

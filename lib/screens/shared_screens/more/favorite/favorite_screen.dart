@@ -223,10 +223,14 @@ class FavoriteScreen extends GetView<FavoriteController> {
             ],
           )),
       onEmpty: Padding(
-        padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
+        padding: EdgeInsets.symmetric(vertical: context.height * 0.1, horizontal: 10),
         child: Center(
             child: textWidget(
-                text: AppStrings.noAddedCarsToFav, style: getMediumStyle())),
+               textOverflow: TextOverflow.visible,
+              textAlign: TextAlign.center,
+                text: AppStrings.noAddedCarsToFav, style: getBoldStyle(
+                  fontSize: 18
+                ))),
       ),
       onError: (e) => Padding(
         padding: EdgeInsets.symmetric(

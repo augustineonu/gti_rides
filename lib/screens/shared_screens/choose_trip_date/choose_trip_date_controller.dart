@@ -67,7 +67,7 @@ class ChooseTripDateController extends GetxController {
     datePickerController.selectedRange =
         PickerDateRange(today, today.add(Duration(days: 3)));
 
-    selectedDifferenceInDays.value = 3;
+    selectedDifferenceInDays.value = 4;
     update();
 
     super.onInit();
@@ -141,7 +141,7 @@ class ChooseTripDateController extends GetxController {
             selectedDateRange!.startDate!,
             selectedDateRange!.endDate ?? selectedDateRange!.startDate!);
 
-        selectedDifferenceInDays.value = difference.inDays;
+        selectedDifferenceInDays.value = difference.inDays + 1;
 
         print('Difference in days: ${difference.inDays}');
       }

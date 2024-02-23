@@ -47,7 +47,13 @@ class PaymentSummaryController extends GetxController {
           arguments?["selectedSecurityEscort"] ?? false;
       totalEscortFee.value = arguments?["totalEscortFee"] ?? '';
       tripType.value = arguments?["tripType"] ?? 0;
+      // this is already in tripData
+    // tripDays.value = arguments?["tripDays"];
 
+      // cautionFee.value = arguments?["cautionFee"] ?? '';
+      rawStartTime = arguments!["rawStartTime"] ?? DateTime.now();
+      rawEndTime = arguments!["rawEndTime"] ?? DateTime.now();
+      discountTotal.value = arguments!["discountTotal"] ?? 0.0;
       logger.log("Received data:: ${tripData.value.carID}");
       logger.log("Received data:: ${tripData.value.tripStartDate}");
 
@@ -61,6 +67,9 @@ class PaymentSummaryController extends GetxController {
       formattedEndDayDateMonth.value =
           extractDayDateMonth(tripData.value.tripEndDate!);
       formattedEndTime.value = extractTime(tripData.value.tripEndDate!);
+      rawStartTime = arguments!["rawStartTime"] ?? DateTime.now();
+      rawEndTime = arguments!["rawEndTime"] ?? DateTime.now();
+      discountTotal.value = arguments!["discountTotal"] ?? 0.0;
     }
   }
 
@@ -92,6 +101,9 @@ class PaymentSummaryController extends GetxController {
   Rx<String> totalEscortFee = ''.obs;
   Rx<int> tripType = 0.obs;
   Rx<bool> isKycUpdate = false.obs;
+  DateTime? rawStartTime;
+  DateTime? rawEndTime;
+  Rx<double> discountTotal = 0.0.obs;
 
   // bool args = Get.arguments;
 
@@ -141,8 +153,10 @@ class PaymentSummaryController extends GetxController {
       final response = await paymentService.addTrip(
           data: TripData(
         carID: tripData.value.carID,
-        tripStartDate: tripData.value.tripStartDate,
-        tripEndDate: tripData.value.tripEndDate,
+        // tripStartDate: tripData.value.tripStartDate,
+        tripStartDate: rawStartTime!.toIso8601String(),
+        // tripEndDate: tripData.value.tripEndDate,
+        tripEndDate: rawEndTime!.toIso8601String(),
         tripsDays: tripData.value.tripsDays,
         tripType: tripData.value.tripType,
         interState: tripData.value.interState,
@@ -160,7 +174,7 @@ class PaymentSummaryController extends GetxController {
       if (response.status == 'success' || response.status_code == 200) {
         // call the flutterwave checkout URL
         logger.log("Success: ${response.data}");
-        
+
         if (tripType.value == 1) {
           successDialog(
               title: AppStrings.requestSentSuccessful,

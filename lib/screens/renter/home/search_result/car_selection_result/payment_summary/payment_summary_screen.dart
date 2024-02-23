@@ -128,6 +128,10 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
               ],
             ),
             rowNairaText(
+                title: 'Discount',
+                hasPreFix: true,
+                subTitle: controller.discountTotal.value.toString()),
+            rowNairaText(
                 title: 'VAT(${controller.vat.value}%)',
                 subTitle: controller.vatValue.value),
             Visibility(
@@ -230,6 +234,7 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
   Widget rowNairaText({
     required String title,
     required String subTitle,
+    bool? hasPreFix = false,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -242,8 +247,10 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
               textWidget(text: title, style: getRegularStyle(color: grey5)),
             ],
           ),
+
           Row(
             children: [
+              hasPreFix! ? textWidget(text: '- ', style: getRegularStyle(color: grey5)) : SizedBox.shrink(),
               SvgPicture.asset(ImageAssets.naira),
               textWidget(text: subTitle, style: getRegularStyle(color: grey5)),
             ],

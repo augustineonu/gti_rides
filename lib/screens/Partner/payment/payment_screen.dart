@@ -125,7 +125,7 @@ class PaymentScreen extends GetView<PaymentController> {
     switch (controller.selectedIndex.value) {
       case 0:
         // All payment
-        return paymentsCard();
+        return paymentsCard(size);
 
       case 1:
         // Payment method
@@ -274,151 +274,153 @@ class PaymentScreen extends GetView<PaymentController> {
     );
   }
 
-  Widget paymentsCard() {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.only(
-            bottom: 1,
-          ),
-          decoration: BoxDecoration(
-              color: primaryColor,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(4.r),
-                bottomRight: Radius.circular(4.r),
-              )),
-          child: Container(
-            height: 30.0,
-            padding: const EdgeInsets.symmetric(
-              horizontal: 8,
-            ),
-            decoration: BoxDecoration(
-                color: backgroundColor,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(2.5.r),
-                  bottomRight: Radius.circular(2.5.r),
-                )),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                textWidget(
-                  text: AppStrings.paymentStatus,
-                  // show AppStrings.aAvailabilityDate
-                  style: getMediumStyle(
-                    color: grey3,
-                    fontSize: 10.sp,
-                  ),
-                ),
-                Row(children: [
-                  textWidget(
-                    text: AppStrings.sent,
-                    style: getMediumStyle(fontSize: 10.sp),
-                  ),
-                  Image.asset(ImageAssets.doubleCheck),
-                ]),
-              ],
-            ),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 5.0.sp, horizontal: 5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              textWidget(
-                  text: AppStrings.totalAmount,
-                  style: getRegularStyle(fontSize: 12.sp, color: grey3)),
-              Row(
-                // crossAxisAlignment: alignment,
-                children: [
-                  SvgPicture.asset(ImageAssets.naira),
-                  textWidget(
-                      text: '500,000',
-                      style: getMediumStyle(fontSize: 16.sp)
-                          .copyWith(fontFamily: 'Neue')),
-                ],
-              ),
-            ],
-          ),
-        ),
-        tripInfo(
-          title: AppStrings.tripId,
-          trailling: InkWell(
-            onTap: () {
-              controller.copy(value: "GTI123456");
-            },
-            child: Row(
-              children: [
-                textWidget(
-                  text: 'GTI123456',
-                  style: getRegularStyle(
-                    fontSize: 10.sp,
-                  ),
-                ),
-                SizedBox(
-                  width: 3.sp,
-                ),
-                SvgPicture.asset(ImageAssets.docCopy),
-              ],
-            ),
-          ),
-        ),
-        tripInfo(
-          title: AppStrings.tripStartDate,
-          trailling: textWidget(
-            text: 'Wed, 1 Nov, 9:00am',
-            style: getRegularStyle(fontSize: 10.sp),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 5.0.sp, horizontal: 5),
-          child: Row(
-            children: [
-              SizedBox(
-                width: 2.sp,
-                height: 16.sp,
-                child: const ColoredBox(
-                  color: primaryColor,
-                ),
-              ),
-              SizedBox(
-                width: 7.sp,
-              ),
-              textWidget(
-                text: 'UBA',
-                style: getRegularStyle(fontSize: 10.sp),
-              ),
-            ],
-          ),
-        ),
-        tripInfo(
-          title: AppStrings.paymentRef,
-          trailling: InkWell(
-            onTap: () {
-              controller.copy(value: "GTI123456");
-            },
-            child: Row(
-              children: [
-                textWidget(
-                  text: 'GTI123456',
-                  style: getRegularStyle(
-                    fontSize: 10.sp,
-                  ),
-                ),
-                SizedBox(
-                  width: 3.sp,
-                ),
-                SvgPicture.asset(ImageAssets.docCopy),
-              ],
-            ),
-          ),
-        ),
-        SizedBox(
-          height: 5.sp,
-        ),
-        divider(color: borderColor)
-      ],
-    );
+  Widget paymentsCard(Size size) {
+    // return Column(
+    //   children: [
+    //     Container(
+    //       padding: const EdgeInsets.only(
+    //         bottom: 1,
+    //       ),
+    //       decoration: BoxDecoration(
+    //           color: primaryColor,
+    //           borderRadius: BorderRadius.only(
+    //             bottomLeft: Radius.circular(4.r),
+    //             bottomRight: Radius.circular(4.r),
+    //           )),
+    //       child: Container(
+    //         height: 30.0,
+    //         padding: const EdgeInsets.symmetric(
+    //           horizontal: 8,
+    //         ),
+    //         decoration: BoxDecoration(
+    //             color: backgroundColor,
+    //             borderRadius: BorderRadius.only(
+    //               bottomLeft: Radius.circular(2.5.r),
+    //               bottomRight: Radius.circular(2.5.r),
+    //             )),
+    //         child: Row(
+    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //           children: [
+    //             textWidget(
+    //               text: AppStrings.paymentStatus,
+    //               // show AppStrings.aAvailabilityDate
+    //               style: getMediumStyle(
+    //                 color: grey3,
+    //                 fontSize: 10.sp,
+    //               ),
+    //             ),
+    //             Row(children: [
+    //               textWidget(
+    //                 text: AppStrings.sent,
+    //                 style: getMediumStyle(fontSize: 10.sp),
+    //               ),
+    //               Image.asset(ImageAssets.doubleCheck),
+    //             ]),
+    //           ],
+    //         ),
+    //       ),
+    //     ),
+    //     Padding(
+    //       padding: EdgeInsets.symmetric(vertical: 5.0.sp, horizontal: 5),
+    //       child: Row(
+    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //         children: [
+    //           textWidget(
+    //               text: AppStrings.totalAmount,
+    //               style: getRegularStyle(fontSize: 12.sp, color: grey3)),
+    //           Row(
+    //             // crossAxisAlignment: alignment,
+    //             children: [
+    //               SvgPicture.asset(ImageAssets.naira),
+    //               textWidget(
+    //                   text: '500,000',
+    //                   style: getMediumStyle(fontSize: 16.sp)
+    //                       .copyWith(fontFamily: 'Neue')),
+    //             ],
+    //           ),
+    //         ],
+    //       ),
+    //     ),
+    //     tripInfo(
+    //       title: AppStrings.tripId,
+    //       trailling: InkWell(
+    //         onTap: () {
+    //           controller.copy(value: "GTI123456");
+    //         },
+    //         child: Row(
+    //           children: [
+    //             textWidget(
+    //               text: 'GTI123456',
+    //               style: getRegularStyle(
+    //                 fontSize: 10.sp,
+    //               ),
+    //             ),
+    //             SizedBox(
+    //               width: 3.sp,
+    //             ),
+    //             SvgPicture.asset(ImageAssets.docCopy),
+    //           ],
+    //         ),
+    //       ),
+    //     ),
+    //     tripInfo(
+    //       title: AppStrings.tripStartDate,
+    //       trailling: textWidget(
+    //         text: 'Wed, 1 Nov, 9:00am',
+    //         style: getRegularStyle(fontSize: 10.sp),
+    //       ),
+    //     ),
+    //     Padding(
+    //       padding: EdgeInsets.symmetric(vertical: 5.0.sp, horizontal: 5),
+    //       child: Row(
+    //         children: [
+    //           SizedBox(
+    //             width: 2.sp,
+    //             height: 16.sp,
+    //             child: const ColoredBox(
+    //               color: primaryColor,
+    //             ),
+    //           ),
+    //           SizedBox(
+    //             width: 7.sp,
+    //           ),
+    //           textWidget(
+    //             text: 'UBA',
+    //             style: getRegularStyle(fontSize: 10.sp),
+    //           ),
+    //         ],
+    //       ),
+    //     ),
+    //     tripInfo(
+    //       title: AppStrings.paymentRef,
+    //       trailling: InkWell(
+    //         onTap: () {
+    //           controller.copy(value: "GTI123456");
+    //         },
+    //         child: Row(
+    //           children: [
+    //             textWidget(
+    //               text: 'GTI123456',
+    //               style: getRegularStyle(
+    //                 fontSize: 10.sp,
+    //               ),
+    //             ),
+    //             SizedBox(
+    //               width: 3.sp,
+    //             ),
+    //             SvgPicture.asset(ImageAssets.docCopy),
+    //           ],
+    //         ),
+    //       ),
+    //     ),
+    //     SizedBox(
+    //       height: 5.sp,
+    //     ),
+    //     divider(color: borderColor)
+    //   ],
+    // );
+
+    return noPreviousPaymentWidget(size);
   }
 
   Form addAccountForm(context, Size size) {
@@ -563,6 +565,31 @@ class PaymentScreen extends GetView<PaymentController> {
           width: 350,
           onTap: () => controller.paymentMethodView.value = 1,
         ),
+      ],
+    );
+  }
+  Widget noPreviousPaymentWidget(Size size) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SizedBox(
+          height: size.height * 0.1.sp,
+        ),
+        SvgPicture.asset(ImageAssets.folder),
+        SizedBox(
+          height: 26.sp,
+        ),
+        textWidget(
+          text: AppStrings.youHaveNoPaymentRecord,
+          textOverflow: TextOverflow.visible,
+          style: getRegularStyle(
+            color: black,
+          ),
+        ),
+        SizedBox(
+          height: size.height * 0.3.sp,
+        ),
+    
       ],
     );
   }

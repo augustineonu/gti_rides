@@ -976,11 +976,12 @@ class ListVehicleController extends GetxController {
   }
 
   bool validateImageUpload1() {
-    if (selectedVehiclePhotos.isEmpty) {
+    if (selectedVehiclePhotos.isEmpty && apiFetchedPhotos.isEmpty) {
       // Show an error message or handle it accordingly
       showErrorSnackbar(message: 'Please upload an image.');
       return false;
-    } else if (selectedVehiclePhotos.length + apiFetchedPhotos.length < 6) {
+    }
+    if (selectedVehiclePhotos.length + apiFetchedPhotos.length < 6) {
       showErrorSnackbar(message: 'Kindly upload more photos.');
       return false;
     }
@@ -1390,7 +1391,7 @@ class ListVehicleController extends GetxController {
 
             logger.log("extracted name: ${selectedInspectionPhotos.value}");
           });
-       
+
           // roadWorthiness
           await downloadAndSaveImage(
               roadWorthinessDocUrl!, 'roadWorthiness.png', (filePath) {
@@ -1400,7 +1401,7 @@ class ListVehicleController extends GetxController {
             logger.log(
                 "extracted name: ${selectedRoadWorthinessPhotoName.value}");
           });
-      
+
           // insurance photos
 
           await downloadAndSaveImage(
@@ -1410,12 +1411,12 @@ class ListVehicleController extends GetxController {
 
             logger.log("extracted name: ${selectedInsurancePhotos.value}");
           });
-       
+
           // selectedInspectionPhotos.value =
           //     firstCar['document'][0]["documentURL"];
           // // availability
-          startDateTime.value = firstCar['startDate'] ?? '';
-          endDateTime.value = firstCar['endDate'] ?? '';
+          startDateTime.value = formateDate(date: firstCar['startDate'] ?? '');
+          endDateTime.value = formateDate(date: firstCar['endDate'] ?? '');
           advanceTime.value = firstCar['advanceDays'] ?? '';
           pricePerDay.value = firstCar['pricePerDay'] ?? '';
           discountDays.value = firstCar['discountDays'] ?? '';

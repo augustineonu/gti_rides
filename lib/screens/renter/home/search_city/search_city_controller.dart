@@ -282,7 +282,8 @@ class SearchCityController extends GetxController {
     // isFetchingCars.value = true;
     try {
       final response = await renterService.searchCars(
-          stateCode: selectedStateCode.value, cityCode: selectedcityCode.value);
+          stateCode: selectedStateCode.value, cityCode: selectedcityCode.value,
+          startDate: rawStartTime!.toIso8601String(), endDate: rawEndTime!.toIso8601String());
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("gotten cars  ${response.data}");
 

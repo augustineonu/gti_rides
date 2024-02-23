@@ -34,8 +34,8 @@ class QuickEditController extends GetxController {
       photoUrl.value = arguments['photoUrl'] ?? '';
       carID.value = arguments['carID'];
 
-      startDateTime.value = arguments['start'] ?? '';
-      endDateTime.value = arguments['end'] ?? '';
+      startDateTime.value = formateDate(date: arguments['start'] ?? '');
+      endDateTime.value =formateDate(date: arguments['end'] ?? '');
       pricePerDay.value = arguments['pricePerDay'] ?? '';
 
       // startDate.value = arguments["startDate"] ?? '';
@@ -69,8 +69,9 @@ class QuickEditController extends GetxController {
   RxString endDateTime = "".obs;
   RxString pricePerDay = "".obs;
   Rx<bool> isFromManageCars = false.obs;
-  // RxString endDate = "".obs;
-  // RxString startDate = "".obs;
+DateTime? rawStartTime;
+DateTime? rawEndTime;
+
 
   TextEditingController senderNameController = TextEditingController();
   late TextEditingController pricePerDayController;
@@ -112,8 +113,8 @@ class QuickEditController extends GetxController {
 
     try {
       final result = await partnerService.carQuickEdit(payload: {
-        "startDate": startDateTime.value,
-        "endDate": endDateTime.value,
+        "startDate": rawStartTime!.toIso8601String(),
+        "endDate": rawEndTime!.toIso8601String(),
         "pricePerDay": pricePerDayController.text
       }, carID: carID.value);
       if (result.status == "success") {

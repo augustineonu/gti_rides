@@ -62,6 +62,12 @@ class IdentityVerificationController extends GetxController {
       selectedSecurityEscort.value =
           arguments?["selectedSecurityEscort"] ?? false;
 
+      tripType.value = arguments?["tripType"] ?? 0;
+      tripDays.value = arguments?["tripDays"];
+      cautionFee.value = arguments?["cautionFee"] ?? '';
+      rawStartTime = arguments!["rawStartTime"] ?? DateTime.now();
+      rawEndTime = arguments!["rawEndTime"] ?? DateTime.now();
+      discountTotal.value = arguments!["discountTotal"] ?? 0.0;
       // tripDays.value = arguments?["tripDays"];
       // cautionFee.value = arguments?["cautionFee"];
       // dropOffFee.value = arguments?["dropOffFee"];
@@ -130,6 +136,9 @@ class IdentityVerificationController extends GetxController {
   RxBool selectedSelfDropOff = false.obs;
   Rx<int> tripType = 0.obs;
   Rx<String> totalEscortFee = ''.obs;
+  DateTime? rawStartTime;
+  DateTime? rawEndTime;
+  Rx<double> discountTotal = 0.0.obs;
 
   // list
   List<String> gender = [
@@ -206,6 +215,9 @@ class IdentityVerificationController extends GetxController {
       "selectedSelfDropOff": selectedSelfDropOff.value,
       "selectedSecurityEscort": selectedSecurityEscort.value,
       "tripType": tripType.value,
+        "rawStartTime": rawStartTime,
+        "rawEndTime": rawEndTime,
+        "discountTotal": discountTotal.value,
 
       // "startDateTime": startDateTime.value,
       // "endDateTime": endDateTime.value,

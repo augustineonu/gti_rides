@@ -59,6 +59,7 @@ class ApiService {
           logger.log("Dio error: ${e.message}, Status code: ${e.response?.statusCode}");
 
           if (e.response?.statusCode == 400) {
+            // {{BaseURL}}/user/partner/car/carQuickEdit?carID=mr9LvcZk3W 
             // If a 401 response is received, refresh the access token
             // String newAccessToken = await refreshToken();
             bool newAccessTokenResult = await tokenService.getNewAccessToken();

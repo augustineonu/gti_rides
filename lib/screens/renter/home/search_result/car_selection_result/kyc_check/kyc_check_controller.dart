@@ -53,6 +53,11 @@ class KycCheckController extends GetxController {
       // isKycUpdate.value = arguments?["isKycUpdate"];
       tripDays.value = arguments?["tripDays"];
       cautionFee.value = arguments?["cautionFee"] ?? '';
+
+      rawStartTime = arguments!["rawStartTime"] ?? DateTime.now();
+      rawEndTime = arguments!["rawEndTime"] ?? DateTime.now();
+      discountTotal.value = arguments!["discountTotal"] ?? 0.0;
+
       // dropOffFee.value = arguments?["dropOffFee"];
       // cautionFee.value = arguments?["cautionFee"];
       // pickUpFee.value = arguments?["pickUpFee"];
@@ -91,7 +96,9 @@ class KycCheckController extends GetxController {
   RxBool selectedSelfDropOff = false.obs;
   Rx<String> totalEscortFee = ''.obs;
   Rx<int> tripType = 0.obs;
-
+  DateTime? rawStartTime;
+  DateTime? rawEndTime;
+  Rx<double> discountTotal = 0.0.obs;
 
   void goBack() => routeService.goBack();
   void routeToUpdateKyc() =>
@@ -114,7 +121,10 @@ class KycCheckController extends GetxController {
         "selectedSelfDropOff": selectedSelfDropOff.value,
         "selectedSecurityEscort": selectedSecurityEscort.value,
         "tripType": tripType.value,
-        "totalEscortFee": totalEscortFee.value
+        "totalEscortFee": totalEscortFee.value,
+        "rawStartTime": rawStartTime,
+        "rawEndTime": rawEndTime,
+        "discountTotal": discountTotal.value,
       });
 
   void onClickPrevious() {

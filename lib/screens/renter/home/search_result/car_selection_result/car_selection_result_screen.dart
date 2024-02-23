@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:gti_rides/models/partner/car_history_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/screens/renter/home/search_result/car_selection_result/car_selection_result_controller.dart';
+import 'package:gti_rides/screens/renter/home/search_result/car_selection_result/widgets/booked_sheet.dart';
 import 'package:gti_rides/screens/renter/widgets/car_availability_tag.dart';
 import 'package:gti_rides/shared_widgets/dropdown_widget.dart';
 import 'package:gti_rides/shared_widgets/generic_car_widgets.dart';
@@ -248,6 +249,7 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                     ),
                   ),
                   divider(color: borderColor),
+
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: carBasics(
@@ -256,6 +258,16 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                     ),
                   ),
                   divider(color: borderColor),
+                  ElevatedButton(
+                      onPressed: () {
+                        // bookedDatedSheet(
+                        //   itemCount: 2,
+                        //   startDate: "11-12-2024 9:00am",
+                        //   endDate: "11-12-2024 9:00am",
+                        // );
+                      },
+                      child: textWidget(
+                          text: "Click me", style: getMediumStyle())),
                   Padding(
                     padding: const EdgeInsets.only(left: 10),
                     child: carFetures(children: [

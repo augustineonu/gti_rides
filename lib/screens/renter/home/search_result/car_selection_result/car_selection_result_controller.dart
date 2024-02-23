@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/models/partner/car_history_model.dart';
+import 'package:gti_rides/models/renter/booked_dates.dart';
 import 'package:gti_rides/models/renter/trip_amount_model.dart';
 import 'package:gti_rides/models/renter/trip_data_model.dart';
 import 'package:gti_rides/models/user/kyc_response_model.dart';
 import 'package:gti_rides/route/app_links.dart';
+import 'package:gti_rides/screens/renter/home/search_result/car_selection_result/widgets/booked_sheet.dart';
 import 'package:gti_rides/screens/shared_screens/choose_trip_date/choose_trip_date_controller.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/partner_service.dart';
@@ -122,6 +124,7 @@ class CarSelectionResultController extends GetxController
   Rx<String> formattedVatValue = ''.obs;
   DateTime? rawStartTime;
   DateTime? rawEndTime;
+  List<CarHistoryData>? carHistory;
 
   void goBack() => routeService.goBack();
   void routeToSearchFilter() => routeService.gotoRoute(AppLinks.searchFilter);
@@ -236,40 +239,57 @@ class CarSelectionResultController extends GetxController
   // i can also try to reset all self drive values when Chauffeur is selected
   Rx<double> updatedTotalValue = 0.0.obs;
   Future<void> updateEstimatedTotal() async {
-    // double total = calculateEstimatedTotal(pricePerDay.value, tripDays.value);
+    double escortFeeTotal = await calculateEscortFeeTotal();
+    totalEscortFee.value = await formatAmount(escortFeeTotal);
 
-    double escortFeeTotal = selectedSecurityEscort.value &&
+    double sumTotal = await calculateTotalPriceChangesDifference();
+
+    updatedTotalValue.value = escortFeeTotal + sumTotal;
+
+    applyDiscount();
+
+    logResults();
+  }
+
+  Future<double> calculateEscortFeeTotal() async {
+    return selectedSecurityEscort.value &&
             escortSecurityNoInputController.text.isNotEmpty
         ? await calculateEscortFee(
             escortFee: escortFee.value,
             numberOfEscort: escortSecurityNoInputController.text,
           )
         : 0.0;
-    totalEscortFee.value = await formatAmount(escortFeeTotal);
+  }
 
-    double sumTotal = await calculatePriceChangesDifference(
+  Future<double> calculateTotalPriceChangesDifference() async {
+    return await calculatePriceChangesDifference(
       total: initialEstimatedTotal.value,
       cautionFee:
           tripType.value == 1 && cautionFee.isNotEmpty ? cautionFee.value : '0',
       dropOffFee: selectedSelfDropOff.value ? dropOffFee.value : '0',
       pickUpFee: selectedSelfPickUp.value ? pickUpFee.value : '0',
-      // still need to calculate the escort fee
-      // which is number of escort x escort fee
-      // escortFee: selectedSecurityEscort.value ? escortFee.value : '0',
     );
+  }
 
-    updatedTotalValue.value = escortFeeTotal + sumTotal;
+  Rx<double> discountTotal = 0.0.obs;
+  Rx<bool> discountApplied = false.obs;
+  void applyDiscount() {
+    var discountDay = carHistory?.first.discountDays;
+    var discountPrice = carHistory?.first.discountPrice;
+    if (tripDays.value >= int.parse(discountDay)) {
+      discountApplied.value = true;
+      discountTotal.value =
+          double.parse(discountPrice.replaceAll(',', '')) * tripDays.value;
+      logger.log("discount price total: ${discountTotal.toString()}");
 
-    logger.log("new sum total:: ${estimatedTotal.value}");
-    logger.log(" new total:: ${updatedTotalValue}");
+      updatedTotalValue.value -= discountTotal.value;
+      logger.log("Total price after discount: ${updatedTotalValue.value}");
+    }
+  }
 
-    // double vatAmount = await calculateVAT(updatedTotalValue.value, vatValue.value);
-    // logger.log("VAT total:: $vatAmount");
-    // formattedVatValue.value = await formatAmount(vatAmount);
-
-    // // sum up vat plus updated total
-    // updatedTotalValue.value = updatedTotalValue.value + vatAmount;
-    // estimatedTotal.value = await formatAmount(updatedTotalValue.value);
+  void logResults() {
+    logger.log("Estimated total: ${estimatedTotal.value}");
+    logger.log("New total: ${updatedTotalValue}");
   }
 
   Future<void> addGrandTotal() async {
@@ -295,8 +315,6 @@ class CarSelectionResultController extends GetxController
   //   double vatAmount = await calculateVAT(sumTotal, vatValue.value);
   //   formattedVatValue.value = await formatAmount(vatAmount);
   // }
-
-  List<CarHistoryData>? carHistory;
 
   Future<void> getCarHistory() async {
     change(<CarHistoryData>[].obs, status: RxStatus.loading());
@@ -394,6 +412,7 @@ class CarSelectionResultController extends GetxController
   // final controller = Get.put(ChooseTripDateController());
 
 // raw date should be passed from previous screen
+  RxList<BookedData> bookedData = <BookedData>[].obs;
   Future<bool> checkCarAvailability() async {
     try {
       final response = await renterService.getCarTrip(
@@ -402,7 +421,12 @@ class CarSelectionResultController extends GetxController
         if (response.data!.isEmpty) {
           return true;
         } else {
-          carNotAvailable.value = response.message ?? 'message';
+          logger.log("trip booked dates: ${response.data}");
+          carNotAvailable.value =
+              response.message ?? 'Car booked for selected dates';
+          bookedData.value = List<BookedData>.from(
+              response.data!.map((booked) => BookedData.fromJson(booked)));
+          logger.log("Booked trips ${bookedData.value.first.carId}");
           return false;
         }
       } else {
@@ -459,7 +483,7 @@ class CarSelectionResultController extends GetxController
       showErrorSnackbar(message: 'Kindly select trip dates');
       return;
     }
-    if (carHistory?.first.availability != "available ".toLowerCase()) {
+    if (carHistory?.first.availability != "available".toLowerCase()) {
       showSuccessSnackbar(message: "Car not available");
       return;
     }
@@ -471,8 +495,11 @@ class CarSelectionResultController extends GetxController
     if (!isCarAvailable) {
       showSuccessSnackbar(message: carNotAvailable.value);
       isLoading.value = false;
-      return;
-      
+      return bookedDatedSheet(
+        itemCount: bookedData,
+        startDate: '',
+        endDate: "11-12-2024 9:00am",
+      );
     }
     try {
       final kycResponse = await userService.getKycProfile();
@@ -514,6 +541,9 @@ class CarSelectionResultController extends GetxController
                   : null,
               "totalEscortFee":
                   selectedSecurityEscort.value ? totalEscortFee.value : '',
+              "rawStartTime": rawStartTime,
+              "rawEndTime": rawEndTime,
+              "discountTotal": discountTotal.value,
 
               // "startDateTime": startDateTime.value,
               // "endDateTime": endDateTime.value,
@@ -547,7 +577,9 @@ class CarSelectionResultController extends GetxController
                   : null, //
               "totalEscortFee":
                   selectedSecurityEscort.value ? totalEscortFee.value : '', //
-
+              "rawStartTime": rawStartTime,
+              "rawEndTime": rawEndTime,
+              "discountTotal": discountTotal.value
               // "startDateTime": startDateTime.value,
               // "endDateTime": endDateTime.value,
             });

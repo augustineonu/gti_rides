@@ -161,8 +161,13 @@ class QuickEditScreen extends StatelessWidget {
 
                     // Handle the selected date here
                     print('Selected Date page: $data');
+                    if(data != null){
+
                     controller.startDateTime.value = data['start'];
                     controller.endDateTime.value = data['end'];
+                    controller.rawStartTime = data["rawStartTime"];
+                    controller.rawEndTime = data["rawEndTime"];
+                    }
                   },
                 ),
               ),
