@@ -469,7 +469,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                           ? controller.discountDays.value
                           : null,
                       values:
-                          List.generate(20, (index) => (index + 1).toString()),
+                          List.generate(21, (index) => (index).toString()),
                       onChange: (value) {
                         controller.discountDays.value = value;
                         print(
@@ -486,6 +486,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     hintText: AppStrings.amountHintText,
                     controller: controller.discountPerDayController,
                     textInputType: TextInputType.number,
+                    validator: (vg){},
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(10),
                       NumberTextInputFormatter(),

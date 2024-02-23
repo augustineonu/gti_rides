@@ -258,16 +258,7 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                     ),
                   ),
                   divider(color: borderColor),
-                  ElevatedButton(
-                      onPressed: () {
-                        // bookedDatedSheet(
-                        //   itemCount: 2,
-                        //   startDate: "11-12-2024 9:00am",
-                        //   endDate: "11-12-2024 9:00am",
-                        // );
-                      },
-                      child: textWidget(
-                          text: "Click me", style: getMediumStyle())),
+                  
                   Padding(
                     padding: const EdgeInsets.only(left: 10),
                     child: carFetures(children: [

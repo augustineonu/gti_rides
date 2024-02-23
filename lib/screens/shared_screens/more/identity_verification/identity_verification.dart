@@ -95,8 +95,12 @@ class IdentityVerificationScreen
                   onTap: controller.routeToSelectGender),
               identityVerificationWidget(
                   title: AppStrings.dob,
-                  subTitle: userKyc != []
-                      ? formatDate1(date: userKyc![0]["dateOfBirth"]) ?? AppStrings.provideDob
+                  subTitle: userKyc != null &&
+                          userKyc.isNotEmpty &&
+                          userKyc[0] != null &&
+                          userKyc[0]["dateOfBirth"] != null
+                      ? formatDate1(date: userKyc[0]["dateOfBirth"]) ??
+                          AppStrings.provideDob
                       : AppStrings.provideDob,
                   onTap: controller.routeToDob),
               identityVerificationWidget(

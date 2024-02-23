@@ -217,7 +217,9 @@ class SearchResultScreen extends GetView<SearchResultController> {
                                     carAvailabilityTag(
                                         positionRight: 7.sp,
                                         positionTop: 6.sp,
-                                        status: carData.availability.toString()),
+                                        status: carData.availability.toString(),
+                                        // notAvailable
+                                        ),
                                   ],
                                 ),
                               ),
