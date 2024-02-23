@@ -50,13 +50,14 @@ class PaymentWebViewController extends GetxController {
             }
             // https://webhook.site/9d0b00ba-9a69-44fa-a43d-a82c33c36fdc?status=completed&tx_ref=OOXVipNTuVwvtcN&transaction_id=1247735467
           },
+          // https://gtirides.com/?status=successful&tx_ref=341529040606591&transaction_id=4926694
           onNavigationRequest: (NavigationRequest request) {
             logger.log("URL:: ${request.url}");
-            if (request.url.startsWith('https://webhook.site/')) {
+            if (request.url.startsWith('https://gtirides.com/')) {
               // showErrorSnackbar(message: "message");
               if (request.url
                   .toLowerCase()
-                  .contains('completed'.toLowerCase())) {
+                  .contains('successful'.toLowerCase())) {
                 routeService.goBack(result: true);
                 // Navigator.pop(context)
               }

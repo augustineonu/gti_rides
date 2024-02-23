@@ -24,6 +24,7 @@ class TripsScreen extends GetView<TripsController> {
 
   @override
   Widget build(BuildContext context) {
+    print("TripScreen called from build");
     final controller = Get.put<TripsController>(TripsController());
     var size = MediaQuery.of(context).size;
     bool expanded = false;
@@ -732,8 +733,7 @@ class TripsScreen extends GetView<TripsController> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.all(Radius.circular(6.r)),
                         child: carImage(
-                          height: 65.sp,
-                          imgUrl: pendingTrips.carProfilePic),
+                            height: 65.sp, imgUrl: pendingTrips.carProfilePic),
                       ),
                     ),
                     ScrollOnExpand(
@@ -767,7 +767,7 @@ class TripsScreen extends GetView<TripsController> {
                                   ),
                                   SvgPicture.asset(ImageAssets.naira),
                                   textWidget(
-                                    text: ' 100,000',
+                                    text: pendingTrips.totalFee ?? '0',
                                     style:
                                         getRegularStyle(color: secondaryColor)
                                             .copyWith(fontFamily: 'Neue'),
@@ -778,7 +778,7 @@ class TripsScreen extends GetView<TripsController> {
                             SizedBox(
                               height: 8.sp,
                             ),
-                            continueButton(controller),
+                            continueButton(controller, pendingTrips),
                           ],
                         ),
                         expanded: Column(
@@ -789,8 +789,10 @@ class TripsScreen extends GetView<TripsController> {
                               children: [
                                 dateTimeColWIdget(
                                     alignment: CrossAxisAlignment.start,
-                                    title: formatDayDate(pendingTrips.tripStartDate!),
-                                    subTitle: formatTime(pendingTrips.tripStartDate!)),
+                                    title: formatDayDate(
+                                        pendingTrips.tripStartDate!),
+                                    subTitle: formatTime(
+                                        pendingTrips.tripStartDate!)),
                                 SvgPicture.asset(
                                   ImageAssets.arrowForwardRounded,
                                   height: 24.sp,
@@ -799,8 +801,10 @@ class TripsScreen extends GetView<TripsController> {
                                 ),
                                 dateTimeColWIdget(
                                     alignment: CrossAxisAlignment.end,
-                                    title: formatDayDate(pendingTrips.tripEndDate!),
-                                    subTitle: formatTime(pendingTrips.tripEndDate!)),
+                                    title: formatDayDate(
+                                        pendingTrips.tripEndDate!),
+                                    subTitle:
+                                        formatTime(pendingTrips.tripEndDate!)),
                               ],
                             ),
                             divider(color: borderColor),
@@ -867,7 +871,7 @@ class TripsScreen extends GetView<TripsController> {
                                         color: primaryColor,
                                       ),
                                       textWidget(
-                                          text: '500,000',
+                                          text: pendingTrips.totalFee ?? '0',
                                           style: getRegularStyle(
                                                   color: primaryColor)
                                               .copyWith(
@@ -881,7 +885,7 @@ class TripsScreen extends GetView<TripsController> {
                             SizedBox(
                               height: 14.sp,
                             ),
-                            continueButton(controller),
+                            continueButton(controller, pendingTrips),
                           ],
                         ),
                         builder: (_, collapsed, expanded) {
@@ -1006,9 +1010,12 @@ class TripsScreen extends GetView<TripsController> {
                         text: AppStrings.orderStatus,
                         style: getMediumStyle(fontSize: 12.sp).copyWith(),
                       ),
-                      SvgPicture.asset(pendingTrips.status == "pending"
-                          ? ImageAssets.pending
-                          : ImageAssets.accessCheck, color: grey4,),
+                      SvgPicture.asset(
+                        pendingTrips.status == "pending"
+                            ? ImageAssets.pending
+                            : ImageAssets.accessCheck,
+                        color: grey4,
+                      ),
                       SizedBox(
                         width: 2.sp,
                       ),
@@ -1047,17 +1054,65 @@ class TripsScreen extends GetView<TripsController> {
     );
   }
 
-  Widget continueButton(TripsController controller) {
+  Widget continueButton(
+      TripsController controller, PendingTripsData pendingTrips) {
     return controller.isLoading.isTrue
         ? centerLoadingIcon()
         : GtiButton(
             height: 40.sp,
             width: 300.sp,
-            text: AppStrings.payNow,
+            text: getPendingTripsStatusMessage(pendingTrips),
             color: primaryColor,
-            onTap: () {},
+            isDisabled: shouldButtonBeDisabled(pendingTrips),
+            disabledColor: (pendingTrips.tripType == "self drive" &&
+                    pendingTrips.adminStatus == "pending")
+                ? white
+                : primaryColorLight,
+            disabledTextColor: (pendingTrips.tripType == "self drive" &&
+                    pendingTrips.adminStatus == "pending")
+                ? primaryColorLight
+                : grey5,
+            onTap: () {
+              if (pendingTrips.status == "pending") {
+                if (pendingTrips.tripType == 'chauffeur') {
+                  // call a different method here
+                  // startChauffeurMethod();
+                } else if (pendingTrips.tripType == "self drive" &&
+                    pendingTrips.adminStatus == "approved") {
+                  // call a different method here
+                  // payNowMethod();
+                }
+              } else if (pendingTrips.status == "declined") {
+                // call a different method here
+                // chatWithAdminMethod();
+              }
+            },
             // onTap: controller.routeToPhoneVerification,
             isLoading: controller.isLoading.value,
           );
+  }
+
+  String getPendingTripsStatusMessage(PendingTripsData pendingTrips) {
+    if (pendingTrips.status == "pending") {
+      if (pendingTrips.tripType == 'chauffeur') {
+        return "Start";
+      } else if (pendingTrips.tripType == "self drive" &&
+          pendingTrips.adminStatus == "pending") {
+        return "Pending admin approval";
+      } else if (pendingTrips.tripType == "self drive" &&
+          pendingTrips.adminStatus == "approved") {
+        return AppStrings.payNow;
+        // what about if self drive and status is approved ?
+      }
+    } else if (pendingTrips.status == "declined") {
+      return 'Chat with admin';
+    }
+    return "null";
+  }
+
+  bool shouldButtonBeDisabled(PendingTripsData pendingTrips) {
+    return (pendingTrips.tripType == "self drive" &&
+            pendingTrips.adminStatus == "pending") ||
+        pendingTrips.status == 'declined';
   }
 }

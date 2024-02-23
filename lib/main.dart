@@ -33,7 +33,7 @@ void main() async {
   runApp(GtiRides(
     isNewUser: isNewUser,
   ));
-  // NetworkController.;
+  NetworkController();
 }
 
 Future<bool> determineUserStatus() async {
@@ -56,6 +56,8 @@ class GtiRides extends StatefulWidget {
 class _GtiRidesState extends State<GtiRides> {
   Logger logger = Logger('_GtiRidesState');
   AppBinding bindings = AppBinding();
+    NetworkController networkController = NetworkController(); // Add this line
+
 
   @override
   void initState() {
@@ -86,6 +88,7 @@ class _GtiRidesState extends State<GtiRides> {
           child,
         ) {
           return GetMaterialApp(
+            
             title: 'GTI Rides',
             theme: ThemeData(
               colorScheme: ColorScheme.fromSeed(seedColor: white),
@@ -107,6 +110,7 @@ class _GtiRidesState extends State<GtiRides> {
             getPages: AppRoutes.pages,
             navigatorObservers: [RouteService(), RouteService().routeObserver],
             onInit: () {
+              networkController.onInit();
               SystemChrome.setPreferredOrientations([
                 DeviceOrientation.portraitUp,
                 DeviceOrientation.portraitDown
