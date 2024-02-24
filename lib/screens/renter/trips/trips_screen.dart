@@ -48,15 +48,25 @@ class TripsScreen extends GetView<TripsController> {
                         tabIndicator(
                             title: AppStrings.pending,
                             selected: controller.selectedIndex.value == 0,
-                            onTap: () => controller.selectedIndex.value = 0),
+                            onTap: () {
+                              controller.getAllTrips();
+                              controller.selectedIndex.value = 0;
+                            }),
                         tabIndicator(
                             title: AppStrings.active,
                             selected: controller.selectedIndex.value == 1,
-                            onTap: () => controller.selectedIndex.value = 1),
+                            onTap: () {
+                              controller.getAllTrips();
+                              controller.selectedIndex.value = 1;
+                            }),
                         tabIndicator(
-                            title: AppStrings.completed,
-                            selected: controller.selectedIndex.value == 2,
-                            onTap: () => controller.selectedIndex.value = 2),
+                          title: AppStrings.completed,
+                          selected: controller.selectedIndex.value == 2,
+                          onTap: () {
+                            controller.getAllTrips();
+                            controller.selectedIndex.value = 2;
+                          },
+                        ),
                       ],
                     ),
                   ),
@@ -79,80 +89,103 @@ class TripsScreen extends GetView<TripsController> {
     );
   }
 
-  Widget buildBody(
-      Size size,BuildContext context, TripsController controller, bool expanded) {
+  Widget buildBody(Size size, BuildContext context, TripsController controller,
+      bool expanded) {
     switch (controller.selectedIndex.value) {
       case 0:
         return pendingStatusBuild(size, controller, context);
       case 1:
         // active trips
-        return controller.obx(
+        return controller.activeTrips.isEmpty ? 
+         Padding(
+            padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
+            child: Center(
+                child: textWidget(
+                    textOverflow: TextOverflow.visible,
+                    textAlign: TextAlign.center,
+                    text: AppStrings.noActiveTripsYet,
+                    style: getExtraBoldStyle(fontSize: 18.sp))),
+          )
+        : controller.obx(
           (state) {
             return ListView.builder(
-                itemCount: controller.activeTrips.length,
-                shrinkWrap: true,
-                physics: const ScrollPhysics(),
-                itemBuilder: (context, index) {
-                  // if (controller.activeTrips.isEmpty) {
-                  //   return Padding(
-                  //     padding: EdgeInsets.symmetric(vertical: 10),
-                  //     child: Center(
-                  //         child: textWidget(
-                  //             text: AppStrings.noActiveCarsYet,
-                  //             style: getMediumStyle())),
-                  //   );
-                  // }
-                  return activeAndCompletedCard(
-                    size,
-                    headerTitle: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        textWidget(text: 'Countdown:', style: getRegularStyle()),
-                        const SizedBox(width: 4),
-                        textWidget(
-                            text: '00:00', style: getMediumStyle(fontSize: 16.sp)),
-                      ],
-                    ),
-                    vehicleName: '2012 KIA Sportage',
-                    tripStatus: AppStrings.active,
-                    button1Title: AppStrings.extend,
-                    button1OnTap: () {
-                      extendTimeDialog(size, controller);
-                    },
-                    button2Title: AppStrings.return1,
-                    button2OnTap: () {},
-                  );
-                },);
+              itemCount: controller.activeTrips.length,
+              shrinkWrap: true,
+              physics: const ScrollPhysics(),
+              itemBuilder: (context, index) {
+                var activeTrip = controller.activeTrips[index];
+                // if (controller.activeTrips.isEmpty) {
+                //   return Padding(
+                //     padding: EdgeInsets.symmetric(vertical: 10),
+                //     child: Center(
+                //         child: textWidget(
+                //             text: AppStrings.noActiveCarsYet,
+                //             style: getMediumStyle())),
+                //   );
+                // }
+                return activeAndCompletedCard(
+                  size,
+                  headerTitle: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      textWidget(text: 'Countdown:', style: getRegularStyle()),
+                      const SizedBox(width: 4),
+                      textWidget(
+                          text: '00:00',
+                          style: getMediumStyle(fontSize: 16.sp)),
+                    ],
+                  ),
+                  vehicleName:
+                      "${activeTrip.carYear.toString()} ${activeTrip.carBrand.toString()} ${activeTrip.carModel.toString()}",
+                  tripStatus: AppStrings.active,
+                  button1Title: AppStrings.extend,
+                  button1OnTap: () {
+                    extendTimeDialog(size, controller);
+                  },
+                  button2Title: AppStrings.return1,
+                  button2OnTap: () {},
+                );
+              },
+            );
           },
-            onEmpty: Padding(
-        padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
-        child: Center(
-            child: textWidget(
-              textOverflow: TextOverflow.visible,
-              textAlign: TextAlign.center,
-                text: AppStrings.noActiveTripsYet, style: getExtraBoldStyle(
-                  fontSize: 18.sp
-                ))),
-      ),
-      onError: (e) => Padding(
-        padding: EdgeInsets.symmetric(
-            vertical: context.height * 0.1, horizontal: 20),
-        child: Center(
-          child: Text(
-            "$e",
-            textAlign: TextAlign.center,
+          onEmpty: Padding(
+            padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
+            child: Center(
+                child: textWidget(
+                    textOverflow: TextOverflow.visible,
+                    textAlign: TextAlign.center,
+                    text: AppStrings.noActiveTripsYet,
+                    style: getExtraBoldStyle(fontSize: 18.sp))),
           ),
-        ),
-      ),
-      onLoading: boxShimmer(height: 200.sp),
+          onError: (e) => Padding(
+            padding: EdgeInsets.symmetric(
+                vertical: context.height * 0.1, horizontal: 20),
+            child: Center(
+              child: Text(
+                "$e",
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+          onLoading: boxShimmer(height: 200.sp),
         );
 
       case 2:
         // completed trips
-        return controller.obx(
+        return controller.completedTrips.isEmpty ?
+         Padding(
+            padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
+            child: Center(
+                child: textWidget(
+                    textOverflow: TextOverflow.visible,
+                    textAlign: TextAlign.center,
+                    text: AppStrings.noCompletedTripYet,
+                    style: getExtraBoldStyle(fontSize: 18.sp))),
+          )
+        : controller.obx(
           (state) {
             return ListView.builder(
-                itemCount: 2,
+                itemCount: controller.completedTrips.length,
                 shrinkWrap: true,
                 physics: const ScrollPhysics(),
                 itemBuilder: (context, index) {
@@ -194,15 +227,16 @@ class TripsScreen extends GetView<TripsController> {
                                       shrinkWrap: true,
                                       itemCount: controller.ratings.length,
                                       itemBuilder: (context, index) {
-                                        final rating = controller.ratings[index];
-            
+                                        final rating =
+                                            controller.ratings[index];
+
                                         // final selectedRating = controller
                                         //     .selectedIndices
                                         //     .contains(index);
-            
+
                                         final RatingItem ratings =
                                             controller.ratings1[index];
-            
+
                                         return AnimatedContainer(
                                           duration:
                                               const Duration(milliseconds: 200),
@@ -224,55 +258,68 @@ class TripsScreen extends GetView<TripsController> {
                                           ),
                                           child: Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 roundedContainer(
-                                                    color: ratings.selectedType ==
+                                                    color: ratings
+                                                                .selectedType ==
                                                             RatingType.thumbsUp
                                                         ? white
                                                         : green,
                                                     thumb: SvgPicture.asset(
                                                       ImageAssets.thumbsUpGreen,
-                                                      color: ratings.selectedType ==
-                                                              RatingType.thumbsUp
-                                                          ? grey5
-                                                          : white,
+                                                      color:
+                                                          ratings.selectedType ==
+                                                                  RatingType
+                                                                      .thumbsUp
+                                                              ? grey5
+                                                              : white,
                                                     ),
                                                     onTap: () {
                                                       // controller
                                                       // .toggleSelection(index);
-                                                      controller.toggleSelection1(
-                                                          index,
-                                                          RatingType.thumbsUp);
+                                                      controller
+                                                          .toggleSelection1(
+                                                              index,
+                                                              RatingType
+                                                                  .thumbsUp);
                                                       setState(() {});
                                                     }),
                                                 textWidget(
                                                     text: rating,
                                                     style: getRegularStyle(
-                                                        color: ratings
-                                                                    .selectedType ==
-                                                                RatingType.thumbsUp
-                                                            ? grey5
-                                                            : white,
+                                                        color:
+                                                            ratings.selectedType ==
+                                                                    RatingType
+                                                                        .thumbsUp
+                                                                ? grey5
+                                                                : white,
                                                         fontSize: 12.sp)),
                                                 roundedContainer(
-                                                    color: ratings.selectedType ==
-                                                            RatingType.thumbsDown
-                                                        ? danger
-                                                        : white,
+                                                    color:
+                                                        ratings.selectedType ==
+                                                                RatingType
+                                                                    .thumbsDown
+                                                            ? danger
+                                                            : white,
                                                     thumb: SvgPicture.asset(
                                                       ImageAssets.thumbsDown,
-                                                      color: ratings.selectedType ==
-                                                              RatingType.thumbsDown
-                                                          ? white
-                                                          : grey5,
+                                                      color:
+                                                          ratings.selectedType ==
+                                                                  RatingType
+                                                                      .thumbsDown
+                                                              ? white
+                                                              : grey5,
                                                     ),
                                                     onTap: () {
                                                       // controller
                                                       // .toggleSelection(index);
-                                                      controller.toggleSelection1(
-                                                          index,
-                                                          RatingType.thumbsDown);
+                                                      controller
+                                                          .toggleSelection1(
+                                                              index,
+                                                              RatingType
+                                                                  .thumbsDown);
                                                       setState(() {});
                                                     })
                                               ]),
@@ -305,24 +352,27 @@ class TripsScreen extends GetView<TripsController> {
                                                     children: [
                                                       Spacer(),
                                                       textWidget(
-                                                          text: AppStrings.review,
+                                                          text:
+                                                              AppStrings.review,
                                                           style: getMediumStyle(
-                                                              color: primaryColor)),
+                                                              color:
+                                                                  primaryColor)),
                                                       Spacer(),
                                                       SvgPicture.asset(
-                                                          ImageAssets.closeSmall),
+                                                          ImageAssets
+                                                              .closeSmall),
                                                     ],
                                                   ),
                                                   Container(
                                                     width: 100,
-                                                    margin:
-                                                        const EdgeInsets.symmetric(
-                                                            vertical: 15,
-                                                            horizontal: 15),
-                                                    padding:
-                                                        const EdgeInsets.symmetric(
-                                                            vertical: 6,
-                                                            horizontal: 15),
+                                                    margin: const EdgeInsets
+                                                        .symmetric(
+                                                        vertical: 15,
+                                                        horizontal: 15),
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        vertical: 6,
+                                                        horizontal: 15),
                                                     decoration: BoxDecoration(
                                                       color: primaryColor,
                                                       borderRadius:
@@ -333,64 +383,76 @@ class TripsScreen extends GetView<TripsController> {
                                                     child: Row(
                                                       children: [
                                                         SvgPicture.asset(
-                                                          ImageAssets.thumbsUpGreen,
+                                                          ImageAssets
+                                                              .thumbsUpGreen,
                                                           color: white,
                                                         ),
                                                         SizedBox(width: 13),
                                                         textWidget(
                                                             text: '80%',
-                                                            style: getMediumStyle(
-                                                                color: white,
-                                                                fontSize: 16.sp)),
+                                                            style:
+                                                                getMediumStyle(
+                                                                    color:
+                                                                        white,
+                                                                    fontSize:
+                                                                        16.sp)),
                                                       ],
                                                     ),
                                                   ),
                                                   SizedBox(height: 20.sp),
                                                   reviews(
-                                                    title: AppStrings.cleanliness,
+                                                    title:
+                                                        AppStrings.cleanliness,
                                                     selected: true,
                                                   ),
                                                   reviews(
-                                                    title: AppStrings.roadTardiness,
+                                                    title: AppStrings
+                                                        .roadTardiness,
                                                     selected: true,
                                                   ),
                                                   reviews(
-                                                    title: AppStrings.convenience,
+                                                    title:
+                                                        AppStrings.convenience,
                                                     selected: false,
                                                   ),
                                                   reviews(
-                                                    title: AppStrings.maintenance,
+                                                    title:
+                                                        AppStrings.maintenance,
                                                     selected: true,
                                                   ),
                                                   reviews(
-                                                    title: AppStrings.fifthPoint,
+                                                    title:
+                                                        AppStrings.fifthPoint,
                                                     selected: true,
                                                   ),
                                                   NormalInputTextWidget(
                                                     expectedVariable: 'field',
                                                     title: '',
-                                                    hintText:
-                                                        AppStrings.reviewHintText,
+                                                    hintText: AppStrings
+                                                        .reviewHintText,
                                                     hintTextColor: grey2,
                                                     maxLines: 5,
                                                     filled: true,
-                                                    fillColor: Color(0xffF2F2F2),
+                                                    fillColor:
+                                                        Color(0xffF2F2F2),
                                                     border: InputBorder.none,
-                                                    enabledBorder: InputBorder.none,
+                                                    enabledBorder:
+                                                        InputBorder.none,
                                                   ),
                                                   SizedBox(height: 37.sp),
                                                   GtiButton(
                                                       width: 350,
                                                       text: AppStrings.submit,
-                                                      onTap:
-                                                          controller.routeToHome),
+                                                      onTap: controller
+                                                          .routeToHome),
                                                 ]),
                                           ),
                                         ));
                                   },
                                   child: textWidget(
                                       text: AppStrings.continueToLeaveReview,
-                                      style: getMediumStyle(color: primaryColor)),
+                                      style:
+                                          getMediumStyle(color: primaryColor)),
                                 )
                               ],
                             ),
@@ -399,27 +461,26 @@ class TripsScreen extends GetView<TripsController> {
                   );
                 });
           },
-            onEmpty: Padding(
-        padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
-        child: Center(
-            child: textWidget(
-               textOverflow: TextOverflow.visible,
-              textAlign: TextAlign.center,
-                text: AppStrings.noCompletedTripYet, style: getExtraBoldStyle(
-                  fontSize: 18.sp
-                ))),
-      ),
-      onError: (e) => Padding(
-        padding: EdgeInsets.symmetric(
-            vertical: context.height * 0.1, horizontal: 20),
-        child: Center(
-          child: Text(
-            "$e",
-            textAlign: TextAlign.center,
+          onEmpty: Padding(
+            padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
+            child: Center(
+                child: textWidget(
+                    textOverflow: TextOverflow.visible,
+                    textAlign: TextAlign.center,
+                    text: AppStrings.noCompletedTripYet,
+                    style: getExtraBoldStyle(fontSize: 18.sp))),
           ),
-        ),
-      ),
-      onLoading: boxShimmer(height: 200.sp),
+          onError: (e) => Padding(
+            padding: EdgeInsets.symmetric(
+                vertical: context.height * 0.1, horizontal: 20),
+            child: Center(
+              child: Text(
+                "$e",
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+          onLoading: boxShimmer(height: 200.sp),
         );
 
       default:
@@ -875,18 +936,27 @@ class TripsScreen extends GetView<TripsController> {
                                   children: [
                                     SvgPicture.asset(ImageAssets.naira),
                                     textWidget(
-                                        text: '100,000',
+                                        text: pendingTrips
+                                                .tripOrders!.first.pricePerDay
+                                                .toString() ??
+                                            '',
                                         style: getRegularStyle(color: grey5)),
                                     // textWidget(
                                     //     text: ' x ', style: getRegularStyle()),
-
+                                    SizedBox(
+                                      width: 2,
+                                    ),
                                     SvgPicture.asset(
                                       ImageAssets.closeSmall,
                                       width: 7.sp,
                                       height: 7.sp,
                                     ),
+                                    SizedBox(
+                                      width: 2,
+                                    ),
                                     textWidget(
-                                        text: '5days',
+                                        text:
+                                            '${pendingTrips.tripOrders!.first.tripsDays} ${int.parse(pendingTrips.tripOrders!.first.tripsDays) > 1 ? 'days' : 'day'}',
                                         style: getRegularStyle(color: grey5)),
                                   ],
                                 ),
@@ -894,15 +964,49 @@ class TripsScreen extends GetView<TripsController> {
                                   children: [
                                     SvgPicture.asset(ImageAssets.naira),
                                     textWidget(
-                                        text: '500,000',
+                                        text: pendingTrips
+                                            .tripOrders!.first.totalFee
+                                            .toString(),
                                         style: getRegularStyle(color: grey5)),
                                   ],
                                 ),
                               ],
                             ),
-                            rowNairaText(title: 'VAT', subTitle: '1,000'),
-                            rowNairaText(title: 'Pick up', subTitle: '10,000'),
-                            rowNairaText(title: 'Drop off', subTitle: '10,000'),
+                            rowNairaText(
+                                title: 'VAT',
+                                subTitle: pendingTrips.tripOrders!.first.vatFee
+                                        .toString() ??
+                                    ''),
+                            Visibility(
+                                visible: pendingTrips
+                                            .tripOrders!.first.pickUpFee
+                                            .toString() ==
+                                        '0'
+                                    ? false
+                                    : true,
+                                child: rowNairaText(
+                                    title: 'Pick up',
+                                    subTitle: pendingTrips
+                                        .tripOrders!.first.pickUpFee
+                                        .toString())),
+                            Visibility(
+                                visible: pendingTrips
+                                            .tripOrders!.first.dropOffFee
+                                            .toString() ==
+                                        '0'
+                                    ? false
+                                    : true,
+                                child: rowNairaText(
+                                    title: 'Drop off', subTitle: '10,000')),
+                            Visibility(
+                                visible: pendingTrips
+                                            .tripOrders!.first.escortFee
+                                            .toString() ==
+                                        '0'
+                                    ? false
+                                    : true,
+                                child: rowNairaText(
+                                    title: 'Escort', subTitle: '10,000')),
                             Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 14, vertical: 9),
@@ -972,11 +1076,10 @@ class TripsScreen extends GetView<TripsController> {
         padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
         child: Center(
             child: textWidget(
-               textOverflow: TextOverflow.visible,
-              textAlign: TextAlign.center,
-                text: AppStrings.noPendingCarsYet, style: getExtraBoldStyle(
-                  fontSize: 18
-                ))),
+                textOverflow: TextOverflow.visible,
+                textAlign: TextAlign.center,
+                text: AppStrings.noPendingCarsYet,
+                style: getExtraBoldStyle(fontSize: 18))),
       ),
       onError: (e) => Padding(
         padding: EdgeInsets.symmetric(
@@ -1036,7 +1139,7 @@ class TripsScreen extends GetView<TripsController> {
     );
   }
 
-  Widget headerCard(Size size, PendingTripsData pendingTrips) {
+  Widget headerCard(Size size, AllTripsData pendingTrips) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 0.sp),
       child: Stack(
@@ -1117,8 +1220,7 @@ class TripsScreen extends GetView<TripsController> {
     );
   }
 
-  Widget continueButton(
-      TripsController controller, PendingTripsData pendingTrips) {
+  Widget continueButton(TripsController controller, AllTripsData pendingTrips) {
     return controller.isLoading.isTrue
         ? centerLoadingIcon()
         : GtiButton(
@@ -1136,29 +1238,40 @@ class TripsScreen extends GetView<TripsController> {
                 ? primaryColorLight
                 : grey5,
             onTap: () {
-              if (pendingTrips.status == "pending") {
-                if (pendingTrips.tripType == 'chauffeur') {
-                  // call a different method here
-                  // startChauffeurMethod();
-                } else if (pendingTrips.tripType == "self drive" &&
-                    pendingTrips.adminStatus == "approved") {
-                  // call a different method here
-                  // payNowMethod();
-                }
-              } else if (pendingTrips.status == "declined") {
-                // call a different method here
-                // chatWithAdminMethod();
+              switch (pendingTrips.status) {
+                case "pending":
+                  if (pendingTrips.tripType == 'chauffeur') {
+                    // startTripMethod();
+                    print("object");
+                  } else if (pendingTrips.tripType == "self drive" &&
+                      pendingTrips.adminStatus == "approved") {
+                    // payNowMethod();
+                  } else if (pendingTrips.tripType == "self drive" &&
+                      pendingTrips.tripOrders!.first.paymentStatus
+                          .toString()
+                          .contains("successful")) {
+                    print("confirm");
+                    // confirm trip button
+                  }
+                  break;
+                case "declined":
+                  // chatWithAdminMethod();
+                  break;
+                // Add more cases if needed
+                default:
+                  break;
               }
             },
+
             // onTap: controller.routeToPhoneVerification,
             isLoading: controller.isLoading.value,
           );
   }
 
-  String getPendingTripsStatusMessage(PendingTripsData pendingTrips) {
+  String getPendingTripsStatusMessage(AllTripsData pendingTrips) {
     if (pendingTrips.status == "pending") {
       if (pendingTrips.tripType == 'chauffeur') {
-        return "Start";
+        return "Confirm Trip";
       } else if (pendingTrips.tripType == "self drive" &&
           pendingTrips.adminStatus == "pending") {
         return "Pending admin approval";
@@ -1173,7 +1286,7 @@ class TripsScreen extends GetView<TripsController> {
     return "null";
   }
 
-  bool shouldButtonBeDisabled(PendingTripsData pendingTrips) {
+  bool shouldButtonBeDisabled(AllTripsData pendingTrips) {
     return (pendingTrips.tripType == "self drive" &&
             pendingTrips.adminStatus == "pending") ||
         pendingTrips.status == 'declined';

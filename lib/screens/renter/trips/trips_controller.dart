@@ -7,9 +7,10 @@ import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/renter_service.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/utils/constants.dart';
+import 'package:gti_rides/utils/utils.dart';
 
 class TripsController extends GetxController
-    with StateMixin<List<PendingTripsData>> {
+    with StateMixin<List<AllTripsData>> {
   Logger logger = Logger("Controller");
 
   TripsController() {
@@ -21,7 +22,7 @@ class TripsController extends GetxController
   }
 
   @override
-  void onInit() async{
+  void onInit() async {
     super.onInit();
     // await getAllTrips();
     // Initialize your ratings list with default values
@@ -46,6 +47,7 @@ class TripsController extends GetxController
   RxBool isGettingPendingTrips = false.obs;
   RxBool isGettingActiveTrips = false.obs;
   RxBool isExpanded = false.obs;
+  RxBool confirmingTrip = false.obs;
   PageController pageController = PageController();
 
   Rx<String> testString = 'hello world'.obs;
@@ -63,9 +65,9 @@ class TripsController extends GetxController
 
   List<int> selectedIndices = [];
   List<RatingItem> ratings1 = List<RatingItem>.empty(growable: true);
-  RxList<PendingTripsData> pendingTrips = <PendingTripsData>[].obs;
-  RxList<PendingTripsData> activeTrips = <PendingTripsData>[].obs;
-  RxList<PendingTripsData> completedTrips = <PendingTripsData>[].obs;
+  RxList<AllTripsData> pendingTrips = <AllTripsData>[].obs;
+  RxList<AllTripsData> activeTrips = <AllTripsData>[].obs;
+  RxList<AllTripsData> completedTrips = <AllTripsData>[].obs;
 
   //  methods
   void goBack() => routeService.goBack();
@@ -131,8 +133,8 @@ class TripsController extends GetxController
 
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("All Trips:: ${response.data}");
-        List<PendingTripsData> trips = List<PendingTripsData>.from(
-            response.data!.map((trip) => PendingTripsData.fromJson(trip)));
+        List<AllTripsData> trips = List<AllTripsData>.from(
+            response.data!.map((trip) => AllTripsData.fromJson(trip)));
 
         if (trips.isEmpty) {
           change([], status: RxStatus.empty());
@@ -143,7 +145,7 @@ class TripsController extends GetxController
           completedTrips.clear();
 
           // Iterate through trips and assign to appropriate lists based on status
-          for (PendingTripsData trip in trips) {
+          for (AllTripsData trip in trips) {
             switch (trip.status) {
               case 'pending':
                 pendingTrips.add(trip);
@@ -170,23 +172,24 @@ class TripsController extends GetxController
     }
   }
 
-  RxString activeTripsErrorMessage = ''.obs;
-  RxBool activeTripHasError = false.obs;
-  RxBool activeTripsLoaded = false.obs;
+ Future<void> confirmTrip() async {
+  confirmingTrip.value = true;
 
-  Future<void> getActiveTrips() async {
-    isGettingActiveTrips.value = true; ///////
-    try {
-      final response = await renterService.getAllTrips(status: 'active');
-      if (response.status == 'success' || response.status_code == 200) {
-        activeTrips.value = response.data!.cast<PendingTripsData>();
-        activeTripsLoaded.value = true;
-      } else {
-        logger.log("Unable to get active trips");
-        // return false;
-      }
-    } catch (e) {
-      logger.log("some error occured $e");
+  try {
+    final response = await renterService.confirmTrip(type: "");
+    if (response.status == "success" || response.status_code == 200) {
+      showSuccessSnackbar(message: response.message ?? "Trip confirmed");
+    } else {
+      logger.log("Unable to confirm trip");
+      // Show an error snackbar for unsuccessful response
+      showErrorSnackbar(message: "Unable to confirm trip");
     }
+  } catch (exception) {
+    showErrorSnackbar(message: "An error occurred: ${exception.toString()}");
+    logger.log("Error: ${exception}");
+  }finally{
+    confirmingTrip.value = false;
   }
+}
+
 }

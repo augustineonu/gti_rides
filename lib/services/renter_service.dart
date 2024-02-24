@@ -207,6 +207,17 @@ class RenterService {
       rethrow;
     }
   }
+  Future<ApiResponseModel> confirmTrip({required String type}) async {
+    try {
+      final result = await apiService.postRequest(
+          endpoint: '/user/renter/trips/updateTripStatus', data: {"type": type});
+      // logger.log("result $result");
+
+      return ApiResponseModel.fromJson(result);
+    } catch (err) {
+      rethrow;
+    }
+  }
 
   Future<ListResponseModel> getAllTrips({
     String? status,

@@ -9,7 +9,7 @@ import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/utils/constants.dart';
 
-class RentHistoryController extends GetxController with StateMixin<List<PendingTripsData>> {
+class RentHistoryController extends GetxController with StateMixin<List<AllTripsData>> {
   Logger logger = Logger("Controller");
 
   RentHistoryController() {
@@ -35,8 +35,8 @@ class RentHistoryController extends GetxController with StateMixin<List<PendingT
   RxString testString = "".obs;
 
   TextEditingController senderNameController = TextEditingController();
-  RxList<PendingTripsData> activeTrips = <PendingTripsData>[].obs;
-  RxList<PendingTripsData> completedTrips = <PendingTripsData>[].obs;
+  // RxList<PendingTripsData> activeTrips = <PendingTripsData>[].obs;
+  // RxList<PendingTripsData> completedTrips = <PendingTripsData>[].obs;
 
   List<Map<String, String>> quickOptions = [
     {

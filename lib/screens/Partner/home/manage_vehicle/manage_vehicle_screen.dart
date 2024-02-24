@@ -87,6 +87,7 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
                             selected: controller.selectedIndex.value == 0,
                             onTap: () {
                               controller.selectedIndex.value = 0;
+                              controller.getAllCars;
                               setState(() {});
                             },
                           ),
@@ -96,6 +97,7 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
                             selected: controller.selectedIndex.value == 1,
                             onTap: () {
                               controller.selectedIndex.value = 1;
+                              controller.getBookedCars;
                               setState(() {});
                             },
                           ),
