@@ -135,13 +135,13 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
                 title: 'VAT(${controller.vat.value}%)',
                 subTitle: controller.vatValue.value),
             Visibility(
-                visible: controller.selectedSelfPickUp.value,
+                visible: !controller.selectedSelfPickUp.value,
                 child: rowNairaText(
                     title: 'Pick up',
                     subTitle:
                         controller.carSelectionController.pickUpFee.value)),
             Visibility(
-                visible: controller.selectedSelfDropOff.value,
+                visible: !controller.selectedSelfDropOff.value,
                 child: rowNairaText(
                     title: 'Drop off',
                     subTitle: controller.carSelectionController.dropOffFee.value

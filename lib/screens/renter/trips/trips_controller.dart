@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/models/rating_model.dart';
@@ -69,6 +71,10 @@ class TripsController extends GetxController
   RxList<AllTripsData> activeTrips = <AllTripsData>[].obs;
   RxList<AllTripsData> completedTrips = <AllTripsData>[].obs;
 
+  RxBool isCountDownFinished = false.obs;
+  late Timer timer;
+  RxString countdownText = ''.obs;
+
   //  methods
   void goBack() => routeService.goBack();
   void routeToPaymentSummary({required bool isComingFromTrips}) => routeService
@@ -129,7 +135,7 @@ class TripsController extends GetxController
     // RxStatus.loading();
     change([], status: RxStatus.loading());
     try {
-      final response = await renterService.getAllTrips();
+      final response = await renterService.getAllTrips(param: 'renter');
 
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("All Trips:: ${response.data}");
@@ -172,10 +178,10 @@ class TripsController extends GetxController
     }
   }
 
-  void routeToPayment({dynamic url}){
+  void routeToPayment({dynamic url}) {
     routeService.gotoRoute(AppLinks.paymentWebView, arguments: {
-            "checkoutUrl": url,
-          });
+      "checkoutUrl": url,
+    });
   }
 
   Future<void> updateTripStatus(
@@ -187,6 +193,8 @@ class TripsController extends GetxController
           await renterService.updateTripStatus(type: type, tripID: tripID);
       if (response.status == "success" || response.status_code == 200) {
         showSuccessSnackbar(message: response.message ?? "Trip confirmed");
+        selectedIndex.value = 1;
+        getAllTrips();
       } else {
         logger.log("Unable to confirm trip");
         // Show an error snackbar for unsuccessful response
@@ -199,4 +207,42 @@ class TripsController extends GetxController
       confirmingTrip.value = false;
     }
   }
+
+  void startCountdown(DateTime startDate, DateTime endDate) {
+    final now = DateTime.now();
+    final duration = endDate.difference(now);
+    int secondsRemaining = duration.inSeconds;
+
+    if (secondsRemaining > 0) {
+      isCountDownFinished.value = false;
+      logger.log('Countdown started!');
+
+      timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+        if (secondsRemaining > 0) {
+          secondsRemaining--;
+          updateCountdownText(secondsRemaining);
+        } else {
+          timer.cancel();
+          // You can perform any action when the countdown reaches 0
+          isCountDownFinished.value = true;
+          logger.log('Countdown finished!');
+        }
+      });
+    } else {
+      // Handle the case where the end date is in the past
+      logger.log('End date is in the past. No countdown started.');
+    }
+  }
+
+  void updateCountdownText(int secondsRemaining) {
+    final hours = (secondsRemaining ~/ 3600).toString().padLeft(2, '0');
+    final minutes = ((secondsRemaining ~/ 60) % 60).toString().padLeft(2, '0');
+    final seconds = (secondsRemaining % 60).toString().padLeft(2, '0');
+    countdownText.value = '$hours:$minutes:$seconds';
+  }
+
+// Example usage:
+  DateTime tripStartDate = DateTime.parse("2024-02-27T00:00:00.000Z");
+  DateTime tripEndDate = DateTime.parse("2024-02-28T00:00:00.000Z");
+// startCountdown(tripStartDate, tripEndDate);
 }

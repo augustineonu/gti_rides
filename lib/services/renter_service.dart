@@ -225,10 +225,11 @@ class RenterService {
 
   Future<ListResponseModel> getAllTrips({
     String? status,
+    required String? param,
   }) async {
     try {
       final result = await apiService.getRequest(
-        '/user/renter/trip/getAllTrips?status=&skip=0&limit=1000',
+        '/user/$param/trip/getAllTrips?status=&skip=0&limit=10000',
       );
       // logger.log("result $result");
 

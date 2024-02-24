@@ -114,38 +114,40 @@ class TripsScreen extends GetView<TripsController> {
                     physics: const ScrollPhysics(),
                     itemBuilder: (context, index) {
                       var activeTrip = controller.activeTrips[index];
-                      // if (controller.activeTrips.isEmpty) {
-                      //   return Padding(
-                      //     padding: EdgeInsets.symmetric(vertical: 10),
-                      //     child: Center(
-                      //         child: textWidget(
-                      //             text: AppStrings.noActiveCarsYet,
-                      //             style: getMediumStyle())),
-                      //   );
-                      // }
-                      return activeAndCompletedCard(
-                        size,
-                        headerTitle: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            textWidget(
-                                text: 'Countdown:', style: getRegularStyle()),
-                            const SizedBox(width: 4),
-                            textWidget(
-                                text: '00:00',
-                                style: getMediumStyle(fontSize: 16.sp)),
-                          ],
-                        ),
-                        vehicleName:
-                            "${activeTrip.carYear.toString()} ${activeTrip.carBrand.toString()} ${activeTrip.carModel.toString()}",
-                        tripStatus: AppStrings.active,
-                        button1Title: AppStrings.extend,
-                        button1OnTap: () {
-                          extendTimeDialog(size, controller);
-                        },
-                        button2Title: AppStrings.return1,
-                        button2OnTap: () {},
-                      );
+                      DateTime tripStartDate =
+                          activeTrip.tripStartDate ?? DateTime.now();
+                      DateTime tripEndDate =
+                          activeTrip.tripEndDate ?? DateTime.now();
+
+                      // Call startCountdown to start the countdown for each item
+                      controller.startCountdown(tripStartDate, tripEndDate);
+
+                      return Obx(() {
+                        return activeAndCompletedCard(
+                          size,
+                          imgUrl: activeTrip.carProfilePic.toString(),
+                          headerTitle: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              textWidget(
+                                  text: 'Countdown:', style: getRegularStyle()),
+                              const SizedBox(width: 4),
+                              textWidget(
+                                  text: controller.countdownText.value,
+                                  style: getMediumStyle(fontSize: 16.sp)),
+                            ],
+                          ),
+                          vehicleName:
+                              "${activeTrip.carYear.toString()} ${activeTrip.carBrand.toString()} ${activeTrip.carModel.toString()}",
+                          tripStatus: AppStrings.active,
+                          button1Title: AppStrings.extend,
+                          button1OnTap: () {
+                            extendTimeDialog(size, controller);
+                          },
+                          button2Title: AppStrings.return1,
+                          button2OnTap: () {},
+                        );
+                      });
                     },
                   );
                 },
@@ -192,6 +194,7 @@ class TripsScreen extends GetView<TripsController> {
                       itemBuilder: (context, index) {
                         return activeAndCompletedCard(
                           size,
+                          imgUrl: '',
                           headerTitle: textWidget(
                               text: 'Completed', style: getRegularStyle()),
                           vehicleName: '2012 KIA Sportage',
@@ -571,6 +574,7 @@ class TripsScreen extends GetView<TripsController> {
     required String button2Title,
     required void Function()? button1OnTap,
     required void Function()? button2OnTap,
+    required String imgUrl,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -617,10 +621,11 @@ class TripsScreen extends GetView<TripsController> {
         ),
         Row(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(6.r)),
-              child: Image.asset('assets/images/car_small.png'),
-            ),
+            carImage(
+                imgUrl: imgUrl,
+                borderRadius: BorderRadius.all(Radius.circular(6.r)),
+                width: 78.sp,
+                height: 60.sp),
             const SizedBox(width: 12),
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -667,32 +672,35 @@ class TripsScreen extends GetView<TripsController> {
         SizedBox(
           height: 8.sp,
         ),
-        Row(
-          children: [
-            Expanded(
-              child: GtiButton(
-                  text: button1Title,
-                  textColor: primaryColor,
-                  color: backgroundColor,
-                  width: 160.sp,
-                  hasBorder: true,
-                  borderColor: primaryColor,
-                  onTap: button1OnTap),
-            ),
-            SizedBox(
-              width: 8.sp,
-            ),
-            Expanded(
-              child: GtiButton(
-                  text: button2Title,
-                  textColor: primaryColor,
-                  color: backgroundColor,
-                  width: 160.sp,
-                  hasBorder: true,
-                  borderColor: primaryColor,
-                  onTap: button2OnTap),
-            ),
-          ],
+        Visibility(
+          visible: false,
+          child: Row(
+            children: [
+              Expanded(
+                child: GtiButton(
+                    text: button1Title,
+                    textColor: primaryColor,
+                    color: backgroundColor,
+                    width: 160.sp,
+                    hasBorder: true,
+                    borderColor: primaryColor,
+                    onTap: button1OnTap),
+              ),
+              SizedBox(
+                width: 8.sp,
+              ),
+              Expanded(
+                child: GtiButton(
+                    text: button2Title,
+                    textColor: primaryColor,
+                    color: backgroundColor,
+                    width: 160.sp,
+                    hasBorder: true,
+                    borderColor: primaryColor,
+                    onTap: button2OnTap),
+              ),
+            ],
+          ),
         )
       ]),
     );

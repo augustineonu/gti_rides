@@ -267,8 +267,8 @@ class CarSelectionResultController extends GetxController
       total: initialEstimatedTotal.value,
       cautionFee:
           tripType.value == 1 && cautionFee.isNotEmpty ? cautionFee.value : '0',
-      dropOffFee: selectedSelfDropOff.value ? dropOffFee.value : '0',
-      pickUpFee: selectedSelfPickUp.value ? pickUpFee.value : '0',
+      dropOffFee: !selectedSelfDropOff.value ? dropOffFee.value : '0',
+      pickUpFee: !selectedSelfPickUp.value ? pickUpFee.value : '0',
     );
   }
 
@@ -459,17 +459,20 @@ class CarSelectionResultController extends GetxController
             : null,
         pickUpType: tripType.value == 0
             ? 'true'
-            : tripType.value == 1 && selectedSelfPickUp.value
+            : tripType.value == 1 && selectedSelfPickUp.isTrue
                 ? "true"
                 : "false",
         pickUpAddress: tripType.value == 0
             ? inputPickupAddController.text
-            : tripType.value == 1 && selectedSelfPickUp.value
+            : tripType.value == 1 && selectedSelfPickUp.isTrue
                 ? selfPickUpInputController.text
                 : null,
-        dropOffType:
-            tripType.value == 1 && selectedSelfDropOff.value ? "true" : "false",
-        dropOffAddress: tripType.value == 1 && selectedSelfDropOff.value
+        dropOffType: tripType.value == 0
+            ? "true"
+            : tripType.value == 1 && selectedSelfDropOff.isTrue
+                ? "true"
+                : "false",
+        dropOffAddress: tripType.value == 1 && selectedSelfDropOff.isTrue
             ? selfDropOffInputController.text
             : null,
         routeStart: tripType.value == 0 ? startRouteController.text : null,
