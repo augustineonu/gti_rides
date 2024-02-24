@@ -847,7 +847,7 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                     textInputType: TextInputType.text,
                     contentPadding:
                         const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                    controller: controller.interStateInputController,
+                    controller: controller.inputPickupAddController,
                   ),
                   SizedBox(
                     height: 16.sp,

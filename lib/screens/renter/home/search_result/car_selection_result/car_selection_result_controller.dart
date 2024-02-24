@@ -69,6 +69,7 @@ class CarSelectionResultController extends GetxController
 
   ScrollController scrollController = ScrollController();
   TextEditingController interStateInputController = TextEditingController();
+  TextEditingController inputPickupAddController = TextEditingController();
   TextEditingController escortSecurityNoInputController =
       TextEditingController();
   TextEditingController selfPickUpInputController = TextEditingController();
@@ -456,11 +457,16 @@ class CarSelectionResultController extends GetxController
         escortValue: selectedSecurityEscort.value
             ? escortSecurityNoInputController.text
             : null,
-        pickUpType:
-            tripType.value == 1 && selectedSelfPickUp.value ? "true" : "false",
-        pickUpAddress: tripType.value == 1 && selectedSelfPickUp.value
-            ? selfPickUpInputController.text
-            : null,
+        pickUpType: tripType.value == 0
+            ? 'true'
+            : tripType.value == 1 && selectedSelfPickUp.value
+                ? "true"
+                : "false",
+        pickUpAddress: tripType.value == 0
+            ? inputPickupAddController.text
+            : tripType.value == 1 && selectedSelfPickUp.value
+                ? selfPickUpInputController.text
+                : null,
         dropOffType:
             tripType.value == 1 && selectedSelfDropOff.value ? "true" : "false",
         dropOffAddress: tripType.value == 1 && selectedSelfDropOff.value

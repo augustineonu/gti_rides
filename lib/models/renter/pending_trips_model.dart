@@ -97,6 +97,9 @@ class AllTripsData {
 }
 
 class AllTripOrder {
+    final dynamic cautionFee;
+    final dynamic discountPerDay;
+    final dynamic discountPerDayTotal;
     final dynamic dropOffFee;
     final dynamic escortFee;
     final dynamic paymentLink;
@@ -104,13 +107,17 @@ class AllTripOrder {
     final dynamic paymentStatus;
     final dynamic pickUpFee;
     final dynamic pricePerDay;
-    final dynamic? totalFee;
+    final dynamic pricePerDayTotal;
+    final dynamic totalFee;
     final DateTime? tripEndDate;
     final DateTime? tripStartDate;
     final dynamic tripsDays;
     final dynamic vatFee;
 
     AllTripOrder({
+      this.cautionFee,
+        this.discountPerDay,
+        this.discountPerDayTotal,
         this.dropOffFee,
         this.escortFee,
         this.paymentLink,
@@ -118,6 +125,7 @@ class AllTripOrder {
         this.paymentStatus,
         this.pickUpFee,
         this.pricePerDay,
+        this.pricePerDayTotal,
         this.totalFee,
         this.tripEndDate,
         this.tripStartDate,
@@ -130,6 +138,9 @@ class AllTripOrder {
     String toRawJson() => json.encode(toJson());
 
     factory AllTripOrder.fromJson(Map<String, dynamic> json) => AllTripOrder(
+        cautionFee: json["cautionFee"],
+        discountPerDay: json["discountPerDay"],
+        discountPerDayTotal: json["discountPerDayTotal"],
         dropOffFee: json["dropOffFee"],
         escortFee: json["escortFee"],
         paymentLink: json["paymentLink"],
@@ -137,6 +148,7 @@ class AllTripOrder {
         paymentStatus: json["paymentStatus"],
         pickUpFee: json["pickUpFee"],
         pricePerDay: json["pricePerDay"],
+        pricePerDayTotal: json["pricePerDayTotal"],
         totalFee: json["totalFee"],
         tripEndDate: json["tripEndDate"] == null ? null : DateTime.parse(json["tripEndDate"]),
         tripStartDate: json["tripStartDate"] == null ? null : DateTime.parse(json["tripStartDate"]),
@@ -145,6 +157,9 @@ class AllTripOrder {
     );
 
     Map<String, dynamic> toJson() => {
+      "cautionFee": cautionFee,
+        "discountPerDay": discountPerDay,
+        "discountPerDayTotal": discountPerDayTotal,
         "dropOffFee": dropOffFee,
         "escortFee": escortFee,
         "paymentLink": paymentLink,
@@ -152,6 +167,7 @@ class AllTripOrder {
         "paymentStatus": paymentStatus,
         "pickUpFee": pickUpFee,
         "pricePerDay": pricePerDay,
+        "pricePerDayTotal": pricePerDayTotal,
         "totalFee": totalFee,
         "tripEndDate": tripEndDate?.toIso8601String(),
         "tripStartDate": tripStartDate?.toIso8601String(),

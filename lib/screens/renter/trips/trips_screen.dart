@@ -75,7 +75,7 @@ class TripsScreen extends GetView<TripsController> {
                       child: Column(
                         children: [
                           SizedBox(
-                            height: 20.sp,
+                            height: 5.sp,
                           ),
                           buildBody(size, context, controller, expanded),
                         ],
@@ -96,392 +96,420 @@ class TripsScreen extends GetView<TripsController> {
         return pendingStatusBuild(size, controller, context);
       case 1:
         // active trips
-        return controller.activeTrips.isEmpty ? 
-         Padding(
-            padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
-            child: Center(
-                child: textWidget(
-                    textOverflow: TextOverflow.visible,
-                    textAlign: TextAlign.center,
-                    text: AppStrings.noActiveTripsYet,
-                    style: getExtraBoldStyle(fontSize: 18.sp))),
-          )
-        : controller.obx(
-          (state) {
-            return ListView.builder(
-              itemCount: controller.activeTrips.length,
-              shrinkWrap: true,
-              physics: const ScrollPhysics(),
-              itemBuilder: (context, index) {
-                var activeTrip = controller.activeTrips[index];
-                // if (controller.activeTrips.isEmpty) {
-                //   return Padding(
-                //     padding: EdgeInsets.symmetric(vertical: 10),
-                //     child: Center(
-                //         child: textWidget(
-                //             text: AppStrings.noActiveCarsYet,
-                //             style: getMediumStyle())),
-                //   );
-                // }
-                return activeAndCompletedCard(
-                  size,
-                  headerTitle: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      textWidget(text: 'Countdown:', style: getRegularStyle()),
-                      const SizedBox(width: 4),
-                      textWidget(
-                          text: '00:00',
-                          style: getMediumStyle(fontSize: 16.sp)),
-                    ],
+        return controller.activeTrips.isEmpty
+            ? Padding(
+                padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
+                child: Center(
+                    child: textWidget(
+                        textOverflow: TextOverflow.visible,
+                        textAlign: TextAlign.center,
+                        text: AppStrings.noActiveTripsYet,
+                        style: getExtraBoldStyle(fontSize: 18.sp))),
+              )
+            : controller.obx(
+                (state) {
+                  return ListView.builder(
+                    itemCount: controller.activeTrips.length,
+                    shrinkWrap: true,
+                    physics: const ScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      var activeTrip = controller.activeTrips[index];
+                      // if (controller.activeTrips.isEmpty) {
+                      //   return Padding(
+                      //     padding: EdgeInsets.symmetric(vertical: 10),
+                      //     child: Center(
+                      //         child: textWidget(
+                      //             text: AppStrings.noActiveCarsYet,
+                      //             style: getMediumStyle())),
+                      //   );
+                      // }
+                      return activeAndCompletedCard(
+                        size,
+                        headerTitle: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            textWidget(
+                                text: 'Countdown:', style: getRegularStyle()),
+                            const SizedBox(width: 4),
+                            textWidget(
+                                text: '00:00',
+                                style: getMediumStyle(fontSize: 16.sp)),
+                          ],
+                        ),
+                        vehicleName:
+                            "${activeTrip.carYear.toString()} ${activeTrip.carBrand.toString()} ${activeTrip.carModel.toString()}",
+                        tripStatus: AppStrings.active,
+                        button1Title: AppStrings.extend,
+                        button1OnTap: () {
+                          extendTimeDialog(size, controller);
+                        },
+                        button2Title: AppStrings.return1,
+                        button2OnTap: () {},
+                      );
+                    },
+                  );
+                },
+                onEmpty: Padding(
+                  padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
+                  child: Center(
+                      child: textWidget(
+                          textOverflow: TextOverflow.visible,
+                          textAlign: TextAlign.center,
+                          text: AppStrings.noActiveTripsYet,
+                          style: getExtraBoldStyle(fontSize: 18.sp))),
+                ),
+                onError: (e) => Padding(
+                  padding: EdgeInsets.symmetric(
+                      vertical: context.height * 0.1, horizontal: 20),
+                  child: Center(
+                    child: Text(
+                      "$e",
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-                  vehicleName:
-                      "${activeTrip.carYear.toString()} ${activeTrip.carBrand.toString()} ${activeTrip.carModel.toString()}",
-                  tripStatus: AppStrings.active,
-                  button1Title: AppStrings.extend,
-                  button1OnTap: () {
-                    extendTimeDialog(size, controller);
-                  },
-                  button2Title: AppStrings.return1,
-                  button2OnTap: () {},
-                );
-              },
-            );
-          },
-          onEmpty: Padding(
-            padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
-            child: Center(
-                child: textWidget(
-                    textOverflow: TextOverflow.visible,
-                    textAlign: TextAlign.center,
-                    text: AppStrings.noActiveTripsYet,
-                    style: getExtraBoldStyle(fontSize: 18.sp))),
-          ),
-          onError: (e) => Padding(
-            padding: EdgeInsets.symmetric(
-                vertical: context.height * 0.1, horizontal: 20),
-            child: Center(
-              child: Text(
-                "$e",
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-          onLoading: boxShimmer(height: 200.sp),
-        );
+                ),
+                onLoading: boxShimmer(height: 200.sp),
+              );
 
       case 2:
         // completed trips
-        return controller.completedTrips.isEmpty ?
-         Padding(
-            padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
-            child: Center(
-                child: textWidget(
-                    textOverflow: TextOverflow.visible,
-                    textAlign: TextAlign.center,
-                    text: AppStrings.noCompletedTripYet,
-                    style: getExtraBoldStyle(fontSize: 18.sp))),
-          )
-        : controller.obx(
-          (state) {
-            return ListView.builder(
-                itemCount: controller.completedTrips.length,
-                shrinkWrap: true,
-                physics: const ScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return activeAndCompletedCard(
-                    size,
-                    headerTitle:
-                        textWidget(text: 'Completed', style: getRegularStyle()),
-                    vehicleName: '2012 KIA Sportage',
-                    tripStatus: AppStrings.completed,
-                    button1Title: AppStrings.seeDetails,
-                    button1OnTap: () {
-                      // see details
-                    },
-                    button2Title: AppStrings.rateTrip,
-                    button2OnTap: () {
-                      Get.bottomSheet(
-                          backgroundColor: white,
-                          isScrollControlled: true,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(8.r),
-                                topRight: Radius.circular(8.r)),
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(19.sp),
-                            height: size.height * 0.6,
-                            width: size.width,
-                            child: Column(
-                              children: [
-                                textWidget(
-                                  text: 'How was your trip experience',
-                                  style: getBoldStyle(fontSize: 12.sp),
+        return controller.completedTrips.isEmpty
+            ? Padding(
+                padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
+                child: Center(
+                    child: textWidget(
+                        textOverflow: TextOverflow.visible,
+                        textAlign: TextAlign.center,
+                        text: AppStrings.noCompletedTripYet,
+                        style: getExtraBoldStyle(fontSize: 18.sp))),
+              )
+            : controller.obx(
+                (state) {
+                  return ListView.builder(
+                      itemCount: controller.completedTrips.length,
+                      shrinkWrap: true,
+                      physics: const ScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return activeAndCompletedCard(
+                          size,
+                          headerTitle: textWidget(
+                              text: 'Completed', style: getRegularStyle()),
+                          vehicleName: '2012 KIA Sportage',
+                          tripStatus: AppStrings.completed,
+                          button1Title: AppStrings.seeDetails,
+                          button1OnTap: () {
+                            // see details
+                          },
+                          button2Title: AppStrings.rateTrip,
+                          button2OnTap: () {
+                            Get.bottomSheet(
+                                backgroundColor: white,
+                                isScrollControlled: true,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(8.r),
+                                      topRight: Radius.circular(8.r)),
                                 ),
-                                SizedBox(
-                                  height: 20.sp,
-                                ),
-                                StatefulBuilder(builder: (context, setState) {
-                                  return ListView.builder(
-                                      shrinkWrap: true,
-                                      itemCount: controller.ratings.length,
-                                      itemBuilder: (context, index) {
-                                        final rating =
-                                            controller.ratings[index];
+                                Container(
+                                  padding: EdgeInsets.all(19.sp),
+                                  height: size.height * 0.6,
+                                  width: size.width,
+                                  child: Column(
+                                    children: [
+                                      textWidget(
+                                        text: 'How was your trip experience',
+                                        style: getBoldStyle(fontSize: 12.sp),
+                                      ),
+                                      SizedBox(
+                                        height: 20.sp,
+                                      ),
+                                      StatefulBuilder(
+                                          builder: (context, setState) {
+                                        return ListView.builder(
+                                            shrinkWrap: true,
+                                            itemCount:
+                                                controller.ratings.length,
+                                            itemBuilder: (context, index) {
+                                              final rating =
+                                                  controller.ratings[index];
 
-                                        // final selectedRating = controller
-                                        //     .selectedIndices
-                                        //     .contains(index);
+                                              // final selectedRating = controller
+                                              //     .selectedIndices
+                                              //     .contains(index);
 
-                                        final RatingItem ratings =
-                                            controller.ratings1[index];
+                                              final RatingItem ratings =
+                                                  controller.ratings1[index];
 
-                                        return AnimatedContainer(
-                                          duration:
-                                              const Duration(milliseconds: 200),
-                                          margin: const EdgeInsets.symmetric(
-                                              vertical: 8, horizontal: 40),
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 4, horizontal: 6),
-                                          decoration: BoxDecoration(
-                                            // color: selectedRating
-                                            //     ? primaryColorLight2
-                                            //     : pr
-                                            color: ratings.selectedType ==
-                                                    RatingType.thumbsUp
-                                                ? primaryColorLight2
-                                                : primaryColor,
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(24.r),
-                                            ),
-                                          ),
-                                          child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                roundedContainer(
-                                                    color: ratings
-                                                                .selectedType ==
-                                                            RatingType.thumbsUp
-                                                        ? white
-                                                        : green,
-                                                    thumb: SvgPicture.asset(
-                                                      ImageAssets.thumbsUpGreen,
-                                                      color:
-                                                          ratings.selectedType ==
+                                              return AnimatedContainer(
+                                                duration: const Duration(
+                                                    milliseconds: 200),
+                                                margin:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 8,
+                                                        horizontal: 40),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 4,
+                                                        horizontal: 6),
+                                                decoration: BoxDecoration(
+                                                  // color: selectedRating
+                                                  //     ? primaryColorLight2
+                                                  //     : pr
+                                                  color: ratings.selectedType ==
+                                                          RatingType.thumbsUp
+                                                      ? primaryColorLight2
+                                                      : primaryColor,
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                    Radius.circular(24.r),
+                                                  ),
+                                                ),
+                                                child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      roundedContainer(
+                                                          color: ratings
+                                                                      .selectedType ==
                                                                   RatingType
                                                                       .thumbsUp
-                                                              ? grey5
-                                                              : white,
-                                                    ),
-                                                    onTap: () {
-                                                      // controller
-                                                      // .toggleSelection(index);
-                                                      controller
-                                                          .toggleSelection1(
-                                                              index,
-                                                              RatingType
-                                                                  .thumbsUp);
-                                                      setState(() {});
-                                                    }),
-                                                textWidget(
-                                                    text: rating,
-                                                    style: getRegularStyle(
-                                                        color:
-                                                            ratings.selectedType ==
+                                                              ? white
+                                                              : green,
+                                                          thumb:
+                                                              SvgPicture.asset(
+                                                            ImageAssets
+                                                                .thumbsUpGreen,
+                                                            color: ratings
+                                                                        .selectedType ==
                                                                     RatingType
                                                                         .thumbsUp
                                                                 ? grey5
                                                                 : white,
-                                                        fontSize: 12.sp)),
-                                                roundedContainer(
-                                                    color:
-                                                        ratings.selectedType ==
-                                                                RatingType
-                                                                    .thumbsDown
-                                                            ? danger
-                                                            : white,
-                                                    thumb: SvgPicture.asset(
-                                                      ImageAssets.thumbsDown,
-                                                      color:
-                                                          ratings.selectedType ==
+                                                          ),
+                                                          onTap: () {
+                                                            // controller
+                                                            // .toggleSelection(index);
+                                                            controller
+                                                                .toggleSelection1(
+                                                                    index,
+                                                                    RatingType
+                                                                        .thumbsUp);
+                                                            setState(() {});
+                                                          }),
+                                                      textWidget(
+                                                          text: rating,
+                                                          style: getRegularStyle(
+                                                              color: ratings
+                                                                          .selectedType ==
+                                                                      RatingType
+                                                                          .thumbsUp
+                                                                  ? grey5
+                                                                  : white,
+                                                              fontSize: 12.sp)),
+                                                      roundedContainer(
+                                                          color: ratings
+                                                                      .selectedType ==
                                                                   RatingType
                                                                       .thumbsDown
-                                                              ? white
-                                                              : grey5,
-                                                    ),
-                                                    onTap: () {
-                                                      // controller
-                                                      // .toggleSelection(index);
-                                                      controller
-                                                          .toggleSelection1(
-                                                              index,
-                                                              RatingType
-                                                                  .thumbsDown);
-                                                      setState(() {});
-                                                    })
-                                              ]),
-                                        );
-                                      });
-                                }),
-                                SizedBox(
-                                  height: 30.sp,
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    Get.bottomSheet(
-                                        backgroundColor: white,
-                                        isScrollControlled: true,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(8.r),
-                                              topRight: Radius.circular(8.r)),
-                                        ),
-                                        Container(
-                                          padding: EdgeInsets.all(19.sp),
-                                          height: size.height * 0.7,
-                                          width: size.width,
-                                          child: SingleChildScrollView(
-                                            child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      Spacer(),
-                                                      textWidget(
-                                                          text:
-                                                              AppStrings.review,
-                                                          style: getMediumStyle(
-                                                              color:
-                                                                  primaryColor)),
-                                                      Spacer(),
-                                                      SvgPicture.asset(
-                                                          ImageAssets
-                                                              .closeSmall),
-                                                    ],
-                                                  ),
-                                                  Container(
-                                                    width: 100,
-                                                    margin: const EdgeInsets
-                                                        .symmetric(
-                                                        vertical: 15,
-                                                        horizontal: 15),
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        vertical: 6,
-                                                        horizontal: 15),
-                                                    decoration: BoxDecoration(
-                                                      color: primaryColor,
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                        Radius.circular(4.r),
-                                                      ),
-                                                    ),
-                                                    child: Row(
+                                                              ? danger
+                                                              : white,
+                                                          thumb:
+                                                              SvgPicture.asset(
+                                                            ImageAssets
+                                                                .thumbsDown,
+                                                            color: ratings
+                                                                        .selectedType ==
+                                                                    RatingType
+                                                                        .thumbsDown
+                                                                ? white
+                                                                : grey5,
+                                                          ),
+                                                          onTap: () {
+                                                            // controller
+                                                            // .toggleSelection(index);
+                                                            controller
+                                                                .toggleSelection1(
+                                                                    index,
+                                                                    RatingType
+                                                                        .thumbsDown);
+                                                            setState(() {});
+                                                          })
+                                                    ]),
+                                              );
+                                            });
+                                      }),
+                                      SizedBox(
+                                        height: 30.sp,
+                                      ),
+                                      InkWell(
+                                        onTap: () {
+                                          Get.bottomSheet(
+                                              backgroundColor: white,
+                                              isScrollControlled: true,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(8.r),
+                                                    topRight:
+                                                        Radius.circular(8.r)),
+                                              ),
+                                              Container(
+                                                padding: EdgeInsets.all(19.sp),
+                                                height: size.height * 0.7,
+                                                width: size.width,
+                                                child: SingleChildScrollView(
+                                                  child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
                                                       children: [
-                                                        SvgPicture.asset(
-                                                          ImageAssets
-                                                              .thumbsUpGreen,
-                                                          color: white,
-                                                        ),
-                                                        SizedBox(width: 13),
-                                                        textWidget(
-                                                            text: '80%',
-                                                            style:
-                                                                getMediumStyle(
+                                                        Row(
+                                                          children: [
+                                                            const Spacer(),
+                                                            textWidget(
+                                                                text: AppStrings
+                                                                    .review,
+                                                                style: getMediumStyle(
                                                                     color:
-                                                                        white,
-                                                                    fontSize:
-                                                                        16.sp)),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SizedBox(height: 20.sp),
-                                                  reviews(
-                                                    title:
-                                                        AppStrings.cleanliness,
-                                                    selected: true,
-                                                  ),
-                                                  reviews(
-                                                    title: AppStrings
-                                                        .roadTardiness,
-                                                    selected: true,
-                                                  ),
-                                                  reviews(
-                                                    title:
-                                                        AppStrings.convenience,
-                                                    selected: false,
-                                                  ),
-                                                  reviews(
-                                                    title:
-                                                        AppStrings.maintenance,
-                                                    selected: true,
-                                                  ),
-                                                  reviews(
-                                                    title:
-                                                        AppStrings.fifthPoint,
-                                                    selected: true,
-                                                  ),
-                                                  NormalInputTextWidget(
-                                                    expectedVariable: 'field',
-                                                    title: '',
-                                                    hintText: AppStrings
-                                                        .reviewHintText,
-                                                    hintTextColor: grey2,
-                                                    maxLines: 5,
-                                                    filled: true,
-                                                    fillColor:
-                                                        Color(0xffF2F2F2),
-                                                    border: InputBorder.none,
-                                                    enabledBorder:
-                                                        InputBorder.none,
-                                                  ),
-                                                  SizedBox(height: 37.sp),
-                                                  GtiButton(
-                                                      width: 350,
-                                                      text: AppStrings.submit,
-                                                      onTap: controller
-                                                          .routeToHome),
-                                                ]),
-                                          ),
-                                        ));
-                                  },
-                                  child: textWidget(
-                                      text: AppStrings.continueToLeaveReview,
-                                      style:
-                                          getMediumStyle(color: primaryColor)),
-                                )
-                              ],
-                            ),
-                          ));
-                    },
-                  );
-                });
-          },
-          onEmpty: Padding(
-            padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
-            child: Center(
-                child: textWidget(
-                    textOverflow: TextOverflow.visible,
-                    textAlign: TextAlign.center,
-                    text: AppStrings.noCompletedTripYet,
-                    style: getExtraBoldStyle(fontSize: 18.sp))),
-          ),
-          onError: (e) => Padding(
-            padding: EdgeInsets.symmetric(
-                vertical: context.height * 0.1, horizontal: 20),
-            child: Center(
-              child: Text(
-                "$e",
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-          onLoading: boxShimmer(height: 200.sp),
-        );
+                                                                        primaryColor)),
+                                                            const Spacer(),
+                                                            SvgPicture.asset(
+                                                                ImageAssets
+                                                                    .closeSmall),
+                                                          ],
+                                                        ),
+                                                        Container(
+                                                          width: 100,
+                                                          margin:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                                  vertical: 15,
+                                                                  horizontal:
+                                                                      15),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                                  vertical: 6,
+                                                                  horizontal:
+                                                                      15),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: primaryColor,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .all(
+                                                              Radius.circular(
+                                                                  4.r),
+                                                            ),
+                                                          ),
+                                                          child: Row(
+                                                            children: [
+                                                              SvgPicture.asset(
+                                                                ImageAssets
+                                                                    .thumbsUpGreen,
+                                                                color: white,
+                                                              ),
+                                                              const SizedBox(
+                                                                  width: 13),
+                                                              textWidget(
+                                                                  text: '80%',
+                                                                  style: getMediumStyle(
+                                                                      color:
+                                                                          white,
+                                                                      fontSize:
+                                                                          16.sp)),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        SizedBox(height: 20.sp),
+                                                        reviews(
+                                                          title: AppStrings
+                                                              .cleanliness,
+                                                          selected: true,
+                                                        ),
+                                                        reviews(
+                                                          title: AppStrings
+                                                              .roadTardiness,
+                                                          selected: true,
+                                                        ),
+                                                        reviews(
+                                                          title: AppStrings
+                                                              .convenience,
+                                                          selected: false,
+                                                        ),
+                                                        reviews(
+                                                          title: AppStrings
+                                                              .maintenance,
+                                                          selected: true,
+                                                        ),
+                                                        reviews(
+                                                          title: AppStrings
+                                                              .fifthPoint,
+                                                          selected: true,
+                                                        ),
+                                                        NormalInputTextWidget(
+                                                          expectedVariable:
+                                                              'field',
+                                                          title: '',
+                                                          hintText: AppStrings
+                                                              .reviewHintText,
+                                                          hintTextColor: grey2,
+                                                          maxLines: 5,
+                                                          filled: true,
+                                                          fillColor:
+                                                              const Color(
+                                                                  0xffF2F2F2),
+                                                          border:
+                                                              InputBorder.none,
+                                                          enabledBorder:
+                                                              InputBorder.none,
+                                                        ),
+                                                        SizedBox(height: 37.sp),
+                                                        GtiButton(
+                                                            width: 350,
+                                                            text: AppStrings
+                                                                .submit,
+                                                            onTap: controller
+                                                                .routeToHome),
+                                                      ]),
+                                                ),
+                                              ));
+                                        },
+                                        child: textWidget(
+                                            text: AppStrings
+                                                .continueToLeaveReview,
+                                            style: getMediumStyle(
+                                                color: primaryColor)),
+                                      )
+                                    ],
+                                  ),
+                                ));
+                          },
+                        );
+                      });
+                },
+                onEmpty: Padding(
+                  padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
+                  child: Center(
+                      child: textWidget(
+                          textOverflow: TextOverflow.visible,
+                          textAlign: TextAlign.center,
+                          text: AppStrings.noCompletedTripYet,
+                          style: getExtraBoldStyle(fontSize: 18.sp))),
+                ),
+                onError: (e) => Padding(
+                  padding: EdgeInsets.symmetric(
+                      vertical: context.height * 0.1, horizontal: 20),
+                  child: Center(
+                    child: Text(
+                      "$e",
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+                onLoading: boxShimmer(height: 200.sp),
+              );
 
       default:
         return Container();
@@ -503,7 +531,7 @@ class TripsScreen extends GetView<TripsController> {
               SvgPicture.asset(selected
                   ? ImageAssets.filledReviewBar
                   : ImageAssets.emptyReviewBar),
-              SizedBox(
+              const SizedBox(
                 width: 9,
               ),
               textWidget(
@@ -943,7 +971,7 @@ class TripsScreen extends GetView<TripsController> {
                                         style: getRegularStyle(color: grey5)),
                                     // textWidget(
                                     //     text: ' x ', style: getRegularStyle()),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 2,
                                     ),
                                     SvgPicture.asset(
@@ -951,7 +979,7 @@ class TripsScreen extends GetView<TripsController> {
                                       width: 7.sp,
                                       height: 7.sp,
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 2,
                                     ),
                                     textWidget(
@@ -965,7 +993,39 @@ class TripsScreen extends GetView<TripsController> {
                                     SvgPicture.asset(ImageAssets.naira),
                                     textWidget(
                                         text: pendingTrips
-                                            .tripOrders!.first.totalFee
+                                            .tripOrders!.first.pricePerDayTotal
+                                            .toString(),
+                                        style: getRegularStyle(color: grey5)),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10.sp,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  // crossAxisAlignment: alignment,
+                                  children: [
+                                    textWidget(
+                                        text: 'Discount',
+                                        style: getRegularStyle(color: grey5)),
+                                    const SizedBox(
+                                      width: 2,
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    textWidget(
+                                        text: '- ',
+                                        style: getRegularStyle(color: grey5)),
+                                    SvgPicture.asset(ImageAssets.naira),
+                                    textWidget(
+                                        text: pendingTrips.tripOrders!.first
+                                            .discountPerDayTotal
                                             .toString(),
                                         style: getRegularStyle(color: grey5)),
                                   ],
@@ -997,7 +1057,10 @@ class TripsScreen extends GetView<TripsController> {
                                     ? false
                                     : true,
                                 child: rowNairaText(
-                                    title: 'Drop off', subTitle: '10,000')),
+                                    title: 'Drop off',
+                                    subTitle: pendingTrips
+                                        .tripOrders!.first.dropOffFee
+                                        .toString())),
                             Visibility(
                                 visible: pendingTrips
                                             .tripOrders!.first.escortFee
@@ -1006,7 +1069,20 @@ class TripsScreen extends GetView<TripsController> {
                                     ? false
                                     : true,
                                 child: rowNairaText(
-                                    title: 'Escort', subTitle: '10,000')),
+                                    title: 'Escort',
+                                    subTitle: pendingTrips
+                                        .tripOrders!.first.escortFee
+                                        .toString())),
+                            Visibility(
+                                visible: pendingTrips.tripType.toString() ==
+                                        'self drive'
+                                    ? true
+                                    : false,
+                                child: rowNairaText(
+                                    title: 'Caution fee',
+                                    subTitle: pendingTrips
+                                        .tripOrders!.first.cautionFee
+                                        .toString())),
                             Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 14, vertical: 9),
@@ -1242,14 +1318,20 @@ class TripsScreen extends GetView<TripsController> {
                 case "pending":
                   if (pendingTrips.tripType == 'chauffeur') {
                     // startTripMethod();
+                    controller.updateTripStatus(
+                        type: 'active', tripID: pendingTrips.tripId.toString());
                     print("object");
                   } else if (pendingTrips.tripType == "self drive" &&
                       pendingTrips.adminStatus == "approved") {
                     // payNowMethod();
+                    controller.routeToPayment(
+                        url: pendingTrips.tripOrders!.first.paymentLink);
                   } else if (pendingTrips.tripType == "self drive" &&
                       pendingTrips.tripOrders!.first.paymentStatus
                           .toString()
                           .contains("successful")) {
+                    controller.updateTripStatus(
+                        type: 'active', tripID: pendingTrips.tripId.toString());
                     print("confirm");
                     // confirm trip button
                   }

@@ -142,12 +142,11 @@ class RenterService {
     }
   }
 
-  Future<ListResponseModel> searchCars({
-    required String stateCode,
-    required String cityCode,
-    required String startDate,
-    required String endDate
-  }) async {
+  Future<ListResponseModel> searchCars(
+      {required String stateCode,
+      required String cityCode,
+      required String startDate,
+      required String endDate}) async {
     try {
       final result = await apiService.getRequest(
         '/user/renter/car/getCars?stateCode=$stateCode&cityCode=$cityCode&skip=0&limit=1000000&startDate=$startDate&endDate=$endDate',
@@ -207,10 +206,15 @@ class RenterService {
       rethrow;
     }
   }
-  Future<ApiResponseModel> confirmTrip({required String type}) async {
+
+  Future<ApiResponseModel> updateTripStatus({
+    required String type,
+    required String tripID,
+  }) async {
     try {
       final result = await apiService.postRequest(
-          endpoint: '/user/renter/trips/updateTripStatus', data: {"type": type});
+          endpoint: '/user/renter/trip/updateTripStatus',
+          data: {"type": type, "tripID": tripID});
       // logger.log("result $result");
 
       return ApiResponseModel.fromJson(result);

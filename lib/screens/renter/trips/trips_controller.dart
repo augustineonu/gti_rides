@@ -172,24 +172,31 @@ class TripsController extends GetxController
     }
   }
 
- Future<void> confirmTrip() async {
-  confirmingTrip.value = true;
-
-  try {
-    final response = await renterService.confirmTrip(type: "");
-    if (response.status == "success" || response.status_code == 200) {
-      showSuccessSnackbar(message: response.message ?? "Trip confirmed");
-    } else {
-      logger.log("Unable to confirm trip");
-      // Show an error snackbar for unsuccessful response
-      showErrorSnackbar(message: "Unable to confirm trip");
-    }
-  } catch (exception) {
-    showErrorSnackbar(message: "An error occurred: ${exception.toString()}");
-    logger.log("Error: ${exception}");
-  }finally{
-    confirmingTrip.value = false;
+  void routeToPayment({dynamic url}){
+    routeService.gotoRoute(AppLinks.paymentWebView, arguments: {
+            "checkoutUrl": url,
+          });
   }
-}
 
+  Future<void> updateTripStatus(
+      {required String type, required String tripID}) async {
+    confirmingTrip.value = true;
+
+    try {
+      final response =
+          await renterService.updateTripStatus(type: type, tripID: tripID);
+      if (response.status == "success" || response.status_code == 200) {
+        showSuccessSnackbar(message: response.message ?? "Trip confirmed");
+      } else {
+        logger.log("Unable to confirm trip");
+        // Show an error snackbar for unsuccessful response
+        showErrorSnackbar(message: "Unable to confirm trip");
+      }
+    } catch (exception) {
+      showErrorSnackbar(message: "An error occurred: ${exception.toString()}");
+      logger.log("Error: ${exception}");
+    } finally {
+      confirmingTrip.value = false;
+    }
+  }
 }
