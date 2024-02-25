@@ -258,7 +258,7 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                     ),
                   ),
                   divider(color: borderColor),
-                  
+
                   Padding(
                     padding: const EdgeInsets.only(left: 10),
                     child: carFetures(children: [
@@ -309,7 +309,9 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                                 value: controller.selectedInterState.value,
                                 activeTrackColor: borderColor,
                                 onChanged: (value) =>
-                                    controller.onSelectInterState(value)),
+                                    controller.isLoading.isTrue
+                                        ? () {}
+                                        : controller.onSelectInterState(value)),
                           ],
                         ),
                       ),
@@ -355,7 +357,8 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                                         width: 150.sp,
                                         height: 33.sp,
                                         color: backgroundColor,
-                                        onTap: controller.tripType.value == 0
+                                        onTap: controller.isLoading.isTrue ||
+                                                controller.tripType.value == 0
                                             ? () {}
                                             : () {
                                                 controller.onChangeTripType(0);
@@ -382,7 +385,8 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                                         width: 150.sp,
                                         height: 33.sp,
                                         color: backgroundColor,
-                                        onTap: controller.tripType.value == 1
+                                        onTap: controller.isLoading.isTrue ||
+                                                controller.tripType.value == 1
                                             ? () {}
                                             : () {
                                                 controller.onChangeTripType(1);
@@ -678,8 +682,9 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                           switchWidget(context,
                               value: controller.selectedSelfPickUp.value,
                               activeTrackColor: borderColor,
-                              onChanged: (value) =>
-                                  controller.onSelectSelfPickUp(value)),
+                              onChanged: (value) => controller.isLoading.isTrue
+                                  ? () {}
+                                  : controller.onSelectSelfPickUp(value)),
                         ],
                       ),
                     ),
@@ -730,8 +735,9 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                           switchWidget(context,
                               value: controller.selectedSelfDropOff.value,
                               activeTrackColor: borderColor,
-                              onChanged: (value) =>
-                                  controller.onSelectSelfDropOff(value)),
+                              onChanged: (value) => controller.isLoading.isTrue
+                                  ? () {}
+                                  : controller.onSelectSelfDropOff(value)),
                         ],
                       ),
                     ),
@@ -765,8 +771,9 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                   switchWidget(context,
                       value: controller.selectedSecurityEscort.value,
                       activeTrackColor: borderColor,
-                      onChanged: (value) =>
-                          controller.onSelectSecurityEscort(value)),
+                      onChanged: (value) => controller.isLoading.isTrue
+                          ? () {}
+                          : controller.onSelectSecurityEscort(value)),
                 ],
               ),
             ),
@@ -939,13 +946,9 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                   title: AppStrings.selectNoOfSecurity,
                   iconColor: grey3,
                   expectedVariable: 'field',
-                  // selectedValue: controller.isFromManageCars.isTrue &&
-                  //         controller.advanceAmount.value.isNotEmpty
-                  //     ? controller.advanceAmount.value.contains('hours')
-                  //         ? controller.advanceAmount.value
-                  //         : "4 hours"
-                  //     : null,
-                  values: <String>["1", "2", '3', '4', '5', '6', '7', '8'],
+                  selectedValue:
+                      controller.escortSecurityNoInputController.text,
+                  values: <String>["", "1", "2", '3', '4', '5', '6', '7', '8'],
                   onChange: (value) =>
                       controller.onChangeEscortNumber(value: value),
                 ),
@@ -1106,7 +1109,9 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
             Padding(
               padding: const EdgeInsets.only(right: 20, top: 10),
               child: InkWell(
-                onTap: () => controller.routeToReviews(),
+                onTap: () => controller.isLoading.isTrue
+                    ? () {}
+                    : controller.routeToReviews(),
                 child: textWidget(
                     text: AppStrings.seeAllReviews,
                     style:

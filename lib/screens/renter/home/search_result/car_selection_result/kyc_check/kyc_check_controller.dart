@@ -49,8 +49,8 @@ class KycCheckController extends GetxController {
           arguments?["selectedSecurityEscort"] ?? false;
       totalEscortFee.value = arguments?["totalEscortFee"] ?? '';
       tripType.value = arguments?["tripType"] ?? 0;
-
-      // isKycUpdate.value = arguments?["isKycUpdate"];
+      
+      //
       tripDays.value = arguments?["tripDays"];
       cautionFee.value = arguments?["cautionFee"] ?? '';
 
@@ -58,10 +58,6 @@ class KycCheckController extends GetxController {
       rawEndTime = arguments!["rawEndTime"] ?? DateTime.now();
       discountTotal.value = arguments!["discountTotal"] ?? 0.0;
 
-      // dropOffFee.value = arguments?["dropOffFee"];
-      // cautionFee.value = arguments?["cautionFee"];
-      // pickUpFee.value = arguments?["pickUpFee"];
-      // escortFee.value = arguments?["escortFee"];
     }
   }
 

@@ -12,6 +12,7 @@ import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
+import 'package:gti_rides/utils/utils.dart';
 import 'package:iconsax/iconsax.dart';
 
 class RentHistoryBinding extends Bindings {
@@ -63,10 +64,16 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
                   SizedBox(
                     height: 24.sp,
                   ),
-                  buildBody(controller, context, size),
-                  textWidget(
-                      text: controller.testString.value,
-                      style: getRegularStyle()),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          buildBody(controller, context, size),
+                        ],
+                      ),
+                    ),
+                  ),
+                 
                 ],
               ),
             ),
@@ -84,17 +91,20 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
           (state) {
             return ListView.separated(
               physics: ScrollPhysics(),
+              scrollDirection: Axis.vertical,
               shrinkWrap: true,
               itemCount: controller.activeTrips.length,
               itemBuilder: (context, index) {
+                var activeTrip = controller.activeTrips[index];
                 return cardWidget(
                   context,
                   size,
-                  title: 'Tesla Model Y',
-                  amount: '100,000 ',
-                  noOfDays: '5days',
-                  startDateTime: "wed, 1 Nov, 9:00am",
-                  endDateTime: "wed, 1 Nov, 9:00am",
+                  imgUrl: activeTrip.carProfilePic.toString(),
+                  title: ' ${activeTrip.carBrand.toString()} ${activeTrip.carModel.toString()}',
+                  amount: '${activeTrip.tripOrders!.first.pricePerDay.toString()} ',
+                  noOfDays: '${activeTrip.tripOrders!.first.tripsDays.toString()}days',
+                  startDateTime: formateDate(date: activeTrip.tripOrders!.first.tripStartDate!.toIso8601String()),
+                  endDateTime: formateDate(date: activeTrip.tripOrders!.first.tripEndDate!.toIso8601String()),
                   trailling: Positioned(
                     right: 12.sp,
                     top: 12.sp,
@@ -153,17 +163,20 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
           (statet) {
             return ListView.separated(
               itemCount: controller.completedTrips.length,
+              scrollDirection: Axis.vertical,
               shrinkWrap: true,
               physics: AlwaysScrollableScrollPhysics(),
               itemBuilder: (context, index) {
+                var completedTrip = controller.completedTrips[index];
                 return cardWidget(
                   context,
                   size,
-                  title: 'Tesla Model Y',
-                  amount: '100,000 ',
-                  noOfDays: '5days',
-                  startDateTime: "wed, 1 Nov, 9:00am",
-                  endDateTime: "wed, 1 Nov, 9:00am",
+                  imgUrl: completedTrip.carProfilePic.toString(),
+                 title: ' ${completedTrip.carBrand.toString()} ${completedTrip.carModel.toString()}',
+                  amount: '${completedTrip.tripOrders!.first.pricePerDay.toString()} ',
+                  noOfDays: '${completedTrip.tripOrders!.first.tripsDays.toString()}days',
+                  startDateTime: formateDate(date: completedTrip.tripOrders!.first.tripStartDate!.toIso8601String()),
+                  endDateTime: formateDate(date: completedTrip.tripOrders!.first.tripEndDate!.toIso8601String()),
                   trailling: Positioned(
                     right: 7.sp,
                     top: 11.sp,
@@ -223,7 +236,10 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
       required String noOfDays,
       required String startDateTime,
       required String endDateTime,
-      required Widget trailling}) {
+      required Widget trailling,
+      required String imgUrl
+      
+      }) {
     return Stack(
       children: [
         Container(
@@ -245,6 +261,7 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
                       fit: BoxFit.fitHeight,
                     ),
                   ),
+                  carImage(imgUrl: imgUrl)
                 ],
               ),
               Padding(
@@ -269,7 +286,7 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
                               SvgPicture.asset(ImageAssets.naira),
                               textWidget(
                                   text: amount,
-                                  style: getMediumStyle(fontSize: 10.sp)
+                                  style: getMediumStyle(fontSize: 8.sp)
                                       .copyWith(fontFamily: 'Neue')),
                               // textWidget(
                               //     text: ' x ', style: getMediumStyle(fontSize: 10.sp).copyWith(fontFamily: 'Neue')),
@@ -333,7 +350,7 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
                               textWidget(
                                   text: startDateTime,
                                   textOverflow: TextOverflow.visible,
-                                  style: getMediumStyle(fontSize: 10.sp)
+                                  style: getMediumStyle(fontSize: 8.sp)
                                       .copyWith(fontFamily: 'Neue')),
                               SizedBox(width: 2),
                               SvgPicture.asset(
@@ -345,7 +362,7 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
                               textWidget(
                                   text: endDateTime,
                                   textOverflow: TextOverflow.visible,
-                                  style: getMediumStyle(fontSize: 10.sp)
+                                  style: getMediumStyle(fontSize: 8.sp)
                                       .copyWith(fontFamily: 'Neue')),
                             ],
                           ),

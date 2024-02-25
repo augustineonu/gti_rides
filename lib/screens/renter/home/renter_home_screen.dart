@@ -415,6 +415,7 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
             decoration: BoxDecoration(
                 color: primaryColorDark.withOpacity(0.6),
                 image: const DecorationImage(
+                  // filterQuality: FilterQuality.medium,
                   image: AssetImage("assets/images/splash_bg.png"),
                 ),
                 borderRadius: BorderRadius.all(Radius.circular(4.r))),

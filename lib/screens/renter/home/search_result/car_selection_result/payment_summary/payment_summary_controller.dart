@@ -15,6 +15,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 class PaymentSummaryController extends GetxController {
   Logger logger = Logger("Controller");
+    final carSelectionController = Get.put(CarSelectionResultController());
+
+  
 
   PaymentSummaryController() {
     init();
@@ -23,60 +26,67 @@ class PaymentSummaryController extends GetxController {
   void init() {
     logger.log("PaymentSummaryController Initialized");
   }
+  
 
   @override
   void onInit() async {
     update();
 
     super.onInit();
+    logger.log("Data:: ${carSelectionController.rawStartTime}");
     if (arguments != null) {
-      logger.log("Received data:: $arguments");
-      logger.log("Received data:: ${arguments?["tripsData"]}");
-      tripData.value = arguments?["tripData"] as TripData;
-      logger.log("${tripData.value.carID}");
-      logger.log("${tripData.value}");
-      isKycUpdate.value = arguments?["isKycUpdate"] ?? false;
-      pricePerDay.value = arguments?["pricePerDay"];
-      estimatedTotal.value = arguments?["estimatedTotal"];
-      tripDaysTotal.value = arguments?["tripDaysTotal"];
-      vatValue.value = arguments?["vatValue"];
-      vat.value = arguments?["vat"];
-      selectedSelfPickUp.value = arguments?["selectedSelfPickUp"] ?? false;
-      selectedSelfDropOff.value = arguments?["selectedSelfDropOff"] ?? false;
-      selectedSecurityEscort.value =
-          arguments?["selectedSecurityEscort"] ?? false;
-      totalEscortFee.value = arguments?["totalEscortFee"] ?? '';
-      tripType.value = arguments?["tripType"] ?? 0;
-      // this is already in tripData
-    // tripDays.value = arguments?["tripDays"];
+        logger.log("Received data:: $arguments");
+        logger.log("Received data:: ${arguments?["tripsData"]}");
 
-      // cautionFee.value = arguments?["cautionFee"] ?? '';
-      rawStartTime = arguments!["rawStartTime"] ?? DateTime.now();
-      rawEndTime = arguments!["rawEndTime"] ?? DateTime.now();
-      discountTotal.value = arguments!["discountTotal"] ?? 0.0;
-      logger.log("Received data:: ${tripData.value.carID}");
-      logger.log("Received data:: ${tripData.value.tripStartDate}");
+        tripData.value = arguments?["tripData"] as TripData;
+        logger.log("${tripData.value.carID}");
+        logger.log("${tripData.value}");
 
-      formattedStartDayDateMonth.value =
-          extractDayDateMonth(tripData.value.tripStartDate!);
-      logger.log(
-          "formattedStartDayDateMonth:: ${formattedStartDayDateMonth.value}");
-      formattedStartTime.value = extractTime(tripData.value.tripStartDate!);
-      logger.log("formattedStartTime:: ${formattedStartTime.value}");
+        isKycUpdate.value = arguments?["isKycUpdate"] ?? false;
+        pricePerDay.value = arguments?["pricePerDay"];
+        estimatedTotal.value = arguments?["estimatedTotal"];
+        tripDaysTotal.value = arguments?["tripDaysTotal"];
+        vatValue.value = arguments?["vatValue"];
+        vat.value = arguments?["vat"];
+        selectedSelfPickUp.value = arguments?["selectedSelfPickUp"] ?? false;
+        selectedSelfDropOff.value = arguments?["selectedSelfDropOff"] ?? false;
+        selectedSecurityEscort.value = arguments?["selectedSecurityEscort"] ?? false;
+        totalEscortFee.value = arguments?["totalEscortFee"] ?? '';
+        tripType.value = arguments?["tripType"] ?? 0;
+        rawStartTime = arguments!["rawStartTime"] ?? DateTime.now();
+        rawEndTime = arguments!["rawEndTime"] ?? DateTime.now();
+        discountTotal.value = arguments!["discountTotal"] ?? 0.0;
 
-      formattedEndDayDateMonth.value =
-          extractDayDateMonth(tripData.value.tripEndDate!);
-      formattedEndTime.value = extractTime(tripData.value.tripEndDate!);
-      rawStartTime = arguments!["rawStartTime"] ?? DateTime.now();
-      rawEndTime = arguments!["rawEndTime"] ?? DateTime.now();
-      discountTotal.value = arguments!["discountTotal"] ?? 0.0;
+        logger.log("Received data:: ${tripData.value.carID}");
+        logger.log("Received data:: ${tripData.value.tripStartDate}");
+
+        formattedStartDayDateMonth.value =
+            extractDayDateMonth(tripData.value.tripStartDate!);
+        logger.log("formattedStartDayDateMonth:: ${formattedStartDayDateMonth.value}");
+
+        formattedStartTime.value = extractTime(tripData.value.tripStartDate!);
+        logger.log("formattedStartTime:: ${formattedStartTime.value}");
+
+        formattedEndDayDateMonth.value =
+            extractDayDateMonth(tripData.value.tripEndDate!);
+        formattedEndTime.value = extractTime(tripData.value.tripEndDate!);
+        rawStartTime = arguments!["rawStartTime"] ?? DateTime.now();
+        rawEndTime = arguments!["rawEndTime"] ?? DateTime.now();
+        discountTotal.value = arguments!["discountTotal"] ?? 0.0;
+
     }
+  }
+  
+  
+@override
+  void onReady() {
+    // TODO: implement onReady
+    super.onReady();
+    
   }
 
   Map<String, dynamic>? arguments = Get.arguments;
   Rx<TripData> tripData = TripData().obs;
-  final carSelectionController = Get.put(CarSelectionResultController());
-
   final animationValue = 0.0.obs;
   RxInt currentIndex = 0.obs;
   RxBool isLoading = false.obs;
@@ -152,7 +162,7 @@ class PaymentSummaryController extends GetxController {
     try {
       final response = await paymentService.addTrip(
           data: TripData(
-        carID: tripData.value.carID,
+        carID: tripData.value.carID ,
         // tripStartDate: tripData.value.tripStartDate,
         tripStartDate: rawStartTime!.toIso8601String(),
         // tripEndDate: tripData.value.tripEndDate,

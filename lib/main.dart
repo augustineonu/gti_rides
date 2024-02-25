@@ -88,7 +88,6 @@ class _GtiRidesState extends State<GtiRides> {
           child,
         ) {
           return GetMaterialApp(
-            
             title: 'GTI Rides',
             theme: ThemeData(
               colorScheme: ColorScheme.fromSeed(seedColor: white),

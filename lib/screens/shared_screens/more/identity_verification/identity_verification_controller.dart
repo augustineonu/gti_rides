@@ -197,7 +197,7 @@ class IdentityVerificationController extends GetxController {
       "pricePerDay": carSelectionController.pricePerDay.value,
       "tripDays": carSelectionController.tripDays.value,
       "estimatedTotal": estimatedTotal.value,
-      "vatValue": carSelectionController.formattedVatValue.value,
+      "vatValue": carSelectionController.vatValue.value,
       "vat": carSelectionController.vatValue.value,
       "cautionFee":
           carSelectionController.tripType.value == 1 ? cautionFee.value : null,

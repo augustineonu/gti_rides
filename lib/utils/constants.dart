@@ -61,7 +61,7 @@ class AppStrings {
   static String inboox = "Inbox";
   static String more = "More";
   static String welcomeBack = "Welcome back %s";
-  static String howGtiWorks = "How GTI works?";
+  static String howGtiWorks = "How GTi works?";
   static String weArePeer =
       "We are peer to peer car\nsharing market place with the\nwildest fleet of cars....";
   static String readMore = "Read more";

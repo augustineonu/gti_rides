@@ -82,8 +82,8 @@ class CarSelectionResultController extends GetxController
   RxBool isLoading = false.obs;
   RxBool selectedInterState = false.obs;
   RxBool selectedSecurityEscort = false.obs;
-  RxBool selectedSelfPickUp = false.obs;
-  RxBool selectedSelfDropOff = false.obs;
+  RxBool selectedSelfPickUp = true.obs;
+  RxBool selectedSelfDropOff = true.obs;
   RxBool isLiked = false.obs;
   RxBool isAddingFavCar = false.obs;
   RxBool isDeletingFavCar = false.obs;
@@ -197,10 +197,12 @@ class CarSelectionResultController extends GetxController
       // estimatedTotal.value = initialEstimatedTotal.value;
       selectedSecurityEscort.value = false;
       escortSecurityNoInputController.clear();
-      selectedSelfDropOff.value = false;
-      selectedSelfPickUp.value = false;
+      selectedSelfDropOff.value = true;
+      selectedSelfPickUp.value = true;
       await updateEstimatedTotal();
     } else {
+      selectedSelfDropOff.value = false;
+      selectedSelfPickUp.value = false;
       selectedSecurityEscort.value = false;
       escortSecurityNoInputController.clear();
       await updateEstimatedTotal();
@@ -267,8 +269,8 @@ class CarSelectionResultController extends GetxController
       total: initialEstimatedTotal.value,
       cautionFee:
           tripType.value == 1 && cautionFee.isNotEmpty ? cautionFee.value : '0',
-      dropOffFee: !selectedSelfDropOff.value ? dropOffFee.value : '0',
-      pickUpFee: !selectedSelfPickUp.value ? pickUpFee.value : '0',
+      dropOffFee: !selectedSelfDropOff.value ? dropOffFee.value : '0.0',
+      pickUpFee: !selectedSelfPickUp.value ? pickUpFee.value : '0.0',
     );
   }
 
@@ -276,7 +278,7 @@ class CarSelectionResultController extends GetxController
   Rx<bool> discountApplied = false.obs;
   void applyDiscount() {
     var discountDay = carHistory?.first.discountDays;
-    var discountPrice = carHistory?.first.discountPrice;
+    var discountPrice = carHistory?.first.discountPrice ?? '0.0';
     if (tripDays.value >= int.parse(discountDay)) {
       discountApplied.value = true;
       discountTotal.value =
@@ -502,6 +504,7 @@ class CarSelectionResultController extends GetxController
     isLoading.value = true;
     var isCarAvailable = await checkCarAvailability();
     if (!isCarAvailable) {
+      if (carNotAvailable.value == 'An error occurred') return;
       showSuccessSnackbar(message: carNotAvailable.value);
       isLoading.value = false;
       return bookedDatedSheet(
@@ -542,10 +545,10 @@ class CarSelectionResultController extends GetxController
               "vat": vatValue.value,
               "tripType": tripType.value,
               "cautionFee": tripType.value == 1 ? cautionFee.value : '',
-              "dropOffFee": tripType.value == 1 && selectedSelfDropOff.value
+              "dropOffFee": tripType.value == 1 && selectedSelfDropOff.isFalse
                   ? dropOffFee.value
                   : null,
-              "pickUp": tripType.value == 1 && selectedSelfPickUp.value
+              "pickUp": tripType.value == 1 && selectedSelfPickUp.isFalse
                   ? pickUpFee.value
                   : null,
               "totalEscortFee":
