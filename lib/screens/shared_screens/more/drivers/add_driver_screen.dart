@@ -66,14 +66,25 @@ class AddDriverScreen extends GetView<DriversController> {
                   ),
                   const SizedBox(height: 24),
                   NormalInputTextWidget(
-                    expectedVariable: 'field',
+                    expectedVariable: 'phone',
                     title: AppStrings.driversNumber,
                     hintText: AppStrings.phoneHintText,
                     textInputType: TextInputType.phone,
                     controller: controller.phoneNoController,
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(11),
+                      FilteringTextInputFormatter.digitsOnly,
                     ],
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return fetchErrorText(expectedTextVariable: "phone");
+                      }
+                      if (value.length != 11) {
+                        return fetchErrorText(
+                            expectedTextVariable: 'phone length');
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 24),
                   NormalInputTextWidget(
@@ -102,6 +113,7 @@ class AddDriverScreen extends GetView<DriversController> {
                     textInputType: TextInputType.name,
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(9),
+                      FilteringTextInputFormatter.digitsOnly,
                     ],
                   ),
                   const SizedBox(height: 24),

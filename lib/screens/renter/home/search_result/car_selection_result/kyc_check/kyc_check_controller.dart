@@ -35,9 +35,11 @@ class KycCheckController extends GetxController {
           .map((fieldName) => mapFieldToDisplayName(fieldName))
           .toList();
       appBarTitle.value = arguments?["appBarTitle"];
+      
       tripData.value = arguments?["tripData"] as TripData;
       logger.log("trip data:: ${tripData.value.tripType ?? 'lol'}");
       logger.log("${tripData.value.carID}");
+
       pricePerDay.value = arguments?["pricePerDay"];
       estimatedTotal.value = arguments?["estimatedTotal"];
       vatValue.value = arguments?["vatValue"];
@@ -45,18 +47,19 @@ class KycCheckController extends GetxController {
       tripDaysTotal.value = arguments?["tripDaysTotal"] ?? '';
       selectedSelfPickUp.value = arguments?["selectedSelfPickUp"] ?? false;
       selectedSelfDropOff.value = arguments?["selectedSelfDropOff"] ?? false;
-      selectedSecurityEscort.value =
-          arguments?["selectedSecurityEscort"] ?? false;
+      selectedSecurityEscort.value = arguments?["selectedSecurityEscort"] ?? false;
       totalEscortFee.value = arguments?["totalEscortFee"] ?? '';
       tripType.value = arguments?["tripType"] ?? 0;
-      
-      //
+
+      // already in tripData
       tripDays.value = arguments?["tripDays"];
+      // not used
       cautionFee.value = arguments?["cautionFee"] ?? '';
 
       rawStartTime = arguments!["rawStartTime"] ?? DateTime.now();
       rawEndTime = arguments!["rawEndTime"] ?? DateTime.now();
       discountTotal.value = arguments!["discountTotal"] ?? 0.0;
+
 
     }
   }

@@ -87,6 +87,7 @@ class ProofOfIdentityScreen extends GetView<HomeAddressController> {
                     controller: controller.licenseNoController,
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(9),
+                      FilteringTextInputFormatter.digitsOnly,
 
                       // FilteringTextInputFormatter.allow(RegExp(
                       // r'[0-9.]')), // Allow digits and a decimal point

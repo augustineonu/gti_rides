@@ -23,6 +23,8 @@ String fetchErrorText({required String expectedTextVariable}) {
       return AppStrings.passwordIsRequiredError;
     case 'phone':
       return AppStrings.phoneIsRequiredError;
+    case 'phone length':
+      return AppStrings.phoneLengthError;
     case 'otp':
       return AppStrings.otpIsRequiredError;
     case 'fullName':

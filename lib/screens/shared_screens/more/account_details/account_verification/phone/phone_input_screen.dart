@@ -11,6 +11,7 @@ import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
+import 'package:gti_rides/utils/utils.dart';
 
 class PhoneInputScreen extends StatelessWidget {
   const PhoneInputScreen([Key? key]) : super(key: key);
@@ -37,7 +38,17 @@ class PhoneInputScreen extends StatelessWidget {
                   controller: controller.phoneController,
                      inputFormatters: [
                       LengthLimitingTextInputFormatter(11),
+                      FilteringTextInputFormatter.digitsOnly,
                     ],
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return fetchErrorText(expectedTextVariable: "phone");
+                        }
+                        if (value.length != 11) {
+                          return fetchErrorText(expectedTextVariable: 'phone length');
+                        }
+                        return null;
+                      },
                 ),
                 SizedBox(
                   height: 30.sp,

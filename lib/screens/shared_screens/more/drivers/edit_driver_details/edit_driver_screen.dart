@@ -14,6 +14,7 @@ import 'package:gti_rides/shared_widgets/upload_image_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
+import 'package:gti_rides/utils/utils.dart';
 
 class EditDriverScreen extends GetView<EditDriversController> {
   const EditDriverScreen([Key? key]) : super(key: key);
@@ -74,6 +75,15 @@ class EditDriverScreen extends GetView<EditDriversController> {
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(11),
                     ],
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return fetchErrorText(expectedTextVariable: "phone");
+                        }
+                        if (value.length != 11) {
+                          return fetchErrorText(expectedTextVariable: 'phone length');
+                        }
+                        return null;
+                      },
                   ),
                   const SizedBox(height: 24),
                   NormalInputTextWidget(

@@ -12,6 +12,7 @@ import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
+import 'package:gti_rides/utils/utils.dart';
 
 class EmergencyContactScreen extends GetView<IdentityVerificationController> {
   const EmergencyContactScreen([Key? key]) : super(key: key);
@@ -53,14 +54,23 @@ class EmergencyContactScreen extends GetView<IdentityVerificationController> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   NormalInputTextWidget(
-                      expectedVariable: 'field',
+                      expectedVariable: 'phone',
                       title: AppStrings.inputEmergencyNumber,
                       hintText: AppStrings.phoneHintText,
                       controller: controller.emergencyNumberController,
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(11),
-                        
+                        FilteringTextInputFormatter.digitsOnly,
                       ],
+                        validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return fetchErrorText(expectedTextVariable: "phone");
+                        }
+                        if (value.length != 11) {
+                          return fetchErrorText(expectedTextVariable: 'phone length');
+                        }
+                        return null;
+                      },
                       textInputType: TextInputType.phone,),
                   const SizedBox(height: 24),
                   NormalInputTextWidget(

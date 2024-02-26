@@ -56,11 +56,9 @@ class IdentityVerificationController extends GetxController {
       vat.value = arguments?["vat"] ?? '';
       tripDaysTotal.value = arguments?["tripDaysTotal"] ?? '';
       totalEscortFee.value = arguments?["totalEscortFee"] ?? '';
-      tripType.value = arguments?["tripType"] ?? 0;
       selectedSelfPickUp.value = arguments?["selectedSelfPickUp"] ?? false;
       selectedSelfDropOff.value = arguments?["selectedSelfDropOff"] ?? false;
-      selectedSecurityEscort.value =
-          arguments?["selectedSecurityEscort"] ?? false;
+      selectedSecurityEscort.value = arguments?["selectedSecurityEscort"] ?? false;
 
       tripType.value = arguments?["tripType"] ?? 0;
       tripDays.value = arguments?["tripDays"];
@@ -68,12 +66,8 @@ class IdentityVerificationController extends GetxController {
       rawStartTime = arguments!["rawStartTime"] ?? DateTime.now();
       rawEndTime = arguments!["rawEndTime"] ?? DateTime.now();
       discountTotal.value = arguments!["discountTotal"] ?? 0.0;
-      // tripDays.value = arguments?["tripDays"];
-      // cautionFee.value = arguments?["cautionFee"];
-      // dropOffFee.value = arguments?["dropOffFee"];
-      // cautionFee.value = arguments?["cautionFee"];
-      // pickUpFee.value = arguments?["pickUpFee"];
-      // escortFee.value = arguments?["escortFee"];
+
+
     }
   }
 
@@ -197,7 +191,7 @@ class IdentityVerificationController extends GetxController {
       "pricePerDay": carSelectionController.pricePerDay.value,
       "tripDays": carSelectionController.tripDays.value,
       "estimatedTotal": estimatedTotal.value,
-      "vatValue": carSelectionController.vatValue.value,
+      "vatValue": vatValue.value,
       "vat": carSelectionController.vatValue.value,
       "cautionFee":
           carSelectionController.tripType.value == 1 ? cautionFee.value : null,

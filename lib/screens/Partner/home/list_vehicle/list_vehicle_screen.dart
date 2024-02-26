@@ -1835,6 +1835,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                 controller: controller.vinController,
                 inputFormatters: [
                   LengthLimitingTextInputFormatter(17),
+                  FilteringTextInputFormatter.digitsOnly,
                 ],
                 titleFontSize: 12.sp),
             SizedBox(
@@ -1848,6 +1849,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                 controller: controller.plateNumberController,
                 inputFormatters: [
                   LengthLimitingTextInputFormatter(9),
+                  
                 ],
                 titleFontSize: 12.sp),
             SizedBox(

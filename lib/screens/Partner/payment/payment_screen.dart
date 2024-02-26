@@ -512,6 +512,7 @@ class PaymentScreen extends GetView<PaymentController> {
             },
             inputFormatters: [
               LengthLimitingTextInputFormatter(10),
+              FilteringTextInputFormatter.digitsOnly,
             ],
           ),
           const SizedBox(

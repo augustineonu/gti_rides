@@ -276,19 +276,27 @@ class CarSelectionResultController extends GetxController
 
   Rx<double> discountTotal = 0.0.obs;
   Rx<bool> discountApplied = false.obs;
-  void applyDiscount() {
-    var discountDay = carHistory?.first.discountDays;
-    var discountPrice = carHistory?.first.discountPrice ?? '0.0';
+void applyDiscount() {
+  var discountDay = carHistory?.first.discountDays;
+  var discountPrice = carHistory?.first.discountPrice;
+
+  if (discountPrice != null) {
+    var parsedDiscountPrice = double.tryParse(discountPrice.replaceAll(',', '')) ?? 0.0;
+    
     if (tripDays.value >= int.parse(discountDay)) {
       discountApplied.value = true;
-      discountTotal.value =
-          double.parse(discountPrice.replaceAll(',', '')) * tripDays.value;
+      discountTotal.value = parsedDiscountPrice * tripDays.value;
       logger.log("discount price total: ${discountTotal.toString()}");
 
       updatedTotalValue.value -= discountTotal.value;
       logger.log("Total price after discount: ${updatedTotalValue.value}");
     }
+  } else {
+    // Handle the case where discountPrice is null
+    logger.log("Discount price is null");
   }
+}
+
 
   void logResults() {
     logger.log("Estimated total: ${estimatedTotal.value}");
@@ -556,9 +564,6 @@ class CarSelectionResultController extends GetxController
               "rawStartTime": rawStartTime,
               "rawEndTime": rawEndTime,
               "discountTotal": discountTotal.value,
-
-              // "startDateTime": startDateTime.value,
-              // "endDateTime": endDateTime.value,
             });
           } else {
             // Some fields are missing, route to KYC screen with the list of missing fields
@@ -568,32 +573,30 @@ class CarSelectionResultController extends GetxController
             routeService.gotoRoute(AppLinks.kycCheck, arguments: {
               "isKycUpdate": true, //
               "appBarTitle": AppStrings.addToContinue,
-              "tripData": tripData.value, //
-              "missingKycFields": missingKycFields, //
-              "pricePerDay": pricePerDay.value, //
-              "tripDays": tripDays.value, //
-              "estimatedTotal": estimatedTotal.value, //
+              "tripData": tripData.value,
+              "missingKycFields": missingKycFields,
+              "pricePerDay": pricePerDay.value,
+              "tripDays": tripDays.value,
+              "estimatedTotal": estimatedTotal.value,
               "tripDaysTotal": tripDaysTotal.value,
-              "vatValue": formattedVatValue.value, //
+              "vatValue": formattedVatValue.value,
               "selectedSelfPickUp": selectedSelfPickUp.value,
               "selectedSelfDropOff": selectedSelfDropOff.value,
               "selectedSecurityEscort": selectedSecurityEscort.value,
-              "vat": vatValue.value, //
+              "vat": vatValue.value,
               "tripType": tripType.value,
-              "cautionFee": tripType.value == 1 ? cautionFee.value : '', //
+              "cautionFee": tripType.value == 1 ? cautionFee.value : '',
               "dropOffFee": tripType.value == 1 && selectedSelfDropOff.value
                   ? dropOffFee.value
-                  : null, //
+                  : null,
               "pickUpFee": tripType.value == 1 && selectedSelfPickUp.value
                   ? pickUpFee.value
-                  : null, //
+                  : null,
               "totalEscortFee":
-                  selectedSecurityEscort.value ? totalEscortFee.value : '', //
+                  selectedSecurityEscort.value ? totalEscortFee.value : '',
               "rawStartTime": rawStartTime,
               "rawEndTime": rawEndTime,
               "discountTotal": discountTotal.value
-              // "startDateTime": startDateTime.value,
-              // "endDateTime": endDateTime.value,
             });
           }
         }

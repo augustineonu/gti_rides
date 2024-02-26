@@ -50,6 +50,7 @@ class AppStrings {
   static String passwordIsRequiredError = "password is required";
   static String fullNameRequiredError = "name is required";
   static String phoneIsRequiredError = "Phone is required";
+  static String phoneLengthError = "Phone number cannot be less than 11";
   static String fieldIsRequiredError = "field cannot be empty";
   static String selectGenderError = "Kindly select gender";
   static String selectBankError = "Kindly select bank";
@@ -328,7 +329,7 @@ class AppStrings {
   static String mobileNumber = 'Mobile Number';
   static String phoneNumber = 'Phone number';
   static String inputPhoneNumber = 'Input phone number';
-  static String phoneHintText = '+2348 189 899 437';
+  static String phoneHintText = '08 189 899 437';
   static String verifyPhoneNumber = 'Verify phone number';
   static String oldPasswordSm = 'Old password';
   static String newPasswordSm = 'New password';

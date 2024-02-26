@@ -153,15 +153,16 @@ class SignUpScreen extends GetView<SignUpController> {
                         title: AppStrings.email,
                         expectedVariable: "email",
                         hintText: AppStrings.emailHintText,
-                          validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return fetchErrorText(expectedTextVariable: "field");
-                      }
-                      if (!value.contains('.com')) {
-                        return fetchErrorText(expectedTextVariable: '.com');
-                      }
-                      return null;
-                    },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return fetchErrorText(
+                                expectedTextVariable: "field");
+                          }
+                          if (!value.contains('.com')) {
+                            return fetchErrorText(expectedTextVariable: '.com');
+                          }
+                          return null;
+                        },
                         controller: controller.emailController,
                       ),
                       SizedBox(
@@ -172,11 +173,22 @@ class SignUpScreen extends GetView<SignUpController> {
                         expectedVariable: "phone",
                         hintText: AppStrings.phoneHintText,
                         controller: controller.phoneNoController,
-                         textInputType: TextInputType.phone,
-                         inputFormatters: [
-                      LengthLimitingTextInputFormatter(11),
-                           FilteringTextInputFormatter.digitsOnly
-                    ],
+                        textInputType: TextInputType.phone,
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(11),
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return fetchErrorText(
+                                expectedTextVariable: "phone");
+                          }
+                          if (value.length != 11) {
+                            return fetchErrorText(
+                                expectedTextVariable: 'phone length');
+                          }
+                          return null;
+                        },
                       ),
                       SizedBox(
                         height: 16.sp,
@@ -258,6 +270,16 @@ class SignUpScreen extends GetView<SignUpController> {
                       LengthLimitingTextInputFormatter(11),
                       FilteringTextInputFormatter.digitsOnly
                     ],
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return fetchErrorText(expectedTextVariable: "phone");
+                      }
+                      if (value.length != 11) {
+                        return fetchErrorText(
+                            expectedTextVariable: 'phone length');
+                      }
+                      return null;
+                    },
                     controller: controller.ownerPhoneNoController,
                   ),
                   SizedBox(
