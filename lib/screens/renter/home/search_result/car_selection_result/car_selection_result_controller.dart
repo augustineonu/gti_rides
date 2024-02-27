@@ -276,27 +276,27 @@ class CarSelectionResultController extends GetxController
 
   Rx<double> discountTotal = 0.0.obs;
   Rx<bool> discountApplied = false.obs;
-void applyDiscount() {
-  var discountDay = carHistory?.first.discountDays;
-  var discountPrice = carHistory?.first.discountPrice;
+  void applyDiscount() {
+    var discountDay = carHistory?.first.discountDays;
+    var discountPrice = carHistory?.first.discountPrice;
 
-  if (discountPrice != null) {
-    var parsedDiscountPrice = double.tryParse(discountPrice.replaceAll(',', '')) ?? 0.0;
-    
-    if (tripDays.value >= int.parse(discountDay)) {
-      discountApplied.value = true;
-      discountTotal.value = parsedDiscountPrice * tripDays.value;
-      logger.log("discount price total: ${discountTotal.toString()}");
+    if (discountPrice != null) {
+      var parsedDiscountPrice =
+          double.tryParse(discountPrice.replaceAll(',', '')) ?? 0.0;
 
-      updatedTotalValue.value -= discountTotal.value;
-      logger.log("Total price after discount: ${updatedTotalValue.value}");
+      if (tripDays.value >= int.parse(discountDay)) {
+        discountApplied.value = true;
+        discountTotal.value = parsedDiscountPrice * tripDays.value;
+        logger.log("discount price total: ${discountTotal.toString()}");
+
+        updatedTotalValue.value -= discountTotal.value;
+        logger.log("Total price after discount: ${updatedTotalValue.value}");
+      }
+    } else {
+      // Handle the case where discountPrice is null
+      logger.log("Discount price is null");
     }
-  } else {
-    // Handle the case where discountPrice is null
-    logger.log("Discount price is null");
   }
-}
-
 
   void logResults() {
     logger.log("Estimated total: ${estimatedTotal.value}");
@@ -327,6 +327,7 @@ void applyDiscount() {
   //   formattedVatValue.value = await formatAmount(vatAmount);
   // }
 
+  DateTime? carAvialbilityEndDate;
   Future<void> getCarHistory() async {
     change(<CarHistoryData>[].obs, status: RxStatus.loading());
     try {
@@ -346,6 +347,8 @@ void applyDiscount() {
               .map((car) => CarHistoryData.fromJson(car))
               .toList();
           change(carHistory, status: RxStatus.success());
+          var endDateString = carHistory?.first.endDate;
+          carAvialbilityEndDate = DateTime.parse(endDateString!);
 
           pricePerDay.value = carHistory?.first.pricePerDay;
           //price per day total x no of days
@@ -421,6 +424,12 @@ void applyDiscount() {
 
   RxString carNotAvailable = ''.obs;
   // final controller = Get.put(ChooseTripDateController());
+
+  bool isDateAfterCarAvailability(
+      {required DateTime rawEndTime,
+      required DateTime carAvailabilityEndDate}) {
+    return rawEndTime.isAfter(carAvailabilityEndDate);
+  }
 
 // raw date should be passed from previous screen
   RxList<BookedData> bookedData = <BookedData>[].obs;
@@ -510,9 +519,22 @@ void applyDiscount() {
     await addGrandTotal();
 
     isLoading.value = true;
+    var isEndDaterWithinAvailabilityFrame = isDateAfterCarAvailability(
+        rawEndTime: rawEndTime!,
+        carAvailabilityEndDate: carAvialbilityEndDate!);
+    if (isEndDaterWithinAvailabilityFrame) {
+      showSuccessSnackbar(
+          message: 'Car end date is not within car availability frame');
+          isLoading.value = false;
+      return;
+    }
+
     var isCarAvailable = await checkCarAvailability();
     if (!isCarAvailable) {
-      if (carNotAvailable.value == 'An error occurred') return;
+      if (carNotAvailable.value == 'An error occurred') {
+        isLoading.value = false;
+        return;
+      }
       showSuccessSnackbar(message: carNotAvailable.value);
       isLoading.value = false;
       return bookedDatedSheet(

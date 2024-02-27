@@ -89,13 +89,13 @@ class _GtiRidesState extends State<GtiRides> {
         ) {
           return GetMaterialApp(
             title: 'GTI Rides',
+              // debugShowMaterialGrid : true,
             theme: ThemeData(
               colorScheme: ColorScheme.fromSeed(seedColor: white),
               scaffoldBackgroundColor: backgroundColor,
               // backgroundColor: backgroundColor,
               useMaterial3: true,
               appBarTheme: const AppBarTheme(),
-
               textTheme: const TextTheme(
                 bodyMedium: TextStyle(
                   fontFamily: 'Basis Grotesque Pro',

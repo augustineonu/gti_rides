@@ -67,6 +67,8 @@ class IdentityVerificationController extends GetxController {
       rawEndTime = arguments!["rawEndTime"] ?? DateTime.now();
       discountTotal.value = arguments!["discountTotal"] ?? 0.0;
 
+      logger.log("Received discount total:: ${discountTotal.value}");
+
 
     }
   }
