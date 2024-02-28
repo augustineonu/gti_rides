@@ -114,40 +114,55 @@ class TripsScreen extends GetView<TripsController> {
                     physics: const ScrollPhysics(),
                     itemBuilder: (context, index) {
                       var activeTrip = controller.activeTrips[index];
-                      DateTime tripStartDate =
-                          activeTrip.tripStartDate ?? DateTime.now();
-                      DateTime tripEndDate =
-                          activeTrip.tripEndDate ?? DateTime.now();
+                      // DateTime tripStartDate =
+                      //     activeTrip.tripStartDate ?? DateTime.now();
+                      // DateTime tripEndDate =
+                      //     activeTrip.tripEndDate ?? DateTime.now();
 
                       // Call startCountdown to start the countdown for each item
-                      controller.startCountdown(tripStartDate, tripEndDate);
+                      // controller.startCountdown(tripStartDate, tripEndDate);
+                      // trip end date is greater than DateTime.now()
 
-                      return Obx(() {
-                        return activeAndCompletedCard(
-                          size,
-                          imgUrl: activeTrip.carProfilePic.toString(),
-                          headerTitle: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              textWidget(
-                                  text: 'Countdown:', style: getRegularStyle()),
-                              const SizedBox(width: 4),
-                              textWidget(
-                                  text: controller.countdownText.value,
-                                  style: getMediumStyle(fontSize: 16.sp)),
-                            ],
-                          ),
-                          vehicleName:
-                              "${activeTrip.carYear.toString()} ${activeTrip.carBrand.toString()} ${activeTrip.carModel.toString()}",
-                          tripStatus: AppStrings.active,
-                          button1Title: AppStrings.extend,
-                          button1OnTap: () {
-                            extendTimeDialog(size, controller);
-                          },
-                          button2Title: AppStrings.return1,
-                          button2OnTap: () {},
-                        );
-                      });
+                      // return Obx(() {
+                      bool isTripActive = controller.isTripActive(
+                          activeTrip.tripEndDate ?? DateTime.now());
+
+                      return activeAndCompletedCard(
+                        key: UniqueKey(),
+                        size,
+                        imgUrl: activeTrip.carProfilePic.toString(),
+                        headerTitle: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            textWidget(
+                                text: 'Countdown:', style: getRegularStyle()),
+                            const SizedBox(width: 4),
+                            StreamBuilder<String>(
+                                stream:
+                                    getCountdownStream(activeTrip.tripEndDate!),
+                                builder: (context, snapshot) {
+                                  return textWidget(
+                                      text: snapshot.data ?? '',
+                                      // text: controller.startCountdown(
+                                      //     activeTrip.tripStartDate!,
+                                      //     activeTrip.tripEndDate!),
+                                      style: getMediumStyle(fontSize: 16.sp));
+                                }),
+                          ],
+                        ),
+                        vehicleName:
+                            "${activeTrip.carYear.toString()} ${activeTrip.carBrand.toString()} ${activeTrip.carModel.toString()}",
+                        tripStatus: AppStrings.active,
+                        button1Title: AppStrings.extend,
+                        button1OnTap: !isTripActive
+                            ? () {}
+                            : () {
+                                extendTimeDialog(size, controller);
+                              },
+                        button2Title: AppStrings.return1,
+                        button2OnTap: !isTripActive ? () {} : () {},
+                      );
+                      // });
                     },
                   );
                 },
@@ -193,6 +208,7 @@ class TripsScreen extends GetView<TripsController> {
                       physics: const ScrollPhysics(),
                       itemBuilder: (context, index) {
                         return activeAndCompletedCard(
+                          key: UniqueKey(),
                           size,
                           imgUrl: '',
                           headerTitle: textWidget(
@@ -519,6 +535,20 @@ class TripsScreen extends GetView<TripsController> {
     }
   }
 
+  Stream<String> getCountdownStream(DateTime endDate) {
+    return Stream.periodic(Duration(seconds: 1), (count) {
+      Duration difference = endDate.difference(DateTime.now());
+      if (difference.isNegative) {
+        return '00:00:00';
+      } else {
+        int hours = difference.inHours;
+        int minutes = difference.inMinutes.remainder(60);
+        int seconds = difference.inSeconds.remainder(60);
+        return '$hours:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+      }
+    });
+  }
+
   Widget reviews({
     required String title,
     required bool selected,
@@ -567,6 +597,7 @@ class TripsScreen extends GetView<TripsController> {
 
   Widget activeAndCompletedCard(
     Size size, {
+    required Key? key,
     required Widget headerTitle,
     required String vehicleName,
     required String tripStatus,
@@ -577,6 +608,7 @@ class TripsScreen extends GetView<TripsController> {
     required String imgUrl,
   }) {
     return Container(
+      key: key,
       decoration: BoxDecoration(
         color: white,
         borderRadius: BorderRadius.all(
@@ -673,7 +705,7 @@ class TripsScreen extends GetView<TripsController> {
           height: 8.sp,
         ),
         Visibility(
-          visible: false,
+          visible: true,
           child: Row(
             children: [
               Expanded(

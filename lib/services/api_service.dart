@@ -5,6 +5,7 @@ import 'package:get/get.dart' as getx;
 import 'package:gti_rides/models/api_response_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/api_exception.dart';
+import 'package:gti_rides/services/error_interceptor.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/services/token_service.dart';
 import 'package:gti_rides/utils/constants.dart';
@@ -38,10 +39,15 @@ class ApiService {
         headers: {
           'Content-Type': 'application/json',
         },
+        validateStatus: (int? status) {
+          return status != null;
+          // return status != null && status >= 200 && status < 300;
+        },
       ),
     );
 
-    _dio.interceptors.add(
+    _dio.interceptors.addAll([
+      ErrorInterceptor(),
       InterceptorsWrapper(
         onRequest: (options, handler) {
           // Add the access token to the request header
@@ -56,10 +62,11 @@ class ApiService {
           //      if(e.type == DioExceptionType.connectionTimeout){
           //   throw Exception("Connection  Timeout Exception");
           // }
-          logger.log("Dio error: ${e.message}, Status code: ${e.response?.statusCode}");
+          logger.log(
+              "Dio error: ${e.message}, Status code: ${e.response?.statusCode}");
 
-          if (e.response?.statusCode == 400) {
-            // {{BaseURL}}/user/partner/car/carQuickEdit?carID=mr9LvcZk3W 
+          if (e.response?.statusCode == 401) {
+            // {{BaseURL}}/user/partner/car/carQuickEdit?carID=mr9LvcZk3W
             // If a 401 response is received, refresh the access token
             // String newAccessToken = await refreshToken();
             bool newAccessTokenResult = await tokenService.getNewAccessToken();
@@ -88,9 +95,8 @@ class ApiService {
           return handler.next(e);
         },
       ),
-    );
+    ]);
     logger.log("Dio initialization completed");
-
   }
 
   Options get options {

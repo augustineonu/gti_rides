@@ -207,8 +207,9 @@ class TripsController extends GetxController
       confirmingTrip.value = false;
     }
   }
+  
 
-  void startCountdown(DateTime startDate, DateTime endDate) {
+  String startCountdown(DateTime startDate, DateTime endDate) {
     final now = DateTime.now();
     final duration = endDate.difference(now);
     int secondsRemaining = duration.inSeconds;
@@ -216,11 +217,20 @@ class TripsController extends GetxController
     if (secondsRemaining > 0) {
       isCountDownFinished.value = false;
       logger.log('Countdown started!');
+      Rx<String> hours = ''.obs;
+      Rx<String> minutes = ''.obs;
+      Rx<String> seconds = ''.obs;
 
       timer = Timer.periodic(const Duration(seconds: 1), (timer) {
         if (secondsRemaining > 0) {
           secondsRemaining--;
-          updateCountdownText(secondsRemaining);
+          // updateCountdownText(secondsRemaining);
+           hours.value = (secondsRemaining ~/ 3600).toString().padLeft(2, '0');
+           minutes.value =
+              ((secondsRemaining ~/ 60) % 60).toString().padLeft(2, '0');
+           seconds.value = (secondsRemaining % 60).toString().padLeft(2, '0');
+          // countdownText.value = '$hours:$minutes:$seconds';
+          // return '$hours:$minutes:$seconds';
         } else {
           timer.cancel();
           // You can perform any action when the countdown reaches 0
@@ -228,9 +238,12 @@ class TripsController extends GetxController
           logger.log('Countdown finished!');
         }
       });
+
+      return '${hours.value}:${minutes.value}:${seconds.value}';
     } else {
       // Handle the case where the end date is in the past
       logger.log('End date is in the past. No countdown started.');
+      return "00:00:00";
     }
   }
 
@@ -239,6 +252,12 @@ class TripsController extends GetxController
     final minutes = ((secondsRemaining ~/ 60) % 60).toString().padLeft(2, '0');
     final seconds = (secondsRemaining % 60).toString().padLeft(2, '0');
     countdownText.value = '$hours:$minutes:$seconds';
+    logger.log("Time:: ${countdownText.value}}");
+  }
+
+  bool isTripActive(DateTime tripEndDate) {
+    return tripEndDate.isAfter(DateTime.now()) ||
+        tripEndDate.isAtSameMomentAs(DateTime.now());
   }
 
 // Example usage:

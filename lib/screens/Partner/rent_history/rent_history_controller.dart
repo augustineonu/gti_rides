@@ -55,7 +55,7 @@ class RentHistoryController extends GetxController with StateMixin<List<AllTrips
     },
     {
       "imageUrl": ImageAssets.history,
-      "title": AppStrings.carHistory,
+      "title": AppStrings.rideHistory,
     },
   ];
 
@@ -63,7 +63,7 @@ class RentHistoryController extends GetxController with StateMixin<List<AllTrips
   void goBack() => routeService.goBack();
   void routeToQuickEdit() => routeService.gotoRoute(AppLinks.quickEdit);
   void routeToCarHistory() => routeService.gotoRoute(AppLinks.carHistory);
-  void routeToCompletedTrip() => routeService.gotoRoute(AppLinks.completedTrip);
+  void routeToCompletedTrip({Object? arguments}) => routeService.gotoRoute(AppLinks.completedTrip,arguments: arguments);
 
 
 

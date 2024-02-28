@@ -10,6 +10,7 @@ import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
+import 'package:gti_rides/utils/utils.dart';
 import 'package:iconsax/iconsax.dart';
 
 class CompletedTripBinding extends Bindings {
@@ -21,16 +22,17 @@ class CompletedTripBinding extends Bindings {
 }
 
 class CompletedTripScreen extends GetView<CompletedTripController> {
-  const CompletedTripScreen({
+  CompletedTripScreen({
     super.key,
   });
+  @override
+  final controller =
+      Get.put<CompletedTripController>(CompletedTripController());
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final size = MediaQuery.of(context).size;
-    final controller =
-        Get.put<CompletedTripController>(CompletedTripController());
 
     return Scaffold(
       appBar: customAppBar(width, controller),
@@ -49,7 +51,7 @@ class CompletedTripScreen extends GetView<CompletedTripController> {
             divider(color: borderColor),
             tripIDandDates(),
             divider(color: borderColor),
-            paymentInfo(controller),
+            paymentInfo(),
             divider(color: borderColor),
             rentalReview(),
             divider(color: borderColor),
@@ -89,8 +91,9 @@ class CompletedTripScreen extends GetView<CompletedTripController> {
                                   )),
                               Spacer(),
                               InkWell(
-                                onTap: controller.goBack,
-                                child: SvgPicture.asset(ImageAssets.closeSmall)),
+                                  onTap: controller.goBack,
+                                  child:
+                                      SvgPicture.asset(ImageAssets.closeSmall)),
                             ],
                           ),
                           NormalInputTextWidget(
@@ -188,19 +191,19 @@ class CompletedTripScreen extends GetView<CompletedTripController> {
     );
   }
 
-  Widget paymentInfo(controller) {
+  Widget paymentInfo() {
     return Column(
       children: [
         tripInfo(
           title: AppStrings.paymentRef,
           trailling: InkWell(
             onTap: () {
-              controller.copy(value: "GTI123456");
+              controller.copy(value: controller.tripsData.tripOrders!.first.paymentReference.toString());
             },
             child: Row(
               children: [
                 textWidget(
-                  text: 'GTI123456',
+                  text: controller.tripsData.tripOrders!.first.paymentReference.toString(),
                   style: getRegularStyle(
                     fontSize: 10.sp,
                   ),
@@ -220,7 +223,7 @@ class CompletedTripScreen extends GetView<CompletedTripController> {
               SizedBox(
                 width: 2.sp,
                 height: 16.sp,
-                child: ColoredBox(
+                child: const ColoredBox(
                   color: primaryColor,
                 ),
               ),
@@ -228,7 +231,7 @@ class CompletedTripScreen extends GetView<CompletedTripController> {
                 width: 7.sp,
               ),
               textWidget(
-                text: 'UBA',
+                text: 'nill',
                 style: getRegularStyle(fontSize: 10.sp),
               ),
             ],
@@ -238,7 +241,7 @@ class CompletedTripScreen extends GetView<CompletedTripController> {
           title: AppStrings.paymentStatus,
           trailling: Row(children: [
             textWidget(
-              text: AppStrings.sent,
+              text: controller.tripsData.tripOrders!.first.paymentStatus == 'successful' ? AppStrings.sent : 'pending',
               style: getRegularStyle(fontSize: 10.sp),
             ),
             Image.asset(ImageAssets.doubleCheck),
@@ -255,12 +258,12 @@ class CompletedTripScreen extends GetView<CompletedTripController> {
           title: AppStrings.tripId,
           trailling: InkWell(
             onTap: () {
-              controller.copy(value: "GTI123456");
+              controller.copy(value: controller.tripsData.tripId.toString());
             },
             child: Row(
               children: [
                 textWidget(
-                  text: 'GTI123456',
+                  text: controller.tripsData.tripId.toString(),
                   style: getRegularStyle(
                     fontSize: 10.sp,
                   ),
@@ -276,14 +279,14 @@ class CompletedTripScreen extends GetView<CompletedTripController> {
         tripInfo(
           title: AppStrings.tripStartDate,
           trailling: textWidget(
-            text: 'Wed, 1 Nov, 9:00am',
+            text: formateDate(date: controller.tripsData.tripStartDate.toString()),
             style: getRegularStyle(fontSize: 10.sp),
           ),
         ),
         tripInfo(
           title: AppStrings.tripEndDate,
           trailling: textWidget(
-            text: 'Wed, 5 Nov, 9:00am',
+            text: formateDate(date: controller.tripsData.tripEndDate.toString()),
             style: getRegularStyle(fontSize: 10.sp),
           ),
         ),
@@ -319,33 +322,43 @@ class CompletedTripScreen extends GetView<CompletedTripController> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                Image.asset('assets/images/small_car.png'),
-                SizedBox(
-                  width: 6.w,
-                ),
-                textWidget(
-                  text: 'Tesla Model Y',
-                  textOverflow: TextOverflow.visible,
-                  style: getBoldStyle(fontWeight: FontWeight.w700, color: black)
-                      .copyWith(
-                    fontFamily: "Neue",
+            SizedBox(
+              width: 250.sp,
+              child: Row(
+                children: [
+                  // Image.asset('assets/images/small_car.png'),
+                  carImage(
+                      imgUrl: controller.tripsData.carProfilePic.toString(),
+                      width: 32.sp,
+                      height: 32.sp),
+                  SizedBox(
+                    width: 6.w,
                   ),
-                ),
-              ],
+                  Expanded(
+                    child: textWidget(
+                      text:
+                          "${controller.tripsData.carBrand.toString()} ${controller.tripsData.carModel.toString()}",
+                      textOverflow: TextOverflow.visible,
+                      style: getBoldStyle(fontWeight: FontWeight.w700, color: black)
+                          .copyWith(
+                        fontFamily: "Neue",
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             textWidget(
-              text: AppStrings.completed,
+              text: controller.tripsData.status.toString(),
               textOverflow: TextOverflow.visible,
               style: getRegularStyle(color: grey3, fontSize: 10.sp),
             ),
           ],
         ),
-        priceBreakdown(title: AppStrings.totalAmount, amount: '500,000'),
-        priceBreakdown(title: AppStrings.pricePerDay, amount: '100,000'),
-        priceBreakdown(title: AppStrings.vat, amount: '100,000'),
-        priceBreakdown(title: "x 4days", amount: '500,000'),
+        priceBreakdown(title: AppStrings.totalAmount, amount: controller.tripsData.totalFee.toString()),
+        priceBreakdown(title: AppStrings.pricePerDay, amount: controller.tripsData.tripOrders!.first.pricePerDay.toString()),
+        priceBreakdown(title: AppStrings.vat, amount: controller.tripsData.tripOrders!.first.vatFee),
+        priceBreakdown(title: "x ${controller.tripsData.tripOrders?.first.tripsDays.toString()} ${controller.tripsData.tripOrders?.first.tripsDays == 1 ? 'day' : 'days'}", amount: controller.tripsData.tripOrders!.first.pricePerDayTotal.toString()),
       ],
     );
   }
@@ -404,11 +417,12 @@ class CompletedTripScreen extends GetView<CompletedTripController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    SizedBox(height: 5.sp,),
                     InkWell(
                         onTap: controller.goBack,
                         child: SvgPicture.asset(
                           color: white,
-                          ImageAssets.arrowLeft,
+                          ImageAssets.arrowLeft,width: 24.sp,
                         )),
                     const Spacer(),
                     Row(
@@ -416,7 +430,8 @@ class CompletedTripScreen extends GetView<CompletedTripController> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         textWidget(
-                            text: AppStrings.carTripCompleted,
+                            text: AppStrings.carTripStatus.trArgs(
+                                [controller.tripsData.status.toString()]),
                             textOverflow: TextOverflow.visible,
                             style:
                                 getMediumStyle(color: white, fontSize: 17.sp)),

@@ -318,7 +318,8 @@ showErrorSnackbar({required String message, Color? color}) {
 }
 
 showSuccessSnackbar(
-    {required String message, String? title, Color? color, Color? textColor}) {
+    {required String message, String? title, Color? color, Color? textColor,int? seconds
+    }) {
   final overlayContext = Get.overlayContext;
   if (overlayContext != null) {
     Get.rawSnackbar(
@@ -327,7 +328,7 @@ showSuccessSnackbar(
       message: message,
       isDismissible: false,
       backgroundColor: color ?? success,
-      duration: const Duration(seconds: 4),
+      duration:  Duration(seconds: seconds ?? 4),
       margin: EdgeInsets.all(10),
       padding: EdgeInsets.all(15),
       borderRadius: 16.0,

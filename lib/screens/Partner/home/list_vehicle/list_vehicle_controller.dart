@@ -1285,7 +1285,7 @@ class ListVehicleController extends GetxController {
         if (carData != null && carData.isNotEmpty) {
           carHistory.value = carData;
 
-          isFetchingCarDetails.value = false;
+          
 
           final firstCar = carData.first;
           CarListData carListData = CarListData.fromJson(response.data?.first);
@@ -1449,6 +1449,7 @@ class ListVehicleController extends GetxController {
           logger.log("photos:: ${apiFetchedPhotos}");
 
           logger.log("car history $carHistory");
+          isFetchingCarDetails.value = false;
         } else {
           showSuccessSnackbar(message: 'no data');
         }

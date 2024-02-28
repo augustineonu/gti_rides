@@ -441,6 +441,7 @@ class AppStrings {
   static String quickEdit = 'Quick edit';
   static String edit = 'Edit';
   static String carHistory = 'Car history';
+  static String rideHistory = 'Ride history';
   static String areYouSureToDelete = 'Are you sure you want to delete %s';
   static String areYouSuretToRemovefavorite = 'Are you sure you want to delete %s from Favorite';
   static String everyDataWouldBeDeleted =
@@ -458,7 +459,7 @@ class AppStrings {
   static String tripId = 'Trip ID';
   static String copied = 'Copied';
   static String reportTripToAdin = 'Report trip to admin';
-  static String carTripCompleted = 'Car trip completed';
+  static String carTripStatus = 'Car trip %s';
   static String totalAmount = 'Total amount';
   static String vat = 'VAT';
   static String tripStartDate = 'Trip start date';

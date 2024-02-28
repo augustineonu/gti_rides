@@ -181,7 +181,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                                 ),
                               ),
                               SizedBox(
-                                height: size.height * 0.02,
+                                height: size.height * 0.02.h,
                               ),
                               // continueButto
                             ],

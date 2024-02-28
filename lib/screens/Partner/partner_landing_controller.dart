@@ -13,6 +13,9 @@ class PartnerLandingController extends GetxController {
   PartnerLandingController() {
     logger.log('Controller initialized');
   }
+
+  // final Map<String, dynamic>? arguments = Get.arguments;
+
   Rx<int> tabIndex = 0.obs;
 
   void changeTabIndex(int index) {
@@ -21,6 +24,9 @@ class PartnerLandingController extends GetxController {
 
   @override
   void onInit() {
+    // if (arguments != null) {
+      // tabIndex.value = arguments?["tabIndex"] ?? 0;
+    // }
     // Get.delete<MoreController>();
     Get.delete<PaymentController>();
     // Get.put<MoreController>(MoreController());

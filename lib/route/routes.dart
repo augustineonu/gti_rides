@@ -264,7 +264,7 @@ class AppRoutes {
         binding: OwnerTripsBinding()),
     GetPage(
         name: AppLinks.completedTrip,
-        page: () => const CompletedTripScreen(),
+        page: () =>  CompletedTripScreen(),
         binding: CompletedTripBinding()),
     GetPage(
       name: AppLinks.verifyAccountOtp,
