@@ -324,6 +324,7 @@ class AppStrings {
   static String selectOption = 'Select option';
   static String camera = 'Camera';
   static String gallery = 'Gallery ';
+  static String document = 'Document ';
   static String remove = 'Remove';
   static String loginSettings = 'LOGIN SETTINGS';
   static String mobileNumber = 'Mobile Number';

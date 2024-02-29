@@ -217,13 +217,62 @@ String formatDateMonth(DateTime datetime) {
   var formatter = DateFormat('dd MMM');
   return formatter.format(datetime);
 }
+// rteurns date as example 1 Nov
+String formatDateMonth1(String datetime) {
+  if (datetime.isNotEmpty) {
+    try {
+      DateTime parsedDate = DateTime.parse(datetime);
+      var formatter = DateFormat('dd MMM').format(parsedDate);
+      return formatter;
+    } catch (e) {
+      // Handle the case where parsing fails
+      print('Error parsing date: $e');
+    }
+  }
 
-// / rteurns date as example Wed, 1 Nov
+  // Return a default value or an empty string if the input is empty
+  return 'N/A';
+}
+
+
+// / returns date as example Wed, 1 Nov
 String formatDayDate(DateTime datetime) {
   var formatter = DateFormat('E, d MMM');
   return formatter.format(datetime);
 }
+// / returns date as example Wed, 1 Nov
+String formatDayDate1(String datetime) {
+  if (datetime.isNotEmpty) {
+    try {
+      DateTime parsedDate = DateTime.parse(datetime);
+      var formatter = DateFormat('E, d MMM').format(parsedDate);
+      return formatter;
+    } catch (e) {
+      // Handle the case where parsing fails
+      print('Error parsing date: $e');
+    }
+  }
 
+  // Return a default value or an empty string if the input is empty
+  return 'N/A';
+}
+
+
+// returns as 9:00am
+String formatTime1(String time) {
+  if (time.isNotEmpty) {
+  try {
+    DateTime parsedDate = DateTime.parse(time);
+    var formatter = DateFormat('h:mm a').format(parsedDate);
+    return formatter;
+  } catch (e) {
+    print("unable to format time $e");
+    return time;
+  }
+  
+  }
+  return 'N/A';
+}
 // returns as 9:00am
 String formatTime(DateTime time) {
   try {

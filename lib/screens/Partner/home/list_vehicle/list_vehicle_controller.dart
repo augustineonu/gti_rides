@@ -340,8 +340,9 @@ class ListVehicleController extends GetxController {
   // }
 
   Future<void> openGallery() async {
-    ImageResponse? response =
-        await imageService.pickImage(source: ImageSource.gallery);
+    // ImageResponse? response =
+    // await imageService.pickImage(source: ImageSource.gallery);
+    ImageResponse? response = await imageService.pickDocument();
     if (response != null) {
       logger.log("Picked image ${selectedPhotoName.value}");
       selectedPhotos.value = response.imagePath;
@@ -396,8 +397,7 @@ class ListVehicleController extends GetxController {
   }
 
   Future<void> openRoadWorthinessGallery() async {
-    ImageResponse? response =
-        await imageService.pickImage(source: ImageSource.gallery);
+    ImageResponse? response = await imageService.pickDocument();
     if (response != null) {
       selectedRoadWorthinessPhoto.value = response.imagePath;
       logger.log(
@@ -451,8 +451,7 @@ class ListVehicleController extends GetxController {
   }
 
   Future<void> openInsuranceGallery() async {
-    ImageResponse? response =
-        await imageService.pickImage(source: ImageSource.gallery);
+    ImageResponse? response = await imageService.pickDocument();
     if (response != null) {
       selectedInsurancePhotos.value = response.imagePath;
       selectedInsurancePhotoName.value = response.imagePath.split('/').last;
@@ -503,8 +502,7 @@ class ListVehicleController extends GetxController {
   }
 
   Future<void> openInspectionGallery() async {
-    ImageResponse? response =
-        await imageService.pickImage(source: ImageSource.gallery);
+    ImageResponse? response = await imageService.pickDocument();
     if (response != null) {
       selectedInspectionPhotos.value = (response.imagePath);
       selectedInspectionPhotoName.value = (response.imagePath).split('/').last;
@@ -1284,8 +1282,6 @@ class ListVehicleController extends GetxController {
 
         if (carData != null && carData.isNotEmpty) {
           carHistory.value = carData;
-
-          
 
           final firstCar = carData.first;
           CarListData carListData = CarListData.fromJson(response.data?.first);

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/models/renter/favorite_cars_model.dart';
 import 'package:gti_rides/screens/Partner/home/partner_home_controller.dart';
 import 'package:gti_rides/screens/Partner/partner_landing_controller.dart';
 import 'package:gti_rides/screens/renter/widgets/build_carousel_dot.dart';
@@ -154,12 +155,14 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
                                                   onTap: () => controller
                                                           .routeToCarHistory(
                                                               arguments: {
-                                                            'brandModelName': car[
-                                                                'brandModelName'],
-                                                            'photoUrl':
-                                                                car['photoUrl'],
-                                                            'carID':
-                                                                car['carID'],
+                                                            'brandModelName': car
+                                                                .brandModelName
+                                                                .toString(),
+                                                            'photoUrl': car
+                                                                .photoUrl
+                                                                .toString(),
+                                                            'carID': car.carId
+                                                                .toString(),
                                                           })),
                                           ],
                                         ),
@@ -279,9 +282,10 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
                               carCardWidget(size, car,
                                   onTap: () =>
                                       controller.routeToCarHistory(arguments: {
-                                        'brandModelName': car['brandModelName'],
-                                        'photoUrl': car['photoUrl'],
-                                        'carID': car['carID'],
+                                        'brandModelName':
+                                            car.brandModelName.toString(),
+                                        'photoUrl': car.photoUrl.toString(),
+                                        'carID': car.carId.toString(),
                                       })),
                           ],
                         ),
@@ -334,7 +338,8 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
     );
   }
 
-  Widget carCardWidget(Size size, dynamic car, {void Function()? onTap}) {
+  Widget carCardWidget(Size size, FavoriteCarData car,
+      {void Function()? onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: SizedBox(
@@ -354,8 +359,8 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
                   carImage(
                     height: 140.sp,
                     width: size.width.sp,
-                    imgUrl: car['photoUrl'] != ''
-                        ? car['photoUrl']
+                    imgUrl: car.photoUrl.toString() != ''
+                        ? car.photoUrl.toString()
                         : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnKpMPFWYvaoInINJ44Qh4weo_z8nDwDUf8Q&usqp=CAU',
                   ),
                   Padding(
@@ -366,7 +371,7 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             textWidget(
-                                text: car['brandModelName'],
+                                text: car.brandModelName.toString(),
                                 textOverflow: TextOverflow.visible,
                                 style:
                                     getSemiBoldStyle(fontSize: 14.sp).copyWith(
@@ -374,7 +379,7 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
                                   fontWeight: FontWeight.w600,
                                   // fontFamily: 'neue'
                                 )),
-                            car['status'] == 'booked'
+                            car.status.toString() == 'booked'
                                 ? Row(
                                     children: [
                                       SvgPicture.asset(ImageAssets.naira),
@@ -382,8 +387,7 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
                                         width: 2.sp,
                                       ),
                                       textWidget(
-                                        text:
-                                            car['pricePerDay'] ?? 0.toString(),
+                                        text: car.pricePerDay ?? 0.toString(),
                                         style: getMediumStyle(fontSize: 12.sp)
                                             .copyWith(
                                           fontFamily: 'Neue',
@@ -443,17 +447,14 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
                                     children: [
                                       dateTimeColWIdget(
                                         alignment: CrossAxisAlignment.start,
-                                        title: extractMonthDay(
-                                            car['startDate'] != null
-                                                ? (car['startDate'])
-                                                : ''),
+                                        // title: 'lol',
+                                        title:
+                                            "${formatDayDate1(car.startDate.toString())},",
                                         titleFontSize: 10.sp,
                                         subTitleFontSize: 10.sp,
                                         subTitleFontWeight: FontWeight.w500,
-                                        subTitle: extractTime(
-                                            car['startDate'] != null
-                                                ? (car['startDate'])
-                                                : ''),
+                                        // subTitle: 'lol'
+                                        subTitle: formatTime1(car.startDate),
                                       ),
                                       SvgPicture.asset(
                                         ImageAssets.arrowForwardRounded,
@@ -463,17 +464,15 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
                                       ),
                                       dateTimeColWIdget(
                                           alignment: CrossAxisAlignment.start,
-                                          title: extractMonthDay(
-                                              car['endDate'] != null
-                                                  ? (car['endDate'])
-                                                  : ''),
+                                         
+                                          title: formatDayDate1(
+                                          car.endDate),
                                           titleFontSize: 10.sp,
                                           subTitleFontSize: 10.sp,
                                           subTitleFontWeight: FontWeight.w500,
-                                          subTitle: extractTime(
-                                              car['startDate'] != null
-                                                  ? (car['startDate'])
-                                                  : '')),
+                                          // subTitle: 'lol')
+                                      subTitle: formatTime1(
+                                      car.startDate)),
                                     ],
                                   ),
                                 ],
@@ -488,13 +487,13 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
                                 ),
                                 RichText(
                                   text: TextSpan(
-                                      text: '${car['percentageRate']}%',
+                                      text: '${car.percentageRate}%',
                                       style: getMediumStyle(
                                         fontSize: 12.sp,
                                       ),
                                       children: <TextSpan>[
                                         TextSpan(
-                                          text: ' (${car['tripsCount']} trips)',
+                                          text: ' (${car.tripsCount} trips)',
                                           style: getLightStyle(
                                             fontSize: 12.sp,
                                           ),
@@ -513,7 +512,7 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
             ),
             carAvailabilityTag(
                 status:
-                    '${AppStrings.carStatus} ${car['status'] == 'pending' ? AppStrings.pending : car['status'] == 'active' ? AppStrings.active : car['status']}'),
+                    '${AppStrings.carStatus} ${car.status == 'pending' ? AppStrings.pending : car.status == 'active' ? AppStrings.active : car.status}'),
           ],
         ),
       ),

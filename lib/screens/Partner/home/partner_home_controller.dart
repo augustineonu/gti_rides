@@ -1,7 +1,7 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/models/renter/favorite_cars_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/screens/Partner/partner_landing_controller.dart';
 import 'package:gti_rides/services/auth_service.dart';
@@ -16,7 +16,7 @@ import 'package:gti_rides/utils/utils.dart';
 import '../../../services/route_service.dart';
 
 class PartnerHomeController extends GetxController
-    with StateMixin<List<dynamic>> {
+    with StateMixin<List<FavoriteCarData>> {
   Logger logger = Logger('PartnerHomeController');
   late Timer timer;
   RxInt currentIndex = 0.obs;
@@ -32,7 +32,7 @@ class PartnerHomeController extends GetxController
 
   TextEditingController emailOrPhoneController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-      // final landingController = PartnerLandingController();
+  // final landingController = PartnerLandingController();
 
   final cars = <dynamic>[].obs;
 
@@ -120,20 +120,23 @@ class PartnerHomeController extends GetxController
 
   Future<void> getAllCars() async {
     isFetchingCars.value = true;
-    change(<dynamic>[].obs, status: RxStatus.loading());
+    change(<FavoriteCarData>[].obs, status: RxStatus.loading());
     try {
       final response = await partnerService.getCars(queryType: 'all');
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("gotten cars ${response.data}");
+        List<FavoriteCarData> listedCars = List<FavoriteCarData>.from(
+            response.data!.map((car) => FavoriteCarData.fromJson(car)));
 
         if (response.data == null || response.data!.isEmpty) {
           // If the list is empty
-          change(<dynamic>[].obs, status: RxStatus.empty());
+          change(<FavoriteCarData>[].obs, status: RxStatus.empty());
           [] = response.data!;
           logger.log("cars $cars");
         } else {
           // If the list is not empty
-          change(response.data!, status: RxStatus.success());
+          change(listedCars,
+              status: RxStatus.success());
           cars.value = response.data!;
           update();
         }
@@ -144,7 +147,8 @@ class PartnerHomeController extends GetxController
       }
     } catch (exception) {
       logger.log("error  $exception");
-      change(<dynamic>[].obs, status: RxStatus.error(exception.toString()));
+      change(<FavoriteCarData>[].obs,
+          status: RxStatus.error(exception.toString()));
     }
   }
 

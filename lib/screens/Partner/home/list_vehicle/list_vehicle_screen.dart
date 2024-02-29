@@ -919,7 +919,8 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                         .then((value) => routeService.goBack()),
                     onSelectGallery: () => controller
                         .openGallery()
-                        .then((value) => routeService.goBack()));
+                        .then((value) => routeService.goBack()),
+                        button1Title: AppStrings.document);
               },
             ),
 
@@ -938,7 +939,8 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                       .then((value) => routeService.goBack()),
                   onSelectGallery: () => controller
                       .openRoadWorthinessGallery()
-                      .then((value) => routeService.goBack()));
+                      .then((value) => routeService.goBack()),
+                      button1Title: AppStrings.document);
             }),
 
             SizedBox(
@@ -991,7 +993,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                       .then((value) => routeService.goBack()),
                   onSelectGallery: () => controller
                       .openInsuranceGallery()
-                      .then((value) => routeService.goBack()));
+                      .then((value) => routeService.goBack()),button1Title: AppStrings.document);
             }),
 
             SizedBox(
@@ -1009,7 +1011,8 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                       .then((value) => routeService.goBack()),
                   onSelectGallery: () => controller
                       .openInspectionGallery()
-                      .then((value) => routeService.goBack()));
+                      .then((value) => routeService.goBack()),
+                      button1Title: AppStrings.document);
             }),
 
             SizedBox(
@@ -2011,6 +2014,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
     Size size, {
     void Function()? onSelectCamera,
     void Function()? onSelectGallery,
+    String? button1Title,
   }) {
     return Get.bottomSheet(
       Container(
@@ -2038,7 +2042,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                 Expanded(
                   child: GtiButton(
                     width: 120.sp,
-                    text: AppStrings.gallery,
+                    text: button1Title ?? AppStrings.gallery,
                     onTap: onSelectGallery,
                   ),
                 ),
