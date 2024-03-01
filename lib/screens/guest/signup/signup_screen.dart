@@ -140,11 +140,21 @@ class SignUpScreen extends GetView<SignUpController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       NormalInputTextWidget(
-                        title: AppStrings.fullName,
+                        title: AppStrings.firstName,
                         expectedVariable: "fullName",
-                        hintText: AppStrings.nameHintText,
+                        hintText: AppStrings.enterFirstName,
                         textInputType: TextInputType.name,
                         controller: controller.fullNameController,
+                      ),
+                      SizedBox(
+                        height: 16.sp,
+                      ),
+                      NormalInputTextWidget(
+                        title: AppStrings.lastName,
+                        expectedVariable: "fullName",
+                        hintText: AppStrings.enterFirstName,
+                        textInputType: TextInputType.name,
+                        controller: controller.lastNameController,
                       ),
                       SizedBox(
                         height: 16.sp,
@@ -242,9 +252,19 @@ class SignUpScreen extends GetView<SignUpController> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   NormalInputTextWidget(
-                    title: AppStrings.fullName,
+                    title: AppStrings.firstName,
                     expectedVariable: "fullName",
-                    hintText: AppStrings.nameHintText,
+                    hintText: AppStrings.enterFirstName,
+                    textInputType: TextInputType.name,
+                    controller: controller.ownerFullNameController,
+                  ),
+                  SizedBox(
+                    height: 16.sp,
+                  ),
+                  NormalInputTextWidget(
+                    title: AppStrings.firstName,
+                    expectedVariable: "fullName",
+                    hintText: AppStrings.enterLastName,
                     textInputType: TextInputType.name,
                     controller: controller.ownerFullNameController,
                   ),

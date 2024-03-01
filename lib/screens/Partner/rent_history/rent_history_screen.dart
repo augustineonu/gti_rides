@@ -27,11 +27,11 @@ class RentHistoryBinding extends Bindings {
 }
 
 class RentHistoryScreen extends GetView<RentHistoryController> {
-  const RentHistoryScreen([Key? key]) : super(key: key);
+   RentHistoryScreen([Key? key]) : super(key: key);
+    final controller = Get.put<RentHistoryController>(RentHistoryController());
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    final controller = Get.put<RentHistoryController>(RentHistoryController());
     return Obx(() => Scaffold(
           // body: body(size, context)),
           body: SafeArea(

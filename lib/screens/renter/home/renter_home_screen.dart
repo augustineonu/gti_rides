@@ -400,7 +400,7 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
           child: ClipRRect(
               borderRadius: BorderRadius.all(Radius.circular(4.r)),
               child: Image.asset(
-                ImageAssets.ladyHandout,
+                ImageAssets.ikiyiLinkBridge,
                 fit: BoxFit.fitHeight,
                 height: 260.sp,
               )),

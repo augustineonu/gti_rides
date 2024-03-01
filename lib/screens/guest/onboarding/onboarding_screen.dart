@@ -44,6 +44,7 @@ class OnboardingScreen extends GetView<OnboardingController> {
                         Center(
                           child: Image.asset(
                             content.imageUrl,
+                            // "Frame 1046.svg",
                             // height: 218.h,
                             width: width.w,
                             fit: BoxFit.fitWidth,

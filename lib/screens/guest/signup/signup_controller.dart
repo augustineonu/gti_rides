@@ -25,7 +25,9 @@ class SignUpController extends GetxController
   RxBool isLoading = false.obs;
 
   TextEditingController fullNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
   TextEditingController ownerFullNameController = TextEditingController();
+  TextEditingController ownerLastNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController ownerEmailController = TextEditingController();
   TextEditingController phoneNoController = TextEditingController();
@@ -82,8 +84,8 @@ class SignUpController extends GetxController
       // Use the right set of controllers based on the selected user type
       final SignUpRequestModel signUpRequest = SignUpRequestModel(
         fullName: currentIndex.value == 0
-            ? fullNameController.text
-            : ownerFullNameController.text,
+            ? "${fullNameController.text} ${lastNameController.text}"
+            : "${ownerFullNameController.text} ${ownerLastNameController.text}}",
         emailAddress: currentIndex.value == 0
             ? emailController.text
             : ownerEmailController.text,
@@ -154,7 +156,9 @@ class SignUpController extends GetxController
     pageController.dispose();
     super.dispose();
     fullNameController.dispose();
+    lastNameController.dispose();
     ownerFullNameController.dispose();
+    ownerLastNameController.dispose();
     emailController.dispose();
     ownerEmailController.dispose();
     phoneNoController.dispose();

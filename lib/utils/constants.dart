@@ -24,7 +24,11 @@ class AppStrings {
   static String signUpWithGoogle = "Sign up with Google";
   static String createAccount = "Create account";
   static String fullName = "Full Name";
+  static String firstName = "First Name";
+  static String lastName = "Last Name";
   static String nameHintText = "Surname and Last Name";
+  static String enterLastName = "Enter last Name";
+  static String enterFirstName = "Enter first Name";
   static String bankAccoutName = "Bank account Name";
   static String referralCode = "Referral Code ";
   static String referralCodeHint = "hhryryr";

@@ -92,7 +92,7 @@ class ImageAssets {
   // static const String carListingBg = "$SVG_PATH/car_listing_bg.svg";
   // PNG IMAGES 
 
-  static const String onboarding_01 = "$IMAGE_PATH/onboarding_01.png";
+  static const String onboarding_01 = "$IMAGE_PATH/lady_smile.png";
   static const String onboarding_02 = "$IMAGE_PATH/onboarding_02.png";
   static const String onboarding01 = "$IMAGE_PATH/onboarding01.png";
   static const String onboarding02 = "$IMAGE_PATH/onboarding02.png";
