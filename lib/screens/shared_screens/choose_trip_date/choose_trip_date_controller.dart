@@ -115,6 +115,8 @@ class ChooseTripDateController extends GetxController {
         '$formattedHour:${formattedMinute.toString().padLeft(2, '0')}$selectedAmPm';
   }
 
+  void pop() => routeService.goBack();
+
   PickerDateRange? selectedDateRange;
 
   void selectionChanged(DateRangePickerSelectionChangedArgs args) {
@@ -170,37 +172,6 @@ class ChooseTripDateController extends GetxController {
     goBack1();
   }
 
-  void onSingleDateSelection(DateRangePickerSelectionChangedArgs args) {
-    if (args.value != null && args.value != '') {
-      selectedExpiryDate.value = formatDate(args.value!).toString();
-
-      logger.log("Selected args: ${args.value}");
-      logger.log("Selected date: ${selectedExpiryDate.value}");
-    } else {
-      // Handle the case when the date is unselected (null)
-      selectedExpiryDate.value = ''; // Or any default value you want
-      logger.log("Date unselected");
-    }
-  }
-
-  void resetDateSelection(context) {
-    toggleDaySelection.value = true;
-    onCancelCalled.value = true;
-    bottomSnackbar(context, message: 'Selection cleared');
-    // selectedExpiryDate.value = '';
-  }
-
-  void queryListener() {}
-
-  // void goBack() => routeService.goBack();
-  // void goBack1({bool? closeOverlays = true}) => routeService.goBack(result: {
-  //       "start":
-  //           "$startDate $selectedStartHour:${selectedStartMinute < 10 ? '0$selectedStartMinute' : selectedStartMinute}${selectedStartAmPm.value == 0 ? "am" : "PM"}",
-  //       "end":
-  //           "$endDate $selectedEndHour:${selectedEndMins < 10 ? '0$selectedEndMins' : selectedEndMins}${selectedEndAmPm.value == 0 ? "am" : "PM"}",
-  //       "selectedExpiryDate": selectedExpiryDate.value,
-  //     }, closeOverlays: !isRenterHome.value ? false : closeOverlays);
-
   void goBack1({bool? closeOverlays = true}) {
     if (selectedStartHour.value == 0) {
       rawStartTime = addHoursAndMinutes(
@@ -238,8 +209,45 @@ class ChooseTripDateController extends GetxController {
 
     routeService.goBack(
         result: result,
-        closeOverlays: !isRenterHome.value ? false : closeOverlays);
+        // closeOverlays: !isRenterHome.value ? false : closeOverlays);
+        closeOverlays: true);
   }
+  void checkAndGoBack(DateTime selectedDateOfBirth) {
+
+  if (isUserAbove21(selectedDateOfBirth)) {
+    goBack1();
+  } else {
+    // Show an error message indicating the user is below 21
+    // You can use your preferred method to display an error message
+    showErrorSnackbar(message: 'You must be at least 21 years old to use GTi.');
+  }
+}
+
+ 
+  DateTime? selectedDateOfBirth;
+
+  void onSingleDateSelection(DateRangePickerSelectionChangedArgs args) {
+    if (args.value != null && args.value != '') {
+      selectedDateOfBirth = args.value;
+      selectedExpiryDate.value = formatDate(args.value!).toString();
+
+      logger.log("Selected args: ${args.value}");
+      logger.log("Selected date: ${selectedExpiryDate.value}");
+    } else {
+      // Handle the case when the date is unselected (null)
+      selectedExpiryDate.value = ''; // Or any default value you want
+      logger.log("Date unselected");
+    }
+  }
+
+  void resetDateSelection(context) {
+    toggleDaySelection.value = true;
+    onCancelCalled.value = true;
+    bottomSnackbar(context, message: 'Selection cleared');
+    // selectedExpiryDate.value = '';
+  }
+
+  void queryListener() {}
 
   void goBack2() {
     Map<String, dynamic> result = {

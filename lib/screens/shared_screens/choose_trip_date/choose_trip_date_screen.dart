@@ -76,14 +76,13 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
                             },
                       onSubmit: controller.isSingleDateSelection.value
                           ? (value) {
-                              controller.goBack1();
+                              controller.checkAndGoBack(
+                                  controller.selectedDateOfBirth!);
                             }
                           : (value) async {
                               Get.dialog(
-                                
                                 StatefulBuilder(builder: (context, setState) {
                                   return Dialog(
-                                    
                                     backgroundColor: white,
                                     insetPadding: const EdgeInsets.all(0),
                                     shape: RoundedRectangleBorder(
@@ -389,7 +388,6 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
                                             child: GtiButton(
                                               text: AppStrings.cont,
                                               onTap: () {
-                                                
                                                 controller.addRawTime();
                                               },
                                             ),
@@ -520,10 +518,9 @@ class ChooseTripDateScreen extends GetView<ChooseTripDateController> {
 
   AppBar appBar(BuildContext context, ChooseTripDateController controller) {
     return gtiAppBar(
-        onTap: () {
-
-        controller.goBack1(closeOverlays: false);
-        }, 
+        onTap: () => controller.isSingleDateSelection.value
+            ? controller.pop()
+            : controller.goBack1(closeOverlays: false),
         leading: Transform.scale(
             scale: 0.5,
             child: SvgPicture.asset(

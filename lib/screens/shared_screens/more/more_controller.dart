@@ -36,7 +36,6 @@ class MoreController extends GetxController {
 
     await getKycProfile();
     // paymentService.getBankAccount();
-
   }
 
   // late Timer timer;
@@ -74,7 +73,7 @@ class MoreController extends GetxController {
   onPageChanged(int index) {}
 
   void obscurePassword() => showPassword.value = !showPassword.value;
-  
+
   Future<void> logOut() async {
     await tokenService.clearAll();
     routeService.offAllNamed(AppLinks.login);

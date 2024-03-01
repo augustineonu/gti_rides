@@ -123,7 +123,7 @@ class NormalInputTextWidget extends StatelessWidget {
           showCursor: showCursor,
           inputFormatters: inputFormatters ??
               [
-                LengthLimitingTextInputFormatter(25),
+                LengthLimitingTextInputFormatter(50),
               ],
           maxLength: maxLength,
           style: getRegularStyle(fontSize: fontSize ?? 16, color: textColor),

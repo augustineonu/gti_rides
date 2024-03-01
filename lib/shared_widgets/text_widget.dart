@@ -9,5 +9,5 @@ int? maxLines,
       maxLines: maxLines,
       overflow: textOverflow ?? TextOverflow.ellipsis,
       style: style,
-      textAlign: textAlign
+      textAlign: textAlign,
     );

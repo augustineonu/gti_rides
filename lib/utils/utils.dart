@@ -341,6 +341,26 @@ String formatDateTimeOrTimeAgo(DateTime dateTime) {
   }
 }
 
+
+// the method is explanatory
+ bool isUserAbove21(DateTime selectedDateOfBirth) {
+    // Calculate today's date
+    DateTime today = DateTime.now();
+
+    // Calculate the age by subtracting the selected date of birth from today's date
+    int age = today.year - selectedDateOfBirth.year;
+
+    // Check if the birthday has occurred this year or not
+    if (today.month < selectedDateOfBirth.month ||
+        (today.month == selectedDateOfBirth.month &&
+            today.day < selectedDateOfBirth.day)) {
+      age--;
+    }
+
+    // Check if the age is greater than or equal to 21
+    return age >= 21;
+  }
+
 showErrorSnackbar({required String message, Color? color}) {
   final overlayContext = Get.overlayContext;
   if (overlayContext != null) {

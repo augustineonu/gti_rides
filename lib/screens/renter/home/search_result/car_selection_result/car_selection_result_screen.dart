@@ -234,15 +234,15 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                         },
                         child: SizedBox(
                           height: 30.sp,
-                          width: 70.sp,
+                          width: 85.sp,
                           child: Center(
                             child: textWidget(
                                 text: (controller.startDateTime.value == '' &&
                                         controller.endDateTime.value == '')
                                     ? AppStrings.selectDate
                                     : AppStrings.change,
-                                style: getMediumStyle(
-                                    fontSize: 12.sp, color: primaryColor)),
+                                style: getBoldStyle(
+                                    fontSize: 14.sp, color: primaryColor)),
                           ),
                         ),
                       ),
