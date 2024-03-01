@@ -39,6 +39,7 @@ class AppLinks {
   static const reviews = "/reviews";
   static const viewCar = "/viewCar";
   static const kycCheck = "/kycCheck";
+  static const partnerKycCheck = "/partnerKycCheck";
   static const updateKyc = "/renter/searchResult/carSelectionResult/updateKyc";
   static const paymentSummary =
       "/renter/searchResult/carSelectionResult/paymentSummary";
@@ -54,6 +55,7 @@ class AppLinks {
       "/renter/more/account_details/account_verification/phoneOtp";
   static const changePassword = "/renter/more/account_details/changePassword";
   static const identityVerification = "/renter/more/identityVerification";
+  static const partnerIdentityVerification = "/renter/more/partnerIdentityVerification";
   static const proofOfIdentity =
       "/renter/more/identityVerification/proofOfIdentity";
   static const homeAddress = "/renter/more/identityVerification/homeAddress";
@@ -108,6 +110,7 @@ class AppLinks {
     'reviews': reviews,
     'viewCar': viewCar,
     'kycCheck': kycCheck,
+    'partnerKycCheck': partnerKycCheck,
     'updateKyc': updateKyc,
     'paymentSummary': paymentSummary,
     'more': more,
@@ -119,6 +122,7 @@ class AppLinks {
     'phoneInput': phoneInput,
     'changePassword': changePassword,
     'identityVerification': identityVerification,
+    "partnerIdentityVerification": partnerIdentityVerification,
     'proofOfIdentity': proofOfIdentity,
     'homeAddress': homeAddress,
     'officeAddress': officeAddress,

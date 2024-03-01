@@ -525,7 +525,7 @@ class CarSelectionResultController extends GetxController
     if (isEndDaterWithinAvailabilityFrame) {
       showSuccessSnackbar(
           message: 'Car end date is not within car availability frame');
-          isLoading.value = false;
+      isLoading.value = false;
       return;
     }
 

@@ -327,7 +327,8 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                             "to": AppStrings.to,
                             "from": AppStrings.from,
                             "rawStartTime": controller.rawStartTime,
-                            "rawEndTime": controller.rawEndTime
+                            "rawEndTime": controller.rawEndTime,
+                            "isRenterHome": true
                           });
 
                       // Handle the selected date here
@@ -365,6 +366,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                             "from": AppStrings.from,
                             "rawStartTime": controller.rawStartTime,
                             "rawEndTime": controller.rawEndTime,
+                            "isRenterHome": true
                           });
 
                       // Handle the selected date here
@@ -432,11 +434,30 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
               controller: controller.rentPerDayController,
             ),
             SizedBox(
+              height: 7.sp,
+            ),
+            Row(
+              children: [
+                SvgPicture.asset(
+                  ImageAssets.info,
+                ),
+                SizedBox(
+                  width: 4.sp,
+                ),
+                textWidget(
+                    text: '${AppStrings.standardPrice} 130,000',
+                    style:
+                        getMediumStyle(color: primaryColor, fontSize: 10.sp)),
+              ],
+            ),
+            SizedBox(
               height: 24.sp,
             ),
             Row(
               children: [
-                textWidget(text: AppStrings.discount, style: getMediumStyle()),
+                textWidget(
+                    text: '${AppStrings.discount} (Optional)',
+                    style: getMediumStyle()),
                 SizedBox(
                   width: 4.sp,
                 ),
@@ -444,7 +465,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                   ImageAssets.info,
                 ),
                 SizedBox(
-                  width: 1.5.sp,
+                  width: 3.sp,
                 ),
                 textWidget(
                     text: AppStrings.learnMore,
@@ -456,7 +477,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
               height: 4.sp,
             ),
             Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Expanded(
                   child: dropdownWidget1(
@@ -468,25 +489,25 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                               controller.discountDays.isNotEmpty
                           ? controller.discountDays.value
                           : null,
-                      values:
-                          List.generate(21, (index) => (index).toString()),
+                      values: List.generate(21, (index) => (index).toString()),
                       onChange: (value) {
                         controller.discountDays.value = value;
                         print(
                             'Selected value: $value ${controller.discountDays.value}');
-                      }),
+                      },
+                      validator: (value) => null),
                 ),
                 SizedBox(width: 20.sp),
                 Expanded(
                   child: NormalInputTextWidget(
                     expectedVariable: 'field',
-                    title: AppStrings.inputDiscountPerDay,
+                    title: "${AppStrings.inputDiscountPerDay} %",
                     titleFontSize: 12.sp,
                     showCursor: false,
                     hintText: AppStrings.amountHintText,
                     controller: controller.discountPerDayController,
                     textInputType: TextInputType.number,
-                    validator: (vg){},
+                    validator: (vg) {},
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(10),
                       NumberTextInputFormatter(),
@@ -504,7 +525,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
 
             controller.drivers!.isEmpty
                 ? GestureDetector(
-                    onTap: () {
+                    onTap: () async {
                       noDriverDialog(size, controller)
                           .then((value) => controller.getDrivers());
                     },
@@ -920,7 +941,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     onSelectGallery: () => controller
                         .openGallery()
                         .then((value) => routeService.goBack()),
-                        button1Title: AppStrings.document);
+                    button1Title: AppStrings.document);
               },
             ),
 
@@ -940,7 +961,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                   onSelectGallery: () => controller
                       .openRoadWorthinessGallery()
                       .then((value) => routeService.goBack()),
-                      button1Title: AppStrings.document);
+                  button1Title: AppStrings.document);
             }),
 
             SizedBox(
@@ -993,7 +1014,8 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                       .then((value) => routeService.goBack()),
                   onSelectGallery: () => controller
                       .openInsuranceGallery()
-                      .then((value) => routeService.goBack()),button1Title: AppStrings.document);
+                      .then((value) => routeService.goBack()),
+                  button1Title: AppStrings.document);
             }),
 
             SizedBox(
@@ -1012,7 +1034,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                   onSelectGallery: () => controller
                       .openInspectionGallery()
                       .then((value) => routeService.goBack()),
-                      button1Title: AppStrings.document);
+                  button1Title: AppStrings.document);
             }),
 
             SizedBox(
@@ -1852,7 +1874,6 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                 controller: controller.plateNumberController,
                 inputFormatters: [
                   LengthLimitingTextInputFormatter(9),
-                  
                 ],
                 titleFontSize: 12.sp),
             SizedBox(

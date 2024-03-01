@@ -224,6 +224,7 @@ class AppStrings {
   static String inPutAddressDropCar = "Input address we will drop the car";
   static String selectNoOfSecurity = "Select Number of Security Personal";
   static String gainApproval = "Gain approval for renting a car";
+  static String gainApprovalCarLIsting = "Gain approval for listing a car";
   static String kycMessage =
       "On your first trip, you will be required to provide essential information on your profile before you can proceed.";
   static String profilePicture = "Profile picture";
@@ -426,6 +427,7 @@ class AppStrings {
   static String proposeRentalRate = 'Proposed Rental Rate (per day)';
   static String amountHintText = '0.0';
   static String discount = 'Discount';
+  static String standardPrice = 'Standard price for your car NGN';
   static String learnMore = 'Learn more';
   static String chooseNuberOfDays = 'Choose number of days';
   static String inputDiscountPerDay = 'Input discount per day';

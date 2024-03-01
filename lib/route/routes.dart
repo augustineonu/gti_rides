@@ -42,6 +42,7 @@ import 'package:gti_rides/screens/shared_screens/more/drivers/drivers_screen.dar
 import 'package:gti_rides/screens/shared_screens/more/drivers/edit_driver_details/edit_driver_screen.dart';
 import 'package:gti_rides/screens/shared_screens/more/favorite/favorite_screen.dart';
 import 'package:gti_rides/screens/shared_screens/more/identity_verification/identity_verification.dart';
+import 'package:gti_rides/screens/shared_screens/more/identity_verification/partner_verification_screen.dart';
 import 'package:gti_rides/screens/shared_screens/more/identity_verification/screens/dob_screen.dart';
 import 'package:gti_rides/screens/shared_screens/more/identity_verification/screens/emergency_contact_screen.dart';
 import 'package:gti_rides/screens/shared_screens/more/identity_verification/screens/gender_screen.dart';
@@ -74,7 +75,7 @@ class AppRoutes {
         transition: Transition.rightToLeftWithFade),
     GetPage(
         name: AppLinks.login,
-        page: () =>  LoginScreen(),
+        page: () => LoginScreen(),
         binding: LoginScreenBinding(),
         transition: Transition.rightToLeftWithFade),
     GetPage(
@@ -109,7 +110,7 @@ class AppRoutes {
     ),
     GetPage(
       name: AppLinks.chooseTripDate,
-      page: () =>  ChooseTripDateScreen(),
+      page: () => ChooseTripDateScreen(),
       binding: ChooseTripDateBinding(),
     ),
     GetPage(
@@ -134,7 +135,7 @@ class AppRoutes {
     ),
     GetPage(
       name: AppLinks.viewCar,
-      page: () =>  ViewCarScreen(),
+      page: () => ViewCarScreen(),
       binding: ViewCarBinding(),
     ),
     GetPage(
@@ -149,7 +150,7 @@ class AppRoutes {
     ),
     GetPage(
       name: AppLinks.paymentSummary,
-      page: () =>  PaymentSummaryScreen(),
+      page: () => PaymentSummaryScreen(),
       binding: PaymentSummaryBinding(),
     ),
     GetPage(
@@ -203,6 +204,10 @@ class AppRoutes {
       binding: IdentityVerifiationBinding(),
     ),
     GetPage(
+      name: AppLinks.partnerIdentityVerification,
+      page: () => PartnerIdentityVerificationScreen(),
+    ),
+    GetPage(
       name: AppLinks.proofOfIdentity,
       page: () => const ProofOfIdentityScreen(),
     ),
@@ -240,15 +245,15 @@ class AppRoutes {
     ),
     GetPage(
       name: AppLinks.listVehicle,
-      page: () =>  ListVehicleScreen(),
+      page: () => ListVehicleScreen(),
     ),
     GetPage(
         name: AppLinks.manageVehicle,
-        page: () =>  ManageVehicleScreen(),
+        page: () => ManageVehicleScreen(),
         binding: ManageVehicleBinding()),
     GetPage(
         name: AppLinks.quickEdit,
-        page: () =>  QuickEditScreen(),
+        page: () => QuickEditScreen(),
         binding: QuickEditBinding()),
     GetPage(
         name: AppLinks.carHistory,
@@ -264,7 +269,7 @@ class AppRoutes {
         binding: OwnerTripsBinding()),
     GetPage(
         name: AppLinks.completedTrip,
-        page: () =>  CompletedTripScreen(),
+        page: () => CompletedTripScreen(),
         binding: CompletedTripBinding()),
     GetPage(
       name: AppLinks.verifyAccountOtp,
@@ -292,7 +297,7 @@ class AppRoutes {
     ),
     GetPage(
       name: AppLinks.paymentWebView,
-      page: () =>  PaymentWebView(),
+      page: () => PaymentWebView(),
     ),
   ];
 }

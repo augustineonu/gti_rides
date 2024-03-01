@@ -34,7 +34,7 @@ class MoreController extends GetxController {
     tokens = tokenService.tokens;
     logger.log("User token && User type:: $tokens");
 
-    await getBiometricProfile();
+    await getKycProfile();
     // paymentService.getBankAccount();
 
   }
@@ -104,7 +104,7 @@ class MoreController extends GetxController {
     await showSuccessSnackbar(message: AppStrings.copied);
   }
 
-  Future<void> getBiometricProfile() async {
+  Future<void> getKycProfile() async {
     try {
       final response = await userService.getKycProfile();
 

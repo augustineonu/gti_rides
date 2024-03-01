@@ -161,7 +161,7 @@ Widget dropdownWidget1({
   String? expectedVariable,
   bool multipleSelection = false,
   void Function(String?)? onSaved,
-
+String? Function(String?)? validator,
   Key? key,
 }) {
   return Column(
@@ -189,7 +189,7 @@ Widget dropdownWidget1({
                 iconEnabledColor: red,
                 isExpanded: true,
                 onSaved: onSaved,
-                validator: (value) {
+                validator: validator ?? (String? value) {
                   if (value == null || value.isEmpty) {
                     return fetchErrorText(
                         expectedTextVariable: expectedVariable ?? '');

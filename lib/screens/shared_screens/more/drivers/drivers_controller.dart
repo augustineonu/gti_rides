@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:gti_rides/models/drivers_model.dart';
 import 'package:gti_rides/models/image_response.dart';
 import 'package:gti_rides/route/app_links.dart';
+import 'package:gti_rides/screens/Partner/home/list_vehicle/list_vehicle_controller.dart';
 import 'package:gti_rides/services/image_service.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/partner_service.dart';
@@ -16,6 +17,7 @@ import 'package:image_picker/image_picker.dart';
 
 class DriversController extends GetxController {
   Logger logger = Logger('DriversController');
+  final listVehicleController = Get.put(ListVehicleController());
   DriversController() {
     init();
   }
@@ -170,6 +172,7 @@ class DriversController extends GetxController {
       final response = await partnerService.addDriver(payload: newFormData);
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("driver created ${response.message}");
+        await listVehicleController.getDrivers();
 
         successDialog(
             title: AppStrings.driverAddedMessage,

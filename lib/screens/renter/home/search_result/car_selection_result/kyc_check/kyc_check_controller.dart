@@ -9,7 +9,7 @@ import 'package:gti_rides/utils/constants.dart';
 
 class KycCheckController extends GetxController {
   Logger logger = Logger("Controller");
-  final carSelectionController = Get.put(CarSelectionResultController());
+  // final carSelectionController = Get.put(CarSelectionResultController());
 
   KycCheckController() {
     init();
@@ -28,39 +28,39 @@ class KycCheckController extends GetxController {
       logger.log("Received arguments:: $arguments");
       missingKycItems.value = arguments!["missingKycFields"] ?? [];
       logger.log("Received arguments:: ${missingKycItems.value}");
+      isCarListing.value = arguments!["isCarListing"] ?? false;
 
       missingKycFields.value = arguments?["missingKycFields"] ?? [];
 
       displayKycFields.value = missingKycFields
           .map((fieldName) => mapFieldToDisplayName(fieldName))
           .toList();
-      appBarTitle.value = arguments?["appBarTitle"];
-      
-      tripData.value = arguments?["tripData"] as TripData;
+      appBarTitle.value = arguments?["appBarTitle"] ?? '';
+
+      tripData.value = arguments?["tripData"] as TripData ?? tripData.value;
       logger.log("trip data:: ${tripData.value.tripType ?? 'lol'}");
       logger.log("${tripData.value.carID}");
 
-      pricePerDay.value = arguments?["pricePerDay"];
-      estimatedTotal.value = arguments?["estimatedTotal"];
-      vatValue.value = arguments?["vatValue"];
-      vat.value = arguments?["vat"];
+      pricePerDay.value = arguments?["pricePerDay"] ?? '';
+      estimatedTotal.value = arguments?["estimatedTotal"] ?? '';
+      vatValue.value = arguments?["vatValue"] ?? '';
+      vat.value = arguments?["vat"] ?? '';
       tripDaysTotal.value = arguments?["tripDaysTotal"] ?? '';
       selectedSelfPickUp.value = arguments?["selectedSelfPickUp"] ?? false;
       selectedSelfDropOff.value = arguments?["selectedSelfDropOff"] ?? false;
-      selectedSecurityEscort.value = arguments?["selectedSecurityEscort"] ?? false;
+      selectedSecurityEscort.value =
+          arguments?["selectedSecurityEscort"] ?? false;
       totalEscortFee.value = arguments?["totalEscortFee"] ?? '';
       tripType.value = arguments?["tripType"] ?? 0;
 
       // already in tripData
-      tripDays.value = arguments?["tripDays"];
+      tripDays.value = arguments?["tripDays"] ?? 0;
       // not used
       cautionFee.value = arguments?["cautionFee"] ?? '';
 
       rawStartTime = arguments!["rawStartTime"] ?? DateTime.now();
       rawEndTime = arguments!["rawEndTime"] ?? DateTime.now();
       discountTotal.value = arguments!["discountTotal"] ?? 0.0;
-
-
     }
   }
 
@@ -90,6 +90,7 @@ class KycCheckController extends GetxController {
   Rx<String> pickUpFee = ''.obs;
   Rx<String> escortFee = ''.obs;
   Rx<String> tripDaysTotal = ''.obs;
+  RxBool isCarListing = false.obs;
   RxBool selectedSecurityEscort = false.obs;
   RxBool selectedSelfPickUp = false.obs;
   RxBool selectedSelfDropOff = false.obs;
@@ -100,31 +101,32 @@ class KycCheckController extends GetxController {
   Rx<double> discountTotal = 0.0.obs;
 
   void goBack() => routeService.goBack();
-  void routeToUpdateKyc() =>
-      routeService.gotoRoute(AppLinks.identityVerification, arguments: {
-        "isKycUpdate": true, //
-        "appBarTitle": AppStrings.addToContinue,
-        "tripData": tripData.value, //
-        "missingKycFields": missingKycFields.value, //
-        "pricePerDay": pricePerDay.value, //
-        "tripDays": tripDays.value, //
-        "estimatedTotal": estimatedTotal.value, //
-        "vatValue": vatValue.value, //
-        "vat": vatValue.value, //
-        "cautionFee": cautionFee.value, //
-        "dropOffFee": dropOffFee.value,
-        "pickUpFee": pickUpFee.value, //
-        "escortFee": escortFee.value, //
-        "tripDaysTotal": tripDaysTotal.value,
-        "selectedSelfPickUp": selectedSelfPickUp.value,
-        "selectedSelfDropOff": selectedSelfDropOff.value,
-        "selectedSecurityEscort": selectedSecurityEscort.value,
-        "tripType": tripType.value,
-        "totalEscortFee": totalEscortFee.value,
-        "rawStartTime": rawStartTime,
-        "rawEndTime": rawEndTime,
-        "discountTotal": discountTotal.value,
-      });
+  void routeToUpdateKyc() => isCarListing.value
+      ? Get.offAndToNamed(AppLinks.partnerIdentityVerification)
+      : routeService.gotoRoute(AppLinks.identityVerification, arguments: {
+          "isKycUpdate": true, //
+          "appBarTitle": AppStrings.addToContinue,
+          "tripData": tripData.value, //
+          "missingKycFields": missingKycFields.value, //
+          "pricePerDay": pricePerDay.value, //
+          "tripDays": tripDays.value, //
+          "estimatedTotal": estimatedTotal.value, //
+          "vatValue": vatValue.value, //
+          "vat": vatValue.value, //
+          "cautionFee": cautionFee.value, //
+          "dropOffFee": dropOffFee.value,
+          "pickUpFee": pickUpFee.value, //
+          "escortFee": escortFee.value, //
+          "tripDaysTotal": tripDaysTotal.value,
+          "selectedSelfPickUp": selectedSelfPickUp.value,
+          "selectedSelfDropOff": selectedSelfDropOff.value,
+          "selectedSecurityEscort": selectedSecurityEscort.value,
+          "tripType": tripType.value,
+          "totalEscortFee": totalEscortFee.value,
+          "rawStartTime": rawStartTime,
+          "rawEndTime": rawEndTime,
+          "discountTotal": discountTotal.value,
+        });
 
   void onClickPrevious() {
     if (currentIndex > 0) {

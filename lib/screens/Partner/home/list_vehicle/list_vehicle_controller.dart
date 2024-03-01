@@ -8,12 +8,15 @@ import 'package:gti_rides/models/drivers_model.dart' as driver;
 import 'package:gti_rides/models/image_response.dart';
 import 'package:gti_rides/models/list_response_model.dart';
 import 'package:gti_rides/models/partner/car_list_model.dart';
+import 'package:gti_rides/models/renter/trip_data_model.dart';
+import 'package:gti_rides/models/user/kyc_response_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/screens/Partner/home/list_vehicle/list_vehicle_screen.dart';
 import 'package:gti_rides/services/image_service.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/partner_service.dart';
 import 'package:gti_rides/services/route_service.dart';
+import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/utils.dart';
@@ -90,6 +93,7 @@ class ListVehicleController extends GetxController {
   Rx<String> state = ''.obs;
   Rx<String> city = ''.obs;
   Rx<String> brandName = ''.obs;
+  Rx<String> advisedRenterPrice = ''.obs;
 
   GlobalKey<FormState> vehicleTypeFormKey = GlobalKey<FormState>();
   GlobalKey<FormState> vehicleInfoFormKey = GlobalKey<FormState>();
@@ -172,6 +176,7 @@ class ListVehicleController extends GetxController {
   void onInit() async {
     logger.log("ListVehicleController");
     super.onInit();
+    await getDrivers();
 
     // if (isFromManageCars.value == true) {
     //   currentIndex.value = 1;
@@ -820,49 +825,128 @@ class ListVehicleController extends GetxController {
     }
   }
 
-  Future<void> addCar() async {
-    if (!vehicleTypeFormKey.currentState!.validate()) {
-      return;
+  List<String> requiredKycFields = ["dateOfBirth", "gender", "homeAddress"];
+  List<String> missingKycFields = ["dateOfBirth", "gender", "homeAddress"];
+
+  List<String> getMissingKycFields(KycData kycData) {
+    List<String> missingKycFields1 = [];
+
+    for (String field in requiredKycFields) {
+      dynamic fieldValue = kycData.toJson()[field];
+      logger.log("field value:: $fieldValue");
+
+      // Directly add the field to missingKycFields if it's not present
+      if (fieldValue == null || fieldValue.isEmpty) {
+        missingKycFields1.add(field);
+      }
     }
-    if (selectedBrandModel.value == 'Select' ||
-        selectedYearValue!.value == 'Select') {
-      showErrorSnackbar(message: 'All fields must be selected');
+
+    return missingKycFields1;
+  }
+
+  Future<bool> getUserKyc() async {
+  try {
+    final kycResponse = await userService.getKycProfile();
+
+    if (kycResponse.status == 'success' || kycResponse.status_code == 200) {
+      if (kycResponse.data != null && kycResponse.data!.isNotEmpty) {
+       
+        Map<String, dynamic> firstKycItem = kycResponse.data!.first;
+
+        // Check if the first item in the list is not empty
+        if (firstKycItem.isNotEmpty) {
+           missingKycFields.clear();
+          KycData kycData = KycData.fromJson(firstKycItem);
+
+          // Check missing fields and route accordingly
+          missingKycFields = getMissingKycFields(kycData);
+
+          // Use missingKycFields for further processing if needed
+          if (missingKycFields.isNotEmpty) {
+            // User has all KYC fields
+            return false;
+          } else {
+            // User is missing KYC fields
+            return true;
+          }
+        } else {
+          // Route to KYC screen if data is empty
+          // user has no KYC profile at all
+          return false;
+        }
+      } else {
+        // Route to KYC screen if data is empty
+        // user has no KYC profile at all
+        return false;
+      }
+    } else {
+      logger.log("Unable to fetch User KYC: ${kycResponse.message ?? "error"}");
+    }
+  } catch (exception) {
+    logger.log("Unable to fetch User KYC: $exception");
+  }
+
+  // Default to false if an error occurs
+  return false;
+}
+
+
+  Future<void> addCar() async {
+  if (!vehicleTypeFormKey.currentState!.validate()) {
+    return;
+  }
+  if (selectedBrandModel.value == 'Select' ||
+      selectedYearValue!.value == 'Select') {
+    showErrorSnackbar(message: 'All fields must be selected');
+    return;
+  }
+
+  isLoading.value = true;
+  try {
+     List<String> originalMissingKycFields = List.from(missingKycFields);
+
+    var hasKycFields = await getUserKyc();
+    if (!hasKycFields) {
+      // Route to KYC screen, and the rest of the function will be executed later
+      routeService.gotoRoute(AppLinks.kycCheck, arguments: {
+        "missingKycFields": originalMissingKycFields,
+        "isCarListing": true,
+        "tripData": TripData()
+      });
       return;
     }
 
-    try {
-      isLoading.value = true;
-      final response = await partnerService.addCar(data: {
-        "brandCode": brandCode.value,
-        "brandModelCode": modelCode.value,
-        "yearCode": yearCode.value,
-        "vin": vinController.text,
-        "plateNumber": plateNumberController.text,
-        "stateCode": stateCode.value,
-        "cityCode": cityCode.value,
-      }, param: isFromManageCars.isTrue ? "?carID=${carID.value}" : '');
-      if (response.status == 'success' || response.status_code == 200) {
-        logger.log("car added ${response.data}");
-        if (response.data != null) {
-          // cities?.value = response.data!;
-          logger.log("carID ${brands.value.data}");
-          carID.value = response.data!["carID"];
-          showSuccessSnackbar(message: response.message!);
-          goToNextPage();
-          // getCarHistory();
-        }
-      } else {
-        logger.log("unable to add car${response.data}");
-        isLoading.value = false;
-        showErrorSnackbar(message: response.message.toString());
-      }
-    } catch (exception) {
-      logger.log("error  $exception");
-      showErrorSnackbar(message: exception.toString());
-    } finally {
-      isLoading.value = false;
-    }
+    // Continue with the logic to add a car
+    await addCarLogic();
+  } finally {
+    isLoading.value = false;
   }
+}
+
+  Future<void> addCarLogic() async {
+  try {
+    final response = await partnerService.addCar(data: {
+      "brandCode": brandCode.value,
+      "brandModelCode": modelCode.value,
+      "yearCode": yearCode.value,
+      "vin": vinController.text,
+      "plateNumber": plateNumberController.text,
+      "stateCode": stateCode.value,
+      "cityCode": cityCode.value,
+    }, param: isFromManageCars.isTrue ? "?carID=${carID.value}" : '');
+
+    if (response.status == 'success' || response.status_code == 200) {
+      logger.log("car added ${response.data}");
+      if (response.data != null) {
+        carID.value = response.data!["carID"];
+        showSuccessSnackbar(message: response.message!);
+        goToNextPage();
+      }
+    }
+  } finally {
+    isLoading.value = false;
+  }
+}
 
   ScrollController scrollController = ScrollController();
 

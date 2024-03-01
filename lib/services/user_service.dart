@@ -16,7 +16,7 @@ class UserService {
   // Rx<Agent> agentModel = Agent().obs;
   getx.Rx<UserModel> user = UserModel().obs;
   getx.Rx<ListResponseModel> userKyc = ListResponseModel().obs;
-  static final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
+  static const FlutterSecureStorage _secureStorage = FlutterSecureStorage();
 
   static final UserService _cache = UserService._internal();
 

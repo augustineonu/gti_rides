@@ -56,7 +56,9 @@ class KycCheckScreen extends GetView<KycCheckController> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           textWidget(
-              text: AppStrings.gainApproval,
+              text: controller.isCarListing.value
+                  ? AppStrings.gainApprovalCarLIsting
+                  : AppStrings.gainApproval,
               textOverflow: TextOverflow.visible,
               style: getMediumStyle(
                 fontSize: 22.sp,
@@ -82,8 +84,7 @@ class KycCheckScreen extends GetView<KycCheckController> {
                   SizedBox(
                     width: 6.sp,
                   ),
-                  textWidget(
-                      text: missingKyc, style: getMediumStyle()),
+                  textWidget(text: missingKyc, style: getMediumStyle()),
                 ],
               );
             },
