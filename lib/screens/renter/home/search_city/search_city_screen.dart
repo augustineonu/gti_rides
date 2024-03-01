@@ -29,30 +29,36 @@ class SearchCityScreen extends GetView<SearchCityController> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    return Obx(
-      () => Scaffold(
-          backgroundColor: backgroundColor,
-          appBar: appBar(),
-          body: Stack(
-            children: [
-              body(size, context),
-              controller.isFetchingCars.value
-                  ? Stack(
-                      children: [
-                        const Opacity(
-                          opacity: 0.5,
-                          child: ModalBarrier(
-                              dismissible: false, color: Colors.transparent),
-                        ),
-                        Center(
-                          child: Center(child: centerLoadingIcon()),
-                        ),
-                      ],
-                    )
-                  : const SizedBox()
-            ],
-          )),
-      // }
+    return GetBuilder<SearchCityController>(
+      init: SearchCityController(),
+      initState: (_) {},
+      builder: (_) {
+        return  Scaffold(
+              backgroundColor: backgroundColor,
+              appBar: appBar(),
+              body: Stack(
+                children: [
+                  body(size, context),
+                  controller.isFetchingCars.value
+                      ? Stack(
+                          children: [
+                            const Opacity(
+                              opacity: 0.5,
+                              child: ModalBarrier(
+                                  dismissible: false,
+                                  color: Colors.transparent),
+                            ),
+                            Center(
+                              child: Center(child: centerLoadingIcon()),
+                            ),
+                          ],
+                        )
+                      : const SizedBox()
+                ],
+              ));
+          // }
+        
+      },
     );
   }
 
@@ -62,8 +68,8 @@ class SearchCityScreen extends GetView<SearchCityController> {
         hasLeading: false,
         toolbarHeight: 65.sp,
         title: NormalInputTextWidget(
-          controller: controller.searchCategoryController,
-          hintText: "What City are you in?",
+          controller: controller.searchCategoryController.value,
+          hintText: "What State are you in?",
           // labelText: "Email Addres",
           expectedVariable: "field",
           contentPadding: const EdgeInsets.all(10),
@@ -99,8 +105,8 @@ class SearchCityScreen extends GetView<SearchCityController> {
           Padding(
             padding: const EdgeInsets.only(right: 5, top: 15),
             child: InkWell(
-              onTap: controller.selectedType.value == LocationType.city
-                  ? controller.resetStateSelection
+              onTap: controller.searchCategoryController.value.text.isNotEmpty
+                  ? controller.clearSearchField
                   : controller.goBack,
               child: Container(
                 height: 65,
@@ -110,8 +116,9 @@ class SearchCityScreen extends GetView<SearchCityController> {
                 ),
                 child: Center(
                   child: textWidget(
-                      text: controller.selectedType.value == LocationType.city
-                          ? AppStrings.reset
+                      text: controller
+                              .searchCategoryController.value.text.isNotEmpty
+                          ? AppStrings.clear
                           : AppStrings.cancel,
                       style: getRegularStyle(color: primaryColor)
                           .copyWith(fontWeight: FontWeight.w400)),
@@ -147,237 +154,227 @@ class SearchCityScreen extends GetView<SearchCityController> {
                       // controller.selectedState.value = location.name;
                       // controller.locationController.value.text = location.name;
 
-                      if (controller.selectedType.value == LocationType.state) {
+                      // if (controller.selectedType.value == LocationType.state) {
+                      // controller.selectedStateCode.value = location.code;
+                      //   await controller.getCities();
+                      //   // controller.selectedType.value = LocationType.city;
+                      //   controller.selectedState.value = location.name;
+                      // } else {
                       controller.selectedStateCode.value = location.code;
-                        await controller.getCities();
-                        // controller.selectedType.value = LocationType.city;
-                        controller.selectedState.value = location.name;
-                      } else {
-                        controller.selectedcityCode.value = location.code;
-                        print("City code:: ${controller.selectedcityCode.value}");
-                        controller.selectedCity.value = location.name;
-                        controller.onLocationSelected(location);
-                        // Handle city selection logic here
-                        print("city selected: ");
-                        await Get.bottomSheet(
-                          StatefulBuilder(builder: (context, setState) {
-                            return SizedBox(
-                              height: 310.sp,
-                              child: Padding(
-                                padding: EdgeInsets.only(
-                                    left: 20.sp,
-                                    right: 20.sp,
-                                    top: 0.sp,
-                                    bottom: 40.sp),
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const SizedBox(height: 20),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                      // controller.selectedcityCode.value = location.code;
+                      // print("City code:: ${controller.selectedcityCode.value}");
+                      controller.selectedCity.value = location.name;
+                      controller.onLocationSelected(location);
+                      // Handle city selection logic here
+                      print("city selected: ");
+                      await Get.bottomSheet(
+                        StatefulBuilder(builder: (context, setState) {
+                          return SizedBox(
+                            height: 310.sp,
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                  left: 20.sp,
+                                  right: 20.sp,
+                                  top: 0.sp,
+                                  bottom: 40.sp),
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const SizedBox(height: 20),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        GestureDetector(
+                                            onTap: controller.goBack,
+                                            child: SvgPicture.asset(
+                                                ImageAssets.dismiss)),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 10.sp,
+                                    ),
+                                    NormalInputTextWidget(
+                                      title: AppStrings.location,
+                                      expectedVariable: "field",
+                                      hintText: "Surulere, Lagos",
+                                      readOnly: true,
+                                      controller:
+                                          controller.locationController.value,
+                                    ),
+                                    SizedBox(
+                                      height: 10.sp,
+                                    ),
+                                    Form(
+                                      key: controller.searchFormKey,
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          GestureDetector(
-                                              onTap: controller.goBack,
-                                              child: SvgPicture.asset(
-                                                  ImageAssets.dismiss)),
+                                          Expanded(
+                                            child: NormalInputTextWidget(
+                                              title: "From",
+                                              expectedVariable: "field",
+                                              hintText: "1 Nov, 9:00am",
+                                              controller: controller
+                                                  .fromController.value
+                                                ..text = controller
+                                                    .startDateTime.value,
+                                              readOnly: true,
+                                              fontSize: 12.sp,
+                                              onTap: () async {
+                                                // SystemChannels.textInput
+                                                //     .invokeMethod(
+                                                //         'TextInput.hide');
+                                                // controller.routeToSelecteDate();
+                                                var data = await Get.toNamed(
+                                                    AppLinks.chooseTripDate,
+                                                    arguments: {
+                                                      "isRenterHome": true,
+                                                      "appBarTitle":
+                                                          AppStrings.tripDates,
+                                                      "from":
+                                                          AppStrings.startDate,
+                                                      "to": AppStrings.endDate,
+                                                      "enablePastDates": false,
+                                                    });
+                                                print("Received data:: $data");
+                                                if (data != null) {
+                                                  controller
+                                                          .startDateTime.value =
+                                                      data['start'] ?? '';
+                                                  controller.endDateTime.value =
+                                                      data['end'] ?? '';
+                                                  controller.startDate.value =
+                                                      extractDay(controller
+                                                          .startDateTime.value);
+                                                  controller.endDate.value =
+                                                      extractDayMonth(controller
+                                                          .endDateTime.value);
+                                                  controller
+                                                          .selectedDifferenceInDays
+                                                          .value =
+                                                      data['differenceInDays'];
+                                                  controller.rawStartTime =
+                                                      data['rawStartTime'];
+                                                  controller.rawEndTime =
+                                                      data['rawEndTime'];
+
+                                                  WidgetsBinding.instance!
+                                                      .addPostFrameCallback(
+                                                          (_) {
+                                                    setState(() {});
+                                                  });
+                                                }
+                                                // print(
+                                                //     "formatted date:: $startDate");
+                                              },
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 20.sp,
+                                          ),
+                                          Expanded(
+                                            child: NormalInputTextWidget(
+                                              title: "To",
+                                              expectedVariable: "field",
+                                              hintText: "5 Nov, 9:00am",
+                                              readOnly: true,
+                                              fontSize: 12.sp,
+                                              controller:
+                                                  controller.toController.value
+                                                    ..text = controller
+                                                        .endDateTime.value,
+                                              onTap: () async {
+                                                // SystemChannels.textInput
+                                                //     .invokeMethod(
+                                                //         'TextInput.hide');
+                                                // controller.routeToSelecteDate();
+                                                var data = await Get.toNamed(
+                                                    AppLinks.chooseTripDate,
+                                                    arguments: {
+                                                      "isRenterHome": true,
+                                                      "appBarTitle":
+                                                          AppStrings.tripDates,
+                                                      "from":
+                                                          AppStrings.startDate,
+                                                      "to": AppStrings.endDate,
+                                                      "enablePastDates": false,
+                                                    });
+                                                print("Received data:: $data");
+                                                if (data != null) {
+                                                  controller
+                                                          .startDateTime.value =
+                                                      data['start'] ?? '';
+                                                  controller.endDateTime.value =
+                                                      data['end'] ?? '';
+                                                  controller.startDate.value =
+                                                      extractDay(controller
+                                                          .startDateTime.value);
+                                                  controller.endDate.value =
+                                                      extractDayMonth(controller
+                                                          .endDateTime.value);
+                                                  controller
+                                                          .selectedDifferenceInDays
+                                                          .value =
+                                                      data['differenceInDays'];
+                                                  controller.rawStartTime =
+                                                      data['rawStartTime'];
+                                                  controller.rawEndTime =
+                                                      data['rawEndTime'];
+
+                                                  WidgetsBinding.instance!
+                                                      .addPostFrameCallback(
+                                                          (_) {
+                                                    setState(() {});
+                                                  });
+                                                }
+                                                // print(
+                                                //     "formatted date:: $startDate");
+                                              },
+                                            ),
+                                          ),
                                         ],
                                       ),
-                                      SizedBox(
-                                        height: 10.sp,
-                                      ),
-                                      NormalInputTextWidget(
-                                        title: AppStrings.location,
-                                        expectedVariable: "field",
-                                        hintText: "Surulere, Lagos",
-                                        readOnly: true,
-                                        controller:
-                                            controller.locationController.value,
-                                      ),
-                                      SizedBox(
-                                        height: 10.sp,
-                                      ),
-                                      Form(
-                                        key: controller.searchFormKey,
-                                        autovalidateMode:
-                                            AutovalidateMode.onUserInteraction,
-                                        child: Row(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Expanded(
-                                              child: NormalInputTextWidget(
-                                                title: "From",
-                                                expectedVariable: "field",
-                                                hintText: "1 Nov, 9:00am",
-                                                controller: controller
-                                                    .fromController.value
-                                                  ..text = controller
-                                                      .startDateTime.value,
-                                                readOnly: true,
-                                                fontSize: 12.sp,
-                                                onTap: () async {
-                                                  // SystemChannels.textInput
-                                                  //     .invokeMethod(
-                                                  //         'TextInput.hide');
-                                                  // controller.routeToSelecteDate();
-                                                  var data = await Get.toNamed(
-                                                      AppLinks.chooseTripDate,
-                                                      arguments: {
-                                                        "isRenterHome": true,
-                                                        "appBarTitle":
-                                                            AppStrings
-                                                                .tripDates,
-                                                        "from": AppStrings
-                                                            .startDate,
-                                                        "to":
-                                                            AppStrings.endDate,
-                                                        "enablePastDates":
-                                                            false,
-                                                      });
-                                                  print(
-                                                      "Received data:: $data");
-                                                  if (data != null) {
-                                                    controller.startDateTime
-                                                            .value =
-                                                        data['start'] ?? '';
-                                                    controller
-                                                            .endDateTime.value =
-                                                        data['end'] ?? '';
-                                                    controller.startDate.value =
-                                                        extractDay(controller
-                                                            .startDateTime
-                                                            .value);
-                                                    controller.endDate.value =
-                                                        extractDayMonth(
-                                                            controller
-                                                                .endDateTime
-                                                                .value);
-                                                    controller
-                                                            .selectedDifferenceInDays
-                                                            .value =
-                                                        data[
-                                                            'differenceInDays'];
-                                                            controller.rawStartTime = data['rawStartTime'];
-                                                            controller.rawEndTime = data['rawEndTime'];
-
-                                                    WidgetsBinding.instance!
-                                                        .addPostFrameCallback(
-                                                            (_) {
-                                                      setState(() {});
-                                                    });
-                                                  }
-                                                  // print(
-                                                  //     "formatted date:: $startDate");
-                                                },
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: 20.sp,
-                                            ),
-                                            Expanded(
-                                              child: NormalInputTextWidget(
-                                                title: "To",
-                                                expectedVariable: "field",
-                                                hintText: "5 Nov, 9:00am",
-                                                readOnly: true,
-                                                fontSize: 12.sp,
-                                                controller: controller
-                                                    .toController.value
-                                                  ..text = controller
-                                                      .endDateTime.value,
-                                               onTap: () async {
-                                                  // SystemChannels.textInput
-                                                  //     .invokeMethod(
-                                                  //         'TextInput.hide');
-                                                  // controller.routeToSelecteDate();
-                                                  var data = await Get.toNamed(
-                                                      AppLinks.chooseTripDate,
-                                                      arguments: {
-                                                        "isRenterHome": true,
-                                                        "appBarTitle":
-                                                            AppStrings
-                                                                .tripDates,
-                                                        "from": AppStrings
-                                                            .startDate,
-                                                        "to":
-                                                            AppStrings.endDate,
-                                                        "enablePastDates":
-                                                            false,
-                                                      });
-                                                  print(
-                                                      "Received data:: $data");
-                                                  if (data != null) {
-                                                    controller.startDateTime
-                                                            .value =
-                                                        data['start'] ?? '';
-                                                    controller
-                                                            .endDateTime.value =
-                                                        data['end'] ?? '';
-                                                    controller.startDate.value =
-                                                        extractDay(controller
-                                                            .startDateTime
-                                                            .value);
-                                                    controller.endDate.value =
-                                                        extractDayMonth(
-                                                            controller
-                                                                .endDateTime
-                                                                .value);
-                                                    controller
-                                                            .selectedDifferenceInDays
-                                                            .value =
-                                                        data[
-                                                            'differenceInDays'];
-                                                            controller.rawStartTime = data['rawStartTime'];
-                                                            controller.rawEndTime = data['rawEndTime'];
-
-                                                    WidgetsBinding.instance!
-                                                        .addPostFrameCallback(
-                                                            (_) {
-                                                      setState(() {});
-                                                    });
-                                                  }
-                                                  // print(
-                                                  //     "formatted date:: $startDate");
-                                                },
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 20.sp,
-                                      ),
-                                      controller.isFetchingCars.value
-                                          ? centerLoadingIcon()
-                                          : GtiButton(
-                                              text: AppStrings.search,
-                                              onTap: () async {
-                                                controller.isFetchingCars.value = true;
-                                                setState(() {});
-                                              await  controller.searchCars();
-                                                controller.isFetchingCars.value = false;
-                                                setState(() {});
-                                              },
-                                            )
-                                    ],
-                                  ),
+                                    ),
+                                    SizedBox(
+                                      height: 20.sp,
+                                    ),
+                                    controller.isFetchingCars.value
+                                        ? centerLoadingIcon()
+                                        : GtiButton(
+                                            text: AppStrings.search,
+                                            onTap: () async {
+                                              controller.isFetchingCars.value =
+                                                  true;
+                                              setState(() {});
+                                              await controller.searchCars();
+                                              controller.isFetchingCars.value =
+                                                  false;
+                                              setState(() {});
+                                            },
+                                          )
+                                  ],
                                 ),
                               ),
-                            );
-                          }),
-                          backgroundColor: Colors.white,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(6.r),
-                                topRight: Radius.circular(6.r)),
-                          ),
-                        );
-                      }
+                            ),
+                          );
+                        }),
+                        backgroundColor: Colors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(6.r),
+                              topRight: Radius.circular(6.r)),
+                        ),
+                      );
+                      // }
 
                       print(
                           "selected:: ${controller.locationController.value.text} ");
@@ -399,17 +396,4 @@ class SearchCityScreen extends GetView<SearchCityController> {
               );
             });
   }
-
-  // Widget continueButton() {
-  //   return controller.isLoading.isTrue
-  //       ? centerLoadingIcon()
-  //       : GtiButton(
-  //           height: 50.sp,
-  //           width: 300.sp,
-  //           text: "continue".tr,
-  //           color: secondaryColor,
-  //           // onTap: controller.routeToPhoneVerification,
-  //           isLoading: controller.isLoading.value,
-  //         );
-  // }
 }

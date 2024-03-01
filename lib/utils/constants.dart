@@ -73,6 +73,7 @@ class AppStrings {
   static String recentViewCar = "Recently view car";
   static String cancel = "Cancel";
   static String reset = "Reset";
+  static String clear = "Clear";
   static String location = "Location";
   static String tripDates = "Trip dates";
   static String startDate = "Start date";
@@ -262,7 +263,7 @@ class AppStrings {
   static String identityVerificationSm = "Identity verification";
   static String reportAnIncident = "Report an incident";
   static String referrals = "Referrals";
-  static String howGtiWorks1 = "How GTI Ride works";
+  static String howGtiWorks1 = "How GTi Ride works";
   static String logOut = "Log out";
   static String pending = "Pending";
   static String suspended = "Suspended";

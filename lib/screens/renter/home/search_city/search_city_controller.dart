@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:gti_rides/models/partner/car_list_model.dart';
 import 'package:gti_rides/models/renter/cars_model.dart';
 import 'package:gti_rides/models/renter/city_model.dart';
 import 'package:gti_rides/models/renter/state_model.dart';
@@ -10,11 +8,8 @@ import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/partner_service.dart';
 import 'package:gti_rides/services/renter_service.dart';
 import 'package:gti_rides/services/route_service.dart';
-import 'package:gti_rides/shared_widgets/text_widget.dart';
-import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/utils.dart';
-
 import '../../../../models/renter/location_model.dart';
 
 enum LocationType {
@@ -49,7 +44,7 @@ class SearchCityController extends GetxController {
   DateTime? rawStartTime;
   DateTime? rawEndTime;
 
-  TextEditingController searchCategoryController = TextEditingController();
+  Rx<TextEditingController> searchCategoryController = TextEditingController().obs;
   Rx<TextEditingController> fromController = TextEditingController().obs;
   Rx<TextEditingController> toController = TextEditingController().obs;
   Rx<TextEditingController> locationController =
@@ -66,14 +61,6 @@ class SearchCityController extends GetxController {
 
   SearchCityController() {
     init();
-    // cities.value = [
-    //   "Lagos",
-    //   "Abuja",
-    //   "Port Harcourt, Rivers",
-    //   "jewellery_accessories",
-    //   "Delta State"
-    //       "Kano",
-    // ];
   }
 
   void init() {
@@ -96,13 +83,14 @@ class SearchCityController extends GetxController {
       currentIndex.value = pageController.page?.round() ?? 0;
       update();
     });
-    searchCategoryController.addListener(queryListener);
+    searchCategoryController.value.addListener(queryListener);
 
     super.onInit();
   }
 
   void queryListener() {
-    updateFilteredLocations(searchCategoryController.text);
+    updateFilteredLocations(searchCategoryController.value.text);
+    update();
   }
 
   // Update the filteredPages based on search input
@@ -136,6 +124,7 @@ class SearchCityController extends GetxController {
         "from": AppStrings.startDate,
         "to": AppStrings.endDate,
       });
+
   void routeToSearchResult() {
     if (!searchFormKey.currentState!.validate()) {
       return;
@@ -147,13 +136,15 @@ class SearchCityController extends GetxController {
     selectedType.value = LocationType.state;
     await getStates();
   }
+  void clearSearchField() {
+    searchCategoryController.value.clear();
+  }
 
   Rx<Location> selectedLocation = Location('', '', '').obs;
 
   void onLocationSelected(Location location) {
     // selectedLocation.value = location;
-    String selectedLocation = '${location.name}, ${selectedState.value}';
-    locationController.value.text = selectedLocation;
+    locationController.value.text = location.name;
 
     logger.log(">>>>${locationController.value.text}");
   }
@@ -282,8 +273,9 @@ class SearchCityController extends GetxController {
     // isFetchingCars.value = true;
     try {
       final response = await renterService.searchCars(
-          stateCode: selectedStateCode.value, cityCode: selectedcityCode.value,
-          startDate: rawStartTime!.toIso8601String(), endDate: rawEndTime!.toIso8601String());
+          stateCode: selectedStateCode.value,
+          startDate: rawStartTime!.toIso8601String(),
+          endDate: rawEndTime!.toIso8601String());
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("gotten cars  ${response.data}");
 
