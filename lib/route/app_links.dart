@@ -25,6 +25,7 @@ class AppLinks {
   static const agentHome = "/home";
   static const currentOrders = "/orders/currentOrders";
   static const notification = "/notification";
+  static const viewNotification = "/viewNotification";
   static const waitingOrders = "/orders/waitingOrders";
   static const completedOrders = "/orders/completedOrders";
   static const orderDetails = "/orders/waitingOrders/orderDetails";
@@ -143,7 +144,8 @@ class AppLinks {
     'changePasswordOtp': changePasswordOtp,
     'dob': dob,
     'editDriver': editDriver,
-    "paymentWebView": paymentWebView
+    "paymentWebView": paymentWebView,
+    "viewNotification": viewNotification,
     // 'trips': trips,
   };
 

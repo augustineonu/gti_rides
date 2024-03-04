@@ -259,6 +259,7 @@ class AppStrings {
   static String editProfile = "Edit Profile";
   static String accountDetails = "Account details";
   static String favorite = "Favorite";
+  static String notification = "Notification";
   static String identityVerification = "Identity Verification";
   static String identityVerificationSm = "Identity verification";
   static String reportAnIncident = "Report an incident";
@@ -521,5 +522,6 @@ class AppStrings {
   static String noCompletedOrderYet = "You have no Completed Order yet";
   static String noAddedCarsToFav = "You have not added any Cars to Favorite yet";
   static String noViewedCarsYet = "You have not viewed any Cars yet";
+  static String noNotifications = "You don't have any Notifications";
   static String guideForTakingGreatPhotos = "Step by Step Guide for Capturing Great Car Photos for Your GTI Rides Listing";
 }

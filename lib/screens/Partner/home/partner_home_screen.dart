@@ -732,11 +732,14 @@ Widget appBar(Size size, PartnerHomeController controller,
             title: AppStrings.partner,
             imageUrl: ImageAssets.owner,
             onTapCarRenter: controller.switchProfileToRenter),
-        Padding(
-          padding: const EdgeInsets.only(right: 20),
-          child: Icon(
-            Iconsax.notification4,
-            size: 24.sp,
+        GestureDetector(
+          onTap: controller.routeToNotification,
+          child: Padding(
+            padding: const EdgeInsets.only(right: 20),
+            child: Icon(
+              Iconsax.notification4,
+              size: 24.sp,
+            ),
           ),
         ),
       ],

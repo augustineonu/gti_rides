@@ -8,7 +8,7 @@ import 'package:gti_rides/route/routes.dart';
 import 'package:gti_rides/services/firesbase_service.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/network_controller.dart';
-import 'package:gti_rides/services/notification_servie.dart';
+import 'package:gti_rides/services/notification_service.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/services/storage_service.dart';
 import 'package:gti_rides/services/user_service.dart';

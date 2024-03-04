@@ -9,7 +9,7 @@ import 'package:gti_rides/services/google_sign_in_service.dart';
 import 'package:gti_rides/services/image_service.dart';
 import 'package:gti_rides/services/more_service.dart';
 import 'package:gti_rides/services/network_controller.dart';
-import 'package:gti_rides/services/notification_servie.dart';
+import 'package:gti_rides/services/notification_service.dart';
 import 'package:gti_rides/services/partner_service.dart';
 import 'package:gti_rides/services/payment_service.dart';
 import 'package:gti_rides/services/renter_service.dart';

@@ -83,6 +83,8 @@ class PartnerHomeController extends GetxController
   void routeToManageVehicle() => routeService.gotoRoute(AppLinks.manageVehicle);
   void routeToCarHistory({Object? arguments}) =>
       routeService.gotoRoute(AppLinks.carHistory, arguments: arguments);
+  void routeToNotification({Object? arguments}) =>
+      routeService.gotoRoute(AppLinks.notification, arguments: arguments);
 
   void launchWebsite() => openUrl(AppStrings.websiteUrl);
 
@@ -135,8 +137,7 @@ class PartnerHomeController extends GetxController
           logger.log("cars $cars");
         } else {
           // If the list is not empty
-          change(listedCars,
-              status: RxStatus.success());
+          change(listedCars, status: RxStatus.success());
           cars.value = response.data!;
           update();
         }

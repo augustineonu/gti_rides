@@ -163,11 +163,14 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
               title: AppStrings.renter,
               imageUrl: ImageAssets.renter,
               onTapCarOwner: controller.switchProfileToOwner),
-          Padding(
-            padding: const EdgeInsets.only(right: 20),
-            child: Icon(
-              Iconsax.notification4,
-              size: 24.sp,
+          GestureDetector(
+            onTap: controller.routeToNotification,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 20),
+              child: Icon(
+                Iconsax.notification4,
+                size: 24.sp,
+              ),
             ),
           ),
         ],

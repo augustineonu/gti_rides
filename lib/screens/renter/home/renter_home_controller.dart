@@ -111,6 +111,8 @@ class CarRenterHomeController extends GetxController
       routeService.gotoRoute(AppLinks.carSelectionResult,
       arguments: arguments);
 
+  void routeToNotification({Object? arguments}) =>
+      routeService.gotoRoute(AppLinks.notification, arguments: arguments);
   void launchWebsite() => openUrl(AppStrings.websiteUrl);
 
   Future<void> switchProfileToOwner() async {

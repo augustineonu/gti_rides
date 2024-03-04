@@ -35,7 +35,7 @@ class NotificationService {
 
   final androidChannel = const AndroidNotificationChannel(
     "gti_rides_channel1",
-    "gti_rides",
+    "GTi_Rides",
     description: "This channel is used for important notification",
     importance: Importance.high,
     playSound: true,

@@ -53,6 +53,8 @@ import 'package:gti_rides/screens/shared_screens/more/identity_verification/scre
 import 'package:gti_rides/screens/shared_screens/more/referral/referral_code_screen.dart';
 import 'package:gti_rides/screens/shared_screens/more/more_screen.dart';
 import 'package:gti_rides/screens/shared_screens/more/profile/profile_screen.dart';
+import 'package:gti_rides/screens/shared_screens/notification/notification_screen.dart';
+import 'package:gti_rides/screens/shared_screens/notification/view_notification_screen.dart';
 
 import '../screens/guest/Reset_password/reset_password_screen.dart';
 
@@ -298,6 +300,14 @@ class AppRoutes {
     GetPage(
       name: AppLinks.paymentWebView,
       page: () => PaymentWebView(),
+    ),
+    GetPage(
+      name: AppLinks.notification,
+      page: () => NotificationScreen(),
+    ),
+    GetPage(
+      name: AppLinks.viewNotification,
+      page: () => ViewNotificationScreen(),
     ),
   ];
 }
