@@ -42,13 +42,13 @@ class AppBinding extends Bindings {
     Get.put(ApiExceptionService());
     Get.put(NetworkController(), permanent: true);
     // Get.put(AppService());
-    // Get.put(FirebaseService());
+    Get.put(FirebaseService());
     // Get.put(AgentService());
     Get.put(TokenService());
     Get.put(BiometricService());
     // Get.put(EncryptionService());
     // Get.put(ProfileService());
-    // Get.put(NotificationService());
+    Get.put(NotificationService());
 
   }
 }

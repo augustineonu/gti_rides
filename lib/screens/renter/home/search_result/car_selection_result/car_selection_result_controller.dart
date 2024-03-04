@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/models/partner/car_history_model.dart';
@@ -274,29 +276,35 @@ class CarSelectionResultController extends GetxController
     );
   }
 
-  Rx<double> discountTotal = 0.0.obs;
-  Rx<bool> discountApplied = false.obs;
-  void applyDiscount() {
-    var discountDay = carHistory?.first.discountDays;
-    var discountPrice = carHistory?.first.discountPrice;
+ Rx<double> discountTotal = 0.0.obs;
+Rx<bool> discountApplied = false.obs;
 
-    if (discountPrice != null) {
-      var parsedDiscountPrice =
-          double.tryParse(discountPrice.replaceAll(',', '')) ?? 0.0;
+void applyDiscount() {
+  var discountDay = carHistory?.first.discountDays;
+  var discountPercentage = carHistory?.first.discountPrice;
 
-      if (tripDays.value >= int.parse(discountDay)) {
-        discountApplied.value = true;
-        discountTotal.value = parsedDiscountPrice * tripDays.value;
-        logger.log("discount price total: ${discountTotal.toString()}");
+  if (discountPercentage != null) {
+    var parsedDiscountPercentage = double.tryParse(discountPercentage.replaceAll('%', '')) ?? 0.0;
 
-        updatedTotalValue.value -= discountTotal.value;
-        logger.log("Total price after discount: ${updatedTotalValue.value}");
-      }
-    } else {
-      // Handle the case where discountPrice is null
-      logger.log("Discount price is null");
+    if (tripDays.value >= int.parse(discountDay)) {
+      discountApplied.value = true;
+
+      // Calculate the discount based on the percentage
+      var discountPercentageValue = parsedDiscountPercentage / 100.0;
+      var perDay = double.parse(pricePerDay.value);
+      discountTotal.value = discountPercentageValue * (perDay * tripDays.value);
+
+      logger.log("Discount price total: ${discountTotal.toString()}");
+
+      updatedTotalValue.value -= discountTotal.value;
+      logger.log("Total price after discount: ${updatedTotalValue.value}");
     }
+  } else {
+    // Handle the case where discountPercentage is null
+    logger.log("Discount percentage is null");
   }
+}
+
 
   void logResults() {
     logger.log("Estimated total: ${estimatedTotal.value}");

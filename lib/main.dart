@@ -24,6 +24,10 @@ void main() async {
   // FirebaseService firebaseService = FirebaseService();
   // await firebaseService.init();
   WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp(
+      // name: 'GTi Rides',
+        options: DefaultFirebaseOptions.currentPlatform
+        );
 
   Get.put(UserService());
   await Intercom.instance.initialize('hivazykc',
@@ -67,7 +71,7 @@ class _GtiRidesState extends State<GtiRides> {
     // loadImage(ImageAssets.onboarding);
     storageService.init().then((_) {
       logger.debug('loading session...');
-      // notificationService.init();
+      notificationService.init();
     });
     super.initState();
 
@@ -109,8 +113,9 @@ class _GtiRidesState extends State<GtiRides> {
                 : AppLinks.splash,
             getPages: AppRoutes.pages,
             navigatorObservers: [RouteService(), RouteService().routeObserver],
-            onInit: () {
+            onInit: () async {
               networkController.onInit();
+            await  firebaseService.getDeviceToken();
               SystemChrome.setPreferredOrientations([
                 DeviceOrientation.portraitUp,
                 DeviceOrientation.portraitDown

@@ -213,7 +213,11 @@ class PaymentSummaryController extends GetxController {
       }
     } catch (exception) {
       logger.log("Exception:: ${exception.toString()}");
-      showErrorSnackbar(message: "message: $exception");
+      if (exception.toString().contains("NoSuchMethodError")) {
+        showErrorSnackbar(message: "Error: No Such Method");
+      } else {
+        showErrorSnackbar(message: "$exception");
+      }
     } finally {
       isLoading.value = false;
     }

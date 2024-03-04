@@ -25,22 +25,22 @@ class FirebaseService {
 
   FirebaseService._internal() {
     // Initialize Firebase when the service is created
-    init();
+    // init();
   }
 
-  Future<void> init() async {
-    logger.log('Initializing firebase service');
-    WidgetsFlutterBinding.ensureInitialized();
-    // await Firebase.initializeApp(
-    //   // name: 'GTi Rides',
-    //     options: DefaultFirebaseOptions.currentPlatform
-    //     );
-    // getDeviceToken();
-  }
+  // Future<void> init() async {
+  //   logger.log('Initializing firebase service');
+  //   WidgetsFlutterBinding.ensureInitialized();
+  //   // await Firebase.initializeApp(
+  //   //   // name: 'GTi Rides',
+  //   //     options: DefaultFirebaseOptions.currentPlatform
+  //   //     );
+  //   // getDeviceToken();
+  // }
 
   Future<String> getDeviceToken() async {
     FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
-    firebaseMessaging.getToken().then((token) {
+   await firebaseMessaging.getToken().then((token) {
       deviceToken = token!;
       logger.log(" FCM token is $token and $deviceToken");
     });
