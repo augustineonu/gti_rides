@@ -31,9 +31,11 @@ class FirebaseService {
   Future<void> init() async {
     logger.log('Initializing firebase service');
     WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform);
-    getDeviceToken();
+    // await Firebase.initializeApp(
+    //   // name: 'GTi Rides',
+    //     options: DefaultFirebaseOptions.currentPlatform
+    //     );
+    // getDeviceToken();
   }
 
   Future<String> getDeviceToken() async {

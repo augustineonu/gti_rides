@@ -337,12 +337,235 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
                     ],
                   );
                 },
-                onEmpty: Padding(
-                  padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
-                  child: Center(
-                      child: textWidget(
-                          text: AppStrings.noViewedCarsYet,
-                          style: getMediumStyle())),
+                // onEmpty: Padding(
+                //   padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
+                //   child: Center(
+                //       child: textWidget(
+                //           text: AppStrings.noViewedCarsYet,
+                //           style: getMediumStyle())),
+                // ),
+                onEmpty: SizedBox(
+                   height: 235.sp,
+                  width: size.width.sp,
+                  child: Card(
+                    color: white,
+                    surfaceTintColor: Colors.transparent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8.r),
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          'assets/images/Lx570.png',
+                          height: 140.sp,
+                          width: size.width,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(11.0),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  textWidget(
+                                      text: 'Lx570',
+                                      textOverflow: TextOverflow.visible,
+                                      style: getSemiBoldStyle(
+                                              fontSize: 14.sp)
+                                          .copyWith(
+                                        height: 1.2.sp,
+                                        fontWeight: FontWeight.w600,
+                                        // fontFamily: 'neue'
+                                      )),
+                                  // car.status.toString() ==
+                                  //         'booked'
+                                  //     ? Row(
+                                  //         children: [
+                                  //           SvgPicture.asset(
+                                  //               ImageAssets
+                                  //                   .naira),
+                                  //           SizedBox(
+                                  //             width: 2.sp,
+                                  //           ),
+                                  //           textWidget(
+                                  //             text: car
+                                  //                     .pricePerDay ??
+                                  //                 0.toString(),
+                                  //             style: getMediumStyle(
+                                  //                     fontSize:
+                                  //                         12.sp)
+                                  //                 .copyWith(
+                                  //               fontFamily:
+                                  //                   'Neue',
+                                  //             ),
+                                  //           ),
+                                  //           SvgPicture
+                                  //               .asset(
+                                  //             ImageAssets
+                                  //                 .close,
+                                  //             height: 6,
+                                  //             color:
+                                  //                 secondaryColor,
+                                  //           ),
+                                  //           textWidget(
+                                  //             text:
+                                  //                 ' days',
+                                  //             style: getMediumStyle(
+                                  //                     fontSize:
+                                  //                         12.sp)
+                                  //                 .copyWith(
+                                  //               fontFamily:
+                                  //                   'Neue',
+                                  //             ),
+                                  //           ),
+                                  //         ],
+                                  //       )
+                                  //     : const SizedBox(),
+                                ],
+                              ),
+                              // Row(
+                              //   mainAxisAlignment:
+                              //       MainAxisAlignment
+                              //           .spaceBetween,
+                              //   children: [
+                              //     SizedBox(
+                              //       width: 145.sp,
+                              //       child: Column(
+                              //         crossAxisAlignment:
+                              //             CrossAxisAlignment
+                              //                 .start,
+                              //         children: [
+                              //           SizedBox(
+                              //             height: 6.sp,
+                              //           ),
+                              //           Row(
+                              //             mainAxisAlignment:
+                              //                 MainAxisAlignment
+                              //                     .spaceBetween,
+                              //             children: [
+                              //               textWidget(
+                              //                   text: AppStrings
+                              //                       .startDate,
+                              //                   style: getLightStyle(
+                              //                       fontSize: 7
+                              //                           .sp,
+                              //                       color:
+                              //                           black)),
+                              //               SizedBox(
+                              //                 width: 5.sp,
+                              //               ),
+                              //               textWidget(
+                              //                   text: AppStrings
+                              //                       .endDate,
+                              //                   style: getLightStyle(
+                              //                       fontSize: 7
+                              //                           .sp,
+                              //                       color:
+                              //                           black)),
+                              //               SizedBox(
+                              //                 width: 2.sp,
+                              //               ),
+                              //             ],
+                              //           ),
+                              //           Row(
+                              //             mainAxisAlignment:
+                              //                 MainAxisAlignment
+                              //                     .spaceBetween,
+                              //             children: [
+                              //               dateTimeColWIdget(
+                              //                 alignment:
+                              //                     CrossAxisAlignment
+                              //                         .start,
+                              //                 // title: 'lol',
+                              //                 title:
+                              //                     "${formatDayDate1(car.startDate.toString())},",
+                              //                 titleFontSize:
+                              //                     10.sp,
+                              //                 subTitleFontSize:
+                              //                     10.sp,
+                              //                 subTitleFontWeight:
+                              //                     FontWeight
+                              //                         .w500,
+                              //                 // subTitle: 'lol'
+                              //                 subTitle:
+                              //                     formatTime1(
+                              //                         car.startDate),
+                              //               ),
+                              //               SvgPicture
+                              //                   .asset(
+                              //                 ImageAssets
+                              //                     .arrowForwardRounded,
+                              //                 height:
+                              //                     10.sp,
+                              //                 width:
+                              //                     10.sp,
+                              //                 color:
+                              //                     secondaryColor,
+                              //               ),
+                              //               dateTimeColWIdget(
+                              //                   alignment:
+                              //                       CrossAxisAlignment
+                              //                           .start,
+                              //                   title: formatDayDate1(car
+                              //                       .endDate),
+                              //                   titleFontSize:
+                              //                       10.sp,
+                              //                   subTitleFontSize:
+                              //                       10.sp,
+                              //                   subTitleFontWeight:
+                              //                       FontWeight
+                              //                           .w500,
+                              //                   // subTitle: 'lol')
+                              //                   subTitle:
+                              //                       formatTime1(
+                              //                           car.startDate)),
+                              //             ],
+                              //           ),
+                              //         ],
+                              //       ),
+                              //     ),
+                              //     Row(
+                              //       children: [
+                              //         SvgPicture.asset(
+                              //             ImageAssets
+                              //                 .thumbsUpPrimaryColor),
+                              //         SizedBox(
+                              //           width: 5.sp,
+                              //         ),
+                              //         RichText(
+                              //           text: TextSpan(
+                              //               text:
+                              //                   '${car.percentageRate}%',
+                              //               style:
+                              //                   getMediumStyle(
+                              //                 fontSize:
+                              //                     12.sp,
+                              //               ),
+                              //               children: <TextSpan>[
+                              //                 TextSpan(
+                              //                   text:
+                              //                       ' (${car.tripsCount} trips)',
+                              //                   style:
+                              //                       getLightStyle(
+                              //                     fontSize:
+                              //                         12.sp,
+                              //                   ),
+                              //                 )
+                              //               ]),
+                              //         ),
+                              //       ],
+                              //     )
+                              //   ],
+                              // ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
                 onError: (e) => Padding(
                   padding: EdgeInsets.symmetric(
@@ -354,9 +577,7 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
                     ),
                   ),
                 ),
-                onLoading: boxShimmer(
-                  height: 200.sp
-                ),
+                onLoading: boxShimmer(height: 200.sp),
               ),
             ),
 
@@ -368,8 +589,6 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
       ),
     );
   }
-
-
 
   Widget headerText(CarRenterHomeController controller) {
     return Row(

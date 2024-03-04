@@ -189,13 +189,61 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
                                     ),
                                   );
                                 },
-                                onEmpty: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: context.height * 0.1),
-                                  child: Center(
-                                      child: textWidget(
-                                          text: AppStrings.noListedCarsYet,
-                                          style: getMediumStyle())),
+                                // onEmpty: Padding(
+                                //   padding: EdgeInsets.symmetric(
+                                //       vertical: context.height * 0.1),
+                                //   child: Center(
+                                //       child: textWidget(
+                                //           text: AppStrings.noListedCarsYet,
+                                //           style: getMediumStyle())),
+                                // ),
+                                onEmpty: SizedBox(
+                                  height: 235.sp,
+                                  width: size.width.sp,
+                                  child: Card(
+                                    color: white,
+                                    surfaceTintColor: Colors.transparent,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(8.r),
+                                      ),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Image.asset(
+                                          'assets/images/Lx570.png',
+                                          height: 140.sp,
+                                          width: size.width,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(11.0),
+                                          child: Column(
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  textWidget(
+                                                      text: 'Lx570',
+                                                      textOverflow:
+                                                          TextOverflow.visible,
+                                                      style: getSemiBoldStyle(
+                                                              fontSize: 14.sp)
+                                                          .copyWith(
+                                                        height: 1.2.sp,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        // fontFamily: 'neue'
+                                                      )),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                                 onError: (e) => Padding(
                                   padding: EdgeInsets.symmetric(
@@ -464,15 +512,12 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
                                       ),
                                       dateTimeColWIdget(
                                           alignment: CrossAxisAlignment.start,
-                                         
-                                          title: formatDayDate1(
-                                          car.endDate),
+                                          title: formatDayDate1(car.endDate),
                                           titleFontSize: 10.sp,
                                           subTitleFontSize: 10.sp,
                                           subTitleFontWeight: FontWeight.w500,
                                           // subTitle: 'lol')
-                                      subTitle: formatTime1(
-                                      car.startDate)),
+                                          subTitle: formatTime1(car.startDate)),
                                     ],
                                   ),
                                 ],
@@ -540,7 +585,7 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
 
         child: Row(children: [
           Container(
-            // width: 66.sp, // Set the width equal to the desired height
+            width: 130.sp, // Set the width equal to the desired height
             height: double.infinity,
             child: ClipRRect(
               borderRadius: BorderRadius.only(
@@ -555,10 +600,12 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
           // SizedBox(
           //   width: 10.sp,),
           Container(
-            width: 147.sp,
+            // width: 147.sp,
             height: 68.sp,
             padding: const EdgeInsets.only(left: 10, top: 2, bottom: 5),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 textWidget(
                     text: AppStrings.manageListedVehicles,
@@ -575,6 +622,17 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
                     textOverflow: TextOverflow.visible,
                     style: getLightStyle(fontSize: 10.sp).copyWith(
                       fontWeight: FontWeight.w400,
+                      height: 1.2.sp,
+                    )),
+                SizedBox(
+                  height: 2.sp,
+                ),
+                textWidget(
+                    text: AppStrings.seeVehicle,
+                    textOverflow: TextOverflow.visible,
+                    style: getLightStyle(fontSize: 10.sp).copyWith(
+                      fontWeight: FontWeight.w400,
+                      decoration: TextDecoration.underline,
                       height: 1.2.sp,
                     )),
               ],

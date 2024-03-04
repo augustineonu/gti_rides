@@ -386,6 +386,7 @@ class AppStrings {
   static String manageYourVehicleAViailability =
       'Manage your vehicle availabilty';
   static String carStatus = 'Car status:';
+  static String seeVehicle = 'See Vehicle';
   static String listYourVehicle = 'List your Vehicle';
   static String vehicleTypeSm = 'Vehicle type';
   static String vehicleInfo = 'Vehicle info';

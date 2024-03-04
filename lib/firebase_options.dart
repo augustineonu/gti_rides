@@ -50,21 +50,21 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBxe9sY0W-6euLVV_JM0n1jLjEiN_aFvyk',
-    appId: '1:834484120579:android:9e9b357943ee9c64ecf236',
-    messagingSenderId: '834484120579',
-    projectId: 'gti-rides',
-    databaseURL: 'https://gti-rides-default-rtdb.firebaseio.com',
-    storageBucket: 'gti-rides.appspot.com',
+    apiKey: 'AIzaSyDbYbMkgCH0_SCSVy_CYXnC20DaQrLI-cs',
+    appId: '1:81002314927:android:a60c734001a3e83f32e85a',
+    messagingSenderId: '81002314927',
+    projectId: 'gti-rides-01',
+    storageBucket: 'gti-rides-01.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDTSDPlCCdumEww3qTygNg09k5uPWkgrKc',
-    appId: '1:834484120579:ios:69cc62d7d79171f2ecf236',
-    messagingSenderId: '834484120579',
-    projectId: 'gti-rides',
-    databaseURL: 'https://gti-rides-default-rtdb.firebaseio.com',
-    storageBucket: 'gti-rides.appspot.com',
+    apiKey: 'AIzaSyDzah57m4q3za33YLd-leGH_lyZkUbVnaY',
+    appId: '1:81002314927:ios:39f9643a17c8d64732e85a',
+    messagingSenderId: '81002314927',
+    projectId: 'gti-rides-01',
+    storageBucket: 'gti-rides-01.appspot.com',
+    androidClientId: '81002314927-4n20creg233t446hfgfeci4lt2ku92li.apps.googleusercontent.com',
+    iosClientId: '81002314927-siqcjsfdr5imt7f5uncvlcon5ks35j4m.apps.googleusercontent.com',
     iosBundleId: 'com.example.gtiRide',
   );
 }

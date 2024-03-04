@@ -21,8 +21,9 @@ import 'firebase_options.dart';
 // import 'package:intercom_flutter/intercom_flutter.dart';
 
 void main() async {
-  FirebaseService firebaseService = FirebaseService();
+  // FirebaseService firebaseService = FirebaseService();
   // await firebaseService.init();
+  WidgetsFlutterBinding.ensureInitialized();
 
   Get.put(UserService());
   await Intercom.instance.initialize('hivazykc',

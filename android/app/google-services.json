@@ -1,27 +1,43 @@
 {
   "project_info": {
-    "project_number": "834484120579",
-    "firebase_url": "https://gti-rides-default-rtdb.firebaseio.com",
-    "project_id": "gti-rides",
-    "storage_bucket": "gti-rides.appspot.com"
+    "project_number": "81002314927",
+    "project_id": "gti-rides-01",
+    "storage_bucket": "gti-rides-01.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:834484120579:android:9e9b357943ee9c64ecf236",
+        "mobilesdk_app_id": "1:81002314927:android:a60c734001a3e83f32e85a",
         "android_client_info": {
           "package_name": "com.example.gti_rides"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "81002314927-4n20creg233t446hfgfeci4lt2ku92li.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gti_rides",
+            "certificate_hash": "f1b0b2c9cd7531fc031e30d7c373f1d96433a925"
+          }
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyBxe9sY0W-6euLVV_JM0n1jLjEiN_aFvyk"
+          "current_key": "AIzaSyDbYbMkgCH0_SCSVy_CYXnC20DaQrLI-cs"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "81002314927-siqcjsfdr5imt7f5uncvlcon5ks35j4m.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.gtiRide"
+              }
+            }
+          ]
         }
       }
     }
