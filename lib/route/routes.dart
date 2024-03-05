@@ -132,7 +132,7 @@ class AppRoutes {
     ),
     GetPage(
       name: AppLinks.reviews,
-      page: () => const ReviewsScreen(),
+      page: () => ReviewsScreen(),
       binding: ReviewsBinding(),
     ),
     GetPage(
@@ -263,11 +263,11 @@ class AppRoutes {
         binding: CarHistoryBinding()),
     GetPage(
         name: AppLinks.feedback,
-        page: () => const FeedbacksScreen(),
+        page: () =>  FeedbacksScreen(),
         binding: FeedbacksBinding()),
     GetPage(
         name: AppLinks.ownerTrips,
-        page: () => const OwnerTripsScreen(),
+        page: () =>  OwnerTripsScreen(),
         binding: OwnerTripsBinding()),
     GetPage(
         name: AppLinks.completedTrip,

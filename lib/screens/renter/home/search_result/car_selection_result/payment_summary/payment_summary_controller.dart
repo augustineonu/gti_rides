@@ -53,7 +53,7 @@ class PaymentSummaryController extends GetxController {
       tripType.value = arguments?["tripType"] ?? 0;
       rawStartTime = arguments!["rawStartTime"] ?? DateTime.now();
       rawEndTime = arguments!["rawEndTime"] ?? DateTime.now();
-      discountTotal.value = arguments!["discountTotal"] ?? 0.0;
+      discountTotal.value = arguments!["discountTotal"] ?? '0';
 
       logger.log("Received data:: ${tripData.value.carID}");
       logger.log("Received data:: ${tripData.value.tripStartDate}");
@@ -109,7 +109,7 @@ class PaymentSummaryController extends GetxController {
   Rx<bool> isKycUpdate = false.obs;
   DateTime? rawStartTime;
   DateTime? rawEndTime;
-  Rx<double> discountTotal = 0.0.obs;
+  Rx<String> discountTotal = '0.0'.obs;
 
   // bool args = Get.arguments;
 

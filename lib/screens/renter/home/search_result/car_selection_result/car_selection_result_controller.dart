@@ -131,8 +131,12 @@ class CarSelectionResultController extends GetxController
 
   void goBack() => routeService.goBack();
   void routeToSearchFilter() => routeService.gotoRoute(AppLinks.searchFilter);
-  void routeToReviews() => routeService
-      .gotoRoute(AppLinks.reviews, arguments: {"carId": carId.value});
+  void routeToReviews({Object? arguments}) =>
+      routeService.gotoRoute(AppLinks.feedback, arguments: {
+        "carId": carId.value,
+        "vehicleName": vehicleName.value,
+        "photoUrl": photoUrl.value,
+      });
   void routeToViewCar({Object? arguments}) =>
       routeService.gotoRoute(AppLinks.viewCar, arguments: arguments);
   void routeToKycCheck() => routeService.gotoRoute(AppLinks.kycCheck);
@@ -276,35 +280,41 @@ class CarSelectionResultController extends GetxController
     );
   }
 
- Rx<double> discountTotal = 0.0.obs;
-Rx<bool> discountApplied = false.obs;
+  Rx<double> discountTotal = 0.0.obs;
+  Rx<String> discountTotalFee = ''.obs;
+  Rx<bool> discountApplied = false.obs;
 
-void applyDiscount() {
-  var discountDay = carHistory?.first.discountDays;
-  var discountPercentage = carHistory?.first.discountPrice;
+  void applyDiscount() async{
+    var discountDay = carHistory?.first.discountDays;
+    var discountPercentage = carHistory?.first.discountPrice;
 
-  if (discountPercentage != null) {
-    var parsedDiscountPercentage = double.tryParse(discountPercentage.replaceAll('%', '')) ?? 0.0;
+    if (discountPercentage != null) {
+      var parsedDiscountPercentage =
+          double.tryParse(discountPercentage.replaceAll('%', '')) ?? 0.0;
 
-    if (tripDays.value >= int.parse(discountDay)) {
-      discountApplied.value = true;
+      if (tripDays.value >= int.parse(discountDay)) {
+        discountApplied.value = true;
 
-      // Calculate the discount based on the percentage
-      var discountPercentageValue = parsedDiscountPercentage / 100.0;
-      var perDay = double.parse(pricePerDay.value);
-      discountTotal.value = discountPercentageValue * (perDay * tripDays.value);
+        // Calculate the discount based on the percentage
+        var discountPercentageValue = parsedDiscountPercentage / 100.0;
+        var priceWithoutCommas = pricePerDay.value.replaceAll(',', '');
+        var perDay = double.parse(priceWithoutCommas);
+        var discount =
+            discountPercentageValue * (perDay * tripDays.value);
+             discountTotalFee.value = await formatAmount(discount);
+            logger.log("formatted discount ${discountTotalFee.value}");
 
-      logger.log("Discount price total: ${discountTotal.toString()}");
-
-      updatedTotalValue.value -= discountTotal.value;
-      logger.log("Total price after discount: ${updatedTotalValue.value}");
+        logger.log("Discount price total: ${discountTotalFee.toString()}");
+        // update updatedTotal
+        // updatedTotalValue.value -= discountTotal.value;
+        updatedTotalValue.value -= discount;
+        logger.log("Total price after discount: ${updatedTotalValue.value}");
+      }
+    } else {
+      // Handle the case where discountPercentage is null
+      logger.log("Discount percentage is null");
     }
-  } else {
-    // Handle the case where discountPercentage is null
-    logger.log("Discount percentage is null");
   }
-}
-
 
   void logResults() {
     logger.log("Estimated total: ${estimatedTotal.value}");
@@ -336,6 +346,10 @@ void applyDiscount() {
   // }
 
   DateTime? carAvialbilityEndDate;
+  Rx<String> vehicleName = ''.obs;
+  Rx<String> photoUrl = ''.obs;
+  Rx<String> brand = ''.obs;
+  Rx<String> brandModel = ''.obs;
   Future<void> getCarHistory() async {
     change(<CarHistoryData>[].obs, status: RxStatus.loading());
     try {
@@ -354,7 +368,13 @@ void applyDiscount() {
           carHistory = response.data!
               .map((car) => CarHistoryData.fromJson(car))
               .toList();
+
           change(carHistory, status: RxStatus.success());
+          brand.value = carHistory!.first.brand!.first.brandName!;
+          vehicleName.value =
+              '${carHistory!.first.brandModel!.first.modelName!} ${carHistory!.first.brand!.first.brandName!}';
+          photoUrl.value = carHistory!.first.photoUrl!;
+
           var endDateString = carHistory?.first.endDate;
           carAvialbilityEndDate = DateTime.parse(endDateString!);
 
@@ -593,7 +613,7 @@ void applyDiscount() {
                   selectedSecurityEscort.value ? totalEscortFee.value : '',
               "rawStartTime": rawStartTime,
               "rawEndTime": rawEndTime,
-              "discountTotal": discountTotal.value,
+              "discountTotal": discountTotalFee.value,
             });
           } else {
             // Some fields are missing, route to KYC screen with the list of missing fields
@@ -626,7 +646,7 @@ void applyDiscount() {
                   selectedSecurityEscort.value ? totalEscortFee.value : '',
               "rawStartTime": rawStartTime,
               "rawEndTime": rawEndTime,
-              "discountTotal": discountTotal.value
+              "discountTotal": discountTotalFee.value
             });
           }
         }

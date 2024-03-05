@@ -22,7 +22,8 @@ class OwnerTripsBinding extends Bindings {
 TextEditingController textController = TextEditingController();
 
 class OwnerTripsScreen extends GetView<OwnerTripsController> {
-  const OwnerTripsScreen([Key? key]) : super(key: key);
+   OwnerTripsScreen([Key? key]) : super(key: key);
+  final controller = Get.put(OwnerTripsController());
 
   @override
   Widget build(BuildContext context) {

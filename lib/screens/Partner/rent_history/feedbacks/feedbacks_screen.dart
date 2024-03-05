@@ -21,7 +21,8 @@ class FeedbacksBinding extends Bindings {
 TextEditingController textController = TextEditingController();
 
 class FeedbacksScreen extends GetView<FeedbacksController> {
-  const FeedbacksScreen([Key? key]) : super(key: key);
+  FeedbacksScreen([Key? key]) : super(key: key);
+  final controller = Get.put(FeedbacksController());
 
   @override
   Widget build(BuildContext context) {
@@ -38,32 +39,33 @@ class FeedbacksScreen extends GetView<FeedbacksController> {
   }
 
   Widget body(BuildContext context, Size size) {
-    return Column(
-      children: [
-        Expanded(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 20.0.sp, vertical: 16.sp),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Image.asset('assets/images/small_car.png'),
-                    SizedBox(
-                      width: 6.w,
-                    ),
-                    textWidget(
-                      text: 'Tesla Model Y',
-                      textOverflow: TextOverflow.visible,
-                      style: getBoldStyle(
-                              fontWeight: FontWeight.w700, color: black)
-                          .copyWith(
-                        fontFamily: "Neue",
-                      ),
-                    ),
-                  ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              carImage(
+                  imgUrl: controller.photoUrl.value,
+                  height: 35.sp,
+                  width: 35.sp,
+                  borderRadius: BorderRadius.all(Radius.circular(4.r))),
+              SizedBox(
+                width: 6.w,
+              ),
+              textWidget(
+                text: controller.vehicleName.value,
+                textOverflow: TextOverflow.visible,
+                style: getBoldStyle(fontWeight: FontWeight.w700, color: black)
+                    .copyWith(
+                  fontFamily: "Neue",
                 ),
+              ),
+            ],
+          ),
+          Expanded(
+            child: Column(
+              children: [
                 // review type boxes
                 Row(
                   children: [
@@ -72,76 +74,96 @@ class FeedbacksScreen extends GetView<FeedbacksController> {
                         onTap: () => controller.selectedIndex.value = 0,
                         selected: controller.selectedIndex.value == 0),
                     reviewTypeBox(
-                        title: AppStrings.positiveR.trArgs(['2']),
+                        title: AppStrings.positiveR.trArgs(['0']),
                         onTap: () => controller.selectedIndex.value = 1,
                         selected: controller.selectedIndex.value == 1),
                     reviewTypeBox(
-                        title: AppStrings.negativeR.trArgs(['4']),
+                        title: AppStrings.negativeR.trArgs(['0']),
                         onTap: () => controller.selectedIndex.value = 2,
                         selected: controller.selectedIndex.value == 2),
                   ],
                 ),
 
-                SizedBox(
+                const SizedBox(
                   height: 25,
                 ),
-                Column(
-                  children: [
-                    Row(
-                      children: [
-                        Image.asset('assets/images/user_pic.png'),
-                        const SizedBox(width: 8),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                textWidget(
-                                    text: "Gift Joy",
-                                    style: getMediumStyle(
-                                        fontSize: 12.sp,
-                                        color: secondaryColor)),
-                                textWidget(
-                                    text: " | ",
-                                    style: getLightStyle(
-                                        fontSize: 12.sp, color: grey3)),
-                                SvgPicture.asset(ImageAssets.thumbsUpGreen),
-                                const SizedBox(width: 3),
-                                textWidget(
-                                    text: '100%',
-                                    style: getMediumStyle(
-                                        fontSize: 12.sp, color: grey5)),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                textWidget(
-                                    text: 'Wed, 1 Nov, 9:00am',
-                                    style: getLightStyle(
-                                        fontSize: 12.sp, color: grey3)),
-                                SvgPicture.asset(
-                                    ImageAssets.arrowForwardRounded),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
+                Expanded(
+                  child: ListView.separated(
+                    itemCount: 13,
+                    shrinkWrap: true,
+                    physics: const ScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return Column(
+                        children: [
+                          Row(
+                            children: [
+                              // Image.asset('assets/images/user_pic.png'),
+                              carImage(
+                                  imgUrl: controller.photoUrl.value,
+                                  height: 35.sp,
+                                  width: 35.sp,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(50))),
+                              const SizedBox(width: 8),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      textWidget(
+                                          text: "Gift Joy",
+                                          style: getMediumStyle(
+                                              fontSize: 12.sp,
+                                              color: secondaryColor)),
+                                      textWidget(
+                                          text: " | ",
+                                          style: getLightStyle(
+                                              fontSize: 12.sp, color: grey3)),
+                                      SvgPicture.asset(
+                                          ImageAssets.thumbsUpGreen),
+                                      const SizedBox(width: 3),
+                                      textWidget(
+                                          text: '100%',
+                                          style: getMediumStyle(
+                                              fontSize: 12.sp, color: grey5)),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      textWidget(
+                                          text: 'Wed, 1 Nov, 9:00am',
+                                          style: getLightStyle(
+                                              fontSize: 12.sp, color: grey3)),
+                                      SvgPicture.asset(
+                                          ImageAssets.arrowForwardRounded),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 10.sp),
+                          textWidget(
+                              text:
+                                  "The car I rented through the app was in great condition and the booking process was effortless. I had a smooth and enjoyable experience.",
+                              textOverflow: TextOverflow.visible,
+                              style:
+                                  getMediumStyle(fontSize: 10.sp, color: grey2)
+                                      .copyWith(fontWeight: FontWeight.w400)),
+                        ],
+                      );
+                    },
+                    separatorBuilder: (_, index) => Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: divider(color: borderColor),
                     ),
-                    SizedBox(height: 10.sp),
-                    textWidget(
-                        text:
-                            "The car I rented through the app was in great condition and the booking process was effortless. I had a smooth and enjoyable experience.",
-                        textOverflow: TextOverflow.visible,
-                        style: getMediumStyle(fontSize: 10.sp, color: grey2)
-                            .copyWith(fontWeight: FontWeight.w400)),
-                  ],
+                  ),
                 ),
-                divider(color: borderColor),
               ],
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

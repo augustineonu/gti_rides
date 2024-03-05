@@ -60,7 +60,7 @@ class KycCheckController extends GetxController {
 
       rawStartTime = arguments!["rawStartTime"] ?? DateTime.now();
       rawEndTime = arguments!["rawEndTime"] ?? DateTime.now();
-      discountTotal.value = arguments!["discountTotal"] ?? 0.0;
+      discountTotal.value = arguments!["discountTotal"] ?? '0';
     }
   }
 
@@ -98,7 +98,7 @@ class KycCheckController extends GetxController {
   Rx<int> tripType = 0.obs;
   DateTime? rawStartTime;
   DateTime? rawEndTime;
-  Rx<double> discountTotal = 0.0.obs;
+  Rx<String> discountTotal = '0.0'.obs;
 
   void goBack() => routeService.goBack();
   void routeToUpdateKyc() => isCarListing.value

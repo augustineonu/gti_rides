@@ -626,6 +626,8 @@ class ListVehicleController extends GetxController {
           // vehicleYear?.value = response.data!;
           vehicleYear!.assignAll(response.data!);
           isGettingyear.value = false;
+          
+         
           logger.log("msg ${brands.value.data}");
         } else {
           logger.log("no vehicle year ${response.data}");

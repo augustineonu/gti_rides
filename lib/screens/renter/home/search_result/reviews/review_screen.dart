@@ -20,7 +20,9 @@ class ReviewsBinding extends Bindings {
 TextEditingController textController = TextEditingController();
 
 class ReviewsScreen extends GetView<ReviewController> {
-  const ReviewsScreen([Key? key]) : super(key: key);
+  ReviewsScreen([Key? key]) : super(key: key);
+  @override
+  final controller = Get.put(ReviewController());
 
   @override
   Widget build(BuildContext context) {
@@ -48,12 +50,16 @@ class ReviewsScreen extends GetView<ReviewController> {
               children: [
                 Row(
                   children: [
-                    Image.asset('assets/images/small_car.png'),
+                    // Image.asset('assets/images/small_car.png'),
+                    carImage(
+                        imgUrl: controller.photoUrl.value,
+                        height: 35.sp,
+                        width: 35.sp),
                     SizedBox(
                       width: 6.w,
                     ),
                     textWidget(
-                      text: 'Tesla Model Y',
+                      text: "reviews",
                       textOverflow: TextOverflow.visible,
                       style: getBoldStyle(
                               fontWeight: FontWeight.w700, color: black)
@@ -81,7 +87,7 @@ class ReviewsScreen extends GetView<ReviewController> {
                   ],
                 ),
 
-                SizedBox(
+                const SizedBox(
                   height: 25,
                 ),
                 Column(

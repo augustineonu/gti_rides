@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/models/partner/car_history_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/partner_service.dart';
@@ -55,32 +56,38 @@ class CarHistoryController extends GetxController
   RxString startDate = "".obs;
   RxString endDate = "".obs;
   RxString pricePerDay = "".obs;
-  RxList<dynamic> carHistory = RxList<dynamic>();
+  Rx<String> vehicleName = ''.obs;
+  RxList<CarHistoryData> carHistory = RxList<CarHistoryData>();
 
   Rx<String> testString = "".obs;
 
   void goBack() => routeService.goBack();
-  void routeToFeedbacks() => routeService.gotoRoute(AppLinks.feedback);
+  void routeToFeedbacks() =>
+      routeService.gotoRoute(AppLinks.feedback, arguments: {
+        "carId": carID.value,
+        "vehicleName": vehicleName.value,
+        "photoUrl": photoUrl.value,
+      });
   void routeToOwnerTrips() => routeService.gotoRoute(AppLinks.ownerTrips);
-  Future<Object?>? routeToQuickEdit1 () {
-     Get.toNamed(AppLinks.quickEdit, arguments: {
-        "startDate": startDate.value,
-        "endDate": endDate.value,
-        "pricePerDay": pricePerDay.value,
-         "brandModelName": brandModelName.value,
-         "photoUrl": photoUrl.value,
-         "carID": carID.value,
-      }
-      );
+  Future<Object?>? routeToQuickEdit1() {
+    Get.toNamed(AppLinks.quickEdit, arguments: {
+      "startDate": startDate.value,
+      "endDate": endDate.value,
+      "pricePerDay": pricePerDay.value,
+      "brandModelName": brandModelName.value,
+      "photoUrl": photoUrl.value,
+      "carID": carID.value,
+    });
   }
+
   void routeToQuickEdit() =>
       routeService.gotoRoute(AppLinks.quickEdit, arguments: {
-         "brandModelName": brandModelName.value,
-         "photoUrl": photoUrl.value,
-         "carID": carID.value,
+        "brandModelName": brandModelName.value,
+        "photoUrl": photoUrl.value,
+        "carID": carID.value,
         "start": startDate.value,
         "end": endDate.value,
-         "enablePastDates": false,
+        "enablePastDates": false,
         "pricePerDay": pricePerDay.value,
       });
 
@@ -103,17 +110,23 @@ class CarHistoryController extends GetxController
   Future<void> getCarHistory({String? modifiedCarID}) async {
     change(<String>[].obs, status: RxStatus.loading());
     try {
-      final response = await partnerService.getOnCar(carId: modifiedCarID ?? carID.value);
+      final response =
+          await partnerService.getOnCar(carId: modifiedCarID ?? carID.value);
 
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("gotten car history ${response.data}");
         if (response.data != null && response.data!.isNotEmpty) {
-          carHistory.value = response.data!;
+          carHistory.value = response.data!
+              .map((history) => CarHistoryData.fromJson(history))
+              .toList();
+          vehicleName.value =
+              '${carHistory.first.brand!.isNotEmpty ? carHistory.first.brand!.first.brandName! : ''} ${carHistory.first.brandModel!.isNotEmpty ? carHistory.first.brandModel?.first.modelName : ''}';
           change(response.data!, status: RxStatus.success());
           startDate.value = response.data![0]['startDate'] ?? '';
           endDate.value = response.data!.first['endDate'] ?? '';
           pricePerDay.value = response.data!.first['pricePerDay'] ?? '';
-          brandModelName.value = response.data!.first['brandModel'][0]['modelName'] ?? '';
+          brandModelName.value =
+              response.data!.first['brandModel'][0]['modelName'] ?? '';
           photoUrl.value = response.data!.first['photoUrl'] ?? '';
           carID.value = response.data!.first['carID'];
           // logger.log("car history $carHistory");

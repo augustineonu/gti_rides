@@ -25,6 +25,39 @@ class NumberTextInputFormatter extends TextInputFormatter {
   }
 }
 
+class DNumberInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    // Filter non-digit and non-decimal characters
+    String newText = newValue.text.replaceAll(RegExp(r'[^\d.]'), '');
+
+    // If the input is empty, return an empty string
+    if (newText.isEmpty) {
+      return TextEditingValue.empty;
+    }
+
+    // If there's more than one decimal point, remove the extra ones
+    if (newText.indexOf('.') != newText.lastIndexOf('.')) {
+      newText = newText.substring(0, newText.lastIndexOf('.'));
+    }
+
+    // If a digit is entered after the decimal point, add the decimal point after the digit
+    if (newText.endsWith('.') && newText.length > 1) {
+      newText = newText.substring(0, newText.length - 1) + '.' + newText[newText.length - 1];
+    }
+
+    // Format the number with commas
+    final formatter = NumberFormat("#,##0.0#", "en_US");
+    String formattedText = formatter.format(double.parse(newText));
+
+    return newValue.copyWith(
+      text: formattedText,
+      selection: TextSelection.collapsed(offset: formattedText.length),
+    );
+  }
+}
+
 Future<double> calculateEstimatedTotal(
     String pricePerDay, int difference) async {
   Logger logger = Logger("CalculateEstimatedTotal");

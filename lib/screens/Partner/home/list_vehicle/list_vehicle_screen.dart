@@ -445,7 +445,8 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                   width: 4.sp,
                 ),
                 textWidget(
-                    text: '${AppStrings.standardPrice} 130,000',
+                    text:
+                        '${AppStrings.standardPrice} ${controller.advisedRenterPrice.value}',
                     style:
                         getMediumStyle(color: primaryColor, fontSize: 10.sp)),
               ],
@@ -510,7 +511,8 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     validator: (vg) {},
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(10),
-                      NumberTextInputFormatter(),
+                      FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                      // DoubleNumberInputFormatter(),
                     ],
                   ),
                 ),
@@ -1767,6 +1769,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
 
                         // selectedYear['yearName'] = controller.yearName?.value;
                         controller.yearCode.value = selectedYear['yearCode'];
+                        controller.advisedRenterPrice.value = selectedYear['advicePrice'];
                         // Find the brand object with the selected name
                         var selectedYearObject =
                             (controller.vehicleYear ?? []).firstWhere(
@@ -1774,14 +1777,10 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                           orElse: () => null,
                         );
                         if (selectedYearObject != null) {
-                          // controller.yearName?.value =
-                          // selectedYearObject['yearName'];
+                
                           String yearCode =
                               selectedYearObject['yearCode'] as String;
-                          // print(
-                          // "Selected year name: ${controller.yearName?.value}");
-                          // controller.yearCode.value = yearCode;
-                          print("code>>>> $yearCode");
+                         print("code>>>> $yearCode");
                         }
                       });
                     },

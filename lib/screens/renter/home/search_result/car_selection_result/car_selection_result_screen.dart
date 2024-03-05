@@ -551,7 +551,7 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                 children: [
                   textWidget(
                     text:
-                        "${car?.modelYear?[0].yearName} ${car?.brand?[0].brandName} ${car?.brandModel?[0].modelName}",
+                        "${car!.modelYear!.isNotEmpty ? car.modelYear![0].yearName : ''} ${car?.brand?[0].brandName} ${car?.brandModel?[0].modelName}",
                     style: getBoldStyle().copyWith(
                       fontSize: 18.sp,
                       color: white,
@@ -1111,7 +1111,7 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
               child: InkWell(
                 onTap: () => controller.isLoading.isTrue
                     ? () {}
-                    : controller.routeToReviews(),
+                    : controller.routeToReviews,
                 child: textWidget(
                     text: AppStrings.seeAllReviews,
                     style:

@@ -13,7 +13,6 @@ class NetworkController extends GetxController {
   }
 
   void _updateConnectionStatus(ConnectivityResult connectivityResult) {
-    // void _updateConnectionStatus(ConnectivityResult connectivityResult) {
       if (connectivityResult == ConnectivityResult.none) {
         Get.rawSnackbar(
             messageText: const Text('PLEASE CONNECT TO THE INTERNET',
@@ -33,6 +32,6 @@ class NetworkController extends GetxController {
           Get.closeCurrentSnackbar();
         }
       }
-    // }
+    
   }
 }

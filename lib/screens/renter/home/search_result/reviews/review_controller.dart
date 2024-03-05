@@ -20,7 +20,7 @@ class ReviewController extends GetxController {
     if (arguments != null) {
       logger.log("Received data:: $arguments");
       carId.value = arguments!['carId'];
-      await getCarReview();
+      await getCarReviews();
     }
     load();
   }
@@ -30,25 +30,28 @@ class ReviewController extends GetxController {
   }
 
   @override
-  void onInit() {
+  void onInit() async{
     // TODO: implement onInit
     super.onInit();
+    if (arguments != null) {
+      logger.log("Received data:: $arguments");
+      carId.value = arguments!['carId'];
+      photoUrl.value = arguments!['photoUrl'] ?? '';
+      await getCarReviews();
+    }
   }
 
   Map<String, dynamic>? arguments = Get.arguments;
 
   RxInt selectedIndex = 0.obs;
   Rx<String> carId = "".obs;
+  Rx<String> photoUrl = "".obs;
 
   RxList<dynamic> reviews = <dynamic>[].obs;
 
   void goBack() => routeService.goBack();
 
-  void routeToresetPassword() => routeService.gotoRoute(
-        AppLinks.resetPassword,
-      );
-
-  Future<void> getCarReview() async {
+  Future<void> getCarReviews() async {
     // change(<CarHistoryData>[].obs, status: RxStatus.loading());
     try {
       final response = await renterService.getReview(carId: carId.value);
@@ -60,7 +63,6 @@ class ReviewController extends GetxController {
           // change(<CarHistoryData>[].obs, status: RxStatus.empty());
           reviews?.value = response.data!;
         } else {
-          // If the list is not empty
           reviews?.value = response.data!;
 
           // change(carHistory, status: RxStatus.success());
