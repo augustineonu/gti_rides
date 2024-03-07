@@ -58,6 +58,8 @@ class DNumberInputFormatter extends TextInputFormatter {
   }
 }
 
+
+// calculate price per day total fee
 Future<double> calculateEstimatedTotal(
     String pricePerDay, int difference) async {
   Logger logger = Logger("CalculateEstimatedTotal");

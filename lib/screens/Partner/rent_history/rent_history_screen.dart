@@ -27,8 +27,8 @@ class RentHistoryBinding extends Bindings {
 }
 
 class RentHistoryScreen extends GetView<RentHistoryController> {
-   RentHistoryScreen([Key? key]) : super(key: key);
-    final controller = Get.put<RentHistoryController>(RentHistoryController());
+  RentHistoryScreen([Key? key]) : super(key: key);
+  final controller = Get.put<RentHistoryController>(RentHistoryController());
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -50,15 +50,23 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         tabIndicator(
-                            width: 150.sp,
-                            title: AppStrings.active,
-                            selected: controller.selectedIndex.value == 0,
-                            onTap: () => controller.selectedIndex.value = 0),
+                          width: 150.sp,
+                          title: AppStrings.active,
+                          selected: controller.selectedIndex.value == 0,
+                          onTap: () {
+                            controller.selectedIndex.value = 0;
+                            controller.getAllTrips();
+                          },
+                        ),
                         tabIndicator(
-                            width: 150.sp,
-                            title: AppStrings.completed,
-                            selected: controller.selectedIndex.value == 1,
-                            onTap: () => controller.selectedIndex.value = 1),
+                          width: 150.sp,
+                          title: AppStrings.completed,
+                          selected: controller.selectedIndex.value == 1,
+                          onTap: () {
+                            controller.selectedIndex.value = 1;
+                            controller.getAllTrips();
+                          },
+                        ),
                       ],
                     ),
                   ),
@@ -87,71 +95,84 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
     switch (controller.selectedIndex.value) {
       case 0:
         // Active trips
-        return controller.obx(
-          (state) {
-            return ListView.separated(
-              physics: const ScrollPhysics(),
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemCount: controller.activeTrips.length,
-              itemBuilder: (context, index) {
-                var activeTrip = controller.activeTrips[index];
-                return cardWidget(
-                  context,
-                  size,
-                  onTap: () =>
-                      controller.routeToCompletedTrip(arguments: activeTrip),
-                  imgUrl: activeTrip.carProfilePic.toString(),
-                  title:
-                      ' ${activeTrip.carBrand.toString()} ${activeTrip.carModel.toString()}',
-                  amount:
-                      '${activeTrip.tripOrders!.first.pricePerDay.toString()} ',
-                  noOfDays:
-                      activeTrip.tripOrders!.first.tripsDays == 1 ? "day" : 'days',
-                  startDateTime: formateDate(
-                      date: activeTrip.tripOrders!.first.tripStartDate!
-                          .toIso8601String()),
-                  endDateTime: formateDate(
-                      date: activeTrip.tripOrders!.first.tripEndDate!
-                          .toIso8601String()),
-                  trailling: Positioned(
-                    right: 12.sp,
-                    top: 12.sp,
-                    child: InkWell(
-                        onTap: () {
-                          quickOptionsSheet(size, activeTrip);
-                        },
-                        child: SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: SvgPicture.asset(ImageAssets.popUpMenu))),
+        return controller.activeTrips.isEmpty
+            ? Padding(
+                  padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
+                  child: Center(
+                      child: textWidget(
+                          textOverflow: TextOverflow.visible,
+                          textAlign: TextAlign.center,
+                          text: AppStrings.noActiveTripsYet,
+                          style: getExtraBoldStyle(fontSize: 18.sp))),
+                )
+            : controller.obx(
+                (state) {
+                  return ListView.separated(
+                    physics: const ScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: controller.activeTrips.length,
+                    itemBuilder: (context, index) {
+                      var activeTrip = controller.activeTrips[index];
+                      return cardWidget(
+                        context,
+                        size,
+                        onTap: () => controller.routeToCompletedTrip(
+                            arguments: activeTrip),
+                        imgUrl: activeTrip.carProfilePic.toString(),
+                        title:
+                            ' ${activeTrip.carBrand.toString()} ${activeTrip.carModel.toString()}',
+                        amount:
+                            '${activeTrip.tripOrders!.first.pricePerDay.toString()} ',
+                        noOfDays: activeTrip.tripOrders!.first.tripsDays == 1
+                            ? "day"
+                            : 'days',
+                        startDateTime: formateDate(
+                            date: activeTrip.tripOrders!.first.tripStartDate!
+                                .toIso8601String()),
+                        endDateTime: formateDate(
+                            date: activeTrip.tripOrders!.first.tripEndDate!
+                                .toIso8601String()),
+                        trailling: Positioned(
+                          right: 12.sp,
+                          top: 12.sp,
+                          child: InkWell(
+                              onTap: () {
+                                quickOptionsSheet(size, activeTrip);
+                              },
+                              child: SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child:
+                                      SvgPicture.asset(ImageAssets.popUpMenu))),
+                        ),
+                      );
+                    },
+                    separatorBuilder: (context, _) =>
+                        const SizedBox(height: 15),
+                  );
+                },
+                onEmpty: Padding(
+                  padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
+                  child: Center(
+                      child: textWidget(
+                          textOverflow: TextOverflow.visible,
+                          textAlign: TextAlign.center,
+                          text: AppStrings.noActiveTripsYet,
+                          style: getExtraBoldStyle(fontSize: 18.sp))),
+                ),
+                onError: (e) => Padding(
+                  padding: EdgeInsets.symmetric(
+                      vertical: context.height * 0.1, horizontal: 20),
+                  child: Center(
+                    child: Text(
+                      "$e",
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-                );
-              },
-              separatorBuilder: (context, _) => const SizedBox(height: 15),
-            );
-          },
-          onEmpty: Padding(
-            padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
-            child: Center(
-                child: textWidget(
-                    textOverflow: TextOverflow.visible,
-                    textAlign: TextAlign.center,
-                    text: AppStrings.noActiveTripsYet,
-                    style: getExtraBoldStyle(fontSize: 18.sp))),
-          ),
-          onError: (e) => Padding(
-            padding: EdgeInsets.symmetric(
-                vertical: context.height * 0.1, horizontal: 20),
-            child: Center(
-              child: Text(
-                "$e",
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-          onLoading: boxShimmer(height: 200.sp),
-        );
+                ),
+                onLoading: boxShimmer(height: 200.sp),
+              );
 
       case 1:
         // Completed trips

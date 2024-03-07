@@ -16,6 +16,7 @@ import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/utils.dart';
+import 'package:intl/intl.dart';
 
 class TripsScreen extends GetView<TripsController> {
   const TripsScreen({
@@ -114,16 +115,7 @@ class TripsScreen extends GetView<TripsController> {
                     physics: const ScrollPhysics(),
                     itemBuilder: (context, index) {
                       var activeTrip = controller.activeTrips[index];
-                      // DateTime tripStartDate =
-                      //     activeTrip.tripStartDate ?? DateTime.now();
-                      // DateTime tripEndDate =
-                      //     activeTrip.tripEndDate ?? DateTime.now();
-
-                      // Call startCountdown to start the countdown for each item
-                      // controller.startCountdown(tripStartDate, tripEndDate);
-                      // trip end date is greater than DateTime.now()
-
-                      // return Obx(() {
+                    
                       bool isTripActive = controller.isTripActive(
                           activeTrip.tripEndDate ?? DateTime.now());
 
@@ -142,7 +134,7 @@ class TripsScreen extends GetView<TripsController> {
                                     getCountdownStream(activeTrip.tripEndDate!),
                                 builder: (context, snapshot) {
                                   return textWidget(
-                                      text: snapshot.data ?? '',
+                                      text: snapshot.data ?? '00:00:00',
                                       // text: controller.startCountdown(
                                       //     activeTrip.tripStartDate!,
                                       //     activeTrip.tripEndDate!),
@@ -535,19 +527,24 @@ class TripsScreen extends GetView<TripsController> {
     }
   }
 
-  Stream<String> getCountdownStream(DateTime endDate) {
-    return Stream.periodic(Duration(seconds: 1), (count) {
-      Duration difference = endDate.difference(DateTime.now());
-      if (difference.isNegative) {
-        return '00:00:00';
-      } else {
-        int hours = difference.inHours;
-        int minutes = difference.inMinutes.remainder(60);
-        int seconds = difference.inSeconds.remainder(60);
-        return '$hours:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
-      }
-    });
-  }
+Stream<String> getCountdownStream(DateTime endDate) {
+  return Stream.periodic(Duration(seconds: 1), (count) {
+    DateTime now = DateTime.now().add(Duration(hours: 1));
+    endDate = endDate.toLocal();
+    // now = now.toLocal();
+    Duration difference = endDate.toLocal().difference(now);
+
+    if (difference.isNegative) {
+      return '00:00:00';
+    } else {
+      int hours = difference.inHours;
+      int minutes = difference.inMinutes.remainder(60);
+      int seconds = difference.inSeconds.remainder(60);
+      return '$hours:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+    }
+  });
+}
+
 
   Widget reviews({
     required String title,
@@ -1337,6 +1334,9 @@ class TripsScreen extends GetView<TripsController> {
   }
 
   Widget continueButton(TripsController controller, AllTripsData pendingTrips) {
+    // this is dependent if the trips start date is above DateTime.now()
+    bool statTrip = controller.isTripActive(
+        pendingTrips.tripOrders?.first.tripStartDate ?? DateTime.now());
     return controller.isLoading.isTrue
         ? centerLoadingIcon()
         : GtiButton(
@@ -1358,8 +1358,11 @@ class TripsScreen extends GetView<TripsController> {
                 case "pending":
                   if (pendingTrips.tripType == 'chauffeur') {
                     // startTripMethod();
-                    controller.updateTripStatus(
-                        type: 'active', tripID: pendingTrips.tripId.toString());
+                    !statTrip
+                        ? () {}
+                        : controller.updateTripStatus(
+                            type: 'active',
+                            tripID: pendingTrips.tripId.toString());
                     print("object");
                   } else if (pendingTrips.tripType == "self drive" &&
                       pendingTrips.adminStatus == "approved") {

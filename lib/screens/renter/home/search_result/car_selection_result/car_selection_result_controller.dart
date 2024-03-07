@@ -255,7 +255,7 @@ class CarSelectionResultController extends GetxController
 
     updatedTotalValue.value = escortFeeTotal + sumTotal;
 
-    applyDiscount();
+   await applyDiscount();
 
     logResults();
   }
@@ -284,7 +284,8 @@ class CarSelectionResultController extends GetxController
   Rx<String> discountTotalFee = ''.obs;
   Rx<bool> discountApplied = false.obs;
 
-  void applyDiscount() async{
+  Future<void> applyDiscount() async {
+    
     var discountDay = carHistory?.first.discountDays;
     var discountPercentage = carHistory?.first.discountPrice;
 
@@ -298,16 +299,20 @@ class CarSelectionResultController extends GetxController
         // Calculate the discount based on the percentage
         var discountPercentageValue = parsedDiscountPercentage / 100.0;
         var priceWithoutCommas = pricePerDay.value.replaceAll(',', '');
-        var perDay = double.parse(priceWithoutCommas);
+        var perDayPrice = double.parse(priceWithoutCommas);
         var discount =
-            discountPercentageValue * (perDay * tripDays.value);
+            discountPercentageValue * (perDayPrice * tripDays.value);
+            
              discountTotalFee.value = await formatAmount(discount);
+            //  this is supposed to be equal to the totalPricePerdayfee x
+            //  tripDaysTotal
             logger.log("formatted discount ${discountTotalFee.value}");
 
         logger.log("Discount price total: ${discountTotalFee.toString()}");
         // update updatedTotal
         // updatedTotalValue.value -= discountTotal.value;
         updatedTotalValue.value -= discount;
+        // tripDaysTotal.value = await formatAmount(updatedTotalValue.value);
         logger.log("Total price after discount: ${updatedTotalValue.value}");
       }
     } else {

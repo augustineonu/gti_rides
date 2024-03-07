@@ -68,9 +68,9 @@ class FeedbacksController extends GetxController with StateMixin<List<dynamic>>{
         if (response.data == null || response.data!.isEmpty) {
           // If the list is empty
           // change(<reviews>[].obs, status: RxStatus.empty());
-          reviews?.value = response.data!;
+          reviews.value = response.data!;
         } else {
-          reviews?.value = response.data!;
+          reviews.value = response.data!;
 
           // change(carHistory, status: RxStatus.success());
           update();
