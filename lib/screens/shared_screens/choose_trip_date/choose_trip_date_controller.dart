@@ -82,6 +82,7 @@ class ChooseTripDateController extends GetxController {
       isSingleDateSelection.value = arguments['isSingleDateSelection'] ?? false;
       enablePastDates.value = arguments['enablePastDates'] ?? true;
       isRenterHome.value = arguments['isRenterHome'] ?? false;
+      isExpiryDateSelection.value = arguments['isExpiryDateSelection'] ?? false;
       // startDate.value = arguments['startDate'] ?? '';
       logger.log("date ${arguments['enablePastDates']}");
       logger.log("date ${enablePastDates.value}");
@@ -212,19 +213,24 @@ class ChooseTripDateController extends GetxController {
         // closeOverlays: !isRenterHome.value ? false : closeOverlays);
         closeOverlays: true);
   }
+
   void checkAndGoBack(DateTime selectedDateOfBirth) {
-
-  if (isUserAbove21(selectedDateOfBirth)) {
-    goBack1();
-  } else {
-    // Show an error message indicating the user is below 21
-    // You can use your preferred method to display an error message
-    showErrorSnackbar(message: 'You must be at least 21 years old to use GTi.');
+    if (isExpiryDateSelection.isTrue) {
+      goBack1();
+    } else {
+      if (isUserAbove21(selectedDateOfBirth)) {
+        goBack1();
+      } else {
+        // Show an error message indicating the user is below 21
+        // You can use your preferred method to display an error message
+        showErrorSnackbar(
+            message: 'You must be at least 21 years old to use GTi.');
+      }
+    }
   }
-}
 
- 
   DateTime? selectedDateOfBirth;
+  Rx<bool> isExpiryDateSelection = false.obs;
 
   void onSingleDateSelection(DateRangePickerSelectionChangedArgs args) {
     if (args.value != null && args.value != '') {

@@ -161,6 +161,7 @@ class AddDriverScreen extends GetView<DriversController> {
                             "appBarTitle": AppStrings.selectExpiryDate,
                             "enablePastDates": false,
                             "isSingleDateSelection": true,
+                            "isExpiryDateSelection": true,
                             "to": AppStrings.to,
                             "from": AppStrings.from
                           });

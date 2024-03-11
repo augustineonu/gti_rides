@@ -288,7 +288,7 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
                           children: [
                             textWidget(
                                 text: car['startDate'] != null
-                                    ? formateDate(date: (car['startDate'])) 
+                                    ? formateDate(date: (car['startDate']))
                                     : '',
                                 style: getMediumStyle(fontSize: 8.sp)
                                     .copyWith(fontFamily: 'Neue')),
@@ -318,7 +318,9 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
                               padding: const EdgeInsets.symmetric(
                                   vertical: 6, horizontal: 4),
                               decoration: BoxDecoration(
-                                  color: primaryColorLight,
+                                  color: car["availability"] == "available"
+                                      ? green
+                                      : primaryColorLight,
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(2.r))),
                               child: Center(

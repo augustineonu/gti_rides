@@ -497,6 +497,7 @@ class AppStrings {
   static String contactYouSoon = 'Your request will be reviewed. We will Contact you soon.';
   static String weWillSendYouNotification = 'We will send you a notification with the necessary details.';
   static String rentHistory = 'Rent history';
+  static String history = 'History';
   static String contactCustomerCare = 'Contact customer care';
   static String addDriver = 'Add a driver';
   static String addNewDriver = 'Add a new driver';

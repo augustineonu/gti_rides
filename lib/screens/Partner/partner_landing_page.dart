@@ -76,7 +76,7 @@ class PartnerLandingPage extends StatelessWidget {
                       : black,
                 ),
               ),
-              label: AppStrings.rentHistory,
+              label: AppStrings.history,
               backgroundColor: backgroundColor,
             ),
             BottomNavigationBarItem(

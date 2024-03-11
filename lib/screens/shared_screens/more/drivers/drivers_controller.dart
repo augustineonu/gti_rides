@@ -86,6 +86,14 @@ class DriversController extends GetxController {
     }
     return true;
   }
+  bool validateText() {
+    if (selectedExpiryDate.value.isEmpty) {
+      // Show an error message or handle it accordingly
+      showErrorSnackbar(message: 'License expiry date is required');
+      return false;
+    }
+    return true;
+  }
 
   Future<void> openCamera() async {
     ImageResponse? response =
@@ -110,7 +118,7 @@ class DriversController extends GetxController {
 
   Future<void> createDriver() async {
     if (!createDriverFormKey.currentState!.validate() ||
-        !validateImageUpload()) {
+        !validateImageUpload() || !validateText()) {
       return;
     }
     try {
@@ -173,6 +181,7 @@ class DriversController extends GetxController {
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("driver created ${response.message}");
         await listVehicleController.getDrivers();
+        await getDrivers();
 
         successDialog(
             title: AppStrings.driverAddedMessage,
@@ -218,6 +227,10 @@ class DriversController extends GetxController {
   @override
   void dispose() {
     // timer.cancel();
+    fullNameController.dispose();
+    emailController.dispose();
+    phoneNoController.dispose();
+
     super.dispose();
   }
 
@@ -225,6 +238,11 @@ class DriversController extends GetxController {
   void onClose() {
     // timer.cancel(); // Cancel the timer when the controller is disposed.
     super.onClose();
+    fullNameController.clear();
+    emailController.clear();
+    phoneNoController.clear();
+    licenceNoController.clear();
+    
     licenceExpiryDateController.text = selectedExpiryDate.value;
   }
 }

@@ -140,7 +140,7 @@ class ListVehicleController extends GetxController {
       startDateTime.value = arguments['start'] ?? '';
       endDateTime.value = arguments['end'] ?? '';
       isFromManageCars.value = arguments['isFromManageCars'] ?? false;
-      carID.value = arguments['carID'];
+      carID.value = arguments['carID'] ?? '';
       // Now you have access to the passed data (emailOrPhone)
       logger.log('Received data: $arguments');
       await getCarHistory();
@@ -1005,9 +1005,9 @@ class ListVehicleController extends GetxController {
     if (!availabilityFormKey.currentState!.validate()) {
       return;
     }
-    if (selectedView.value == 'select') {
-      showErrorSnackbar(message: 'Kindly select a driver');
-    }
+    // if (selectedView.value == 'select') {
+    //   showErrorSnackbar(message: 'Kindly select a driver');
+    // }
     try {
       isLoading1.value = true;
       final response = await partnerService.addCarAvailability(payload: {
