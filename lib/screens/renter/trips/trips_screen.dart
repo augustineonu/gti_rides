@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/models/rating_model.dart';
 import 'package:gti_rides/models/renter/pending_trips_model.dart';
+import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/screens/renter/trips/trips_controller.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
@@ -32,60 +33,80 @@ class TripsScreen extends GetView<TripsController> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Obx(() => SafeArea(
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 0.sp, horizontal: 20.sp),
-              child: Column(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.symmetric(vertical: 10),
-                    padding: EdgeInsets.all(6.sp),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: primaryColor),
-                        borderRadius: BorderRadius.all(Radius.circular(4.r))),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Obx(() => Stack(
+            children: [
+              SafeArea(
+                child: Padding(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 0.sp, horizontal: 20.sp),
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        padding: EdgeInsets.all(6.sp),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: primaryColor),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(4.r))),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            tabIndicator(
+                                title: AppStrings.pending,
+                                selected: controller.selectedIndex.value == 0,
+                                onTap: () {
+                                  controller.getAllTrips();
+                                  controller.selectedIndex.value = 0;
+                                }),
+                            tabIndicator(
+                                title: AppStrings.active,
+                                selected: controller.selectedIndex.value == 1,
+                                onTap: () {
+                                  controller.getAllTrips();
+                                  controller.selectedIndex.value = 1;
+                                }),
+                            tabIndicator(
+                              title: AppStrings.completed,
+                              selected: controller.selectedIndex.value == 2,
+                              onTap: () {
+                                controller.getAllTrips();
+                                controller.selectedIndex.value = 2;
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 5.sp,
+                              ),
+                              buildBody(size, context, controller, expanded),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              controller.isCheckingCarAvailability.isTrue
+                  ? Stack(
                       children: [
-                        tabIndicator(
-                            title: AppStrings.pending,
-                            selected: controller.selectedIndex.value == 0,
-                            onTap: () {
-                              controller.getAllTrips();
-                              controller.selectedIndex.value = 0;
-                            }),
-                        tabIndicator(
-                            title: AppStrings.active,
-                            selected: controller.selectedIndex.value == 1,
-                            onTap: () {
-                              controller.getAllTrips();
-                              controller.selectedIndex.value = 1;
-                            }),
-                        tabIndicator(
-                          title: AppStrings.completed,
-                          selected: controller.selectedIndex.value == 2,
-                          onTap: () {
-                            controller.getAllTrips();
-                            controller.selectedIndex.value = 2;
-                          },
+                        const Opacity(
+                          opacity: 0.5,
+                          child: ModalBarrier(
+                              dismissible: false, color: Colors.black),
+                        ),
+                        Center(
+                          child: Center(child: centerLoadingIcon()),
                         ),
                       ],
-                    ),
-                  ),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 5.sp,
-                          ),
-                          buildBody(size, context, controller, expanded),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+                    )
+                  : const SizedBox.shrink(),
+            ],
           )),
     );
   }
@@ -115,9 +136,9 @@ class TripsScreen extends GetView<TripsController> {
                     physics: const ScrollPhysics(),
                     itemBuilder: (context, index) {
                       var activeTrip = controller.activeTrips[index];
-                    
-                      bool isTripActive = controller.isTripActive(
-                          activeTrip.tripEndDate ?? DateTime.now());
+
+                      bool isTripActive =
+                          controller.isTripActive(activeTrip.tripEndDate!);
 
                       return activeAndCompletedCard(
                         key: UniqueKey(),
@@ -146,15 +167,17 @@ class TripsScreen extends GetView<TripsController> {
                             "${activeTrip.carYear.toString()} ${activeTrip.carBrand.toString()} ${activeTrip.carModel.toString()}",
                         tripStatus: AppStrings.active,
                         button1Title: AppStrings.extend,
-                        button1OnTap: !isTripActive
-                            ? () {}
-                            : () {
-                                extendTimeDialog(size, controller);
-                              },
+                        button1OnTap: () {
+                          if (isTripActive == true) {
+                            print("object is active");
+                          } else {
+                            print("object isn't active");
+                            extendTimeDialog(size, controller, activeTrip);
+                          }
+                        },
                         button2Title: AppStrings.return1,
                         button2OnTap: !isTripActive ? () {} : () {},
                       );
-                      // });
                     },
                   );
                 },
@@ -527,24 +550,23 @@ class TripsScreen extends GetView<TripsController> {
     }
   }
 
-Stream<String> getCountdownStream(DateTime endDate) {
-  return Stream.periodic(Duration(seconds: 1), (count) {
-    DateTime now = DateTime.now().add(Duration(hours: 1));
-    endDate = endDate.toLocal();
-    // now = now.toLocal();
-    Duration difference = endDate.toLocal().difference(now);
+  Stream<String> getCountdownStream(DateTime endDate) {
+    return Stream.periodic(Duration(seconds: 1), (count) {
+      DateTime now = DateTime.now().add(Duration(hours: 1));
+      endDate = endDate.toLocal();
+      // now = now.toLocal();
+      Duration difference = endDate.toLocal().difference(now);
 
-    if (difference.isNegative) {
-      return '00:00:00';
-    } else {
-      int hours = difference.inHours;
-      int minutes = difference.inMinutes.remainder(60);
-      int seconds = difference.inSeconds.remainder(60);
-      return '$hours:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
-    }
-  });
-}
-
+      if (difference.isNegative) {
+        return '00:00:00';
+      } else {
+        int hours = difference.inHours;
+        int minutes = difference.inMinutes.remainder(60);
+        int seconds = difference.inSeconds.remainder(60);
+        return '$hours:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+      }
+    });
+  }
 
   Widget reviews({
     required String title,
@@ -735,7 +757,8 @@ Stream<String> getCountdownStream(DateTime endDate) {
     );
   }
 
-  Future<dynamic> extendTimeDialog(Size size, TripsController controller) {
+  Future<dynamic> extendTimeDialog(
+      Size size, TripsController controller, AllTripsData activeTrip) {
     return dialogWidgetWithClose(
       size,
       title: '',
@@ -775,10 +798,11 @@ Stream<String> getCountdownStream(DateTime endDate) {
                   textInputType: TextInputType.datetime,
                   textColor: primaryColor,
                   fontSize: 12.sp,
-                  controller: controller.lastDateTimeController.value,
+                  controller: controller.lastDateTimeController.value
+                    ..text = formatDateTime01(date: activeTrip.tripEndDate!),
                 ),
               ),
-              const SizedBox(width: 15),
+              const SizedBox(width: 12),
               Expanded(
                 child: NormalInputTextWidget(
                   title: AppStrings.to,
@@ -786,11 +810,39 @@ Stream<String> getCountdownStream(DateTime endDate) {
                   hintText: AppStrings.dateTimeHintText,
                   readOnly: true,
                   fontSize: 12.sp,
-                  hintTextColor: grey3,
+                  hintTextColor:
+                      controller.dateTimeController.isNull ? null : grey3,
                   textColor: primaryColor,
                   textInputType: TextInputType.datetime,
                   controller: controller.dateTimeController,
-                  onTap: controller.routeToChooseTripDate,
+                  onTap: () async {
+                    var data =
+                        await Get.toNamed(AppLinks.chooseTripDate, arguments: {
+                      "appBarTitle": AppStrings.tripDate,
+                      "to": AppStrings.extendedDate,
+                      "from": AppStrings.currentEndDate,
+                      "enablePastDates": false,
+                      "isSingleDateSelection": true,
+                      "isExpiryDateSelection": true,
+                      "isExtendTrip": true,
+                      "curentEndDate": activeTrip.tripEndDate,
+
+                    });
+                    if (data != null) {
+                      // Handle the selected date here
+                      print('Selected Date page: $data');
+
+                      controller.dateTimeController.text =
+                          formatDateTime01(date: data['rawEndTime']);
+                      controller.selectedEndDateTime = data["rawEndTime"];
+                      controller.tripDays.value = data["tripDays"];
+                      // controller.startDateTime.value = data['start'];
+                      // controller.endDateTime.value = data['end'];
+
+                      // controller.rawStartTime = data['rawStartTime'];
+                      // controller.rawEndTime = data['rawEndTime'];
+                    }
+                  },
                 ),
               ),
             ],
@@ -798,80 +850,76 @@ Stream<String> getCountdownStream(DateTime endDate) {
           const SizedBox(height: 20),
           GtiButton(
             text: AppStrings.checkAvailability,
-            onTap: () {
-              // if car is not available
-              // Get.dialog(
-              //   Dialog(
-              //     backgroundColor: white,
-              //     // insetPadding: EdgeInsets.all(0),
-              //     alignment: Alignment.topCenter,
-              //     shape: RoundedRectangleBorder(
-              //       borderRadius:
-              //           BorderRadius.circular(6.0.r),
-              //     ), //this right here
-              //     child: Container(
-              //       height: 330.sp,
-              //       width: double.infinity,
-              //       decoration: BoxDecoration(
-              //           color: Colors.white,
-              //           borderRadius:
-              //               BorderRadius.circular(8.r)),
-              //       child: Padding(
-              //         padding: EdgeInsets.symmetric(
-              //             vertical: 20.sp,
-              //             horizontal: 15.sp),
-              //         child: Column(
-              //           mainAxisAlignment:
-              //               MainAxisAlignment.spaceBetween,
-              //           crossAxisAlignment:
-              //               CrossAxisAlignment.center,
-              //           children: [
-              //             // cancel or done button
-              //             Row(
-              //               mainAxisAlignment:
-              //                   MainAxisAlignment.end,
-              //               children: [
-              //                 InkWell(
-              //                   onTap: controller.goBack,
-              //                   child: SvgPicture.asset(
-              //                       ImageAssets.closeSmall),
-              //                 ),
-              //               ],
-              //             ),
-              //             SvgPicture.asset(
-              //                 ImageAssets.notAvailable),
-              //             textWidget(
-              //               text:
-              //                   AppStrings.carNotAvailable,
-              //               style: getMediumStyle(
-              //                   fontSize: 16.sp,
-              //                   color: black),
-              //             ),
-              //             // SizedBox(height: 10),
-              //             textWidget(
-              //               text: AppStrings
-              //                   .carNotAvailableForExtension,
-              //                   textOverflow: TextOverflow.visible,
-              //                   textAlign: TextAlign.center,
-              //               style: getLightStyle(
-              //                   fontSize: 12.sp,
-              //                   color: grey4),
-              //             ),
-              //             GtiButton(
-              //               text: AppStrings.talkToAdmin,
-              //               onTap: () {},
-              //             ),
-              //             SizedBox(height: 40),
-              //           ],
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // );
+            onTap: () async {
+              var value = await controller.checkCarAvailability(
+                  carId: activeTrip.carId.toString(),
+                  rawStartTime: activeTrip.tripStartDate!,
+                  rawEndTime: controller.selectedEndDateTime!);
 
-              controller.routeToPaymentSummary(
-                isComingFromTrips: true,
-              );
+              if (value == true) {
+                // controller.routeToPaymentSummary(
+                //   isComingFromTrips: true,
+                // );
+              } else {
+                // if car is not available
+                Get.dialog(
+                  Dialog(
+                    backgroundColor: white,
+                    // insetPadding: EdgeInsets.all(0),
+                    alignment: Alignment.topCenter,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6.0.r),
+                    ), //this right here
+                    child: Container(
+                      height: 330.sp,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8.r)),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 20.sp, horizontal: 15.sp),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            // cancel or done button
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                InkWell(
+                                  onTap: controller.goBack,
+                                  child:
+                                      SvgPicture.asset(ImageAssets.closeSmall),
+                                ),
+                              ],
+                            ),
+                            SvgPicture.asset(ImageAssets.notAvailable),
+                            textWidget(
+                              text: AppStrings.carNotAvailable,
+                              style:
+                                  getMediumStyle(fontSize: 16.sp, color: black),
+                            ),
+                            // SizedBox(height: 10),
+                            textWidget(
+                              text: AppStrings.carNotAvailableForExtension,
+                              textOverflow: TextOverflow.visible,
+                              textAlign: TextAlign.center,
+                              style:
+                                  getLightStyle(fontSize: 12.sp, color: grey4),
+                            ),
+                            GtiButton(
+                              text: AppStrings.talkToAdmin,
+                              onTap: () {},
+                            ),
+                            SizedBox(height: 40),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }
             },
           ),
           const SizedBox(height: 30),

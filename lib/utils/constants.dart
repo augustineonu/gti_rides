@@ -77,6 +77,8 @@ class AppStrings {
   static String location = "Location";
   static String tripDates = "Trip dates";
   static String startDate = "Start date";
+  static String currentEndDate = "Current end date";
+  static String extendedDate = "Extended date";
   static String endDate = "End date";
   static String endTime = "End time";
   static String startTime = "Start time";

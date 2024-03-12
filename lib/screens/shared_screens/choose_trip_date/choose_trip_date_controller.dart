@@ -14,6 +14,7 @@ class ChooseTripDateController extends GetxController {
   Logger logger = Logger("Controller");
   RxBool isLoading = false.obs;
   RxBool isSingleDateSelection = false.obs;
+  RxBool isExtendTrip = false.obs;
   RxBool enablePastDates = true.obs;
   RxBool toggleDaySelection = true.obs;
   RxBool onCancelCalled = false.obs;
@@ -45,6 +46,7 @@ class ChooseTripDateController extends GetxController {
   RxString selectedAmPm = 'am'.obs;
   DateTime? rawStartTime;
   DateTime? rawEndTime;
+  DateTime? currentEndDate;
 
   ChooseTripDateController() {
     init();
@@ -83,6 +85,8 @@ class ChooseTripDateController extends GetxController {
       enablePastDates.value = arguments['enablePastDates'] ?? true;
       isRenterHome.value = arguments['isRenterHome'] ?? false;
       isExpiryDateSelection.value = arguments['isExpiryDateSelection'] ?? false;
+      isExtendTrip.value = arguments['isExtendTrip'] ?? false;
+      currentEndDate = arguments['currentEndDate'] ?? DateTime.now();
       // startDate.value = arguments['startDate'] ?? '';
       logger.log("date ${arguments['enablePastDates']}");
       logger.log("date ${enablePastDates.value}");
@@ -120,6 +124,26 @@ class ChooseTripDateController extends GetxController {
 
   PickerDateRange? selectedDateRange;
 
+  DateTime? selectedDateOfBirth;
+  Rx<bool> isExpiryDateSelection = false.obs;
+
+  void onSingleDateSelection(DateRangePickerSelectionChangedArgs args) {
+    if (args.value != null && args.value != '') {
+      selectedDateOfBirth = args.value;
+      selectedExpiryDate.value = formatDate(args.value!).toString();
+
+      update();
+      endDate.value =
+        formatDayDate(args.value ).toString();
+      logger.log("Selected args: ${args.value}");
+      logger.log("Selected date: ${selectedExpiryDate.value}");
+    } else {
+      // Handle the case when the date is unselected (null)
+      selectedExpiryDate.value = ''; // Or any default value you want
+      logger.log("Date unselected");
+    }
+  }
+
   void selectionChanged(DateRangePickerSelectionChangedArgs args) {
     startDate.value = formatDayDate(args.value.startDate).toString();
     rawStartTime = args.value.startDate;
@@ -156,6 +180,34 @@ class ChooseTripDateController extends GetxController {
     return endDate.difference(startDate);
   }
 
+  void addSingleRawTime() {
+    rawEndTime = addHoursAndMinutes(
+        dateTime: selectedDateOfBirth!,
+        hours: selectedEndHour.value,
+        minutes: selectedEndMins.value,
+        isAM: selectedEndAmPm.value == 0 ? true : false);
+    logger.log("Raw end time:: $rawEndTime");
+
+    popRoute();
+  }
+
+  void popRoute() {
+    Map<String, dynamic> result2 = {
+      // "end":
+      // "$endDate $selectedEndHour:${selectedEndMins < 10 ? '0$selectedEndMins' : selectedEndMins}${selectedEndAmPm.value == 0 ? "am" : "PM"}",
+      "rawEndTime": rawEndTime,
+      "selectedDateOfBirth": selectedDateOfBirth ?? DateTime.now(),
+    };
+
+    // Check if any of the values in the result map is null, and provide default values if so
+    result2.forEach((key, value) {
+      if (value == null) {
+        result2[key] = ''; // Provide an empty string as the default value
+      }
+    });
+    routeService.goBack(result: result2, closeOverlays: true);
+  }
+
   void addRawTime() {
     rawStartTime = addHoursAndMinutes(
         dateTime: rawStartTime!,
@@ -186,6 +238,7 @@ class ChooseTripDateController extends GetxController {
           hours: selectedEndHour.value,
           minutes: selectedEndMins.value,
           isAM: selectedEndAmPm.value == 0 ? true : false);
+
       logger.log("Raw start time:: $rawStartTime");
       logger.log("Raw end time:: $rawEndTime");
     }
@@ -198,7 +251,8 @@ class ChooseTripDateController extends GetxController {
       "selectedExpiryDate": selectedExpiryDate.value,
       "differenceInDays": selectedDifferenceInDays.value,
       "rawStartTime": rawStartTime,
-      "rawEndTime": rawEndTime
+      "rawEndTime": rawEndTime,
+      "selectedDateOfBirth": selectedDateOfBirth ?? DateTime.now(),
     };
 
     // Check if any of the values in the result map is null, and provide default values if so
@@ -211,10 +265,14 @@ class ChooseTripDateController extends GetxController {
     routeService.goBack(
         result: result,
         // closeOverlays: !isRenterHome.value ? false : closeOverlays);
-        closeOverlays: true);
+        closeOverlays: isExpiryDateSelection.isTrue ? false : true);
   }
 
-  void checkAndGoBack(DateTime selectedDateOfBirth) {
+  void checkAndGoBack(DateTime? selectedDateOfBirth) {
+    if (selectedDateOfBirth == null) {
+      showErrorSnackbar(message: 'Kindly select date');
+      return;
+    }
     if (isExpiryDateSelection.isTrue) {
       goBack1();
     } else {
@@ -226,23 +284,6 @@ class ChooseTripDateController extends GetxController {
         showErrorSnackbar(
             message: 'You must be at least 21 years old to use GTi.');
       }
-    }
-  }
-
-  DateTime? selectedDateOfBirth;
-  Rx<bool> isExpiryDateSelection = false.obs;
-
-  void onSingleDateSelection(DateRangePickerSelectionChangedArgs args) {
-    if (args.value != null && args.value != '') {
-      selectedDateOfBirth = args.value;
-      selectedExpiryDate.value = formatDate(args.value!).toString();
-
-      logger.log("Selected args: ${args.value}");
-      logger.log("Selected date: ${selectedExpiryDate.value}");
-    } else {
-      // Handle the case when the date is unselected (null)
-      selectedExpiryDate.value = ''; // Or any default value you want
-      logger.log("Date unselected");
     }
   }
 

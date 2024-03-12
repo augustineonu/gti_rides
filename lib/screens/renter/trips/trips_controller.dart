@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/models/rating_model.dart';
+import 'package:gti_rides/models/renter/booked_dates.dart';
 import 'package:gti_rides/models/renter/pending_trips_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/logger.dart';
@@ -74,6 +75,7 @@ class TripsController extends GetxController
   RxBool isCountDownFinished = false.obs;
   late Timer timer;
   RxString countdownText = ''.obs;
+  Rx<int> tripDays = 0.obs;
 
   //  methods
   void goBack() => routeService.goBack();
@@ -129,6 +131,48 @@ class TripsController extends GetxController
     }
 
     update();
+  }
+
+  RxList<BookedData> bookedData = <BookedData>[].obs;
+  RxString carNotAvailable = ''.obs;
+  DateTime? selectedEndDateTime = DateTime.now();
+  Rx<bool> isCheckingCarAvailability = false.obs;
+
+  Future<bool> checkCarAvailability({required carId,
+  required DateTime rawStartTime,
+  required DateTime rawEndTime,
+  }) async {
+    try {
+      Get.back();
+      isCheckingCarAvailability.value = true;
+      final response = await renterService.getCarTrip(
+          carID: carId, startDate: rawStartTime, endDate: rawEndTime);
+      if (response.status == 'success' || response.status_code == 200) {
+        if (response.data!.isEmpty) {
+          isCheckingCarAvailability.value = false;
+          return true;
+        } else {
+          logger.log("trip booked dates: ${response.data}");
+          carNotAvailable.value =
+              response.message ?? 'Car booked for selected dates';
+          bookedData.value = List<BookedData>.from(
+              response.data!.map((booked) => BookedData.fromJson(booked)));
+          logger.log("Booked trips ${bookedData.value.first.carId}");
+          return false;
+        }
+      } else {
+        carNotAvailable.value = response.message ?? 'error';
+        logger.log("an error occured");
+        return false;
+      }
+    } catch (e) {
+      carNotAvailable.value = e.toString();
+
+      logger.log("some error occured $e");
+      return false;
+    } finally{
+      isCheckingCarAvailability.value = false;
+    }
   }
 
   Future<void> getAllTrips() async {
@@ -207,7 +251,6 @@ class TripsController extends GetxController
       confirmingTrip.value = false;
     }
   }
-  
 
   String startCountdown(DateTime startDate, DateTime endDate) {
     final now = DateTime.now();
@@ -225,10 +268,10 @@ class TripsController extends GetxController
         if (secondsRemaining > 0) {
           secondsRemaining--;
           // updateCountdownText(secondsRemaining);
-           hours.value = (secondsRemaining ~/ 3600).toString().padLeft(2, '0');
-           minutes.value =
+          hours.value = (secondsRemaining ~/ 3600).toString().padLeft(2, '0');
+          minutes.value =
               ((secondsRemaining ~/ 60) % 60).toString().padLeft(2, '0');
-           seconds.value = (secondsRemaining % 60).toString().padLeft(2, '0');
+          seconds.value = (secondsRemaining % 60).toString().padLeft(2, '0');
           // countdownText.value = '$hours:$minutes:$seconds';
           // return '$hours:$minutes:$seconds';
         } else {
@@ -256,8 +299,7 @@ class TripsController extends GetxController
   }
 
   bool isTripActive(DateTime tripEndDate) {
-    return tripEndDate.isAfter(DateTime.now()) ||
-        tripEndDate.isAtSameMomentAs(DateTime.now());
+    return tripEndDate.isAfter(DateTime.now());
   }
 
 // Example usage:

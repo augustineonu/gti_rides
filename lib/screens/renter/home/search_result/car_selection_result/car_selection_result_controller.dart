@@ -355,6 +355,7 @@ class CarSelectionResultController extends GetxController
   Rx<String> photoUrl = ''.obs;
   Rx<String> brand = ''.obs;
   Rx<String> brandModel = ''.obs;
+  
   Future<void> getCarHistory() async {
     change(<CarHistoryData>[].obs, status: RxStatus.loading());
     try {

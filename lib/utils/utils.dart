@@ -148,12 +148,7 @@ String extractDayDateMonth(String inputDate) {
 //   return '$day, $date $month';
 // }
 
-String formatDateTime(String datetime) {
-  var formatter = DateFormat('dd, MMMM h:mma');
-  DateTime parsedDate = formatter.parse(datetime);
-  String formattedDate = DateFormat('dd, MMM h:mma').format(parsedDate);
-  return formattedDate;
-}
+
 
 String formatDateTime1(String datetime) {
   // Remove the ordinal indicator ("th") from the day
@@ -309,6 +304,35 @@ String formateDate({required String date}) {
     return date;
   }
 }
+
+String isSingleDateSelection({required DateTime date}) {
+  try {
+    // DateTime dateTime = DateTime.parse(date);
+    String formattedDate = DateFormat('E, d MMM, h:mma').format(date);
+    return formattedDate;
+  } catch (e) {
+    // Return the original string if parsing fails
+    return 'NAN';
+  }
+}
+String formatDateTime01({required DateTime date}) {
+  try {
+    // DateTime dateTime = DateTime.parse(date);
+    String formattedDate = DateFormat('d MMM, h:mma').format(date);
+    return formattedDate;
+  } catch (e) {
+    // Return the original string if parsing fails
+    return 'NAN';
+  }
+}
+
+String formatDateTime(String datetime) {
+  var formatter = DateFormat('dd, MMMM h:mma');
+  DateTime parsedDate = formatter.parse(datetime);
+  String formattedDate = DateFormat('dd, MMM h:mma').format(parsedDate);
+  return formattedDate;
+}
+
 
 // 02 - 05 - 2013
 String formatDate1({required String date}) {
