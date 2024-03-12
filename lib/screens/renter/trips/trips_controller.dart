@@ -35,7 +35,7 @@ class TripsController extends GetxController
     // Initialize your ratings list with default values
     ratings1 = List<RatingItem>.generate(
       ratings.length, // Use your desired length
-      (index) => RatingItem(rating: 'Rating ${index + 1}'),
+      (index) => RatingItem(),
     );
   }
 
@@ -82,6 +82,13 @@ class TripsController extends GetxController
   Rx<int> tripDays = 0.obs;
   Rx<String> carId = ''.obs;
   Rx<String> tripType = ''.obs;
+
+  Rx<String> cleanlinessValue = '0'.obs;
+  Rx<String> roadTardinessValue = '0'.obs;
+  Rx<String> convenienceValue = '0'.obs;
+  Rx<String> maintenanceValue = '0'.obs;
+  Rx<String> fifthPointValue = '0'.obs;
+  TextEditingController reviewMessageController = TextEditingController();
 
   //  methods
   void goBack() => routeService.goBack();
@@ -143,13 +150,115 @@ class TripsController extends GetxController
     if (rating.selectedType == selectedType) {
       // If the same type is selected, unselect
       rating.selectedType = RatingType.none;
+      getTotalRatingValue();
     } else {
       // Otherwise, select the new type
       rating.selectedType = selectedType;
       logger.log("rating:: ${selectedType}");
+      getTotalRatingValue();
     }
 
     update();
+  }
+
+  // Function to get the total value of selected ratings
+  Rx<int> totalRatingValue = 0.obs;
+  int getTotalRatingValue() {
+    int accumulatedValue = 0;
+
+    for (RatingItem rating in ratings1) {
+      // if (rating.isSelected()) {
+      // Assign value based on the rating type
+      int value = (rating.selectedType == RatingType.thumbsUp) ? 20 : 0;
+      if (rating.selectedType == RatingType.none) {
+        value == 0;
+      }
+      accumulatedValue += value;
+      // }
+    }
+
+    totalRatingValue.value = accumulatedValue;
+    logger.log("totalRatingValue: ${totalRatingValue.value}");
+
+    return totalRatingValue.value;
+  }
+
+  // Function to get a list of selected ratings
+  List<RatingInfo> getSelectedRatings() {
+    List<RatingInfo> selectedRatings = [];
+    for (int i = 0; i < ratings1.length; i++) {
+      if (ratings1[i].isSelected()) {
+        RatingInfo ratingInfo = RatingInfo(ratings1[i].selectedType, i + 1);
+        selectedRatings.add(ratingInfo);
+      }
+    }
+    return selectedRatings;
+  }
+
+  void calculateCriterionValues() {
+    cleanlinessValue.value = getCriterionValue(RatingType.thumbsUp, 0);
+    roadTardinessValue.value = getCriterionValue(RatingType.thumbsUp, 1);
+    convenienceValue.value = getCriterionValue(RatingType.thumbsUp, 2);
+    maintenanceValue.value = getCriterionValue(RatingType.thumbsUp, 3);
+    fifthPointValue.value = getCriterionValue(RatingType.thumbsUp, 4);
+
+    // You can use the values as strings in your UI
+  }
+
+  String getCriterionValue(RatingType selectedType, int index) {
+    if (ratings1[index].selectedType == selectedType) {
+      return '100';
+    } else {
+      return '0';
+    }
+  }
+
+  Rx<bool> isSendingReview = false.obs;
+  GlobalKey<FormState> reviewFormKey = GlobalKey();
+  Future<void> addR() async {
+    logger.log("loading...");
+    update();
+    isSendingReview.value = true;
+    await Future.delayed(Duration(seconds: 5));
+    isSendingReview.value = false;
+    update();
+    logger.log("loaded");
+  }
+
+  Future<void> addReview() async {
+    if (!reviewFormKey.currentState!.validate()) {
+      return;
+    }
+    try {
+      isSendingReview.value = true;
+      final response = await renterService.addReview(carId: carId.value, data: {
+        "cleanliness": cleanlinessValue.value == '0' ? 'unLike' : "like",
+        "cleanlinessPercentage": cleanlinessValue.value,
+        "roadTardiness": roadTardinessValue.value == '0' ? "unLike" : "like",
+        "roadTardinessPercentage": roadTardinessValue.value,
+        "convenience": convenienceValue.value == '0' ? "unLike" : "like",
+        "conveniencePercentage": convenienceValue.value,
+        "maintenance": maintenanceValue.value == '0' ? 'unLike' : "like",
+        "maintenancePercentage": maintenanceValue.value,
+        "point": fifthPointValue.value == '0' ? 'unLike' : "like",
+        "pointPercentage": fifthPointValue.value,
+        "message": reviewMessageController.text,
+      });
+      if (response.status_code == 200) {
+        showSuccessSnackbar(message: response.message ?? 'Review sent');
+        await Future.delayed(Duration(seconds: 2));
+        routeService.goBack(closeOverlays: true);
+      } else {
+        logger.log(
+            "unable to send review: ${response.message ?? "error sending review"}");
+
+        showErrorSnackbar(message: response.message ?? 'Unable to send review');
+      }
+    } catch (e) {
+      logger.log("error: $e");
+    } finally {
+      isSendingReview.value = false;
+    }
   }
 
   RxList<BookedData> bookedData = <BookedData>[].obs;
@@ -165,7 +274,7 @@ class TripsController extends GetxController
   Rx<String> vatValue = ''.obs;
   Rx<String> formattedVatValue = ''.obs;
 
-  //  Rx<double> updatedTotalValue = 0.0.obs;
+  //  Rx<double> updatedTotalRatingValue = 0.0.obs;
   Rx<double> discountTotal = 0.0.obs;
   Rx<String> discountTotalFee = ''.obs;
   Rx<bool> discountApplied = false.obs;
@@ -201,9 +310,9 @@ class TripsController extends GetxController
 
         logger.log("Discount price total: ${discountTotalFee.toString()}");
         // update updatedTotal
-        // updatedTotalValue.value -= discountTotal.value;
+        // updatedTotalRatingValue.value -= discountTotal.value;
         total.value -= discount;
-        // tripDaysTotal.value = await formatAmount(updatedTotalValue.value);
+        // tripDaysTotal.value = await formatAmount(updatedTotalRatingValue.value);
         logger.log("Total price after discount: ${total.value}");
       }
     } else {
@@ -247,8 +356,10 @@ class TripsController extends GetxController
           // apply discount if applicable before calculating VAT
           await applyDiscount();
 
-          formattedVatValue.value = await formatAmount(await calculateVAT(total.value, vatValue.value));
-          total.value = total.value + await calculateVAT(total.value, vatValue.value);
+          formattedVatValue.value = await formatAmount(
+              await calculateVAT(total.value, vatValue.value));
+          total.value =
+              total.value + await calculateVAT(total.value, vatValue.value);
           // update total after VAT and discount
           estimatedTotal.value = await formatAmount(total.value);
           logger.log("Estimated Total:: ${total.value.toString()}");
@@ -466,4 +577,11 @@ class TripsController extends GetxController
   DateTime tripStartDate = DateTime.parse("2024-02-27T00:00:00.000Z");
   DateTime tripEndDate = DateTime.parse("2024-02-28T00:00:00.000Z");
 // startCountdown(tripStartDate, tripEndDate);
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    reviewMessageController.clear();
+  }
 }

@@ -407,111 +407,156 @@ class TripsScreen extends GetView<TripsController> {
                                       ),
                                       InkWell(
                                         onTap: () {
+                                          controller.calculateCriterionValues();
                                           Get.bottomSheet(
                                               backgroundColor: white,
                                               isScrollControlled: true,
+                                              isDismissible: false,
                                               shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.only(
                                                     topLeft:
                                                         Radius.circular(8.r),
                                                     topRight:
                                                         Radius.circular(8.r)),
-                                              ),
-                                              Container(
-                                                padding: EdgeInsets.all(19.sp),
-                                                height: size.height * 0.7,
-                                                width: size.width,
-                                                child: SingleChildScrollView(
-                                                  child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Row(
-                                                          children: [
-                                                            const Spacer(),
-                                                            textWidget(
-                                                                text: AppStrings
-                                                                    .review,
-                                                                style: getMediumStyle(
-                                                                    color:
-                                                                        primaryColor)),
-                                                            const Spacer(),
-                                                            SvgPicture.asset(
+                                              ), StatefulBuilder(
+                                                  builder: (context, setState) {
+                                            return Container(
+                                              padding: EdgeInsets.all(19.sp),
+                                              height: size.height * 0.7,
+                                              width: size.width,
+                                              child: SingleChildScrollView(
+                                                child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Row(
+                                                        children: [
+                                                          const Spacer(),
+                                                          textWidget(
+                                                              text: AppStrings
+                                                                  .review,
+                                                              style: getMediumStyle(
+                                                                  color:
+                                                                      primaryColor)),
+                                                          const Spacer(),
+                                                          GestureDetector(
+                                                            onTap: controller.isSendingReview.isTrue ? (){} : controller.goBack,
+                                                            child: SvgPicture.asset(
                                                                 ImageAssets
                                                                     .closeSmall),
-                                                          ],
-                                                        ),
-                                                        Container(
-                                                          width: 100,
-                                                          margin:
-                                                              const EdgeInsets
-                                                                  .symmetric(
-                                                                  vertical: 15,
-                                                                  horizontal:
-                                                                      15),
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .symmetric(
-                                                                  vertical: 6,
-                                                                  horizontal:
-                                                                      15),
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: primaryColor,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .all(
-                                                              Radius.circular(
-                                                                  4.r),
-                                                            ),
                                                           ),
-                                                          child: Row(
-                                                            children: [
-                                                              SvgPicture.asset(
-                                                                ImageAssets
-                                                                    .thumbsUpGreen,
-                                                                color: white,
-                                                              ),
-                                                              const SizedBox(
-                                                                  width: 13),
-                                                              textWidget(
-                                                                  text: '80%',
+                                                        ],
+                                                      ),
+                                                      Container(
+                                                        width: 110.sp,
+                                                        margin: const EdgeInsets
+                                                            .symmetric(
+                                                            vertical: 15,
+                                                            horizontal: 15),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                vertical: 6,
+                                                                horizontal: 15),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: primaryColor,
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                            Radius.circular(
+                                                                4.r),
+                                                          ),
+                                                        ),
+                                                        child: Row(
+                                                          children: [
+                                                            SvgPicture.asset(
+                                                              controller.totalRatingValue
+                                                                          .value ==
+                                                                      0
+                                                                  ? ImageAssets
+                                                                      .thumbsDown
+                                                                  : ImageAssets
+                                                                      .thumbsUpGreen,
+                                                              color: white,
+                                                            ),
+                                                            const SizedBox(
+                                                                width: 13),
+                                                            Expanded(
+                                                              child: textWidget(
+                                                                  text:
+                                                                      '${controller.totalRatingValue.toString()}%',
+                                                                  textOverflow:
+                                                                      TextOverflow
+                                                                          .visible,
                                                                   style: getMediumStyle(
                                                                       color:
                                                                           white,
                                                                       fontSize:
                                                                           16.sp)),
-                                                            ],
-                                                          ),
+                                                            ),
+                                                          ],
                                                         ),
-                                                        SizedBox(height: 20.sp),
-                                                        reviews(
-                                                          title: AppStrings
-                                                              .cleanliness,
-                                                          selected: true,
-                                                        ),
-                                                        reviews(
-                                                          title: AppStrings
-                                                              .roadTardiness,
-                                                          selected: true,
-                                                        ),
-                                                        reviews(
-                                                          title: AppStrings
-                                                              .convenience,
-                                                          selected: false,
-                                                        ),
-                                                        reviews(
-                                                          title: AppStrings
-                                                              .maintenance,
-                                                          selected: true,
-                                                        ),
-                                                        reviews(
-                                                          title: AppStrings
-                                                              .fifthPoint,
-                                                          selected: true,
-                                                        ),
-                                                        NormalInputTextWidget(
+                                                      ),
+                                                      SizedBox(height: 20.sp),
+                                                      reviews(
+                                                        title: AppStrings
+                                                            .cleanliness,
+                                                        selected: controller
+                                                                    .cleanlinessValue
+                                                                    .value ==
+                                                                '100'
+                                                            ? true
+                                                            : false,
+                                                      ),
+                                                      reviews(
+                                                        title: AppStrings
+                                                            .roadTardiness,
+                                                        selected: controller
+                                                                    .roadTardinessValue
+                                                                    .value ==
+                                                                '100'
+                                                            ? true
+                                                            : false,
+                                                      ),
+                                                      reviews(
+                                                        title: AppStrings
+                                                            .convenience,
+                                                        selected: controller
+                                                                    .convenienceValue
+                                                                    .value ==
+                                                                '100'
+                                                            ? true
+                                                            : false,
+                                                      ),
+                                                      reviews(
+                                                        title: AppStrings
+                                                            .maintenance,
+                                                        selected: controller
+                                                                    .maintenanceValue
+                                                                    .value ==
+                                                                '100'
+                                                            ? true
+                                                            : false,
+                                                      ),
+                                                      reviews(
+                                                        title: AppStrings
+                                                            .fifthPoint,
+                                                        selected: controller
+                                                                    .fifthPointValue
+                                                                    .value ==
+                                                                '100'
+                                                            ? true
+                                                            : false,
+                                                      ),
+                                                      Form(
+                                                        key: controller
+                                                            .reviewFormKey,
+                                                        autovalidateMode:
+                                                            AutovalidateMode
+                                                                .onUserInteraction,
+                                                        child:
+                                                            NormalInputTextWidget(
                                                           expectedVariable:
                                                               'field',
                                                           title: '',
@@ -519,6 +564,8 @@ class TripsScreen extends GetView<TripsController> {
                                                               .reviewHintText,
                                                           hintTextColor: grey2,
                                                           maxLines: 5,
+                                                          controller: controller
+                                                              .reviewMessageController,
                                                           filled: true,
                                                           fillColor:
                                                               const Color(
@@ -528,16 +575,31 @@ class TripsScreen extends GetView<TripsController> {
                                                           enabledBorder:
                                                               InputBorder.none,
                                                         ),
-                                                        SizedBox(height: 37.sp),
-                                                        GtiButton(
-                                                            width: 350,
-                                                            text: AppStrings
-                                                                .submit,
-                                                            onTap: controller
-                                                                .routeToHome),
-                                                      ]),
-                                                ),
-                                              ));
+                                                      ),
+                                                      SizedBox(height: 37.sp),
+                                                      controller.isSendingReview
+                                                              .isTrue
+                                                          ? centerLoadingIcon()
+                                                          : GtiButton(
+                                                              width: 350,
+                                                              text: AppStrings
+                                                                  .submit,
+                                                              onTap: () async {
+                                                                // Future.delayed(Duration(seconds: 5));
+                                                                setState(() {});
+                                                                var value = await controller
+                                                                    .addReview()
+                                                                    .then((value) =>
+                                                                        setState(
+                                                                            () {}));
+                                                                            print("object");
+
+                                                                // });
+                                                              }),
+                                                    ]),
+                                              ),
+                                            );
+                                          }));
                                         },
                                         child: textWidget(
                                             text: AppStrings

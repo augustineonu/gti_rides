@@ -208,6 +208,19 @@ class RenterService {
     }
   }
 
+  Future<ApiResponseModel> addReview(
+      {required String carId, required Map data}) async {
+    try {
+      final result = await apiService.postRequest(
+          endpoint: '/user/renter/addReview?carID=$carId', data: data);
+      // logger.log("result $result");
+
+      return ApiResponseModel.fromJson(result);
+    } catch (err) {
+      rethrow;
+    }
+  }
+
   Future<ApiResponseModel> updateTripStatus({
     required String type,
     required String tripID,

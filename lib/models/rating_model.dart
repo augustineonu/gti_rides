@@ -1,8 +1,15 @@
-class RatingItem {
-  String rating;
-  RatingType selectedType;
+enum RatingType { none, thumbsUp, thumbsDown }
 
-  RatingItem({required this.rating, this.selectedType = RatingType.none});
+class RatingItem {
+  RatingType selectedType = RatingType.none;
+  bool isSelected() {
+    return selectedType != RatingType.none;
+  }
 }
 
-enum RatingType { none, thumbsUp, thumbsDown }
+class RatingInfo {
+  RatingType ratingType;
+  int value;
+
+  RatingInfo(this.ratingType, this.value);
+}
