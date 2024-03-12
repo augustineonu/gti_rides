@@ -106,6 +106,20 @@ class TripsScreen extends GetView<TripsController> {
                       ],
                     )
                   : const SizedBox.shrink(),
+              controller.isLoading.isTrue
+                  ? Stack(
+                      children: [
+                        const Opacity(
+                          opacity: 0.5,
+                          child: ModalBarrier(
+                              dismissible: false, color: Colors.black),
+                        ),
+                        Center(
+                          child: Center(child: centerLoadingIcon()),
+                        ),
+                      ],
+                    )
+                  : const SizedBox.shrink(),
             ],
           )),
     );
@@ -176,7 +190,14 @@ class TripsScreen extends GetView<TripsController> {
                           }
                         },
                         button2Title: AppStrings.return1,
-                        button2OnTap: !isTripActive ? () {} : () {},
+                        button2OnTap: () {
+                          if (isTripActive == false) {
+                            print("object is active");
+                            controller.updateTripStatus(
+                                type: 'completed',
+                                tripID: activeTrip.tripId.toString());
+                          }
+                        },
                       );
                     },
                   );
@@ -222,13 +243,15 @@ class TripsScreen extends GetView<TripsController> {
                       shrinkWrap: true,
                       physics: const ScrollPhysics(),
                       itemBuilder: (context, index) {
+                        var completedTrip = controller.completedTrips[index];
                         return activeAndCompletedCard(
                           key: UniqueKey(),
                           size,
-                          imgUrl: '',
+                          imgUrl: completedTrip.carProfilePic.toString(),
                           headerTitle: textWidget(
                               text: 'Completed', style: getRegularStyle()),
-                          vehicleName: '2012 KIA Sportage',
+                          vehicleName:
+                              "${completedTrip.carYear.toString()} ${completedTrip.carBrand.toString()} ${completedTrip.carModel.toString()}",
                           tripStatus: AppStrings.completed,
                           button1Title: AppStrings.seeDetails,
                           button1OnTap: () {
@@ -290,9 +313,13 @@ class TripsScreen extends GetView<TripsController> {
                                                   //     ? primaryColorLight2
                                                   //     : pr
                                                   color: ratings.selectedType ==
-                                                          RatingType.thumbsUp
-                                                      ? primaryColorLight2
-                                                      : primaryColor,
+                                                              RatingType
+                                                                  .thumbsUp ||
+                                                          ratings.selectedType ==
+                                                              RatingType
+                                                                  .thumbsDown
+                                                      ? primaryColor
+                                                      : primaryColorLight2,
                                                   borderRadius:
                                                       BorderRadius.all(
                                                     Radius.circular(24.r),
@@ -308,8 +335,8 @@ class TripsScreen extends GetView<TripsController> {
                                                                       .selectedType ==
                                                                   RatingType
                                                                       .thumbsUp
-                                                              ? white
-                                                              : green,
+                                                              ? green
+                                                              : white,
                                                           thumb:
                                                               SvgPicture.asset(
                                                             ImageAssets
@@ -318,8 +345,8 @@ class TripsScreen extends GetView<TripsController> {
                                                                         .selectedType ==
                                                                     RatingType
                                                                         .thumbsUp
-                                                                ? grey5
-                                                                : white,
+                                                                ? white
+                                                                : grey5,
                                                           ),
                                                           onTap: () {
                                                             // controller
@@ -334,12 +361,14 @@ class TripsScreen extends GetView<TripsController> {
                                                       textWidget(
                                                           text: rating,
                                                           style: getRegularStyle(
-                                                              color: ratings
-                                                                          .selectedType ==
-                                                                      RatingType
-                                                                          .thumbsUp
-                                                                  ? grey5
-                                                                  : white,
+                                                              color: ratings.selectedType ==
+                                                                          RatingType
+                                                                              .thumbsUp ||
+                                                                      ratings.selectedType ==
+                                                                          RatingType
+                                                                              .thumbsDown
+                                                                  ? white
+                                                                  : grey5,
                                                               fontSize: 12.sp)),
                                                       roundedContainer(
                                                           color: ratings
@@ -764,6 +793,7 @@ class TripsScreen extends GetView<TripsController> {
       title: '',
       space: 1.sp,
       alignment: Alignment.topCenter,
+      onTap: controller.goBack,
       content: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -826,7 +856,6 @@ class TripsScreen extends GetView<TripsController> {
                       "isExpiryDateSelection": true,
                       "isExtendTrip": true,
                       "curentEndDate": activeTrip.tripEndDate,
-
                     });
                     if (data != null) {
                       // Handle the selected date here
@@ -836,6 +865,7 @@ class TripsScreen extends GetView<TripsController> {
                           formatDateTime01(date: data['rawEndTime']);
                       controller.selectedEndDateTime = data["rawEndTime"];
                       controller.tripDays.value = data["tripDays"];
+                      controller.currentStartTime = activeTrip.tripEndDate!;
                       // controller.startDateTime.value = data['start'];
                       // controller.endDateTime.value = data['end'];
 
@@ -851,16 +881,21 @@ class TripsScreen extends GetView<TripsController> {
           GtiButton(
             text: AppStrings.checkAvailability,
             onTap: () async {
+              if (controller.selectedEndDateTime == null) {
+                showErrorSnackbar(message: "Kindly select an end date");
+                return;
+              }
+              controller.carId.value = activeTrip.carId;
+              controller.tripType.value = activeTrip.tripType.toString();
+              await controller.getCarHistory(carId: activeTrip.carId);
               var value = await controller.checkCarAvailability(
                   carId: activeTrip.carId.toString(),
                   rawStartTime: activeTrip.tripStartDate!,
                   rawEndTime: controller.selectedEndDateTime!);
 
               if (value == true) {
-                // controller.routeToPaymentSummary(
-                //   isComingFromTrips: true,
-                // );
-              } else {
+                controller.routeToPaymentSummary();
+              } else if (value == false) {
                 // if car is not available
                 Get.dialog(
                   Dialog(

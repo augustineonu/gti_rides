@@ -1,10 +1,9 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/renter/home/search_result/car_selection_result/payment_summary/payment_summary_controller.dart';
+import 'package:gti_rides/screens/renter/trips/extend_trip_payment/extend_trip_payment_controller.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
@@ -12,18 +11,11 @@ import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
 
-class PaymentSummaryBinding extends Bindings {
+class ExtendTripPaymentSummaryScreen
+    extends GetView<ExtendTripPaymentController> {
+  ExtendTripPaymentSummaryScreen([Key? key]) : super(key: key);
   @override
-  void dependencies() {
-    // TODO: implement dependencies
-    Get.put<PaymentSummaryController>(PaymentSummaryController());
-  }
-}
-
-class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
-  PaymentSummaryScreen([Key? key]) : super(key: key);
-  @override
-  final controller = Get.put(PaymentSummaryController());
+  final controller = Get.put(ExtendTripPaymentController());
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -34,20 +26,6 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
               backgroundColor: backgroundColor,
               appBar: appBar(),
               body: body(size, context)),
-          controller.isCheckingPaymentStatus.value
-              ? Stack(
-                  children: [
-                    const Opacity(
-                      opacity: 0.5,
-                      child:
-                          ModalBarrier(dismissible: false, color: Colors.black),
-                    ),
-                    Center(
-                      child: Center(child: centerLoadingIcon()),
-                    ),
-                  ],
-                )
-              : const SizedBox()
         ],
       ),
       // }
@@ -93,11 +71,11 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
                     subTitle: controller.formattedEndTime.value),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             divider(color: borderColor),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Row(
@@ -112,8 +90,7 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
                         style: getRegularStyle(color: grey5)),
                     textWidget(text: ' x ', style: getRegularStyle()),
                     textWidget(
-                        text:
-                            '${controller.tripData.value.tripsDays.toString()}days',
+                        text: '${controller.tripsDays.toString()}days',
                         style: getRegularStyle(color: grey5)),
                   ],
                 ),
@@ -132,66 +109,8 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
                 hasPreFix: true,
                 subTitle: controller.discountTotal.value.toString()),
             rowNairaText(
-                title: 'VAT(${controller.vat.value}%)',
-                subTitle: controller.vatValue.value),
-            Visibility(
-                visible: !controller.selectedSelfPickUp.value,
-                child: rowNairaText(
-                    title: 'Pick up',
-                    subTitle:
-                        controller.carSelectionController.pickUpFee.value)),
-            Visibility(
-                visible: !controller.selectedSelfDropOff.value,
-                child: rowNairaText(
-                    title: 'Drop off',
-                    subTitle: controller.carSelectionController.dropOffFee.value
-                            .toString() ??
-                        '')),
-            Visibility(
-                visible: controller.selectedSecurityEscort.value,
-                child: rowNairaText(
-                    title: 'Escort Service Fee',
-                    subTitle: controller.totalEscortFee.toString() ?? '')),
-            Visibility(
-              visible: controller.tripType.value == 1,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        // crossAxisAlignment: alignment,
-                        children: [
-                          textWidget(
-                              text: 'Caution Fee (Self drive)',
-                              style: getRegularStyle(color: grey5)),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          SvgPicture.asset(ImageAssets.naira),
-                          textWidget(
-                              text: controller
-                                      .carSelectionController.cautionFee.value
-                                      .toString() ??
-                                  '',
-                              style: getRegularStyle(color: grey5)),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    width: 180.sp,
-                    child: textWidget(
-                        text: AppStrings.feeWillBeRefundedWhen,
-                        textOverflow: TextOverflow.visible,
-                        style: getLightStyle(
-                            fontSize: 10.sp, color: primaryColor)),
-                  ),
-                ],
-              ),
-            ),
+                title: 'VAT(${controller.vatValue.value}%)',
+                subTitle: controller.vat.value),
             Container(
               margin: EdgeInsets.symmetric(vertical: 20),
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
@@ -247,10 +166,11 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
               textWidget(text: title, style: getRegularStyle(color: grey5)),
             ],
           ),
-
           Row(
             children: [
-              hasPreFix! ? textWidget(text: '- ', style: getRegularStyle(color: grey5)) : SizedBox.shrink(),
+              hasPreFix!
+                  ? textWidget(text: '- ', style: getRegularStyle(color: grey5))
+                  : SizedBox.shrink(),
               SvgPicture.asset(ImageAssets.naira),
               textWidget(text: subTitle, style: getRegularStyle(color: grey5)),
             ],
@@ -278,51 +198,17 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
     );
   }
 
-  Widget identityVerificationWidget({
-    required String title,
-    required String subTitle,
-    void Function()? onTap,
-  }) {
-    return Column(
-      children: [
-        InkWell(
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                textWidget(text: title, style: getRegularStyle(color: black)),
-                textWidget(
-                    text: subTitle,
-                    style: getRegularStyle(fontSize: 12.sp, color: grey2)),
-              ],
-            ),
-          ),
-        ),
-        divider(color: borderColor),
-      ],
-    );
-  }
-
   Widget continueButton() {
     return controller.isLoading.isTrue
         ? centerLoadingIcon()
         : GtiButton(
             height: 40.sp,
             width: 380.sp,
-            text:
-                //  controller.args
-                // ? AppStrings.proceedToPay
-                // :
-                controller.tripType.value == 0 
-                    ? AppStrings.proceedToPay
-                    : AppStrings.sendRequest,
+            text: AppStrings.proceedToPay,
             color: primaryColor,
             // onTap: controller.routeToUpdateKyc,
             onTap: controller.addTrip,
             isLoading: controller.isLoading.value,
           );
   }
-
 }

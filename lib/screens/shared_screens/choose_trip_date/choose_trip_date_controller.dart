@@ -135,6 +135,13 @@ class ChooseTripDateController extends GetxController {
       update();
       endDate.value =
         formatDayDate(args.value ).toString();
+
+        // Calculate the difference
+        Duration difference = calculateDateDifference(
+            currentEndDate ?? DateTime.now(),
+            args.value! );
+
+        selectedDifferenceInDays.value = difference.inDays + 1;
       logger.log("Selected args: ${args.value}");
       logger.log("Selected date: ${selectedExpiryDate.value}");
     } else {
@@ -197,6 +204,7 @@ class ChooseTripDateController extends GetxController {
       // "$endDate $selectedEndHour:${selectedEndMins < 10 ? '0$selectedEndMins' : selectedEndMins}${selectedEndAmPm.value == 0 ? "am" : "PM"}",
       "rawEndTime": rawEndTime,
       "selectedDateOfBirth": selectedDateOfBirth ?? DateTime.now(),
+      "tripDays": selectedDifferenceInDays.value
     };
 
     // Check if any of the values in the result map is null, and provide default values if so
