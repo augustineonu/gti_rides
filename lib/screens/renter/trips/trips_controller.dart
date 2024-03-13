@@ -232,22 +232,23 @@ class TripsController extends GetxController
     try {
       isSendingReview.value = true;
       final response = await renterService.addReview(carId: carId.value, data: {
-        "cleanliness": cleanlinessValue.value == '0' ? 'unLike' : "like",
+        "cleanliness": cleanlinessValue.value == '0' ? 'dislike' : "like",
         "cleanlinessPercentage": cleanlinessValue.value,
-        "roadTardiness": roadTardinessValue.value == '0' ? "unLike" : "like",
+        "roadTardiness": roadTardinessValue.value == '0' ? "dislike" : "like",
         "roadTardinessPercentage": roadTardinessValue.value,
-        "convenience": convenienceValue.value == '0' ? "unLike" : "like",
+        "convenience": convenienceValue.value == '0' ? "dislike" : "like",
         "conveniencePercentage": convenienceValue.value,
-        "maintenance": maintenanceValue.value == '0' ? 'unLike' : "like",
+        "maintenance": maintenanceValue.value == '0' ? 'dislike' : "like",
         "maintenancePercentage": maintenanceValue.value,
-        "point": fifthPointValue.value == '0' ? 'unLike' : "like",
+        "point": fifthPointValue.value == '0' ? 'dislike' : "like",
         "pointPercentage": fifthPointValue.value,
         "message": reviewMessageController.text,
       });
       if (response.status_code == 200) {
-        showSuccessSnackbar(message: response.message ?? 'Review sent');
-        await Future.delayed(Duration(seconds: 2));
-        routeService.goBack(closeOverlays: true);
+        showSuccessSnackbar(message: response.message ?? 'Review sent', seconds: 2);
+         Future.delayed(const Duration(seconds: 4)).then((value) => 
+         routeService.goBack()).then((value) => Get.back());
+        //  Get.back();
       } else {
         logger.log(
             "unable to send review: ${response.message ?? "error sending review"}");

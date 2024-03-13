@@ -259,6 +259,7 @@ class TripsScreen extends GetView<TripsController> {
                           },
                           button2Title: AppStrings.rateTrip,
                           button2OnTap: () {
+                            controller.carId.value = completedTrip.carId;
                             Get.bottomSheet(
                                 backgroundColor: white,
                                 isScrollControlled: true,
@@ -407,6 +408,7 @@ class TripsScreen extends GetView<TripsController> {
                                       ),
                                       InkWell(
                                         onTap: () {
+                                          // controller.carId.value = completedTrip.carId;
                                           controller.calculateCriterionValues();
                                           Get.bottomSheet(
                                               backgroundColor: white,

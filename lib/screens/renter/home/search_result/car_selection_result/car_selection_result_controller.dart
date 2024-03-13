@@ -6,6 +6,7 @@ import 'package:gti_rides/models/partner/car_history_model.dart';
 import 'package:gti_rides/models/renter/booked_dates.dart';
 import 'package:gti_rides/models/renter/trip_amount_model.dart';
 import 'package:gti_rides/models/renter/trip_data_model.dart';
+import 'package:gti_rides/models/review_response_model.dart';
 import 'package:gti_rides/models/user/kyc_response_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/screens/renter/home/search_result/car_selection_result/widgets/booked_sheet.dart';
@@ -94,7 +95,7 @@ class CarSelectionResultController extends GetxController
   Rx<String> carId = "".obs;
   Rx<String> startDateTime = "".obs;
   Rx<String> endDateTime = "".obs;
-  RxList<dynamic>? reviews = <dynamic>[].obs;
+  RxList<ReviewData>? reviews = <ReviewData>[].obs;
 
   // add trip information
   Rx<int> tripDays = 0.obs;
@@ -132,7 +133,7 @@ class CarSelectionResultController extends GetxController
   void goBack() => routeService.goBack();
   void routeToSearchFilter() => routeService.gotoRoute(AppLinks.searchFilter);
   void routeToReviews({Object? arguments}) =>
-      routeService.gotoRoute(AppLinks.feedback, arguments: {
+      routeService.gotoRoute(AppLinks.reviews, arguments: {
         "carId": carId.value,
         "vehicleName": vehicleName.value,
         "photoUrl": photoUrl.value,
@@ -740,12 +741,12 @@ class CarSelectionResultController extends GetxController
         if (response.data == null || response.data!.isEmpty) {
           // If the list is empty
           // change(<CarHistoryData>[].obs, status: RxStatus.empty());
-          reviews?.value = response.data!;
+          reviews?.value = [];
         } else {
           // If the list is not empty
-          reviews?.value = response.data!;
+          // reviews?.value = response.data!;
+          reviews?.value = response.data!.map((review) => ReviewData.fromJson(review)).toList();
 
-          // change(carHistory, status: RxStatus.success());
           update();
         }
       } else {

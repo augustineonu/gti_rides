@@ -19,6 +19,7 @@ import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
+import 'package:gti_rides/utils/utils.dart';
 import 'package:remixicon/remixicon.dart';
 
 class CarSelectionResultBinding extends Bindings {
@@ -1035,14 +1036,15 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                       text: 'You have no reviews yet', style: getBoldStyle()),
                 )
               : ListView.builder(
-                  itemCount: 4,
+                  itemCount: controller.reviews!.take(5).length,
                   shrinkWrap: true,
                   physics: const BouncingScrollPhysics(),
                   controller: ScrollController(initialScrollOffset: 5),
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
+                    var review = controller.reviews![index];
                     return Container(
-                      height: 135,
+                      height: 135.sp,
                       width: 300.sp,
                       margin: EdgeInsets.only(left: 11.sp),
                       padding: EdgeInsets.all(12.sp),
@@ -1053,10 +1055,18 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                         ),
                       ),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             children: [
-                              Image.asset('assets/images/user_pic.png'),
+                              carImage(
+                                  imgUrl:
+                                      review.user!.userProfileUrl.toString(),
+                                  height: 30.sp,
+                                  width: 30.sp,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(30.r))),
+                              
                               const SizedBox(width: 8),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1064,7 +1074,8 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                                   Row(
                                     children: [
                                       textWidget(
-                                          text: "Gift Joy",
+                                          text:
+                                              review.user!.userName.toString(),
                                           style: getMediumStyle(
                                               fontSize: 12.sp,
                                               color: secondaryColor)),
@@ -1082,7 +1093,8 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                                     ],
                                   ),
                                   textWidget(
-                                      text: 'Wed, 1 Nov, 9:00am',
+                                      text: isSingleDateSelection(
+                                          date: review.createdAt!),
                                       style: getLightStyle(
                                           fontSize: 12.sp, color: grey3)),
                                 ],
@@ -1091,9 +1103,9 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                           ),
                           SizedBox(height: 10.sp),
                           textWidget(
-                              text:
-                                  "The car I rented through the app was in great condition and the booking process was effortless. I had a smooth and enjoyable experience.",
+                              text: review.message.toString(),
                               textOverflow: TextOverflow.visible,
+                              textAlign: TextAlign.start,
                               style:
                                   getMediumStyle(fontSize: 10.sp, color: grey2)
                                       .copyWith(fontWeight: FontWeight.w400)),
@@ -1109,9 +1121,11 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
             Padding(
               padding: const EdgeInsets.only(right: 20, top: 10),
               child: InkWell(
-                onTap: () => controller.isLoading.isTrue
-                    ? () {}
-                    : controller.routeToReviews,
+                onTap: () {
+                  if (!controller.isLoading.value) {
+                    controller.routeToReviews();
+                  }
+                },
                 child: textWidget(
                     text: AppStrings.seeAllReviews,
                     style:

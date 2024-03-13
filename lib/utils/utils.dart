@@ -305,6 +305,8 @@ String formateDate({required String date}) {
   }
 }
 
+
+//// wed, 1 Nov, 9:00am
 String isSingleDateSelection({required DateTime date}) {
   try {
     // DateTime dateTime = DateTime.parse(date);
@@ -315,6 +317,8 @@ String isSingleDateSelection({required DateTime date}) {
     return 'NAN';
   }
 }
+
+// 7 Mar, 1:16PM
 String formatDateTime01({required DateTime date}) {
   try {
     // DateTime dateTime = DateTime.parse(date);
@@ -421,7 +425,7 @@ showSuccessSnackbar(
       message: message,
       isDismissible: false,
       backgroundColor: color ?? success,
-      duration:  Duration(seconds: seconds ?? 4),
+      duration:  Duration(seconds: seconds ?? 3),
       margin: EdgeInsets.all(10),
       padding: EdgeInsets.all(15),
       borderRadius: 16.0,
