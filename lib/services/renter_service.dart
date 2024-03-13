@@ -87,10 +87,12 @@ class RenterService {
     }
   }
 
-  Future<ListResponseModel> getReview({required String carId}) async {
+  Future<ListResponseModel> getReview({required String carId,
+  String? type}) async {
     try {
       final result = await apiService.getRequest(
-        '/user/renter/getReview?carID=$carId&skip=0&limit=1000',
+        // /user/partner/getReview?carID=a9UExyBrC4&skip=0&limit=10
+        '/user/${type ?? 'renter'}/getReview?carID=$carId&skip=0&limit=1000',
       );
       // {{BaseLocal}}/user/renter/getReview?carID=a9UExyBrC4&skip=0&limit=10
       logger.log("result $result");

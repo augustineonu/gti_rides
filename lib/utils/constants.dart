@@ -302,7 +302,7 @@ class AppStrings {
       'Trip successfully extended, Safe trip!';
   static String extendedTripSuccessMessage1 = 'See details';
   static String home = 'Home';
-  static String seeDetails = 'Home';
+  static String seeDetails = 'See details';
   static String rateTrip = 'Rate trip';
   static String cleanliness = 'Cleanliness';
   static String roadTardiness = 'Road tardiness';

@@ -457,4 +457,17 @@ class PartnerService extends GetxController {
       rethrow;
     }
   }
+
+   Future<ApiResponseModel> addReview(
+      {required String carId, required Map data}) async {
+    try {
+      final result = await apiService.postRequest(
+          endpoint: '/user/partner/addReview?carID=$carId', data: data);
+      // logger.log("result $result");
+
+      return ApiResponseModel.fromJson(result);
+    } catch (err) {
+      rethrow;
+    }
+  }
 }

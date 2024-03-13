@@ -97,14 +97,14 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
         // Active trips
         return controller.activeTrips.isEmpty
             ? Padding(
-                  padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
-                  child: Center(
-                      child: textWidget(
-                          textOverflow: TextOverflow.visible,
-                          textAlign: TextAlign.center,
-                          text: AppStrings.noActiveTripsYet,
-                          style: getExtraBoldStyle(fontSize: 18.sp))),
-                )
+                padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
+                child: Center(
+                    child: textWidget(
+                        textOverflow: TextOverflow.visible,
+                        textAlign: TextAlign.center,
+                        text: AppStrings.noActiveTripsYet,
+                        style: getExtraBoldStyle(fontSize: 18.sp))),
+              )
             : controller.obx(
                 (state) {
                   return ListView.separated(
@@ -117,8 +117,10 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
                       return cardWidget(
                         context,
                         size,
-                        onTap: () => controller.routeToCompletedTrip(
-                            arguments: activeTrip),
+                        onTap: () =>
+                            controller.routeToCompletedTrip(arguments: {
+                          "completedTrip": activeTrip,
+                        }),
                         imgUrl: activeTrip.carProfilePic.toString(),
                         title:
                             ' ${activeTrip.carBrand.toString()} ${activeTrip.carModel.toString()}',
@@ -217,7 +219,10 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
                           right: 7.sp,
                           top: 11.sp,
                           child: InkWell(
-                            onTap: controller.routeToCompletedTrip,
+                            onTap: () =>
+                                controller.routeToCompletedTrip(arguments: {
+                              "completedTrip": completedTrip,
+                            }),
                             child: Row(children: [
                               textWidget(
                                   text: AppStrings.completed,
@@ -436,7 +441,9 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
                   // report trip to admin;
 
                   case 1:
-                    controller.routeToCompletedTrip(arguments: activeTrip);
+                    controller.routeToCompletedTrip(arguments: {
+                      "completedTrip": activeTrip,
+                    });
                     break;
                   default:
                 }

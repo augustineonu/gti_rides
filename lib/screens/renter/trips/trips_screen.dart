@@ -31,98 +31,113 @@ class TripsScreen extends GetView<TripsController> {
     var size = MediaQuery.of(context).size;
     bool expanded = false;
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Obx(() => Stack(
-            children: [
-              SafeArea(
-                child: Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 0.sp, horizontal: 20.sp),
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.symmetric(vertical: 10),
-                        padding: EdgeInsets.all(6.sp),
-                        decoration: BoxDecoration(
-                            border: Border.all(color: primaryColor),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(4.r))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            tabIndicator(
-                                title: AppStrings.pending,
-                                selected: controller.selectedIndex.value == 0,
-                                onTap: () {
-                                  controller.getAllTrips();
-                                  controller.selectedIndex.value = 0;
-                                }),
-                            tabIndicator(
-                                title: AppStrings.active,
-                                selected: controller.selectedIndex.value == 1,
-                                onTap: () {
-                                  controller.getAllTrips();
-                                  controller.selectedIndex.value = 1;
-                                }),
-                            tabIndicator(
-                              title: AppStrings.completed,
-                              selected: controller.selectedIndex.value == 2,
+    return Obx(() {
+      return Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Stack(
+          children: [
+            SafeArea(
+              child: Padding(
+                padding:
+                    EdgeInsets.symmetric(vertical: 0.sp, horizontal: 20.sp),
+                child: Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.symmetric(vertical: 10),
+                      padding: EdgeInsets.all(6.sp),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: primaryColor),
+                          borderRadius: BorderRadius.all(Radius.circular(4.r))),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          tabIndicator(
+                              title: AppStrings.pending,
+                              selected: controller.selectedIndex.value == 0,
                               onTap: () {
                                 controller.getAllTrips();
-                                controller.selectedIndex.value = 2;
-                              },
+                                controller.selectedIndex.value = 0;
+                              }),
+                          tabIndicator(
+                              title: AppStrings.active,
+                              selected: controller.selectedIndex.value == 1,
+                              onTap: () {
+                                controller.getAllTrips();
+                                controller.selectedIndex.value = 1;
+                              }),
+                          tabIndicator(
+                            title: AppStrings.completed,
+                            selected: controller.selectedIndex.value == 2,
+                            onTap: () {
+                              controller.getAllTrips();
+                              controller.selectedIndex.value = 2;
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 5.sp,
                             ),
+                            buildBody(size, context, controller, expanded),
                           ],
                         ),
                       ),
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: 5.sp,
-                              ),
-                              buildBody(size, context, controller, expanded),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-              controller.isCheckingCarAvailability.isTrue
-                  ? Stack(
-                      children: [
-                        const Opacity(
-                          opacity: 0.5,
-                          child: ModalBarrier(
-                              dismissible: false, color: Colors.black),
-                        ),
-                        Center(
-                          child: Center(child: centerLoadingIcon()),
-                        ),
-                      ],
-                    )
-                  : const SizedBox.shrink(),
-              controller.isLoading.isTrue
-                  ? Stack(
-                      children: [
-                        const Opacity(
-                          opacity: 0.5,
-                          child: ModalBarrier(
-                              dismissible: false, color: Colors.black),
-                        ),
-                        Center(
-                          child: Center(child: centerLoadingIcon()),
-                        ),
-                      ],
-                    )
-                  : const SizedBox.shrink(),
-            ],
-          )),
-    );
+            ),
+            controller.isCheckingCarAvailability.isTrue
+                ? Stack(
+                    children: [
+                      const Opacity(
+                        opacity: 0.5,
+                        child: ModalBarrier(
+                            dismissible: false, color: Colors.black),
+                      ),
+                      Center(
+                        child: Center(child: centerLoadingIcon()),
+                      ),
+                    ],
+                  )
+                : const SizedBox.shrink(),
+            controller.isLoading.isTrue
+                ? Stack(
+                    children: [
+                      const Opacity(
+                        opacity: 0.5,
+                        child: ModalBarrier(
+                            dismissible: false, color: Colors.black),
+                      ),
+                      Center(
+                        child: Center(child: centerLoadingIcon()),
+                      ),
+                    ],
+                  )
+                : const SizedBox.shrink(),
+            controller.isSendingReview.isTrue
+                ? Stack(
+                    children: [
+                      const Opacity(
+                        opacity: 0.5,
+                        child: ModalBarrier(
+                            dismissible: false, color: Colors.black),
+                      ),
+                      Center(
+                        child: Center(child: centerLoadingIcon()),
+                      ),
+                    ],
+                  )
+                : const SizedBox.shrink(),
+          ],
+        ),
+      );
+    });
   }
 
   Widget buildBody(Size size, BuildContext context, TripsController controller,
@@ -256,6 +271,12 @@ class TripsScreen extends GetView<TripsController> {
                           button1Title: AppStrings.seeDetails,
                           button1OnTap: () {
                             // see details
+                            controller.routeToCompletedTrip(
+                              arguments: {
+                                "completedTrip": completedTrip,
+                                "showSupport": false
+                              },
+                            );
                           },
                           button2Title: AppStrings.rateTrip,
                           button2OnTap: () {
@@ -443,9 +464,14 @@ class TripsScreen extends GetView<TripsController> {
                                                                       primaryColor)),
                                                           const Spacer(),
                                                           GestureDetector(
-                                                            onTap: controller.isSendingReview.isTrue ? (){} : controller.goBack,
-                                                            child: SvgPicture.asset(
-                                                                ImageAssets
+                                                            onTap: controller
+                                                                    .isSendingReview
+                                                                    .isTrue
+                                                                ? () {}
+                                                                : controller
+                                                                    .goBack,
+                                                            child: SvgPicture
+                                                                .asset(ImageAssets
                                                                     .closeSmall),
                                                           ),
                                                         ],
@@ -594,7 +620,7 @@ class TripsScreen extends GetView<TripsController> {
                                                                     .then((value) =>
                                                                         setState(
                                                                             () {}));
-                                                                            print("object");
+                                                                print("object");
 
                                                                 // });
                                                               }),

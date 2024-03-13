@@ -1035,7 +1035,7 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                   child: textWidget(
                       text: 'You have no reviews yet', style: getBoldStyle()),
                 )
-              : ListView.builder(
+              : ListView.separated(
                   itemCount: controller.reviews!.take(5).length,
                   shrinkWrap: true,
                   physics: const BouncingScrollPhysics(),
@@ -1043,76 +1043,85 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
                     var review = controller.reviews![index];
-                    return Container(
-                      height: 135.sp,
-                      width: 300.sp,
-                      margin: EdgeInsets.only(left: 11.sp),
-                      padding: EdgeInsets.all(12.sp),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: borderColor),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(4.r),
-                        ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              carImage(
-                                  imgUrl:
-                                      review.user!.userProfileUrl.toString(),
-                                  height: 30.sp,
-                                  width: 30.sp,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(30.r))),
-                              
-                              const SizedBox(width: 8),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      textWidget(
-                                          text:
-                                              review.user!.userName.toString(),
-                                          style: getMediumStyle(
-                                              fontSize: 12.sp,
-                                              color: secondaryColor)),
-                                      textWidget(
-                                          text: " | ",
-                                          style: getLightStyle(
-                                              fontSize: 12.sp, color: grey3)),
-                                      SvgPicture.asset(
-                                          ImageAssets.thumbsUpGreen),
-                                      const SizedBox(width: 3),
-                                      textWidget(
-                                          text: AppStrings.positive,
-                                          style: getMediumStyle(
-                                              fontSize: 12.sp, color: grey5)),
-                                    ],
-                                  ),
-                                  textWidget(
-                                      text: isSingleDateSelection(
-                                          date: review.createdAt!),
-                                      style: getLightStyle(
-                                          fontSize: 12.sp, color: grey3)),
-                                ],
-                              ),
-                            ],
+                    return InkWell(
+                      onTap: () {
+                        if (!controller.isLoading.value) {
+                          controller.routeToReviews();
+                        }
+                      },
+                      child: Container(
+                        height: 135.sp,
+                        width: 300.sp,
+                        // margin: EdgeInsets.only(left: 11.sp),
+                        padding: EdgeInsets.all(12.sp),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: borderColor),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(4.r),
                           ),
-                          SizedBox(height: 10.sp),
-                          textWidget(
-                              text: review.message.toString(),
-                              textOverflow: TextOverflow.visible,
-                              textAlign: TextAlign.start,
-                              style:
-                                  getMediumStyle(fontSize: 10.sp, color: grey2)
-                                      .copyWith(fontWeight: FontWeight.w400)),
-                        ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                carImage(
+                                    imgUrl:
+                                        review.user!.userProfileUrl.toString(),
+                                    height: 30.sp,
+                                    width: 30.sp,
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(30.r))),
+                                const SizedBox(width: 8),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        textWidget(
+                                            text: review.user!.userName
+                                                .toString(),
+                                            style: getMediumStyle(
+                                                fontSize: 12.sp,
+                                                color: secondaryColor)),
+                                        textWidget(
+                                            text: " | ",
+                                            style: getLightStyle(
+                                                fontSize: 12.sp, color: grey3)),
+                                        SvgPicture.asset(
+                                            ImageAssets.thumbsUpGreen),
+                                        const SizedBox(width: 3),
+                                        textWidget(
+                                            text: AppStrings.positive,
+                                            style: getMediumStyle(
+                                                fontSize: 12.sp, color: grey5)),
+                                      ],
+                                    ),
+                                    textWidget(
+                                        text: isSingleDateSelection(
+                                            date: review.createdAt!),
+                                        style: getLightStyle(
+                                            fontSize: 12.sp, color: grey3)),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 10.sp),
+                            textWidget(
+                                text: review.message.toString(),
+                                textOverflow: TextOverflow.visible,
+                                textAlign: TextAlign.start,
+                                style: getMediumStyle(
+                                        fontSize: 10.sp, color: grey2)
+                                    .copyWith(fontWeight: FontWeight.w400)),
+                          ],
+                        ),
                       ),
                     );
                   },
+                  separatorBuilder: (_, lol) => const SizedBox(
+                    width: 11,
+                  ),
                 ),
         ),
         Row(

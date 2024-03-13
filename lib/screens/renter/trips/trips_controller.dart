@@ -125,6 +125,7 @@ class TripsController extends GetxController
     selectedIndex.value = value;
     update();
   }
+  void routeToCompletedTrip({Object? arguments}) => routeService.gotoRoute(AppLinks.completedTrip,arguments: arguments);
 
   void onClickPrevious() {
     if (currentIndex > 0) {
