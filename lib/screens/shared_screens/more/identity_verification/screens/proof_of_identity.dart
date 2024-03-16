@@ -99,7 +99,8 @@ class ProofOfIdentityScreen extends GetView<HomeAddressController> {
                     expectedVariable: "field",
                     hintText: AppStrings.inputDetails,
                     textInputType: TextInputType.none,
-                    controller: controller.expiryDateController..text = controller.selectedExpiryDate.value,
+                    controller: controller.expiryDateController
+                      ..text = controller.selectedExpiryDate.value,
                     readOnly: true,
                     onTap: () async {
                       var data = await Get.toNamed(AppLinks.chooseTripDate,
@@ -108,7 +109,8 @@ class ProofOfIdentityScreen extends GetView<HomeAddressController> {
                             "enablePastDates": true,
                             "isSingleDateSelection": true,
                             "to": AppStrings.to,
-                            "from": AppStrings.from
+                            "from": AppStrings.from,
+                            "isExpiryDateSelection": true
                           });
 
                       // Handle the selected date here

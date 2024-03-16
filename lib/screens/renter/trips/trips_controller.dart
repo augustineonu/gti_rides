@@ -243,6 +243,7 @@ class TripsController extends GetxController
         "maintenancePercentage": maintenanceValue.value,
         "point": fifthPointValue.value == '0' ? 'dislike' : "like",
         "pointPercentage": fifthPointValue.value,
+        "reviewPercentage": totalRatingValue.value.toString(),
         "message": reviewMessageController.text,
       });
       if (response.status_code == 200) {

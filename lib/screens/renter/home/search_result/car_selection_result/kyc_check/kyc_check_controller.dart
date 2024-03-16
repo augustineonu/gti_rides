@@ -112,7 +112,7 @@ class KycCheckController extends GetxController {
           "tripDays": tripDays.value, //
           "estimatedTotal": estimatedTotal.value, //
           "vatValue": vatValue.value, //
-          "vat": vatValue.value, //
+          "vat": vat.value, //
           "cautionFee": cautionFee.value, //
           "dropOffFee": dropOffFee.value,
           "pickUpFee": pickUpFee.value, //

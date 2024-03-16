@@ -290,7 +290,7 @@ class ChooseTripDateController extends GetxController {
         // Show an error message indicating the user is below 21
         // You can use your preferred method to display an error message
         showErrorSnackbar(
-            message: 'You must be at least 21 years old to use GTi.');
+            message: 'You must be at least 21 years old to use GTi Rides.');
       }
     }
   }

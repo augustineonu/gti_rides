@@ -173,7 +173,7 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
                           SvgPicture.asset(ImageAssets.naira),
                           textWidget(
                               text: controller
-                                      .carSelectionController.cautionFee.value
+                                      .cautionFee.value
                                       .toString() ??
                                   '',
                               style: getRegularStyle(color: grey5)),

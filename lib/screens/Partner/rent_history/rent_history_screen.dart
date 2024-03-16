@@ -202,6 +202,10 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
                       return cardWidget(
                         context,
                         size,
+                        onTap: () =>
+                            controller.routeToCompletedTrip(arguments: {
+                          "completedTrip": completedTrip,
+                        }),
                         imgUrl: completedTrip.carProfilePic.toString(),
                         title:
                             ' ${completedTrip.carBrand.toString()} ${completedTrip.carModel.toString()}',

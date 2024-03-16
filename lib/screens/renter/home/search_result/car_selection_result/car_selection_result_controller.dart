@@ -324,7 +324,7 @@ class CarSelectionResultController extends GetxController
 
   void logResults() {
     logger.log("Estimated total: ${estimatedTotal.value}");
-    logger.log("New total: ${updatedTotalValue}");
+    logger.log("New total: $updatedTotalValue");
   }
 
   Future<void> addGrandTotal() async {
@@ -596,7 +596,7 @@ class CarSelectionResultController extends GetxController
             // All required fields are present, proceed to the payment screen
             // ...
             logger.log("All fields are present, proceed to the payment screen");
-            routeService.gotoRoute(AppLinks.paymentSummary, arguments: {
+            routeService.gotoRoute(AppLinks.kycCheck, arguments: {
               "appBarTitle": AppStrings.addToContinue,
               "tripData": tripData.value,
               "pricePerDay": pricePerDay.value,
@@ -621,6 +621,7 @@ class CarSelectionResultController extends GetxController
               "rawStartTime": rawStartTime,
               "rawEndTime": rawEndTime,
               "discountTotal": discountTotalFee.value,
+
             });
           } else {
             // Some fields are missing, route to KYC screen with the list of missing fields

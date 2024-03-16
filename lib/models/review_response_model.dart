@@ -41,6 +41,7 @@ class ReviewData {
     final Cleanliness? point;
     final dynamic pointPercentage;
     final dynamic message;
+    final dynamic reviewPercentage;
     final DateTime? createdAt;
     final User? user;
 
@@ -57,6 +58,7 @@ class ReviewData {
         this.point,
         this.pointPercentage,
         this.message,
+        this.reviewPercentage,
         this.createdAt,
         this.user,
     });
@@ -78,6 +80,7 @@ class ReviewData {
         point: cleanlinessValues.map[json["point"]]!,
         pointPercentage: json["pointPercentage"],
         message: json["message"],
+        reviewPercentage: json["reviewPercentage"],
         createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
         user: json["user"] == null ? null : User.fromJson(json["user"]),
     );
@@ -95,6 +98,7 @@ class ReviewData {
         "point": cleanlinessValues.reverse[point],
         "pointPercentage": pointPercentage,
         "message": message,
+        "reviewPercentage": reviewPercentage,
         "createdAt": createdAt?.toIso8601String(),
         "user": user?.toJson(),
     };

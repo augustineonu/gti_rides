@@ -72,6 +72,7 @@ class PaymentSummaryController extends GetxController {
       rawStartTime = arguments!["rawStartTime"] ?? DateTime.now();
       rawEndTime = arguments!["rawEndTime"] ?? DateTime.now();
       discountTotal.value = arguments!["discountTotal"] ?? 0.0;
+      cautionFee.value = arguments!["cautionFee"] ?? '';
     }
   }
 
@@ -96,6 +97,7 @@ class PaymentSummaryController extends GetxController {
   Rx<String> formattedEndDayDateMonth = ''.obs;
   Rx<String> formattedEndTime = ''.obs;
 
+  Rx<String> cautionFee = ''.obs;
   Rx<String> pricePerDay = ''.obs;
   Rx<String> estimatedTotal = ''.obs;
   Rx<String> tripDaysTotal = ''.obs;

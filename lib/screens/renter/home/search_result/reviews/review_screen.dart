@@ -98,6 +98,8 @@ class ReviewsScreen extends GetView<ReviewController> {
                 scrollDirection: Axis.vertical,
                 itemBuilder: (context, index) {
                   var review = controller.reviews![index];
+                  // var reviewPercentage = review.reviewPercentage
+                  // int? reviewPercentage = int.tryParse(review.reviewPercentage);
                   return SingleChildScrollView(
                     padding: EdgeInsets.symmetric(
                         horizontal: 20.0.sp, vertical: 16.sp),
@@ -134,10 +136,12 @@ class ReviewsScreen extends GetView<ReviewController> {
                                             style: getLightStyle(
                                                 fontSize: 12.sp, color: grey3)),
                                         SvgPicture.asset(
-                                            ImageAssets.thumbsUpGreen),
+                                          ImageAssets.thumbsUpGreen,),
+                                          //  reviewPercentage! >= 50 ? ImageAssets.thumbsUpGreen : ImageAssets.thumbsDown),
                                         const SizedBox(width: 3),
                                         textWidget(
-                                            text: '100%',
+                                          text: '100%',
+                                            // text: review.reviewPercentage != null ? review.reviewPercentage.toString() : '0',
                                             style: getMediumStyle(
                                                 fontSize: 12.sp, color: grey5)),
                                       ],

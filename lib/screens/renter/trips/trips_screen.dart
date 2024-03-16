@@ -1527,29 +1527,42 @@ class TripsScreen extends GetView<TripsController> {
                 ? primaryColorLight
                 : grey5,
             onTap: () {
+             
               switch (pendingTrips.status) {
                 case "pending":
                   if (pendingTrips.tripType == 'chauffeur') {
-                    // startTripMethod();
-                    !statTrip
-                        ? () {}
-                        : controller.updateTripStatus(
-                            type: 'active',
-                            tripID: pendingTrips.tripId.toString());
-                    print("object");
-                  } else if (pendingTrips.tripType == "self drive" &&
-                      pendingTrips.adminStatus == "approved") {
-                    // payNowMethod();
-                    controller.routeToPayment(
-                        url: pendingTrips.tripOrders!.first.paymentLink);
-                  } else if (pendingTrips.tripType == "self drive" &&
-                      pendingTrips.tripOrders!.first.paymentStatus
-                          .toString()
-                          .contains("successful")) {
-                    controller.updateTripStatus(
-                        type: 'active', tripID: pendingTrips.tripId.toString());
-                    print("confirm");
-                    // confirm trip button
+                    if (pendingTrips.tripOrders!.first.paymentStatus ==
+                        'pending') {
+                      // payNowMethod();
+                      controller.routeToPayment(
+                          url: pendingTrips.tripOrders!.first.paymentLink);
+                    } else if (pendingTrips.tripOrders!.first.paymentStatus ==
+                        'successful') {
+                      !statTrip
+                          ? () {}
+                          : controller.updateTripStatus(
+                              type: 'active',
+                              tripID: pendingTrips.tripId.toString());
+                      print("object");
+                    } else {
+                      // chat with admin
+                    }
+                  } else {
+                    if (pendingTrips.adminStatus == "approved") {
+                      // payNowMethod();
+                      controller.routeToPayment(
+                          url: pendingTrips.tripOrders!.first.paymentLink);
+                    } else if (pendingTrips.tripOrders!.first.paymentStatus
+                        .toString()
+                        .contains("successful")) {
+                      controller.updateTripStatus(
+                          type: 'active',
+                          tripID: pendingTrips.tripId.toString());
+                      print("confirm");
+                      // confirm trip button
+                    } else {
+                      //chat with admin action
+                    }
                   }
                   break;
                 case "declined":
@@ -1569,14 +1582,31 @@ class TripsScreen extends GetView<TripsController> {
   String getPendingTripsStatusMessage(AllTripsData pendingTrips) {
     if (pendingTrips.status == "pending") {
       if (pendingTrips.tripType == 'chauffeur') {
-        return "Confirm Trip";
-      } else if (pendingTrips.tripType == "self drive" &&
-          pendingTrips.adminStatus == "pending") {
-        return "Pending admin approval";
-      } else if (pendingTrips.tripType == "self drive" &&
-          pendingTrips.adminStatus == "approved") {
-        return AppStrings.payNow;
-        // what about if self drive and status is approved ?
+        // if status == 'pending' && paymentStatus == 'pending' ? 'pay'
+
+        if (pendingTrips.tripOrders!.first.paymentStatus == 'pending') {
+          return AppStrings.payNow;
+        } else if (pendingTrips.tripOrders!.first.paymentStatus ==
+            'successful') {
+          return "Confirm Trip";
+        } else {
+          return 'Chat with admin';
+        }
+      } else {
+        if (pendingTrips.adminStatus == "pending") {
+          return "Pending admin approval";
+        } else if (pendingTrips.adminStatus == "approved" &&
+            pendingTrips.tripOrders!.first.paymentStatus == 'pending') {
+          //
+          return AppStrings.payNow;
+          // what about if self drive and status is approved ?
+        } else if (pendingTrips.tripOrders!.first.paymentStatus ==
+            'successful') {
+          return "Confirm Trip";
+        } else {
+          // if the status is none of the above show 'chat with admin'
+          return 'Chat with admin';
+        }
       }
     } else if (pendingTrips.status == "declined") {
       return 'Chat with admin';
@@ -1586,7 +1616,23 @@ class TripsScreen extends GetView<TripsController> {
 
   bool shouldButtonBeDisabled(AllTripsData pendingTrips) {
     return (pendingTrips.tripType == "self drive" &&
-            pendingTrips.adminStatus == "pending") ||
-        pendingTrips.status == 'declined';
+        pendingTrips.adminStatus == "pending");
+    //      ||
+    // pendingTrips.status == 'declined';
   }
 }
+
+enum PaymentStatus {
+  pending,
+  successful,
+  // add other possible values if needed
+}
+
+//       switch (pendingTrips.tripOrders!.first.paymentStatus) {
+//   case PaymentStatus.pending:
+//     return AppStrings.payNow;
+//   case PaymentStatus.successful:
+//     return "Confirm Trip";
+//   default:
+//     return 'Chat with admin';
+// }

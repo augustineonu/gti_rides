@@ -88,6 +88,9 @@ class _GtiRidesState extends State<GtiRides> {
 
     return ScreenUtilInit(
         designSize: selectedSize.size,
+        minTextAdapt: true,
+        useInheritedMediaQuery: true,
+        rebuildFactor: (old, data) => true,
         builder: (
           context,
           child,

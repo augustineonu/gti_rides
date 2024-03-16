@@ -61,11 +61,11 @@ class IdentityVerificationController extends GetxController {
       selectedSecurityEscort.value = arguments?["selectedSecurityEscort"] ?? false;
 
       tripType.value = arguments?["tripType"] ?? 0;
-      tripDays.value = arguments?["tripDays"];
+      tripDays.value = arguments?["tripDays"] ?? 0;
       cautionFee.value = arguments?["cautionFee"] ?? '';
       rawStartTime = arguments!["rawStartTime"] ?? DateTime.now();
       rawEndTime = arguments!["rawEndTime"] ?? DateTime.now();
-      discountTotal.value = arguments!["discountTotal"] ?? 0.0;
+      discountTotal.value = arguments!["discountTotal"] ?? '0';
 
       logger.log("Received discount total:: ${discountTotal.value}");
 
@@ -134,7 +134,7 @@ class IdentityVerificationController extends GetxController {
   Rx<String> totalEscortFee = ''.obs;
   DateTime? rawStartTime;
   DateTime? rawEndTime;
-  Rx<double> discountTotal = 0.0.obs;
+  Rx<String> discountTotal = '0.0'.obs;
 
   // list
   List<String> gender = [
@@ -190,13 +190,14 @@ class IdentityVerificationController extends GetxController {
     routeService.gotoRoute(AppLinks.paymentSummary, arguments: {
       "isKycUpdate": isKycUpdate.value,
       "tripData": tripData.value,
-      "pricePerDay": carSelectionController.pricePerDay.value,
-      "tripDays": carSelectionController.tripDays.value,
+      // this data is not coming
+      "pricePerDay": pricePerDay.value,
+      "tripDays": tripDays.value,
       "estimatedTotal": estimatedTotal.value,
       "vatValue": vatValue.value,
-      "vat": carSelectionController.vatValue.value,
+      "vat": vat.value,
       "cautionFee":
-          carSelectionController.tripType.value == 1 ? cautionFee.value : null,
+          tripType.value == 1 ? cautionFee.value : null,
       "dropOffFee": carSelectionController.tripType.value == 1 &&
               carSelectionController.selectedSelfDropOff.value
           ? dropOffFee.value
