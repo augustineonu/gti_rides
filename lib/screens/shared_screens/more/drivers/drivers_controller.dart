@@ -15,7 +15,8 @@ import 'package:dio/dio.dart' as dio;
 import 'package:gti_rides/utils/utils.dart';
 import 'package:image_picker/image_picker.dart';
 
-class DriversController extends GetxController {
+class DriversController extends GetxController
+    with StateMixin<List<dynamic>> {
   Logger logger = Logger('DriversController');
   final listVehicleController = Get.put(ListVehicleController());
   DriversController() {
@@ -86,6 +87,7 @@ class DriversController extends GetxController {
     }
     return true;
   }
+
   bool validateText() {
     if (selectedExpiryDate.value.isEmpty) {
       // Show an error message or handle it accordingly
@@ -118,7 +120,8 @@ class DriversController extends GetxController {
 
   Future<void> createDriver() async {
     if (!createDriverFormKey.currentState!.validate() ||
-        !validateImageUpload() || !validateText()) {
+        !validateImageUpload() ||
+        !validateText()) {
       return;
     }
     try {
@@ -207,19 +210,34 @@ class DriversController extends GetxController {
 
   Future<void> getDrivers() async {
     isFetchingDrivers.value = true;
+    change([].obs, status: RxStatus.loading());
+
     try {
       final response = await partnerService.getDrivers();
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("gotten drivers ${response.data}");
+        // await Future.delayed(Duration(days: 1));
         if (response.data != null) {
           drivers?.value = response.data! as dynamic;
+          change(response.data as dynamic, status: RxStatus.success());
           logger.log("drivers $drivers");
+        } else {
+        change([].obs, status: RxStatus.empty());
+
         }
         isFetchingDrivers.value = false;
       } else {
         logger.log("unable to get drivers ${response.data}");
+        change(
+          [].obs,
+          status: RxStatus.error(response.message ?? 'An error occured'),
+        );
       }
     } catch (exception) {
+      change(
+        [].obs,
+        status: RxStatus.error(exception.toString()),
+      );
       logger.log("error  $exception");
     }
   }
@@ -242,7 +260,7 @@ class DriversController extends GetxController {
     emailController.clear();
     phoneNoController.clear();
     licenceNoController.clear();
-    
+
     licenceExpiryDateController.text = selectedExpiryDate.value;
   }
 }

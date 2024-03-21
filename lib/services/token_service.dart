@@ -8,12 +8,11 @@ import 'package:gti_rides/services/auth_service.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/storage_service.dart';
 
-
 TokenService get tokenService => Get.find();
 
 class TokenService {
   Logger logger = Logger('TokenService');
-    static final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
+  static final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
 
   Rx<TokenModel> tokens = TokenModel().obs;
   RxString accessToken = ''.obs;
@@ -36,7 +35,7 @@ class TokenService {
   Future<bool> setTokenModel(tokensJson) async {
     tokens.value = TokenModel.fromJson(tokensJson);
 
-    // come to this later #TODO: 
+    // come to this later #TODO:
     // await biometricService.saveTokensData(tokens.value);
     return true;
   }
@@ -46,39 +45,37 @@ class TokenService {
     return true;
   }
 
-
-
   // bool setRefreshToken(token) {
   //   refreshToken.value = token;
   //   return true;
   // }
 
-
-
   Future<bool> getNewAccessToken() async {
-  try {
-    final ApiResponseModel result = await authService.getNewAccessToken(
-      // accessToken: accessToken.value
-    );
-    logger.log("refresh token: ${result.data} ${result.status}");
-    
-    if (result.status == 'success' || result.status_code == 200) {
-      await setTokenModel(result.data);
-      setAccessToken(result.data["accessToken"]);
-      // tokenService.accessToken.value = result.data["accessToken"];
-      return true;
-    } else {
-      logger.log("error fetching token");
+    try {
+      final ApiResponseModel result = await authService.getNewAccessToken(
+          // accessToken: accessToken.value
+          );
+      logger.log("refresh token: ${result.data} ${result.status}");
+
+      if (result.status == 'success' || result.status_code == 200) {
+        TokenModel tokenModel = TokenModel.fromJson(result.data);
+
+        await saveTokensData(tokenModel);
+        await setTokenModel(result.data);
+        setAccessToken(result.data["accessToken"]);
+        // tokenService.accessToken.value = result.data["accessToken"];
+        return true;
+      } else {
+        logger.log("error fetching token");
+        return false;
+      }
+    } catch (error) {
+      logger.log("error getting refresh token ${error}");
       return false;
     }
-  } catch (error) {
-    logger.log("error getting refresh token ${error}");
-    return false;
   }
-}
 
-
-    // Tokens
+  // Tokens
   Future<void> saveTokensData(TokenModel token) async {
     logger.log('Saving token data');
     String tokenJson = json.encode(token.toJson());
@@ -100,7 +97,7 @@ class TokenService {
     await _secureStorage.delete(key: 'auth_tokens');
   }
 
-   // Access Token
+  // Access Token
   Future<void> saveAccessToken(String token) async {
     logger.log('Saving Access token');
     await _secureStorage.write(key: 'auth_access_token', value: token);
@@ -116,8 +113,7 @@ class TokenService {
     await _secureStorage.delete(key: 'auth_access_token');
   }
 
-
-   Future<void> clearAll() async {
+  Future<void> clearAll() async {
     logger.log('Deleting passcode');
     await _secureStorage.deleteAll();
     await storageService.insert("firstTimeLogin", true);

@@ -520,6 +520,7 @@ class AppStrings {
   static String noBookedCarsYet = "You have not Booked any cars yet";
   static String noPendingCarsYet = "You have no Pending Trips yet";
   static String noReviewsYet = "You have no reviews yet";
+  static String noDriversYet = "You have no drivers yet";
   static String noActiveTripsYet = "You have no Active Trips yet";
   static String noActiveOrderYet = "You have no Active Order yet";
   static String noCompletedTripYet = "You have no Completed Trips yet";

@@ -30,8 +30,8 @@ class OnboardingScreen extends GetView<OnboardingController> {
         () => Column(
           children: [
             AnimatedContainer(
-              duration: Duration(milliseconds: 1000),
-              height: height * 0.75.sp,
+              duration: const Duration(milliseconds: 1000),
+              height: height * 0.74.sp,
               child: PageView.builder(
                   controller: controller.controller,
                   itemCount: OnBoardingContent.onBoardingContents.length,
@@ -50,7 +50,7 @@ class OnboardingScreen extends GetView<OnboardingController> {
                             fit: BoxFit.fitWidth,
                           ),
                         ),
-                        SizedBox(height: 40.0.h),
+                        SizedBox(height: 20.0.h),
                         SizedBox(
                           width: 320.sp,
                           child: Column(
@@ -89,47 +89,49 @@ class OnboardingScreen extends GetView<OnboardingController> {
   }
 
   Widget body(BuildContext context, double width) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(
-            OnBoardingContent.onBoardingContents.length,
-            (index) => buildDot(
-              context,
-              currentIndex: controller.currentIndex.value,
-              index: index,
+    return Expanded(
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(
+              OnBoardingContent.onBoardingContents.length,
+              (index) => buildDot(
+                context,
+                currentIndex: controller.currentIndex.value,
+                index: index,
+              ),
             ),
           ),
-        ),
-        SizedBox(
-          height: 60.sp,
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.sp),
-          child: Column(
-            children: [
-              GtiButton(
-                text: AppStrings.getStartedButtonText,
-                width: width,
-                onTap: controller.routeToSignUp,
-              ),
-              SizedBox(
-                height: 8.sp,
-              ),
-              GtiButton(
-                text: AppStrings.loginButtonText,
-                width: width,
-                textColor: primaryColor,
-                hasBorder: true,
-                borderColor: primaryColor,
-                color: white,
-                onTap:  controller.routeToLogin,
-              ),
-            ],
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.06,
           ),
-        ),
-      ],
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.sp),
+            child: Column(
+              children: [
+                GtiButton(
+                  text: AppStrings.getStartedButtonText,
+                  width: width,
+                  onTap: controller.routeToSignUp,
+                ),
+                SizedBox(
+                  height: 8.sp,
+                ),
+                GtiButton(
+                  text: AppStrings.loginButtonText,
+                  width: width,
+                  textColor: primaryColor,
+                  hasBorder: true,
+                  borderColor: primaryColor,
+                  color: white,
+                  onTap:  controller.routeToLogin,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 

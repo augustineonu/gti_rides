@@ -40,7 +40,7 @@ class AppBinding extends Bindings {
     Get.put(PartnerService());
     Get.put(PaymentService());
     Get.put(ApiExceptionService());
-    Get.put(NetworkController(), permanent: true);
+    // Get.put<NetworkController>(NetworkController(), permanent: true);
     // Get.put(AppService());
     Get.put(FirebaseService());
     // Get.put(AgentService());

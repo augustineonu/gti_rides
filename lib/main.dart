@@ -38,7 +38,7 @@ void main() async {
   runApp(GtiRides(
     isNewUser: isNewUser,
   ));
-  NetworkController();
+  // NetworkController();
 }
 
 Future<bool> determineUserStatus() async {
@@ -96,6 +96,7 @@ class _GtiRidesState extends State<GtiRides> {
           child,
         ) {
           return GetMaterialApp(
+            
             title: 'GTI Rides',
               // debugShowMaterialGrid : true,
             theme: ThemeData(
@@ -117,7 +118,7 @@ class _GtiRidesState extends State<GtiRides> {
             getPages: AppRoutes.pages,
             navigatorObservers: [RouteService(), RouteService().routeObserver],
             onInit: () async {
-              networkController.onInit();
+              // networkController.onInit();
             await  firebaseService.getDeviceToken();
               SystemChrome.setPreferredOrientations([
                 DeviceOrientation.portraitUp,

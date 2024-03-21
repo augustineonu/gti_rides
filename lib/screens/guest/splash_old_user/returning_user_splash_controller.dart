@@ -51,24 +51,35 @@ class ReturningUserSplashController extends GetxController
 
       logger.log("User model >>: ${userModel.toJson()}");
       if (hasExpired) {
-        
+        // routeService.offAllNamed(AppLinks.login);
+        // get new access token
+        bool result = await tokenService.getNewAccessToken();
+        if (!result) {
+          // move to welcome screen
+          logger.log('Going to Login screen');
+          routeService.offAllNamed(AppLinks.login);
+          return;
+        }
+        //   // move to home screen
+          final response = await authService.getProfile();
+        if (response.status == "success" || response.status_code == 200) {
+          // persist user data
+          logger.log("user ${response.data.toString()}");
+          final UserModel userModel = UserModel.fromJson(response.data?[0]);
+          userService.setCurrentUser(userModel.toJson());
+          // persist data
+          await userService.saveUserData(userModel);
+          // await showSuccessSnackbar(message: result.message!);
 
-        routeService.offAllNamed(AppLinks.login);
-              // get new access token
-      // bool result = await tokenService.getNewAccessToken();
-      // if (!result) {
-      //   // move to welcome screen
-      //   logger.log('Going to Login screen');
-      //   routeService.offAllNamed(AppLinks.login);
-      //   return;
-      // }
-      //   // move to home screen
-      // if (userModel.userType.toString() == "renter") {
-      //   await routeService.gotoRoute(AppLinks.carRenterLanding);
-      // } else {
-      //   await routeService.gotoRoute(AppLinks.carOwnerLanding);
-      // }
-
+          if (userModel.userType.toString() == "renter") {
+            await routeService.gotoRoute(AppLinks.carRenterLanding);
+          } else {
+            await routeService.gotoRoute(AppLinks.carOwnerLanding);
+          }
+        } else {
+          // showErrorSnackbar(message: "Kindly login");
+          routeService.offAllNamed(AppLinks.login);
+        }
       } else {
         final response = await authService.getProfile();
         if (response.status == "success" || response.status_code == 200) {
@@ -90,8 +101,6 @@ class ReturningUserSplashController extends GetxController
           routeService.offAllNamed(AppLinks.login);
         }
       }
-
-  
 
       logger.log('Going to home screen');
       // routeService.offAllNamed(AppLinks.agentHome);
