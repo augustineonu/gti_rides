@@ -88,6 +88,7 @@ class TripsController extends GetxController
   Rx<String> convenienceValue = '0'.obs;
   Rx<String> maintenanceValue = '0'.obs;
   Rx<String> fifthPointValue = '0'.obs;
+  Rx<String> tripId = ''.obs;
   TextEditingController reviewMessageController = TextEditingController();
 
   //  methods
@@ -245,6 +246,7 @@ class TripsController extends GetxController
         "pointPercentage": fifthPointValue.value,
         "reviewPercentage": totalRatingValue.value.toString(),
         "message": reviewMessageController.text,
+         "tripID" : tripId.value
       });
       if (response.status_code == 200) {
         showSuccessSnackbar(message: response.message ?? 'Review sent', seconds: 2);

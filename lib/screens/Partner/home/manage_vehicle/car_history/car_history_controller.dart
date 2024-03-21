@@ -68,7 +68,13 @@ class CarHistoryController extends GetxController
         "vehicleName": vehicleName.value,
         "photoUrl": photoUrl.value,
       });
-  void routeToOwnerTrips() => routeService.gotoRoute(AppLinks.ownerTrips);
+  void routeToOwnerTrips() =>
+      routeService.gotoRoute(AppLinks.ownerTrips, arguments: {
+        "carId": carID.value,
+        "vehicleName": vehicleName.value,
+        "photoUrl": photoUrl.value,
+      });
+
   Future<Object?>? routeToQuickEdit1() {
     Get.toNamed(AppLinks.quickEdit, arguments: {
       "startDate": startDate.value,

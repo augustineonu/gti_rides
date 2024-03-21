@@ -63,41 +63,42 @@ class CarHistoryScreen extends StatelessWidget {
                             state[0]['feedbackCount'].toString() ?? "not set"),
                     divider(color: borderColor),
                     earningsAndAllTrips(
-                        totalEarnings:
-                            state[0]['totalEarning'].toString() ?? ''),
+                      totalEarnings: state[0]['totalEarning'].toString() ?? '',
+                    ),
                     divider(color: borderColor),
                     tripDate(
                       title: AppStrings.availabilityDate,
-                        startDate: formateDate(date: state[0]['startDate'] ?? ''),
-                        endDate: formateDate(date: state[0]['endDate'] ?? ''),
-                        trailling:  InkWell(
-                onTap: () async {
-                  controller.routeToQuickEdit();
-                // var result = await Get.toNamed(AppLinks.quickEdit, arguments: {
-                //     "startDate": controller.startDate.value,
-                //     "endDate": controller.endDate.value,
-                //     "pricePerDay": controller.pricePerDay.value,
-                //     "brandModelName": controller.brandModelName.value,
-                //     "photoUrl": controller.photoUrl.value,
-                //     "carID": controller.carID.value,
-                //   });
-                  // if (result != null) {
-                  //   Get.put(CarHistoryController());
-                  // }
-                },
-                child: Row(
-                  children: [
-                    textWidget(
-                        text: AppStrings.quickEdit,
-                        style: getMediumStyle(
-                            fontSize: 12.sp, color: primaryColor)),
-                    SizedBox(
-                      width: 6.sp,
+                      startDate: formateDate(date: state[0]['startDate'] ?? ''),
+                      endDate: formateDate(date: state[0]['endDate'] ?? ''),
+                      trailling: InkWell(
+                        onTap: () async {
+                          controller.routeToQuickEdit();
+                          // var result = await Get.toNamed(AppLinks.quickEdit, arguments: {
+                          //     "startDate": controller.startDate.value,
+                          //     "endDate": controller.endDate.value,
+                          //     "pricePerDay": controller.pricePerDay.value,
+                          //     "brandModelName": controller.brandModelName.value,
+                          //     "photoUrl": controller.photoUrl.value,
+                          //     "carID": controller.carID.value,
+                          //   });
+                          // if (result != null) {
+                          //   Get.put(CarHistoryController());
+                          // }
+                        },
+                        child: Row(
+                          children: [
+                            textWidget(
+                                text: AppStrings.quickEdit,
+                                style: getMediumStyle(
+                                    fontSize: 12.sp, color: primaryColor)),
+                            SizedBox(
+                              width: 6.sp,
+                            ),
+                            SvgPicture.asset(ImageAssets.pencilEdit),
+                          ],
+                        ),
+                      ),
                     ),
-                    SvgPicture.asset(ImageAssets.pencilEdit),
-                  ],
-                ),
-              ),),
                     divider(color: borderColor),
                     carBasics(
                       carType: state[0]['type'].isNotEmpty == true
@@ -153,7 +154,6 @@ class CarHistoryScreen extends StatelessWidget {
       // }
     );
   }
-
 
   Widget earningsAndAllTrips({required String totalEarnings}) {
     return Padding(
@@ -312,14 +312,6 @@ class CarHistoryScreen extends StatelessWidget {
       ],
     );
   }
-
- 
-
- 
-
-
-
- 
 
   Widget continueButton() {
     return controller.isLoading.isTrue

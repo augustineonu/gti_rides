@@ -120,6 +120,7 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
                         onTap: () =>
                             controller.routeToCompletedTrip(arguments: {
                           "completedTrip": activeTrip,
+                          "tripId": activeTrip.tripId
                         }),
                         imgUrl: activeTrip.carProfilePic.toString(),
                         title:
@@ -205,6 +206,7 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
                         onTap: () =>
                             controller.routeToCompletedTrip(arguments: {
                           "completedTrip": completedTrip,
+                          "tripId": completedTrip.tripId
                         }),
                         imgUrl: completedTrip.carProfilePic.toString(),
                         title:
@@ -226,6 +228,7 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
                             onTap: () =>
                                 controller.routeToCompletedTrip(arguments: {
                               "completedTrip": completedTrip,
+                              "tripId": completedTrip.tripId
                             }),
                             child: Row(children: [
                               textWidget(
@@ -447,6 +450,7 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
                   case 1:
                     controller.routeToCompletedTrip(arguments: {
                       "completedTrip": activeTrip,
+                      "tripId": activeTrip.tripId
                     });
                     break;
                   default:

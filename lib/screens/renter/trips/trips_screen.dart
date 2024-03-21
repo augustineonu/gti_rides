@@ -281,6 +281,7 @@ class TripsScreen extends GetView<TripsController> {
                           button2Title: AppStrings.rateTrip,
                           button2OnTap: () {
                             controller.carId.value = completedTrip.carId;
+                            controller.tripId.value = completedTrip.tripId;
                             Get.bottomSheet(
                                 backgroundColor: white,
                                 isScrollControlled: true,
