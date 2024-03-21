@@ -348,7 +348,7 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
                 //           style: getMediumStyle())),
                 // ),
                 onEmpty: SizedBox(
-                   height: 235.sp,
+                  height: 235.sp,
                   width: size.width.sp,
                   child: Card(
                     color: white,
@@ -376,8 +376,7 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
                                   textWidget(
                                       text: 'Lx570',
                                       textOverflow: TextOverflow.visible,
-                                      style: getSemiBoldStyle(
-                                              fontSize: 14.sp)
+                                      style: getSemiBoldStyle(fontSize: 14.sp)
                                           .copyWith(
                                         height: 1.2.sp,
                                         fontWeight: FontWeight.w600,
@@ -622,7 +621,7 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
           child: ClipRRect(
               borderRadius: BorderRadius.all(Radius.circular(4.r)),
               child: Image.asset(
-                ImageAssets.ikiyiLinkBridge,
+                ImageAssets.ikoyiLinkBridge,
                 fit: BoxFit.fitHeight,
                 height: 260.sp,
               )),
@@ -642,11 +641,12 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
                 ),
                 borderRadius: BorderRadius.all(Radius.circular(4.r))),
             child: Column(
+              // crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 textWidget(
                     text: "Discover your perfect Ride.",
                     style: getBoldStyle(fontSize: 18.sp, color: white).copyWith(
-                        fontWeight: FontWeight.w900, fontFamily: 'neue')),
+                        fontWeight: FontWeight.w500, fontFamily: 'neue')),
                 textWidget(
                     text: "Feel free to search for car in your location",
                     style:

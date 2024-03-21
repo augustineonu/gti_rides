@@ -189,14 +189,6 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
                                     ),
                                   );
                                 },
-                                // onEmpty: Padding(
-                                //   padding: EdgeInsets.symmetric(
-                                //       vertical: context.height * 0.1),
-                                //   child: Center(
-                                //       child: textWidget(
-                                //           text: AppStrings.noListedCarsYet,
-                                //           style: getMediumStyle())),
-                                // ),
                                 onEmpty: SizedBox(
                                   height: 235.sp,
                                   width: size.width.sp,
@@ -287,104 +279,7 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
     );
   }
 
-  Widget body(PartnerHomeController controller, Size size) {
-    return Expanded(
-      child: SingleChildScrollView(
-        controller: scrollController,
-        padding: EdgeInsets.symmetric(vertical: 10.sp, horizontal: 16.sp),
-        child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            getCarListedCard(onTap: controller.routeTolistVehicle),
-            manageListedVehicles(onTap: controller.routeToManageVehicle),
-            howGtiWorksCard(
-                onTap: () {
-                  controller.launchWebsite();
-                },
-                imageUrl: ImageAssets.guyWorks),
-            // textWidget(
-            //   text: AppStrings.recentViewCar,
-            //   style: getRegularStyle(),
-            // ),
 
-            Builder(builder: (context) {
-              return controller.obx(
-                (state) {
-                  final visibleCars = state?.take(5).toList() ?? [];
-
-                  return SizedBox(
-                    height: 235.sp,
-                    width: size.width,
-                    child: Stack(
-                      children: [
-                        PageView(
-                          key: pageViewKey,
-                          physics: const ScrollPhysics(),
-                          controller: cardPageController,
-                          onPageChanged: (int index) {
-                            currentIndex.value = index;
-                          },
-                          scrollDirection: Axis.horizontal,
-                          children: [
-                            for (var car in visibleCars)
-                              carCardWidget(size, car,
-                                  onTap: () =>
-                                      controller.routeToCarHistory(arguments: {
-                                        'brandModelName':
-                                            car.brandModelName.toString(),
-                                        'photoUrl': car.photoUrl.toString(),
-                                        'carID': car.carId.toString(),
-                                      })),
-                          ],
-                        ),
-                        Positioned(
-                          bottom: 95.sp,
-                          right: 0,
-                          left: 0,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: List.generate(
-                              visibleCars.length,
-                              (index) => BuildCarouselDot(
-                                currentIndex: currentIndex.value,
-                                index: index,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                onEmpty: Padding(
-                  padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
-                  child: Center(
-                      child: textWidget(
-                          text: AppStrings.noListedCarsYet,
-                          style: getMediumStyle())),
-                ),
-                onError: (e) => Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical: context.height * 0.1, horizontal: 20),
-                  child: Center(
-                    child: Text(
-                      "$e",
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-                onLoading: Padding(
-                  padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
-                  child: Center(child: centerLoadingIcon()),
-                ),
-              );
-            }),
-          ],
-        ),
-      ),
-    );
-  }
 
   Widget carCardWidget(Size size, FavoriteCarData car,
       {void Function()? onTap}) {

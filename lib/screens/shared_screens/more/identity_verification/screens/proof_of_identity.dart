@@ -54,7 +54,7 @@ class ProofOfIdentityScreen extends GetView<HomeAddressController> {
               autovalidateMode: AutovalidateMode.onUserInteraction,
               key: controller.updateFormKey,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   SizedBox(
                     width: 255.sp,

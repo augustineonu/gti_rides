@@ -22,6 +22,7 @@ const green = Color(0xff02C20F);
 const scaffoldColor = Color(0xffF7F8FD);
 const greyLight = Color(0xffD4D4D4);
 const greyLight1 = Color(0xffF2F2F2);
+const grey01 = Color(0xffD9D9D9);
 const grey1 = Color(0xffADADAD);
 const grey2 = Color(0xff858585);
 const grey3 = Color(0xff5C5C5C);

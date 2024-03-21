@@ -47,7 +47,7 @@ class DateOfBirthScreen extends GetView<IdentityVerificationController> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
       child: Obx(() => Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Form(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -62,7 +62,7 @@ class DateOfBirthScreen extends GetView<IdentityVerificationController> {
                     onTap: () async {
                       var data = await Get.toNamed(AppLinks.chooseTripDate,
                           arguments: {
-                            "appBarTitle": AppStrings.selectExpiryDate,
+                            "appBarTitle": AppStrings.selectDob,
                             "enablePastDates": true,
                             "isSingleDateSelection": true,
                             "to": AppStrings.to,

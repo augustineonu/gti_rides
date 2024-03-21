@@ -13,8 +13,8 @@ Widget switchWidget(context,
       // thumb color (round icon)
       activeColor: primaryColor,
       activeTrackColor: activeTrackColor ?? borderColor.withOpacity(0.5),
-      inactiveThumbColor: Colors.blueGrey.shade600,
-      inactiveTrackColor: Colors.grey.shade400,
+      inactiveThumbColor: grey01,
+      inactiveTrackColor: borderColor,
       splashRadius: 0.0,
       // boolean variable value
       value: value,

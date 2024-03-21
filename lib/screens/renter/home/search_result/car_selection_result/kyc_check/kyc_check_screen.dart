@@ -53,7 +53,7 @@ class KycCheckScreen extends GetView<KycCheckController> {
       padding: EdgeInsets.symmetric(horizontal: 20.sp),
       child: Column(
         // mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           textWidget(
               text: controller.isCarListing.value

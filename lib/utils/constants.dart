@@ -516,6 +516,7 @@ class AppStrings {
   static String selectAvailabilityDate = "Select availability date";
   static String selectDate = "Select date";
   static String selectExpiryDate = "Select expiry date";
+  static String selectDob = "Select Date of Birth";
   static String noListedCarsYet = "You have not Listed any cars yet";
   static String noBookedCarsYet = "You have not Booked any cars yet";
   static String noPendingCarsYet = "You have no Pending Trips yet";

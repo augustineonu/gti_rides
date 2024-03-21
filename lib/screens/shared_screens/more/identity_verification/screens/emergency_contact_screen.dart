@@ -51,7 +51,7 @@ class EmergencyContactScreen extends GetView<IdentityVerificationController> {
             key: controller.updateFormKey,
             child: SingleChildScrollView(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   NormalInputTextWidget(
                       expectedVariable: 'phone',

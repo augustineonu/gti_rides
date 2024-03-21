@@ -44,7 +44,7 @@ class GenderScreen extends GetView<IdentityVerificationController> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
       child: Obx(() => Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // textWidget(text: AppStrings.selectGender, style: getRegularStyle()),
               Form(

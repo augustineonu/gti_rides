@@ -101,7 +101,7 @@ class ImageAssets {
   static const String user = "$IMAGE_PATH/user.png";
   static const String ladyWorks = "$IMAGE_PATH/lady_works.png";
   static const String ladyHandout = "$IMAGE_PATH/unsplash.png";
-  static const String ikiyiLinkBridge = "$IMAGE_PATH/Ikoyi_Lekki_Link_Bridge.png";
+  static const String ikoyiLinkBridge = "$IMAGE_PATH/Ikoyi_Lekki_Link_Bridge.png";
   static const String appBarBg1 = "$IMAGE_PATH/appbar_bg.png";
   static const String renter = "$IMAGE_PATH/key.png";
   static const String owner = "$IMAGE_PATH/owner.png";

@@ -51,7 +51,7 @@ class HomeAddressScreen extends GetView<HomeAddressController> {
             autovalidateMode: AutovalidateMode.onUserInteraction,
             key: controller.updateFormKey,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 NormalInputTextWidget(
                   expectedVariable: 'field',

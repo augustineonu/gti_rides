@@ -20,54 +20,60 @@ Widget howGtiWorksCard({void Function()? onTap,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(
-            // width: 120.sp,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 10, right: 5, ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  textWidget(
-                      text: AppStrings.howGtiWorks,
-                      style: getSemiBoldStyle(fontSize: 16.sp).copyWith(
-                          fontWeight: FontWeight.w600, fontFamily: 'neue')),
-                  SizedBox(
-                    height: 7.sp,
-                  ),
-                  textWidget(
-                      text: AppStrings.weArePeer,
-                      style: getLightStyle(fontSize: 10.sp)
-                          .copyWith(fontWeight: FontWeight.w400)),
-                  SizedBox(
-                    height: 7.sp,
-                  ),
-                  InkWell(
-                    onTap: onTap,
-                    child: textWidget(
-                        text: AppStrings.readMore,
-                        style: getLightStyle(fontSize: 10.sp).copyWith(
-                          fontWeight: FontWeight.w400,
-                          decoration: TextDecoration.underline,
-                        )),
-                  ),
-                ],
+          Expanded(
+            flex: 2,
+            child: SizedBox(
+              // width: 120.sp,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10, right: 5, ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    textWidget(
+                        text: AppStrings.howGtiWorks,
+                        style: getSemiBoldStyle(fontSize: 16.sp).copyWith(
+                            fontWeight: FontWeight.w600, fontFamily: 'neue')),
+                    SizedBox(
+                      height: 7.sp,
+                    ),
+                    textWidget(
+                        text: AppStrings.weArePeer,
+                        style: getLightStyle(fontSize: 10.sp)
+                            .copyWith(fontWeight: FontWeight.w400)),
+                    SizedBox(
+                      height: 7.sp,
+                    ),
+                    InkWell(
+                      onTap: onTap,
+                      child: textWidget(
+                          text: AppStrings.readMore,
+                          style: getLightStyle(fontSize: 10.sp).copyWith(
+                            fontWeight: FontWeight.w400,
+                            decoration: TextDecoration.underline,
+                          )),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-          ClipRRect(
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(
-                4.r,
+        
+          Expanded(flex: 2,
+            child: ClipRRect(
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(
+                  4.r,
+                ),
+                bottomRight: Radius.circular(
+                  4.r,
+                ),
               ),
-              bottomRight: Radius.circular(
-                4.r,
+              child: Image.asset(
+                imageUrl,
+                width: 140.sp,
+                height: 125.sp,
+                fit: BoxFit.cover,
               ),
-            ),
-            child: Image.asset(
-              imageUrl,
-              width: 140.sp,
-              height: 125.sp,
-              fit: BoxFit.cover,
             ),
           ),
         ],
