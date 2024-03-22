@@ -73,28 +73,33 @@ class ReferralCodeScreen extends GetView<MoreController> {
                   textOverflow: TextOverflow.visible,
                   style: getRegularStyle(color: grey1)),
               textWidget(
-                  text: 'https://gtirides.com/ytihj',
+                  text:
+                      'https://gtirides.com/${controller.user.value.referralCode}',
                   textAlign: TextAlign.center,
                   textOverflow: TextOverflow.visible,
-                  style: getSemiBoldStyle(fontSize: 18..sp)),
+                  style: getSemiBoldStyle(fontSize: 16.sp)),
             ],
           ),
         ),
-        Container(
-          width: size.width,
-          padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20.sp),
-          decoration: BoxDecoration(
-            color: primaryColor,
-            borderRadius: BorderRadius.only(
-                bottomRight: Radius.circular(4.r),
-                bottomLeft: Radius.circular(4.r)),
-          ),
-          child: Center(
-            child: textWidget(
-                text: AppStrings.shareLink,
-                textAlign: TextAlign.center,
-                textOverflow: TextOverflow.visible,
-                style: getMediumStyle(color: white)),
+        InkWell(
+          onTap: () =>
+              controller.shareRide(content: controller.user.value.referralCode),
+          child: Container(
+            width: size.width,
+            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20.sp),
+            decoration: BoxDecoration(
+              color: primaryColor,
+              borderRadius: BorderRadius.only(
+                  bottomRight: Radius.circular(4.r),
+                  bottomLeft: Radius.circular(4.r)),
+            ),
+            child: Center(
+              child: textWidget(
+                  text: AppStrings.shareLink,
+                  textAlign: TextAlign.center,
+                  textOverflow: TextOverflow.visible,
+                  style: getMediumStyle(color: white)),
+            ),
           ),
         ),
       ],
@@ -166,7 +171,7 @@ class ReferralCodeScreen extends GetView<MoreController> {
     );
   }
 
-  Column header() {
+  Widget header() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
