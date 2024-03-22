@@ -31,11 +31,9 @@ class ReturningUserSplashController extends GetxController
   }
 
   Future<void> getSavedUserModel() async {
-    // final Agent? agentModel = await biometricService.getAgentModelData();
     final UserModel? userModel = await userService.getUserData();
     final TokenModel? tokenModel = await tokenService.getTokensData();
-    // final Tokens? tokens = await biometricService.getTokensData();
-    if (userModel != null) {
+    if (tokenModel != null) {
       logger.log("User token: ${tokenModel!.accessToken}");
 
       //   // setup and move to home screen
@@ -45,13 +43,8 @@ class ReturningUserSplashController extends GetxController
       bool hasExpired = JwtDecoder.isExpired(tokenModel.accessToken!);
       logger.log("token status:: $hasExpired");
 
-      // userService.setCurrentUser(userModel.toJson());
-      // tokenService.setTokenModel(tokenModel.toJson());
-      // tokenService.setAccessToken(tokenModel.accessToken);
-
-      logger.log("User model >>: ${userModel.toJson()}");
+      logger.log("User model >>: ${userModel!.toJson()}");
       if (hasExpired) {
-        // routeService.offAllNamed(AppLinks.login);
         // get new access token
         bool result = await tokenService.getNewAccessToken();
         if (!result) {
@@ -69,7 +62,6 @@ class ReturningUserSplashController extends GetxController
           userService.setCurrentUser(userModel.toJson());
           // persist data
           await userService.saveUserData(userModel);
-          // await showSuccessSnackbar(message: result.message!);
 
           if (userModel.userType.toString() == "renter") {
             await routeService.gotoRoute(AppLinks.carRenterLanding);
@@ -77,7 +69,6 @@ class ReturningUserSplashController extends GetxController
             await routeService.gotoRoute(AppLinks.carOwnerLanding);
           }
         } else {
-          // showErrorSnackbar(message: "Kindly login");
           routeService.offAllNamed(AppLinks.login);
         }
       } else {
@@ -89,7 +80,6 @@ class ReturningUserSplashController extends GetxController
           userService.setCurrentUser(userModel.toJson());
           // persist data
           await userService.saveUserData(userModel);
-          // await showSuccessSnackbar(message: result.message!);
 
           if (userModel.userType.toString() == "renter") {
             await routeService.gotoRoute(AppLinks.carRenterLanding);
@@ -97,14 +87,11 @@ class ReturningUserSplashController extends GetxController
             await routeService.gotoRoute(AppLinks.carOwnerLanding);
           }
         } else {
-          // showErrorSnackbar(message: "Kindly login");
           routeService.offAllNamed(AppLinks.login);
         }
       }
 
       logger.log('Going to home screen');
-      // routeService.offAllNamed(AppLinks.agentHome);
-
       return;
     } else {
       // move to login screen

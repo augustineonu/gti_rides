@@ -115,6 +115,16 @@ class UserService {
     await _secureStorage.write(key: 'user_data', value: userJson);
   }
 
+  Future<void> saveData(String key, String value) async {
+    logger.log('Saving value');
+    await _secureStorage.write(key: key, value: value);
+  }
+
+  Future<dynamic> getData(String key) async {
+    var value = await _secureStorage.read(key: key);
+    return value;
+  }
+
   Future<UserModel?> getUserData() async {
     logger.log('Getting user data');
     String? userJson = await _secureStorage.read(key: 'user_data');

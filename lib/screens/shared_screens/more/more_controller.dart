@@ -8,6 +8,7 @@ import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/partner_service.dart';
 import 'package:gti_rides/services/payment_service.dart';
+import 'package:gti_rides/services/storage_service.dart';
 import 'package:gti_rides/services/token_service.dart';
 import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
@@ -77,6 +78,7 @@ class MoreController extends GetxController {
 
   Future<void> logOut() async {
     await tokenService.clearAll();
+    // storageService.remove('firstTimeLogin');
     routeService.offAllNamed(AppLinks.login);
   }
 

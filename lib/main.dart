@@ -42,8 +42,8 @@ void main() async {
 }
 
 Future<bool> determineUserStatus() async {
-  final user = await userService.getUserData();
-  if (user == null) {
+  final user = await userService.getData('firstTimeLogin');
+  if (user == null || user == 'true') {
     return false;
   } else {
     return true;

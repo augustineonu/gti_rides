@@ -66,8 +66,8 @@ class LoginController extends GetxController
   }
 
   Future<bool?> firstTimeLoginCheck() async {
-    bool? value = await storageService.fetch('firstTimeLogin');
-    if (value == null || value == true) {
+    String? value = await userService.getData('firstTimeLogin');
+    if (value == null || value == 'true') {
       return true;
     } else {
       return false;
@@ -115,14 +115,15 @@ class LoginController extends GetxController
 
         if (isFirstTimeLogin!) {
           await sendFirebaseToken();
-          final res = await authService
-              .addBiometric(payload: {"biometricID": deviceService.deviceId.value});
+          final res = await authService.addBiometric(
+              payload: {"biometricID": deviceService.deviceId.value});
           if (res.status == "success" || res.status_code == 200) {
             isFirstTimeLogin = false;
             await storageService.insert('firstTimeLogin', isFirstTimeLogin!);
+            userService.saveData('firstTimeLogin', 'false');
             logger.log("${res.status} ${res.message}");
-             bool? value = await storageService.fetch('firstTimeLogin');
-             logger.log("firstTimeLogin valeu $value");
+            bool? value = await storageService.fetch('firstTimeLogin');
+            logger.log("firstTimeLogin valeu $value");
           } else {
             logger.log("${res.status} ${res.message}");
           }
@@ -209,6 +210,9 @@ class LoginController extends GetxController
             "biometricID": deviceService.deviceId.value
           });
           if (response.status == "success" || response.status_code == 200) {
+            TokenModel tokenModel = TokenModel.fromJson(response.data);
+
+            tokenService.saveTokensData(tokenModel);
             tokenService.setTokenModel(response.data!);
             tokenService.setAccessToken(response.data!["accessToken"]);
             logger.log("set token:: ${response.data!["accessToken"]}");

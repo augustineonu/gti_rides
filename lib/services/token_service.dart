@@ -94,7 +94,8 @@ class TokenService {
 
   Future<void> deleteTokensData() async {
     logger.log('Deleting tokens data');
-    await _secureStorage.delete(key: 'auth_tokens');
+    await _secureStorage.delete(key: 'user_data');
+    // await _secureStorage.delete(key: 'auth_tokens');
   }
 
   // Access Token
