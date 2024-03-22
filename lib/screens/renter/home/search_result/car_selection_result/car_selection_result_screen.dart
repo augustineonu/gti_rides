@@ -1043,6 +1043,7 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
                     var review = controller.reviews![index];
+                    // int? ratingPercentage = int.tryParse(review.reviewPercentage);
                     return InkWell(
                       onTap: () {
                         if (!controller.isLoading.value) {
@@ -1088,13 +1089,29 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                                             text: " | ",
                                             style: getLightStyle(
                                                 fontSize: 12.sp, color: grey3)),
-                                        SvgPicture.asset(
-                                            ImageAssets.thumbsUpGreen),
+                                      // ratingPercentage! >= 50 ?
+                                      Row(
+                                          children: [
+                                            SvgPicture.asset(
+                                                ImageAssets.thumbsUpGreen),
                                         const SizedBox(width: 3),
                                         textWidget(
                                             text: AppStrings.positive,
                                             style: getMediumStyle(
                                                 fontSize: 12.sp, color: grey5)),
+                                          ],
+                                        )
+                                      // :  Row(
+                                      //     children: [
+                                      //       SvgPicture.asset(
+                                      //           ImageAssets.thumbsDown),
+                                      //   const SizedBox(width: 3),
+                                      //   textWidget(
+                                      //       text: AppStrings.negative,
+                                      //       style: getMediumStyle(
+                                      //           fontSize: 12.sp, color: grey5)),
+                                      //     ],
+                                      //   ),
                                       ],
                                     ),
                                     textWidget(

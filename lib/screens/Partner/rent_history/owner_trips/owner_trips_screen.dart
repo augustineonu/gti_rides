@@ -211,7 +211,7 @@ class OwnerTripsScreen extends GetView<OwnerTripsController> {
           children: [
             ListView.builder(
                 shrinkWrap: true,
-                physics: const ScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 itemCount: itemCount,
                 itemBuilder: (context, index) {
                   // var trip = controller.allTrips[index];

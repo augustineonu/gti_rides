@@ -217,6 +217,7 @@ class AppStrings {
   static String all = "All";
   static String positiveR = "Positive (%s)";
   static String negativeR = "Negative (%s)";
+  static String negative = "Negative";
   static String yourRoute = "Your Route";
   static String weWantToKnowTheRoute =
       "we want to know the route our drive will pick you and drop you through out your trip";
