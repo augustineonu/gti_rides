@@ -114,12 +114,15 @@ class LoginController extends GetxController
         var isFirstTimeLogin = await firstTimeLoginCheck();
 
         if (isFirstTimeLogin!) {
+          await sendFirebaseToken();
           final res = await authService
-              .addBiometric(payload: {"biometricID": deviceService.deviceId});
+              .addBiometric(payload: {"biometricID": deviceService.deviceId.value});
           if (res.status == "success" || res.status_code == 200) {
             isFirstTimeLogin = false;
             await storageService.insert('firstTimeLogin', isFirstTimeLogin!);
             logger.log("${res.status} ${res.message}");
+             bool? value = await storageService.fetch('firstTimeLogin');
+             logger.log("firstTimeLogin valeu $value");
           } else {
             logger.log("${res.status} ${res.message}");
           }
@@ -147,6 +150,19 @@ class LoginController extends GetxController
       showErrorSnackbar(message: e.toString());
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  Future<void> sendFirebaseToken() async {
+    final response = await deviceService.addNotificationToken();
+    try {
+      if (response.status_code == 200) {
+        logger.log("Success:: ${response.message} ");
+      } else {
+        logger.log("Failed:: ${response.message} ");
+      }
+    } catch (exception) {
+      logger.log("Exception:: ${exception.toString()} ");
     }
   }
 
@@ -190,7 +206,7 @@ class LoginController extends GetxController
           isLoading1.value = true;
           final response = await authService.biometricLogin(payload: {
             "user": userModel?.emailAddress!,
-            "biometricID": deviceService.deviceId
+            "biometricID": deviceService.deviceId.value
           });
           if (response.status == "success" || response.status_code == 200) {
             tokenService.setTokenModel(response.data!);

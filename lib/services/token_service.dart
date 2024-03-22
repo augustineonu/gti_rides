@@ -115,7 +115,9 @@ class TokenService {
 
   Future<void> clearAll() async {
     logger.log('Deleting passcode');
-    await _secureStorage.deleteAll();
-    await storageService.insert("firstTimeLogin", true);
+
+    await _secureStorage.delete(key: 'auth_tokens');
+    // await _secureStorage.deleteAll();
+    // await storageService.insert("firstTimeLogin", true);
   }
 }

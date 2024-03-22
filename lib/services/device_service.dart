@@ -7,6 +7,9 @@ import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/models/api_response_model.dart';
+import 'package:gti_rides/services/api_service.dart';
+import 'package:gti_rides/services/firesbase_service.dart';
 import 'package:gti_rides/services/storage_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -20,10 +23,9 @@ class DeviceService with WidgetsBindingObserver {
   static final DeviceService _cache = DeviceService._internal();
   bool keyboardVisible = false;
   String deviceType = 'Test device';
-  String deviceId = '';
+  RxString deviceId = ''.obs;
   String deviceModel = '23';
   bool inTestMode = Platform.environment['FLUTTER_TEST'] == 'true';
-  
 
   factory DeviceService() {
     return _cache;
@@ -40,8 +42,6 @@ class DeviceService with WidgetsBindingObserver {
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     getDeviceInfo();
-
-
   }
 
   @override
@@ -70,17 +70,17 @@ class DeviceService with WidgetsBindingObserver {
 
     if (Platform.isAndroid) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      deviceId = androidInfo.id;
+      deviceId.value = androidInfo.id;
       logger.log(androidInfo.data.toString());
       deviceType = 'Android';
     } else if (Platform.isIOS) {
       IosDeviceInfo iOSinfo = await deviceInfo.iosInfo;
-      deviceId = iOSinfo.identifierForVendor!;
+      deviceId.value = iOSinfo.identifierForVendor!;
       logger.log(iOSinfo.data.toString());
       deviceType = 'iOS';
     } else if (Platform.isLinux) {
       LinuxDeviceInfo linuxInfo = await deviceInfo.linuxInfo;
-      deviceId = linuxInfo.machineId!;
+      deviceId.value = linuxInfo.machineId!;
       deviceType = 'Linux';
       logger.log(linuxInfo.data.toString());
     } else if (Platform.isMacOS) {
@@ -93,6 +93,19 @@ class DeviceService with WidgetsBindingObserver {
       deviceType = 'Windows';
     }
     return deviceType;
+  }
+
+  Future<ApiResponseModel> addNotificationToken() async {
+    try {
+      final result = await apiService.postRequest(
+          endpoint: '/user/auth/addNotificationToken',
+          data: {"token": firebaseService.deviceToken.value});
+      // logger.log("result $result");
+
+      return ApiResponseModel.fromJson(result);
+    } catch (err) {
+      rethrow;
+    }
   }
 
   Future<Position> getDeviceCoordinates() async {

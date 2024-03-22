@@ -17,7 +17,7 @@ class FirebaseService {
   static final FirebaseMessaging _firebaseMessaging =
       FirebaseMessaging.instance;
 
-  String deviceToken = "";
+  RxString deviceToken = "".obs;
 
   factory FirebaseService() {
     return _cache;
@@ -41,9 +41,9 @@ class FirebaseService {
   Future<String> getDeviceToken() async {
     FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
    await firebaseMessaging.getToken().then((token) {
-      deviceToken = token!;
-      logger.log(" FCM token is $token and $deviceToken");
+      deviceToken.value = token!;
+      logger.log(" FCM token is $token and ${deviceToken.value}");
     });
-    return deviceToken;
+    return deviceToken.value;
   }
 }
