@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/models/review_response_model.dart';
 import 'package:gti_rides/screens/Partner/rent_history/feedbacks/feedbacks_controller.dart';
 import 'package:gti_rides/screens/renter/home/search_result/reviews/review_controller.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
@@ -9,6 +10,7 @@ import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
+import 'package:gti_rides/utils/utils.dart';
 
 class FeedbacksBinding extends Bindings {
   @override
@@ -63,106 +65,144 @@ class FeedbacksScreen extends GetView<FeedbacksController> {
               ),
             ],
           ),
-          Expanded(
-            child: Column(
+          Row(
+            children: [
+              reviewTypeBox(
+                  title: AppStrings.all,
+                  onTap: () {
+                    controller.reviews!.refresh();
+                    controller.selectedIndex.value = 0;
+                  },
+                  selected: controller.selectedIndex.value == 0),
+              reviewTypeBox(
+                  title: AppStrings.positiveR
+                      .trArgs([controller.positiveReviews.length.toString()]),
+                  onTap: () {
+                    controller.positiveReviews.refresh();
+                    controller.selectedIndex.value = 1;
+                  },
+                  selected: controller.selectedIndex.value == 1),
+              reviewTypeBox(
+                  title: AppStrings.negativeR
+                      .trArgs([controller.negativeReviews.length.toString()]),
+                  onTap: () {
+                    controller.negativeReviews.refresh();
+                    controller.selectedIndex.value = 2;
+                  },
+                  selected: controller.selectedIndex.value == 2),
+            ],
+          ),
+          const SizedBox(
+            height: 25,
+          ),
+          buildReviews(size, context),
+        ],
+      ),
+    );
+  }
+
+  Widget buildReviews(Size size, BuildContext context) {
+    switch (controller.selectedIndex.value) {
+      case 0:
+        return buildFeedbackLIst(itemCount: controller.reviews!.length);
+      // break;
+      case 1:
+        return buildFeedbackLIst(itemCount: controller.positiveReviews.length);
+      case 2:
+        return buildFeedbackLIst(itemCount: controller.negativeReviews.length);
+      default:
+        return const SizedBox();
+    }
+  }
+
+  Widget buildFeedbackLIst({
+    required int itemCount,
+  }) {
+    return Expanded(
+      child: RefreshIndicator(
+        onRefresh: ()=> controller.getCarReviews(),
+        child: ListView.separated(
+          itemCount: itemCount,
+          shrinkWrap: true,
+          physics: const BouncingScrollPhysics(),
+          itemBuilder: (context, index) {
+            ReviewData review;
+            if (controller.selectedIndex.value == 0) {
+              review = controller.reviews![index];
+            } else if (controller.selectedIndex.value == 1) {
+              review = controller.positiveReviews[index];
+            } else {
+              review = controller.negativeReviews[index];
+            }
+        
+            int? reviewPercentage = int.tryParse(review.reviewPercentage);
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // review type boxes
                 Row(
                   children: [
-                    reviewTypeBox(
-                        title: AppStrings.all,
-                        onTap: () => controller.selectedIndex.value = 0,
-                        selected: controller.selectedIndex.value == 0),
-                    reviewTypeBox(
-                        title: AppStrings.positiveR.trArgs(['0']),
-                        onTap: () => controller.selectedIndex.value = 1,
-                        selected: controller.selectedIndex.value == 1),
-                    reviewTypeBox(
-                        title: AppStrings.negativeR.trArgs(['0']),
-                        onTap: () => controller.selectedIndex.value = 2,
-                        selected: controller.selectedIndex.value == 2),
+                    // Image.asset('assets/images/user_pic.png'),
+                    carImage(
+                        imgUrl: controller.photoUrl.value,
+                        height: 35.sp,
+                        width: 35.sp,
+                        borderRadius: BorderRadius.all(Radius.circular(50))),
+                    const SizedBox(width: 8),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            textWidget(
+                                text: review.user!.userName,
+                                style: getMediumStyle(
+                                    fontSize: 12.sp, color: secondaryColor)),
+                            textWidget(
+                                text: " | ",
+                                style:
+                                    getLightStyle(fontSize: 12.sp, color: grey3)),
+                            SvgPicture.asset(reviewPercentage! >= 50
+                                      ? ImageAssets.thumbsUpGreen
+                                      : ImageAssets.thumbsDown,
+                                  color: reviewPercentage >= 50 ? null : red),
+                            const SizedBox(width: 3),
+                            textWidget(
+                                text:  review.reviewPercentage != null
+                                        ? "${review.reviewPercentage.toString()}%" 
+                                        : '0%',
+                                style: getMediumStyle(
+                                    fontSize: 12.sp, color: grey5)),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            textWidget(
+                                text: isSingleDateSelection(
+                                    date: review.createdAt!),
+                                style: getRegularStyle(
+                                    fontSize: 10.sp, color: grey3)),
+                            // SvgPicture.asset(ImageAssets.arrowForwardRounded),
+                          ],
+                        ),
+                      ],
+                    ),
                   ],
                 ),
-
-                const SizedBox(
-                  height: 25,
-                ),
-                Expanded(
-                  child: ListView.separated(
-                    itemCount: 13,
-                    shrinkWrap: true,
-                    physics: const ScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          Row(
-                            children: [
-                              // Image.asset('assets/images/user_pic.png'),
-                              carImage(
-                                  imgUrl: controller.photoUrl.value,
-                                  height: 35.sp,
-                                  width: 35.sp,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(50))),
-                              const SizedBox(width: 8),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      textWidget(
-                                          text: "Gift Joy",
-                                          style: getMediumStyle(
-                                              fontSize: 12.sp,
-                                              color: secondaryColor)),
-                                      textWidget(
-                                          text: " | ",
-                                          style: getLightStyle(
-                                              fontSize: 12.sp, color: grey3)),
-                                      SvgPicture.asset(
-                                          ImageAssets.thumbsUpGreen),
-                                      const SizedBox(width: 3),
-                                      textWidget(
-                                          text: '100%',
-                                          style: getMediumStyle(
-                                              fontSize: 12.sp, color: grey5)),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      textWidget(
-                                          text: 'Wed, 1 Nov, 9:00am',
-                                          style: getLightStyle(
-                                              fontSize: 12.sp, color: grey3)),
-                                      SvgPicture.asset(
-                                          ImageAssets.arrowForwardRounded),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 10.sp),
-                          textWidget(
-                              text:
-                                  "The car I rented through the app was in great condition and the booking process was effortless. I had a smooth and enjoyable experience.",
-                              textOverflow: TextOverflow.visible,
-                              style:
-                                  getMediumStyle(fontSize: 10.sp, color: grey2)
-                                      .copyWith(fontWeight: FontWeight.w400)),
-                        ],
-                      );
-                    },
-                    separatorBuilder: (_, index) => Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: divider(color: borderColor),
-                    ),
-                  ),
-                ),
+                SizedBox(height: 10.sp),
+                textWidget(
+                    text: review.message.toString(),
+                        textOverflow: TextOverflow.visible,
+                        textAlign: TextAlign.start,
+                        style: getMediumStyle(fontSize: 12.sp, color: grey5)
+                            .copyWith(fontWeight: FontWeight.w300)),
               ],
-            ),
+            );
+          },
+          separatorBuilder: (_, index) => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: divider(color: borderColor),
           ),
-        ],
+        ),
       ),
     );
   }

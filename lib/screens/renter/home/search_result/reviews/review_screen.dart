@@ -138,18 +138,18 @@ class ReviewsScreen extends GetView<ReviewController> {
   Widget buildReviews(Size size, BuildContext context) {
     switch (controller.selectedIndex.value) {
       case 0:
-        return reviewCard(itemCount: controller.reviews!.length);
+        return reviewCardList(itemCount: controller.reviews!.length);
       // break;
       case 1:
-        return reviewCard(itemCount: controller.positiveReviews.length);
+        return reviewCardList(itemCount: controller.positiveReviews.length);
       case 2:
-        return reviewCard(itemCount: controller.negativeReviews.length);
+        return reviewCardList(itemCount: controller.negativeReviews.length);
       default:
         return const SizedBox();
     }
   }
 
-  Widget reviewCard({
+  Widget reviewCardList({
     required int itemCount,
   }) {
     return Expanded(

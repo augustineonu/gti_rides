@@ -52,8 +52,8 @@ class CarHistoryScreen extends StatelessWidget {
                     SizedBox(height: 15.sp),
                     // change this when the data is returned from the API
                     tripsAndRating(
-                      tripCount: state![0]['tripsCount'].toString() ?? '200',
-                      rating: state[0]['percentage'].toString() ?? '100',
+                      tripCount: state![0]['tripsCount'].toString() ?? '0',
+                      rating: state[0]['percentage'].toString() ?? '0',
                     ),
                     SizedBox(height: 12.sp),
                     divider(color: borderColor),

@@ -1117,8 +1117,8 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                                     textWidget(
                                         text: isSingleDateSelection(
                                             date: review.createdAt!),
-                                        style: getLightStyle(
-                                            fontSize: 12.sp, color: grey3)),
+                                        style: getRegularStyle(
+                                            fontSize: 10.sp, color: grey3)),
                                   ],
                                 ),
                               ],
@@ -1128,9 +1128,8 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                                 text: review.message.toString(),
                                 textOverflow: TextOverflow.visible,
                                 textAlign: TextAlign.start,
-                                style: getMediumStyle(
-                                        fontSize: 10.sp, color: grey2)
-                                    .copyWith(fontWeight: FontWeight.w400)),
+                                style: getMediumStyle(fontSize: 12.sp, color: grey5)
+                            .copyWith(fontWeight: FontWeight.w300)),
                           ],
                         ),
                       ),
@@ -1147,15 +1146,19 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
             Padding(
               padding: const EdgeInsets.only(right: 20, top: 10),
               child: InkWell(
+                borderRadius: BorderRadius.all(Radius.circular(5)),
                 onTap: () {
                   if (!controller.isLoading.value) {
                     controller.routeToReviews();
                   }
                 },
-                child: textWidget(
-                    text: AppStrings.seeAllReviews,
-                    style:
-                        getMediumStyle(fontSize: 12.sp, color: primaryColor)),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: textWidget(
+                      text: AppStrings.seeAllReviews,
+                      style:
+                          getMediumStyle(fontSize: 12.sp, color: primaryColor)),
+                ),
               ),
             ),
           ],

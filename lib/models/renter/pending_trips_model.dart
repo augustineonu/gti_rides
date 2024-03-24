@@ -38,6 +38,7 @@ class AllTripsData {
     final DateTime? tripStartDate;
     final dynamic tripType;
     final List<AllTripOrder>? tripOrders;
+        final Renter? renter;
     final dynamic carProfilePic;
     final dynamic carModel;
     final dynamic carYear;
@@ -53,6 +54,7 @@ class AllTripsData {
         this.tripStartDate,
         this.tripType,
         this.tripOrders,
+        this.renter,
         this.carProfilePic,
         this.carModel,
         this.carYear,
@@ -73,6 +75,8 @@ class AllTripsData {
         tripStartDate: json["tripStartDate"] == null ? null : DateTime.parse(json["tripStartDate"]),
         tripType: json["tripType"],
         tripOrders: json["tripOrders"] == null ? [] : List<AllTripOrder>.from(json["tripOrders"]!.map((x) => AllTripOrder.fromJson(x))),
+                renter: json["renter"] == null ? null : Renter.fromJson(json["renter"]),
+
         carProfilePic: json["carProfilePic"],
         carModel: json["carModel"],
         carYear: json["carYear"],
@@ -89,12 +93,38 @@ class AllTripsData {
         "tripStartDate": tripStartDate?.toIso8601String(),
         "tripType": tripType,
         "tripOrders": tripOrders == null ? [] : List<dynamic>.from(tripOrders!.map((x) => x.toJson())),
+        "renter": renter?.toJson(),
         "carProfilePic": carProfilePic,
         "carModel": carModel,
         "carYear": carYear,
         "carBrand": carBrand,
     };
 }
+
+class Renter {
+    final String? userId;
+    final String? userName;
+    final String? userProfileUrl;
+
+    Renter({
+        this.userId,
+        this.userName,
+        this.userProfileUrl,
+    });
+
+    factory Renter.fromJson(Map<String, dynamic> json) => Renter(
+        userId: json["userID"],
+        userName: json["userName"],
+        userProfileUrl: json["userProfileUrl"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "userID": userId,
+        "userName": userName,
+        "userProfileUrl": userProfileUrl,
+    };
+}
+
 
 class AllTripOrder {
     final dynamic cautionFee;

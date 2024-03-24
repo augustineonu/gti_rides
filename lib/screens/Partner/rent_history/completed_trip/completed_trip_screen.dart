@@ -36,7 +36,10 @@ class CompletedTripScreen extends GetView<CompletedTripController> {
     final size = MediaQuery.of(context).size;
 
     return Obx(() => Scaffold(
-          appBar: customAppBar(width, controller),
+              primary: true,
+
+          // appBar: customAppBar(width, controller),
+          appBar: CustomAppBar(controller: controller),
           body: body(context, width, controller, size),
         ));
   }
@@ -534,4 +537,76 @@ class CompletedTripScreen extends GetView<CompletedTripController> {
       ),
     );
   }
+}
+
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const CustomAppBar({required this.controller, super.key});
+
+  final CompletedTripController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    return Container(
+            color: Colors.white,
+
+      child: Stack(
+        children: [
+          Container(
+            width: size.width,
+            padding:
+                EdgeInsets.only(top: 0.sp, bottom: 20.sp, left: 20, right: 20),
+            height: 179.h,
+            decoration: const BoxDecoration(
+                color: darkBrown,
+                image: DecorationImage(
+                    image: AssetImage(
+                      ImageAssets.appBarBg1,
+                    ),
+                    fit: BoxFit.fitHeight)),
+            child: SafeArea(
+              child: SizedBox(
+                width: 180.sp,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 5.sp,
+                    ),
+                    InkWell(
+                        onTap: controller.goBack,
+                        child: SvgPicture.asset(
+                          color: white,
+                          ImageAssets.arrowLeft,
+                          width: 24.sp,
+                        )),
+                    const Spacer(),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        textWidget(
+                            text: AppStrings.carTripStatus
+                                .trArgs([controller.tripsData.status.toString()]),
+                            textOverflow: TextOverflow.visible,
+                            style: getMediumStyle(color: white, fontSize: 17.sp)),
+                        SizedBox(
+                          width: 5.sp,
+                        ),
+                        SvgPicture.asset(ImageAssets.completedCheck),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  // TODO: implement preferredSize
+  Size get preferredSize => Size(0.0, 180.0);
 }

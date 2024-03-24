@@ -126,7 +126,9 @@ class TripsController extends GetxController
     selectedIndex.value = value;
     update();
   }
-  void routeToCompletedTrip({Object? arguments}) => routeService.gotoRoute(AppLinks.completedTrip,arguments: arguments);
+
+  void routeToCompletedTrip({Object? arguments}) =>
+      routeService.gotoRoute(AppLinks.completedTrip, arguments: arguments);
 
   void onClickPrevious() {
     if (currentIndex > 0) {
@@ -246,12 +248,14 @@ class TripsController extends GetxController
         "pointPercentage": fifthPointValue.value,
         "reviewPercentage": totalRatingValue.value.toString(),
         "message": reviewMessageController.text,
-         "tripID" : tripId.value
+        "tripID": tripId.value
       });
       if (response.status_code == 200) {
-        showSuccessSnackbar(message: response.message ?? 'Review sent', seconds: 2);
-         Future.delayed(const Duration(seconds: 4)).then((value) => 
-         routeService.goBack()).then((value) => Get.back());
+        showSuccessSnackbar(
+            message: response.message ?? 'Review sent', seconds: 2);
+        Future.delayed(const Duration(seconds: 4))
+            .then((value) => routeService.goBack())
+            .then((value) => Get.back());
         //  Get.back();
       } else {
         logger.log(

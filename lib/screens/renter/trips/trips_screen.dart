@@ -1,5 +1,6 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -145,7 +146,9 @@ class TripsScreen extends GetView<TripsController> {
     switch (controller.selectedIndex.value) {
       case 0:
         // return pendingStatusBuild(size, controller, context);
-        return PendingTrips(controller: controller,);
+        return PendingTrips(
+          controller: controller,
+        );
       case 1:
         // active trips
         return controller.activeTrips.isEmpty
@@ -590,6 +593,10 @@ class TripsScreen extends GetView<TripsController> {
                                                           expectedVariable:
                                                               'field',
                                                           title: '',
+                                                          inputFormatters: [
+                                                            LengthLimitingTextInputFormatter(
+                                                                500),
+                                                          ],
                                                           hintText: AppStrings
                                                               .reviewHintText,
                                                           hintTextColor: grey2,
@@ -1529,7 +1536,6 @@ class TripsScreen extends GetView<TripsController> {
                 ? primaryColorLight
                 : grey5,
             onTap: () {
-             
               switch (pendingTrips.status) {
                 case "pending":
                   if (pendingTrips.tripType == 'chauffeur') {
@@ -1622,8 +1628,6 @@ class TripsScreen extends GetView<TripsController> {
     //      ||
     // pendingTrips.status == 'declined';
   }
-
-
 }
 
 enum PaymentStatus {
@@ -1641,11 +1645,9 @@ enum PaymentStatus {
 //     return 'Chat with admin';
 // }
 
-
 class PendingTrips extends StatelessWidget {
-   PendingTrips({super.key, required this.controller});
-final TripsController controller;
-
+  PendingTrips({super.key, required this.controller});
+  final TripsController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -1976,7 +1978,7 @@ final TripsController controller;
     );
   }
 
-    Widget dateTimeColWIdget({
+  Widget dateTimeColWIdget({
     required String title,
     required String subTitle,
     required CrossAxisAlignment alignment,
@@ -1994,8 +1996,7 @@ final TripsController controller;
     );
   }
 
-
-   Widget headerCard(Size size, AllTripsData pendingTrips) {
+  Widget headerCard(Size size, AllTripsData pendingTrips) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 0.sp),
       child: Stack(
@@ -2076,7 +2077,7 @@ final TripsController controller;
     );
   }
 
-   Widget rowNairaText({
+  Widget rowNairaText({
     required String title,
     required String subTitle,
   }) {
@@ -2102,7 +2103,7 @@ final TripsController controller;
     );
   }
 
-    Widget continueButton(TripsController controller, AllTripsData pendingTrips) {
+  Widget continueButton(TripsController controller, AllTripsData pendingTrips) {
     // this is dependent if the trips start date is above DateTime.now()
     bool statTrip = controller.isTripActive(
         pendingTrips.tripOrders?.first.tripStartDate ?? DateTime.now());
@@ -2123,7 +2124,6 @@ final TripsController controller;
                 ? primaryColorLight
                 : grey5,
             onTap: () {
-             
               switch (pendingTrips.status) {
                 case "pending":
                   if (pendingTrips.tripType == 'chauffeur') {
@@ -2216,5 +2216,4 @@ final TripsController controller;
     //      ||
     // pendingTrips.status == 'declined';
   }
-
 }
