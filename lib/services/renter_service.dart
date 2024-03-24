@@ -60,7 +60,7 @@ class RenterService {
   Future<ListResponseModel> getRecentCars() async {
     try {
       final result = await apiService.getRequest(
-        '/user/renter/car/getRecentCars?skip=0&limit=10',
+        '/user/renter/car/getRecentCars?skip=0&limit=100',
       );
       logger.log("result $result");
 
@@ -88,11 +88,11 @@ class RenterService {
   }
 
   Future<ListResponseModel> getReview({required String carId,
-  String? type, String? filter}) async {
+  String? type, String? tripId}) async {
     try {
       final result = await apiService.getRequest(
         // /user/partner/getReview?carID=a9UExyBrC4&skip=0&limit=10
-        '/user/${type ?? 'renter'}/getReview?carID=$carId&skip=0&limit=1000${filter ?? ''}',
+        '/user/${type ?? 'renter'}/getReview?carID=$carId&skip=0&limit=1000&tripID=${tripId ?? ''}',
       );
       // {{BaseLocal}}/user/renter/getReview?carID=a9UExyBrC4&skip=0&limit=10
       logger.log("result $result");
@@ -245,7 +245,7 @@ class RenterService {
   }) async {
     try {
       final result = await apiService.getRequest(
-        '/user/$param/trip/getAllTrips?status=&skip=0&limit=10000',
+        '/user/$param/trip/getAllTrips?status=&skip=0&limit=100',
       );
       // logger.log("result $result");
 

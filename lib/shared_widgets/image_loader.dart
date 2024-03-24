@@ -4,10 +4,11 @@ import 'package:flutter/widgets.dart';
 class SafeCachedNetworkImageProvider extends CachedNetworkImageProvider {
 
   final ImageProvider? fallbackImage;
+  final int? decode;
 
-  const SafeCachedNetworkImageProvider(String url, {this.fallbackImage}) : super(url);
+  const SafeCachedNetworkImageProvider(String url, {this.fallbackImage, 
+  this.decode}) : super(url);
 
-  @override
   ImageStreamCompleter load(
       CachedNetworkImageProvider key, ImageDecoderCallback decode) {
     try {

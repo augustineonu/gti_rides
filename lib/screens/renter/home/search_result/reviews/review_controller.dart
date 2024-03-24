@@ -8,7 +8,8 @@ import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/renter_service.dart';
 import 'package:gti_rides/services/route_service.dart';
 
-class ReviewController extends GetxController with StateMixin<List<ReviewData>> {
+class ReviewController extends GetxController
+    with StateMixin<List<ReviewData>> {
   Logger logger = Logger('ReviewController');
 
   ReviewController() {
@@ -32,7 +33,7 @@ class ReviewController extends GetxController with StateMixin<List<ReviewData>> 
   }
 
   @override
-  void onInit() async{
+  void onInit() async {
     // TODO: implement onInit
     super.onInit();
     if (arguments != null) {
@@ -49,10 +50,15 @@ class ReviewController extends GetxController with StateMixin<List<ReviewData>> 
   Rx<String> carId = "".obs;
   Rx<String> photoUrl = "".obs;
   Rx<String> vehicleName = "".obs;
+  Rx<String> testString = "".obs;
 
   RxList<ReviewData>? reviews = <ReviewData>[].obs;
 
   void goBack() => routeService.goBack();
+
+  // RxList<ReviewData> allReviews = <ReviewData>[].obs;
+  RxList<ReviewData> positiveReviews = <ReviewData>[].obs;
+  RxList<ReviewData> negativeReviews = <ReviewData>[].obs;
 
   Future<void> getCarReviews() async {
     change([], status: RxStatus.loading());
@@ -63,21 +69,41 @@ class ReviewController extends GetxController with StateMixin<List<ReviewData>> 
 
         if (response.data == null || response.data!.isEmpty) {
           // If the list is empty
-          // change(<CarHistoryData>[].obs, status: RxStatus.empty());
           reviews?.value = [];
           change(reviews, status: RxStatus.empty());
         } else {
-          reviews?.value = response.data!.map((review) => ReviewData.fromJson(review)).toList();
+          reviews?.value = response.data!
+              .map((review) => ReviewData.fromJson(review))
+              .toList();
 
+          positiveReviews.clear();
+          negativeReviews.clear();
+
+          for (ReviewData review in reviews!) {
+            var reviewPercentage = int.parse(review.reviewPercentage);
+            switch (reviewPercentage) {
+              case <= 49:
+                negativeReviews.add(review);
+                break;
+              case >= 50:
+                positiveReviews.add(review);
+                break;
+              default:
+                reviews;
+            }
+          }
+          logger.log("Positive Review:: ${positiveReviews.length.toString()}");
+          logger.log("Negative Review:: ${negativeReviews.length.toString()}");
+          logger.log("Review:: ${reviews!.length.toString()}");
           change(reviews, status: RxStatus.success());
           update();
         }
       } else {
-        change([] ,status: RxStatus.error());
+        change([], status: RxStatus.error());
         logger.log("unable to get car review ${response.data}");
       }
     } catch (exception) {
-      change([] ,status: RxStatus.error());
+      change([], status: RxStatus.error());
       logger.log("error: ${exception.toString()}");
     }
   }

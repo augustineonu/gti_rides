@@ -18,14 +18,14 @@ Widget switchProfileWidget({
     onTap: () {
       Get.bottomSheet(
         Container(
-          padding: EdgeInsets.only(left: 18.sp, top: 22.sp, bottom: 29.sp),
+          padding: EdgeInsets.only(top: 22.sp, bottom: 29.sp),
           height: size.height * 0.2,
           child: Column(
             children: [
               InkWell(
                 onTap: onTapCarOwner ?? (){},
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 18),
                   child: Row(
                     children: [
                       Image.asset(ImageAssets.owner),
@@ -46,7 +46,7 @@ Widget switchProfileWidget({
               InkWell(
                 onTap: onTapCarRenter ?? (){},
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 18),
                   child: Row(
                     children: [
                       Image.asset(ImageAssets.renter),

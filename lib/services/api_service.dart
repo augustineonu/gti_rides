@@ -450,6 +450,9 @@ class ApiService {
       }
       return response.data;
     } on DioException catch (e) {
+      if(e is SocketException) {
+        throw "seems you are offline";
+      }
       logger.log("GET REQUEST ERROR ($endpoint) :: ${e.response?.data}");
       if (e.response?.data != null) {
         return e.response?.data;

@@ -219,7 +219,7 @@ Widget profileAvatar({
                           shape: BoxShape.circle,
                           image: DecorationImage(
                               image: ResizeImage(imageProvider,
-                              width: 300, height: 300), fit: BoxFit.cover),
+                              width: 50, height: 50), fit: BoxFit.cover),
                         ),
                       ),
                       placeholder: (context, url) => const SizedBox(

@@ -33,7 +33,7 @@ class CompletedTripController extends GetxController
       tripsData = arguments!["completedTrip"] as AllTripsData;
       showSupport.value = arguments!["showSupport"] ?? true;
       await getCarReviews(type: 'renter',
-      filter: showSupport.value ? '&tripID=${tripsData.tripId}' : '');
+      tripId: showSupport.value ? '&tripID=${tripsData.tripId}' : '');
     }
   }
 
@@ -64,12 +64,12 @@ class CompletedTripController extends GetxController
   RxList<ReviewData>? reviews = <ReviewData>[].obs;
 
   Future<void> getCarReviews({required String type,
-  String? filter}) async {
+  String? tripId}) async {
     change([], status: RxStatus.loading());
     isLoading.value = true;
     try {
       final response = await renterService.getReview(
-          carId: tripsData.carId.toString(), type: type, filter: filter);
+          carId: tripsData.carId.toString(), type: type, tripId: tripId);
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("car review::${response.data}");
 
