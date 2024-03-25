@@ -236,7 +236,7 @@ class AppRoutes {
     ),
     GetPage(
       name: AppLinks.referral,
-      page: () => const ReferralCodeScreen(),
+      page: () => ReferralCodeScreen(),
     ),
     GetPage(
       name: AppLinks.carOwnerLanding,

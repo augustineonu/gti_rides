@@ -32,9 +32,14 @@ class CompletedTripController extends GetxController
       logger.log("Received data:: ${arguments!}");
       tripsData = arguments!["completedTrip"] as AllTripsData;
       showSupport.value = arguments!["showSupport"] ?? true;
-      await getCarReviews(type: 'renter',
-      tripId: showSupport.value ? '&tripID=${tripsData.tripId}' : '');
+      await getCarReviews(
+          type: 'renter',
+          tripId: showSupport.value ? '${tripsData.tripId}' : '');
     }
+
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
+      statusBarIconBrightness: Brightness.light,
+    ));
   }
 
   Map<String, dynamic>? arguments = Get.arguments;
@@ -63,8 +68,7 @@ class CompletedTripController extends GetxController
 
   RxList<ReviewData>? reviews = <ReviewData>[].obs;
 
-  Future<void> getCarReviews({required String type,
-  String? tripId}) async {
+  Future<void> getCarReviews({required String type, String? tripId}) async {
     change([], status: RxStatus.loading());
     isLoading.value = true;
     try {
@@ -111,7 +115,7 @@ class CompletedTripController extends GetxController
       final response = await partnerService
           .addReview(carId: tripsData.carId.toString(), data: {
         "tripID": tripsData.tripId.toString(),
-        // "renterID": tripsData.,
+        "renterID": tripsData.renter!.userId,
         "message": reviewMessageController.text,
       });
       if (response.status_code == 200) {
@@ -142,6 +146,8 @@ class CompletedTripController extends GetxController
 
   @override
   void onClose() {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+
     // timer.cancel(); // Cancel the timer when the controller is disposed.
     super.onClose();
   }

@@ -11,11 +11,12 @@ import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
 
 class ReferralCodeScreen extends GetView<MoreController> {
-  const ReferralCodeScreen([Key? key]) : super(key: key);
+   ReferralCodeScreen([Key? key]) : super(key: key);
+    @override
+      final controller = Get.put(MoreController());
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    // final controller = Get.put(AccountVerificationController());
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: appBar(),

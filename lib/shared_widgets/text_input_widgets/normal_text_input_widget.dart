@@ -120,12 +120,13 @@ class NormalInputTextWidget extends StatelessWidget {
               },
           onEditingComplete: onEditingComplete,
           maxLines: maxLines,
+          maxLength: maxLength,
           showCursor: showCursor,
           inputFormatters: inputFormatters ??
               [
                 LengthLimitingTextInputFormatter(50),
               ],
-          maxLength: maxLength,
+          
           style: getRegularStyle(fontSize: fontSize ?? 16, color: textColor),
           decoration: InputDecoration(
             filled: filled,

@@ -108,6 +108,7 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
     return Obx(
       () => Scaffold(
         body: RefreshIndicator(
+          color: primaryColor,
           onRefresh: controller.getRecentCars,
           child: Stack(
             children: [

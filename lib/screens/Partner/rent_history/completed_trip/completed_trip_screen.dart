@@ -36,7 +36,7 @@ class CompletedTripScreen extends GetView<CompletedTripController> {
     final size = MediaQuery.of(context).size;
 
     return Obx(() => Scaffold(
-              primary: true,
+          primary: false,
 
           // appBar: customAppBar(width, controller),
           appBar: CustomAppBar(controller: controller),
@@ -92,14 +92,14 @@ class CompletedTripScreen extends GetView<CompletedTripController> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Spacer(),
+                                const Spacer(),
                                 textWidget(
                                     text: AppStrings.review,
                                     textOverflow: TextOverflow.visible,
                                     style: getMediumStyle(
                                       color: grey3,
                                     )),
-                                Spacer(),
+                                const Spacer(),
                                 InkWell(
                                     onTap: controller.goBack,
                                     child: SvgPicture.asset(
@@ -147,6 +147,7 @@ class CompletedTripScreen extends GetView<CompletedTripController> {
             child: tripInfo(
                 title: AppStrings.leaveReviewAboutRental,
                 fontWeight: FontWeight.w500,
+                color: grey5,
                 trailling: const Icon(Iconsax.arrow_right_3, size: 18)),
           ),
         ],
@@ -167,6 +168,7 @@ class CompletedTripScreen extends GetView<CompletedTripController> {
             child: tripInfo(
                 title: AppStrings.speakToSupport,
                 fontWeight: FontWeight.w500,
+                color: grey5,
                 trailling: const Icon(Iconsax.arrow_right_3, size: 18)),
           ),
         ],
@@ -179,7 +181,7 @@ class CompletedTripScreen extends GetView<CompletedTripController> {
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: controller.obx(
         (state) {
-          var review = state!.first;
+          // var review = state!.first;
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -188,46 +190,87 @@ class CompletedTripScreen extends GetView<CompletedTripController> {
                 style: getRegularStyle(fontSize: 12.sp, color: grey3),
               ),
               SizedBox(height: 14.sp),
-              Row(
-                children: [
-                  // Image.asset('assets/images/user_pic.png'),
-                  carImage(
-                      imgUrl: review.user!.userProfileUrl.toString(),
-                      height: 30.sp,
-                      width: 30.sp,
-                      borderRadius: BorderRadius.all(Radius.circular(30.r))),
-                  const SizedBox(width: 8),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
+              SizedBox(
+                height: 90.sp,
+                // width: 300.sp,
+                child: ListView.separated(
+                  itemCount: state!.take(5).length,
+                  shrinkWrap: true,
+                  physics: const BouncingScrollPhysics(),
+                  // controller: ScrollController(initialScrollOffset: 5),
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    var review = state[index];
+                    int? reviewPercentage =
+                        int.tryParse(review.reviewPercentage);
+                    return SizedBox(
+                      width: 300.sp,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Row(
+                            children: [
+                              // Image.asset('assets/images/user_pic.png'),
+                              carImage(
+                                  imgUrl:
+                                      review.user!.userProfileUrl.toString(),
+                                  height: 30.sp,
+                                  width: 30.sp,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(30.r))),
+                              const SizedBox(width: 8),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      textWidget(
+                                          text:
+                                              review.user!.userName.toString(),
+                                          style: getMediumStyle(
+                                              fontSize: 12.sp,
+                                              color: secondaryColor)),
+                                      textWidget(
+                                          text: " | ",
+                                          style: getLightStyle(
+                                              fontSize: 12.sp, color: grey3)),
+                                      SvgPicture.asset(
+                                          reviewPercentage! >= 50
+                                              ? ImageAssets.thumbsUpGreen
+                                              : ImageAssets.thumbsDown,
+                                          color: reviewPercentage >= 50
+                                              ? null
+                                              : red),
+                                      const SizedBox(width: 3),
+                                      textWidget(
+                                          text: review.reviewPercentage != null
+                                              ? "${review.reviewPercentage.toString()}%"
+                                              : '0%',
+                                          style: getMediumStyle(
+                                              fontSize: 12.sp, color: grey5)),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 10.sp),
                           textWidget(
-                              text: review.user!.userName.toString(),
-                              style: getMediumStyle(
-                                  fontSize: 12.sp, color: secondaryColor)),
-                          textWidget(
-                              text: " | ",
+                              text: review.message.toString(),
+                              textOverflow: TextOverflow.visible,
+                              textAlign: TextAlign.start,
                               style:
-                                  getLightStyle(fontSize: 12.sp, color: grey3)),
-                          SvgPicture.asset(ImageAssets.thumbsUpGreen),
-                          const SizedBox(width: 3),
-                          textWidget(
-                              text: '100%',
-                              style: getMediumStyle(
-                                  fontSize: 12.sp, color: grey5)),
+                                  getMediumStyle(fontSize: 12.sp, color: grey5)
+                                      .copyWith(fontWeight: FontWeight.w300)),
                         ],
                       ),
-                    ],
+                    );
+                  },
+                  separatorBuilder: (_, lol) => const SizedBox(
+                    width: 0
                   ),
-                ],
+                ),
               ),
-              SizedBox(height: 10.sp),
-              textWidget(
-                  text: review.message.toString(),
-                  textOverflow: TextOverflow.visible,
-                  style: getMediumStyle(fontSize: 10.sp, color: grey2)
-                      .copyWith(fontWeight: FontWeight.w400)),
             ],
           );
         },
@@ -369,7 +412,8 @@ class CompletedTripScreen extends GetView<CompletedTripController> {
   Widget tripInfo(
       {required String title,
       required Widget trailling,
-      FontWeight? fontWeight}) {
+      FontWeight? fontWeight,
+      Color? color}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5.0),
       child: Row(
@@ -378,7 +422,7 @@ class CompletedTripScreen extends GetView<CompletedTripController> {
           textWidget(
             text: title,
             textOverflow: TextOverflow.visible,
-            style: getRegularStyle(color: grey3, fontSize: 12.sp)
+            style: getRegularStyle(color: color ?? grey3, fontSize: 12.sp)
                 .copyWith(fontWeight: fontWeight),
           ),
           trailling
@@ -533,6 +577,8 @@ class CompletedTripScreen extends GetView<CompletedTripController> {
               ),
             ),
           ),
+       
+       
         ],
       ),
     );
@@ -548,8 +594,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Container(
-            color: Colors.white,
-
+      color:  Colors.white,
       child: Stack(
         children: [
           Container(
@@ -586,10 +631,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         textWidget(
-                            text: AppStrings.carTripStatus
-                                .trArgs([controller.tripsData.status.toString()]),
+                            text: AppStrings.carTripStatus.trArgs(
+                                [controller.tripsData.status.toString()]),
                             textOverflow: TextOverflow.visible,
-                            style: getMediumStyle(color: white, fontSize: 17.sp)),
+                            style:
+                                getMediumStyle(color: white, fontSize: 17.sp)),
                         SizedBox(
                           width: 5.sp,
                         ),
@@ -608,5 +654,5 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   // TODO: implement preferredSize
-  Size get preferredSize => Size(0.0, 180.0);
+  Size get preferredSize => Size(0.0,  180.0);
 }
