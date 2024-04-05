@@ -1498,7 +1498,9 @@ class ListVehicleController extends GetxController {
           //     firstCar['document'][0]["documentURL"];
           // // availability
           startDateTime.value = formateDate(date: firstCar['startDate'] ?? '');
+          rawStartTime = firstCar['startDate'];
           endDateTime.value = formateDate(date: firstCar['endDate'] ?? '');
+          rawEndTime = firstCar['endDate'];
           advanceTime.value = firstCar['advanceDays'] ?? '';
           pricePerDay.value = firstCar['pricePerDay'] ?? '';
           discountDays.value = firstCar['discountDays'] ?? '';

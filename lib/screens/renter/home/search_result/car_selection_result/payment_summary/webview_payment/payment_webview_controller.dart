@@ -57,7 +57,9 @@ class PaymentWebViewController extends GetxController {
               // showErrorSnackbar(message: "message");
               if (request.url
                   .toLowerCase()
-                  .contains('successful'.toLowerCase())) {
+                  .contains('pending'.toLowerCase()) || request.url
+                  .toLowerCase()
+                  .contains('successful'.toLowerCase()) ){
                 routeService.goBack(result: true);
                 // Navigator.pop(context)
               }

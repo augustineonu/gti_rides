@@ -25,6 +25,35 @@ class NumberTextInputFormatter extends TextInputFormatter {
   }
 }
 
+class DiscountInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    // Filter non-digit characters
+    String newText = newValue.text.replaceAll(RegExp(r'[^\d]'), '');
+
+    // Ensure input is within the range of 1 to 100
+    int parsedValue = int.tryParse(newText) ?? 0;
+    // if (parsedValue < 1) {
+    //   parsedValue = 1;
+    // } else 
+    if (parsedValue > 100) {
+      parsedValue = 100;
+    }
+
+      // Ensure the length of the input does not exceed 3 characters
+    String formattedText = parsedValue.toString();
+    if (formattedText.length > 3) {
+      formattedText = formattedText.substring(0, 3);
+    }
+    return newValue.copyWith(
+      text: formattedText,
+      selection: TextSelection.collapsed(offset: formattedText.length),
+    );
+  }
+}
+
+
 class DNumberInputFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(

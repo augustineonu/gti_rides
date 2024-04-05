@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -9,6 +10,7 @@ import 'package:gti_rides/services/error_interceptor.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/services/token_service.dart';
 import 'package:gti_rides/utils/constants.dart';
+import 'package:gti_rides/utils/utils.dart';
 import 'logger.dart';
 
 ApiService get apiService => getx.Get.find();
@@ -58,6 +60,23 @@ class ApiService {
           return handler.next(options);
         },
         onError: (DioException e, handler) async {
+          final statusCode =
+              jsonDecode(e.response!.data.toString())['status_code'];
+          logger
+              .log("Error: ${statusCode.toString()} ${e.response!.statusCode}");
+          if (e.response!.statusCode == 400 && statusCode == '401') {
+             logger
+              .log("Again: ${statusCode.toString()} ${e.response!.statusCode}");
+            // bool newAccessTokenResult = await tokenService.getNewAccessToken();
+            // if (!newAccessTokenResult) {
+            //   logger.log('Going to Login screen');
+            //   routeService.offAllNamed(AppLinks.login);
+            //   return;
+            // }
+          }
+          // final appError = createErrorEntity(e);
+          // logger.log("Error: ${appError.toString()}");
+          // showErrorSnackbar(message: appError.toString());
           // to be worked on later
           //      if(e.type == DioExceptionType.connectionTimeout){
           //   throw Exception("Connection  Timeout Exception");
@@ -65,33 +84,33 @@ class ApiService {
           logger.log(
               "Dio error: ${e.message}, Status code: ${e.response?.statusCode}");
 
-          if (e.response?.statusCode == 400) {
-            // {{BaseURL}}/user/partner/car/carQuickEdit?carID=mr9LvcZk3W
-            // If a 401 response is received, refresh the access token
-            // String newAccessToken = await refreshToken();
-            bool newAccessTokenResult = await tokenService.getNewAccessToken();
-            if (!newAccessTokenResult) {
-              logger.log('Going to Login screen');
-              routeService.offAllNamed(AppLinks.login);
-              return;
-            }
-            // else {
-            //   logger.log("result: token is false ");
-            // }
+          // if (e.response?.statusCode == 400) {
+          //   // {{BaseURL}}/user/partner/car/carQuickEdit?carID=mr9LvcZk3W
+          //   // If a 401 response is received, refresh the access token
+          //   // String newAccessToken = await refreshToken();
+          //   bool newAccessTokenResult = await tokenService.getNewAccessToken();
+          //   if (!newAccessTokenResult) {
+          //     logger.log('Going to Login screen');
+          //     routeService.offAllNamed(AppLinks.login);
+          //     return;
+          //   }
+          //   // else {
+          //   //   logger.log("result: token is false ");
+          //   // }
 
-            // Update the request header with the new access token
-            e.requestOptions.headers['Authorization'] =
-                'Bearer ${tokenService.accessToken.value}';
+          //   // Update the request header with the new access token
+          //   e.requestOptions.headers['Authorization'] =
+          //       'Bearer ${tokenService.accessToken.value}';
 
-            _dio.options.headers['Authorization'] =
-                'Bearer ${tokenService.accessToken.value}';
+          //   _dio.options.headers['Authorization'] =
+          //       'Bearer ${tokenService.accessToken.value}';
 
-            // Repeat the request with the updated header
-            return handler.resolve(await _dio.fetch(e.requestOptions));
-          } else if (e.response?.statusCode == 403) {
-            logger.log("status code == 403");
-            //  _logOut();
-          }
+          //   // Repeat the request with the updated header
+          //   return handler.resolve(await _dio.fetch(e.requestOptions));
+          // } else if (e.response?.statusCode == 403) {
+          //   logger.log("status code == 403");
+          //   //  _logOut();
+          // }
           return handler.next(e);
         },
       ),
@@ -450,7 +469,7 @@ class ApiService {
       }
       return response.data;
     } on DioException catch (e) {
-      if(e is SocketException) {
+      if (e is SocketException) {
         throw "seems you are offline";
       }
       logger.log("GET REQUEST ERROR ($endpoint) :: ${e.response?.data}");

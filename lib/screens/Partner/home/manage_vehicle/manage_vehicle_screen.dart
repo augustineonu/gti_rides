@@ -185,6 +185,10 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: InkWell(
+        // onTapDown: (TapDownDetails value) {
+        //   print("hello");
+        //   quickOptionsSheet(size, controller, car);
+        // },
         onTap: () => controller.routeToCarHistory(arguments: {
           "brandModelName": car["brandModelName"],
           "photoUrl": car["photoUrl"],
@@ -358,82 +362,7 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
               top: 12.sp,
               child: InkWell(
                   onTap: () {
-                    Get.bottomSheet(
-                      SizedBox(
-                        height: size.height * 0.2.sp,
-                        width: size.width.sp,
-                        child: ListView.separated(
-                          shrinkWrap: true,
-                          padding: const EdgeInsets.all(20),
-                          itemCount: controller.quickOptions.length,
-                          itemBuilder: (context, index) {
-                            final option = controller.quickOptions[index];
-                            return InkWell(
-                              onTap: () {
-                                switch (index) {
-                                  case 0:
-                                    deleteVehicleSheet(size,
-                                        title: AppStrings.areYouSureToDelete
-                                            .trArgs([car['brandModelName']]),
-                                        subTitle: AppStrings
-                                            .everyDataWouldBeDeleted
-                                            .trArgs([car['brandModelName']]),
-                                        onTapCancel: controller.goBack,
-                                        onTapContinue: () => controller
-                                            .deleteCar(carID: car['carID']));
-                                  case 1:
-                                    controller.routeToQuickEdit(arguments: {
-                                      "brandModelName": car["brandModelName"],
-                                      "photoUrl": car["photoUrl"],
-                                      "carID": car["carID"],
-                                      "start": car["startDate"],
-                                      "end": car["endDate"],
-                                      "enablePastDates": false,
-                                      "pricePerDay": car["pricePerDay"],
-                                      "isFromManageCars": true
-                                    });
-                                  case 2:
-                                    controller.routeToListVehicle(arguments: {
-                                      "carID": car["carID"],
-                                      "isFromManageCars": true,
-                                    });
-                                  case 3:
-                                    controller.routeToCarHistory(arguments: {
-                                      "brandModelName": car["brandModelName"],
-                                      "photoUrl": car["photoUrl"],
-                                      "carID": car["carID"]
-                                    });
-                                    break;
-                                  default:
-                                }
-                              },
-                              child: Row(
-                                children: [
-                                  SvgPicture.asset(option['imageUrl']!),
-                                  const SizedBox(
-                                    width: 6,
-                                  ),
-                                  textWidget(
-                                      text: option['title'],
-                                      style:
-                                          getRegularStyle(color: primaryColor)),
-                                ],
-                              ),
-                            );
-                          },
-                          separatorBuilder: (context, index) => const SizedBox(
-                            height: 18,
-                          ),
-                        ),
-                      ),
-                      backgroundColor: backgroundColor,
-                      isScrollControlled: true,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(4.r),
-                            topRight: Radius.circular(4.r)),
-                      ),
-                    );
+                    quickOptionsSheet(size, controller, car);
                   },
                   child: SizedBox(
                       height: 20,
@@ -442,6 +371,83 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Future<dynamic> quickOptionsSheet(
+      Size size, ManageVehicleController controller, car) {
+    return Get.bottomSheet(
+      SizedBox(
+        height: size.height * 0.2.sp,
+        width: size.width.sp,
+        child: ListView.separated(
+          shrinkWrap: true,
+          padding: const EdgeInsets.all(20),
+          itemCount: controller.quickOptions.length,
+          itemBuilder: (context, index) {
+            final option = controller.quickOptions[index];
+            return InkWell(
+              onTap: () {
+                switch (index) {
+                  case 0:
+                    deleteVehicleSheet(size,
+                        title: AppStrings.areYouSureToDelete
+                            .trArgs([car['brandModelName']]),
+                        subTitle: AppStrings.everyDataWouldBeDeleted
+                            .trArgs([car['brandModelName']]),
+                        onTapCancel: controller.goBack,
+                        onTapContinue: () =>
+                            controller.deleteCar(carID: car['carID']));
+                  case 1:
+                    controller.routeToQuickEdit(arguments: {
+                      "brandModelName": car["brandModelName"],
+                      "photoUrl": car["photoUrl"],
+                      "carID": car["carID"],
+                      "start": car["startDate"],
+                      "end": car["endDate"],
+                      "enablePastDates": false,
+                      "pricePerDay": car["pricePerDay"],
+                      "isFromManageCars": true
+                    });
+                  case 2:
+                    controller.routeToListVehicle(arguments: {
+                      "carID": car["carID"],
+                      "isFromManageCars": true,
+                    });
+                  case 3:
+                    controller.routeToCarHistory(arguments: {
+                      "brandModelName": car["brandModelName"],
+                      "photoUrl": car["photoUrl"],
+                      "carID": car["carID"]
+                    });
+                    break;
+                  default:
+                }
+              },
+              child: Row(
+                children: [
+                  SvgPicture.asset(option['imageUrl']!),
+                  const SizedBox(
+                    width: 6,
+                  ),
+                  textWidget(
+                      text: option['title'],
+                      style: getRegularStyle(color: primaryColor)),
+                ],
+              ),
+            );
+          },
+          separatorBuilder: (context, index) => const SizedBox(
+            height: 18,
+          ),
+        ),
+      ),
+      backgroundColor: backgroundColor,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(4.r), topRight: Radius.circular(4.r)),
       ),
     );
   }
@@ -801,7 +807,6 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
                     state.where((car) => car['status'] == 'pending').toList();
                 var car = bookedCars[index];
 
-                // return carWidget(context, size);
                 return bookedOrPendingCars(
                   context,
                   size,
@@ -830,224 +835,6 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
       onLoading: Padding(
         padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
         child: Center(child: centerLoadingIcon()),
-      ),
-    );
-  }
-
-  Widget carWidget(BuildContext context, Size size) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Stack(
-        children: [
-          Container(
-            height: 140.sp,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-                border: Border.all(color: greyLight),
-                borderRadius: BorderRadius.all(Radius.circular(4.r))),
-            child: Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  // color: red,
-                  height: size.height,
-                  width: 110,
-                  child: carImage(
-                      imgUrl:
-                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnKpMPFWYvaoInINJ44Qh4weo_z8nDwDUf8Q&usqp=CAU'),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      textWidget(text: 'Tesla Model Y', style: getBoldStyle()),
-                      const SizedBox(
-                        height: 3,
-                      ),
-                      Row(
-                        children: [
-                          Row(
-                            children: [
-                              SvgPicture.asset(
-                                  ImageAssets.thumbsUpPrimaryColor),
-                              SizedBox(
-                                width: 5.sp,
-                              ),
-                              RichText(
-                                text: TextSpan(
-                                    text: '20%',
-                                    style: getMediumStyle(
-                                      fontSize: 12.sp,
-                                    ),
-                                    children: <TextSpan>[
-                                      TextSpan(
-                                        text: ' (15 trips)',
-                                        style: getLightStyle(
-                                            fontSize: 12.sp, color: grey2),
-                                      )
-                                    ]),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            // crossAxisAlignment: alignment,
-                            children: [
-                              SvgPicture.asset(ImageAssets.naira),
-                              textWidget(
-                                  // text: car['pricePerDay'] ?? '0',
-                                  text: 'per day',
-                                  style: getMediumStyle(fontSize: 10.sp)
-                                      .copyWith(fontFamily: 'Neue')),
-                              textWidget(
-                                  text: '/day',
-                                  style: getMediumStyle(fontSize: 10.sp)
-                                      .copyWith(fontFamily: 'Neue')),
-                            ],
-                          ),
-                        ],
-                      ),
-
-                      ////////
-                      const SizedBox(
-                        height: 6,
-                      ),
-
-                      textWidget(
-                        text: AppStrings.availabilityDate,
-                        // show AppStrings.aAvailabilityDate
-                        style: getRegularStyle(
-                          color: grey3,
-                          fontSize: 10.sp,
-                        ),
-                      ),
-
-                      const SizedBox(
-                        height: 3,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          textWidget(
-                              text: "wed, 1 Nov, 9:00am",
-                              style: getMediumStyle(fontSize: 8.sp)
-                                  .copyWith(fontFamily: 'Neue')),
-                          SizedBox(
-                            width: 3,
-                          ),
-                          SvgPicture.asset(
-                            ImageAssets.arrowForwardRounded,
-                            height: 8.sp,
-                            width: 8.sp,
-                          ),
-                          SizedBox(
-                            width: 3,
-                          ),
-                          textWidget(
-                              text: "wed, 1 Nov, 9:00am",
-                              style: getMediumStyle(fontSize: 8.sp)
-                                  .copyWith(fontFamily: 'Neue')),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 6, horizontal: 4),
-                            decoration: BoxDecoration(
-                                color: primaryColorLight,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(2.r))),
-                            child: Center(
-                              child: textWidget(
-                                  text: AppStrings.available,
-                                  style: getRegularStyle(fontSize: 10.sp)),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 8.sp,
-                          ),
-                          switchWidget(context,
-                              value: controller.isAvailable.value,
-                              activeTrackColor: borderColor,
-                              onChanged: (value) {}
-                              // onChanged: (value) =>
-                              // controller.onToggleCarAvailability(value),
-                              ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Positioned(
-            right: 12.sp,
-            top: 12.sp,
-            child: InkWell(
-                onTap: () {
-                  quickOptionsSheet(size);
-                },
-                child: SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: SvgPicture.asset(ImageAssets.popUpMenu))),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Future<dynamic> quickOptionsSheet(Size size) {
-    return Get.bottomSheet(
-      SizedBox(
-        height: size.height * 0.2.sp,
-        width: size.width.sp,
-        child: ListView.separated(
-          shrinkWrap: true,
-          padding: const EdgeInsets.all(20),
-          itemCount: controller.quickOptions.length,
-          itemBuilder: (context, index) {
-            final option = controller.quickOptions[index];
-            return InkWell(
-              onTap: () {
-                switch (index) {
-                  case 0:
-                  // deleteVehicleSheet(size);
-                  case 1:
-                    controller.routeToQuickEdit();
-                  case 2:
-                  case 3:
-                    controller.routeToCarHistory();
-                    break;
-                  default:
-                }
-              },
-              child: Row(
-                children: [
-                  SvgPicture.asset(option['imageUrl']!),
-                  const SizedBox(
-                    width: 6,
-                  ),
-                  textWidget(
-                      text: option['title'],
-                      style: getRegularStyle(color: primaryColor)),
-                ],
-              ),
-            );
-          },
-          separatorBuilder: (context, index) => const SizedBox(
-            height: 18,
-          ),
-        ),
-      ),
-      backgroundColor: backgroundColor,
-      isScrollControlled: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(4.r), topRight: Radius.circular(4.r)),
       ),
     );
   }

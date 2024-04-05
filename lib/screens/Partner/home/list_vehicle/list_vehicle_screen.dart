@@ -510,9 +510,11 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     textInputType: TextInputType.number,
                     validator: (vg) {},
                     inputFormatters: [
-                      LengthLimitingTextInputFormatter(10),
-                      FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                      // DoubleNumberInputFormatter(),
+                      LengthLimitingTextInputFormatter(3),
+                      // this formatter allows decimal values
+                      // FilteringTextInputFormatter.allow(
+                      //     RegExp(r'^\d+\.?\d{0,2}')),
+                      DiscountInputFormatter(),
                     ],
                   ),
                 ),
@@ -658,23 +660,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                       ),
                     ),
                   ),
-            // dropdownWidget(
-            //   context: context,
-            //   hintText: 'Select',
-            //   title: AppStrings.selectDriver,
-            //   iconColor: grey3,
-            //   values: List.generate(
-            //       controller.drivers.length,
-            //       (index) => controller.drivers[index]),
-            //   onChange: (value) {
-            //     print('Selected value: $value');
-            //   },
-            //   onTap: () {
-            //     if (controller.drivers.isEmpty) {
-            //       noDriverDialog(size);
-            //     }
-            //   },
-            // ),
+        
             SizedBox(
               height: 50.sp,
             ),
@@ -1769,7 +1755,8 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
 
                         // selectedYear['yearName'] = controller.yearName?.value;
                         controller.yearCode.value = selectedYear['yearCode'];
-                        controller.advisedRenterPrice.value = selectedYear['advicePrice'];
+                        controller.advisedRenterPrice.value =
+                            selectedYear['advicePrice'];
                         // Find the brand object with the selected name
                         var selectedYearObject =
                             (controller.vehicleYear ?? []).firstWhere(
@@ -1777,10 +1764,9 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                           orElse: () => null,
                         );
                         if (selectedYearObject != null) {
-                
                           String yearCode =
                               selectedYearObject['yearCode'] as String;
-                         print("code>>>> $yearCode");
+                          print("code>>>> $yearCode");
                         }
                       });
                     },

@@ -595,26 +595,6 @@ class PaymentScreen extends GetView<PaymentController> {
     );
   }
 
-  Widget tripInfo(
-      {required String title,
-      required Widget trailling,
-      FontWeight? fontWeight}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 5),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          textWidget(
-            text: title,
-            textOverflow: TextOverflow.visible,
-            style: getRegularStyle(color: grey3, fontSize: 12.sp)
-                .copyWith(fontWeight: fontWeight),
-          ),
-          trailling
-        ],
-      ),
-    );
-  }
 
   Widget continueButton() {
     return controller.isLoading.isTrue

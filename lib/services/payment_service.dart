@@ -58,7 +58,7 @@ class PaymentService extends GetxController {
       final result = await apiService.getRequest(
         '/user/partner/payment/getBankAccount',
       );
-      logger.log("bank account $result");
+      // logger.log("bank account $result");
 
       final decodedResult = json.decode(result);
 

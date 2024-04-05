@@ -339,17 +339,6 @@ class CarSelectionResultController extends GetxController
     logger.log("New estimated Total:: ${estimatedTotal.value}");
   }
 
-  // Future<void> getEscortFee() async {
-  //   var sumTotal = await calculateEscortFee(
-  //     escortFee: escortFee.value,
-  //     numberOfEscort: escortSecurityNoInputController.text,
-  //     // initialEstimatedTotal: initialEstimatedTotal.value
-  //   );
-  //   estimatedTotal.value = await formatAmount(sumTotal);
-  //   logger.log("new sum total:: ${estimatedTotal.value}");
-  //   double vatAmount = await calculateVAT(sumTotal, vatValue.value);
-  //   formattedVatValue.value = await formatAmount(vatAmount);
-  // }
 
   DateTime? carAvialbilityEndDate;
   Rx<String> vehicleName = ''.obs;
