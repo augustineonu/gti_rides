@@ -35,7 +35,9 @@ class QuickEditController extends GetxController {
       carID.value = arguments['carID'];
 
       startDateTime.value = formateDate(date: arguments['start'] ?? '');
-      endDateTime.value =formateDate(date: arguments['end'] ?? '');
+      endDateTime.value = formateDate(date: arguments['end'] ?? '');
+      rawStartTime = parseDateTime(arguments['start']);
+      rawEndTime = parseDateTime(arguments['end']);
       pricePerDay.value = arguments['pricePerDay'] ?? '';
 
       // startDate.value = arguments["startDate"] ?? '';
@@ -69,9 +71,8 @@ class QuickEditController extends GetxController {
   RxString endDateTime = "".obs;
   RxString pricePerDay = "".obs;
   Rx<bool> isFromManageCars = false.obs;
-DateTime? rawStartTime;
-DateTime? rawEndTime;
-
+  DateTime? rawStartTime;
+  DateTime? rawEndTime;
 
   TextEditingController senderNameController = TextEditingController();
   late TextEditingController pricePerDayController;
@@ -102,6 +103,7 @@ DateTime? rawEndTime;
   void goBack1() => routeService.goBack(closeOverlays: true);
 
   Future<void> quickEditCar() async {
+    var error = 'Null check operator used on a null value';
     if (!amountFormKey.currentState!.validate()) {
       return;
     }
@@ -146,7 +148,11 @@ DateTime? rawEndTime;
       }
     } catch (exception) {
       isLoading.value = false;
-      showErrorSnackbar(message: exception.toString());
+      
+      showErrorSnackbar(
+          message: exception.toString() == error
+              ? "Null type Error"
+              : exception.toString());
       logger.log("error editing car:: ${exception.toString()}");
     } finally {
       isLoading.value = false;

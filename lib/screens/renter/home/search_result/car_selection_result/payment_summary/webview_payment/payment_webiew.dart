@@ -23,7 +23,7 @@ class PaymentWebView extends StatelessWidget {
             leading: Transform.scale(
           scale: 0.5,
           child: GestureDetector(
-            onTap: () => controller.goBack(),
+            onTap: () => controller.goBack1(),
             child: SvgPicture.asset(ImageAssets.arrowLeft, color: black))),
           ),
           body: WebViewWidget(

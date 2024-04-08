@@ -505,7 +505,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     title: "${AppStrings.inputDiscountPerDay} %",
                     titleFontSize: 12.sp,
                     showCursor: false,
-                    hintText: AppStrings.amountHintText,
+                    hintText: '10',
                     controller: controller.discountPerDayController,
                     textInputType: TextInputType.number,
                     validator: (vg) {},
@@ -1736,20 +1736,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     color: backgroundColor,
                     onSelected: (selectedYear) async {
                       setState(() {
-                        // controller.selectedYearValue = selectedYear['yearName'];
-                        // controller.yearName?.value = selectedYear['yearName'];
-                        // controller.yearCode.value =
-                        //     selectedYear['yearCode'] as String;
-                        // controller.brandCode.value =
-                        //     selectedYear['yearCode'] as String;
-                        // controller.brandCode1 =
-                        //     selectedBrand['brandCode'] as String;
-                        // controller.brandModelCode =
-                        //     selectedBrand['modelCode'] as String;
-                        // print(
-                        //     "Selected brand name: ${controller.modelName?.value}");
 
-                        // print("Slected brand code ${controller.brandCode1}");
                         controller.selectedYearValue!.value =
                             selectedYear['yearName'];
 

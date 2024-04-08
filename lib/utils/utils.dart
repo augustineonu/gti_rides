@@ -337,6 +337,18 @@ String formatDateTime(String datetime) {
   return formattedDate;
 }
 
+DateTime? parseDateTime(String datetime) {
+  try {
+    var formatter = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+    DateTime parsedDate = formatter.parse(datetime);
+    return parsedDate;
+  } catch (e) {
+    Logger('Utils').log("Error parsing datetime: $e");
+    return null;
+  }
+}
+
+
 
 // 02 - 05 - 2013
 String formatDate1({required String date}) {

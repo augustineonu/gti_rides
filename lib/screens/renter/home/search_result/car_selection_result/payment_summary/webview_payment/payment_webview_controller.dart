@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/utils/utils.dart';
@@ -55,11 +56,10 @@ class PaymentWebViewController extends GetxController {
             logger.log("URL:: ${request.url}");
             if (request.url.startsWith('https://gtirides.com/')) {
               // showErrorSnackbar(message: "message");
-              if (request.url
-                  .toLowerCase()
-                  .contains('pending'.toLowerCase()) || request.url
-                  .toLowerCase()
-                  .contains('successful'.toLowerCase()) ){
+              if (request.url.toLowerCase().contains('pending'.toLowerCase()) ||
+                  request.url
+                      .toLowerCase()
+                      .contains('successful'.toLowerCase())) {
                 routeService.goBack(result: true);
                 // Navigator.pop(context)
               }
@@ -84,4 +84,6 @@ class PaymentWebViewController extends GetxController {
   WebViewController webViewController = WebViewController();
 
   void goBack() => routeService.goBack();
+  void goBack1() => routeService
+      .offAllNamed(AppLinks.carRenterLanding, arguments: {"tabIndex": 1});
 }

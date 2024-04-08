@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/models/drivers_model.dart';
 import 'package:gti_rides/models/renter/pending_trips_model.dart';
+import 'package:gti_rides/models/user_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/screens/Partner/home/list_vehicle/list_vehicle_screen.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/renter_service.dart';
 import 'package:gti_rides/services/route_service.dart';
+import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/utils/constants.dart';
 
@@ -26,6 +28,7 @@ class RentHistoryController extends GetxController with StateMixin<List<AllTrips
     pageController.addListener(() {
       update();
     });
+    user = userService.user;
     super.onInit();
   }
 
@@ -33,10 +36,13 @@ class RentHistoryController extends GetxController with StateMixin<List<AllTrips
   void onReady()async {
     // TODO: implement onReady
     super.onReady();
-    await getAllTrips();
+     if (user.value.userType == "partner") {
+      await getAllTrips();
+    }
   }
 
   // variables
+   Rx<UserModel> user = UserModel().obs;
   RxBool isLoading = false.obs;
   PageController pageController = PageController();
   RxInt selectedIndex = 0.obs;

@@ -31,13 +31,20 @@ class MoreController extends GetxController {
 
   void init() async {
     logger.log('MoreController initialized');
-    user = userService.user;
-    logger.log("User:: $user");
-    tokens = tokenService.tokens;
-    logger.log("User token && User type:: $tokens");
+  
 
     await getKycProfile();
     // paymentService.getBankAccount();
+  }
+  @override
+  void onInit() async{
+    // TODO: implement onInit
+      user = userService.user;
+    logger.log("User:: ${user.value}");
+    tokens.value = (await tokenService.getTokensData())!;
+    logger.log("User:: ${tokens.value.userType}");
+    logger.log("User token && User type:: $tokens");
+    super.onInit();
   }
 
   // late Timer timer;

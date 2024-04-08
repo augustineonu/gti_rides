@@ -585,7 +585,7 @@ class CarSelectionResultController extends GetxController
             // All required fields are present, proceed to the payment screen
             // ...
             logger.log("All fields are present, proceed to the payment screen");
-            routeService.gotoRoute(AppLinks.kycCheck, arguments: {
+            routeService.gotoRoute(AppLinks.paymentSummary, arguments: {
               "appBarTitle": AppStrings.addToContinue,
               "tripData": tripData.value,
               "pricePerDay": pricePerDay.value,

@@ -11,7 +11,11 @@ class RenterLandingController extends GetxController {
   RenterLandingController() {
     logger.log('Controller initialized');
   }
+
+  final   Map<String, dynamic>? arguments = Get.arguments;
   Rx<int> tabIndex = 0.obs;
+
+
 
   void changeTabIndex(int index) {
     tabIndex.value = index;
@@ -35,6 +39,9 @@ class RenterLandingController extends GetxController {
   void onInit() {
     Get.delete<MoreController>();
     Get.put<MoreController>(MoreController());
+    if (arguments != null) {
+      tabIndex.value = arguments!['tabIndex'] ?? 0;
+    }
     super.onInit();
   }
 }

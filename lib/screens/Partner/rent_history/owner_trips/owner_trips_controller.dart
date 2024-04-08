@@ -1,10 +1,12 @@
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/models/renter/pending_trips_model.dart';
+import 'package:gti_rides/models/user_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/renter_service.dart';
 import 'package:gti_rides/services/route_service.dart';
+import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/utils.dart';
 
@@ -34,6 +36,7 @@ class OwnerTripsController extends GetxController
   @override
   void onInit() {
     // TODO: implement onInit
+    user = userService.user;
     super.onInit();
   }
 
@@ -41,8 +44,12 @@ class OwnerTripsController extends GetxController
   void onReady() async {
     // TODO: implement onReady
     super.onReady();
-    await getAllTrips();
+    if (user.value.userType == "partner") {
+      await getAllTrips();
+    }
   }
+
+  Rx<UserModel> user = UserModel().obs;
 
   Map<String, dynamic>? arguments = Get.arguments;
 
@@ -75,8 +82,8 @@ class OwnerTripsController extends GetxController
   RxList<AllTripsData> activeTrips = <AllTripsData>[].obs;
   RxList<AllTripsData> completedTrips = <AllTripsData>[].obs;
 
-    void routeToCompletedTrip({Object? arguments}) => routeService.gotoRoute(AppLinks.completedTrip,arguments: arguments);
-
+  void routeToCompletedTrip({Object? arguments}) =>
+      routeService.gotoRoute(AppLinks.completedTrip, arguments: arguments);
 
   Future<void> getAllTrips() async {
     // RxStatus.loading();
