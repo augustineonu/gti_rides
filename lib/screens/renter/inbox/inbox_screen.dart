@@ -207,8 +207,13 @@ class InboxScreen extends StatelessWidget {
               InkWell(
                 onTap: () async {
                   await Intercom.instance.loginIdentifiedUser(
-                    email: ctrl.user.value.emailAddress
-                  );
+                    email: ctrl.user.value.emailAddress,
+                    statusCallback: IntercomStatusCallback(),
+                  ).then((value) => print("Registered user successfully"), onError: (error){
+                     print("Error registering user: $error");
+                  }).catchError((error){
+                    print("Error: $error");
+                  });
                   await Intercom.instance.displayMessenger();
                 },
                 child: Container(

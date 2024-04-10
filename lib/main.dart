@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -24,15 +27,22 @@ void main() async {
   // FirebaseService firebaseService = FirebaseService();
   // await firebaseService.init();
   WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp(
+  await Firebase.initializeApp(
       // name: 'GTi Rides',
-        options: DefaultFirebaseOptions.currentPlatform
-        );
+      options: DefaultFirebaseOptions.currentPlatform);
 
   Get.put(UserService());
   await Intercom.instance.initialize('hivazykc',
       iosApiKey: 'ios_sdk-efac9e9f5fa7bf1e1bfb33d91f1cddd68b47f895',
       androidApiKey: 'android_sdk-3337cce19e6e590feed33d6b48f39eae825fcfd0');
+
+  final firebaseMessaging = FirebaseMessaging.instance;
+  final intercomToken = Platform.isIOS
+      ? await firebaseMessaging.getAPNSToken()
+      : await firebaseMessaging.getToken();
+  // await Intercom.instance.loginIdentifiedUser(email: userData.email ?? '');
+  Intercom.instance.sendTokenToIntercom(intercomToken ?? '');
+
   bool isNewUser = await determineUserStatus();
 
   runApp(GtiRides(
@@ -61,8 +71,7 @@ class GtiRides extends StatefulWidget {
 class _GtiRidesState extends State<GtiRides> {
   Logger logger = Logger('_GtiRidesState');
   AppBinding bindings = AppBinding();
-    NetworkController networkController = NetworkController(); // Add this line
-
+  NetworkController networkController = NetworkController(); // Add this line
 
   @override
   void initState() {
@@ -96,9 +105,8 @@ class _GtiRidesState extends State<GtiRides> {
           child,
         ) {
           return GetMaterialApp(
-            
             title: 'GTI Rides',
-              // debugShowMaterialGrid : true,
+            // debugShowMaterialGrid : true,
             theme: ThemeData(
               colorScheme: ColorScheme.fromSeed(seedColor: white),
               scaffoldBackgroundColor: backgroundColor,
@@ -119,7 +127,7 @@ class _GtiRidesState extends State<GtiRides> {
             navigatorObservers: [RouteService(), RouteService().routeObserver],
             onInit: () async {
               networkController.onInit();
-            await  firebaseService.getDeviceToken();
+              await firebaseService.getDeviceToken();
               SystemChrome.setPreferredOrientations([
                 DeviceOrientation.portraitUp,
                 DeviceOrientation.portraitDown
