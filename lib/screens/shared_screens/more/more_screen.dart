@@ -8,6 +8,7 @@ import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
+import 'package:intercom_flutter/intercom_flutter.dart';
 
 class MoreBinding extends Bindings {
   @override
@@ -57,7 +58,6 @@ class MoreScreen extends StatelessWidget {
                       SizedBox(
                         height: 10.sp,
                       ),
- 
                       ListView.builder(
                         shrinkWrap: true,
                         itemCount: controller.profileOptions.length,
@@ -65,34 +65,37 @@ class MoreScreen extends StatelessWidget {
                           // show "My Drivers" only if user type is Owner
                           final option = controller.profileOptions[index];
                           if (controller.tokens.value.userType == "partner") {
-                            return index == 1 ? SizedBox() : profileOptionsWIdget(
-                              imageUrl: option['image'],
-                              title: option['title'],
-                              onTap: () {
-                                // controller.routeToDrivers();
-                                switch (index) {
-                                case 0:
-                                  controller.routeToAccountDetails();
-                                case 1:
-                                  controller.routeToFavorite();
-                                case 2:
-                                  controller.routeToIdentityVerification();
-                                // show "My Drivers" only if user type is Owner
-                                case 3:
-                                  controller.routeToDrivers();
-                                case 4:
-                                controller.launchWebsite();
-                                case 5:
-                                  controller.routeToReferralCode();
-                                  break;
-                                  case 6:
-                                  break;
-                                  case 7:
-                                  break;
-                                default:
-                                }
-                              },
-                            );
+                            return index == 1
+                                ? SizedBox()
+                                : profileOptionsWIdget(
+                                    imageUrl: option['image'],
+                                    title: option['title'],
+                                    onTap: () {
+                                      // controller.routeToDrivers();
+                                      switch (index) {
+                                        case 0:
+                                          controller.routeToAccountDetails();
+                                        case 1:
+                                          controller.routeToFavorite();
+                                        case 2:
+                                          controller
+                                              .routeToIdentityVerification();
+                                        // show "My Drivers" only if user type is Owner
+                                        case 3:
+                                          controller.routeToDrivers();
+                                        case 4:
+                                          controller.launchWebsite();
+                                        case 5:
+                                          controller.routeToReferralCode();
+                                          break;
+                                        case 6:
+                                          break;
+                                        case 7:
+                                          break;
+                                        default:
+                                      }
+                                    },
+                                  );
                           } else {
                             // if user type is renter
                             return switch (index) {
@@ -117,7 +120,7 @@ class MoreScreen extends StatelessWidget {
                                     controller.routeToIdentityVerification();
                                   },
                                 ),
-                              3 => const SizedBox(), 
+                              3 => const SizedBox(),
                               4 => profileOptionsWIdget(
                                   imageUrl: option['image'],
                                   title: option['title'],
@@ -125,7 +128,7 @@ class MoreScreen extends StatelessWidget {
                                     controller.launchWebsite();
                                   },
                                 ),
-                               5 => profileOptionsWIdget(
+                              5 => profileOptionsWIdget(
                                   imageUrl: option['image'],
                                   title: option['title'],
                                   onTap: () {
@@ -135,14 +138,24 @@ class MoreScreen extends StatelessWidget {
                               6 => profileOptionsWIdget(
                                   imageUrl: option['image'],
                                   title: option['title'],
-                                  onTap: () {},
+                                  onTap: ()async {
+                                    await Intercom.instance.loginIdentifiedUser(
+                                        email:
+                                            controller.user.value.emailAddress);
+                                    await Intercom.instance.displayMessenger();
+                                  },
                                 ),
                               7 => profileOptionsWIdget(
                                   imageUrl: option['image'],
                                   title: option['title'],
-                                  onTap: () {},
+                                  onTap: () async {
+                                    await Intercom.instance.loginIdentifiedUser(
+                                        email:
+                                            controller.user.value.emailAddress);
+                                    await Intercom.instance.displayMessenger();
+                                  },
                                 ),
-                              _ => Container() 
+                              _ => Container()
                             };
                           }
                         },
@@ -213,9 +226,9 @@ class MoreScreen extends StatelessWidget {
           ),
           profileAvatar(
             height: 40,
-            width: 40, 
+            width: 40,
             imgUrl: controller.user.value.profilePic!,
-          // imgUrl:  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ88joJfjwoaz_jWaMQhbZn2X11VHGBzWKiQg&usqp=CAU',
+            // imgUrl:  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ88joJfjwoaz_jWaMQhbZn2X11VHGBzWKiQg&usqp=CAU',
           ),
         ],
       ),

@@ -60,20 +60,20 @@ class ApiService {
           return handler.next(options);
         },
         onError: (DioException e, handler) async {
-          final statusCode =
-              jsonDecode(e.response!.data.toString())['status_code'];
-          logger
-              .log("Error: ${statusCode.toString()} ${e.response!.statusCode}");
-          if (e.response!.statusCode == 400 && statusCode == '401') {
-             logger
-              .log("Again: ${statusCode.toString()} ${e.response!.statusCode}");
-            // bool newAccessTokenResult = await tokenService.getNewAccessToken();
-            // if (!newAccessTokenResult) {
-            //   logger.log('Going to Login screen');
-            //   routeService.offAllNamed(AppLinks.login);
-            //   return;
-            // }
-          }
+          // final statusCode =
+          //     jsonDecode(e.response!.data.toString())['status_code'];
+          // logger
+              // .log("Error: ${statusCode.toString()} ${e.response!.statusCode}");
+          // if (e.response!.statusCode == 400 && statusCode == '401') {
+          //   logger.log(
+          //       "Again: ${statusCode.toString()} ${e.response!.statusCode}");
+          //   // bool newAccessTokenResult = await tokenService.getNewAccessToken();
+          //   // if (!newAccessTokenResult) {
+          //   //   logger.log('Going to Login screen');
+          //   //   routeService.offAllNamed(AppLinks.login);
+          //   //   return;
+          //   // }
+          // }
           // final appError = createErrorEntity(e);
           // logger.log("Error: ${appError.toString()}");
           // showErrorSnackbar(message: appError.toString());
@@ -111,6 +111,22 @@ class ApiService {
           //   logger.log("status code == 403");
           //   //  _logOut();
           // }
+
+          if (e.response?.statusCode == 401 || e.response?.statusCode == 400) {
+            // If a 401 response is received, refresh the access token
+            bool newAccessTokenResult = await tokenService.getNewAccessToken();
+            if (!newAccessTokenResult) {
+              logger.log('Going to Login screen');
+              routeService.offAllNamed(AppLinks.login);
+              return;
+            }
+            // Update the request header with the new access token
+            e.requestOptions.headers['Authorization'] =
+                'Bearer ${tokenService.accessToken.value}';
+
+            // Repeat the request with the updated header
+            return handler.resolve(await _dio.fetch(e.requestOptions));
+          }
           return handler.next(e);
         },
       ),

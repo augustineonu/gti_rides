@@ -133,15 +133,13 @@ class ChooseTripDateController extends GetxController {
       selectedExpiryDate.value = formatDate(args.value!).toString();
 
       update();
-      endDate.value =
-        formatDayDate(args.value ).toString();
+      endDate.value = formatDayDate(args.value).toString();
 
-        // Calculate the difference
-        Duration difference = calculateDateDifference(
-            currentEndDate ?? DateTime.now(),
-            args.value! );
+      // Calculate the difference
+      Duration difference = calculateDateDifference(
+          currentEndDate ?? DateTime.now(), args.value!);
 
-        selectedDifferenceInDays.value = difference.inDays + 1;
+      selectedDifferenceInDays.value = difference.inDays + 1;
       logger.log("Selected args: ${args.value}");
       logger.log("Selected date: ${selectedExpiryDate.value}");
     } else {
@@ -224,7 +222,7 @@ class ChooseTripDateController extends GetxController {
         isAM: selectedStartAmPm.value == 0 ? true : false);
 
     rawEndTime = addHoursAndMinutes(
-        dateTime: rawEndTime!,
+        dateTime: rawEndTime ?? DateTime.now(),
         hours: selectedEndHour.value,
         minutes: selectedEndMins.value,
         isAM: selectedEndAmPm.value == 0 ? true : false);
