@@ -31,6 +31,7 @@ class CarsModel {
 class CarData {
     final dynamic carId;
     final dynamic availability;
+        final bool? documentExpire;
     final dynamic status;
     final dynamic photoUrl;
     final dynamic endDate;
@@ -47,6 +48,7 @@ class CarData {
     CarData({
         this.carId,
         this.availability,
+        this.documentExpire,
         this.status,
         this.photoUrl,
         this.endDate,
@@ -68,6 +70,7 @@ class CarData {
     factory CarData.fromJson(Map<String, dynamic> json) => CarData(
         carId: json["carID"],
         availability: json["availability"],
+        documentExpire: json["documentExpire"],
         status: json["status"],
         photoUrl: json["photoUrl"],
         endDate: json["endDate"],
@@ -85,6 +88,7 @@ class CarData {
     Map<String, dynamic> toJson() => {
         "carID": carId,
         "availability": availability,
+         "documentExpire": documentExpire,
         "status": status,
         "photoUrl": photoUrl,
         "endDate": endDate,

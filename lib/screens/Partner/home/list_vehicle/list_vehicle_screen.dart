@@ -155,13 +155,17 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                               ),
                               // pageview pages
                               SizedBox(
-                                height: size.height / 0.85.sp,
+                                // height: controller.currentIndex.value == 2
+                                //     ? size.height / 0.7
+                                //     :
+                                height: size.height / 0.77.sp,
                                 child: PageView(
                                   // itemCount: controller.pages.length,
                                   physics: ScrollPhysics(),
                                   controller: controller.pageController,
                                   onPageChanged: (value) {
                                     controller.currentIndex.value = value;
+                                    setState(() {});
                                   },
                                   children: <Widget>[
                                     // Vehicle type page
@@ -660,7 +664,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                       ),
                     ),
                   ),
-        
+
             SizedBox(
               height: 50.sp,
             ),
@@ -932,6 +936,36 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     button1Title: AppStrings.document);
               },
             ),
+            const SizedBox(height: 10),
+            NormalInputTextWidget(
+              titleFontSize: 12,
+              title: AppStrings.vehicleLicenseExpiryDate,
+              expectedVariable: "field",
+              hintText: AppStrings.inputDetails,
+              textInputType: TextInputType.none,
+              controller: controller.licenseExpiryDateController
+                ..text = controller.licenseExpiryDate.value,
+              readOnly: true,
+              onTap: () async {
+                var data =
+                    await Get.toNamed(AppLinks.chooseTripDate, arguments: {
+                  "appBarTitle": AppStrings.selectExpiryDate,
+                  "enablePastDates": false,
+                  "isSingleDateSelection": true,
+                  "isExpiryDateSelection": true
+                });
+
+                // Handle the selected date here
+                if (kDebugMode) {
+                  print('Selected Date page: $data');
+                }
+                if (data != null && data['selectedExpiryDate'] != null) {
+                  controller.licenseExpiryDate.value =
+                      data['selectedExpiryDate'];
+                  print("value ${controller.licenseExpiryDate.value}");
+                }
+              },
+            ),
 
             SizedBox(
               height: 24.sp,
@@ -951,6 +985,36 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                       .then((value) => routeService.goBack()),
                   button1Title: AppStrings.document);
             }),
+            const SizedBox(height: 10),
+            NormalInputTextWidget(
+              titleFontSize: 12,
+              title: AppStrings.roadWorthinessExpiryDate,
+              expectedVariable: "field",
+              hintText: AppStrings.inputDetails,
+              textInputType: TextInputType.none,
+              controller: controller.roadWorthinessExpiryDateController
+                ..text = controller.roadWorthinessExpiryDate.value,
+              readOnly: true,
+              onTap: () async {
+                var data =
+                    await Get.toNamed(AppLinks.chooseTripDate, arguments: {
+                  "appBarTitle": AppStrings.selectExpiryDate,
+                  "enablePastDates": false,
+                  "isSingleDateSelection": true,
+                  "isExpiryDateSelection": true
+                });
+
+                // Handle the selected date here
+                if (kDebugMode) {
+                  print('Selected Date page: $data');
+                }
+                if (data != null && data['selectedExpiryDate'] != null) {
+                  controller.roadWorthinessExpiryDate.value =
+                      data['selectedExpiryDate'];
+                  print("value ${controller.roadWorthinessExpiryDate.value}");
+                }
+              },
+            ),
 
             SizedBox(
               height: 24.sp,
@@ -1005,6 +1069,36 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                       .then((value) => routeService.goBack()),
                   button1Title: AppStrings.document);
             }),
+            const SizedBox(height: 10),
+            NormalInputTextWidget(
+              titleFontSize: 12,
+              title: AppStrings.certificateOfInsuranceExpiryDate,
+              expectedVariable: "field",
+              hintText: AppStrings.inputDetails,
+              textInputType: TextInputType.none,
+              controller: controller.insuranceExpiryDateController
+                ..text = controller.insuranceExpiryDate.value,
+              readOnly: true,
+              onTap: () async {
+                var data =
+                    await Get.toNamed(AppLinks.chooseTripDate, arguments: {
+                  "appBarTitle": AppStrings.selectExpiryDate,
+                  "enablePastDates": false,
+                  "isSingleDateSelection": true,
+                  "isExpiryDateSelection": true
+                });
+
+                // Handle the selected date here
+                if (kDebugMode) {
+                  print('Selected Date page: $data');
+                }
+                if (data != null && data['selectedExpiryDate'] != null) {
+                  controller.insuranceExpiryDate.value =
+                      data['selectedExpiryDate'];
+                  print("value ${controller.insuranceExpiryDate.value}");
+                }
+              },
+            ),
 
             SizedBox(
               height: 24.sp,
@@ -1024,6 +1118,36 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                       .then((value) => routeService.goBack()),
                   button1Title: AppStrings.document);
             }),
+            const SizedBox(height: 10),
+            NormalInputTextWidget(
+              titleFontSize: 12,
+              title: AppStrings.vehicleInspectionExpiryDate,
+              expectedVariable: "field",
+              hintText: AppStrings.inputDetails,
+              textInputType: TextInputType.none,
+              controller: controller.inspectionExpiryDateController
+                ..text = controller.inspectionExpiryDate.value,
+              readOnly: true,
+              onTap: () async {
+                var data =
+                    await Get.toNamed(AppLinks.chooseTripDate, arguments: {
+                  "appBarTitle": AppStrings.selectExpiryDate,
+                  "enablePastDates": false,
+                  "isSingleDateSelection": true,
+                  "isExpiryDateSelection": true
+                });
+
+                // Handle the selected date here
+                if (kDebugMode) {
+                  print('Selected Date page: $data');
+                }
+                if (data != null && data['selectedExpiryDate'] != null) {
+                  controller.inspectionExpiryDate.value =
+                      data['selectedExpiryDate'];
+                  print("value ${controller.inspectionExpiryDate.value}");
+                }
+              },
+            ),
 
             SizedBox(
               height: 50.sp,
@@ -1736,7 +1860,6 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     color: backgroundColor,
                     onSelected: (selectedYear) async {
                       setState(() {
-
                         controller.selectedYearValue!.value =
                             selectedYear['yearName'];
 

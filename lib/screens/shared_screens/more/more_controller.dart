@@ -14,6 +14,7 @@ import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/utils.dart';
+import 'package:intercom_flutter/intercom_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../services/route_service.dart';
@@ -114,6 +115,12 @@ class MoreController extends GetxController {
     await Clipboard.setData(ClipboardData(text: value));
 
     await showSuccessSnackbar(message: AppStrings.copied);
+  }
+
+   Future<void> launchMessenger() async {
+    await Intercom.instance
+        .loginIdentifiedUser(email: userService.user.value.emailAddress);
+    await Intercom.instance.displayMessenger();
   }
 
   Future<void> getKycProfile() async {

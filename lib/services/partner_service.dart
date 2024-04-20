@@ -161,8 +161,7 @@ class PartnerService extends GetxController {
     }
   }
 
-  Future<ApiResponseModel> addCar({required Map data,
-  String? param}) async {
+  Future<ApiResponseModel> addCar({required Map data, String? param}) async {
     try {
       final result = await apiService.postRequest(
           endpoint: '/user/partner/car/addCar$param', data: data);
@@ -204,10 +203,10 @@ class PartnerService extends GetxController {
     }
   }
 
-  Future<ApiResponseModel> addDriver({
-    // required dio.FormData payload
-    required Map payload
-    }) async {
+  Future<ApiResponseModel> addDriver(
+      {
+      // required dio.FormData payload
+      required Map payload}) async {
     try {
       final result = await apiService.postRequest(
         endpoint: '/user/partner/driver/addDriver',
@@ -310,6 +309,7 @@ class PartnerService extends GetxController {
       rethrow;
     }
   }
+
   Future<ListResponseModel> getCars({required String queryType}) async {
     try {
       final result = await apiService.getRequest(
@@ -340,6 +340,7 @@ class PartnerService extends GetxController {
       rethrow;
     }
   }
+
   Future<ApiResponseModel> addCarDocument(
       {required dio.FormData payload, required String carID}) async {
     try {
@@ -354,6 +355,7 @@ class PartnerService extends GetxController {
       rethrow;
     }
   }
+
   Future<ApiResponseModel> addCarPhoto(
       {required dio.FormData payload, required String carID}) async {
     try {
@@ -368,6 +370,7 @@ class PartnerService extends GetxController {
       rethrow;
     }
   }
+
   Future<ApiResponseModel> updateLicensePhoto(
       {required dio.FormData payload, required String driverID}) async {
     try {
@@ -383,7 +386,7 @@ class PartnerService extends GetxController {
     }
   }
 
-    Future<ApiResponseModel> carQuickEdit(
+  Future<ApiResponseModel> carQuickEdit(
       {required Map payload, required String carID}) async {
     try {
       final result = await apiService.postRequest(
@@ -398,7 +401,7 @@ class PartnerService extends GetxController {
     }
   }
 
-    Future<ListResponseModel> getOnCar({required String carId}) async {
+  Future<ListResponseModel> getOnCar({required String carId}) async {
     try {
       final result = await apiService.getRequest(
         '/user/partner/car/getOneCar?carID=$carId',
@@ -413,12 +416,10 @@ class PartnerService extends GetxController {
     }
   }
 
-   Future<ApiResponseModel> deleteCar(
-      { required String carID}) async {
+  Future<ApiResponseModel> deleteCar({required String carID}) async {
     try {
       final result = await apiService.deleteRequest(
         endpoint: '/user/partner/car/deleteCar?carID=$carID',
-        
       );
 
       return ApiResponseModel.fromJson(result);
@@ -428,7 +429,7 @@ class PartnerService extends GetxController {
     }
   }
 
-   Future<ApiResponseModel> toggleCarAvailability(
+  Future<ApiResponseModel> toggleCarAvailability(
       {required Map payload, required String carID}) async {
     try {
       final result = await apiService.putRequest(
@@ -443,12 +444,11 @@ class PartnerService extends GetxController {
       rethrow;
     }
   }
-   Future<ApiResponseModel> deleteCarPhoto(
-      { required String carID}) async {
+
+  Future<ApiResponseModel> deleteCarPhoto({required String carID}) async {
     try {
       final result = await apiService.deleteRequest(
         endpoint: '/user/partner/car/deleteCarPhoto?photoCode=$carID',
-        
       );
 
       return ApiResponseModel.fromJson(result);
@@ -458,7 +458,23 @@ class PartnerService extends GetxController {
     }
   }
 
-   Future<ApiResponseModel> addReview(
+   Future<ApiResponseModel> addCarDocumentExpireDate(
+      {required Object? payload, required String carId}) async {
+    try {
+      final result = await apiService.putRequest(
+        endpoint: '/user/partner/car/addCarDocumentExpireDate?carID=$carId',
+        data: payload,
+      );
+      logger.log("add car document response: ${result}");
+
+      return ApiResponseModel.fromJson(result);
+    } catch (err) {
+      logger.log("add car document Error: $err");
+      rethrow;
+    }
+  }
+
+  Future<ApiResponseModel> addReview(
       {required String carId, required Map data}) async {
     try {
       final result = await apiService.postRequest(
@@ -466,6 +482,21 @@ class PartnerService extends GetxController {
       // logger.log("result $result");
 
       return ApiResponseModel.fromJson(result);
+    } catch (err) {
+      rethrow;
+    }
+  }
+
+  Future<ListResponseModel> getPaymentList() async {
+    try {
+      final result = await apiService.getRequest(
+        '/user/partner/payment/getPaymentList?skip=0&limit=10000',
+      );
+      logger.log("result $result");
+
+      final decodedResult = json.decode(result);
+
+      return ListResponseModel.fromJson(decodedResult);
     } catch (err) {
       rethrow;
     }

@@ -35,61 +35,60 @@ class PaymentScreen extends GetView<PaymentController> {
           body: Stack(
             children: [
               SafeArea(
-                child: SingleChildScrollView(
+                child: Padding(
+                  padding:
+                      EdgeInsets.only(left: 20.0.sp, right: 20.sp, top: 13.sp),
                   child: Column(
                     children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: 20.0.sp, right: 20.sp, top: 13.sp),
+                      Container(
+                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        padding: EdgeInsets.all(6.sp),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: primaryColor),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(4.r))),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            tabIndicator(
+                                width: 150.sp,
+                                title: AppStrings.allApayment,
+                                selected: controller.selectedIndex.value == 0,
+                                onTap: () {
+                                  controller.selectedIndex.value = 0;
+                                  controller.paymentMethodView.value = 0;
+                                  // controller.fullNameController.clear();
+                                  // controller.accountNumberController
+                                  //     .clear();
+                                }),
+                            tabIndicator(
+                                width: 150.sp,
+                                title: controller.addedPaymentMethod.value
+                                    ? AppStrings.paymentAccount
+                                    : AppStrings.paymentMethod,
+                                // if user has added payment account show AppStrings.paymentAccount
+                                selected: controller.selectedIndex.value == 1,
+                                onTap: () {
+                                  controller.selectedIndex.value = 1;
+                                  controller.getBankAccount();
+                                }),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 14.sp,
+                      ),
+                      Expanded(
                         child: SingleChildScrollView(
+                          physics: const ScrollPhysics(),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Container(
-                                margin:
-                                    const EdgeInsets.symmetric(vertical: 10),
-                                padding: EdgeInsets.all(6.sp),
-                                decoration: BoxDecoration(
-                                    border: Border.all(color: primaryColor),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(4.r))),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    tabIndicator(
-                                        width: 150.sp,
-                                        title: AppStrings.allApayment,
-                                        selected:
-                                            controller.selectedIndex.value == 0,
-                                        onTap: () {
-                                          controller.selectedIndex.value = 0;
-                                          controller.paymentMethodView.value =
-                                              0;
-                                          // controller.fullNameController.clear();
-                                          // controller.accountNumberController
-                                          //     .clear();
-                                        }),
-                                    tabIndicator(
-                                        width: 150.sp,
-                                        title:
-                                            controller.addedPaymentMethod.value
-                                                ? AppStrings.paymentAccount
-                                                : AppStrings.paymentMethod,
-                                        // if user has added payment account show AppStrings.paymentAccount
-                                        selected:
-                                            controller.selectedIndex.value == 1,
-                                        onTap: () {
-                                          controller.selectedIndex.value = 1;
-                                          controller.getBankAccount();
-                                        }),
-                                  ],
-                                ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  buildBody(context, size),
+                                ],
                               ),
-                              SizedBox(
-                                height: 24.sp,
-                              ),
-                              buildBody(context, size),
                             ],
                           ),
                         ),
@@ -125,7 +124,9 @@ class PaymentScreen extends GetView<PaymentController> {
     switch (controller.selectedIndex.value) {
       case 0:
         // All payment
-        return paymentsCard(size);
+        return Obx(() {
+          return paymentsCard(size);
+        });
 
       case 1:
         // Payment method
@@ -275,151 +276,164 @@ class PaymentScreen extends GetView<PaymentController> {
   }
 
   Widget paymentsCard(Size size) {
-    // return Column(
-    //   children: [
-    //     Container(
-    //       padding: const EdgeInsets.only(
-    //         bottom: 1,
-    //       ),
-    //       decoration: BoxDecoration(
-    //           color: primaryColor,
-    //           borderRadius: BorderRadius.only(
-    //             bottomLeft: Radius.circular(4.r),
-    //             bottomRight: Radius.circular(4.r),
-    //           )),
-    //       child: Container(
-    //         height: 30.0,
-    //         padding: const EdgeInsets.symmetric(
-    //           horizontal: 8,
-    //         ),
-    //         decoration: BoxDecoration(
-    //             color: backgroundColor,
-    //             borderRadius: BorderRadius.only(
-    //               bottomLeft: Radius.circular(2.5.r),
-    //               bottomRight: Radius.circular(2.5.r),
-    //             )),
-    //         child: Row(
-    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //           children: [
-    //             textWidget(
-    //               text: AppStrings.paymentStatus,
-    //               // show AppStrings.aAvailabilityDate
-    //               style: getMediumStyle(
-    //                 color: grey3,
-    //                 fontSize: 10.sp,
-    //               ),
-    //             ),
-    //             Row(children: [
-    //               textWidget(
-    //                 text: AppStrings.sent,
-    //                 style: getMediumStyle(fontSize: 10.sp),
-    //               ),
-    //               Image.asset(ImageAssets.doubleCheck),
-    //             ]),
-    //           ],
-    //         ),
-    //       ),
-    //     ),
-    //     Padding(
-    //       padding: EdgeInsets.symmetric(vertical: 5.0.sp, horizontal: 5),
-    //       child: Row(
-    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //         children: [
-    //           textWidget(
-    //               text: AppStrings.totalAmount,
-    //               style: getRegularStyle(fontSize: 12.sp, color: grey3)),
-    //           Row(
-    //             // crossAxisAlignment: alignment,
-    //             children: [
-    //               SvgPicture.asset(ImageAssets.naira),
-    //               textWidget(
-    //                   text: '500,000',
-    //                   style: getMediumStyle(fontSize: 16.sp)
-    //                       .copyWith(fontFamily: 'Neue')),
-    //             ],
-    //           ),
-    //         ],
-    //       ),
-    //     ),
-    //     tripInfo(
-    //       title: AppStrings.tripId,
-    //       trailling: InkWell(
-    //         onTap: () {
-    //           controller.copy(value: "GTI123456");
-    //         },
-    //         child: Row(
-    //           children: [
-    //             textWidget(
-    //               text: 'GTI123456',
-    //               style: getRegularStyle(
-    //                 fontSize: 10.sp,
-    //               ),
-    //             ),
-    //             SizedBox(
-    //               width: 3.sp,
-    //             ),
-    //             SvgPicture.asset(ImageAssets.docCopy),
-    //           ],
-    //         ),
-    //       ),
-    //     ),
-    //     tripInfo(
-    //       title: AppStrings.tripStartDate,
-    //       trailling: textWidget(
-    //         text: 'Wed, 1 Nov, 9:00am',
-    //         style: getRegularStyle(fontSize: 10.sp),
-    //       ),
-    //     ),
-    //     Padding(
-    //       padding: EdgeInsets.symmetric(vertical: 5.0.sp, horizontal: 5),
-    //       child: Row(
-    //         children: [
-    //           SizedBox(
-    //             width: 2.sp,
-    //             height: 16.sp,
-    //             child: const ColoredBox(
-    //               color: primaryColor,
-    //             ),
-    //           ),
-    //           SizedBox(
-    //             width: 7.sp,
-    //           ),
-    //           textWidget(
-    //             text: 'UBA',
-    //             style: getRegularStyle(fontSize: 10.sp),
-    //           ),
-    //         ],
-    //       ),
-    //     ),
-    //     tripInfo(
-    //       title: AppStrings.paymentRef,
-    //       trailling: InkWell(
-    //         onTap: () {
-    //           controller.copy(value: "GTI123456");
-    //         },
-    //         child: Row(
-    //           children: [
-    //             textWidget(
-    //               text: 'GTI123456',
-    //               style: getRegularStyle(
-    //                 fontSize: 10.sp,
-    //               ),
-    //             ),
-    //             SizedBox(
-    //               width: 3.sp,
-    //             ),
-    //             SvgPicture.asset(ImageAssets.docCopy),
-    //           ],
-    //         ),
-    //       ),
-    //     ),
-    //     SizedBox(
-    //       height: 5.sp,
-    //     ),
-    //     divider(color: borderColor)
-    //   ],
-    // );
-
+    if (controller.paymentList.isNotEmpty) {
+      return Column(
+        children: [
+          for (var payment in controller.paymentList)
+            Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(
+                    bottom: 1,
+                  ),
+                  decoration: BoxDecoration(
+                      color: primaryColor,
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(4.r),
+                        bottomRight: Radius.circular(4.r),
+                      )),
+                  child: Container(
+                    height: 30.0,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                    ),
+                    decoration: BoxDecoration(
+                        color: backgroundColor,
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(2.5.r),
+                          bottomRight: Radius.circular(2.5.r),
+                        )),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        textWidget(
+                          text: AppStrings.paymentStatus,
+                          // show AppStrings.aAvailabilityDate
+                          style: getMediumStyle(
+                            color: grey3,
+                            fontSize: 10.sp,
+                          ),
+                        ),
+                        Row(children: [
+                          textWidget(
+                            text: payment["paymentStatus"],
+                            style: getMediumStyle(fontSize: 10.sp),
+                          ),
+                          Image.asset(ImageAssets.doubleCheck),
+                        ]),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 5.0.sp, horizontal: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      textWidget(
+                          text: AppStrings.totalAmount,
+                          style:
+                              getRegularStyle(fontSize: 12.sp, color: grey3)),
+                      Row(
+                        // crossAxisAlignment: alignment,
+                        children: [
+                          SvgPicture.asset(ImageAssets.naira),
+                          textWidget(
+                              text: payment["paymentAmount"],
+                              style: getMediumStyle(fontSize: 16.sp)
+                                  .copyWith(fontFamily: 'Neue')),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                tripInfo(
+                  title: AppStrings.tripId,
+                  trailling: InkWell(
+                    onTap: () {
+                      controller.copy(value: payment["tripID"]);
+                    },
+                    child: Row(
+                      children: [
+                        textWidget(
+                          text: payment["tripID"],
+                          style: getRegularStyle(
+                            fontSize: 10.sp,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 3.sp,
+                        ),
+                        SvgPicture.asset(ImageAssets.docCopy),
+                      ],
+                    ),
+                  ),
+                ),
+                tripInfo(
+                  title: AppStrings.paymentDate,
+                  trailling: textWidget(
+                    text: isSingleDateSelection(date: DateTime.now()),
+                    style: getRegularStyle(fontSize: 10.sp),
+                  ),
+                ),
+                Padding(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 5.0.sp, horizontal: 5),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 2.sp,
+                        height: 16.sp,
+                        child: const ColoredBox(
+                          color: primaryColor,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 7.sp,
+                      ),
+                      textWidget(
+                        text: payment["paymentMethod"]["bankName"],
+                        style: getRegularStyle(fontSize: 10.sp),
+                      ),
+                    ],
+                  ),
+                ),
+                tripInfo(
+                  title: AppStrings.paymentRef,
+                  trailling: InkWell(
+                    onTap: () {
+                      // payment reference
+                      controller.copy(value: payment["paymentReference"]);
+                    },
+                    child: Row(
+                      children: [
+                        textWidget(
+                          text: payment["paymentReference"].toString(),
+                          style: getRegularStyle(
+                            fontSize: 10.sp,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 3.sp,
+                        ),
+                        SvgPicture.asset(ImageAssets.docCopy),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 5.sp,
+                ),
+                divider(color: borderColor),
+                SizedBox(
+                  height: 15.sp,
+                ),
+              ],
+            ),
+        ],
+      );
+    }
     return noPreviousPaymentWidget(size);
   }
 
@@ -569,6 +583,7 @@ class PaymentScreen extends GetView<PaymentController> {
       ],
     );
   }
+
   Widget noPreviousPaymentWidget(Size size) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -590,11 +605,30 @@ class PaymentScreen extends GetView<PaymentController> {
         SizedBox(
           height: size.height * 0.3.sp,
         ),
-    
       ],
     );
   }
 
+  Widget tripInfo(
+      {required String title,
+      required Widget trailling,
+      FontWeight? fontWeight}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          textWidget(
+            text: title,
+            textOverflow: TextOverflow.visible,
+            style: getRegularStyle(color: grey3, fontSize: 12.sp)
+                .copyWith(fontWeight: fontWeight),
+          ),
+          trailling
+        ],
+      ),
+    );
+  }
 
   Widget continueButton() {
     return controller.isLoading.isTrue

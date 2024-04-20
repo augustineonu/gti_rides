@@ -89,9 +89,11 @@ class MoreScreen extends StatelessWidget {
                                           controller.routeToReferralCode();
                                           break;
                                         case 6:
-                                          break;
+                                          controller.launchMessenger();
+                                        // break;
                                         case 7:
-                                          break;
+                                          controller.launchMessenger();
+                                        // break;
                                         default:
                                       }
                                     },
@@ -138,22 +140,12 @@ class MoreScreen extends StatelessWidget {
                               6 => profileOptionsWIdget(
                                   imageUrl: option['image'],
                                   title: option['title'],
-                                  onTap: ()async {
-                                    await Intercom.instance.loginIdentifiedUser(
-                                        email:
-                                            controller.user.value.emailAddress);
-                                    await Intercom.instance.displayMessenger();
-                                  },
+                                  onTap: () => controller.launchMessenger(),
                                 ),
                               7 => profileOptionsWIdget(
                                   imageUrl: option['image'],
                                   title: option['title'],
-                                  onTap: () async {
-                                    await Intercom.instance.loginIdentifiedUser(
-                                        email:
-                                            controller.user.value.emailAddress);
-                                    await Intercom.instance.displayMessenger();
-                                  },
+                                  onTap: () => controller.launchMessenger(),
                                 ),
                               _ => Container()
                             };

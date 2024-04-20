@@ -63,7 +63,7 @@ class ApiService {
           // final statusCode =
           //     jsonDecode(e.response!.data.toString())['status_code'];
           // logger
-              // .log("Error: ${statusCode.toString()} ${e.response!.statusCode}");
+          // .log("Error: ${statusCode.toString()} ${e.response!.statusCode}");
           // if (e.response!.statusCode == 400 && statusCode == '401') {
           //   logger.log(
           //       "Again: ${statusCode.toString()} ${e.response!.statusCode}");
@@ -112,8 +112,8 @@ class ApiService {
           //   //  _logOut();
           // }
 
-          if (e.response?.statusCode == 401 || e.response?.statusCode == 400) {
-            // If a 401 response is received, refresh the access token
+          if (e.response?.statusCode == 401) {
+            // Unauthorized - refresh token
             bool newAccessTokenResult = await tokenService.getNewAccessToken();
             if (!newAccessTokenResult) {
               logger.log('Going to Login screen');
@@ -123,10 +123,26 @@ class ApiService {
             // Update the request header with the new access token
             e.requestOptions.headers['Authorization'] =
                 'Bearer ${tokenService.accessToken.value}';
-
             // Repeat the request with the updated header
             return handler.resolve(await _dio.fetch(e.requestOptions));
+          } else if (e.response?.data["status_code"] == 401 ||
+              e.response?.data['message'] ==
+                  'Unauthorized! Access Token was expired') {
+            bool newAccessTokenResult = await tokenService.getNewAccessToken();
+            if (!newAccessTokenResult) {
+              logger.log('Going to Login screen');
+              routeService.offAllNamed(AppLinks.login);
+              return;
+            } else {
+              // Handle invalid or wrong token error
+              // You may want to log the error or notify the user
+              // Then redirect to the login screen or perform other appropriate actions
+              logger.log('Invalid or wrong token error');
+              routeService.offAllNamed(AppLinks.login);
+              return;
+            }
           }
+          // For other error cases, proceed with the default error handling
           return handler.next(e);
         },
       ),
@@ -215,7 +231,7 @@ class ApiService {
 
   Future<dynamic> putRequest({
     required String endpoint,
-    required Map? data,
+    required Object? data,
   }) async {
     try {
       late Response response;
@@ -496,7 +512,11 @@ class ApiService {
     } on SocketException {
       throw "seems you are offline";
     } catch (error) {
-      throw error.toString();
+      if (error.toString().contains('<!DOCTYPE html>')) {
+        throw "Bad format: API error";
+      } else {
+        throw error.toString();
+      }
     }
   }
 

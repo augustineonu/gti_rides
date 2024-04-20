@@ -238,12 +238,25 @@ class City {
 
 class Document {
     final String? documentName;
+    final DateTime? expireDate;
     final String? documentUrl;
 
     Document({
         this.documentName,
+        this.expireDate,
         this.documentUrl,
     });
+
+    Document copyWith({
+        String? documentName,
+        DateTime? expireDate,
+        String? documentUrl,
+    }) => 
+        Document(
+            documentName: documentName ?? this.documentName,
+            expireDate: expireDate ?? this.expireDate,
+            documentUrl: documentUrl ?? this.documentUrl,
+        );
 
     factory Document.fromRawJson(String str) => Document.fromJson(json.decode(str));
 
@@ -251,11 +264,13 @@ class Document {
 
     factory Document.fromJson(Map<String, dynamic> json) => Document(
         documentName: json["documentName"],
+        expireDate: json["expireDate"] == null ? null : DateTime.parse(json["expireDate"]),
         documentUrl: json["documentURL"],
     );
 
     Map<String, dynamic> toJson() => {
         "documentName": documentName,
+        "expireDate": expireDate?.toIso8601String(),
         "documentURL": documentUrl,
     };
 }

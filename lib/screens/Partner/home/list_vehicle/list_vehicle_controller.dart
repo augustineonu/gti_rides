@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -8,6 +9,7 @@ import 'package:gti_rides/models/drivers_model.dart' as driver;
 import 'package:gti_rides/models/image_response.dart';
 import 'package:gti_rides/models/list_response_model.dart';
 import 'package:gti_rides/models/partner/car_list_model.dart';
+import 'package:gti_rides/models/partner/doc_expiry_date_model.dart';
 import 'package:gti_rides/models/renter/trip_data_model.dart';
 import 'package:gti_rides/models/user/kyc_response_model.dart';
 import 'package:gti_rides/route/app_links.dart';
@@ -122,6 +124,17 @@ class ListVehicleController extends GetxController {
   TextEditingController aboutVehicleController = TextEditingController();
   Rx<TextEditingController> fromController = TextEditingController().obs;
   Rx<TextEditingController> toController = TextEditingController().obs;
+  TextEditingController licenseExpiryDateController = TextEditingController();
+  TextEditingController roadWorthinessExpiryDateController =
+      TextEditingController();
+  TextEditingController insuranceExpiryDateController = TextEditingController();
+  TextEditingController inspectionExpiryDateController =
+      TextEditingController();
+  Rx<String> licenseExpiryDate = "".obs;
+  Rx<String> roadWorthinessExpiryDate = "".obs;
+  Rx<String> insuranceExpiryDate = "".obs;
+  Rx<String> inspectionExpiryDate = "".obs;
+
   Rx<String> advanceTime = ''.obs;
   RxInt initiPageIndex = 1.obs;
   DateTime? rawStartTime;
@@ -160,16 +173,6 @@ class ListVehicleController extends GetxController {
     await getInsuranceType();
     // await getCarHistory();
     logger.log("oooooooooo");
-    // Access the arguments using Get.arguments
-
-    // if (isFromManageCars.value == true) {
-    //   currentIndex.value = 1;
-    //   pageController = PageController(initialPage: currentIndex.value);
-    //   // pageController.addListener(() {
-    //     // currentIndex.value = pageController.page?.round() ?? 0;
-    //     update();
-    //   // });
-    // }
   }
 
   @override
@@ -593,7 +596,7 @@ class ListVehicleController extends GetxController {
         isGettingBrands.value = false;
       }
     } catch (exception) {
-      logger.log("error  $exception");
+      logger.log("get brands error  $exception");
     } finally {
       isGettingBrands.value = false;
     }
@@ -626,9 +629,8 @@ class ListVehicleController extends GetxController {
           // vehicleYear?.value = response.data!;
           vehicleYear!.assignAll(response.data!);
           isGettingyear.value = false;
-          
-         
-          logger.log("msg ${brands.value.data}");
+
+          logger.log("vehicle year ${vehicleYear!.value}");
         } else {
           logger.log("no vehicle year ${response.data}");
         }
@@ -638,7 +640,7 @@ class ListVehicleController extends GetxController {
         isGettingyear.value = false;
       }
     } catch (exception) {
-      logger.log("error  $exception");
+      logger.log("get vehicle year error  $exception");
     } finally {
       isGettingyear.value = false;
     }
@@ -668,7 +670,7 @@ class ListVehicleController extends GetxController {
         isGettingBrands.value = false;
       }
     } catch (exception) {
-      logger.log("error  $exception");
+      logger.log("get brand model error  $exception");
     } finally {
       isGettingBrandModel.value = false;
     }
@@ -689,7 +691,7 @@ class ListVehicleController extends GetxController {
         isGettingBrands.value = false;
       }
     } catch (exception) {
-      logger.log("error  $exception");
+      logger.log("get states error  $exception");
     }
   }
 
@@ -709,7 +711,7 @@ class ListVehicleController extends GetxController {
         isGettingBrands.value = false;
       }
     } catch (exception) {
-      logger.log("error  $exception");
+      logger.log("get city error  $exception");
     }
   }
 
@@ -721,14 +723,14 @@ class ListVehicleController extends GetxController {
         logger.log("gotten transmission ${response.data}");
         if (response.data != null && response.data != []) {
           transmissions?.value = response.data!;
-          logger.log("msg ${transmissions?.value}");
+          logger.log("transmissions: ${transmissions?.value}");
         }
       } else {
         logger.log("unable to get transmission ${response.data}");
         isGettingBrands.value = false;
       }
     } catch (exception) {
-      logger.log("error  $exception");
+      logger.log("transmission error  $exception");
     }
   }
 
@@ -740,14 +742,14 @@ class ListVehicleController extends GetxController {
         logger.log("gotten car features ${response.data}");
         if (response.data != null && response.data != []) {
           carFeatures?.value = response.data!;
-          logger.log("msg ${carFeatures?.value}");
+          logger.log("features ${carFeatures?.value}");
         }
       } else {
         logger.log("unable to car features ${response.data}");
         isGettingBrands.value = false;
       }
     } catch (exception) {
-      logger.log("error  $exception");
+      logger.log("get car features error  $exception");
     }
   }
 
@@ -759,14 +761,14 @@ class ListVehicleController extends GetxController {
         logger.log("gotten vehicle Types ${response.data}");
         if (response.data != null && response.data != []) {
           vehicleTypes?.value = response.data!;
-          logger.log("msg ${vehicleTypes?.value}");
+          logger.log("vehicle type ${vehicleTypes?.value}");
         }
       } else {
         logger.log("unable to vehicle Types ${response.data}");
         isGettingBrands.value = false;
       }
     } catch (exception) {
-      logger.log("error  $exception");
+      logger.log("get vehicle type error  $exception");
     }
   }
 
@@ -785,7 +787,7 @@ class ListVehicleController extends GetxController {
         isGettingBrands.value = false;
       }
     } catch (exception) {
-      logger.log("error  $exception");
+      logger.log("get vehicle seats error  $exception");
     }
   }
 
@@ -804,7 +806,7 @@ class ListVehicleController extends GetxController {
         isGettingBrands.value = false;
       }
     } catch (exception) {
-      logger.log("error  $exception");
+      logger.log("get insurance error  $exception");
     }
   }
 
@@ -823,7 +825,7 @@ class ListVehicleController extends GetxController {
         isGettingBrands.value = false;
       }
     } catch (exception) {
-      logger.log("error  $exception");
+      logger.log("get drivers error  $exception");
     }
   }
 
@@ -847,29 +849,33 @@ class ListVehicleController extends GetxController {
   }
 
   Future<bool> getUserKyc() async {
-  try {
-    final kycResponse = await userService.getKycProfile();
+    try {
+      final kycResponse = await userService.getKycProfile();
 
-    if (kycResponse.status == 'success' || kycResponse.status_code == 200) {
-      if (kycResponse.data != null && kycResponse.data!.isNotEmpty) {
-       
-        Map<String, dynamic> firstKycItem = kycResponse.data!.first;
+      if (kycResponse.status == 'success' || kycResponse.status_code == 200) {
+        if (kycResponse.data != null && kycResponse.data!.isNotEmpty) {
+          Map<String, dynamic> firstKycItem = kycResponse.data!.first;
 
-        // Check if the first item in the list is not empty
-        if (firstKycItem.isNotEmpty) {
-           missingKycFields.clear();
-          KycData kycData = KycData.fromJson(firstKycItem);
+          // Check if the first item in the list is not empty
+          if (firstKycItem.isNotEmpty) {
+            missingKycFields.clear();
+            KycData kycData = KycData.fromJson(firstKycItem);
 
-          // Check missing fields and route accordingly
-          missingKycFields = getMissingKycFields(kycData);
+            // Check missing fields and route accordingly
+            missingKycFields = getMissingKycFields(kycData);
 
-          // Use missingKycFields for further processing if needed
-          if (missingKycFields.isNotEmpty) {
-            // User has all KYC fields
-            return false;
+            // Use missingKycFields for further processing if needed
+            if (missingKycFields.isNotEmpty) {
+              // User has all KYC fields
+              return false;
+            } else {
+              // User is missing KYC fields
+              return true;
+            }
           } else {
-            // User is missing KYC fields
-            return true;
+            // Route to KYC screen if data is empty
+            // user has no KYC profile at all
+            return false;
           }
         } else {
           // Route to KYC screen if data is empty
@@ -877,78 +883,73 @@ class ListVehicleController extends GetxController {
           return false;
         }
       } else {
-        // Route to KYC screen if data is empty
-        // user has no KYC profile at all
-        return false;
+        logger.log(
+            "Unable to fetch User KYC: ${kycResponse.message ?? "kyc error"}");
       }
-    } else {
-      logger.log("Unable to fetch User KYC: ${kycResponse.message ?? "error"}");
+    } catch (exception) {
+      logger.log("Unable to fetch User KYC: $exception");
     }
-  } catch (exception) {
-    logger.log("Unable to fetch User KYC: $exception");
+
+    // Default to false if an error occurs
+    return false;
   }
-
-  // Default to false if an error occurs
-  return false;
-}
-
 
   Future<void> addCar() async {
-  if (!vehicleTypeFormKey.currentState!.validate()) {
-    return;
-  }
-  if (selectedBrandModel.value == 'Select' ||
-      selectedYearValue!.value == 'Select') {
-    showErrorSnackbar(message: 'All fields must be selected');
-    return;
-  }
-
-  isLoading.value = true;
-  try {
-     List<String> originalMissingKycFields = List.from(missingKycFields);
-
-    var hasKycFields = await getUserKyc();
-    if (!hasKycFields) {
-      // Route to KYC screen, and the rest of the function will be executed later
-      routeService.gotoRoute(AppLinks.kycCheck, arguments: {
-        "missingKycFields": originalMissingKycFields,
-        "isCarListing": true,
-        "tripData": TripData()
-      });
+    if (!vehicleTypeFormKey.currentState!.validate()) {
+      return;
+    }
+    if (selectedBrandModel.value == 'Select' ||
+        selectedYearValue!.value == 'Select') {
+      showErrorSnackbar(message: 'All fields must be selected');
       return;
     }
 
-    // Continue with the logic to add a car
-    await addCarLogic();
-  } finally {
-    isLoading.value = false;
+    isLoading.value = true;
+    try {
+      List<String> originalMissingKycFields = List.from(missingKycFields);
+
+      var hasKycFields = await getUserKyc();
+      if (!hasKycFields) {
+        // Route to KYC screen, and the rest of the function will be executed later
+        routeService.gotoRoute(AppLinks.kycCheck, arguments: {
+          "missingKycFields": originalMissingKycFields,
+          "isCarListing": true,
+          "tripData": TripData()
+        });
+        return;
+      }
+
+      // Continue with the logic to add a car
+      await addCarLogic();
+    } finally {
+      isLoading.value = false;
+    }
   }
-}
 
   Future<void> addCarLogic() async {
-  try {
-    final response = await partnerService.addCar(data: {
-      "brandCode": brandCode.value,
-      "brandModelCode": modelCode.value,
-      "yearCode": yearCode.value,
-      "vin": vinController.text,
-      "plateNumber": plateNumberController.text,
-      "stateCode": stateCode.value,
-      "cityCode": cityCode.value,
-    }, param: isFromManageCars.isTrue ? "?carID=${carID.value}" : '');
+    try {
+      final response = await partnerService.addCar(data: {
+        "brandCode": brandCode.value,
+        "brandModelCode": modelCode.value,
+        "yearCode": yearCode.value,
+        "vin": vinController.text,
+        "plateNumber": plateNumberController.text,
+        "stateCode": stateCode.value,
+        "cityCode": cityCode.value,
+      }, param: isFromManageCars.isTrue ? "?carID=${carID.value}" : '');
 
-    if (response.status == 'success' || response.status_code == 200) {
-      logger.log("car added ${response.data}");
-      if (response.data != null) {
-        carID.value = response.data!["carID"];
-        showSuccessSnackbar(message: response.message!);
-        goToNextPage();
+      if (response.status == 'success' || response.status_code == 200) {
+        logger.log("car added ${response.data}");
+        if (response.data != null) {
+          carID.value = response.data!["carID"];
+          showSuccessSnackbar(message: response.message!);
+          goToNextPage();
+        }
       }
+    } finally {
+      isLoading.value = false;
     }
-  } finally {
-    isLoading.value = false;
   }
-}
 
   ScrollController scrollController = ScrollController();
 
@@ -994,7 +995,7 @@ class ListVehicleController extends GetxController {
         showErrorSnackbar(message: response.message.toString());
       }
     } catch (exception) {
-      logger.log("error  $exception");
+      logger.log("add car info error  $exception");
       showErrorSnackbar(message: exception.toString());
     } finally {
       isLoading.value = false;
@@ -1040,7 +1041,7 @@ class ListVehicleController extends GetxController {
         isLoading1.value = false;
       }
     } catch (exception) {
-      logger.log("error  $exception");
+      logger.log("add car availability error  $exception");
       showErrorSnackbar(message: exception.toString());
     } finally {
       isLoading1.value = false;
@@ -1199,6 +1200,7 @@ class ListVehicleController extends GetxController {
           carID: carID.value);
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("car document added ${response.message}");
+        await addCarDocumentExpireDate();
 
         showSuccessSnackbar(message: response.message!);
         goToNextPage();
@@ -1209,10 +1211,45 @@ class ListVehicleController extends GetxController {
         isLoading.value = false;
       }
     } catch (exception) {
-      logger.log("error  $exception");
+      logger.log("add car doc error  $exception");
       showErrorSnackbar(message: exception.toString());
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  Future<void> addCarDocumentExpireDate() async {
+    // isDeletingCarPhoto.value = true;
+    // You might want to call an API to delete the photo on the server as well
+    var data = json.encode([
+      {"documentName": "vehicleLicense", "expireDate": licenseExpiryDate.value},
+      {
+        "documentName": "roadWorthiness",
+        "expireDate": roadWorthinessExpiryDate.value
+      },
+      {
+        "documentName": "insuranceCertificate",
+        "expireDate": inspectionExpiryDate.value
+      },
+      {
+        "documentName": "inspectionReport",
+        "expireDate": inspectionExpiryDate.value
+      },
+    ]);
+
+    try {
+      final response = await partnerService.addCarDocumentExpireDate(
+          payload: data, carId: carID.value);
+      if (response.status == 'success' || response.status_code == 200) {
+        // showSuccessSnackbar(message: 'Photo deleted successfully');
+        logger.log("car document expriry success");
+      } else {
+        logger.log("Unable to delete car photo");
+      }
+    } catch (e) {
+      logger.log("eror:: ${e.toString()}");
+    } finally {
+      // isDeletingCarPhoto.value = false;
     }
   }
 
@@ -1299,7 +1336,7 @@ class ListVehicleController extends GetxController {
         isLoading.value = false;
       }
     } catch (exception) {
-      logger.log("error  $exception");
+      logger.log(" add car photo error  $exception");
       showErrorSnackbar(
           message: exception.toString().contains('Map<String, dynamic>')
               ? "Sorry, unknown error "
@@ -1378,6 +1415,7 @@ class ListVehicleController extends GetxController {
           city.value = firstCar['city'].isNotEmpty
               ? firstCar['city'][0]["cityName"]
               : "";
+          logger.log("city value:: ${city.value}");
           stateCode.value = firstCar['state'].isNotEmpty
               ? firstCar['state'][0]["stateCode"]
               : '';
@@ -1432,75 +1470,106 @@ class ListVehicleController extends GetxController {
 
           logger.log("features code:: ${featuresCode.value}");
 
-          // documentation
-          insurance.value = firstCar["insurance"].isNotEmpty
-              ? firstCar["insurance"][0]["insuranceName"]
-              : '';
-          insuranceCode.value = firstCar["insurance"].isNotEmpty
-              ? firstCar["insurance"][0]["insuranceCode"]
-              : '';
+          if (carListData.document != null &&
+              carListData.document!.isNotEmpty) {
+            final licenseDocUrl = carListData.document![3].documentUrl;
+            final inspectionDocUrl = carListData.document![1].documentUrl;
+            final insuranceDocUrl = carListData.document![0].documentUrl;
+            final roadWorthinessDocUrl = carListData.document![2].documentUrl;
 
-          final licenseDocUrl =
-              carListData.document != null && carListData.document!.isNotEmpty
-                  ? carListData.document![3].documentUrl
-                  : null;
-          final inspectionDocUrl =
-              carListData.document != null && carListData.document!.isNotEmpty
-                  ? carListData.document![1].documentUrl
-                  : null;
-          final insuranceDocUrl =
-              carListData.document != null && carListData.document!.isNotEmpty
-                  ? carListData.document![0].documentUrl
-                  : null;
+            // vehicle License
+            if (licenseDocUrl != null) {
+              await downloadAndSaveImage(licenseDocUrl, 'vehicleLicense.png',
+                  (filePath) {
+                selectedPhotos.value = filePath;
+                selectedPhotoName.value = 'vehicleLicense.png';
 
-          final roadWorthinessDocUrl =
-              carListData.document != null && carListData.document!.isNotEmpty
-                  ? carListData.document![2].documentUrl
-                  : null;
-          // vehicle License
-          await downloadAndSaveImage(licenseDocUrl!, 'vehicleLicense.png',
-              (filePath) {
-            selectedPhotos.value = filePath;
-            selectedPhotoName.value = 'vehicleLicense.png';
+                logger.log("extracted name: ${selectedPhotoName.value}");
+              });
+            }
 
-            logger.log("extracted name: ${selectedPhotoName.value}");
-          });
-          // vehicle inspection
-          await downloadAndSaveImage(inspectionDocUrl!, 'inspectionReport.png',
-              (filePath) {
-            selectedInspectionPhotos.value = filePath;
-            selectedInspectionPhotoName.value = 'inspectionReport.png';
+            // vehicle inspection
+            if (inspectionDocUrl != null) {
+              await downloadAndSaveImage(
+                  inspectionDocUrl, 'inspectionReport.png', (filePath) {
+                selectedInspectionPhotos.value = filePath;
+                selectedInspectionPhotoName.value = 'inspectionReport.png';
 
-            logger.log("extracted name: ${selectedInspectionPhotos.value}");
-          });
+                logger.log("extracted name: ${selectedInspectionPhotos.value}");
+              });
+            }
 
-          // roadWorthiness
-          await downloadAndSaveImage(
-              roadWorthinessDocUrl!, 'roadWorthiness.png', (filePath) {
-            selectedRoadWorthinessPhoto.value = filePath;
-            selectedRoadWorthinessPhotoName.value = 'roadWorthiness.png';
+            // roadWorthiness
+            if (roadWorthinessDocUrl != null) {
+              await downloadAndSaveImage(
+                  roadWorthinessDocUrl, 'roadWorthiness.png', (filePath) {
+                selectedRoadWorthinessPhoto.value = filePath;
+                selectedRoadWorthinessPhotoName.value = 'roadWorthiness.png';
 
-            logger.log(
-                "extracted name: ${selectedRoadWorthinessPhotoName.value}");
-          });
+                logger.log(
+                    "extracted name: ${selectedRoadWorthinessPhotoName.value}");
+              });
+            }
 
-          // insurance photos
+            insurance.value = carListData.insurance!.first.insuranceName!;
+            insuranceCode.value = carListData.insurance!.first.insuranceCode!;
 
-          await downloadAndSaveImage(
-              insuranceDocUrl!, 'insuranceCertificate.png', (filePath) {
-            selectedInsurancePhotos.value = filePath;
-            selectedInsurancePhotoName.value = 'insuranceCertificate.png';
+            // insurance photos
+            if (insuranceDocUrl != null) {
+              await downloadAndSaveImage(
+                  insuranceDocUrl, 'insuranceCertificate.png', (filePath) {
+                selectedInsurancePhotos.value = filePath;
+                selectedInsurancePhotoName.value = 'insuranceCertificate.png';
 
-            logger.log("extracted name: ${selectedInsurancePhotos.value}");
-          });
+                logger.log("extracted name: ${selectedInsurancePhotos.value}");
+              });
+            }
+            DateTime? licenseRawDate;
+            DateTime? roadWorthinessRawDate;
+            DateTime? insuranceRawDate;
+            DateTime? inspectionRawDate;
+            // documents expiry dates
+            // license
+            licenseRawDate = (carListData.document != null &&
+                    carListData.document!.isNotEmpty
+                ? carListData.document![3].expireDate
+                : null)!;
+
+            licenseExpiryDate.value = formatDate(licenseRawDate);
+            // road worthiness
+            roadWorthinessRawDate = (carListData.document != null &&
+                    carListData.document!.isNotEmpty
+                ? carListData.document![2].expireDate
+                : null)!;
+            roadWorthinessExpiryDate.value = formatDate(roadWorthinessRawDate);
+            // insurance
+            insuranceRawDate = (carListData.document != null &&
+                    carListData.document!.isNotEmpty
+                ? carListData.document![0].expireDate
+                : null)!;
+            insuranceExpiryDate.value = formatDate(insuranceRawDate);
+            // inspection
+            inspectionRawDate = (carListData.document != null &&
+                    carListData.document!.isNotEmpty
+                ? carListData.document![1].expireDate
+                : null)!;
+            inspectionExpiryDate.value = formatDate(inspectionRawDate);
+          }
 
           // selectedInspectionPhotos.value =
           //     firstCar['document'][0]["documentURL"];
           // // availability
-          startDateTime.value = formateDate(date: firstCar['startDate'] ?? '');
-          rawStartTime = firstCar['startDate'];
-          endDateTime.value = formateDate(date: firstCar['endDate'] ?? '');
-          rawEndTime = firstCar['endDate'];
+          if (firstCar['startDate'] != null &&
+              firstCar['startDate'].isNotEmpty) {
+            startDateTime.value = isSingleDateSelection(
+                date: DateTime.parse(firstCar['startDate'] ?? ''));
+
+            rawStartTime = DateTime.parse(firstCar['startDate'] ?? '');
+
+            endDateTime.value = isSingleDateSelection(
+                date: DateTime.parse(firstCar['endDate'] ?? ''));
+            rawEndTime = DateTime.parse(firstCar['endDate'] ?? '');
+          }
           advanceTime.value = firstCar['advanceDays'] ?? '';
           pricePerDay.value = firstCar['pricePerDay'] ?? '';
           discountDays.value = firstCar['discountDays'] ?? '';
@@ -1531,6 +1600,7 @@ class ListVehicleController extends GetxController {
 
           apiFetchedPhotos.assignAll(carListData.photo ?? []);
           logger.log("photos:: ${apiFetchedPhotos}");
+          logger.log("photos:: ${carListData.photo!.length}");
 
           logger.log("car history $carHistory");
           isFetchingCarDetails.value = false;
@@ -1541,7 +1611,7 @@ class ListVehicleController extends GetxController {
         logger.log("unable to get car history ${response.data}");
       }
     } catch (exception) {
-      logger.log("error  $exception");
+      logger.log("get car history error  $exception");
     } finally {
       isFetchingCarDetails.value = false;
     }

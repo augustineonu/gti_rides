@@ -59,16 +59,6 @@ String formatDate(DateTime datetime) {
   var formatter = DateFormat('yyyy/MM/dd');
   return formatter.format(datetime);
 }
-// DateTime formatDate1(DateTime datetime) {
-//   var formatter = DateFormat('dd-MM-yyyy');
-//   return formatter.format(datetime.toIso8601String());
-// }
-
-// String formatDate(DateTime datetime) {
-//   // var formatter = DateFormat('yyyy-MM-dd');
-//   var formatter = DateFormat('dd MMM yyyy');
-//   return formatter.format(datetime);
-// }
 
 // "dd, MMM h:mma"
 String extractMonthDay(String dateString) {
@@ -135,19 +125,6 @@ String extractDayDateMonth(String inputDate) {
   // Return the day, date, and month
   return '$day, $date $month';
 }
-// String extractTime(String inputDate) {
-//   // Split the input date by comma and space
-//   List<String> parts = inputDate.split(', ');
-
-//   // Extract the day and date parts
-//   String day = parts[0];
-//   String date = parts[1].split(' ')[0];
-//   String month = parts[1].split(' ')[1];
-
-//   // Return the day, date, and month
-//   return '$day, $date $month';
-// }
-
 
 
 String formatDateTime1(String datetime) {

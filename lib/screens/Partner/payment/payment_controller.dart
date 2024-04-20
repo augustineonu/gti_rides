@@ -8,6 +8,7 @@ import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/screens/Partner/home/list_vehicle/list_vehicle_screen.dart';
 import 'package:gti_rides/services/auth_service.dart';
 import 'package:gti_rides/services/logger.dart';
+import 'package:gti_rides/services/partner_service.dart';
 import 'package:gti_rides/services/payment_service.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/services/user_service.dart';
@@ -25,22 +26,22 @@ class PaymentController extends GetxController with StateMixin<List<dynamic>> {
   void init() async {
     logger.log("PaymentController Initialized");
     addedPaymentMethod.value == true;
-     logger.log("User type:: ${userService.user.value.userType}");
+    logger.log("User type:: ${userService.user.value.userType}");
     if (userService.user.value.userType == "partner") {
       await getBanks();
       await getBankAccount();
-    // await getBankAccount();
+      await getPaymentList();
+      // await getBankAccount();
     }
-    
   }
 
   @override
   void onInit() async {
+    logger.log("value:: $paymentList");
     pageController.addListener(() {
       update();
     });
     super.onInit();
-   
 
     // addedPaymentMethod.value = true;
   }
@@ -178,7 +179,7 @@ class PaymentController extends GetxController with StateMixin<List<dynamic>> {
       final response = await paymentService.getBanks();
 
       if (response.status == 'success' || response.status_code == 200) {
-        logger.log("gotten banks ${response.data}");
+        // logger.log("gotten banks ${response.data}");
         if (response.data != null && response.data!.isNotEmpty) {
           listOfBanksAsMap = response.data!.cast<Map<String, dynamic>>();
 
@@ -208,7 +209,7 @@ class PaymentController extends GetxController with StateMixin<List<dynamic>> {
       final response = await paymentService.getBankAccount();
 
       if (response.status == 'success' || response.status_code == 200) {
-        logger.log("gotten bank account ${response.data}");
+        // logger.log("gotten bank account ${response.data}");
         if (response.data != null && response.data!.isNotEmpty) {
           // listOfBanksAsMap = response.data!.cast<Map<String, dynamic>>();
           addedPaymentMethod.value == true;
@@ -229,7 +230,34 @@ class PaymentController extends GetxController with StateMixin<List<dynamic>> {
       }
     } catch (exception) {
       logger.log("error  $exception");
-      change(<BanksModel>[].obs, status: RxStatus.error(exception.toString()));
+      change(<dynamic>[].obs, status: RxStatus.error(exception.toString()));
+    }
+  }
+
+  RxBool isGettingPaymentList = false.obs;
+  // RxList<dynamic> paymentLIst = <Rx>[].obs;
+  RxList<dynamic> paymentList = <dynamic>[].obs;
+
+  Future<void> getPaymentList() async {
+    isGettingPaymentList.value = true;
+    try {
+      final response = await partnerService.getPaymentList();
+      if (response.status == 'success' || response.status_code == 200) {
+        logger.log("gotten payment list ${response.data}");
+        if (response.data != null && response.data!.isNotEmpty) {
+          // paymentList.value = response.data!;
+            paymentList.value = response.data!.cast<dynamic>().obs;
+
+          logger.log("payment list:: ${paymentList}");
+        } else {
+          logger.log('data is empty');
+          paymentList.value = [];
+        }
+      } else {
+        logger.log("unable to get payment list ${response.data}");
+      }
+    } catch (exception) {
+      logger.log("error  $exception");
     }
   }
 

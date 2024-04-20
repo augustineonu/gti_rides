@@ -266,7 +266,7 @@ class SignUpScreen extends GetView<SignUpController> {
                     expectedVariable: "fullName",
                     hintText: AppStrings.enterLastName,
                     textInputType: TextInputType.name,
-                    controller: controller.ownerFullNameController,
+                    controller: controller.ownerLastNameController,
                   ),
                   SizedBox(
                     height: 16.sp,

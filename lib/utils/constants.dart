@@ -250,6 +250,10 @@ class AppStrings {
   static String driversLicense = "Driver's License";
   static String driversLicenseNo = "Driver's License Number";
   static String licenseExpireyDate = "Expiry Date of Driver's License";
+  static String vehicleLicenseExpiryDate = "Expiry Date of Vehicle License";
+  static String roadWorthinessExpiryDate = "Expiry Date of Road Worthiness";
+  static String certificateOfInsuranceExpiryDate = "Certificate of Insurance Expiry Date";
+  static String vehicleInspectionExpiryDate = "Vehicle Inspection Expiry Date";
   static String provideDriversLicense = "Provide Driver's License";
   static String addressVerificationCaps = "ADDRESS VERIFICATION";
   static String accountStatusCaps = "ACCOUNT STATUS";
@@ -476,6 +480,7 @@ class AppStrings {
   static String totalAmount = 'Total amount';
   static String vat = 'VAT';
   static String tripStartDate = 'Trip start date';
+  static String paymentDate = 'Payment date';
   static String tripEndDate = 'Trip end date';
   static String paymentRef = 'Payment ref';
   static String paymentStatus = 'Payment status';

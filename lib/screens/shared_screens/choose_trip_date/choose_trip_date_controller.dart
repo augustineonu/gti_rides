@@ -90,6 +90,7 @@ class ChooseTripDateController extends GetxController {
       // startDate.value = arguments['startDate'] ?? '';
       logger.log("date ${arguments['enablePastDates']}");
       logger.log("date ${enablePastDates.value}");
+      logger.log("current endDate ${currentEndDate}");
 
       // Now you have access to the passed data (emailOrPhone)
       logger.log('Received argument: $appBarTitle');
@@ -136,12 +137,15 @@ class ChooseTripDateController extends GetxController {
       endDate.value = formatDayDate(args.value).toString();
 
       // Calculate the difference
+      logger.log("current end date: ${currentEndDate}");
       Duration difference = calculateDateDifference(
           currentEndDate ?? DateTime.now(), args.value!);
 
       selectedDifferenceInDays.value = difference.inDays + 1;
       logger.log("Selected args: ${args.value}");
       logger.log("Selected date: ${selectedExpiryDate.value}");
+      logger
+          .log("days difference: ${selectedDifferenceInDays.value.toString()}");
     } else {
       // Handle the case when the date is unselected (null)
       selectedExpiryDate.value = ''; // Or any default value you want

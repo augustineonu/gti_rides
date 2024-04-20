@@ -955,7 +955,7 @@ class TripsScreen extends GetView<TripsController> {
                       "isSingleDateSelection": true,
                       "isExpiryDateSelection": true,
                       "isExtendTrip": true,
-                      "curentEndDate": activeTrip.tripEndDate,
+                      "currentEndDate": activeTrip.tripEndDate,
                     });
                     if (data != null) {
                       // Handle the selected date here

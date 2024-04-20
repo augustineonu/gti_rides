@@ -11,9 +11,11 @@ import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/renter_service.dart';
 import 'package:gti_rides/services/route_service.dart';
+import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/figures_helpers.dart';
 import 'package:gti_rides/utils/utils.dart';
+import 'package:intercom_flutter/intercom_flutter.dart';
 
 class TripsController extends GetxController
     with StateMixin<List<AllTripsData>> {
@@ -579,13 +581,24 @@ class TripsController extends GetxController
   }
 
   bool isTripActive(DateTime tripEndDate) {
-    return tripEndDate.isAfter(DateTime.now());
+    // Convert the current time to UTC
+    DateTime currentTimeUtc = DateTime.now().toUtc();
+    logger.log("date utc: $currentTimeUtc $tripEndDate");
+
+    // Check if the trip end date is after the current time in UTC
+    return tripEndDate.isAfter(currentTimeUtc);
   }
 
 // Example usage:
   DateTime tripStartDate = DateTime.parse("2024-02-27T00:00:00.000Z");
   DateTime tripEndDate = DateTime.parse("2024-02-28T00:00:00.000Z");
 // startCountdown(tripStartDate, tripEndDate);
+
+  Future<void> launchMessenger() async {
+    await Intercom.instance
+        .loginIdentifiedUser(email: userService.user.value.emailAddress);
+    await Intercom.instance.displayMessenger();
+  }
 
   @override
   void dispose() {
