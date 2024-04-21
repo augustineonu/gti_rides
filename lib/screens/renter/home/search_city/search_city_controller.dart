@@ -44,7 +44,8 @@ class SearchCityController extends GetxController {
   DateTime? rawStartTime;
   DateTime? rawEndTime;
 
-  Rx<TextEditingController> searchCategoryController = TextEditingController().obs;
+  Rx<TextEditingController> searchCategoryController =
+      TextEditingController().obs;
   Rx<TextEditingController> fromController = TextEditingController().obs;
   Rx<TextEditingController> toController = TextEditingController().obs;
   Rx<TextEditingController> locationController =
@@ -136,6 +137,7 @@ class SearchCityController extends GetxController {
     selectedType.value = LocationType.state;
     await getStates();
   }
+
   void clearSearchField() {
     searchCategoryController.value.clear();
   }
@@ -174,6 +176,8 @@ class SearchCityController extends GetxController {
               .map((stateData) =>
                   Location(stateData.stateCode!, stateData.stateName!, 'state'))
               .toList();
+          // Sort the stateLocations list alphabetically by state name
+          stateLocations.sort((a, b) => a.name.compareTo(b.name));
 
           locations.assignAll([...stateLocations]);
 

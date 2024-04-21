@@ -458,7 +458,7 @@ class PartnerService extends GetxController {
     }
   }
 
-   Future<ApiResponseModel> addCarDocumentExpireDate(
+  Future<ApiResponseModel> addCarDocumentExpireDate(
       {required Object? payload, required String carId}) async {
     try {
       final result = await apiService.putRequest(
@@ -498,6 +498,40 @@ class PartnerService extends GetxController {
 
       return ListResponseModel.fromJson(decodedResult);
     } catch (err) {
+      rethrow;
+    }
+  }
+
+  Future<ListResponseModel> getNotification({
+    String? skipNumber,
+  }) async {
+    try {
+      final result = await apiService.getRequest(
+        '/user/notification/getNotification?limit=10&skip=${skipNumber ?? 0}',
+      );
+      logger.log("result $result");
+
+      final decodedResult = json.decode(result);
+
+      return ListResponseModel.fromJson(decodedResult);
+    } catch (err) {
+      rethrow;
+    }
+  }
+
+  Future<ApiResponseModel> viewNotification(
+      {required String notificationID}) async {
+    try {
+      final result = await apiService.putRequest(
+        endpoint:
+            '/user/notification/updateNotification?notificationID=$notificationID',
+        // data: Object,
+      );
+      logger.log("view notification response: ${result}");
+
+      return ApiResponseModel.fromJson(result);
+    } catch (err) {
+      logger.log("view notification Error: $err");
       rethrow;
     }
   }

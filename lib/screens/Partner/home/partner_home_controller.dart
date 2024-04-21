@@ -83,8 +83,8 @@ class PartnerHomeController extends GetxController
   void routeToManageVehicle() => routeService.gotoRoute(AppLinks.manageVehicle);
   void routeToCarHistory({Object? arguments}) =>
       routeService.gotoRoute(AppLinks.carHistory, arguments: arguments);
-  void routeToNotification({Object? arguments}) =>
-      routeService.gotoRoute(AppLinks.notification, arguments: arguments);
+  void routeToNotification() =>
+      routeService.gotoRoute(AppLinks.notification);
 
   void launchWebsite() => openUrl(AppStrings.websiteUrl);
 

@@ -231,7 +231,7 @@ class ApiService {
 
   Future<dynamic> putRequest({
     required String endpoint,
-    required Object? data,
+    Object? data,
   }) async {
     try {
       late Response response;

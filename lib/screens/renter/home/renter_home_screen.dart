@@ -655,7 +655,7 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
                     style: getBoldStyle(fontSize: 18.sp, color: white).copyWith(
                         fontWeight: FontWeight.w500, fontFamily: 'neue')),
                 textWidget(
-                    text: "Feel free to search for car in your location",
+                    text: "Feel free to search for ANY car in your location",
                     style:
                         getLightStyle(fontSize: 12.sp, color: white).copyWith(
                       fontWeight: FontWeight.w400,

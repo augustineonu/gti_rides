@@ -295,6 +295,60 @@ String isSingleDateSelection({required DateTime date}) {
   }
 }
 
+String formatRelativeDateTime({required DateTime date, bool relative = false}) {
+  try {
+    if (relative) {
+      final now = DateTime.now();
+      final today = DateTime(now.year, now.month, now.day);
+      final yesterday = DateTime(now.year, now.month, now.day - 1);
+      
+      if (date.isAtSameMomentAs(today)) {
+        return 'Today ' + DateFormat('h:mma').format(date);
+      } else if (date.isAtSameMomentAs(yesterday)) {
+        return 'Yesterday ' + DateFormat('h:mma').format(date);
+      } else if (date.isAfter(yesterday)) {
+        return DateFormat('E, d MMM, h:mma').format(date);
+      } else {
+        return DateFormat('E, d MMM, yyyy, h:mma').format(date);
+      }
+    } else {
+      // Format the date in the default way
+      String formattedDate = DateFormat('E, d MMM, h:mma').format(date);
+      return formattedDate;
+    }
+  } catch (e) {
+    // Return the original string if parsing fails
+    return 'NAN';
+  }
+}
+
+
+// String isSingleDateSelection({required DateTime date, bool relative = false}) {
+//   try {
+//     if (relative) {
+//       // Format the date to be relative
+//       final Duration difference = DateTime.now().difference(date);
+//       if (difference.inDays > 0) {
+//         return '${difference.inDays} days ago';
+//       } else if (difference.inHours > 0) {
+//         return '${difference.inHours} hours ago';
+//       } else if (difference.inMinutes > 0) {
+//         return '${difference.inMinutes} minutes ago';
+//       } else {
+//         return 'Just now';
+//       }
+//     } else {
+//       // Format the date in the default way
+//       String formattedDate = DateFormat('E, d MMM, h:mma').format(date);
+//       return formattedDate;
+//     }
+//   } catch (e) {
+//     // Return the original string if parsing fails
+//     return 'NAN';
+//   }
+// }
+
+
 // 7 Mar, 1:16PM
 String formatDateTime01({required DateTime date}) {
   try {

@@ -96,7 +96,7 @@ class PhoneVerificationController extends GetxController {
         // backend needs to change result.message to "OTP Verified Success" to
         // match all OTP verifications
         await showSuccessSnackbar(message: result.message!);
-        
+
         // save new access token as backend sends new one when OTP is verified
 
         await tokenService.setTokenModel(result.data);
@@ -111,6 +111,12 @@ class PhoneVerificationController extends GetxController {
           pinController.clear();
           // await userService.user.value.userId
 
+          final response = await authService.getProfile();
+          if (response.status == "success" || response.status_code == 200) {
+            logger.log("refresh user details ${response.data.toString()}");
+            final UserModel userModel = UserModel.fromJson(response.data?[0]);
+            userService.setCurrentUser(userModel.toJson());
+          }
           // After OTP verification
           if (user.value.userType == 'renter') {
             // Navigate back to the renter landing page

@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 
 class AppStrings {
   static String baseURL = 'https://squid-app-9sdyd.ondigitalocean.app';
-  static String websiteUrl = 'https://www.gtiautos.com/';
+  static String websiteUrl = 'https://gtirides.com/rent-a-car';
   static String loginButtonText = "Log in";
   static String getStartedButtonText = "Get Started";
   static String welcome = "Welcome back";
@@ -68,9 +68,9 @@ class AppStrings {
   static String welcomeBack = "Welcome back %s";
   static String howGtiWorks = "How GTi works?";
   static String weArePeer =
-      "We are peer to peer car\nsharing market place with the\nwildest fleet of cars....";
+      "We are a peer-to-peer Car\nSharing marketplace with the\nwildest fleet of cars.";
   static String readMore = "Read more";
-  static String recentViewCar = "Recently view car";
+  static String recentViewCar = "Recently Viewed Car";
   static String cancel = "Cancel";
   static String reset = "Reset";
   static String clear = "Clear";
@@ -252,7 +252,8 @@ class AppStrings {
   static String licenseExpireyDate = "Expiry Date of Driver's License";
   static String vehicleLicenseExpiryDate = "Expiry Date of Vehicle License";
   static String roadWorthinessExpiryDate = "Expiry Date of Road Worthiness";
-  static String certificateOfInsuranceExpiryDate = "Certificate of Insurance Expiry Date";
+  static String certificateOfInsuranceExpiryDate =
+      "Certificate of Insurance Expiry Date";
   static String vehicleInspectionExpiryDate = "Vehicle Inspection Expiry Date";
   static String provideDriversLicense = "Provide Driver's License";
   static String addressVerificationCaps = "ADDRESS VERIFICATION";
@@ -271,7 +272,7 @@ class AppStrings {
   static String identityVerificationSm = "Identity verification";
   static String reportAnIncident = "Report an incident";
   static String referrals = "Referrals";
-  static String howGtiWorks1 = "How GTi Ride works";
+  static String howGtiWorks1 = "How GTi Rides works";
   static String logOut = "Log out";
   static String pending = "Pending";
   static String suspended = "Suspended";
@@ -326,9 +327,10 @@ class AppStrings {
       'Find Answers to Frequently Asked Questions (FAQs)';
   static String rentOutYourVehichle = 'Rent out your Vehicle';
   static String youCanListYourCar =
-      'You can also list your car on GTI Rides and earn, listing is free, you can set your rules.';
+      'You can also list your car on GTi Rides and earn, listing is free, you can set your rules.';
   static String yourPersonalDetails = 'Your personal details';
-  static String gotYouCoveredVehicles = "We've got you covered with trucks for moving, Benz for luxury getaways, utility vehicles for errands, buses for events e.t.c";
+  static String gotYouCoveredVehicles =
+      "We've got you covered with trucks for moving, Benz for luxury getaways, utility vehicles for errands, buses for events e.t.c";
   static String rentAvehicle = 'Rent a Vehicle';
   static String findYourDetails = 'Find your details below';
   static String displayPicture = 'Display picture';
@@ -382,7 +384,7 @@ class AppStrings {
   static String myDrivers = 'My drivers';
   static String shareLink = 'Share link';
   static String getDiscountOnEveryOneYouTell =
-      'Get discount on every one you tell about GTI Rides and they register and rent a ride with us';
+      'Get discount on every one you tell about GTi Rides and they register and rent a ride with us';
   static String yourReferralCode = 'Your Referral Code';
   static String copyCode = 'Copy code';
   static String yourReferralLink = 'Your referral link';
@@ -399,7 +401,8 @@ class AppStrings {
   static String vehicleTypeSm = 'Vehicle type';
   static String vehicleInfo = 'Vehicle info';
   static String vehicleInfoSubmitted = 'Vehicle information submitted';
-  static String thankYouForYourPatience = 'Thank you for your patience while we verify your documents.';
+  static String thankYouForYourPatience =
+      'Thank you for your patience while we verify your documents.';
   static String documentation = 'Documentation  ';
   static String addPhotos = 'Add Photos';
   static String availability = ' Availability';
@@ -460,7 +463,8 @@ class AppStrings {
   static String carHistory = 'Car history';
   static String rideHistory = 'Ride history';
   static String areYouSureToDelete = 'Are you sure you want to delete %s';
-  static String areYouSuretToRemovefavorite = 'Are you sure you want to delete %s from Favorite';
+  static String areYouSuretToRemovefavorite =
+      'Are you sure you want to delete %s from Favorite';
   static String everyDataWouldBeDeleted =
       'Every data about %s would be deleted and won\'t be able to be recovered';
   static String carWouldNotBeAvailableInTheListOfFav =
@@ -488,7 +492,8 @@ class AppStrings {
   static String rentalReview = 'Rental review';
   static String leaveReviewAboutRental = 'Leave review about rental';
   static String speakToSupport = 'Speak to support';
-  static String letOthersKnowAboutRentalExperience = 'Let others know about the rental experience';
+  static String letOthersKnowAboutRentalExperience =
+      'Let others know about the rental experience';
   static String allApayment = 'All Payment';
   static String paymentAccount = 'Payment account';
   static String paymentMethod = 'Payment method';
@@ -497,13 +502,16 @@ class AppStrings {
   static String addInfo = 'Add info';
   static String selectBank = 'Select bank';
   static String bankAccountNumber = 'Bank account number';
-  static String bankAccountNumberHintText = 'Please enter your bank account number';
+  static String bankAccountNumberHintText =
+      'Please enter your bank account number';
   static String bankAccountAddedSuccess = 'Bank account added successfully';
   static String payment = 'Payment';
   static String paymentSuccessful = 'Payment Successful';
   static String requestSentSuccessful = 'Request Sent Successful';
-  static String contactYouSoon = 'Your request will be reviewed. We will Contact you soon.';
-  static String weWillSendYouNotification = 'We will send you a notification with the necessary details.';
+  static String contactYouSoon =
+      'Your request will be reviewed. We will Contact you soon.';
+  static String weWillSendYouNotification =
+      'We will send you a notification with the necessary details.';
   static String rentHistory = 'Rent history';
   static String history = 'History';
   static String contactCustomerCare = 'Contact customer care';
@@ -518,7 +526,8 @@ class AppStrings {
   static String licenseNumber = "License Number";
   static String uploadDriversLicense = "Upload Driver's License";
   static String uploadDriversLicenseHint = "Upload License";
-  static String kindlyLoginWithCredToSetBiometrics = "Kindly login with credentials to setup Biometrics";
+  static String kindlyLoginWithCredToSetBiometrics =
+      "Kindly login with credentials to setup Biometrics";
   static String selectAvailabilityDate = "Select availability date";
   static String selectDate = "Select date";
   static String selectExpiryDate = "Select expiry date";
@@ -533,8 +542,10 @@ class AppStrings {
   static String noActiveOrderYet = "You have no Active Order yet";
   static String noCompletedTripYet = "You have no Completed Trips yet";
   static String noCompletedOrderYet = "You have no Completed Order yet";
-  static String noAddedCarsToFav = "You have not added any Cars to Favorite yet";
+  static String noAddedCarsToFav =
+      "You have not added any Cars to Favorite yet";
   static String noViewedCarsYet = "You have not viewed any Cars yet";
   static String noNotifications = "You don't have any Notifications";
-  static String guideForTakingGreatPhotos = "Step by Step Guide for Capturing Great Car Photos for Your GTI Rides Listing";
+  static String guideForTakingGreatPhotos =
+      "Step by Step Guide for Capturing Great Car Photos for Your GTi Rides Listing";
 }
