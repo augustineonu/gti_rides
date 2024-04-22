@@ -185,7 +185,7 @@ class ReferralCodeScreen extends GetView<MoreController> {
         SizedBox(
           width: 230.sp,
           child: textWidget(
-              text: AppStrings.getDiscountOnEveryOneYouTell,
+              text: AppStrings.enjoyDiscountsEverytimeYouReferSomeone,
               textAlign: TextAlign.center,
               textOverflow: TextOverflow.visible,
               style: getRegularStyle(color: grey3)),

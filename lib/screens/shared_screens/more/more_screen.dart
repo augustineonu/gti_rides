@@ -47,7 +47,7 @@ class MoreScreen extends StatelessWidget {
                               imagePath: ImageAssets.ladyHandout,
                               title: AppStrings.rentOutYourVehichle,
                               body: AppStrings.youCanListYourCar,
-                              onTap: () {},
+                              onTap: controller.launchWebsite,
                               height: height)
                           : rentVehicleCard(
                               imagePath: ImageAssets.moreFrame,

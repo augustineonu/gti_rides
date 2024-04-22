@@ -225,10 +225,11 @@ class AppStrings {
   static String endRoute = "End Route";
   static String securityEscort = "Security Escort";
   static String youWillDrive = "You will be able to drive yourself around";
-  static String selfPickUp = "Self Pick Up";
-  static String selfDropOff = "Self Drop Off";
-  static String weWillSupplyYouAddress =
-      "We will supply you the address to pick up the car, turn off if you want us to bring the car to your location (This cost extra charges)";
+  static String selfPickUp = "Self Pick-Up";
+  static String selfDropOff = "Self Drop-Off";
+  static String chooseToPickUpCarAtProvidedAddress =
+      "Choose to pick up the car at a provided address, or opt for delivery to your location for an additional fee.";
+  static String returnCarToDesignatedAddress = "Return the car to a designated address, or select our pick-up service to retrieve the car from your location for a convenient fee.";
   static String inPutAddressDropCar = "Input address we will drop the car";
   static String selectNoOfSecurity = "Select Number of Security Personal";
   static String gainApproval = "Gain approval for renting a car";
@@ -321,7 +322,7 @@ class AppStrings {
   static String review = 'Review';
   static String reviewHintText = 'Let others know about your experience';
   static String feelFreetTalkToSupport =
-      'Free feel to talk to our Support Team';
+      'Feel free to talk to our Support Team';
   static String startConversation = 'Start conversation';
   static String findAnswersToFAQ =
       'Find Answers to Frequently Asked Questions (FAQs)';
@@ -383,8 +384,8 @@ class AppStrings {
   static String referral = 'Referral';
   static String myDrivers = 'My drivers';
   static String shareLink = 'Share link';
-  static String getDiscountOnEveryOneYouTell =
-      'Get discount on every one you tell about GTi Rides and they register and rent a ride with us';
+  static String enjoyDiscountsEverytimeYouReferSomeone =
+      'Enjoy discounts every time you refer someone to GTi Rides! Simply spread the word, and receive a discount when your referrals register and rent a ride with us.';
   static String yourReferralCode = 'Your Referral Code';
   static String copyCode = 'Copy code';
   static String yourReferralLink = 'Your referral link';

@@ -23,7 +23,7 @@ class RenterLandingPage extends StatelessWidget {
           Obx(() => bottomNavBar(context, controller)),
       body: Obx(() => IndexedStack(
             index: controller.tabIndex.value,
-            children: const [
+            children:  [
               CarRenterHomeScreen(),
               TripsScreen(),
               InboxScreen(),

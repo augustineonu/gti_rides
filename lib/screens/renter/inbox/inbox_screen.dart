@@ -21,15 +21,15 @@ class InboxBinding extends Bindings {
 }
 
 class InboxScreen extends StatelessWidget {
-  const InboxScreen({
+   InboxScreen({
     super.key,
   });
+    final ctrl = Get.put<InboxController>(InboxController());
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    final ctrl = Get.put<InboxController>(InboxController());
 
     return Scaffold(
       appBar: customAppBar(width, ctrl),
@@ -78,7 +78,12 @@ class InboxScreen extends StatelessWidget {
               ]),
           padding: EdgeInsets.all(18.sp),
           child: InkWell(
-            onTap: () {},
+            onTap: () async{
+               await Intercom.instance.loginIdentifiedUser(
+                    email: ctrl.user.value.emailAddress
+                  );
+                  await Intercom.instance.displayMessenger();
+            },
             child: Container(
               width: width.sp,
               decoration: BoxDecoration(

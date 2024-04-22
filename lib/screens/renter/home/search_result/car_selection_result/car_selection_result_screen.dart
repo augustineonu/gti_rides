@@ -672,7 +672,7 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                                     text: AppStrings.selfPickUp,
                                     style: getMediumStyle(color: grey5)),
                                 textWidget(
-                                    text: AppStrings.weWillSupplyYouAddress,
+                                    text: AppStrings.chooseToPickUpCarAtProvidedAddress,
                                     textOverflow: TextOverflow.visible,
                                     style: getLightStyle(
                                         fontSize: 10.sp, color: grey2)),
@@ -725,7 +725,7 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                                     text: AppStrings.selfDropOff,
                                     style: getMediumStyle(color: grey5)),
                                 textWidget(
-                                    text: AppStrings.weWillSupplyYouAddress,
+                                    text: AppStrings.returnCarToDesignatedAddress,
                                     textOverflow: TextOverflow.visible,
                                     style: getLightStyle(
                                         fontSize: 10.sp, color: grey2)),
