@@ -11,8 +11,8 @@ Widget switchProfileWidget({
   required String title,
   required String imageUrl,
   required Size size,
-   void Function()? onTapCarOwner,
-   void Function()? onTapCarRenter,
+  void Function()? onTapCarOwner,
+  void Function()? onTapCarRenter,
 }) {
   return InkWell(
     onTap: () {
@@ -23,9 +23,10 @@ Widget switchProfileWidget({
           child: Column(
             children: [
               InkWell(
-                onTap: onTapCarOwner ?? (){},
+                onTap: onTapCarOwner ?? () {},
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 18),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 10.0, horizontal: 18),
                   child: Row(
                     children: [
                       Image.asset(ImageAssets.owner),
@@ -44,9 +45,10 @@ Widget switchProfileWidget({
                 ),
               ),
               InkWell(
-                onTap: onTapCarRenter ?? (){},
+                onTap: onTapCarRenter ?? () {},
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 18),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 10.0, horizontal: 18),
                   child: Row(
                     children: [
                       Image.asset(ImageAssets.renter),
@@ -73,30 +75,21 @@ Widget switchProfileWidget({
             borderRadius: BorderRadius.all(Radius.circular(4.r))),
       );
     },
-    child: Container(
-      // width: 138.sp,
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
-      decoration: BoxDecoration(
-        color: primaryColorVeryLight,
-        borderRadius: BorderRadius.all(
-          Radius.circular(4.r),
+    child: Row(
+      // mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            Image.asset(imageUrl),
+            textWidget(
+                text: title,
+                style: getMediumStyle().copyWith(fontWeight: FontWeight.w500)),
+          ],
         ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Image.asset(imageUrl),
-          SizedBox(
-            width: 4.w,
-          ),
-          textWidget(
-              text: title,
-              style: getMediumStyle().copyWith(fontWeight: FontWeight.w500)),
-          SizedBox(
-            width: 8.w,
-          ),
-          CircleAvatar(
+        Padding(
+          padding: const EdgeInsets.only(right: 20),
+          child: CircleAvatar(
             radius: 15.r,
             backgroundColor: primaryColor,
             child: SvgPicture.asset(
@@ -104,8 +97,8 @@ Widget switchProfileWidget({
               height: 11.sp,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     ),
   );
 }

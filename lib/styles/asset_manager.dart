@@ -104,6 +104,7 @@ class ImageAssets {
   static const String ikoyiLinkBridge = "$IMAGE_PATH/Ikoyi_Lekki_Link_Bridge.png";
   static const String appBarBg1 = "$IMAGE_PATH/appbar_bg.png";
   static const String renter = "$IMAGE_PATH/key.png";
+  static const String renter1 = "$IMAGE_PATH/renter1.png";
   static const String owner = "$IMAGE_PATH/owner.png";
   static const String carListingBg = "$IMAGE_PATH/carListingBg.png";
   static const String greyCar = "$IMAGE_PATH/grey_car.png";
