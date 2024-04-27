@@ -14,7 +14,7 @@ Widget switchProfileWidget({
   void Function()? onTapCarOwner,
   void Function()? onTapCarRenter,
 }) {
-  return InkWell(
+  return GestureDetector(
     onTap: () {
       Get.bottomSheet(
         Container(
@@ -29,13 +29,13 @@ Widget switchProfileWidget({
                       vertical: 10.0, horizontal: 18),
                   child: Row(
                     children: [
-                      Image.asset(ImageAssets.owner),
+                      Image.asset(ImageAssets.partner1),
                       SizedBox(
-                        width: 5.w,
+                        width: 10.w,
                       ),
                       textWidget(
                           text: AppStrings.partner,
-                          style: getMediumStyle()
+                          style: getMediumStyle(fontSize: 16)
                               .copyWith(fontWeight: FontWeight.w500)),
                       SizedBox(
                         width: 8.w,
@@ -51,13 +51,13 @@ Widget switchProfileWidget({
                       vertical: 10.0, horizontal: 18),
                   child: Row(
                     children: [
-                      Image.asset(ImageAssets.renter),
+                      Image.asset(ImageAssets.renter1),
                       SizedBox(
-                        width: 5.w,
+                        width: 10.w,
                       ),
                       textWidget(
                           text: AppStrings.renter,
-                          style: getMediumStyle()
+                          style: getMediumStyle(fontSize: 16)
                               .copyWith(fontWeight: FontWeight.w500)),
                       SizedBox(
                         width: 8.w,
@@ -82,6 +82,9 @@ Widget switchProfileWidget({
         Row(
           children: [
             Image.asset(imageUrl),
+            SizedBox(
+              width: 8,
+            ),
             textWidget(
                 text: title,
                 style: getMediumStyle().copyWith(fontWeight: FontWeight.w500)),

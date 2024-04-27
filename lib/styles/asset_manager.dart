@@ -106,6 +106,7 @@ class ImageAssets {
   static const String renter = "$IMAGE_PATH/key.png";
   static const String renter1 = "$IMAGE_PATH/renter1.png";
   static const String owner = "$IMAGE_PATH/owner.png";
+  static const String partner1 = "$IMAGE_PATH/partner1.png";
   static const String carListingBg = "$IMAGE_PATH/carListingBg.png";
   static const String greyCar = "$IMAGE_PATH/grey_car.png";
   static const String howGtiWorksBg = "$IMAGE_PATH/how_gti_works_bg.png";

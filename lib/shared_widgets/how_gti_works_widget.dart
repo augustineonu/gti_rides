@@ -8,14 +8,17 @@ import 'package:gti_rides/utils/constants.dart';
 Widget howGtiWorksCard({void Function()? onTap, required String imageUrl}) {
   return Container(
     // height: 125.sp,
+    padding: EdgeInsets.all(10),
     margin: const EdgeInsets.symmetric(vertical: 20),
     decoration: BoxDecoration(
-        color: primaryColorLight,
-        borderRadius: BorderRadius.all(
-          Radius.circular(4.r),
-        ),
-        image: const DecorationImage(
-            image: AssetImage(ImageAssets.howGtiWorksBg), fit: BoxFit.contain)),
+      color: Colors.transparent,
+      border: Border.all(color: grey5, width: 0.5),
+      borderRadius: BorderRadius.all(
+        Radius.circular(4.r),
+      ),
+      // image: const DecorationImage(
+      //     image: AssetImage(ImageAssets.howGtiWorksBg), fit: BoxFit.contain),
+    ),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -25,25 +28,26 @@ Widget howGtiWorksCard({void Function()? onTap, required String imageUrl}) {
             // width: 120.sp,
             child: Padding(
               padding: const EdgeInsets.only(
-                left: 10,
-                right: 5,
+                left: 0,
+                right: 0,
               ),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   textWidget(
-                      text: AppStrings.howGtiWorks1,
-                      style: getSemiBoldStyle(fontSize: 14.sp).copyWith(
-                          fontWeight: FontWeight.w600, fontFamily: 'neue')),
+                      text: AppStrings.howGtiWorksNL,
+                      style: getBoldStyle(fontSize: 14.sp)
+                          .copyWith(fontFamily: 'neue')),
                   SizedBox(
-                    height: 7.sp,
+                    height: 10.sp,
                   ),
                   textWidget(
                       text: AppStrings.weArePeer,
                       style: getLightStyle(fontSize: 10.sp)
                           .copyWith(fontWeight: FontWeight.w400)),
                   SizedBox(
-                    height: 7.sp,
+                    height: 10.sp,
                   ),
                   InkWell(
                     onTap: onTap,
@@ -62,16 +66,13 @@ Widget howGtiWorksCard({void Function()? onTap, required String imageUrl}) {
         Expanded(
           flex: 2,
           child: ClipRRect(
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(
-                4.r,
-              ),
-              bottomRight: Radius.circular(
+            borderRadius: BorderRadius.all(
+              Radius.circular(
                 4.r,
               ),
             ),
             child: Image.asset(
-              imageUrl,
+              "assets/images/smiles_2.png",
               width: 140.sp,
               height: 125.sp,
               fit: BoxFit.cover,

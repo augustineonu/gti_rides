@@ -602,7 +602,7 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
               borderRadius: BorderRadius.all(Radius.circular(4.r)),
               child: Image.asset(
                 ImageAssets.ikoyiLinkBridge,
-                fit: BoxFit.fitHeight,
+                fit: BoxFit.fitWidth,
                 height: 260.sp,
               )),
         ),

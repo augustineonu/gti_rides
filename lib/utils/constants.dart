@@ -229,7 +229,8 @@ class AppStrings {
   static String selfDropOff = "Self Drop-Off";
   static String chooseToPickUpCarAtProvidedAddress =
       "Choose to pick up the car at a provided address, or opt for delivery to your location for an additional fee.";
-  static String returnCarToDesignatedAddress = "Return the car to a designated address, or select our pick-up service to retrieve the car from your location for a convenient fee.";
+  static String returnCarToDesignatedAddress =
+      "Return the car to a designated address, or select our pick-up service to retrieve the car from your location for a convenient fee.";
   static String inPutAddressDropCar = "Input address we will drop the car";
   static String selectNoOfSecurity = "Select Number of Security Personal";
   static String gainApproval = "Gain approval for renting a car";
@@ -274,6 +275,7 @@ class AppStrings {
   static String reportAnIncident = "Report an incident";
   static String referrals = "Referrals";
   static String howGtiWorks1 = "How GTi Rides works";
+  static String howGtiWorksNL = "How GTi Rides\nworks";
   static String logOut = "Log out";
   static String pending = "Pending";
   static String suspended = "Suspended";

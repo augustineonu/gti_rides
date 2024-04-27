@@ -114,10 +114,11 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
                         child: Column(
                           // mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            getCarListedCard(
-                                onTap: controller.routeTolistVehicle),
                             manageListedVehicles(
                                 onTap: controller.routeToManageVehicle),
+                            getCarListedCard(
+                                onTap: controller.routeTolistVehicle),
+
                             howGtiWorksCard(
                                 onTap: () {
                                   controller.launchWebsite();
@@ -278,8 +279,6 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
       ),
     );
   }
-
-
 
   Widget carCardWidget(Size size, FavoriteCarData car,
       {void Function()? onTap}) {
@@ -463,143 +462,144 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
     return InkWell(
       onTap: onTap,
       child: Container(
-        height: 70.sp,
+        height: 75.sp,
         //width: size.width,
-        margin: EdgeInsets.symmetric(vertical: 20.sp),
+        padding: EdgeInsets.all(8),
+        margin: EdgeInsets.symmetric(vertical: 0.sp),
         decoration: BoxDecoration(
-            color: primaryColorLight,
-            borderRadius: BorderRadius.all(
-              Radius.circular(4.r),
-            ),
-            image: const DecorationImage(
-                alignment: Alignment.centerRight,
-                image: AssetImage(
-                  ImageAssets.manageListedBg,
-                ),
-                fit: BoxFit.fitHeight)),
+          color: Colors.transparent,
+          border: Border.all(color: grey5, width: 0.5),
+          borderRadius: BorderRadius.all(
+            Radius.circular(4.r),
+          ),
+          // image: const DecorationImage(
+          //     alignment: Alignment.centerRight,
+          //     image: AssetImage(
+          //       ImageAssets.manageListedBg,
+          //     ),
+          //     fit: BoxFit.fitHeight),
+        ),
 
-        child: Row(children: [
-          Container(
-            width: 130.sp, // Set the width equal to the desired height
-            height: double.infinity,
-            child: ClipRRect(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(4.r),
-                  bottomLeft: Radius.circular(4.r)),
-              child: Image.asset(
-                ImageAssets.steering1,
-                fit: BoxFit.fitHeight,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(children: [
+              Container(
+                width: 73.sp, // Set the width equal to the desired height
+                height: double.infinity,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(4.r),
+                  ),
+                  child: Image.asset(
+                    ImageAssets.steering1,
+                    fit: BoxFit.fitHeight,
+                  ),
+                ),
               ),
-            ),
-          ),
-          // SizedBox(
-          //   width: 10.sp,),
-          Container(
-            // width: 147.sp,
-            height: 68.sp,
-            padding: const EdgeInsets.only(left: 10, top: 2, bottom: 5),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                textWidget(
-                    text: AppStrings.manageListedVehicles,
-                    textOverflow: TextOverflow.visible,
-                    style: getSemiBoldStyle(fontSize: 14.sp).copyWith(
-                        height: 1.2.sp,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'neue')),
-                SizedBox(
-                  height: 2.sp,
+              // SizedBox(
+              //   width: 10.sp,),
+              Container(
+                // width: 147.sp,
+                height: 68.sp,
+                padding: const EdgeInsets.only(left: 10, top: 2, bottom: 5),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    textWidget(
+                        text: AppStrings.manageListedVehicles,
+                        textOverflow: TextOverflow.visible,
+                        style: getSemiBoldStyle(fontSize: 14.sp).copyWith(
+                            height: 1.2.sp,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'neue')),
+                    SizedBox(
+                      height: 5.sp,
+                    ),
+                    textWidget(
+                        text: AppStrings.manageYourVehicleAViailability,
+                        textOverflow: TextOverflow.visible,
+                        style: getLightStyle(fontSize: 10.sp).copyWith(
+                          fontWeight: FontWeight.w400,
+                          height: 1.2.sp,
+                        )),
+                    // SizedBox(
+                    //   height: 2.sp,
+                    // ),
+                    // textWidget(
+                    //     text: AppStrings.seeVehicle,
+                    //     textOverflow: TextOverflow.visible,
+                    //     style: getLightStyle(fontSize: 10.sp).copyWith(
+                    //       fontWeight: FontWeight.w400,
+                    //       decoration: TextDecoration.underline,
+                    //       height: 1.2.sp,
+                    //     )),
+                  ],
                 ),
-                textWidget(
-                    text: AppStrings.manageYourVehicleAViailability,
-                    textOverflow: TextOverflow.visible,
-                    style: getLightStyle(fontSize: 10.sp).copyWith(
-                      fontWeight: FontWeight.w400,
-                      height: 1.2.sp,
-                    )),
-                SizedBox(
-                  height: 2.sp,
-                ),
-                textWidget(
-                    text: AppStrings.seeVehicle,
-                    textOverflow: TextOverflow.visible,
-                    style: getLightStyle(fontSize: 10.sp).copyWith(
-                      fontWeight: FontWeight.w400,
-                      decoration: TextDecoration.underline,
-                      height: 1.2.sp,
-                    )),
-              ],
-            ),
-          ),
-        ]),
+              ),
+            ]),
+            SvgPicture.asset(
+              "assets/svg/arrow_right_chev.svg",
+              height: 16,
+            )
+            // Icon(Iconsax.arrow_right_3)
+          ],
+        ),
       ),
     );
   }
 
   Widget getCarListedCard({void Function()? onTap}) {
-    return Stack(
-      children: [
-        Container(
-          height: 140.sp,
-          padding: EdgeInsets.symmetric(vertical: 14, horizontal: 8.sp),
-          decoration: BoxDecoration(
-              color: primaryColorLight3,
-              borderRadius: BorderRadius.all(Radius.circular(4.r)),
-              image: const DecorationImage(
-                  image: AssetImage(ImageAssets.carListingBg),
-                  fit: BoxFit.fitHeight)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: 139.sp,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    textWidget(
-                      text: AppStrings.getYourCarListed,
-                      style: getMediumStyle(),
-                    ),
-                    const SizedBox(
-                      height: 7,
-                    ),
-                    Expanded(
-                      child: textWidget(
-                        text: AppStrings.doYouWantToListYourCar,
-                        textOverflow: TextOverflow.visible,
-                        style: getRegularStyle(fontSize: 10),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 7,
-                    ),
-                    GtiButton(
-                      width: 90.sp,
-                      height: 26.sp,
-                      fontSize: 10.sp,
-                      text: AppStrings.listMyCar,
-                      onTap: onTap,
-                    ),
-                  ],
-                ),
+    return Container(
+      height: 140.sp,
+      margin: EdgeInsets.only(top: 20),
+      padding: EdgeInsets.symmetric(vertical: 14, horizontal: 8.sp),
+      // decoration: BoxDecoration(
+      //     color: primaryColorLight3,
+      //     borderRadius: BorderRadius.all(Radius.circular(4.r)),
+      //     image: const DecorationImage(
+      //         image: AssetImage(ImageAssets.carListingBg),
+      //         fit: BoxFit.fitHeight)),
+      child: SizedBox(
+        width: 211.sp,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            textWidget(
+              text: AppStrings.getYourCarListed,
+              style: getSemiBoldStyle(fontSize: 16).copyWith(
+                fontFamily: 'Neue',
               ),
-              const SizedBox(
-                width: 5,
+            ),
+            const SizedBox(
+              height: 7,
+            ),
+            Expanded(
+              child: textWidget(
+                text: AppStrings.doYouWantToListYourCar,
+                textOverflow: TextOverflow.visible,
+                textAlign: TextAlign.center,
+                style: getRegularStyle(fontSize: 10),
               ),
-            ],
-          ),
+            ),
+            const SizedBox(
+              height: 7,
+            ),
+            GtiButton(
+              width: 95.sp,
+              height: 35.sp,
+              fontSize: 10.sp,
+              borderColor: grey5,
+              color: Colors.transparent,
+              hasBorder: true,
+              textColor: grey5,
+              text: AppStrings.listMyCar,
+              onTap: onTap,
+            ),
+          ],
         ),
-        Positioned(
-          bottom: 5,
-          right: 2,
-          child: Image.asset(
-            ImageAssets.greyCar,
-            width: 190.sp,
-          ),
-        ),
-      ],
+      ),
     );
   }
 }
@@ -608,36 +608,20 @@ Widget appBar(Size size, PartnerHomeController controller,
     {PartnerLandingController? landingController}) {
   return Padding(
     padding: const EdgeInsets.only(left: 16, top: 10, bottom: 10),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        GestureDetector(
-          onTap: () {
-            landingController!.tabIndex.value = 3;
-          },
-          child: profileAvatar(
-            height: 40,
-            width: 40,
-            imgUrl: userService.user.value.profilePic!,
-            // 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ88joJfjwoaz_jWaMQhbZn2X11VHGBzWKiQg&usqp=CAU',
-          ),
-        ),
-        switchProfileWidget(
-            size: size,
-            title: AppStrings.partner,
-            imageUrl: ImageAssets.owner,
-            onTapCarRenter: controller.switchProfileToRenter),
-        GestureDetector(
-          onTap: controller.routeToNotification,
-          child: Padding(
-            padding: const EdgeInsets.only(right: 20),
-            child: Icon(
-              Iconsax.notification4,
-              size: 24.sp,
-            ),
-          ),
-        ),
-      ],
-    ),
+    child: switchProfileWidget(
+        size: size,
+        title: AppStrings.partner,
+        imageUrl: ImageAssets.partner1,
+        onTapCarRenter: controller.switchProfileToRenter),
+    // GestureDetector(
+    //   onTap: controller.routeToNotification,
+    //   child: Padding(
+    //     padding: const EdgeInsets.only(right: 20),
+    //     child: Icon(
+    //       Iconsax.notification4,
+    //       size: 24.sp,
+    //     ),
+    //   ),
+    // ),
   );
 }
