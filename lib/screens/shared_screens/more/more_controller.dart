@@ -78,7 +78,11 @@ class MoreController extends GetxController {
       'image': ImageAssets.headSet,
       'title': "  ${AppStrings.contactCustomerCare}"
     },
+    {'image': ImageAssets.notification, 'title': AppStrings.notification},
   ];
+
+  void routeToNotification() =>
+      routeService.gotoRoute(AppLinks.notification);
 
   onPageChanged(int index) {}
 

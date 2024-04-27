@@ -158,12 +158,12 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
     return Expanded(
       child: SingleChildScrollView(
         controller: scrollController,
-        padding: EdgeInsets.symmetric(vertical: 10.sp, horizontal: 16.sp),
+        padding: EdgeInsets.symmetric(vertical: 0.sp, horizontal: 16.sp),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           // mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            headerText(controller),
+            // headerText(controller),
             discoverCity(onTap: () => controller.routeToSearchCity()),
             howGtiWorksCard(
                 onTap: () {
@@ -597,7 +597,7 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
       padding: EdgeInsets.symmetric(vertical: 15.sp),
       child: Stack(alignment: Alignment.center, children: [
         SizedBox(
-          width: MediaQuery.of(context).size.width,
+          width: MediaQuery.of(context).size.width.sp,
           child: ClipRRect(
               borderRadius: BorderRadius.all(Radius.circular(4.r)),
               child: Image.asset(

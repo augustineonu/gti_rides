@@ -45,6 +45,7 @@ class ImageAssets {
   static const String personIcon = "$SVG_PATH/person_icon.svg";
   static const String personIcon1 = "$SVG_PATH/person_icon1.svg";
   static const String heart = "$SVG_PATH/heart.svg";
+  static const String notification = "$SVG_PATH/icons8-notification-64.svg";
   static const String note = "$SVG_PATH/note.svg";
   static const String note1 = "$SVG_PATH/note1.svg";
   static const String headSet = "$SVG_PATH/headSet.svg";

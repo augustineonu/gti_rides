@@ -94,6 +94,8 @@ class MoreScreen extends StatelessWidget {
                                         case 7:
                                           controller.launchMessenger();
                                         // break;
+                                        case 8:
+                                          controller.routeToNotification();
                                         default:
                                       }
                                     },
@@ -146,6 +148,11 @@ class MoreScreen extends StatelessWidget {
                                   imageUrl: option['image'],
                                   title: option['title'],
                                   onTap: () => controller.launchMessenger(),
+                                ),
+                              8 => profileOptionsWIdget(
+                                  imageUrl: option['image'],
+                                  title: option['title'],
+                                  onTap: () => controller.routeToNotification(),
                                 ),
                               _ => Container()
                             };
@@ -387,6 +394,7 @@ class MoreScreen extends StatelessWidget {
               imageUrl,
               height: 18.sp,
               width: 20.sp,
+              color: primaryColor,
             ),
             SizedBox(
               width: 8.sp,

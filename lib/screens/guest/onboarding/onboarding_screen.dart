@@ -38,45 +38,47 @@ class OnboardingScreen extends GetView<OnboardingController> {
                   onPageChanged: (int index) => controller.onPageChanged(index),
                   itemBuilder: (BuildContext context, int index) {
                     final content = OnBoardingContent.onBoardingContents[index];
-                    return Column(
-                      children: [
-                        // SizedBox(height: 141.0.h),
-                        Center(
-                          child: Image.asset(
-                            content.imageUrl,
-                            // "Frame 1046.svg",
-                            // height: 218.h,
-                            width: width.w,
-                            fit: BoxFit.fitWidth,
+                    return SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          // SizedBox(height: 141.0.h),
+                          Center(
+                            child: Image.asset(
+                              content.imageUrl,
+                              // "Frame 1046.svg",
+                              // height: 218.h,
+                              width: width.w,
+                              fit: BoxFit.fitWidth,
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 20.0.h),
-                        SizedBox(
-                          width: 320.sp,
-                          child: Column(
-                            children: [
-                              Text(
-                                content.title,
-                                textAlign: TextAlign.center,
-                                style: getExtraBoldStyle(fontSize: 24.sp)
-                                    .copyWith(
-                                        height: 1.3,
-                                        fontFamily: "Neue",
-                                        fontWeight: FontWeight.w500),
-                              ),
-                              SizedBox(height: 10.0.h),
-                              Text(
-                                content.description,
-                                textAlign: TextAlign.center,
-                                style: getRegularStyle(fontSize: 12.sp)
-                                    .copyWith(
-                                        height: 1.3,
-                                        fontWeight: FontWeight.w300),
-                              ),
-                            ],
+                          SizedBox(height: 20.0.h),
+                          SizedBox(
+                            width: 320.sp,
+                            child: Column(
+                              children: [
+                                Text(
+                                  content.title,
+                                  textAlign: TextAlign.center,
+                                  style: getExtraBoldStyle(fontSize: 24.sp)
+                                      .copyWith(
+                                          height: 1.3,
+                                          fontFamily: "Neue",
+                                          fontWeight: FontWeight.w500),
+                                ),
+                                SizedBox(height: 10.0.h),
+                                Text(
+                                  content.description,
+                                  textAlign: TextAlign.center,
+                                  style: getRegularStyle(fontSize: 12.sp)
+                                      .copyWith(
+                                          height: 1.3,
+                                          fontWeight: FontWeight.w300),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     );
                   }),
             ),
@@ -104,7 +106,7 @@ class OnboardingScreen extends GetView<OnboardingController> {
             ),
           ),
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.06,
+            height: MediaQuery.of(context).size.height * 0.04,
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.sp),
@@ -125,7 +127,7 @@ class OnboardingScreen extends GetView<OnboardingController> {
                   hasBorder: true,
                   borderColor: primaryColor,
                   color: white,
-                  onTap:  controller.routeToLogin,
+                  onTap: controller.routeToLogin,
                 ),
               ],
             ),
@@ -134,8 +136,6 @@ class OnboardingScreen extends GetView<OnboardingController> {
       ),
     );
   }
-
-
 
   buildDot(
     BuildContext context, {
