@@ -100,9 +100,22 @@ class LoginScreen extends GetView<LoginController> {
                         if (value == null || value.isEmpty) {
                           return fetchErrorText(expectedTextVariable: "field");
                         }
-                        if (!value.contains('.com')) {
-                          return fetchErrorText(expectedTextVariable: '.com');
+                        if (value.contains('@')) {
+                          // Check if the input contains '@', indicating it might be an email
+                          if (!controller.isValidEmail(value)) {
+                            return fetchErrorText(
+                                expectedTextVariable: '.com');
+                          }
+                        } else {
+                          // Check if the input is a valid phone number
+                          if (!controller.isValidPhoneNumber(value)) {
+                            return fetchErrorText(
+                                expectedTextVariable: 'valid phone number');
+                          }
                         }
+                        // if (!value.contains('.com')) {
+                        //   return fetchErrorText(expectedTextVariable: '.com');
+                        // }
                         return null;
                       },
                       controller: controller.emailOrPhoneController,

@@ -242,137 +242,72 @@ class MoreScreen extends StatelessWidget {
       height}) {
     return Container(
       // height: 125.sp,
+      padding: EdgeInsets.all(10),
       margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
       decoration: BoxDecoration(
-        color: primaryColorLight,
+        color: Colors.transparent,
+        border: Border.all(color: grey5, width: 0.5),
         borderRadius: BorderRadius.all(
           Radius.circular(4.r),
         ),
       ),
-      child: Stack(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Positioned(
-              left: 50,
-              // right: 0,
-              bottom: 0,
-              top: 0,
-              child: Image.asset(
-                'assets/images/rent_vehicle_bg.png',
-                fit: BoxFit.fitHeight,
-              )),
-          Stack(
-            children: [
-              SizedBox(
-                width: 160.sp,
-                // height: height,
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    left: 10,
-                    right: 5,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 8.sp,
-                      ),
-                      textWidget(
-                          text: title,
-                          textOverflow: TextOverflow.visible,
-                          style: getSemiBoldStyle(fontSize: 15.sp).copyWith(
-                              fontWeight: FontWeight.w600, height: 1.1)),
-                      // SizedBox(
-                      //   height: 5.sp,
-                      // ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: textWidget(
-                            text: body,
-                            textOverflow: TextOverflow.visible,
-                            style: getLightStyle(fontSize: 10.sp)
-                                .copyWith(fontWeight: FontWeight.w400)),
-                      ),
-                      // SizedBox(
-                      //   height: 2.sp,
-                      // ),
-                      InkWell(
-                        onTap: onTap,
-                        child: textWidget(
-                            text: AppStrings.getStartedButtonText,
-                            style: getLightStyle(fontSize: 10.sp).copyWith(
-                              fontWeight: FontWeight.w700,
-                              decoration: TextDecoration.underline,
-                            )),
-                      ),
-                      // SizedBox(height:5)
-                    ],
-                  ),
+          SizedBox(
+            width: 135.sp,
+            // height: height,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 8.sp,
                 ),
+                textWidget(
+                    text: title,
+                    textOverflow: TextOverflow.visible,
+                    style: getSemiBoldStyle(fontSize: 15.sp)
+                        .copyWith(fontWeight: FontWeight.w600, height: 1.1)),
+                // SizedBox(
+                //   height: 5.sp,
+                // ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: textWidget(
+                      text: body,
+                      textOverflow: TextOverflow.visible,
+                      style: getLightStyle(fontSize: 10.sp)
+                          .copyWith(fontWeight: FontWeight.w400)),
+                ),
+                // SizedBox(
+                //   height: 2.sp,
+                // ),
+                InkWell(
+                  onTap: onTap,
+                  child: textWidget(
+                      text: AppStrings.getStartedButtonText,
+                      style: getLightStyle(fontSize: 10.sp).copyWith(
+                        fontWeight: FontWeight.w700,
+                        decoration: TextDecoration.underline,
+                      )),
+                ),
+                // SizedBox(height:5)
+              ],
+            ),
+          ),
+          ClipRRect(
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            borderRadius: BorderRadius.all(
+              Radius.circular(
+                4.r,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  // Expanded(
-                  //   flex: 3,
-                  //   child: SizedBox(
-                  //     width: 120.sp,
-                  //     // height: height,
-                  //     child: Padding(
-                  //       padding: const EdgeInsets.only(left: 10, right: 5,),
-                  //       child: Column(
-                  //         crossAxisAlignment: CrossAxisAlignment.start,
-                  //         children: [
-                  //           textWidget(
-                  //               text: AppStrings.rentOutYourVehichle,
-                  //               textOverflow: TextOverflow.visible,
-                  //               style: getSemiBoldStyle(fontSize: 16.sp).copyWith(
-                  //                   fontWeight: FontWeight.w600, )),
-                  //           SizedBox(
-                  //             height: 7.sp,
-                  //           ),
-                  //           textWidget(
-                  //               text: AppStrings.youCanListYourCar,
-                  //                 textOverflow: TextOverflow.visible,
-                  //               style: getLightStyle(fontSize: 10.sp)
-                  //                   .copyWith(fontWeight: FontWeight.w400)),
-                  //           SizedBox(
-                  //             height: 7.sp,
-                  //           ),
-                  //           InkWell(
-                  //             onTap: onTap,
-                  //             child: textWidget(
-                  //                 text: AppStrings.getStartedButtonText,
-                  //                 style: getLightStyle(fontSize: 10.sp).copyWith(
-                  //                   fontWeight: FontWeight.w700,
-                  //                   decoration: TextDecoration.underline,
-                  //                 )),
-                  //           ),
-                  //           // SizedBox(height:5)
-                  //         ],
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  ClipRRect(
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(
-                        4.r,
-                      ),
-                      bottomRight: Radius.circular(
-                        4.r,
-                      ),
-                    ),
-                    child: Image.asset(
-                      imagePath,
-                      width: 160.sp,
-                      height: 130,
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+            ),
+            child: Image.asset(
+              "assets/images/smiles_2.png",
+              width: 140.sp,
+              height: 125.sp,
+              fit: BoxFit.cover,
+            ),
           ),
         ],
       ),

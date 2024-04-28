@@ -74,6 +74,18 @@ class LoginController extends GetxController
     }
   }
 
+  bool isValidEmail(String email) {
+    // Use a regular expression to validate the email format
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    return emailRegex.hasMatch(email);
+  }
+
+  bool isValidPhoneNumber(String phoneNumber) {
+    // Use a regular expression to validate the phone number format
+    final phoneRegex = RegExp(r'^[0-9]{11}$'); // Change the pattern as needed
+    return phoneRegex.hasMatch(phoneNumber);
+  }
+
   Future<void> processLogin() async {
     if (!loginFormKey.currentState!.validate()) {
       return;

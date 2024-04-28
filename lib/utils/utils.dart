@@ -37,6 +37,8 @@ String fetchErrorText({required String expectedTextVariable}) {
       return AppStrings.selectBankError;
     case 'accountNumber':
       return AppStrings.selectAccountNumberError;
+    case "valid phone number":
+      return "Phone number is not valid";
     default:
       return AppStrings.isRequiredError;
   }
@@ -126,7 +128,6 @@ String extractDayDateMonth(String inputDate) {
   return '$day, $date $month';
 }
 
-
 String formatDateTime1(String datetime) {
   // Remove the ordinal indicator ("th") from the day
   String cleanedDate =
@@ -189,6 +190,7 @@ String formatDateMonth(DateTime datetime) {
   var formatter = DateFormat('dd MMM');
   return formatter.format(datetime);
 }
+
 // rteurns date as example 1 Nov
 String formatDateMonth1(String datetime) {
   if (datetime.isNotEmpty) {
@@ -206,12 +208,12 @@ String formatDateMonth1(String datetime) {
   return 'N/A';
 }
 
-
 // / returns date as example Wed, 1 Nov
 String formatDayDate(DateTime datetime) {
   var formatter = DateFormat('E, d MMM');
   return formatter.format(datetime);
 }
+
 // / returns date as example Wed, 1 Nov
 String formatDayDate1(String datetime) {
   if (datetime.isNotEmpty) {
@@ -229,22 +231,21 @@ String formatDayDate1(String datetime) {
   return 'N/A';
 }
 
-
 // returns as 9:00am
 String formatTime1(String time) {
   if (time.isNotEmpty) {
-  try {
-    DateTime parsedDate = DateTime.parse(time);
-    var formatter = DateFormat('h:mm a').format(parsedDate);
-    return formatter;
-  } catch (e) {
-    print("unable to format time $e");
-    return time;
-  }
-  
+    try {
+      DateTime parsedDate = DateTime.parse(time);
+      var formatter = DateFormat('h:mm a').format(parsedDate);
+      return formatter;
+    } catch (e) {
+      print("unable to format time $e");
+      return time;
+    }
   }
   return 'N/A';
 }
+
 // returns as 9:00am
 String formatTime(DateTime time) {
   try {
@@ -282,7 +283,6 @@ String formateDate({required String date}) {
   }
 }
 
-
 //// wed, 1 Nov, 9:00am
 String isSingleDateSelection({required DateTime date}) {
   try {
@@ -301,7 +301,7 @@ String formatRelativeDateTime({required DateTime date, bool relative = false}) {
       final now = DateTime.now();
       final today = DateTime(now.year, now.month, now.day);
       final yesterday = DateTime(now.year, now.month, now.day - 1);
-      
+
       if (date.isAtSameMomentAs(today)) {
         return 'Today ' + DateFormat('h:mma').format(date);
       } else if (date.isAtSameMomentAs(yesterday)) {
@@ -321,7 +321,6 @@ String formatRelativeDateTime({required DateTime date, bool relative = false}) {
     return 'NAN';
   }
 }
-
 
 // String isSingleDateSelection({required DateTime date, bool relative = false}) {
 //   try {
@@ -347,7 +346,6 @@ String formatRelativeDateTime({required DateTime date, bool relative = false}) {
 //     return 'NAN';
 //   }
 // }
-
 
 // 7 Mar, 1:16PM
 String formatDateTime01({required DateTime date}) {
@@ -378,8 +376,6 @@ DateTime? parseDateTime(String datetime) {
     return null;
   }
 }
-
-
 
 // 02 - 05 - 2013
 String formatDate1({required String date}) {
@@ -412,25 +408,24 @@ String formatDateTimeOrTimeAgo(DateTime dateTime) {
   }
 }
 
-
 // the method is explanatory
- bool isUserAbove21(DateTime selectedDateOfBirth) {
-    // Calculate today's date
-    DateTime today = DateTime.now();
+bool isUserAbove21(DateTime selectedDateOfBirth) {
+  // Calculate today's date
+  DateTime today = DateTime.now();
 
-    // Calculate the age by subtracting the selected date of birth from today's date
-    int age = today.year - selectedDateOfBirth.year;
+  // Calculate the age by subtracting the selected date of birth from today's date
+  int age = today.year - selectedDateOfBirth.year;
 
-    // Check if the birthday has occurred this year or not
-    if (today.month < selectedDateOfBirth.month ||
-        (today.month == selectedDateOfBirth.month &&
-            today.day < selectedDateOfBirth.day)) {
-      age--;
-    }
-
-    // Check if the age is greater than or equal to 21
-    return age >= 21;
+  // Check if the birthday has occurred this year or not
+  if (today.month < selectedDateOfBirth.month ||
+      (today.month == selectedDateOfBirth.month &&
+          today.day < selectedDateOfBirth.day)) {
+    age--;
   }
+
+  // Check if the age is greater than or equal to 21
+  return age >= 21;
+}
 
 showErrorSnackbar({required String message, Color? color}) {
   final overlayContext = Get.overlayContext;
@@ -458,8 +453,11 @@ showErrorSnackbar({required String message, Color? color}) {
 }
 
 showSuccessSnackbar(
-    {required String message, String? title, Color? color, Color? textColor,int? seconds
-    }) {
+    {required String message,
+    String? title,
+    Color? color,
+    Color? textColor,
+    int? seconds}) {
   final overlayContext = Get.overlayContext;
   if (overlayContext != null) {
     Get.rawSnackbar(
@@ -468,7 +466,7 @@ showSuccessSnackbar(
       message: message,
       isDismissible: false,
       backgroundColor: color ?? success,
-      duration:  Duration(seconds: seconds ?? 3),
+      duration: Duration(seconds: seconds ?? 3),
       margin: EdgeInsets.all(10),
       padding: EdgeInsets.all(15),
       borderRadius: 16.0,
