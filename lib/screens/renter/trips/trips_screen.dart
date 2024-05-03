@@ -1546,7 +1546,7 @@ class TripsScreen extends GetView<TripsController> {
                       controller.routeToPayment(
                           url: pendingTrips.tripOrders!.first.paymentLink);
                     } else if (pendingTrips.tripOrders!.first.paymentStatus ==
-                        'successful') {
+                        'successful' || pendingTrips.tripOrders!.first.paymentStatus == "success") {
                       !statTrip
                           ? () {}
                           : controller.updateTripStatus(
@@ -1563,7 +1563,9 @@ class TripsScreen extends GetView<TripsController> {
                           url: pendingTrips.tripOrders!.first.paymentLink);
                     } else if (pendingTrips.tripOrders!.first.paymentStatus
                         .toString()
-                        .contains("successful")) {
+                        .contains("successful") || pendingTrips.tripOrders!.first.paymentStatus
+                        .toString()
+                        .contains("success")) {
                       controller.updateTripStatus(
                           type: 'active',
                           tripID: pendingTrips.tripId.toString());
@@ -1596,7 +1598,7 @@ class TripsScreen extends GetView<TripsController> {
         if (pendingTrips.tripOrders!.first.paymentStatus == 'pending') {
           return AppStrings.payNow;
         } else if (pendingTrips.tripOrders!.first.paymentStatus ==
-            'successful') {
+            'successful' || pendingTrips.tripOrders!.first.paymentStatus == "success") {
           return "Confirm Trip";
         } else {
           return 'Chat with admin';

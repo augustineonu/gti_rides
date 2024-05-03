@@ -220,8 +220,8 @@ class AppStrings {
   static String negative = "Negative";
   static String yourRoute = "Your Route";
   static String weWantToKnowTheRoute =
-      "we want to know the route our drive will pick you and drop you through out your trip";
-  static String yourStart = "Your Start";
+      " We want to know the different places you plan to stop by.";
+  static String yourStart = "You0r Start";
   static String endRoute = "End Route";
   static String securityEscort = "Security Escort";
   static String youWillDrive = "You will be able to drive yourself around";

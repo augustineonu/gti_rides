@@ -510,16 +510,17 @@ class PendingTrips extends StatelessWidget {
                       // payNowMethod();
                       controller.routeToPayment(
                           url: pendingTrips.tripOrders!.first.paymentLink);
-                    } else if (pendingTrips.tripOrders!.first.paymentStatus ==
+                    } else if (pendingTrips.tripOrders!.first.paymentStatus
+                            .toString() ==
                         'success') {
                       if (startTrip == true) {
                         // () {};
+                        print("do nothing ");
+                      } else {
                         print("start trip is true ");
                         controller.updateTripStatus(
                             type: 'active',
                             tripID: pendingTrips.tripId.toString());
-                      } else {
-                        print("do nothing ");
                       }
                     } else {
                       // chat with admin
