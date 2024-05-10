@@ -68,7 +68,7 @@ class AppStrings {
   static String welcomeBack = "Welcome back %s";
   static String howGtiWorks = "How GTi works?";
   static String weArePeer =
-      "We are a peer-to-peer Car\nSharing marketplace with the\nwildest fleet of cars.";
+      "We are a peer-to-peer Car\nSharing marketplace with the\nwidest fleet of cars.";
   static String readMore = "Read more";
   static String recentViewCar = "Recently Viewed Car";
   static String cancel = "Cancel";
@@ -94,6 +94,9 @@ class AppStrings {
   static String driveOption = "Drive Option";
   static String driveOptionCaps = "DRIVE OPTION";
   static String chauffeur = "Chauffeur";
+  static String youCanDriveYourself = "You can drive yourself";
+  static String ourDriverWillTakeYouThrough =
+      "Our driver will take you all through your journey";
   static String ourDriverWillSupport =
       "Our driver will support you with driving throughout your trip";
   static String selfDrive = "Self Drive";
@@ -106,22 +109,25 @@ class AppStrings {
   static String cannotGoBeyondState = "Can not go beyond owner's state";
   static String hostRating = "HOST RATING";
   static String featuresCaps = "FEATURES";
-  static String allFeatures = "All Features";
-  static String allTypes = "All Types";
+  static String carFeaturesCaps = "CAR FEATURES";
+  static String allFeatures = "All";
+  static String allTypes = "All";
   static String vehicleTypeCaps = "VEHICLE TYPE";
   static String vehicleBrandCaps = "VEHICLE BRAND";
-  static String allBrand = "All Brand";
+  static String allBrand = "All";
   static String model = "MODEL";
-  static String allSeat = "All Seat";
-  static String carSeat = "CAR SEAT";
-  static String allCars = "All Cars";
+  static String allSeat = "All";
+  static String carSeat = "CAR SEATS";
+  static String allCars = "All";
   static String categoryCaps = "CATEGORY";
   static String transmissionCaps = "TRANSMISSION";
-  static String allTransmission = "All Transmission";
+  static String allTransmission = "All";
   static String distanceAway = "Distance Away";
   static String pricePerDayH = "Price per day: high to low";
   static String pricePerDayL = "Price per day: low to high";
   static String vehicleType = "Vehicle Type";
+  static String highestToLowest = "Highest to Lowest";
+  static String lowestToHighest = "Lowest to Highest";
   static String cars = "Cars";
   static String suvs = "SUVs";
   static String minivans = "Minivans";
@@ -204,7 +210,7 @@ class AppStrings {
   static String tripDateCaps = "TRIP DATE";
   static String change = "Change";
   static String carBasicsCaps = "CAR BASICS";
-  static String carFeatureCaps = "CAR FEATURE";
+  static String carFeatureCaps = "CAR FEATURES";
   static String estimatedFee = "Estimated fee: ";
   static String aboutCarCaps = "ABOUT CAR";
   static String ratingsCaps = "RATINGS";
@@ -474,6 +480,7 @@ class AppStrings {
       '%s would no longer be available in the list of Favorite Cars';
   static String proposedPricePerDay = 'Propose price per day';
   static String carRating = 'Car rating';
+  static String carRatingCaps = 'CAR RATING';
   static String feedbacks = 'Feedbacks';
   static String seeAllFeedbacks = 'See all feedbacks';
   static String totalEarnings = 'Total earnings';

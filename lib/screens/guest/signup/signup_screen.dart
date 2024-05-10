@@ -151,8 +151,8 @@ class SignUpScreen extends GetView<SignUpController> {
                       ),
                       NormalInputTextWidget(
                         title: AppStrings.lastName,
-                        expectedVariable: "fullName",
-                        hintText: AppStrings.enterFirstName,
+                        expectedVariable: "lastName",
+                        hintText: AppStrings.enterLastName,
                         textInputType: TextInputType.name,
                         controller: controller.lastNameController,
                       ),
@@ -262,8 +262,8 @@ class SignUpScreen extends GetView<SignUpController> {
                     height: 16.sp,
                   ),
                   NormalInputTextWidget(
-                    title: AppStrings.firstName,
-                    expectedVariable: "fullName",
+                    title: AppStrings.lastName,
+                    expectedVariable: "lastName",
                     hintText: AppStrings.enterLastName,
                     textInputType: TextInputType.name,
                     controller: controller.ownerLastNameController,

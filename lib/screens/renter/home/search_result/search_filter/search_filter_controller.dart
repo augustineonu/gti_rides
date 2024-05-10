@@ -45,6 +45,8 @@ class SearchFilterController extends GetxController {
   RxBool selectedCategory = false.obs;
   RxBool selectedTransmission = false.obs;
 
+  RxList selectedCarTypes1 = [].obs;
+
   // integers
   RxInt selectedCheckboxes = 0.obs;
   RxInt selectedCarTypes = 0.obs;
@@ -54,27 +56,30 @@ class SearchFilterController extends GetxController {
   RxInt selectedCategories = 0.obs;
   RxInt selectedTransmissions = 0.obs;
 
+  RxDouble startValue = 20.0.obs;
+  RxDouble endValue = 90.0.obs;
+
   final List<String> sortByList = [
-    AppStrings.relevance,
-    AppStrings.distanceAway,
-    AppStrings.pricePerDayH,
-    AppStrings.pricePerDayL,
+    // AppStrings.relevance,
+    // AppStrings.distanceAway,
+    AppStrings.highestToLowest,
+    AppStrings.lowestToHighest,
 
     // Add more options here
   ];
   List<FilterOptions> filterOptionsList = [
     FilterOptions(
-        title: AppStrings.featuresCaps, subTitle: AppStrings.allFeatures),
+        title: AppStrings.carFeaturesCaps, subTitle: AppStrings.allFeatures),
     FilterOptions(
         title: AppStrings.vehicleTypeCaps, subTitle: AppStrings.allTypes),
     FilterOptions(
         title: AppStrings.vehicleBrandCaps, subTitle: AppStrings.allBrand),
     FilterOptions(title: AppStrings.model, subTitle: AppStrings.allBrand),
     FilterOptions(title: AppStrings.carSeat, subTitle: AppStrings.allSeat),
-    FilterOptions(title: AppStrings.categoryCaps, subTitle: AppStrings.allCars),
     FilterOptions(
         title: AppStrings.transmissionCaps,
         subTitle: AppStrings.allTransmission),
+    // FilterOptions(title: AppStrings.categoryCaps, subTitle: AppStrings.allCars),
   ];
 
   List<String> carTypes = [
@@ -174,8 +179,7 @@ class SearchFilterController extends GetxController {
     AppStrings.toyota,
     AppStrings.volvo,
   ];
-  
-  
+
   // methods
   void goBack() => routeService.goBack();
 

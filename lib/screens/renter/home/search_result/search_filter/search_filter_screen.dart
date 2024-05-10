@@ -68,65 +68,69 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
               onTap: () => dialogWidgetWithClose(
                 size,
                 alignment: Alignment.topCenter,
-                contentHeight: size.height * 0.29,
+                contentHeight: size.height * 0.20,
                 title: AppStrings.sortBy,
                 content: StatefulBuilder(builder: (context, state) {
-                  return ListView.separated(
-                    itemCount: controller.sortByList.length,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      final sortBy = controller.sortByList[index];
-                      return InkWell(
-                        onTap: () {
-                          controller.onSelectSortBy(index);
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: ListView.separated(
+                      itemCount: controller.sortByList.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        final sortBy = controller.sortByList[index];
+                        return InkWell(
+                          onTap: () {
+                            controller.onSelectSortBy(index);
 
-                          state(() {
-                            controller.selectedSortby.value =
-                                !controller.selectedSortby.value;
-                          });
-                        },
-                        child: Row(
-                          children: [
-                            AnimatedContainer(
-                                duration: const Duration(milliseconds: 100),
-                                margin: EdgeInsets.only(right: 10.sp),
-                                padding: EdgeInsets.all(3.sp),
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.rectangle,
-                                  borderRadius: BorderRadius.circular(2.r),
-                                  border: Border.all(
+                            state(() {
+                              controller.selectedSortby.value =
+                                  !controller.selectedSortby.value;
+                            });
+                          },
+                          child: Row(
+                            children: [
+                              AnimatedContainer(
+                                  duration: const Duration(milliseconds: 100),
+                                  margin: EdgeInsets.only(right: 10.sp),
+                                  padding: EdgeInsets.all(3.sp),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                    borderRadius: BorderRadius.circular(2.r),
+                                    border: Border.all(
+                                        color: controller
+                                                    .selectedCheckboxes.value ==
+                                                index
+                                            ? primaryColor
+                                            : grey3,
+                                        width: 1.6),
+                                  ),
+                                  child: Container(
+                                      padding: EdgeInsets.all(3.sp),
                                       color:
                                           controller.selectedCheckboxes.value ==
                                                   index
                                               ? primaryColor
-                                              : grey3,
-                                      width: 1.6),
-                                ),
-                                child: Container(
-                                    padding: EdgeInsets.all(3.sp),
-                                    color:
-                                        controller.selectedCheckboxes.value ==
-                                                index
-                                            ? primaryColor
-                                            : white)),
-                            textWidget(text: sortBy, style: getRegularStyle()),
-                          ],
-                        ),
-                      );
-                    },
-                    separatorBuilder: (context, _) => SizedBox(height: 14.sp),
+                                              : white)),
+                              textWidget(
+                                  text: sortBy, style: getRegularStyle()),
+                            ],
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, _) => SizedBox(height: 14.sp),
+                    ),
                   );
                 }),
               ),
             ),
             divider(color: borderColor),
             pricing(),
+            // divider(color: borderColor),
+            // driveOptions(context),
+            // divider(color: borderColor),
+            // distance(context),
             divider(color: borderColor),
-            driveOptions(context),
-            divider(color: borderColor),
-            distance(context),
-            divider(color: borderColor),
-            hostRating(),
+            hostRating(context),
             divider(color: borderColor),
             filterOptions(size),
             // textWidget(
@@ -164,9 +168,9 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
               case 4:
                 carSeat(size);
               case 5:
-                category(size);
-              case 6:
                 transmission(size);
+              case 6:
+              // transmission(size);
 
               default:
                 () {};
@@ -177,10 +181,16 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                textWidget(
-                    text: filterOptions.title,
-                    style: getMediumStyle(fontSize: 12.sp, color: grey2)
-                        .copyWith(fontWeight: FontWeight.w500)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    textWidget(
+                        text: filterOptions.title,
+                        style: getMediumStyle(fontSize: 12.sp, color: grey2)
+                            .copyWith(fontWeight: FontWeight.w500)),
+                    SvgPicture.asset(ImageAssets.arrowDown),
+                  ],
+                ),
                 const SizedBox(
                   height: 8,
                 ),
@@ -418,30 +428,36 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
                             final feature = controller.features[index];
+                            final isSelected =
+                                controller.selectedCarTypes1.contains(feature);
+
                             return InkWell(
                               onTap: () {
-                                controller.onCarTypeChecked(index);
+                                // controller.onCarTypeChecked(index);
 
+                                // state(() {
+                                //   controller.selectedCarType.value =
+                                //       !controller.selectedCarType.value;
+                                // });
                                 state(() {
-                                  controller.selectedCarType.value =
-                                      !controller.selectedCarType.value;
+                                  if (isSelected) {
+                                    controller.selectedCarTypes1
+                                        .remove(feature);
+                                  } else {
+                                    controller.selectedCarTypes1.add(feature);
+                                  }
                                 });
+                                print(
+                                    "Selectd car type:: ${controller.selectedCarTypes1}");
                               },
                               child: Row(
                                 children: [
                                   sqaureCheckBox(
                                       border: Border.all(
-                                          color: controller
-                                                      .selectedCarTypes.value ==
-                                                  index
-                                              ? primaryColor
-                                              : grey3,
+                                          color:
+                                              isSelected ? primaryColor : grey3,
                                           width: 1.6),
-                                      color:
-                                          controller.selectedCarTypes.value ==
-                                                  index
-                                              ? primaryColor
-                                              : white),
+                                      color: isSelected ? primaryColor : white),
                                   textWidget(
                                       text: feature, style: getRegularStyle()),
                                 ],
@@ -642,39 +658,72 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
     );
   }
 
-  Widget hostRating() {
+  Widget hostRating(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.sp, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 0.sp, vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          textWidget(
-              text: AppStrings.hostRating,
-              style: getMediumStyle(fontSize: 12.sp, color: grey2)
-                  .copyWith(fontWeight: FontWeight.w500)),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: textWidget(
+                text: AppStrings.carRatingCaps,
+                style: getMediumStyle(fontSize: 12.sp, color: grey2)
+                    .copyWith(fontWeight: FontWeight.w500)),
+          ),
           const SizedBox(
             height: 8,
           ),
-          Row(
-            children: [
-              SvgPicture.asset(
-                ImageAssets.thumbsUpPrimaryColor,
-              ),
-              SizedBox(
-                width: 5.sp,
-              ),
-              textWidget(
-                  text: '97%',
-                  style: getRegularStyle(fontSize: 12.sp)
-                      .copyWith(fontFamily: 'Neue')),
-            ],
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              children: [
+                SvgPicture.asset(
+                  ImageAssets.thumbsUpPrimaryColor,
+                ),
+                SizedBox(
+                  width: 5.sp,
+                ),
+                textWidget(
+                    text:
+                        "${controller.startValue.value.round().toString()}%  - ${controller.endValue.value.round().toString()}%",
+                    style: getRegularStyle().copyWith(fontFamily: 'Neue')),
+              ],
+            ),
           ),
           SizedBox(
-            height: 16.sp,
+            height: 20.sp,
           ),
-          SvgPicture.asset(
-            ImageAssets.dividerPin,
-          ),
+          // SvgPicture.asset(
+          //   ImageAssets.dividerPin,
+          // ),
+          SliderTheme(
+            data: SliderTheme.of(context).copyWith(
+                trackHeight: 3.5,
+                trackShape: RoundedRectSliderTrackShape(),
+                valueIndicatorShape:
+                    RoundSliderOverlayShape(overlayRadius: 100)),
+            child: RangeSlider(
+              min: 0.0,
+              max: 100.0,
+              activeColor: primaryColor,
+              inactiveColor: grey1,
+              labels: RangeLabels(
+                controller.startValue.round().toString(),
+                controller.endValue.round().toString(),
+              ),
+              divisions: 20,
+              values: RangeValues(
+                  controller.startValue.value, controller.endValue.value),
+              onChanged: (values) {
+                print("value: ${values.start}");
+                // setState(() {
+                controller.startValue.value = values.start;
+                controller.endValue.value = values.end;
+                // });
+              },
+            ),
+          )
         ],
       ),
     );
@@ -770,7 +819,7 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
                     textWidget(
                         text: AppStrings.chauffeur, style: getMediumStyle()),
                     textWidget(
-                        text: AppStrings.ourDriverWillSupport,
+                        text: AppStrings.ourDriverWillTakeYouThrough,
                         textOverflow: TextOverflow.visible,
                         style: getMediumStyle(fontSize: 10.sp, color: grey2)),
                   ],
@@ -795,7 +844,7 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
                     textWidget(
                         text: AppStrings.selfDrive, style: getMediumStyle()),
                     textWidget(
-                      text: AppStrings.ourDriverWillSupport,
+                      text: AppStrings.youCanDriveYourself,
                       textOverflow: TextOverflow.visible,
                       style: getMediumStyle(fontSize: 10.sp, color: grey2),
                     ),
@@ -832,12 +881,10 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
             ),
             textWidget(
                 text: value == 0
-                    ? AppStrings.relevance
+                    ? AppStrings.highestToLowest
                     : value == 1
-                        ? AppStrings.distanceAway
-                        : value == 2
-                            ? AppStrings.pricePerDayH
-                            : AppStrings.pricePerDayL,
+                        ? AppStrings.lowestToHighest
+                        : '',
                 style: getMediumStyle()),
           ],
         ),

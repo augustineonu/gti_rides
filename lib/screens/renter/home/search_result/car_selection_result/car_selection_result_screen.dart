@@ -672,7 +672,8 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                                     text: AppStrings.selfPickUp,
                                     style: getMediumStyle(color: grey5)),
                                 textWidget(
-                                    text: AppStrings.chooseToPickUpCarAtProvidedAddress,
+                                    text: AppStrings
+                                        .chooseToPickUpCarAtProvidedAddress,
                                     textOverflow: TextOverflow.visible,
                                     style: getLightStyle(
                                         fontSize: 10.sp, color: grey2)),
@@ -725,7 +726,8 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                                     text: AppStrings.selfDropOff,
                                     style: getMediumStyle(color: grey5)),
                                 textWidget(
-                                    text: AppStrings.returnCarToDesignatedAddress,
+                                    text:
+                                        AppStrings.returnCarToDesignatedAddress,
                                     textOverflow: TextOverflow.visible,
                                     style: getLightStyle(
                                         fontSize: 10.sp, color: grey2)),
@@ -810,7 +812,38 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                   //         ? controller.advanceAmount.value
                   //         : "4 hours"
                   //     : null,
-                  values: <String>["1", "2", '3', '4', '5', '6', '7', '8'],
+                  values: <String>[
+                    "1",
+                    "2",
+                    '3',
+                    '4',
+                    '5',
+                    '6',
+                    '7',
+                    '8',
+                    '9',
+                    '10',
+                    '11',
+                    '12',
+                    '13',
+                    '14',
+                    '15',
+                    '16',
+                    '17',
+                    '18',
+                    '19',
+                    '20',
+                    '21',
+                    '22',
+                    '23',
+                    '24',
+                    '25',
+                    '26',
+                    '27',
+                    '28',
+                    '29',
+                    '30'
+                  ],
                   onChange: (value) =>
                       controller.onChangeEscortNumber(value: value),
                 ),
@@ -948,9 +981,38 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                   expectedVariable: 'field',
                   selectedValue:
                       controller.escortSecurityNoInputController.text,
-                  values: <String>["", "1", "2", '3', '4', '5', '6', '7', '8',
-                  '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19'
-                  '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30'
+                  values: <String>[
+                    "",
+                    "1",
+                    "2",
+                    '3',
+                    '4',
+                    '5',
+                    '6',
+                    '7',
+                    '8',
+                    '9',
+                    '10',
+                    '11',
+                    '12',
+                    '13',
+                    '14',
+                    '15',
+                    '16',
+                    '17',
+                    '18',
+                    '19',
+                    '20',
+                    '21',
+                    '22',
+                    '23',
+                    '24',
+                    '25',
+                    '26',
+                    '27',
+                    '28',
+                    '29',
+                    '30'
                   ],
                   onChange: (value) =>
                       controller.onChangeEscortNumber(value: value),
@@ -1045,7 +1107,8 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
                     var review = controller.reviews![index];
-                    int? ratingPercentage = int.tryParse(review.reviewPercentage);
+                    int? ratingPercentage =
+                        int.tryParse(review.reviewPercentage);
                     return InkWell(
                       onTap: () {
                         if (!controller.isLoading.value) {
@@ -1091,29 +1154,35 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                                             text: " | ",
                                             style: getLightStyle(
                                                 fontSize: 12.sp, color: grey3)),
-                                      ratingPercentage! >= 50 ?
-                                      Row(
-                                          children: [
-                                            SvgPicture.asset(
-                                                ImageAssets.thumbsUpGreen),
-                                        const SizedBox(width: 3),
-                                        textWidget(
-                                            text: '${review.reviewPercentage}%',
-                                            style: getMediumStyle(
-                                                fontSize: 12.sp, color: grey5)),
-                                          ],
-                                        )
-                                      :  Row(
-                                          children: [
-                                            SvgPicture.asset(
-                                                ImageAssets.thumbsDown,color: red,),
-                                        const SizedBox(width: 3),
-                                        textWidget(
-                                            text: '${review.reviewPercentage}%',
-                                            style: getMediumStyle(
-                                                fontSize: 12.sp, color: grey5)),
-                                          ],
-                                        ),
+                                        ratingPercentage! >= 50
+                                            ? Row(
+                                                children: [
+                                                  SvgPicture.asset(ImageAssets
+                                                      .thumbsUpGreen),
+                                                  const SizedBox(width: 3),
+                                                  textWidget(
+                                                      text:
+                                                          '${review.reviewPercentage}%',
+                                                      style: getMediumStyle(
+                                                          fontSize: 12.sp,
+                                                          color: grey5)),
+                                                ],
+                                              )
+                                            : Row(
+                                                children: [
+                                                  SvgPicture.asset(
+                                                    ImageAssets.thumbsDown,
+                                                    color: red,
+                                                  ),
+                                                  const SizedBox(width: 3),
+                                                  textWidget(
+                                                      text:
+                                                          '${review.reviewPercentage}%',
+                                                      style: getMediumStyle(
+                                                          fontSize: 12.sp,
+                                                          color: grey5)),
+                                                ],
+                                              ),
                                       ],
                                     ),
                                     textWidget(
@@ -1130,8 +1199,9 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                                 text: review.message.toString(),
                                 textOverflow: TextOverflow.visible,
                                 textAlign: TextAlign.start,
-                                style: getMediumStyle(fontSize: 12.sp, color: grey5)
-                            .copyWith(fontWeight: FontWeight.w300)),
+                                style: getMediumStyle(
+                                        fontSize: 12.sp, color: grey5)
+                                    .copyWith(fontWeight: FontWeight.w300)),
                           ],
                         ),
                       ),
