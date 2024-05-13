@@ -164,11 +164,11 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
                 // will still need to assign the selected value to the corresponding search options
                 vehicleBrandSheet(size);
               case 3:
-                vehicleModelSheet(size);
-              case 4:
                 carSeat(size);
-              case 5:
+                // vehicleModelSheet(size);
+              case 4:
                 transmission(size);
+              case 5:
               case 6:
               // transmission(size);
 
@@ -272,7 +272,8 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
                                           ? primaryColor
                                           : white),
                                   textWidget(
-                                      text: model, style: getRegularStyle()),
+                                      text: model.brandName,
+                                      style: getRegularStyle()),
                                 ],
                               ),
                             );
@@ -337,33 +338,35 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
                             final brand = controller.vehicleBrands[index];
+                            final isSelected = controller.selectedVehicleBrands
+                                .contains(brand.brandCode);
                             return InkWell(
                               onTap: () {
-                                controller.onVehicleBrandChecked(index);
+                                // controller.onVehicleBrandChecked(index);
 
                                 state(() {
-                                  controller.selectedVehicleBrand.value =
-                                      !controller.selectedVehicleBrand.value;
+                                  if (isSelected) {
+                                    controller.selectedVehicleBrands
+                                        .remove(brand.brandCode);
+                                  } else {
+                                    controller.selectedVehicleBrands
+                                        .add(brand.brandCode);
+                                  }
+                                  print(
+                                      "Selectd car brand:: ${controller.selectedVehicleBrands}");
                                 });
                               },
                               child: Row(
                                 children: [
                                   sqaureCheckBox(
                                       border: Border.all(
-                                          color: controller
-                                                      .selectedVehicleBrands
-                                                      .value ==
-                                                  index
-                                              ? primaryColor
-                                              : grey3,
+                                          color:
+                                              isSelected ? primaryColor : grey3,
                                           width: 1.6),
-                                      color: controller.selectedVehicleBrands
-                                                  .value ==
-                                              index
-                                          ? primaryColor
-                                          : white),
+                                      color: isSelected ? primaryColor : white),
                                   textWidget(
-                                      text: brand, style: getRegularStyle()),
+                                      text: brand.brandName,
+                                      style: getRegularStyle()),
                                 ],
                               ),
                             );
@@ -424,31 +427,26 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
                       builder: (context, state) {
                         return ListView.separated(
                           physics: ScrollPhysics(),
-                          itemCount: controller.features.length,
+                          itemCount: controller.carFeatures.length,
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
-                            final feature = controller.features[index];
-                            final isSelected =
-                                controller.selectedCarTypes1.contains(feature);
+                            final feature = controller.carFeatures[index];
+                            final isSelected = controller.selectedCarFeature
+                                .contains(feature.featuresCode);
 
                             return InkWell(
                               onTap: () {
-                                // controller.onCarTypeChecked(index);
-
-                                // state(() {
-                                //   controller.selectedCarType.value =
-                                //       !controller.selectedCarType.value;
-                                // });
                                 state(() {
                                   if (isSelected) {
-                                    controller.selectedCarTypes1
-                                        .remove(feature);
+                                    controller.selectedCarFeature
+                                        .remove(feature.featuresCode);
                                   } else {
-                                    controller.selectedCarTypes1.add(feature);
+                                    controller.selectedCarFeature
+                                        .add(feature.featuresCode);
                                   }
                                 });
                                 print(
-                                    "Selectd car type:: ${controller.selectedCarTypes1}");
+                                    "Selectd car type:: ${controller.selectedCarFeature}");
                               },
                               child: Row(
                                 children: [
@@ -459,7 +457,8 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
                                           width: 1.6),
                                       color: isSelected ? primaryColor : white),
                                   textWidget(
-                                      text: feature, style: getRegularStyle()),
+                                      text: feature.featuresName,
+                                      style: getRegularStyle()),
                                 ],
                               ),
                             );
@@ -623,31 +622,38 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
       title: AppStrings.vehicleType,
       content: StatefulBuilder(builder: (context, state) {
         return ListView.separated(
-          itemCount: controller.carTypes.length,
+          itemCount: controller.vehicleTypes.length,
           shrinkWrap: true,
           itemBuilder: (context, index) {
-            final carType = controller.carTypes[index];
+            final carType = controller.vehicleTypes[index];
+            final isSelected =
+                controller.selectedCarTypes1.contains(carType.typeCode);
             return InkWell(
               onTap: () {
                 controller.onCarTypeChecked(index);
 
-                state(() {
-                  controller.selectedCarType.value =
-                      !controller.selectedCarType.value;
-                });
+                // state(() {
+                //   controller.selectedCarType.value =
+                //       !controller.selectedCarType.value;
+                // });
+                state(
+                  () {
+                    if (isSelected) {
+                      controller.selectedCarTypes1.remove(carType.typeCode);
+                    } else {
+                      controller.selectedCarTypes1.add(carType.typeCode);
+                    }
+                  },
+                );
+                print("Selectd car type:: ${controller.selectedCarTypes1}");
               },
               child: Row(
                 children: [
                   sqaureCheckBox(
                       border: Border.all(
-                          color: controller.selectedCarTypes.value == index
-                              ? primaryColor
-                              : grey3,
-                          width: 1.6),
-                      color: controller.selectedCarTypes.value == index
-                          ? primaryColor
-                          : white),
-                  textWidget(text: carType, style: getRegularStyle()),
+                          color: isSelected ? primaryColor : grey3, width: 1.6),
+                      color: isSelected ? primaryColor : white),
+                  textWidget(text: carType.typeName, style: getRegularStyle()),
                 ],
               ),
             );

@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/models/car_features.dart';
 import 'package:gti_rides/models/search/filter_options_model.dart';
+import 'package:gti_rides/models/vehicle_brand.dart';
+import 'package:gti_rides/models/vehicle_type.dart';
 import 'package:gti_rides/services/logger.dart';
+import 'package:gti_rides/services/partner_service.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/utils/constants.dart';
 
@@ -19,7 +23,9 @@ class SearchFilterController extends GetxController {
   @override
   void onInit() async {
     update();
-
+    await getCarFeatures();
+    await getVehicleType();
+    await getBrands();
     super.onInit();
   }
 
@@ -45,12 +51,14 @@ class SearchFilterController extends GetxController {
   RxBool selectedCategory = false.obs;
   RxBool selectedTransmission = false.obs;
 
+  RxList selectedCarFeature = [].obs;
   RxList selectedCarTypes1 = [].obs;
+  RxList selectedVehicleBrands = [].obs;
 
   // integers
   RxInt selectedCheckboxes = 0.obs;
   RxInt selectedCarTypes = 0.obs;
-  RxInt selectedVehicleBrands = 0.obs;
+  // RxInt selectedVehicleBrands = 0.obs;
   RxInt selectedVehicleModels = 0.obs;
   RxInt selectedCarSeats = 0.obs;
   RxInt selectedCategories = 0.obs;
@@ -144,8 +152,94 @@ class SearchFilterController extends GetxController {
     AppStrings.usbCharger,
     AppStrings.usbInput,
   ];
+  RxList<CarFeatureData> carFeatures = <CarFeatureData>[].obs;
+  RxList<VehicleTypeData> vehicleTypes = <VehicleTypeData>[].obs;
+  RxList<VehicleBrandData> vehicleBrands = <VehicleBrandData>[].obs;
+  // RxList<VehicleBrandData> vehicleBrands = <VehicleBrandData>[].obs;
 
-  List<String> vehicleBrands = [
+  Future<List<CarFeatureData>> getCarFeatures() async {
+    try {
+      //isGettingBrands.value = true;
+      final response = await partnerService.getFeatures();
+      if (response.status == 'success' || response.status_code == 200) {
+        logger.log("gotten car features ${response.data}");
+        if (response.data != null && response.data != []) {
+          carFeatures?.value = response.data!
+              .map((feature) => CarFeatureData.fromJson(feature))
+              .toList();
+          logger.log("features ${carFeatures?.value}");
+          return carFeatures;
+        }
+        return carFeatures;
+      } else {
+        logger.log("unable to car features ${response.data}");
+        // isGettingBrands.value = false;
+        return carFeatures;
+      }
+    } catch (exception) {
+      logger.log("get car features error  $exception");
+      return carFeatures;
+    }
+  }
+
+  Future<void> getVehicleType() async {
+    try {
+      final response = await partnerService.getVehicleType();
+      if (response.status == 'success' || response.status_code == 200) {
+        logger.log("gotten vehicle Types ${response.data}");
+        if (response.data != null && response.data != []) {
+          vehicleTypes?.value = response.data!
+              .map((type) => VehicleTypeData.fromJson(type))
+              .toList();
+          logger.log("vehicle type ${vehicleTypes?.value}");
+        }
+      } else {
+        logger.log("unable to vehicle Types ${response.data}");
+      }
+    } catch (exception) {
+      logger.log("get vehicle type error  $exception");
+    }
+  }
+
+  Future<void> getBrands() async {
+    try {
+      final response = await partnerService.getBrand();
+      if (response.status == 'success' || response.status_code == 200) {
+        logger.log("gotten brands ${response.data}");
+        if (response.data != null && response.data != []) {
+          vehicleBrands.value = response.data!
+              .map((brand) => VehicleBrandData.fromJson(brand))
+              .toList();
+          // logger.log("brands ${brands.value.data}");
+        }
+      } else {
+        logger.log("unable to get brands ${response.data}");
+      }
+    } catch (exception) {
+      logger.log("get brands error  $exception");
+    }
+  }
+  //   Future<void> getBrandModel({required String brandCode1}) async {
+  //   try {
+  //     final response =
+  //         await partnerService.getBrandModel(brandCode: brandCode1);
+  //     if (response.status == 'success' || response.status_code == 200) {
+  //       logger.log("gotten brand model ${response.data}");
+  //       if (response.data != null && response.data != []) {
+  //         brandModel?.value = response.data!;
+  //         logger.log("brand model ${response.data}");     
+  //       }
+  //     } else {
+  //       logger.log("unable to get brand model ${response.data}");
+  //       showErrorSnackbar(message: response.message!);
+  //       isGettingBrands.value = false;
+  //     }
+  //   } catch (exception) {
+  //     logger.log("get brand model error  $exception");
+  //   }
+  // }
+
+  List<String> vehicleBrands1 = [
     AppStrings.allBrand,
     AppStrings.amGeneral,
     AppStrings.acura,
@@ -190,7 +284,7 @@ class SearchFilterController extends GetxController {
 
   void onSelectSortBy(int index) => selectedCheckboxes.value = index;
   void onCarTypeChecked(int index) => selectedCarTypes.value = index;
-  void onVehicleBrandChecked(int index) => selectedVehicleBrands.value = index;
+  // void onVehicleBrandChecked(int index) => selectedVehicleBrands.value = index;
   void onVehicleModelChecked(int index) => selectedVehicleModels.value = index;
   void onCarSeatChecked(int index) => selectedCarSeats.value = index;
   void onCategoryChecked(int index) => selectedCategories.value = index;
