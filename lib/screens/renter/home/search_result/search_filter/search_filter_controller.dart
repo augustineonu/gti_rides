@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:gti_rides/models/car_features.dart';
 import 'package:gti_rides/models/search/filter_options_model.dart';
 import 'package:gti_rides/models/vehicle_brand.dart';
+import 'package:gti_rides/models/vehicle_seat.dart';
 import 'package:gti_rides/models/vehicle_type.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/partner_service.dart';
@@ -26,6 +27,7 @@ class SearchFilterController extends GetxController {
     await getCarFeatures();
     await getVehicleType();
     await getBrands();
+    await getVehicleSeats();
     super.onInit();
   }
 
@@ -54,6 +56,7 @@ class SearchFilterController extends GetxController {
   RxList selectedCarFeature = [].obs;
   RxList selectedCarTypes1 = [].obs;
   RxList selectedVehicleBrands = [].obs;
+  RxList selectedVehicleSeats = [].obs;
 
   // integers
   RxInt selectedCheckboxes = 0.obs;
@@ -84,9 +87,9 @@ class SearchFilterController extends GetxController {
         title: AppStrings.vehicleBrandCaps, subTitle: AppStrings.allBrand),
     FilterOptions(title: AppStrings.model, subTitle: AppStrings.allBrand),
     FilterOptions(title: AppStrings.carSeat, subTitle: AppStrings.allSeat),
-    FilterOptions(
-        title: AppStrings.transmissionCaps,
-        subTitle: AppStrings.allTransmission),
+    // FilterOptions(
+    //     title: AppStrings.transmissionCaps,
+    //     subTitle: AppStrings.allTransmission),
     // FilterOptions(title: AppStrings.categoryCaps, subTitle: AppStrings.allCars),
   ];
 
@@ -100,7 +103,7 @@ class SearchFilterController extends GetxController {
     AppStrings.cargoVans,
   ];
 
-  List<String> vehicleSeats = [
+  List<String> vehicleSeats1 = [
     AppStrings.allSeat,
     AppStrings.fourOrMore,
     AppStrings.fiveOrMore,
@@ -155,6 +158,7 @@ class SearchFilterController extends GetxController {
   RxList<CarFeatureData> carFeatures = <CarFeatureData>[].obs;
   RxList<VehicleTypeData> vehicleTypes = <VehicleTypeData>[].obs;
   RxList<VehicleBrandData> vehicleBrands = <VehicleBrandData>[].obs;
+  RxList<VehicleSeatData> vehicleSeats = <VehicleSeatData>[].obs;
   // RxList<VehicleBrandData> vehicleBrands = <VehicleBrandData>[].obs;
 
   Future<List<CarFeatureData>> getCarFeatures() async {
@@ -219,6 +223,26 @@ class SearchFilterController extends GetxController {
       logger.log("get brands error  $exception");
     }
   }
+
+  Future<void> getVehicleSeats() async {
+    try {
+      final response = await partnerService.getVehicleSeats();
+      if (response.status == 'success' || response.status_code == 200) {
+        logger.log("gotten vehicle seats ${response.data}");
+        if (response.data != null && response.data != []) {
+          vehicleSeats?.value = response.data!
+              .map((seats) => VehicleSeatData.fromJson(seats))
+              .toList();
+          logger.log("seats ${vehicleSeats?.value}");
+        }
+      } else {
+        logger.log("unable to vehicle seats ${response.data}");
+      }
+    } catch (exception) {
+      logger.log("get vehicle seats error  $exception");
+    }
+  }
+
   //   Future<void> getBrandModel({required String brandCode1}) async {
   //   try {
   //     final response =
@@ -227,7 +251,7 @@ class SearchFilterController extends GetxController {
   //       logger.log("gotten brand model ${response.data}");
   //       if (response.data != null && response.data != []) {
   //         brandModel?.value = response.data!;
-  //         logger.log("brand model ${response.data}");     
+  //         logger.log("brand model ${response.data}");
   //       }
   //     } else {
   //       logger.log("unable to get brand model ${response.data}");
@@ -238,7 +262,6 @@ class SearchFilterController extends GetxController {
   //     logger.log("get brand model error  $exception");
   //   }
   // }
-
   List<String> vehicleBrands1 = [
     AppStrings.allBrand,
     AppStrings.amGeneral,

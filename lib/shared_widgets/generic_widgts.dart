@@ -35,8 +35,12 @@ AppBar gtiAppBar(
     // backgroundColor: newBackgroundColor ?? whiteOrBlackColor(),
     centerTitle: centerTitle ?? true,
     automaticallyImplyLeading: autoImplyLeading ?? false,
-    leading: hasLeading! ? SizedBox(width: 20, height: 20,
-      child: GestureDetector(onTap: onTap, child: leading)) : null,
+    leading: hasLeading!
+        ? SizedBox(
+            width: 20,
+            height: 20,
+            child: GestureDetector(onTap: onTap, child: leading))
+        : null,
     iconTheme: IconThemeData(
       color: newIconColor,
       // color: newIconColor ?? iconColor(),
@@ -219,7 +223,8 @@ Widget profileAvatar({
                           shape: BoxShape.circle,
                           image: DecorationImage(
                               image: ResizeImage(imageProvider,
-                              width: 50, height: 50), fit: BoxFit.cover),
+                                  width: 50, height: 50),
+                              fit: BoxFit.cover),
                         ),
                       ),
                       placeholder: (context, url) => const SizedBox(
@@ -406,7 +411,8 @@ Widget imageWidget1({
             }
           }),
         ),
-        if (onTap != null && (localImagePath != null || networkImagePath != null))
+        if (onTap != null &&
+            (localImagePath != null || networkImagePath != null))
           Positioned(
             right: -4,
             top: -6,
@@ -422,7 +428,6 @@ Widget imageWidget1({
     ),
   );
 }
-
 
 Widget profileImageWidget({
   required String imgUrl,
@@ -491,9 +496,9 @@ Future<dynamic> dialogWidgetWithClose(
             ],
           ),
           SizedBox(
-            height: space,
+            height: 20.sp,
           ),
-          content,
+          Expanded(child: SingleChildScrollView(child: content)),
         ],
       ),
     ),

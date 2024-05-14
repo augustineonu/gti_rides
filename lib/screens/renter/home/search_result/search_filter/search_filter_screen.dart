@@ -164,11 +164,11 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
                 // will still need to assign the selected value to the corresponding search options
                 vehicleBrandSheet(size);
               case 3:
-                carSeat(size);
-                // vehicleModelSheet(size);
+                vehicleModelSheet(size);
               case 4:
-                transmission(size);
+                carSeat(size);
               case 5:
+              // transmission(size);
               case 6:
               // transmission(size);
 
@@ -583,13 +583,21 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
           shrinkWrap: true,
           itemBuilder: (context, index) {
             final vehicleSeat = controller.vehicleSeats[index];
+            final isSelected =
+                controller.selectedVehicleSeats.contains(vehicleSeat.seatCode);
             return InkWell(
               onTap: () {
                 controller.onCarSeatChecked(index);
 
                 state(() {
-                  controller.selectedCarSeat.value =
-                      !controller.selectedCarSeat.value;
+                  // controller.selectedCarSeat.value =
+                  //     !controller.selectedCarSeat.value;
+
+                  if (isSelected) {
+                    controller.selectedCarTypes1.remove(vehicleSeat.seatCode);
+                  } else {
+                    controller.selectedCarTypes1.add(vehicleSeat.seatCode);
+                  }
                 });
               },
               child: Row(
@@ -603,7 +611,8 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
                       color: controller.selectedCarSeats.value == index
                           ? primaryColor
                           : white),
-                  textWidget(text: vehicleSeat, style: getRegularStyle()),
+                  textWidget(
+                      text: vehicleSeat.seatName, style: getRegularStyle()),
                 ],
               ),
             );
@@ -618,11 +627,12 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
     return dialogWidgetWithClose(
       size,
       alignment: Alignment.topCenter,
-      contentHeight: size.height * 0.44,
+      contentHeight: size.height * 0.47,
       title: AppStrings.vehicleType,
       content: StatefulBuilder(builder: (context, state) {
         return ListView.separated(
           itemCount: controller.vehicleTypes.length,
+          physics: ScrollPhysics(),
           shrinkWrap: true,
           itemBuilder: (context, index) {
             final carType = controller.vehicleTypes[index];

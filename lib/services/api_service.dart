@@ -112,7 +112,7 @@ class ApiService {
           //   //  _logOut();
           // }
 
-          if (e.response?.statusCode == 401) {
+          if (e.response?.statusCode == 401 || e.response?.statusCode == 400) {
             // Unauthorized - refresh token
             bool newAccessTokenResult = await tokenService.getNewAccessToken();
             if (!newAccessTokenResult) {
