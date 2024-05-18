@@ -8,10 +8,12 @@ import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/partner_service.dart';
 import 'package:gti_rides/services/renter_service.dart';
 import 'package:gti_rides/services/route_service.dart';
+import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/utils.dart';
+import 'package:intercom_flutter/intercom_flutter.dart';
 
 class CompletedTripController extends GetxController
     with StateMixin<List<ReviewData>> {
@@ -136,6 +138,12 @@ class CompletedTripController extends GetxController
     } finally {
       isSendingReview.value = false;
     }
+  }
+
+     Future<void> launchMessenger() async {
+    await Intercom.instance
+        .loginIdentifiedUser(email: userService.user.value.emailAddress);
+    await Intercom.instance.displayMessenger();
   }
 
   @override

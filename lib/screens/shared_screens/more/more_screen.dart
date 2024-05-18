@@ -60,6 +60,7 @@ class MoreScreen extends StatelessWidget {
                       ),
                       ListView.builder(
                         shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
                         itemCount: controller.profileOptions.length,
                         itemBuilder: (context, index) {
                           // show "My Drivers" only if user type is Owner

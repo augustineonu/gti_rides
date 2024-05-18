@@ -164,7 +164,7 @@ class CompletedTripScreen extends GetView<CompletedTripController> {
             height: 10.sp,
           ),
           InkWell(
-            onTap: () {},
+            onTap: controller.launchMessenger,
             child: tripInfo(
                 title: AppStrings.speakToSupport,
                 fontWeight: FontWeight.w500,

@@ -11,8 +11,10 @@ import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/utils/constants.dart';
+import 'package:intercom_flutter/intercom_flutter.dart';
 
-class RentHistoryController extends GetxController with StateMixin<List<AllTripsData>> {
+class RentHistoryController extends GetxController
+    with StateMixin<List<AllTripsData>> {
   Logger logger = Logger("Controller");
 
   RentHistoryController() {
@@ -33,21 +35,21 @@ class RentHistoryController extends GetxController with StateMixin<List<AllTrips
   }
 
   @override
-  void onReady()async {
+  void onReady() async {
     // TODO: implement onReady
     super.onReady();
-     if (user.value.userType == "partner") {
+    if (user.value.userType == "partner") {
       await getAllTrips();
     }
   }
 
   // variables
-   Rx<UserModel> user = UserModel().obs;
+  Rx<UserModel> user = UserModel().obs;
   RxBool isLoading = false.obs;
   PageController pageController = PageController();
   RxInt selectedIndex = 0.obs;
   RxString testString = "".obs;
-   RxList<AllTripsData> activeTrips = <AllTripsData>[].obs;
+  RxList<AllTripsData> activeTrips = <AllTripsData>[].obs;
   RxList<AllTripsData> completedTrips = <AllTripsData>[].obs;
 
   TextEditingController senderNameController = TextEditingController();
@@ -69,9 +71,8 @@ class RentHistoryController extends GetxController with StateMixin<List<AllTrips
   void goBack() => routeService.goBack();
   void routeToQuickEdit() => routeService.gotoRoute(AppLinks.quickEdit);
   void routeToCarHistory() => routeService.gotoRoute(AppLinks.carHistory);
-  void routeToCompletedTrip({Object? arguments}) => routeService.gotoRoute(AppLinks.completedTrip,arguments: arguments);
-
-
+  void routeToCompletedTrip({Object? arguments}) =>
+      routeService.gotoRoute(AppLinks.completedTrip, arguments: arguments);
 
   Future<void> getAllTrips() async {
     // RxStatus.loading();
@@ -116,4 +117,9 @@ class RentHistoryController extends GetxController with StateMixin<List<AllTrips
     }
   }
 
+  Future<void> launchMessenger() async {
+    await Intercom.instance
+        .loginIdentifiedUser(email: userService.user.value.emailAddress);
+    await Intercom.instance.displayMessenger();
+  }
 }

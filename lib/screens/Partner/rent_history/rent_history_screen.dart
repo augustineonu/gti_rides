@@ -446,6 +446,7 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
                 switch (index) {
                   case 0:
                   // report trip to admin;
+                  controller.launchMessenger();
 
                   case 1:
                     controller.routeToCompletedTrip(arguments: {
