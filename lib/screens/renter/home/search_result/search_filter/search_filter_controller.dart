@@ -1,14 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/models/brand_model.dart';
 import 'package:gti_rides/models/car_features.dart';
 import 'package:gti_rides/models/search/filter_options_model.dart';
 import 'package:gti_rides/models/vehicle_brand.dart';
 import 'package:gti_rides/models/vehicle_seat.dart';
 import 'package:gti_rides/models/vehicle_type.dart';
+import 'package:gti_rides/models/vehicle_year.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/partner_service.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/utils/constants.dart';
+import 'package:gti_rides/utils/utils.dart';
 
 class SearchFilterController extends GetxController {
   Logger logger = Logger("Controller");
@@ -55,14 +58,15 @@ class SearchFilterController extends GetxController {
 
   RxList selectedCarFeature = [].obs;
   RxList selectedCarTypes1 = [].obs;
-  RxList selectedVehicleBrands = [].obs;
+  // RxList selectedVehicleBrands = [].obs;
   RxList selectedVehicleSeats = [].obs;
 
   // integers
   RxInt selectedCheckboxes = 0.obs;
   RxInt selectedCarTypes = 0.obs;
-  // RxInt selectedVehicleBrands = 0.obs;
+  RxInt selectedVehicleBrands = 0.obs;
   RxInt selectedVehicleModels = 0.obs;
+  RxInt selectedVehiclYears = 0.obs;
   RxInt selectedCarSeats = 0.obs;
   RxInt selectedCategories = 0.obs;
   RxInt selectedTransmissions = 0.obs;
@@ -79,14 +83,16 @@ class SearchFilterController extends GetxController {
     // Add more options here
   ];
   List<FilterOptions> filterOptionsList = [
-    FilterOptions(
-        title: AppStrings.carFeaturesCaps, subTitle: AppStrings.allFeatures),
-    FilterOptions(
-        title: AppStrings.vehicleTypeCaps, subTitle: AppStrings.allTypes),
+    // FilterOptions(
+    // title: AppStrings.carFeaturesCaps, subTitle: AppStrings.allFeatures),
+    // FilterOptions(
+        // title: AppStrings.vehicleTypeCaps, subTitle: AppStrings.allTypes),
     FilterOptions(
         title: AppStrings.vehicleBrandCaps, subTitle: AppStrings.allBrand),
-    FilterOptions(title: AppStrings.model, subTitle: AppStrings.allBrand),
-    FilterOptions(title: AppStrings.carSeat, subTitle: AppStrings.allSeat),
+    FilterOptions(
+        title: "VEHICLE ${AppStrings.model}", subTitle: AppStrings.allBrand),
+    FilterOptions(title: "VEHICLE YEAR", subTitle: AppStrings.allBrand),
+    // FilterOptions(title: AppStrings.carSeat, subTitle: AppStrings.allSeat),
     // FilterOptions(
     //     title: AppStrings.transmissionCaps,
     //     subTitle: AppStrings.allTransmission),
@@ -159,7 +165,12 @@ class SearchFilterController extends GetxController {
   RxList<VehicleTypeData> vehicleTypes = <VehicleTypeData>[].obs;
   RxList<VehicleBrandData> vehicleBrands = <VehicleBrandData>[].obs;
   RxList<VehicleSeatData> vehicleSeats = <VehicleSeatData>[].obs;
-  // RxList<VehicleBrandData> vehicleBrands = <VehicleBrandData>[].obs;
+  RxList<BrandModelData> brandModels = <BrandModelData>[].obs;
+  RxList<VehicleYearData> vehicleYearList = <VehicleYearData>[].obs;
+
+  RxBool gettingCarBrand = false.obs;
+  RxBool gettingBrandModel = false.obs;
+  RxBool gettingBrandYear = false.obs;
 
   Future<List<CarFeatureData>> getCarFeatures() async {
     try {
@@ -206,6 +217,7 @@ class SearchFilterController extends GetxController {
   }
 
   Future<void> getBrands() async {
+    gettingCarBrand.value = true;
     try {
       final response = await partnerService.getBrand();
       if (response.status == 'success' || response.status_code == 200) {
@@ -221,6 +233,84 @@ class SearchFilterController extends GetxController {
       }
     } catch (exception) {
       logger.log("get brands error  $exception");
+    } finally {
+      gettingCarBrand.value = false;
+    }
+  }
+
+  String selectedBrandCode = '';
+  String selectedBrandModelCode = '';
+  String selectedYearCode = '';
+  String selectedPriceSorting = '';
+
+  void clearSearchFilter() {
+    selectedPriceSorting = '';
+    selectedBrandCode = '';
+    selectedBrandModelCode = '';
+    selectedYearCode = '';
+    selectedPriceSorting = '';
+    toAmount.clear();
+    fromAmount.clear();
+
+    logger.log("value:: $selectedBrandCode");
+  }
+
+  Future<void> getBrandModel({required String brandCode}) async {
+    gettingBrandModel.value = true;
+    try {
+      final response = await partnerService.getBrandModel(brandCode: brandCode);
+      if (response.status == 'success' || response.status_code == 200) {
+        logger.log("gotten brand model ${response.data}");
+        if (response.data != null && response.data != []) {
+          brandModels?.value = response.data!
+              .map((brandModel) => BrandModelData.fromJson(brandModel))
+              .toList();
+          logger.log("brand model ${response.data}");
+        }
+      } else {
+        logger.log("unable to get brand model ${response.data}");
+        showErrorSnackbar(message: response.message!);
+        // isGettingBrands.value = false;
+      }
+    } catch (exception) {
+      logger.log("get brand model error  $exception");
+    } finally {
+      gettingBrandModel.value = false;
+    }
+  }
+
+  Future<void> getVehicleYear(
+      {required String brandCode, required String brandModelCode}) async {
+    gettingBrandYear.value = true;
+    try {
+      //isGettingBrands.value = true;
+      // isGettingyear.value = true;
+      // vehicleYear!.clear();
+      // selectedYearValue!.value = 'Select';
+      final response = await partnerService.getVehicleYear(
+          brandCode: brandCode, brandModelCode: brandModelCode);
+      if (response.status == 'success' || response.status_code == 200) {
+        logger.log("gotten vehicle year ${response.data}");
+        if (response.data != null && response.data != []) {
+          // vehicleYear?.value = response.data!;
+          vehicleYearList!.assignAll(response.data!
+              .map((year) => VehicleYearData.fromJson(year))
+              .toList());
+          // isGettingyear.value = false;
+
+          logger.log("vehicle year ${vehicleYearList.value}");
+        } else {
+          logger.log("no vehicle year ${response.data}");
+        }
+      } else {
+        logger.log("unable to get vehicle year ${response.data}");
+        showErrorSnackbar(message: response.message!);
+        // isGettingyear.value = false;
+      }
+    } catch (exception) {
+      logger.log("get vehicle year error  $exception");
+    } finally {
+      gettingBrandYear.value = false;
     }
   }
 
@@ -243,25 +333,6 @@ class SearchFilterController extends GetxController {
     }
   }
 
-  //   Future<void> getBrandModel({required String brandCode1}) async {
-  //   try {
-  //     final response =
-  //         await partnerService.getBrandModel(brandCode: brandCode1);
-  //     if (response.status == 'success' || response.status_code == 200) {
-  //       logger.log("gotten brand model ${response.data}");
-  //       if (response.data != null && response.data != []) {
-  //         brandModel?.value = response.data!;
-  //         logger.log("brand model ${response.data}");
-  //       }
-  //     } else {
-  //       logger.log("unable to get brand model ${response.data}");
-  //       showErrorSnackbar(message: response.message!);
-  //       isGettingBrands.value = false;
-  //     }
-  //   } catch (exception) {
-  //     logger.log("get brand model error  $exception");
-  //   }
-  // }
   List<String> vehicleBrands1 = [
     AppStrings.allBrand,
     AppStrings.amGeneral,
@@ -298,7 +369,14 @@ class SearchFilterController extends GetxController {
   ];
 
   // methods
-  void goBack() => routeService.goBack();
+  void goBack() => routeService.goBack(result: {
+        "brandCode": selectedBrandCode,
+        "modelCode": selectedBrandModelCode,
+        "yearCode": selectedYearCode,
+        "startPricing": fromAmount.text,
+        "endPricing": toAmount.text,
+        "priceSort": selectedPriceSorting
+      });
 
   void onChauffeurSelected(bool value) => selectedChauffeur.value = value;
   void onSelectSelfDrive(bool value) => selectedSelfDrive.value = value;
@@ -307,8 +385,9 @@ class SearchFilterController extends GetxController {
 
   void onSelectSortBy(int index) => selectedCheckboxes.value = index;
   void onCarTypeChecked(int index) => selectedCarTypes.value = index;
-  // void onVehicleBrandChecked(int index) => selectedVehicleBrands.value = index;
+  void onVehicleBrandChecked(int index) => selectedVehicleBrands.value = index;
   void onVehicleModelChecked(int index) => selectedVehicleModels.value = index;
+  void onVehicleYearChecked(int index) => selectedVehiclYears.value = index;
   void onCarSeatChecked(int index) => selectedCarSeats.value = index;
   void onCategoryChecked(int index) => selectedCategories.value = index;
   void onTransmissionChecked(int index) => selectedTransmissions.value = index;

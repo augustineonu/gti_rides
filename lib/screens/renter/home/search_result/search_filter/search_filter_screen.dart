@@ -30,7 +30,27 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
       () => Scaffold(
           backgroundColor: backgroundColor,
           appBar: appBar(),
-          body: body(size, context)),
+          body: Stack(
+            children: [
+              SafeArea(child: body(size, context)),
+              controller.gettingCarBrand.isTrue ||
+                      controller.gettingBrandModel.isTrue ||
+                      controller.gettingBrandYear.isTrue
+                  ? Stack(
+                      children: [
+                        const Opacity(
+                          opacity: 0.5,
+                          child: ModalBarrier(
+                              dismissible: false, color: Colors.black),
+                        ),
+                        Center(
+                          child: Center(child: centerLoadingIcon()),
+                        ),
+                      ],
+                    )
+                  : const SizedBox()
+            ],
+          )),
       // }
     );
   }
@@ -47,12 +67,17 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
             style: getMediumStyle().copyWith(fontWeight: FontWeight.w500)),
         titleColor: iconColor(),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16, top: 10),
-            child: textWidget(
-                text: AppStrings.clearAll,
-                style: getRegularStyle(color: primaryColor)
-                    .copyWith(fontWeight: FontWeight.w500)),
+          InkWell(
+            onTap: () {
+              controller.clearSearchFilter();
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(right: 16, top: 10),
+              child: textWidget(
+                  text: AppStrings.clearAll,
+                  style: getRegularStyle(color: primaryColor)
+                      .copyWith(fontWeight: FontWeight.w500)),
+            ),
           )
         ]);
   }
@@ -81,7 +106,7 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
                         return InkWell(
                           onTap: () {
                             controller.onSelectSortBy(index);
-
+                            controller.selectedPriceSorting = sortBy;
                             state(() {
                               controller.selectedSortby.value =
                                   !controller.selectedSortby.value;
@@ -129,8 +154,8 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
             // driveOptions(context),
             // divider(color: borderColor),
             // distance(context),
-            divider(color: borderColor),
-            hostRating(context),
+            // divider(color: borderColor),
+            // hostRating(context),
             divider(color: borderColor),
             filterOptions(size),
             // textWidget(
@@ -156,18 +181,18 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
             switch (index) {
               case 0:
                 // will still need to assign the selected value to the corresponding search options
-                featuresSheet(size);
-              case 1:
+                // featuresSheet(size);
                 vehicleType(size);
-
-              case 2:
-                // will still need to assign the selected value to the corresponding search options
+              case 1:
                 vehicleBrandSheet(size);
-              case 3:
+              case 2:
                 vehicleModelSheet(size);
+              // will still need to assign the selected value to the corresponding search options
+              case 3:
+                vehicleYearSheet(size);
               case 4:
-                carSeat(size);
               case 5:
+              // carSeat(size);
               // transmission(size);
               case 6:
               // transmission(size);
@@ -242,17 +267,27 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
                       builder: (context, state) {
                         return ListView.separated(
                           physics: const ScrollPhysics(),
-                          itemCount: controller.vehicleBrands.length,
+                          itemCount: controller.brandModels.length,
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
-                            final model = controller.vehicleBrands[index];
+                            final model = controller.brandModels[index];
                             return InkWell(
                               onTap: () {
+                                print(">>>${controller.selectedBrandCode}");
                                 controller.onVehicleModelChecked(index);
+                                controller.selectedBrandModelCode =
+                                    model.modelCode.toString();
+                                print(
+                                    "selected brand model code: ${model.modelCode.toString()}");
+
+                                controller.getVehicleYear(
+                                    brandCode: controller.selectedBrandCode,
+                                    brandModelCode:
+                                        controller.selectedBrandModelCode);
 
                                 state(() {
-                                  controller.selectedVehicleModel.value =
-                                      !controller.selectedVehicleModel.value;
+                                  //   controller.selectedVehicleModel.value =
+                                  //       !controller.selectedVehicleModel.value;
                                 });
                               },
                               child: Row(
@@ -272,7 +307,108 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
                                           ? primaryColor
                                           : white),
                                   textWidget(
-                                      text: model.brandName,
+                                      text: model.modelName,
+                                      style: getRegularStyle()),
+                                ],
+                              ),
+                            );
+                          },
+                          separatorBuilder: (context, _) =>
+                              SizedBox(height: 14.sp),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      backgroundColor: white,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(8.r), topRight: Radius.circular(8.r)),
+      ),
+    );
+  }
+
+  Future<dynamic> vehicleYearSheet(Size size) {
+    return Get.bottomSheet(
+      Container(
+        padding: EdgeInsets.all(19.sp),
+        height: size.height * 0.7,
+        child: Column(
+          children: [
+            Row(
+              children: [
+                InkWell(
+                  onTap: () => controller.goBack(),
+                  child: SvgPicture.asset(
+                    ImageAssets.close,
+                    height: 18.sp,
+                    color: black,
+                  ),
+                ),
+                const Spacer(),
+                textWidget(
+                  text: AppStrings.allBrand,
+                  style: getMediumStyle(fontSize: 12.sp)
+                      .copyWith(fontWeight: FontWeight.w700),
+                ),
+                const Spacer(),
+              ],
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.only(top: 35.sp),
+                child: Column(
+                  children: [
+                    StatefulBuilder(
+                      builder: (context, state) {
+                        return ListView.separated(
+                          physics: const ScrollPhysics(),
+                          itemCount: controller.vehicleYearList.length,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            final year = controller.vehicleYearList[index];
+                            return InkWell(
+                              onTap: () {
+                                // print(">>>${controller.selectedBrandCode}");
+                                controller.onVehicleYearChecked(index);
+                                controller.selectedYearCode =
+                                    year.yearCode.toString();
+                                print(
+                                    "selected brand model code: ${year.yearCode.toString()}");
+
+                                // controller.getVehicleYear(
+                                //     brandCode: controller.selectedBrandCode,
+                                //     brandModelCode:
+                                //         controller.selectedBrandModelCode);
+
+                                state(() {
+                                  //   controller.selectedVehicleModel.value =
+                                  //       !controller.selectedVehicleModel.value;
+                                });
+                              },
+                              child: Row(
+                                children: [
+                                  sqaureCheckBox(
+                                      border: Border.all(
+                                          color: controller.selectedVehiclYears
+                                                      .value ==
+                                                  index
+                                              ? primaryColor
+                                              : grey3,
+                                          width: 1.6),
+                                      color: controller
+                                                  .selectedVehiclYears.value ==
+                                              index
+                                          ? primaryColor
+                                          : white),
+                                  textWidget(
+                                      text: year.yearName,
                                       style: getRegularStyle()),
                                 ],
                               ),
@@ -338,32 +474,36 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
                             final brand = controller.vehicleBrands[index];
-                            final isSelected = controller.selectedVehicleBrands
-                                .contains(brand.brandCode);
                             return InkWell(
                               onTap: () {
-                                // controller.onVehicleBrandChecked(index);
+                                controller.onVehicleBrandChecked(index);
+                                controller.selectedBrandCode =
+                                    brand.brandCode.toString();
+
+                                controller.getBrandModel(
+                                    brandCode: brand.brandCode.toString());
 
                                 state(() {
-                                  if (isSelected) {
-                                    controller.selectedVehicleBrands
-                                        .remove(brand.brandCode);
-                                  } else {
-                                    controller.selectedVehicleBrands
-                                        .add(brand.brandCode);
-                                  }
                                   print(
-                                      "Selectd car brand:: ${controller.selectedVehicleBrands}");
+                                      "Selectd car brand:: ${controller.selectedVehicleBrands} ${brand.brandCode.toString()}");
                                 });
                               },
                               child: Row(
                                 children: [
                                   sqaureCheckBox(
                                       border: Border.all(
-                                          color:
-                                              isSelected ? primaryColor : grey3,
+                                          color: controller
+                                                      .selectedVehicleBrands
+                                                      .value ==
+                                                  index
+                                              ? primaryColor
+                                              : grey3,
                                           width: 1.6),
-                                      color: isSelected ? primaryColor : white),
+                                      color: controller.selectedVehicleBrands
+                                                  .value ==
+                                              index
+                                          ? primaryColor
+                                          : white),
                                   textWidget(
                                       text: brand.brandName,
                                       style: getRegularStyle()),

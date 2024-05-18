@@ -172,13 +172,14 @@ class AddDriverScreen extends GetView<DriversController> {
                         controller.selectedExpiryDate.value =
                             data['selectedExpiryDate'];
                       }
+                      // print("date>>> ${controller.selectedExpiryDate.value}");
                     },
                   ),
                   const SizedBox(
                     height: 24,
                   ),
                   imageUploadWidget(
-                    title: AppStrings.uploadDriversLicense,
+                    title: "License Front Page",
                     body: controller.pickedImageName.value.isNotEmpty
                         ? controller.pickedImageName.value
                         : AppStrings.pleaseMakeSurePicIsClear,
@@ -194,8 +195,27 @@ class AddDriverScreen extends GetView<DriversController> {
                       );
                     },
                   ),
+                  const SizedBox(height: 16),
+                  imageUploadWidget(
+                    title: "License Back Page",
+                    body: controller.pickedImageBackName.value.isNotEmpty
+                        ? controller.pickedImageBackName.value
+                        : AppStrings.pleaseMakeSurePicIsClear,
+                    onTap: () {
+                      selectCameraOptionSheet(
+                        size,
+                        onCameraOpen: () => controller
+                            .openCameraBackPage()
+                            .then((value) => controller.goBack()),
+                        onGelleryOpen: () => controller
+                            .openGalleryBackPage()
+                            .then((value) => controller.goBack()),
+                      );
+                    },
+                  ),
                   const SizedBox(height: 74),
                   contButton(),
+                  const SizedBox(height: 40),
                 ],
               ),
             ),

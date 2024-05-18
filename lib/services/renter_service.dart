@@ -87,8 +87,8 @@ class RenterService {
     }
   }
 
-  Future<ListResponseModel> getReview({required String carId,
-  String? type, String? tripId}) async {
+  Future<ListResponseModel> getReview(
+      {required String carId, String? type, String? tripId}) async {
     try {
       final result = await apiService.getRequest(
         // /user/partner/getReview?carID=a9UExyBrC4&skip=0&limit=10
@@ -145,15 +145,38 @@ class RenterService {
     }
   }
 
-  Future<ListResponseModel> searchCars(
-      {required String stateCode,
-      String? cityCode,
-      required String startDate,
-      required String endDate}) async {
+  Future<ListResponseModel> searchCars({
+    required String stateCode,
+    String? cityCode,
+    required String startDate,
+    required String endDate,
+    String? brandCode,
+    String? brandModelCode,
+    String? yearCode,
+    String? startPricing,
+    String? endPricing,
+    String? priceArrangement,
+  }) async {
     try {
-      final result = await apiService.getRequest(
-        '/user/renter/car/getCars?stateCode=$stateCode&cityCode&skip=0&limit=1000000&startDate=$startDate&endDate=$endDate',
-      );
+      final params = [
+        'stateCode=$stateCode',
+        'cityCode${cityCode ?? ''}',
+        'skip=0',
+        'limit=1000000',
+        'startDate=$startDate',
+        'endDate=$endDate',
+        'brandCode=${brandCode ?? ''}',
+        'brandModelCode=${brandModelCode ?? ''}',
+        'YearCode=${yearCode ?? ''}',
+        'startPricing=${startPricing ?? ''}',
+        'endPricing=${endPricing ?? ''}',
+        'priceArrangement=${priceArrangement ?? ''}',
+      ];
+
+      final queryString = params.join('&');
+      final endpoint = "/user/renter/car/getCars?$queryString";
+
+      final result = await apiService.getRequest(endpoint);
       // logger.log("result $result");
 
       final decodedResult = json.decode(result);

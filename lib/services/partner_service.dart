@@ -300,7 +300,23 @@ class PartnerService extends GetxController {
       final result = await apiService.getRequest(
         '/user/partner/driver/getUsersDrivers',
       );
-      logger.log("result $result");
+      // logger.log("result $result");
+
+      final decodedResult = json.decode(result);
+
+      return ListResponseModel.fromJson(decodedResult);
+    } catch (err) {
+      rethrow;
+    }
+  }
+  Future<ListResponseModel> getOneDriver({
+    required String driverId
+  }) async {
+    try {
+      final result = await apiService.getRequest(
+        '/user/partner/driver/getOneDriver?driverID=$driverId',
+      );
+      // logger.log("result $result");
 
       final decodedResult = json.decode(result);
 

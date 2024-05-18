@@ -322,7 +322,8 @@ class SearchCityController extends GetxController {
               "endDateTime": endDateTime.value,
               "differenceInDays": selectedDifferenceInDays.value,
               "rawStartTime": rawStartTime,
-              "rawEndTime": rawEndTime
+              "rawEndTime": rawEndTime,
+              "selectedStateCode": selectedStateCode.value
             },
           );
         }

@@ -142,7 +142,9 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
               itemCount: state!.length,
               itemBuilder: (context, index) {
                 var car = state[index];
-                return car['status'] == 'pending' || car['status'] == "booked"
+                return car['status'] == 'pending' ||
+                        car['status'] == "booked" ||
+                        car['status'] == "decline"
                     ? bookedOrPendingCars(
                         context,
                         size,
@@ -508,8 +510,7 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
                                 )),
                             child: Center(
                               child: textWidget(
-                                text:
-                                    'Car status: \n ${car['status'] == 'pending' ? 'Pending' : "Booked"}',
+                                text: 'Car status: \n ${car['status']}',
                                 textAlign: TextAlign.center,
                                 style: getLightStyle(
                                         fontSize: 10.sp, color: primaryColor)

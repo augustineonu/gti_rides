@@ -187,7 +187,7 @@ class AuthService {
       // {required String accessToken}
       ) async {
     try {
-      final result = await apiService.getRequest(
+      final result = await apiService.getRequest1(
            '/user/auth/refreshToken', 
           // token: accessToken
           );

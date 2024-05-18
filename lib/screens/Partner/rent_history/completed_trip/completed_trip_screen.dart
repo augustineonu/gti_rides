@@ -223,6 +223,7 @@ class CompletedTripScreen extends GetView<CompletedTripController> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
+                                    //Foreatgreen29@#$
                                     children: [
                                       textWidget(
                                           text:
@@ -266,9 +267,7 @@ class CompletedTripScreen extends GetView<CompletedTripController> {
                       ),
                     );
                   },
-                  separatorBuilder: (_, lol) => const SizedBox(
-                    width: 0
-                  ),
+                  separatorBuilder: (_, lol) => const SizedBox(width: 0),
                 ),
               ),
             ],
@@ -325,36 +324,34 @@ class CompletedTripScreen extends GetView<CompletedTripController> {
             ),
           ),
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 5.0.sp),
-          child: Row(
-            children: [
-              SizedBox(
-                width: 2.sp,
-                height: 16.sp,
-                child: const ColoredBox(
-                  color: primaryColor,
-                ),
-              ),
-              SizedBox(
-                width: 7.sp,
-              ),
-              // TODO:
-              textWidget(
-                text: 'nill',
-                style: getRegularStyle(fontSize: 10.sp),
-              ),
-            ],
-          ),
-        ),
+        // Padding(
+        //   padding: EdgeInsets.symmetric(vertical: 5.0.sp),
+        //   child: Row(
+        //     children: [
+        //       SizedBox(
+        //         width: 2.sp,
+        //         height: 16.sp,
+        //         child: const ColoredBox(
+        //           color: primaryColor,
+        //         ),
+        //       ),
+        //       SizedBox(
+        //         width: 7.sp,
+        //       ),
+        //       // TODO:
+        //       textWidget(
+        //         text: 'nill',
+        //         style: getRegularStyle(fontSize: 10.sp),
+        //       ),
+        //     ],
+        //   ),
+        // ),
         tripInfo(
           title: AppStrings.paymentStatus,
           trailling: Row(children: [
             textWidget(
-              text: controller.tripsData.tripOrders!.first.paymentStatus ==
-                      'successful'
-                  ? AppStrings.sent
-                  : 'pending',
+              text: controller.tripsData.tripOrders!.first.paymentStatus
+                  .toString(),
               style: getRegularStyle(fontSize: 10.sp),
             ),
             Image.asset(ImageAssets.doubleCheck),
@@ -577,8 +574,6 @@ class CompletedTripScreen extends GetView<CompletedTripController> {
               ),
             ),
           ),
-       
-       
         ],
       ),
     );
@@ -594,7 +589,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Container(
-      color:  Colors.white,
+      color: Colors.white,
       child: Stack(
         children: [
           Container(
@@ -654,5 +649,5 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   // TODO: implement preferredSize
-  Size get preferredSize => Size(0.0,  180.0);
+  Size get preferredSize => Size(0.0, 180.0);
 }

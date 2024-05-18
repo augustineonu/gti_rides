@@ -1,6 +1,8 @@
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -316,7 +318,9 @@ class PaymentScreen extends GetView<PaymentController> {
                         ),
                         Row(children: [
                           textWidget(
-                            text: payment["paymentStatus"],
+                            text: payment["paymentStatus"] == 'pending'
+                                ? 'Processing'
+                                : "Sent",
                             style: getMediumStyle(fontSize: 10.sp),
                           ),
                           Image.asset(ImageAssets.doubleCheck),
@@ -340,12 +344,13 @@ class PaymentScreen extends GetView<PaymentController> {
                         children: [
                           SvgPicture.asset(ImageAssets.naira),
                           textWidget(
-                              text: payment["paymentAmount"],
+                              text: payment["paymentAmount"].toString(),
                               style: getMediumStyle(fontSize: 16.sp)
                                   .copyWith(fontFamily: 'Neue')),
                         ],
                       ),
                     ],
+                    // Foreatgreen29@#$
                   ),
                 ),
                 tripInfo(
@@ -370,11 +375,14 @@ class PaymentScreen extends GetView<PaymentController> {
                     ),
                   ),
                 ),
-                tripInfo(
-                  title: AppStrings.paymentDate,
-                  trailling: textWidget(
-                    text: isSingleDateSelection(date: DateTime.now()),
-                    style: getRegularStyle(fontSize: 10.sp),
+                Visibility(
+                  visible: payment["paymentDate"] == '' ? false : true,
+                  child: tripInfo(
+                    title: AppStrings.paymentDate,
+                    trailling: textWidget(
+                      text: formateDate(date: payment["paymentDate"]),
+                      style: getRegularStyle(fontSize: 10.sp),
+                    ),
                   ),
                 ),
                 Padding(
@@ -399,26 +407,29 @@ class PaymentScreen extends GetView<PaymentController> {
                     ],
                   ),
                 ),
-                tripInfo(
-                  title: AppStrings.paymentRef,
-                  trailling: InkWell(
-                    onTap: () {
-                      // payment reference
-                      controller.copy(value: payment["paymentReference"]);
-                    },
-                    child: Row(
-                      children: [
-                        textWidget(
-                          text: payment["paymentReference"].toString(),
-                          style: getRegularStyle(
-                            fontSize: 10.sp,
+                Visibility(
+                  visible: payment["paymentStatus"] == "pending" ? false : true,
+                  child: tripInfo(
+                    title: AppStrings.paymentRef,
+                    trailling: InkWell(
+                      onTap: () {
+                        // payment reference
+                        controller.copy(value: payment["paymentReference"]);
+                      },
+                      child: Row(
+                        children: [
+                          textWidget(
+                            text: payment["paymentReference"].toString(),
+                            style: getRegularStyle(
+                              fontSize: 10.sp,
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          width: 3.sp,
-                        ),
-                        SvgPicture.asset(ImageAssets.docCopy),
-                      ],
+                          SizedBox(
+                            width: 3.sp,
+                          ),
+                          SvgPicture.asset(ImageAssets.docCopy),
+                        ],
+                      ),
                     ),
                   ),
                 ),

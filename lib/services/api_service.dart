@@ -11,6 +11,7 @@ import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/services/token_service.dart';
 import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/utils.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'logger.dart';
 
 ApiService get apiService => getx.Get.find();
@@ -59,92 +60,40 @@ class ApiService {
               'Bearer ${tokenService.accessToken.value}';
           return handler.next(options);
         },
-        onError: (DioException e, handler) async {
-          // final statusCode =
-          //     jsonDecode(e.response!.data.toString())['status_code'];
-          // logger
-          // .log("Error: ${statusCode.toString()} ${e.response!.statusCode}");
-          // if (e.response!.statusCode == 400 && statusCode == '401') {
-          //   logger.log(
-          //       "Again: ${statusCode.toString()} ${e.response!.statusCode}");
-          //   // bool newAccessTokenResult = await tokenService.getNewAccessToken();
-          //   // if (!newAccessTokenResult) {
-          //   //   logger.log('Going to Login screen');
-          //   //   routeService.offAllNamed(AppLinks.login);
-          //   //   return;
-          //   // }
-          // }
-          // final appError = createErrorEntity(e);
-          // logger.log("Error: ${appError.toString()}");
-          // showErrorSnackbar(message: appError.toString());
-          // to be worked on later
-          //      if(e.type == DioExceptionType.connectionTimeout){
-          //   throw Exception("Connection  Timeout Exception");
-          // }
-          logger.log(
-              "Dio error: ${e.message}, Status code: ${e.response?.statusCode}");
-
-          // if (e.response?.statusCode == 400) {
-          //   // {{BaseURL}}/user/partner/car/carQuickEdit?carID=mr9LvcZk3W
-          //   // If a 401 response is received, refresh the access token
-          //   // String newAccessToken = await refreshToken();
-          //   bool newAccessTokenResult = await tokenService.getNewAccessToken();
-          //   if (!newAccessTokenResult) {
-          //     logger.log('Going to Login screen');
-          //     routeService.offAllNamed(AppLinks.login);
-          //     return;
-          //   }
-          //   // else {
-          //   //   logger.log("result: token is false ");
-          //   // }
-
-          //   // Update the request header with the new access token
-          //   e.requestOptions.headers['Authorization'] =
-          //       'Bearer ${tokenService.accessToken.value}';
-
-          //   _dio.options.headers['Authorization'] =
-          //       'Bearer ${tokenService.accessToken.value}';
-
-          //   // Repeat the request with the updated header
-          //   return handler.resolve(await _dio.fetch(e.requestOptions));
-          // } else if (e.response?.statusCode == 403) {
-          //   logger.log("status code == 403");
-          //   //  _logOut();
-          // }
-
-          if (e.response?.statusCode == 401 || e.response?.statusCode == 400) {
-            // Unauthorized - refresh token
-            bool newAccessTokenResult = await tokenService.getNewAccessToken();
-            if (!newAccessTokenResult) {
-              logger.log('Going to Login screen');
-              routeService.offAllNamed(AppLinks.login);
-              return;
-            }
-            // Update the request header with the new access token
-            e.requestOptions.headers['Authorization'] =
-                'Bearer ${tokenService.accessToken.value}';
-            // Repeat the request with the updated header
-            return handler.resolve(await _dio.fetch(e.requestOptions));
-          } else if (e.response?.data["status_code"] == 401 ||
-              e.response?.data['message'] ==
-                  'Unauthorized! Access Token was expired') {
-            bool newAccessTokenResult = await tokenService.getNewAccessToken();
-            if (!newAccessTokenResult) {
-              logger.log('Going to Login screen');
-              routeService.offAllNamed(AppLinks.login);
-              return;
-            } else {
-              // Handle invalid or wrong token error
-              // You may want to log the error or notify the user
-              // Then redirect to the login screen or perform other appropriate actions
-              logger.log('Invalid or wrong token error');
-              routeService.offAllNamed(AppLinks.login);
-              return;
-            }
-          }
-          // For other error cases, proceed with the default error handling
-          return handler.next(e);
-        },
+        // onError: (DioException e, handler) async {
+        //   if (e.response?.statusCode == 401) {
+        //     // Unauthorized - refresh token
+        //     bool newAccessTokenResult = await tokenService.getNewAccessToken();
+        //     if (!newAccessTokenResult) {
+        //       logger.log('Going to Login screen');
+        //       routeService.offAllNamed(AppLinks.login);
+        //       return;
+        //     }
+        //     // Update the request header with the new access token
+        //     e.requestOptions.headers['Authorization'] =
+        //         'Bearer ${tokenService.accessToken.value}';
+        //     // Repeat the request with the updated header
+        //     return handler.resolve(await _dio.fetch(e.requestOptions));
+        //   } else if (e.response?.data["status_code"] == 401 ||
+        //       e.response?.data['message'] ==
+        //           'Unauthorized! Access Token was expired') {
+        //     bool newAccessTokenResult = await tokenService.getNewAccessToken();
+        //     if (!newAccessTokenResult) {
+        //       logger.log('Going to Login screen');
+        //       routeService.offAllNamed(AppLinks.login);
+        //       return;
+        //     } else {
+        //       // Handle invalid or wrong token error
+        //       // You may want to log the error or notify the user
+        //       // Then redirect to the login screen or perform other appropriate actions
+        //       logger.log('Invalid or wrong token error');
+        //       routeService.offAllNamed(AppLinks.login);
+        //       return;
+        //     }
+        //   }
+        //   // For other error cases, proceed with the default error handling
+        //   return handler.next(e);
+        // },
       ),
     ]);
     logger.log("Dio initialization completed");
@@ -169,6 +118,24 @@ class ApiService {
     String? token,
   }) async {
     try {
+
+      if(!endpoint.toString().contains("auth")){
+        
+           // Check if the token is expired before making the request
+    if (JwtDecoder.isExpired(tokenService.accessToken.value)) {
+      // Token is expired, attempt to refresh it
+      bool newAccessTokenResult = await tokenService.getNewAccessToken();
+      if (!newAccessTokenResult) {
+        // If the token refresh fails, navigate to the login screen
+        logger.log('Going to Login screen');
+        routeService.offAllNamed(AppLinks.login);
+        return;
+      }
+    }
+
+      }
+
+     
       logger.log("POST REQUEST DATA:: $baseURL  $endpoint $data");
       late Response response;
       response = await _dio.post(
@@ -237,6 +204,18 @@ class ApiService {
       late Response response;
       logger.log("PATCH REQUEST DATA:: $data $endpoint");
 
+        // Check if the token is expired before making the request
+    if (JwtDecoder.isExpired(tokenService.accessToken.value)) {
+      // Token is expired, attempt to refresh it
+      bool newAccessTokenResult = await tokenService.getNewAccessToken();
+      if (!newAccessTokenResult) {
+        // If the token refresh fails, navigate to the login screen
+        logger.log('Going to Login screen');
+        routeService.offAllNamed(AppLinks.login);
+        return;
+      }
+    }
+
       // Function to make the actual request
       Future<void> makeRequest() async {
         response = await _dio.put(
@@ -290,76 +269,23 @@ class ApiService {
     }
   }
 
-  // Future<dynamic> putRequestFile({
-  //   required String endpoint,
-  //   required FormData data,
-  // }) async {
-  //   try {
-  //     logger.log("PATCH REQUEST DATA:: ${data.fields.toString()}");
-  //     // late Response response;
-  //     Response response = await _dio.put(
-  //       endpoint,
-  //       data: data,
-  //       options: Options(
-  //         // receiveDataWhenStatusError: false,
-  //         headers: {
-  //           'Authorization': 'Bearer ${tokenService.accessToken.value}',
-  //         },
-  //       ),
-  //     );
-  //     logger.log("PATCH REQUEST  ($endpoint) :: ${response.data}");
-
-  //     // logger.log("PATCH REQUEST RESPONSE:: $response");
-  //     final ApiResponseModel apiResponse =
-  //         ApiResponseModel.fromJson(response.data);
-
-  //     // Check if the response status code is 400 and handle it globally
-  //     if (apiResponse.status_code == 400) {
-  //       bool newAccessTokenResult = await tokenService.getNewAccessToken();
-  //       if (!newAccessTokenResult) {
-  //         logger.log('Going to Login screen');
-  //         routeService.offAllNamed(AppLinks.login);
-  //         return;
-  //       }
-
-  //       // Retry the request with the new access token
-  //       response = await _dio.put(
-  //         endpoint,
-  //         data: data,
-  //         options: Options(
-  //           headers: {
-  //             'Authorization': 'Bearer ${tokenService.accessToken.value}',
-  //             'Content-Type': 'image/png',
-  //           },
-  //         ),
-  //       );
-  //     }
-
-  //     // Propagate the response to the caller
-  //     return apiResponse;
-  //   } on DioException catch (e) {
-  //     logger.log("PATCH REQUEST ERROR ($endpoint) :: ${e.response?.data}");
-
-  //     final ApiResponseModel apiResponse =
-  //         ApiResponseModel.fromJson(e.response!.data);
-  //     // return apiResponse;
-  //     // Propagate the error to the caller
-  //     // if (e.response?.data != null) {
-  //     //   return e.response?.data;
-  //     // }
-  //     // throw "An error occurred";
-  //   } on SocketException {
-  //     throw "seems you are offline";
-  //   } catch (error) {
-  //     throw error.toString();
-  //   }
-  // }
-
   Future<dynamic> postRequestFile({
     required String endpoint,
     required FormData data,
   }) async {
     try {
+
+        // Check if the token is expired before making the request
+    if (JwtDecoder.isExpired(tokenService.accessToken.value)) {
+      // Token is expired, attempt to refresh it
+      bool newAccessTokenResult = await tokenService.getNewAccessToken();
+      if (!newAccessTokenResult) {
+        // If the token refresh fails, navigate to the login screen
+        logger.log('Going to Login screen');
+        routeService.offAllNamed(AppLinks.login);
+        return;
+      }
+    }
       logger.log("POST REQUEST DATA:: ${data.fields.toString()}");
       logger.log("POST REQUEST DATA:: ${data.files.toString()}");
       late Response response;
@@ -465,9 +391,21 @@ class ApiService {
     String endpoint,
   ) async {
     try {
-      late Response response;
-      late ApiResponseModel apiResponse;
-      response = await _dio.get(
+      // Check if the token is expired before making the request
+      var isExpired  = JwtDecoder.isExpired(tokenService.accessToken.value);
+      if (isExpired) {
+        // Token is expired, attempt to refresh it
+        bool newAccessTokenResult = await tokenService.getNewAccessToken();
+        if (!newAccessTokenResult) {
+          // If the token refresh fails, navigate to the login screen
+          logger.log('Going to Login screen');
+          routeService.offAllNamed(AppLinks.login);
+          return;
+        }
+      }
+
+      // Proceed with the request using the (new) valid token
+      final response = await _dio.get(
         endpoint,
         options: Options(
           responseType: ResponseType.plain,
@@ -477,32 +415,20 @@ class ApiService {
         ),
       );
       logger.log("GET REQUEST RESPONSE ($endpoint) :: ${response.data}");
-      apiResponse = ApiResponseModel.fromRawJson(response.data.toString());
-      // apiResponse = ApiResponseModel.fromJson(response.data);
+
+      final apiResponse =
+          ApiResponseModel.fromRawJson(response.data.toString());
       logger.log("msg: GET REQUEST");
+
       if (apiResponse.status_code == 400) {
-        bool newAccessTokenResult = await tokenService.getNewAccessToken();
-        if (!newAccessTokenResult) {
-          logger.log('Going to Login screen');
-          routeService.offAllNamed(AppLinks.login);
-          return;
-        }
-        response = await _dio.get(
-          endpoint,
-          options: Options(
-            responseType: ResponseType.plain,
-            // headers: {
-            //   'Authorization': 'Bearer ${tokenService.accessToken.value}',
-            // },
-          ),
-        );
-        // apiResponse = ApiResponseModel.fromJson(response.data);
-        apiResponse = ApiResponseModel.fromRawJson(response.data);
+        // Handle specific status code if needed
+        return apiResponse;
       }
+
       return response.data;
     } on DioException catch (e) {
       if (e is SocketException) {
-        throw "seems you are offline";
+        throw "Seems you are offline";
       }
       logger.log("GET REQUEST ERROR ($endpoint) :: ${e.response?.data}");
       if (e.response?.data != null) {
@@ -510,7 +436,7 @@ class ApiService {
       }
       throw "An error occurred";
     } on SocketException {
-      throw "seems you are offline";
+      throw "Seems you are offline";
     } catch (error) {
       if (error.toString().contains('<!DOCTYPE html>')) {
         throw "Bad format: API error";
@@ -520,12 +446,73 @@ class ApiService {
     }
   }
 
+
+ Future<dynamic> getRequest1(
+    String endpoint,
+  ) async {
+    try {
+    
+
+      // Proceed with the request using the (new) valid token
+      final response = await _dio.get(
+        endpoint,
+        options: Options(
+          responseType: ResponseType.plain,
+          headers: {
+            'Authorization': 'Bearer ${tokenService.accessToken.value}',
+          },
+        ),
+      );
+      logger.log("GET REQUEST RESPONSE ($endpoint) :: ${response.data}");
+
+      final apiResponse =
+          ApiResponseModel.fromRawJson(response.data.toString());
+      logger.log("msg: GET REQUEST");
+
+      if (apiResponse.status_code == 400) {
+        // Handle specific status code if needed
+        return apiResponse;
+      }
+
+      return response.data;
+    } on DioException catch (e) {
+      if (e is SocketException) {
+        throw "Seems you are offline";
+      }
+      logger.log("GET REQUEST ERROR ($endpoint) :: ${e.response?.data}");
+      if (e.response?.data != null) {
+        return e.response?.data;
+      }
+      throw "An error occurred";
+    } on SocketException {
+      throw "Seems you are offline";
+    } catch (error) {
+      if (error.toString().contains('<!DOCTYPE html>')) {
+        throw "Bad format: API error";
+      } else {
+        throw error.toString();
+      }
+    }
+  }
+
+
   Future<dynamic> deleteRequest({
     required String endpoint,
     Map? data,
     String? token,
   }) async {
     try {
+        // Check if the token is expired before making the request
+    if (JwtDecoder.isExpired(tokenService.accessToken.value)) {
+      // Token is expired, attempt to refresh it
+      bool newAccessTokenResult = await tokenService.getNewAccessToken();
+      if (!newAccessTokenResult) {
+        // If the token refresh fails, navigate to the login screen
+        logger.log('Going to Login screen');
+        routeService.offAllNamed(AppLinks.login);
+        return;
+      }
+    }
       logger.log("DELETE REQUEST DATA:: $baseURL  $endpoint");
       late Response response;
       response = await _dio.delete(

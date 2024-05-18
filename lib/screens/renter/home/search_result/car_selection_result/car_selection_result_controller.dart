@@ -492,7 +492,7 @@ class CarSelectionResultController extends GetxController
         tripStartDate: startDateTime.value,
         tripEndDate: endDateTime.value,
         tripsDays: tripDays.value.toString(),
-        tripType: tripType.value == 0 ? "chauffeur" : "self drive",
+        tripType: tripType.value == 0 ? "chauffeur" : "selfDrive",
         interState: selectedInterState.value ? "true" : "false",
         interStateAddress:
             selectedInterState.value ? interStateInputController.text : null,

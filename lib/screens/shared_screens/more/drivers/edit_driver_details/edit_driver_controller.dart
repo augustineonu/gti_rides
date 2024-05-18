@@ -20,12 +20,12 @@ class EditDriversController extends GetxController {
     init();
   }
 
-  void init() async{
+  void init() async {
     logger.log('Controller initialized');
 
-    await getDrivers();
+    // await getDrivers();
 
-      Map<String, dynamic>? arguments = Get.arguments;
+    Map<String, dynamic>? arguments = Get.arguments;
 
     if (arguments != null) {
       driverEmail.value = arguments['driverEmail'] ?? '';
@@ -33,6 +33,8 @@ class EditDriversController extends GetxController {
       fullName.value = arguments['fullName'] ?? '';
       fullName.value = arguments['fullName'] ?? '';
       driverID.value = arguments['driverID'] ?? '';
+
+      await getOneDriver();
 
       // Now you have access to the passed data (emailOrPhone)
       logger.log('Received email or phone: $arguments');
@@ -64,7 +66,7 @@ class EditDriversController extends GetxController {
   Rx<String> exampleText = "".obs;
   Rx<String> pickedImagePath = "".obs;
   Rx<String> pickedImageName = "".obs;
-    Rx<String> driverEmail = ''.obs;
+  Rx<String> driverEmail = ''.obs;
   Rx<String> driverNumber = ''.obs;
   Rx<String> fullName = ''.obs;
   Rx<String> driverID = ''.obs;
@@ -76,9 +78,8 @@ class EditDriversController extends GetxController {
   void goBack() => routeService.goBack();
   void goBack1() => routeService.goBack(closeOverlays: true);
   void routeToAddDriver() => routeService.gotoRoute(AppLinks.addDriver);
-  void routeToAddDriver1({Object? arguments}) => routeService.gotoRoute(AppLinks.addDriver,
- arguments: arguments
-  );
+  void routeToAddDriver1({Object? arguments}) =>
+      routeService.gotoRoute(AppLinks.addDriver, arguments: arguments);
   void routeToHome() => routeService.gotoRoute(AppLinks.carOwnerLanding);
 
   bool validateImageUpload() {
@@ -163,14 +164,13 @@ class EditDriversController extends GetxController {
       }
 
       final formData = await constructFormData();
-      final response = await partnerService.updateLicensePhoto(payload: formData,
-      driverID: driverID.value);
+      final response = await partnerService.updateLicensePhoto(
+          payload: formData, driverID: driverID.value);
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("driver profile updated ${response.message!}");
         showSuccessSnackbar(message: response.message!);
-        Future.delayed(const Duration(seconds: 2)).then((value) => 
-         routeService.goBack(closeOverlays: true));
-
+        Future.delayed(const Duration(seconds: 2))
+            .then((value) => routeService.goBack(closeOverlays: true));
       } else {
         logger.log("unable to update drivers ${response.data}");
         showErrorSnackbar(message: response.message!);
@@ -184,24 +184,42 @@ class EditDriversController extends GetxController {
     }
   }
 
-  Future<void> getDrivers() async {
+  // Future<void> getDrivers() async {
+  //   try {
+  //     final response = await partnerService.getDrivers();
+  //     if (response.status == 'success' || response.status_code == 200) {
+  //       logger.log("gotten drivers ${response.data}");
+  //       if (response.data != null) {
+  //         drivers?.value = response.data! as dynamic;
+  //         logger.log("drivers $drivers");
+  //       }
+  //     } else {
+  //       logger.log("unable to get drivers ${response.data}");
+  //     }
+  //   } catch (exception) {
+  //     logger.log("error  $exception");
+  //   }
+  // }
+
+  Future<void> getOneDriver() async {
     try {
-      final response = await partnerService.getDrivers();
+      final response =
+          await partnerService.getOneDriver(driverId: driverID.value);
       if (response.status == 'success' || response.status_code == 200) {
-        logger.log("gotten drivers ${response.data}");
+        logger.log("gotten driver details ${response.data}");
         if (response.data != null) {
           drivers?.value = response.data! as dynamic;
-          logger.log("drivers $drivers");
+
+          // licenceNoController.text = response[""]
+          logger.log("driver $drivers");
         }
       } else {
-        logger.log("unable to get drivers ${response.data}");
+        logger.log("unable to get driver ${response.data}");
       }
     } catch (exception) {
       logger.log("error  $exception");
     }
   }
-
-  
 
   @override
   void dispose() {

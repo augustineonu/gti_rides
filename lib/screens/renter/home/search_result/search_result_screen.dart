@@ -9,12 +9,15 @@ import 'package:gti_rides/models/renter/cars_model.dart';
 import 'package:gti_rides/screens/renter/home/search_result/search_result_controller.dart';
 import 'package:gti_rides/screens/renter/widgets/build_carousel_dot.dart';
 import 'package:gti_rides/screens/renter/widgets/car_availability_tag.dart';
+import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
+
+import '../../../../route/app_links.dart';
 
 class SearchResultBinding extends Bindings {
   @override
@@ -33,7 +36,27 @@ class SearchResultScreen extends GetView<SearchResultController> {
       () => Scaffold(
           backgroundColor: backgroundColor,
           appBar: appBar(),
-          body: body(size, context)),
+          body: Stack(
+            children: [
+              SafeArea(
+                child: body(size, context)),
+             controller.isFetchingCars.isTrue
+                  ? Stack(
+                      children: [
+                        const Opacity(
+                          opacity: 0.5,
+                          child: ModalBarrier(
+                              dismissible: false, color: Colors.black),
+                        ),
+                        Center(
+                          child: Center(child: centerLoadingIcon()),
+                        ),
+                      ],
+                    )
+                  : const SizedBox()
+            
+            ],
+          )),
       // }
     );
   }
@@ -54,7 +77,18 @@ class SearchResultScreen extends GetView<SearchResultController> {
           Padding(
             padding: const EdgeInsets.only(right: 16, top: 10),
             child: InkWell(
-              onTap: () => controller.routeToSearchFilter(),
+              // onTap: () => controller.routeToSearchFilter(),
+              onTap:() async {
+             var data = await  routeService.gotoRoute(AppLinks.searchFilter);
+             if(data != null) {
+              print("received data: $data");
+              controller.searchCars(brandCode: data["brandCode"],
+               brandModelCode: data["modelCode"], 
+               yearCode: data["yearCode"], startPricing: data["startPricing"], 
+               endPricing: data["endPricing"],
+                priceArrangement: data['priceSort']);
+             }
+              },
               child: Row(
                 children: [
                   Padding(

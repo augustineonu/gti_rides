@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/models/drivers_model.dart';
@@ -15,8 +17,7 @@ import 'package:dio/dio.dart' as dio;
 import 'package:gti_rides/utils/utils.dart';
 import 'package:image_picker/image_picker.dart';
 
-class DriversController extends GetxController
-    with StateMixin<List<dynamic>> {
+class DriversController extends GetxController with StateMixin<List<dynamic>> {
   Logger logger = Logger('DriversController');
   final listVehicleController = Get.put(ListVehicleController());
   DriversController() {
@@ -63,7 +64,9 @@ class DriversController extends GetxController
   RxBool showPassword = false.obs;
   Rx<String> exampleText = "".obs;
   Rx<String> pickedImagePath = "".obs;
+  Rx<String> pickedImageBackPath = "".obs;
   Rx<String> pickedImageName = "".obs;
+  Rx<String> pickedImageBackName = "".obs;
   Rx<String> startDateTime = "".obs;
   Rx<String> endDateTime = "".obs;
   Rx<String> selectedExpiryDate = "".obs;
@@ -102,9 +105,52 @@ class DriversController extends GetxController
         await imageService.pickImage(source: ImageSource.camera);
     if (response != null) {
       // Check if frontPagePath is not null before accessing its value
-      pickedImagePath.value = response.imagePath;
       pickedImageName.value = response.imagePath.split('/').last;
+      pickedImagePath.value = response.imagePath;
       logger.log("image path :: ${pickedImagePath.value}");
+      // Extract the directory and file name
+      int lastSeparator = pickedImagePath.value.lastIndexOf('/');
+      String directory = lastSeparator != -1
+          ? pickedImagePath.value.substring(0, lastSeparator)
+          : pickedImagePath.value;
+      pickedImageName.value = 'licenceFront.png';
+
+      // Build the new path with the desired file name
+      String newPath = '$directory/$pickedImageName';
+      logger.log("Picked new path $newPath");
+
+      // Rename the file
+      File(pickedImagePath.value).renameSync(newPath);
+
+      // Now update the selectedPhotos value
+      pickedImagePath.value = newPath;
+    }
+  }
+
+  Future<void> openCameraBackPage() async {
+    ImageResponse? response =
+        await imageService.pickImage(source: ImageSource.camera);
+    if (response != null) {
+      // Check if frontPagePath is not null before accessing its value
+      pickedImageBackPath.value = response.imagePath;
+      pickedImageBackName.value = response.imagePath.split('/').last;
+      logger.log("image path :: ${pickedImageBackPath.value}");
+      // Extract the directory and file name
+      int lastSeparator = pickedImageBackPath.value.lastIndexOf('/');
+      String directory = lastSeparator != -1
+          ? pickedImageBackPath.value.substring(0, lastSeparator)
+          : pickedImageBackPath.value;
+      pickedImageBackName.value = 'licenceBack.png';
+
+      // Build the new path with the desired file name
+      String newPath = '$directory/$pickedImageBackName';
+      logger.log("Picked new path $newPath");
+
+      // Rename the file
+      File(pickedImageBackPath.value).renameSync(newPath);
+
+      // Now update the selectedPhotos value
+      pickedImageBackPath.value = newPath;
     }
   }
 
@@ -115,6 +161,16 @@ class DriversController extends GetxController
       logger.log("imagePath $pickedImagePath");
       pickedImagePath.value = response.imagePath;
       pickedImageName.value = response.imagePath.split('/').last;
+    }
+  }
+
+  Future<void> openGalleryBackPage() async {
+    ImageResponse? response =
+        await imageService.pickImage(source: ImageSource.gallery);
+    if (response != null) {
+      logger.log("imagePath $pickedImageBackPath");
+      pickedImageBackPath.value = response.imagePath;
+      pickedImageBackName.value = response.imagePath.split('/').last;
     }
   }
 
@@ -152,7 +208,7 @@ class DriversController extends GetxController
             'driverNumber': phoneNoController.text,
             'driverEmail': emailController.text,
             'licenseNumber': licenceNoController.text,
-            'expireDate': licenceExpiryDateController.text
+            'licenceExpireDate': licenceExpiryDateController.text
           });
         }
         // Check if imagePath is not empty before adding the image file to formData
@@ -175,9 +231,30 @@ class DriversController extends GetxController
         'driverNumber': phoneNoController.text,
         'driverEmail': emailController.text,
         'licenseNumber': licenceNoController.text,
-        'expireDate': licenceExpiryDateController.text,
-        'files': pickedImagePath.value,
+        'licenceExpireDate': selectedExpiryDate.value,
+        'files': [
+          pickedImagePath.value,
+          pickedImageBackPath.value
+          // await dio.MultipartFile.fromFile(
+          //   pickedImagePath.value,
+          //   // contentType: MediaType(
+          //   //   mimeTypeData[0],
+          //   //   mimeTypeData[1],
+          //   // ),
+          // ),
+          // await dio.MultipartFile.fromFile(
+          //   pickedImageBackPath.value,
+          //   // contentType: MediaType(
+          //   //   backPageMimeTypeData[0],
+          //   //   backPageMimeTypeData[1],
+          //   // ),
+          // ),
+        ],
       };
+
+      // logger.log("values: $newFormData");
+      // isLoading.value = false;
+      // return;
 
       final formData = await constructFormData();
       final response = await partnerService.addDriver(payload: newFormData);
@@ -222,8 +299,7 @@ class DriversController extends GetxController
           change(response.data as dynamic, status: RxStatus.success());
           logger.log("drivers $drivers");
         } else {
-        change([].obs, status: RxStatus.empty());
-
+          change([].obs, status: RxStatus.empty());
         }
         isFetchingDrivers.value = false;
       } else {

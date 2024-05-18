@@ -1294,7 +1294,7 @@ class TripsScreen extends GetView<TripsController> {
                                         .tripOrders!.first.escortFee
                                         .toString())),
                             Visibility(
-                                visible: pendingTrips.tripType.toString() ==
+                                visible: pendingTrips.tripType.toString() == "selfDrive" || pendingTrips.tripType.toString() == 
                                         'self drive'
                                     ? true
                                     : false,
@@ -1528,11 +1528,11 @@ class TripsScreen extends GetView<TripsController> {
             text: getPendingTripsStatusMessage(pendingTrips),
             color: primaryColor,
             isDisabled: shouldButtonBeDisabled(pendingTrips),
-            disabledColor: (pendingTrips.tripType == "self drive" &&
+            disabledColor: (pendingTrips.tripType == "selfDrive" || pendingTrips.tripType == "self drive" &&
                     pendingTrips.adminStatus == "pending")
                 ? white
                 : primaryColorLight,
-            disabledTextColor: (pendingTrips.tripType == "self drive" &&
+            disabledTextColor: (pendingTrips.tripType == "selfDrive" || pendingTrips.tripType == "self drive" &&
                     pendingTrips.adminStatus == "pending")
                 ? primaryColorLight
                 : grey5,
@@ -1626,7 +1626,7 @@ class TripsScreen extends GetView<TripsController> {
   }
 
   bool shouldButtonBeDisabled(AllTripsData pendingTrips) {
-    return (pendingTrips.tripType == "self drive" &&
+    return (  pendingTrips.tripType == "selfDrive" || pendingTrips.tripType == "self drive" &&
         pendingTrips.adminStatus == "pending");
     //      ||
     // pendingTrips.status == 'declined';

@@ -256,7 +256,7 @@ class PendingTrips extends StatelessWidget {
                                           .tripOrders!.first.escortFee
                                           .toString())),
                               Visibility(
-                                  visible: pendingTrips.tripType.toString() ==
+                                  visible:pendingTrips.tripType == "selfDrive" || pendingTrips.tripType.toString() ==
                                           'self drive'
                                       ? true
                                       : false,
@@ -493,11 +493,11 @@ class PendingTrips extends StatelessWidget {
             text: getPendingTripsStatusMessage(pendingTrips),
             color: primaryColor,
             isDisabled: shouldButtonBeDisabled(pendingTrips),
-            disabledColor: (pendingTrips.tripType == "self drive" &&
+            disabledColor: (pendingTrips.tripType == "selfDrive" ||pendingTrips.tripType == "self drive" &&
                     pendingTrips.adminStatus == "pending")
                 ? white
                 : primaryColorLight,
-            disabledTextColor: (pendingTrips.tripType == "self drive" &&
+            disabledTextColor: (pendingTrips.tripType == "selfDrive" ||pendingTrips.tripType == "self drive" &&
                     pendingTrips.adminStatus == "pending")
                 ? primaryColorLight
                 : grey5,
@@ -595,7 +595,7 @@ class PendingTrips extends StatelessWidget {
   }
 
   bool shouldButtonBeDisabled(AllTripsData pendingTrips) {
-    return (pendingTrips.tripType == "self drive" &&
+    return (pendingTrips.tripType == "selfDrive" || pendingTrips.tripType == "self drive" &&
         pendingTrips.adminStatus == "pending");
     //      ||
     // pendingTrips.status == 'declined';
