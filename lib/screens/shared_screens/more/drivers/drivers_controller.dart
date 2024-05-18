@@ -161,6 +161,23 @@ class DriversController extends GetxController with StateMixin<List<dynamic>> {
       logger.log("imagePath $pickedImagePath");
       pickedImagePath.value = response.imagePath;
       pickedImageName.value = response.imagePath.split('/').last;
+
+       // Extract the directory and file name
+      int lastSeparator = pickedImagePath.value.lastIndexOf('/');
+      String directory = lastSeparator != -1
+          ? pickedImagePath.value.substring(0, lastSeparator)
+          : pickedImagePath.value;
+      pickedImageName.value = 'licenceFront.png';
+
+      // Build the new path with the desired file name
+      String newPath = '$directory/$pickedImageName';
+      logger.log("Picked new path $newPath");
+
+      // Rename the file
+      File(pickedImagePath.value).renameSync(newPath);
+
+      // Now update the selectedPhotos value
+      pickedImagePath.value = newPath;
     }
   }
 
@@ -171,6 +188,22 @@ class DriversController extends GetxController with StateMixin<List<dynamic>> {
       logger.log("imagePath $pickedImageBackPath");
       pickedImageBackPath.value = response.imagePath;
       pickedImageBackName.value = response.imagePath.split('/').last;
+         // Extract the directory and file name
+      int lastSeparator = pickedImageBackPath.value.lastIndexOf('/');
+      String directory = lastSeparator != -1
+          ? pickedImageBackPath.value.substring(0, lastSeparator)
+          : pickedImageBackPath.value;
+      pickedImageBackName.value = 'licenceBack.png';
+
+      // Build the new path with the desired file name
+      String newPath = '$directory/$pickedImageBackName';
+      logger.log("Picked new path $newPath");
+
+      // Rename the file
+      File(pickedImageBackPath.value).renameSync(newPath);
+
+      // Now update the selectedPhotos value
+      pickedImageBackPath.value = newPath;
     }
   }
 
@@ -182,82 +215,34 @@ class DriversController extends GetxController with StateMixin<List<dynamic>> {
     }
     try {
       isLoading.value = true;
-      var data = dio.FormData();
-      Future<dio.FormData> constructFormData() async {
-        var formData = dio.FormData.fromMap({});
-
-        // Check if fullName is not empty before adding it to formData
-        if (fullNameController.text.isNotEmpty &&
-            phoneNoController.text.isNotEmpty &&
-            emailController.text.isNotEmpty &&
-            licenceNoController.text.isNotEmpty &&
-            licenceExpiryDateController.text.isNotEmpty) {
-          // formData.fields.add(MapEntry('fullName', fullNameController.text));
-          // formData.fields.add(MapEntry('driverNumber', phoneNoController.text));
-          // formData.fields.add(MapEntry('driverEmail', emailController.text));
-          // formData.fields
-          //     .add(MapEntry('licenseNumber', licenceNoController.text));
-          // formData.fields
-          //     .add(MapEntry('expireDate', licenceExpiryDateController.text));
-          data = dio.FormData.fromMap({
-            'files': [
-              await dio.MultipartFile.fromFile(pickedImagePath.value,
-                  filename: pickedImagePath.value)
-            ],
-            'fullName': fullNameController.text,
-            'driverNumber': phoneNoController.text,
-            'driverEmail': emailController.text,
-            'licenseNumber': licenceNoController.text,
-            'licenceExpireDate': licenceExpiryDateController.text
-          });
-        }
-        // Check if imagePath is not empty before adding the image file to formData
-        // if (pickedImagePath.value.isNotEmpty) {
-        //   // formData.
-        //   formData.fields.add(MapEntry(
-        //     'licenseUpload',
-        //     await dio.MultipartFile.fromFile(
-        //       pickedImagePath.value,
-        //       filename: pickedImagePath.value,
-        //     ).toString(),
-        //   ));
-        // }
-        logger.log("form field ${data.length}");
-        return data;
-      }
-
-      final newFormData = {
-        'fullName': fullNameController.text,
-        'driverNumber': phoneNoController.text,
-        'driverEmail': emailController.text,
-        'licenseNumber': licenceNoController.text,
-        'licenceExpireDate': selectedExpiryDate.value,
-        'files': [
-          pickedImagePath.value,
-          pickedImageBackPath.value
-          // await dio.MultipartFile.fromFile(
-          //   pickedImagePath.value,
-          //   // contentType: MediaType(
-          //   //   mimeTypeData[0],
-          //   //   mimeTypeData[1],
-          //   // ),
-          // ),
-          // await dio.MultipartFile.fromFile(
-          //   pickedImageBackPath.value,
-          //   // contentType: MediaType(
-          //   //   backPageMimeTypeData[0],
-          //   //   backPageMimeTypeData[1],
-          //   // ),
-          // ),
-        ],
-      };
+    
 
       // logger.log("values: $newFormData");
       // isLoading.value = false;
       // return;
 
-      final formData = await constructFormData();
-      final response = await partnerService.addDriver(payload: newFormData);
+      final response = await partnerService.addDriver(
+        payload: dio.FormData.fromMap({
+          'fullName': fullNameController.text,
+          'driverNumber': phoneNoController.text,
+          'driverEmail': emailController.text,
+          'licenseNumber': licenceNoController.text,
+          'licenceExpireDate': selectedExpiryDate.value,
+          'driverDocuments': [
+            await dio.MultipartFile.fromFile(
+              pickedImagePath.value,
+              // // filename: 'vehicleLicense',
+              // contentType: MediaType(mimeTypeData[0], mimeTypeData[1]),
+            ),
+            await dio.MultipartFile.fromFile(
+              pickedImageBackPath.value,
+              // filename: 'roadWorthiness',
+              // contentType:
+              //     MediaType(roadMimeTypeData[0], roadMimeTypeData[1]),
+            ),
+          ]
+        }),
+      );
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("driver created ${response.message}");
         await listVehicleController.getDrivers();
@@ -268,10 +253,7 @@ class DriversController extends GetxController with StateMixin<List<dynamic>> {
             body: AppStrings.thankYouForAddingDriver,
             buttonTitle: AppStrings.cont,
             onTap: goBack1);
-        // if (response.data != null) {
-        //   // drivers = response.data!;
-        //   // logger.log("drivers $drivers");
-        // }
+
       } else {
         logger.log("unable to get drivers ${response.data}");
         showErrorSnackbar(message: response.message!);

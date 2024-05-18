@@ -158,7 +158,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                                 // height: controller.currentIndex.value == 2
                                 //     ? size.height / 0.7
                                 //     :
-                                height: size.height / 0.77.sp,
+                                height: size.height / 0.71.sp,
                                 child: PageView(
                                   // itemCount: controller.pages.length,
                                   physics: ScrollPhysics(),

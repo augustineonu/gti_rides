@@ -206,9 +206,9 @@ class PartnerService extends GetxController {
   Future<ApiResponseModel> addDriver(
       {
       // required dio.FormData payload
-      required Map payload}) async {
+      required dio.FormData payload}) async {
     try {
-      final result = await apiService.postRequest(
+      final result = await apiService.postRequestFile(
         endpoint: '/user/partner/driver/addDriver',
         data: payload,
       );

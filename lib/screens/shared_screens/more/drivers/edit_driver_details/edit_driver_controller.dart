@@ -1,7 +1,11 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/models/drivers_model.dart';
 import 'package:gti_rides/models/image_response.dart';
+import 'package:gti_rides/models/user_driver.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/image_service.dart';
 import 'package:gti_rides/services/logger.dart';
@@ -13,6 +17,7 @@ import 'package:gti_rides/utils/constants.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:gti_rides/utils/utils.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 class EditDriversController extends GetxController {
   Logger logger = Logger('EditDriversController');
@@ -44,13 +49,14 @@ class EditDriversController extends GetxController {
     emailController.text = driverEmail.value;
   }
 
-  RxList<dynamic>? drivers = <dynamic>[].obs;
+  RxList<UserDriverData>? drivers = <UserDriverData>[].obs;
 
   GlobalKey<FormState> createDriverFormKey = GlobalKey<FormState>();
 
   // late Timer timer;
   RxInt currentIndex = 0.obs;
   RxBool isLoading = false.obs;
+  RxBool gettingDriverIfo = false.obs;
 
   // late PageController cardPageController;
   ScrollController scrollController = ScrollController();
@@ -59,7 +65,7 @@ class EditDriversController extends GetxController {
   TextEditingController phoneNoController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController licenceNoController = TextEditingController();
-  TextEditingController licenceExpiryDateController = TextEditingController();
+  // TextEditingController licenceExpiryDateController = TextEditingController();
 
   RxBool isDone = false.obs;
   RxBool showPassword = false.obs;
@@ -70,6 +76,10 @@ class EditDriversController extends GetxController {
   Rx<String> driverNumber = ''.obs;
   Rx<String> fullName = ''.obs;
   Rx<String> driverID = ''.obs;
+
+  Rx<String> pickedImageBackPath = "".obs;
+  Rx<String> pickedImageBackName = "".obs;
+  Rx<String> selectedExpiryDate = "".obs;
 
   void obscurePassword() => showPassword.value = !showPassword.value;
   // update();
@@ -96,9 +106,52 @@ class EditDriversController extends GetxController {
         await imageService.pickImage(source: ImageSource.camera);
     if (response != null) {
       // Check if frontPagePath is not null before accessing its value
-      pickedImagePath.value = response.imagePath;
       pickedImageName.value = response.imagePath.split('/').last;
+      pickedImagePath.value = response.imagePath;
       logger.log("image path :: ${pickedImagePath.value}");
+      // Extract the directory and file name
+      int lastSeparator = pickedImagePath.value.lastIndexOf('/');
+      String directory = lastSeparator != -1
+          ? pickedImagePath.value.substring(0, lastSeparator)
+          : pickedImagePath.value;
+      pickedImageName.value = 'licenceFront.png';
+
+      // Build the new path with the desired file name
+      String newPath = '$directory/$pickedImageName';
+      logger.log("Picked new path $newPath");
+
+      // Rename the file
+      File(pickedImagePath.value).renameSync(newPath);
+
+      // Now update the selectedPhotos value
+      pickedImagePath.value = newPath;
+    }
+  }
+
+  Future<void> openCameraBackPage() async {
+    ImageResponse? response =
+        await imageService.pickImage(source: ImageSource.camera);
+    if (response != null) {
+      // Check if frontPagePath is not null before accessing its value
+      pickedImageBackPath.value = response.imagePath;
+      pickedImageBackName.value = response.imagePath.split('/').last;
+      logger.log("image path :: ${pickedImageBackPath.value}");
+      // Extract the directory and file name
+      int lastSeparator = pickedImageBackPath.value.lastIndexOf('/');
+      String directory = lastSeparator != -1
+          ? pickedImageBackPath.value.substring(0, lastSeparator)
+          : pickedImageBackPath.value;
+      pickedImageBackName.value = 'licenceBack.png';
+
+      // Build the new path with the desired file name
+      String newPath = '$directory/$pickedImageBackName';
+      logger.log("Picked new path $newPath");
+
+      // Rename the file
+      File(pickedImageBackPath.value).renameSync(newPath);
+
+      // Now update the selectedPhotos value
+      pickedImageBackPath.value = newPath;
     }
   }
 
@@ -109,63 +162,92 @@ class EditDriversController extends GetxController {
       logger.log("imagePath $pickedImagePath");
       pickedImagePath.value = response.imagePath;
       pickedImageName.value = response.imagePath.split('/').last;
+
+      // Extract the directory and file name
+      int lastSeparator = pickedImagePath.value.lastIndexOf('/');
+      String directory = lastSeparator != -1
+          ? pickedImagePath.value.substring(0, lastSeparator)
+          : pickedImagePath.value;
+      pickedImageName.value = 'licenceFront.png';
+
+      // Build the new path with the desired file name
+      String newPath = '$directory/$pickedImageName';
+      logger.log("Picked new path $newPath");
+
+      // Rename the file
+      File(pickedImagePath.value).renameSync(newPath);
+
+      // Now update the selectedPhotos value
+      pickedImagePath.value = newPath;
     }
+  }
+
+  Future<void> openGalleryBackPage() async {
+    ImageResponse? response =
+        await imageService.pickImage(source: ImageSource.gallery);
+    if (response != null) {
+      logger.log("imagePath $pickedImageBackPath");
+      pickedImageBackPath.value = response.imagePath;
+      pickedImageBackName.value = response.imagePath.split('/').last;
+      // Extract the directory and file name
+      int lastSeparator = pickedImageBackPath.value.lastIndexOf('/');
+      String directory = lastSeparator != -1
+          ? pickedImageBackPath.value.substring(0, lastSeparator)
+          : pickedImageBackPath.value;
+      pickedImageBackName.value = 'licenceBack.png';
+
+      // Build the new path with the desired file name
+      String newPath = '$directory/$pickedImageBackName';
+      logger.log("Picked new path $newPath");
+
+      // Rename the file
+      File(pickedImageBackPath.value).renameSync(newPath);
+
+      // Now update the selectedPhotos value
+      pickedImageBackPath.value = newPath;
+    }
+  }
+
+  bool validateText() {
+    if (selectedExpiryDate.value.isEmpty) {
+      // Show an error message or handle it accordingly
+      showErrorSnackbar(message: 'License expiry date is required');
+      return false;
+    }
+    return true;
   }
 
   Future<void> createDriver() async {
     if (!createDriverFormKey.currentState!.validate() ||
-        !validateImageUpload()) {
+        !validateImageUpload() ||
+        !validateText()) {
       return;
     }
     try {
       isLoading.value = true;
-      var data = dio.FormData();
-      Future<dio.FormData> constructFormData() async {
-        var formData = dio.FormData.fromMap({});
 
-        // Check if fullName is not empty before adding it to formData
-        if (fullNameController.text.isNotEmpty &&
-            phoneNoController.text.isNotEmpty &&
-            emailController.text.isNotEmpty &&
-            licenceNoController.text.isNotEmpty &&
-            licenceExpiryDateController.text.isNotEmpty) {
-          // formData.fields.add(MapEntry('fullName', fullNameController.text));
-          // formData.fields.add(MapEntry('driverNumber', phoneNoController.text));
-          // formData.fields.add(MapEntry('driverEmail', emailController.text));
-          // formData.fields
-          //     .add(MapEntry('licenseNumber', licenceNoController.text));
-          // formData.fields
-          //     .add(MapEntry('expireDate', licenceExpiryDateController.text));
-          data = dio.FormData.fromMap({
-            'licenseUpload': [
-              await dio.MultipartFile.fromFile(pickedImagePath.value,
-                  filename: pickedImagePath.value)
-            ],
+      final response = await partnerService.updateLicensePhoto(
+          payload: dio.FormData.fromMap({
             // 'fullName': fullNameController.text,
-            // 'driverNumber': phoneNoController.text,
+            'driverNumber': phoneNoController.text,
             // 'driverEmail': emailController.text,
             'licenseNumber': licenceNoController.text,
-            'expireDate': licenceExpiryDateController.text
-          });
-        }
-        // Check if imagePath is not empty before adding the image file to formData
-        // if (pickedImagePath.value.isNotEmpty) {
-        //   // formData.
-        //   formData.fields.add(MapEntry(
-        //     'licenseUpload',
-        //     await dio.MultipartFile.fromFile(
-        //       pickedImagePath.value,
-        //       filename: pickedImagePath.value,
-        //     ).toString(),
-        //   ));
-        // }
-        logger.log("form field ${data.length}");
-        return data;
-      }
-
-      final formData = await constructFormData();
-      final response = await partnerService.updateLicensePhoto(
-          payload: formData, driverID: driverID.value);
+            'licenceExpireDate': selectedExpiryDate.value,
+            'driverDocuments': [
+              await dio.MultipartFile.fromFile(
+                pickedImagePath.value,
+                // // filename: 'vehicleLicense',
+                // contentType: MediaType(mimeTypeData[0], mimeTypeData[1]),
+              ),
+              await dio.MultipartFile.fromFile(
+                pickedImageBackPath.value,
+                // filename: 'roadWorthiness',
+                // contentType:
+                //     MediaType(roadMimeTypeData[0], roadMimeTypeData[1]),
+              ),
+            ]
+          }),
+          driverID: driverID.value);
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("driver profile updated ${response.message!}");
         showSuccessSnackbar(message: response.message!);
@@ -184,32 +266,38 @@ class EditDriversController extends GetxController {
     }
   }
 
-  // Future<void> getDrivers() async {
-  //   try {
-  //     final response = await partnerService.getDrivers();
-  //     if (response.status == 'success' || response.status_code == 200) {
-  //       logger.log("gotten drivers ${response.data}");
-  //       if (response.data != null) {
-  //         drivers?.value = response.data! as dynamic;
-  //         logger.log("drivers $drivers");
-  //       }
-  //     } else {
-  //       logger.log("unable to get drivers ${response.data}");
-  //     }
-  //   } catch (exception) {
-  //     logger.log("error  $exception");
-  //   }
-  // }
-
   Future<void> getOneDriver() async {
+    gettingDriverIfo.value = true;
     try {
       final response =
           await partnerService.getOneDriver(driverId: driverID.value);
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("gotten driver details ${response.data}");
         if (response.data != null) {
-          drivers?.value = response.data! as dynamic;
+          drivers?.value = response.data!
+              .map((driver) => UserDriverData.fromJson(driver))
+              .toList();
+          licenceNoController.text = drivers!.first.licenseNumber ?? '';
+          selectedExpiryDate.value = drivers!.first.licenceExpireDate ?? '';
+          if (drivers!.first.licenceFront != null &&
+              drivers!.first.licenceBack != null) {
+            selectedExpiryDate.value = drivers!.first.licenceExpireDate ?? '';
+            await downloadAndSaveImage(
+                drivers!.first.licenceFront!, 'licenceFront.png', (filePath) {
+              pickedImagePath.value = filePath;
+              pickedImageName.value = 'licenceFront.png';
 
+              logger.log("extracted name: ${pickedImageName.value}");
+            });
+            await downloadAndSaveImage(
+                drivers!.first.licenceBack!, 'licenceBack.png', (filePath) {
+              pickedImageBackPath.value = filePath;
+              pickedImageBackName.value = 'licenceBack.png';
+
+              logger.log("extracted name: ${pickedImageBackName.value}");
+            });
+          }
+          gettingDriverIfo.value = false;
           // licenceNoController.text = response[""]
           logger.log("driver $drivers");
         }
@@ -218,6 +306,38 @@ class EditDriversController extends GetxController {
       }
     } catch (exception) {
       logger.log("error  $exception");
+    } finally {
+      gettingDriverIfo.value = false;
+    }
+  }
+
+  Future<void> downloadAndSaveImage(
+      String url, String fileName, Function(String) onDownloadComplete) async {
+    try {
+      final response = await dio.Dio().get<Uint8List>(
+        url,
+        options: dio.Options(responseType: dio.ResponseType.bytes),
+      );
+      // logger.log("Photo downloaded: ${response.data}");
+
+      final directory = await getApplicationDocumentsDirectory();
+      final filePath = '${directory.path}/$fileName';
+
+      logger.log("Saving to file path: $filePath");
+
+      final file = File(filePath);
+      await file.writeAsBytes(response.data!, flush: true);
+
+      // Rename the file
+      File(filePath).renameSync('${directory.path}/$fileName');
+
+      // Invoke the callback with the new local file path
+      onDownloadComplete(filePath);
+
+      // Continue with further operations after the download is complete
+    } catch (e) {
+      // Handle any errors or exceptions that occur during the process
+      print("Error downloading and saving image: $e");
     }
   }
 
