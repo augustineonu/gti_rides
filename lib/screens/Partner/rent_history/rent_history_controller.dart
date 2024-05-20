@@ -81,9 +81,11 @@ class RentHistoryController extends GetxController
       final response = await renterService.getAllTrips(param: 'partner');
 
       if (response.status == 'success' || response.status_code == 200) {
-        logger.log("All Trips:: ${response.data}");
+        // logger.log("All Trips:: ${response.data}");
         List<AllTripsData> trips = List<AllTripsData>.from(
             response.data!.map((trip) => AllTripsData.fromJson(trip)));
+
+            logger.log("User trips:: ${trips}");
 
         if (trips.isEmpty) {
           change([], status: RxStatus.empty());

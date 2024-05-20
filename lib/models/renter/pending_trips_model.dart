@@ -125,6 +125,30 @@ class Renter {
     };
 }
 
+class Payment {
+    final String? paymentStatus;
+    final String? paymentDate;
+    final String? paymentReference;
+
+    Payment({
+        this.paymentStatus,
+        this.paymentDate,
+        this.paymentReference,
+    });
+
+    factory Payment.fromJson(Map<String, dynamic> json) => Payment(
+        paymentStatus: json["paymentStatus"],
+        paymentDate: json["paymentDate"],
+        paymentReference: json["paymentReference"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "paymentStatus": paymentStatus,
+        "paymentDate": paymentDate,
+        "paymentReference": paymentReference,
+    };
+}
+
 
 class AllTripOrder {
     final dynamic cautionFee;
@@ -143,6 +167,7 @@ class AllTripOrder {
     final DateTime? tripStartDate;
     final dynamic tripsDays;
     final dynamic vatFee;
+    final Payment? payment;
 
     AllTripOrder({
       this.cautionFee,
@@ -161,6 +186,7 @@ class AllTripOrder {
         this.tripStartDate,
         this.tripsDays,
         this.vatFee,
+        this.payment,
     });
 
     factory AllTripOrder.fromRawJson(String str) => AllTripOrder.fromJson(json.decode(str));
@@ -184,6 +210,7 @@ class AllTripOrder {
         tripStartDate: json["tripStartDate"] == null ? null : DateTime.parse(json["tripStartDate"]),
         tripsDays: json["tripsDays"],
         vatFee: json["vatFee"],
+        payment: json["payment"] == null ? null : Payment.fromJson(json["payment"])
     );
 
     Map<String, dynamic> toJson() => {
@@ -203,5 +230,6 @@ class AllTripOrder {
         "tripStartDate": tripStartDate?.toIso8601String(),
         "tripsDays": tripsDays,
         "vatFee": vatFee,
+        "payment": payment!.toJson(),
     };
 }

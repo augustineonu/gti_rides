@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/Partner/rent_history/completed_trip/completed_trip_controller.dart';
+import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/shimmer_loading/box_shimmer.dart';
@@ -297,68 +298,99 @@ class CompletedTripScreen extends GetView<CompletedTripController> {
   }
 
   Widget paymentInfo() {
-    return Column(
-      children: [
-        tripInfo(
-          title: AppStrings.paymentRef,
-          trailling: InkWell(
-            onTap: () {
-              controller.copy(
-                  value: controller.tripsData.tripOrders!.first.paymentReference
-                      .toString());
-            },
-            child: Row(
-              children: [
-                textWidget(
-                  text: controller.tripsData.tripOrders!.first.paymentReference
-                      .toString(),
-                  style: getRegularStyle(
-                    fontSize: 10.sp,
+    if (userService.user.value.userType == "partner") {
+      return Column(
+        children: [
+          tripInfo(
+            title: AppStrings.paymentRef,
+            trailling: InkWell(
+              onTap: () {
+                if (controller
+                    .tripsData.tripOrders!.first.payment!.paymentReference
+                    .toString()
+                    .isNotEmpty) {
+                  controller.copy(
+                      value: controller
+                          .tripsData.tripOrders!.first.payment!.paymentReference
+                          .toString());
+                }
+              },
+              child: Row(
+                children: [
+                  textWidget(
+                    text: controller
+                        .tripsData.tripOrders!.first.payment!.paymentReference
+                        .toString(),
+                    style: getRegularStyle(
+                      fontSize: 10.sp,
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: 3.sp,
-                ),
-                SvgPicture.asset(ImageAssets.docCopy),
-              ],
+                  SizedBox(
+                    width: 3.sp,
+                  ),
+                  SvgPicture.asset(ImageAssets.docCopy),
+                ],
+              ),
             ),
           ),
-        ),
-        // Padding(
-        //   padding: EdgeInsets.symmetric(vertical: 5.0.sp),
-        //   child: Row(
-        //     children: [
-        //       SizedBox(
-        //         width: 2.sp,
-        //         height: 16.sp,
-        //         child: const ColoredBox(
-        //           color: primaryColor,
-        //         ),
-        //       ),
-        //       SizedBox(
-        //         width: 7.sp,
-        //       ),
-        //       // TODO:
-        //       textWidget(
-        //         text: 'nill',
-        //         style: getRegularStyle(fontSize: 10.sp),
-        //       ),
-        //     ],
-        //   ),
-        // ),
-        tripInfo(
-          title: AppStrings.paymentStatus,
-          trailling: Row(children: [
-            textWidget(
-              text: controller.tripsData.tripOrders!.first.paymentStatus
-                  .toString(),
-              style: getRegularStyle(fontSize: 10.sp),
+          tripInfo(
+            title: AppStrings.paymentStatus,
+            trailling: Row(children: [
+              textWidget(
+                text: controller
+                    .tripsData.tripOrders!.first.payment!.paymentStatus
+                    .toString(),
+                style: getRegularStyle(fontSize: 10.sp),
+              ),
+              Image.asset(ImageAssets.doubleCheck),
+            ]),
+          ),
+        ],
+      );
+    } else {
+      return Column(
+        children: [
+          tripInfo(
+            title: AppStrings.paymentRef,
+            trailling: InkWell(
+              onTap: () {
+                controller.copy(
+                    value: controller
+                        .tripsData.tripOrders!.first.paymentReference
+                        .toString());
+              },
+              child: Row(
+                children: [
+                  textWidget(
+                    text: controller.tripsData.tripOrders!.first.paymentReference
+                        .toString()
+                        .toString(),
+                    style: getRegularStyle(
+                      fontSize: 10.sp,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 3.sp,
+                  ),
+                  SvgPicture.asset(ImageAssets.docCopy),
+                ],
+              ),
             ),
-            Image.asset(ImageAssets.doubleCheck),
-          ]),
-        ),
-      ],
-    );
+          ),
+          tripInfo(
+            title: AppStrings.paymentStatus,
+            trailling: Row(children: [
+              textWidget(
+                text: controller.tripsData.tripOrders!.first.paymentStatus
+                    .toString(),
+                style: getRegularStyle(fontSize: 10.sp),
+              ),
+              Image.asset(ImageAssets.doubleCheck),
+            ]),
+          ),
+        ],
+      );
+    }
   }
 
   Widget tripIDandDates() {
