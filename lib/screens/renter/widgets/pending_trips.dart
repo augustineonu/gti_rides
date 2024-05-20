@@ -93,7 +93,7 @@ class PendingTrips extends StatelessWidget {
                                     ),
                                     SvgPicture.asset(ImageAssets.naira),
                                     textWidget(
-                                      text: pendingTrips.totalFee ?? '0',
+                                      text: pendingTrips.totalFee.toString() ?? '0',
                                       style:
                                           getRegularStyle(color: secondaryColor)
                                               .copyWith(fontFamily: 'Neue'),
@@ -104,7 +104,12 @@ class PendingTrips extends StatelessWidget {
                               SizedBox(
                                 height: 8.sp,
                               ),
-                              continueButton(controller, pendingTrips),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+continueButton(controller, pendingTrips),
+                              ],),
+                              
                             ],
                           ),
                           expanded: Column(
@@ -293,7 +298,7 @@ class PendingTrips extends StatelessWidget {
                                           color: primaryColor,
                                         ),
                                         textWidget(
-                                            text: pendingTrips.totalFee ?? '0',
+                                            text: pendingTrips.totalFee.toString() ?? '0',
                                             style: getRegularStyle(
                                                     color: primaryColor)
                                                 .copyWith(
@@ -489,7 +494,7 @@ class PendingTrips extends StatelessWidget {
         ? centerLoadingIcon()
         : GtiButton(
             height: 40.sp,
-            width: 300.sp,
+            width: 320.sp,
             text: getPendingTripsStatusMessage(pendingTrips),
             color: primaryColor,
             isDisabled: shouldButtonBeDisabled(pendingTrips),

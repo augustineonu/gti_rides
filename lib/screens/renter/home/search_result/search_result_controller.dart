@@ -48,7 +48,7 @@ class SearchResultController extends GetxController {
       differenceInDays.value = arguments?["differenceInDays"] ?? 0;
       rawStartTime = arguments?["rawStartTime"] ?? DateTime.now();
       rawEndTime = arguments?["rawEndTime"] ?? DateTime.now();
-      selectedStateCode.value = arguments?["selectedStateCode"] ?? 0;
+      selectedStateCode.value = arguments?["selectedStateCode"] ?? '';
     }
   }
 

@@ -13,7 +13,7 @@ import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/network_controller.dart';
 import 'package:gti_rides/services/notification_service.dart';
 import 'package:gti_rides/services/route_service.dart';
-import 'package:gti_rides/services/storage_service.dart';
+import 'package:gti_rides/services/storage_service.dart' show storageService;
 import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
@@ -32,7 +32,7 @@ void main() async {
       options: DefaultFirebaseOptions.currentPlatform);
 
   Get.put(UserService());
-  await Intercom.instance.initialize('hivazykc',
+  await Intercom.instance.initialize('hitujtjtvazykc',
       iosApiKey: 'ios_sdk-efac9e9f5fa7bf1e1bfb33d91f1cddd68b47f895',
       androidApiKey: 'android_sdk-3337cce19e6e590feed33d6b48f39eae825fcfd0');
       // Intercom.instance.setUserHash('79de1c3c223ff6bfa25b267ed903313cb04b4ee0fe5601797a3996714c715b07');

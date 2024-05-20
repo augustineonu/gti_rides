@@ -478,7 +478,7 @@ class CompletedTripScreen extends GetView<CompletedTripController> {
                 controller.tripsData.tripOrders!.first.pricePerDay.toString()),
         priceBreakdown(
             title: AppStrings.vat,
-            amount: controller.tripsData.tripOrders!.first.vatFee),
+            amount: controller.tripsData.tripOrders!.first.vatFee.toString()),
         priceBreakdown(
             title:
                 "x ${controller.tripsData.tripOrders?.first.tripsDays.toString()} ${controller.tripsData.tripOrders?.first.tripsDays == 1 ? 'day' : 'days'}",
