@@ -463,7 +463,7 @@ class ApiService {
           },
         ),
       );
-      logger.log("GET REQUEST RESPONSE ($endpoint) :: ${response.data}");
+      // logger.log("GET REQUßEST RESPONSE ($endpoint) :: ${response.data}");
 
       final apiResponse =
           ApiResponseModel.fromRawJson(response.data.toString());

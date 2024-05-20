@@ -243,12 +243,12 @@ class PaymentController extends GetxController with StateMixin<List<dynamic>> {
     try {
       final response = await partnerService.getPaymentList();
       if (response.status == 'success' || response.status_code == 200) {
-        logger.log("gotten payment list ${response.data}");
+        // logger.log("gotten payment list ${response.data}");
         if (response.data != null && response.data!.isNotEmpty) {
           // paymentList.value = response.data!;
             paymentList.value = response.data!.cast<dynamic>().obs;
 
-          logger.log("payment list:: ${paymentList}");
+          // logger.log("payment list:: ${paymentList}");
         } else {
           logger.log('data is empty');
           paymentList.value = [];
@@ -277,7 +277,7 @@ class PaymentController extends GetxController with StateMixin<List<dynamic>> {
           accountCode: bankCode.value);
 
       if (response.status == 'success' || response.status_code == 200) {
-        logger.log("gotten account details ${response.data}");
+        // logger.log("gotten account details ${response.data}");
         if (response.data != null && response.data!.isNotEmpty) {
           accountName.value = response.data['account_name'];
           fullNameController.text = response.data['account_name'];

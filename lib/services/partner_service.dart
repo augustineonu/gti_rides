@@ -508,7 +508,7 @@ class PartnerService extends GetxController {
       final result = await apiService.getRequest(
         '/user/partner/payment/getPaymentList?skip=0&limit=10000',
       );
-      logger.log("result $result");
+      // logger.log("result $result");
 
       final decodedResult = json.decode(result);
 

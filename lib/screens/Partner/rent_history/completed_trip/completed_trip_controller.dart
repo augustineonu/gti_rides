@@ -34,6 +34,7 @@ class CompletedTripController extends GetxController
       logger.log("Received data:: ${arguments!}");
       tripsData = arguments!["completedTrip"] as AllTripsData;
       showSupport.value = arguments!["showSupport"] ?? true;
+      logger.log("Received data:: ${tripsData.tripOrders!.first}");
       await getCarReviews(
           type: 'renter',
           tripId: showSupport.value ? '${tripsData.tripId}' : '');
