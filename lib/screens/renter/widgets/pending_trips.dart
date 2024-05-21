@@ -93,7 +93,8 @@ class PendingTrips extends StatelessWidget {
                                     ),
                                     SvgPicture.asset(ImageAssets.naira),
                                     textWidget(
-                                      text: pendingTrips.totalFee.toString() ?? '0',
+                                      text: pendingTrips.totalFee.toString() ??
+                                          '0',
                                       style:
                                           getRegularStyle(color: secondaryColor)
                                               .copyWith(fontFamily: 'Neue'),
@@ -107,9 +108,10 @@ class PendingTrips extends StatelessWidget {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-continueButton(controller, pendingTrips),
-                              ],),
-                              
+                                  continueButton(
+                                      controller, pendingTrips, context),
+                                ],
+                              ),
                             ],
                           ),
                           expanded: Column(
@@ -261,8 +263,10 @@ continueButton(controller, pendingTrips),
                                           .tripOrders!.first.escortFee
                                           .toString())),
                               Visibility(
-                                  visible:pendingTrips.tripType == "selfDrive" || pendingTrips.tripType.toString() ==
-                                          'self drive'
+                                  visible: pendingTrips.tripType ==
+                                              "selfDrive" ||
+                                          pendingTrips.tripType.toString() ==
+                                              'self drive'
                                       ? true
                                       : false,
                                   child: rowNairaText(
@@ -298,7 +302,9 @@ continueButton(controller, pendingTrips),
                                           color: primaryColor,
                                         ),
                                         textWidget(
-                                            text: pendingTrips.totalFee.toString() ?? '0',
+                                            text: pendingTrips.totalFee
+                                                    .toString() ??
+                                                '0',
                                             style: getRegularStyle(
                                                     color: primaryColor)
                                                 .copyWith(
@@ -313,7 +319,7 @@ continueButton(controller, pendingTrips),
                               SizedBox(
                                 height: 14.sp,
                               ),
-                              continueButton(controller, pendingTrips),
+                              continueButton(controller, pendingTrips, context),
                             ],
                           ),
                           builder: (_, collapsed, expanded) {
@@ -486,7 +492,8 @@ continueButton(controller, pendingTrips),
     );
   }
 
-  Widget continueButton(TripsController controller, AllTripsData pendingTrips) {
+  Widget continueButton(TripsController controller, AllTripsData pendingTrips,
+      BuildContext context) {
     // this is dependent if the trips start date is above DateTime.now()
     bool startTrip = controller.isTripActive(
         pendingTrips.tripOrders?.first.tripStartDate ?? DateTime.now());
@@ -494,16 +501,18 @@ continueButton(controller, pendingTrips),
         ? centerLoadingIcon()
         : GtiButton(
             height: 40.sp,
-            width: 320.sp,
+            width: MediaQuery.of(context).size.width.sp - 60.sp,
             text: getPendingTripsStatusMessage(pendingTrips),
             color: primaryColor,
             isDisabled: shouldButtonBeDisabled(pendingTrips),
-            disabledColor: (pendingTrips.tripType == "selfDrive" ||pendingTrips.tripType == "self drive" &&
-                    pendingTrips.adminStatus == "pending")
+            disabledColor: (pendingTrips.tripType == "selfDrive" ||
+                    pendingTrips.tripType == "self drive" &&
+                        pendingTrips.adminStatus == "pending")
                 ? white
                 : primaryColorLight,
-            disabledTextColor: (pendingTrips.tripType == "selfDrive" ||pendingTrips.tripType == "self drive" &&
-                    pendingTrips.adminStatus == "pending")
+            disabledTextColor: (pendingTrips.tripType == "selfDrive" ||
+                    pendingTrips.tripType == "self drive" &&
+                        pendingTrips.adminStatus == "pending")
                 ? primaryColorLight
                 : grey5,
             onTap: () {
@@ -600,8 +609,9 @@ continueButton(controller, pendingTrips),
   }
 
   bool shouldButtonBeDisabled(AllTripsData pendingTrips) {
-    return (pendingTrips.tripType == "selfDrive" || pendingTrips.tripType == "self drive" &&
-        pendingTrips.adminStatus == "pending");
+    return (pendingTrips.tripType == "selfDrive" ||
+        pendingTrips.tripType == "self drive" &&
+            pendingTrips.adminStatus == "pending");
     //      ||
     // pendingTrips.status == 'declined';
   }

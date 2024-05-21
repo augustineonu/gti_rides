@@ -265,11 +265,12 @@ class RenterService {
   Future<ListResponseModel> getAllTrips({
     String? status,
     required String? param,
+    String? carID,
   }) async {
     try {
       final result = await apiService.getRequest(
-        '/user/$param/trip/getAllTrips?status=&skip=0&limit=100',
-      );
+          '/user/$param/trip/getAllTrips?status=&carID=${carID ?? ''}&skip=0&limit=100');
+      // "/user/partner/trip/getAllTrips?status=&carID=&skip=0&limit=1000");
       // logger.log("result $result");
 
       final decodedResult = json.decode(result);

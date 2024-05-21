@@ -143,7 +143,7 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
               itemBuilder: (context, index) {
                 var car = state[index];
                 return car['status'] == 'pending' ||
-                        car['status'] == "booked" ||
+                        car['availability'] == "booked" ||
                         car['status'] == "decline"
                     ? bookedOrPendingCars(
                         context,
@@ -510,7 +510,8 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
                                 )),
                             child: Center(
                               child: textWidget(
-                                text: 'Car status: \n ${car['status']}',
+                                text:
+                                    'Car status: \n ${car['availability'] == "booked" ? "booked" : car['status']}',
                                 textAlign: TextAlign.center,
                                 style: getLightStyle(
                                         fontSize: 10.sp, color: primaryColor)
@@ -537,7 +538,7 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
                             const SizedBox(
                               height: 3,
                             ),
-                            car['status'] == 'booked'
+                            car['availability'] == 'booked'
                                 ? Row(
                                     children: [
                                       SvgPicture.asset(
@@ -643,7 +644,7 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
                             ),
                             textWidget(
                               // text: AppStrings.tripDate,
-                              text: car['status'] != 'booked'
+                              text: car['availability'] != 'booked'
                                   ? AppStrings.availabilityDate
                                   : AppStrings.tripDate,
                               // show AppStrings.aAvailabilityDate
@@ -794,18 +795,19 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
     Size size,
   ) {
     return controller.obx(
-      (state) => state!.where((car) => car['status'] == 'booked').isEmpty
+      (state) => state!.where((car) => car['availability'] == 'booked').isEmpty
           ? Center(
               child: textWidget(
                   text: AppStrings.noBookedCarsYet, style: getMediumStyle()))
           : ListView.builder(
               shrinkWrap: true,
               itemCount:
-                  state!.where((car) => car['status'] == 'booked').length,
+                  state!.where((car) => car['availability'] == 'booked').length,
               physics: const ScrollPhysics(),
               itemBuilder: (context, index) {
-                var bookedCars =
-                    state.where((car) => car['status'] == 'pending').toList();
+                var bookedCars = state
+                    .where((car) => car['availability'] == 'booked')
+                    .toList();
                 var car = bookedCars[index];
 
                 return bookedOrPendingCars(

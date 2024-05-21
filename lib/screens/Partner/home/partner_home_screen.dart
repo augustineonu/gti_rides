@@ -426,13 +426,14 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
                                 ),
                                 RichText(
                                   text: TextSpan(
-                                      text: '${car.percentageRate}%',
+                                      text: '${car.percentageRate.toString()}%',
                                       style: getMediumStyle(
                                         fontSize: 12.sp,
                                       ),
                                       children: <TextSpan>[
                                         TextSpan(
-                                          text: ' (${car.tripsCount} trips)',
+                                          text:
+                                              ' (${car.tripsCount.toString()} trips)',
                                           style: getLightStyle(
                                             fontSize: 12.sp,
                                           ),
@@ -451,7 +452,7 @@ class _CarRenterHomeScreenState extends State<PartnerHomeScreen> {
             ),
             carAvailabilityTag(
                 status:
-                    '${AppStrings.carStatus} ${car.status == 'pending' ? AppStrings.pending : car.status == 'active' ? AppStrings.active : car.status}'),
+                    '${AppStrings.carStatus} ${car.availability == 'booked' ? 'booked' : car.status == 'pending' ? AppStrings.pending : car.status == 'active' ? AppStrings.active : car.status}'),
           ],
         ),
       ),

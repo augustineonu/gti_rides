@@ -89,7 +89,8 @@ class OwnerTripsController extends GetxController
     // RxStatus.loading();
     change([], status: RxStatus.loading());
     try {
-      final response = await renterService.getAllTrips(param: 'partner');
+      final response =
+          await renterService.getAllTrips(param: 'partner', carID: carId.value);
 
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("All Trips:: ${response.data}");
