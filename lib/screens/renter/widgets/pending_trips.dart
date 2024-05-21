@@ -541,7 +541,7 @@ class PendingTrips extends StatelessWidget {
                       controller.launchMessenger();
                     }
                   } else {
-                    if (pendingTrips.adminStatus == "approved") {
+                    if (pendingTrips.adminStatus == "approved" && pendingTrips.tripOrders!.first.paymentStatus == "pending") {
                       // payNowMethod();
                       controller.routeToPayment(
                           url: pendingTrips.tripOrders!.first.paymentLink);
@@ -609,7 +609,7 @@ class PendingTrips extends StatelessWidget {
   }
 
   bool shouldButtonBeDisabled(AllTripsData pendingTrips) {
-    return (pendingTrips.tripType == "selfDrive" ||
+    return (pendingTrips.tripType == "selfDrive" &&
         pendingTrips.tripType == "self drive" &&
             pendingTrips.adminStatus == "pending");
     //      ||

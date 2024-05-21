@@ -112,9 +112,7 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                             ],
                           ),
                           carAvailabilityTag(
-                            status: car?.availability == 'available'
-                                ? AppStrings.available
-                                : AppStrings.unavailable,
+                            status: car!.status == "booked" ? "Booked" : car.availability,
                             positionLeft: 7,
                             positionTop: 7,
                           ),
