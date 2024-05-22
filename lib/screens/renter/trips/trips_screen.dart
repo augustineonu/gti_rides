@@ -201,6 +201,7 @@ class TripsScreen extends GetView<TripsController> {
                             "${activeTrip.carYear.toString()} ${activeTrip.carBrand.toString()} ${activeTrip.carModel.toString()}",
                         tripStatus: AppStrings.active,
                         button1Title: AppStrings.extend,
+                        //extend trips
                         button1OnTap: () {
                           if (isTripActive == true) {
                             print("object is active");
@@ -892,6 +893,7 @@ class TripsScreen extends GetView<TripsController> {
       size,
       title: '',
       space: 1.sp,
+      contentHeight: size.height * 0.4,
       alignment: Alignment.topCenter,
       onTap: controller.goBack,
       content: Column(
@@ -1294,8 +1296,10 @@ class TripsScreen extends GetView<TripsController> {
                                         .tripOrders!.first.escortFee
                                         .toString())),
                             Visibility(
-                                visible: pendingTrips.tripType.toString() == "selfDrive" || pendingTrips.tripType.toString() == 
-                                        'self drive'
+                                visible: pendingTrips.tripType.toString() ==
+                                            "selfDrive" ||
+                                        pendingTrips.tripType.toString() ==
+                                            'self drive'
                                     ? true
                                     : false,
                                 child: rowNairaText(
@@ -1528,12 +1532,14 @@ class TripsScreen extends GetView<TripsController> {
             text: getPendingTripsStatusMessage(pendingTrips),
             color: primaryColor,
             isDisabled: shouldButtonBeDisabled(pendingTrips),
-            disabledColor: (pendingTrips.tripType == "selfDrive" || pendingTrips.tripType == "self drive" &&
-                    pendingTrips.adminStatus == "pending")
+            disabledColor: (pendingTrips.tripType == "selfDrive" ||
+                    pendingTrips.tripType == "self drive" &&
+                        pendingTrips.adminStatus == "pending")
                 ? white
                 : primaryColorLight,
-            disabledTextColor: (pendingTrips.tripType == "selfDrive" || pendingTrips.tripType == "self drive" &&
-                    pendingTrips.adminStatus == "pending")
+            disabledTextColor: (pendingTrips.tripType == "selfDrive" ||
+                    pendingTrips.tripType == "self drive" &&
+                        pendingTrips.adminStatus == "pending")
                 ? primaryColorLight
                 : grey5,
             onTap: () {
@@ -1546,7 +1552,9 @@ class TripsScreen extends GetView<TripsController> {
                       controller.routeToPayment(
                           url: pendingTrips.tripOrders!.first.paymentLink);
                     } else if (pendingTrips.tripOrders!.first.paymentStatus ==
-                        'successful' || pendingTrips.tripOrders!.first.paymentStatus == "success") {
+                            'successful' ||
+                        pendingTrips.tripOrders!.first.paymentStatus ==
+                            "success") {
                       !statTrip
                           ? () {}
                           : controller.updateTripStatus(
@@ -1562,10 +1570,11 @@ class TripsScreen extends GetView<TripsController> {
                       controller.routeToPayment(
                           url: pendingTrips.tripOrders!.first.paymentLink);
                     } else if (pendingTrips.tripOrders!.first.paymentStatus
-                        .toString()
-                        .contains("successful") || pendingTrips.tripOrders!.first.paymentStatus
-                        .toString()
-                        .contains("success")) {
+                            .toString()
+                            .contains("successful") ||
+                        pendingTrips.tripOrders!.first.paymentStatus
+                            .toString()
+                            .contains("success")) {
                       controller.updateTripStatus(
                           type: 'active',
                           tripID: pendingTrips.tripId.toString());
@@ -1598,7 +1607,8 @@ class TripsScreen extends GetView<TripsController> {
         if (pendingTrips.tripOrders!.first.paymentStatus == 'pending') {
           return AppStrings.payNow;
         } else if (pendingTrips.tripOrders!.first.paymentStatus ==
-            'successful' || pendingTrips.tripOrders!.first.paymentStatus == "success") {
+                'successful' ||
+            pendingTrips.tripOrders!.first.paymentStatus == "success") {
           return "Confirm Trip";
         } else {
           return 'Chat with admin';
@@ -1626,8 +1636,9 @@ class TripsScreen extends GetView<TripsController> {
   }
 
   bool shouldButtonBeDisabled(AllTripsData pendingTrips) {
-    return (  pendingTrips.tripType == "selfDrive" || pendingTrips.tripType == "self drive" &&
-        pendingTrips.adminStatus == "pending");
+    return (pendingTrips.tripType == "selfDrive" ||
+        pendingTrips.tripType == "self drive" &&
+            pendingTrips.adminStatus == "pending");
     //      ||
     // pendingTrips.status == 'declined';
   }

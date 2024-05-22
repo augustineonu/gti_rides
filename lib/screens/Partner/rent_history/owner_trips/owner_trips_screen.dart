@@ -51,12 +51,13 @@ class OwnerTripsScreen extends GetView<OwnerTripsController> {
         );
       },
       onEmpty: Padding(
-        padding: EdgeInsets.symmetric(vertical: context.height * 0.1),
+        padding:
+            EdgeInsets.symmetric(vertical: context.height * 0, horizontal: 20),
         child: Column(
           children: [
             Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
-                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Row(
                     children: [
@@ -89,11 +90,11 @@ class OwnerTripsScreen extends GetView<OwnerTripsController> {
                           onTap: () => controller.selectedIndex.value = 0,
                           selected: controller.selectedIndex.value == 0),
                       reviewTypeBox(
-                          title: AppStrings.activeNum.trArgs(['2']),
+                          title: AppStrings.activeNum.trArgs(['0']),
                           onTap: () => controller.selectedIndex.value = 1,
                           selected: controller.selectedIndex.value == 1),
                       reviewTypeBox(
-                          title: AppStrings.completedNum.trArgs(['4']),
+                          title: AppStrings.completedNum.trArgs(['0']),
                           onTap: () => controller.selectedIndex.value = 2,
                           selected: controller.selectedIndex.value == 2),
                     ],
