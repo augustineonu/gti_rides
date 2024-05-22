@@ -202,12 +202,101 @@ class TripsScreen extends GetView<TripsController> {
                         tripStatus: AppStrings.active,
                         button1Title: AppStrings.extend,
                         //extend trips
-                        button1OnTap: () {
+                        button1OnTap: () async {
                           if (isTripActive == true) {
                             print("object is active");
                           } else {
                             print("object isn't active");
-                            extendTimeDialog(size, controller, activeTrip);
+                            var value = await extendTimeDialog(
+                                context, size, controller, activeTrip);
+                            if (value == true) {
+                              print("return value $value");
+                              // simulate, make api call for car availability
+                              controller.carId.value = activeTrip.carId;
+                              controller.tripType.value =
+                                  activeTrip.tripType.toString();
+                              await controller.getCarHistory(
+                                  carId: activeTrip.carId);
+                              var isCarAvailable =
+                                  await controller.checkCarAvailability(
+                                      carId: activeTrip.carId.toString(),
+                                      rawStartTime: activeTrip.tripStartDate!,
+                                      rawEndTime:
+                                          controller.selectedEndDateTime!);
+
+                              if (isCarAvailable == true) {
+                                controller.routeToPaymentSummary();
+                              } else if (isCarAvailable == false) {
+                                // if car is not available
+                                Get.dialog(
+                                  Dialog(
+                                    backgroundColor: white,
+                                    // insetPadding: EdgeInsets.all(0),
+                                    alignment: Alignment.topCenter,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(6.0.r),
+                                    ), //this right here
+                                    child: Container(
+                                      height: 330.sp,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(8.r)),
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 20.sp, horizontal: 15.sp),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            // cancel or done button
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                InkWell(
+                                                  onTap: controller.goBack,
+                                                  child: SvgPicture.asset(
+                                                      ImageAssets.closeSmall),
+                                                ),
+                                              ],
+                                            ),
+                                            SvgPicture.asset(
+                                                ImageAssets.notAvailable),
+                                            textWidget(
+                                              text: AppStrings.carNotAvailable,
+                                              style: getMediumStyle(
+                                                  fontSize: 16.sp,
+                                                  color: black),
+                                            ),
+                                            // SizedBox(height: 10),
+                                            textWidget(
+                                              text: AppStrings
+                                                  .carNotAvailableForExtension,
+                                              textOverflow:
+                                                  TextOverflow.visible,
+                                              textAlign: TextAlign.center,
+                                              style: getLightStyle(
+                                                  fontSize: 12.sp,
+                                                  color: grey4),
+                                            ),
+                                            GtiButton(
+                                              text: AppStrings.talkToAdmin,
+                                              onTap: () {},
+                                            ),
+                                            SizedBox(height: 40),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }
+                            }
                           }
                         },
                         button2Title: AppStrings.return1,
@@ -887,8 +976,8 @@ class TripsScreen extends GetView<TripsController> {
     );
   }
 
-  Future<dynamic> extendTimeDialog(
-      Size size, TripsController controller, AllTripsData activeTrip) {
+  Future<dynamic> extendTimeDialog(BuildContext context, Size size,
+      TripsController controller, AllTripsData activeTrip) {
     return dialogWidgetWithClose(
       size,
       title: '',
@@ -987,76 +1076,9 @@ class TripsScreen extends GetView<TripsController> {
                 showErrorSnackbar(message: "Kindly select an end date");
                 return;
               }
-              controller.carId.value = activeTrip.carId;
-              controller.tripType.value = activeTrip.tripType.toString();
-              await controller.getCarHistory(carId: activeTrip.carId);
-              var value = await controller.checkCarAvailability(
-                  carId: activeTrip.carId.toString(),
-                  rawStartTime: activeTrip.tripStartDate!,
-                  rawEndTime: controller.selectedEndDateTime!);
-
-              if (value == true) {
-                controller.routeToPaymentSummary();
-              } else if (value == false) {
-                // if car is not available
-                Get.dialog(
-                  Dialog(
-                    backgroundColor: white,
-                    // insetPadding: EdgeInsets.all(0),
-                    alignment: Alignment.topCenter,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6.0.r),
-                    ), //this right here
-                    child: Container(
-                      height: 330.sp,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8.r)),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 20.sp, horizontal: 15.sp),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            // cancel or done button
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                InkWell(
-                                  onTap: controller.goBack,
-                                  child:
-                                      SvgPicture.asset(ImageAssets.closeSmall),
-                                ),
-                              ],
-                            ),
-                            SvgPicture.asset(ImageAssets.notAvailable),
-                            textWidget(
-                              text: AppStrings.carNotAvailable,
-                              style:
-                                  getMediumStyle(fontSize: 16.sp, color: black),
-                            ),
-                            // SizedBox(height: 10),
-                            textWidget(
-                              text: AppStrings.carNotAvailableForExtension,
-                              textOverflow: TextOverflow.visible,
-                              textAlign: TextAlign.center,
-                              style:
-                                  getLightStyle(fontSize: 12.sp, color: grey4),
-                            ),
-                            GtiButton(
-                              text: AppStrings.talkToAdmin,
-                              onTap: () {},
-                            ),
-                            SizedBox(height: 40),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              }
+              // controller.goBack();
+              // Navigator.of(context,).pop();
+              Navigator.of(Get.overlayContext!).pop(true);
             },
           ),
           const SizedBox(height: 30),

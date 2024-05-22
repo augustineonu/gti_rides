@@ -116,7 +116,7 @@ class IdentityVerificationScreen
               // address verification
               Visibility(
                 visible: controller.isKycUpdate.isTrue
-                    ? controller.tripData.value.tripType == "selfDriver" || controller.tripData.value.tripType == 'self drive'
+                    ? controller.tripData.value.tripType == "selfDrive" || controller.tripData.value.tripType == 'self drive'
                     : true,
                 child: Column(
                   children: [

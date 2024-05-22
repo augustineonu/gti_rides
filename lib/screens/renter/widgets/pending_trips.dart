@@ -15,7 +15,7 @@ import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/utils.dart';
 
 class PendingTrips extends StatelessWidget {
-  PendingTrips({super.key, required this.controller});
+  const PendingTrips({super.key, required this.controller});
   final TripsController controller;
 
   @override
@@ -505,8 +505,7 @@ class PendingTrips extends StatelessWidget {
             text: getPendingTripsStatusMessage(pendingTrips),
             color: primaryColor,
             isDisabled: shouldButtonBeDisabled(pendingTrips),
-            disabledColor: (pendingTrips.tripType == "selfDrive" ||
-                    pendingTrips.tripType == "self drive" &&
+            disabledColor: (pendingTrips.tripType == "selfDrive" &&
                         pendingTrips.adminStatus == "pending")
                 ? white
                 : primaryColorLight,
@@ -610,7 +609,6 @@ class PendingTrips extends StatelessWidget {
 
   bool shouldButtonBeDisabled(AllTripsData pendingTrips) {
     return (pendingTrips.tripType == "selfDrive" &&
-        pendingTrips.tripType == "self drive" &&
             pendingTrips.adminStatus == "pending");
     //      ||
     // pendingTrips.status == 'declined';

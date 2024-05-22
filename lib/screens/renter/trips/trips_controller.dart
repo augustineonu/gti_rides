@@ -423,7 +423,7 @@ class TripsController extends GetxController
     required DateTime rawStartTime,
     required DateTime rawEndTime,
   }) async {
-    Get.back();
+    // Get.back();
 
     try {
       isCheckingCarAvailability.value = true;

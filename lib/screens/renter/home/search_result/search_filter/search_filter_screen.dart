@@ -182,14 +182,14 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
               case 0:
                 // will still need to assign the selected value to the corresponding search options
                 // featuresSheet(size);
-                vehicleType(size);
-              case 1:
+                // vehicleType(size);
                 vehicleBrandSheet(size);
-              case 2:
+              case 1:
                 vehicleModelSheet(size);
+              case 2:
               // will still need to assign the selected value to the corresponding search options
-              case 3:
                 vehicleYearSheet(size);
+              case 3:
               case 4:
               case 5:
               // carSeat(size);

@@ -21,34 +21,38 @@ class NotificationScreen extends GetView<NotificationController> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    return Scaffold(
-        backgroundColor: backgroundColor,
-        appBar: appBar(),
-        body: RefreshIndicator(
-          onRefresh: () {
-            return controller.hello();
-          },
-          // onRefresh: () => controller.getFavoriteCars(),
-          child: Stack(
-            children: [
-              body(size, context),
-              controller.isDeletingFavCar.value
-                  ? Stack(
-                      children: [
-                        const Opacity(
-                          opacity: 0.5,
-                          child: ModalBarrier(
-                              dismissible: false, color: Colors.black),
-                        ),
-                        Center(
-                          child: Center(child: centerLoadingIcon()),
-                        ),
-                      ],
-                    )
-                  : const SizedBox()
-            ],
-          ),
-        ));
+    return Obx(() {
+      return Scaffold(
+          backgroundColor: backgroundColor,
+          appBar: appBar(),
+          body: RefreshIndicator(
+            color: primaryColor,
+            triggerMode: RefreshIndicatorTriggerMode.anywhere,
+            onRefresh: () {
+              return controller.getNotification();
+            },
+            // onRefresh: () => controller.getFavoriteCars(),
+            child: Stack(
+              children: [
+                body(size, context),
+                controller.isDeletingFavCar.value
+                    ? Stack(
+                        children: [
+                          const Opacity(
+                            opacity: 0.5,
+                            child: ModalBarrier(
+                                dismissible: false, color: Colors.black),
+                          ),
+                          Center(
+                            child: Center(child: centerLoadingIcon()),
+                          ),
+                        ],
+                      )
+                    : const SizedBox()
+              ],
+            ),
+          ));
+    });
     // }
   }
 
@@ -71,7 +75,7 @@ class NotificationScreen extends GetView<NotificationController> {
       (state) {
         return ListView.builder(
           shrinkWrap: true,
-          physics: ScrollPhysics(),
+          physics: AlwaysScrollableScrollPhysics(),
           itemCount: state!.length,
           itemBuilder: (context, index) {
             var notification = state[index];
@@ -85,8 +89,10 @@ class NotificationScreen extends GetView<NotificationController> {
                   controller.routeToViewNotification(arguments: {
                     "notificationData": notification
                   }).then((value) => notification.status == false
-                      ? controller.viewNotification(
-                          notificationID: notification.notificationId!)
+                      ? controller
+                          .viewNotification(
+                              notificationID: notification.notificationId!)
+                          .then((value) => controller.getNotification())
                       : null);
                 },
                 child: Padding(

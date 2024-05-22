@@ -82,6 +82,7 @@ class NotificationController extends GetxController
       if (response.status_code == 200) {
         logger.log("successfully viewed notification");
         refresh();
+        update();
       } else {
         logger.log("failed to view notification");
       }
