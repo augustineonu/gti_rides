@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -114,6 +115,9 @@ class CompletedTripScreen extends GetView<CompletedTripController> {
                               child: NormalInputTextWidget(
                                 expectedVariable: '',
                                 title: '',
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(30),
+                                ],
                                 hintText: AppStrings
                                     .letOthersKnowAboutRentalExperience,
                                 maxLines: 3,
@@ -121,7 +125,8 @@ class CompletedTripScreen extends GetView<CompletedTripController> {
                               ),
                             ),
                             const SizedBox(height: 5),
-                            GtiButton(
+                         controller.isSendingReview.value ? 
+                         centerLoadingIcon() :  GtiButton(
                               text: AppStrings.submit,
                               onTap: () {
                                 setState(() {});
@@ -362,7 +367,8 @@ class CompletedTripScreen extends GetView<CompletedTripController> {
               child: Row(
                 children: [
                   textWidget(
-                    text: controller.tripsData.tripOrders!.first.paymentReference
+                    text: controller
+                        .tripsData.tripOrders!.first.paymentReference
                         .toString()
                         .toString(),
                     style: getRegularStyle(

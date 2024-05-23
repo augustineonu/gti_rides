@@ -160,7 +160,14 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
             filterOptions(size),
             // textWidget(
             //     text: controller.testString.value, style: getMediumStyle()),
-
+            
+            SizedBox(height: 40.sp,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                continueButton(),
+              ],
+            ),
             SizedBox(
               height: size.height * 0.02,
             ),
@@ -1118,9 +1125,9 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
         : GtiButton(
             height: 50.sp,
             width: 300.sp,
-            text: "continue".tr,
-            color: secondaryColor,
-            // onTap: controller.routeToPhoneVerification,
+            text: "Filter".tr,
+            color: primaryColor,
+            onTap: controller.goBack,
             isLoading: controller.isLoading.value,
           );
   }

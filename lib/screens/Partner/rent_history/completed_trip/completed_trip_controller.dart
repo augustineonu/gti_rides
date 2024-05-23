@@ -122,11 +122,14 @@ class CompletedTripController extends GetxController
         "message": reviewMessageController.text,
       });
       if (response.status_code == 200) {
-        showSuccessSnackbar(
-            message: response.message ?? 'Review sent', seconds: 2);
-        Future.delayed(const Duration(seconds: 4))
-            .then((value) => routeService.goBack())
-            .then((value) => Get.back());
+        Get.back();
+        await Future.delayed(Duration(seconds: 2)).then(showSuccessSnackbar(
+            message: response.message ?? 'Review sent', seconds: 2));
+
+        // Future.delayed(const Duration(seconds: 2))
+        //     .then((value) => routeService.goBack())
+        //     .then((value) => Get.back());
+
         //  Get.back();
       } else {
         logger.log(
@@ -141,7 +144,7 @@ class CompletedTripController extends GetxController
     }
   }
 
-     Future<void> launchMessenger() async {
+  Future<void> launchMessenger() async {
     await Intercom.instance
         .loginIdentifiedUser(email: userService.user.value.emailAddress);
     await Intercom.instance.displayMessenger();

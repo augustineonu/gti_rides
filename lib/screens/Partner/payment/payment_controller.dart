@@ -235,6 +235,7 @@ class PaymentController extends GetxController with StateMixin<List<dynamic>> {
   }
 
   RxBool isGettingPaymentList = false.obs;
+  RxBool isGettingBankAccount = false.obs;
   // RxList<dynamic> paymentLIst = <Rx>[].obs;
   RxList<dynamic> paymentList = <dynamic>[].obs;
 
@@ -249,6 +250,7 @@ class PaymentController extends GetxController with StateMixin<List<dynamic>> {
             paymentList.value = response.data!.cast<dynamic>().obs;
 
           // logger.log("payment list:: ${paymentList}");
+          isGettingPaymentList.value = false;
         } else {
           logger.log('data is empty');
           paymentList.value = [];
@@ -258,6 +260,8 @@ class PaymentController extends GetxController with StateMixin<List<dynamic>> {
       }
     } catch (exception) {
       logger.log("error  $exception");
+    } finally{
+      isGettingPaymentList.value = false;
     }
   }
 

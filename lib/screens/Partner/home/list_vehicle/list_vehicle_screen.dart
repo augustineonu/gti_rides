@@ -1180,7 +1180,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                 title: AppStrings.tellUsAboutYourVehicle,
                 hintText: AppStrings.writeHere,
                 maxLines: 3,
-                maxLength: 100,
+                maxLength: 300,
                 inputFormatters: [
                   LengthLimitingTextInputFormatter(100),
                 ],

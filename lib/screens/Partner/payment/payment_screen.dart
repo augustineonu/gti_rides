@@ -59,6 +59,7 @@ class PaymentScreen extends GetView<PaymentController> {
                                 onTap: () {
                                   controller.selectedIndex.value = 0;
                                   controller.paymentMethodView.value = 0;
+                                  controller.getPaymentList();
                                   // controller.fullNameController.clear();
                                   // controller.accountNumberController
                                   //     .clear();
@@ -81,17 +82,22 @@ class PaymentScreen extends GetView<PaymentController> {
                         height: 14.sp,
                       ),
                       Expanded(
-                        child: SingleChildScrollView(
-                          physics: const ScrollPhysics(),
-                          child: Column(
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  buildBody(context, size),
-                                ],
-                              ),
-                            ],
+                        child: RefreshIndicator(
+                          color: primaryColor,
+                          onRefresh: () => controller.getPaymentList(),
+                          triggerMode: RefreshIndicatorTriggerMode.anywhere,
+                          child: SingleChildScrollView(
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            child: Column(
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    buildBody(context, size),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -99,7 +105,8 @@ class PaymentScreen extends GetView<PaymentController> {
                   ),
                 ),
               ),
-              controller.isFetchingAccountDetails.isTrue
+              controller.isFetchingAccountDetails.isTrue ||
+                      controller.isGettingPaymentList.isTrue
                   ? Stack(
                       children: [
                         const Opacity(
@@ -164,9 +171,15 @@ class PaymentScreen extends GetView<PaymentController> {
                     ),
                   ),
                 ),
-                onLoading: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 50),
-                  child: Center(child: centerLoadingIcon()),
+                onLoading: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: size.height / 3.5),
+                      child: Center(child: centerLoadingIcon()),
+                    ),
+                  ],
                 ),
               );
 
@@ -495,21 +508,6 @@ class PaymentScreen extends GetView<PaymentController> {
               }
             },
           ),
-          // DropdownSearch<String>(
-          //   popupProps: PopupProps.menu(
-          //     showSelectedItems: true,
-          //     disabledItemFn: (String s) => s.startsWith('I'),
-          //   ),
-          //   items: ["Brazil", "Italia (Disabled)", "Tunisia", 'Canada'],
-          //   dropdownDecoratorProps: DropDownDecoratorProps(
-          //     dropdownSearchDecoration: InputDecoration(
-          //       labelText: "Menu mode",
-          //       hintText: "country in menu mode",
-          //     ),
-          //   ),
-          //   onChanged: print,
-          //   selectedItem: "Brazil",
-          // ),
           const SizedBox(
             height: 22,
           ),
