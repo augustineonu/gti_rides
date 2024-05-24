@@ -238,16 +238,23 @@ class SearchFilterController extends GetxController {
     }
   }
 
+  String selectedBrandName= '';
   String selectedBrandCode = '';
+  String selectedBrandModelName = '';
   String selectedBrandModelCode = '';
+  RxString selectedYearName = ''.obs;
   String selectedYearCode = '';
   String selectedPriceSorting = '';
 
   void clearSearchFilter() {
     selectedPriceSorting = '';
+    selectedBrandName = '';
     selectedBrandCode = '';
+    selectedBrandModelName = '';
     selectedBrandModelCode = '';
     selectedYearCode = '';
+    selectedYearCode = '';
+    selectedYearName = "".obs;
     selectedPriceSorting = '';
     toAmount.clear();
     fromAmount.clear();

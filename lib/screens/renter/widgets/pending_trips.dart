@@ -505,11 +505,13 @@ class PendingTrips extends StatelessWidget {
             text: getPendingTripsStatusMessage(pendingTrips),
             color: primaryColor,
             isDisabled: shouldButtonBeDisabled(pendingTrips),
-            disabledColor: (pendingTrips.tripType == "selfDrive" &&
+            disabledColor: (startTrip == true ||
+                    pendingTrips.tripType == "selfDrive" &&
                         pendingTrips.adminStatus == "pending")
                 ? white
                 : primaryColorLight,
-            disabledTextColor: (pendingTrips.tripType == "selfDrive" ||
+            disabledTextColor: (startTrip == true ||
+                    pendingTrips.tripType == "selfDrive" ||
                     pendingTrips.tripType == "self drive" &&
                         pendingTrips.adminStatus == "pending")
                 ? primaryColorLight
@@ -540,16 +542,23 @@ class PendingTrips extends StatelessWidget {
                       controller.launchMessenger();
                     }
                   } else {
-                    if (pendingTrips.adminStatus == "approved" && pendingTrips.tripOrders!.first.paymentStatus == "pending") {
+                    if (pendingTrips.adminStatus == "approved" &&
+                        pendingTrips.tripOrders!.first.paymentStatus ==
+                            "pending") {
                       // payNowMethod();
                       controller.routeToPayment(
                           url: pendingTrips.tripOrders!.first.paymentLink);
                     } else if (pendingTrips.tripOrders!.first.paymentStatus
                         .toString()
                         .contains("success")) {
-                      controller.updateTripStatus(
-                          type: 'active',
-                          tripID: pendingTrips.tripId.toString());
+                      if (startTrip == true) {
+                        // () {};
+                        print("do nothing ");
+                      } else {
+                        controller.updateTripStatus(
+                            type: 'active',
+                            tripID: pendingTrips.tripId.toString());
+                      }
                       print("confirm");
                       // confirm trip button
                     } else {
@@ -607,8 +616,11 @@ class PendingTrips extends StatelessWidget {
     return "null";
   }
 
+//  bool isTripActive =
+//                           controller.isTripActive(activeTrip.tripEndDate!);
   bool shouldButtonBeDisabled(AllTripsData pendingTrips) {
-    return (pendingTrips.tripType == "selfDrive" &&
+    return (controller.isTripActive(pendingTrips.tripStartDate!) ||
+        pendingTrips.tripType == "selfDrive" &&
             pendingTrips.adminStatus == "pending");
     //      ||
     // pendingTrips.status == 'declined';

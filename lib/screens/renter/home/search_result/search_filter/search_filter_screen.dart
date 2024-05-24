@@ -157,11 +157,111 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
             // divider(color: borderColor),
             // hostRating(context),
             divider(color: borderColor),
-            filterOptions(size),
+            // filterOptions(size),
+            // vehicle brand
+            InkWell(
+              onTap: (){
+                vehicleBrandSheet(size);
+              },
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.sp, vertical: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        textWidget(
+                            text: AppStrings.vehicleBrandCaps,
+                            style: getMediumStyle(fontSize: 12.sp, color: grey2)
+                                .copyWith(fontWeight: FontWeight.w500)),
+                        SvgPicture.asset(ImageAssets.arrowDown),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    textWidget(
+                        text: controller.selectedBrandName.isEmpty
+                            ? "All"
+                            : controller.selectedBrandName,
+                        style: getMediumStyle(fontSize: 14.sp)
+                            .copyWith(fontWeight: FontWeight.w400)),
+                  ],
+                ),
+              ),
+            ),
+            // vehicle model
+            InkWell(
+              onTap: (){
+                vehicleModelSheet(size);
+              },
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.sp, vertical: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        textWidget(
+                            text:  "VEHICLE ${AppStrings.model}",
+                            style: getMediumStyle(fontSize: 12.sp, color: grey2)
+                                .copyWith(fontWeight: FontWeight.w500)),
+                        SvgPicture.asset(ImageAssets.arrowDown),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    textWidget(
+                        text: controller.selectedBrandModelName.isEmpty
+                            ? "All"
+                            : controller.selectedBrandModelName,
+                        style: getMediumStyle(fontSize: 14.sp)
+                            .copyWith(fontWeight: FontWeight.w400)),
+                  ],
+                ),
+              ),
+            ),
+            InkWell(
+              onTap: (){
+                vehicleYearSheet(size);
+              },
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.sp, vertical: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        textWidget(
+                            text:  "VEHICLE YEAR",
+                            style: getMediumStyle(fontSize: 12.sp, color: grey2)
+                                .copyWith(fontWeight: FontWeight.w500)),
+                        SvgPicture.asset(ImageAssets.arrowDown),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    textWidget(
+                        text: controller.selectedYearName.value.isEmpty
+                            ? "All"
+                            : controller.selectedYearName.value,
+                        style: getMediumStyle(fontSize: 14.sp)
+                            .copyWith(fontWeight: FontWeight.w400)),
+                  ],
+                ),
+              ),
+            ),
             // textWidget(
             //     text: controller.testString.value, style: getMediumStyle()),
-            
-            SizedBox(height: 40.sp,),
+
+            SizedBox(
+              height: 40.sp,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -176,68 +276,68 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
         ));
   }
 
-  Widget filterOptions(Size size) {
-    return ListView.separated(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: controller.filterOptionsList.length,
-      itemBuilder: (context, index) {
-        final filterOptions = controller.filterOptionsList[index];
-        return InkWell(
-          onTap: () {
-            switch (index) {
-              case 0:
-                // will still need to assign the selected value to the corresponding search options
-                // featuresSheet(size);
-                // vehicleType(size);
-                vehicleBrandSheet(size);
-              case 1:
-                vehicleModelSheet(size);
-              case 2:
-              // will still need to assign the selected value to the corresponding search options
-                vehicleYearSheet(size);
-              case 3:
-              case 4:
-              case 5:
-              // carSeat(size);
-              // transmission(size);
-              case 6:
-              // transmission(size);
+  // Widget filterOptions(Size size) {
+  //   return ListView.separated(
+  //     shrinkWrap: true,
+  //     physics: const NeverScrollableScrollPhysics(),
+  //     itemCount: controller.filterOptionsList.length,
+  //     itemBuilder: (context, index) {
+  //       final filterOptions = controller.filterOptionsList[index];
+  //       return InkWell(
+  //         onTap: () {
+  //           switch (index) {
+  //             case 0:
+  //               // will still need to assign the selected value to the corresponding search options
+  //               // featuresSheet(size);
+  //               // vehicleType(size);
+  //               vehicleBrandSheet(size);
+  //             case 1:
+  //               vehicleModelSheet(size);
+  //             case 2:
+  //               // will still need to assign the selected value to the corresponding search options
+  //               vehicleYearSheet(size);
+  //             case 3:
+  //             case 4:
+  //             case 5:
+  //             // carSeat(size);
+  //             // transmission(size);
+  //             case 6:
+  //             // transmission(size);
 
-              default:
-                () {};
-            }
-          },
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.sp, vertical: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    textWidget(
-                        text: filterOptions.title,
-                        style: getMediumStyle(fontSize: 12.sp, color: grey2)
-                            .copyWith(fontWeight: FontWeight.w500)),
-                    SvgPicture.asset(ImageAssets.arrowDown),
-                  ],
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                textWidget(
-                    text: filterOptions.subTitle,
-                    style: getMediumStyle(fontSize: 14.sp)
-                        .copyWith(fontWeight: FontWeight.w400)),
-              ],
-            ),
-          ),
-        );
-      },
-      separatorBuilder: (conext, _) => divider(color: borderColor),
-    );
-  }
+  //             default:
+  //               () {};
+  //           }
+  //         },
+  //         child: Padding(
+  //           padding: EdgeInsets.symmetric(horizontal: 20.sp, vertical: 10),
+  //           child: Column(
+  //             crossAxisAlignment: CrossAxisAlignment.stretch,
+  //             children: [
+  //               Row(
+  //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                 children: [
+  //                   textWidget(
+  //                       text: filterOptions.title,
+  //                       style: getMediumStyle(fontSize: 12.sp, color: grey2)
+  //                           .copyWith(fontWeight: FontWeight.w500)),
+  //                   SvgPicture.asset(ImageAssets.arrowDown),
+  //                 ],
+  //               ),
+  //               const SizedBox(
+  //                 height: 8,
+  //               ),
+  //               textWidget(
+  //                   text: filterOptions.subTitle,
+  //                   style: getMediumStyle(fontSize: 14.sp)
+  //                       .copyWith(fontWeight: FontWeight.w400)),
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //     separatorBuilder: (conext, _) => divider(color: borderColor),
+  //   );
+  // }
 
   Future<dynamic> vehicleModelSheet(Size size) {
     return Get.bottomSheet(
@@ -284,6 +384,10 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
                                 controller.onVehicleModelChecked(index);
                                 controller.selectedBrandModelCode =
                                     model.modelCode.toString();
+                                    controller.selectedBrandModelName = model.modelName ?? "";
+                                    controller.selectedYearName.value = '';
+                                    controller.selectedYearCode = '';
+                                    Get.back();
                                 print(
                                     "selected brand model code: ${model.modelCode.toString()}");
 
@@ -386,6 +490,8 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
                                 controller.onVehicleYearChecked(index);
                                 controller.selectedYearCode =
                                     year.yearCode.toString();
+                                    controller.selectedYearName.value = year.yearName ?? "";
+                                    
                                 print(
                                     "selected brand model code: ${year.yearCode.toString()}");
 
@@ -395,9 +501,11 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
                                 //         controller.selectedBrandModelCode);
 
                                 state(() {
+                                    // controller.selectedYearName = year.yearName ?? "";
                                   //   controller.selectedVehicleModel.value =
                                   //       !controller.selectedVehicleModel.value;
                                 });
+                                Get.back();
                               },
                               child: Row(
                                 children: [
@@ -486,10 +594,16 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
                                 controller.onVehicleBrandChecked(index);
                                 controller.selectedBrandCode =
                                     brand.brandCode.toString();
+                                controller.selectedBrandName =
+                                    brand.brandName ?? "";
 
                                 controller.getBrandModel(
                                     brandCode: brand.brandCode.toString());
-
+                                    controller.selectedBrandModelName = '';
+                                    controller.selectedBrandModelCode = '';
+                                    controller.selectedYearCode = '';
+                                    controller.selectedYearName.value = '';
+                                  Get.back();
                                 state(() {
                                   print(
                                       "Selectd car brand:: ${controller.selectedVehicleBrands} ${brand.brandCode.toString()}");
