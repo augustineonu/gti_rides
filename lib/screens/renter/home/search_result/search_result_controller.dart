@@ -112,8 +112,8 @@ class SearchResultController extends GetxController {
         endDate: rawEndTime!.toIso8601String(),
         brandCode: brandCode, brandModelCode: brandModelCode,
         yearCode: yearCode,
-        // startPricing: startPricing, endPricing: endPricing,
-        // priceArrangement: priceArrangement
+        startPricing: startPricing, endPricing: endPricing,
+        priceArrangement: priceArrangement
       );
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("gotten cars  ${response.data}");

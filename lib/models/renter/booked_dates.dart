@@ -29,18 +29,18 @@ class BookedDatesModel {
 }
 
 class BookedData {
-    final String? tripId;
-    final String? adminStatus;
-    final String? carId;
-    final String? status;
-    final String? totalFee;
+    final dynamic tripId;
+    final dynamic adminStatus;
+    final dynamic carId;
+    final dynamic status;
+    final dynamic totalFee;
     final DateTime? tripEndDate;
     final DateTime? tripStartDate;
-    final String? tripType;
-    final String? carProfilePic;
-    final String? carModel;
-    final String? carYear;
-    final List<String>? carBrand;
+    final dynamic tripType;
+    final dynamic carProfilePic;
+    final dynamic carModel;
+    final dynamic carYear;
+    final dynamic carBrand;
 
     BookedData({
         this.tripId,
@@ -73,7 +73,7 @@ class BookedData {
         carProfilePic: json["carProfilePic"],
         carModel: json["carModel"],
         carYear: json["carYear"],
-        carBrand: json["carBrand"] == null ? [] : List<String>.from(json["carBrand"]!.map((x) => x)),
+        carBrand: json["carBrand"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -88,6 +88,6 @@ class BookedData {
         "carProfilePic": carProfilePic,
         "carModel": carModel,
         "carYear": carYear,
-        "carBrand": carBrand == null ? [] : List<dynamic>.from(carBrand!.map((x) => x)),
+        "carBrand": carBrand,
     };
 }

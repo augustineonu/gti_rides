@@ -8,8 +8,6 @@ import 'package:gti_rides/utils/utils.dart';
 
 Future<dynamic> bookedDatedSheet({
   required List<BookedData> itemCount,
-  required String startDate,
-  required String endDate,
 }) {
   return Get.bottomSheet(
     SizedBox(

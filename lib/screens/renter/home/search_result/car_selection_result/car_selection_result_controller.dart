@@ -256,7 +256,7 @@ class CarSelectionResultController extends GetxController
 
     updatedTotalValue.value = escortFeeTotal + sumTotal;
 
-   await applyDiscount();
+    await applyDiscount();
 
     logResults();
   }
@@ -286,7 +286,6 @@ class CarSelectionResultController extends GetxController
   Rx<bool> discountApplied = false.obs;
 
   Future<void> applyDiscount() async {
-    
     var discountDay = carHistory?.first.discountDays;
     var discountPercentage = carHistory?.first.discountPrice;
 
@@ -301,13 +300,12 @@ class CarSelectionResultController extends GetxController
         var discountPercentageValue = parsedDiscountPercentage / 100.0;
         var priceWithoutCommas = pricePerDay.value.replaceAll(',', '');
         var perDayPrice = double.parse(priceWithoutCommas);
-        var discount =
-            discountPercentageValue * (perDayPrice * tripDays.value);
-            
-             discountTotalFee.value = await formatAmount(discount);
-            //  this is supposed to be equal to the totalPricePerdayfee x
-            //  tripDaysTotal
-            logger.log("formatted discount ${discountTotalFee.value}");
+        var discount = discountPercentageValue * (perDayPrice * tripDays.value);
+
+        discountTotalFee.value = await formatAmount(discount);
+        //  this is supposed to be equal to the totalPricePerdayfee x
+        //  tripDaysTotal
+        logger.log("formatted discount ${discountTotalFee.value}");
 
         logger.log("Discount price total: ${discountTotalFee.toString()}");
         // update updatedTotal
@@ -339,13 +337,12 @@ class CarSelectionResultController extends GetxController
     logger.log("New estimated Total:: ${estimatedTotal.value}");
   }
 
-
   DateTime? carAvialbilityEndDate;
   Rx<String> vehicleName = ''.obs;
   Rx<String> photoUrl = ''.obs;
   Rx<String> brand = ''.obs;
   Rx<String> brandModel = ''.obs;
-  
+
   Future<void> getCarHistory() async {
     change(<CarHistoryData>[].obs, status: RxStatus.loading());
     try {
@@ -535,7 +532,7 @@ class CarSelectionResultController extends GetxController
       showErrorSnackbar(message: 'Kindly select trip dates');
       return;
     }
-    if (carHistory?.first.availability != "available".toLowerCase()) {
+    if (carHistory?.first.availability == "notAvailable") {
       showSuccessSnackbar(message: "Car not available");
       return;
     }
@@ -543,6 +540,9 @@ class CarSelectionResultController extends GetxController
     await addGrandTotal();
 
     isLoading.value = true;
+
+    // if the user selects a date that is not withing the car's availability date
+    // it throws this
     var isEndDaterWithinAvailabilityFrame = isDateAfterCarAvailability(
         rawEndTime: rawEndTime!,
         carAvailabilityEndDate: carAvialbilityEndDate!);
@@ -553,6 +553,8 @@ class CarSelectionResultController extends GetxController
       return;
     }
 
+    // checks car availability frame matching the supplied start and end date if
+    // the car is booked withing the frame
     var isCarAvailable = await checkCarAvailability();
     if (!isCarAvailable) {
       if (carNotAvailable.value == 'An error occurred') {
@@ -563,8 +565,6 @@ class CarSelectionResultController extends GetxController
       isLoading.value = false;
       return bookedDatedSheet(
         itemCount: bookedData,
-        startDate: '',
-        endDate: "11-12-2024 9:00am",
       );
     }
     try {
@@ -610,7 +610,6 @@ class CarSelectionResultController extends GetxController
               "rawStartTime": rawStartTime,
               "rawEndTime": rawEndTime,
               "discountTotal": discountTotalFee.value,
-
             });
           } else {
             // Some fields are missing, route to KYC screen with the list of missing fields
@@ -735,7 +734,9 @@ class CarSelectionResultController extends GetxController
         } else {
           // If the list is not empty
           // reviews?.value = response.data!;
-          reviews?.value = response.data!.map((review) => ReviewData.fromJson(review)).toList();
+          reviews?.value = response.data!
+              .map((review) => ReviewData.fromJson(review))
+              .toList();
 
           update();
         }
