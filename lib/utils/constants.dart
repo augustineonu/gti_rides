@@ -227,7 +227,8 @@ class AppStrings {
   static String yourRoute = "Your Route";
   static String weWantToKnowTheRoute =
       " We want to know the different places you plan to stop by.";
-  static String yourStart = "You0r Start";
+  static String yourStart = "Your Start";
+  static String startRoute = "Start Route";
   static String endRoute = "End Route";
   static String securityEscort = "Security Escort";
   static String youWillDrive = "You will be able to drive yourself around";

@@ -217,10 +217,27 @@ class TripsScreen extends GetView<TripsController> {
                                   activeTrip.tripType.toString();
                               await controller.getCarHistory(
                                   carId: activeTrip.carId);
+
+                              // if the user selects a date that is not within the car's availability date
+                              // it throws this
+                              var isEndDaterWithinAvailabilityFrame =
+                                  isDateAfterCarAvailability(
+                                      rawEndTime:
+                                          controller.selectedEndDateTime!,
+                                      carAvailabilityEndDate:
+                                          controller.carAvialbilityEndDate!);
+                              if (isEndDaterWithinAvailabilityFrame) {
+                                showSuccessSnackbar(
+                                    message:
+                                        'Car end date is not within car availability frame');
+                                // isLoading.value = false;
+                                return;
+                              }
+
                               var isCarAvailable =
                                   await controller.checkCarAvailability(
                                       carId: activeTrip.carId.toString(),
-                                      rawStartTime: activeTrip.tripStartDate!,
+                                      rawStartTime: activeTrip.tripEndDate!,
                                       rawEndTime:
                                           controller.selectedEndDateTime!);
 
@@ -260,8 +277,12 @@ class TripsScreen extends GetView<TripsController> {
                                               children: [
                                                 InkWell(
                                                   onTap: controller.goBack,
-                                                  child: SvgPicture.asset(
-                                                      ImageAssets.closeSmall),
+                                                  child: SizedBox(
+                                                    width: 40.sp,
+                                                    height: 30.sp,
+                                                    child: SvgPicture.asset(
+                                                        ImageAssets.closeSmall),
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -286,7 +307,9 @@ class TripsScreen extends GetView<TripsController> {
                                             ),
                                             GtiButton(
                                               text: AppStrings.talkToAdmin,
-                                              onTap: () {},
+                                              onTap: () {
+                                                controller.launchMessenger();
+                                              },
                                             ),
                                             SizedBox(height: 40),
                                           ],

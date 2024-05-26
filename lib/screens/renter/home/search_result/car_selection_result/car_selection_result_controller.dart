@@ -446,11 +446,11 @@ class CarSelectionResultController extends GetxController
   RxString carNotAvailable = ''.obs;
   // final controller = Get.put(ChooseTripDateController());
 
-  bool isDateAfterCarAvailability(
-      {required DateTime rawEndTime,
-      required DateTime carAvailabilityEndDate}) {
-    return rawEndTime.isAfter(carAvailabilityEndDate);
-  }
+  // bool isDateAfterCarAvailability(
+  //     {required DateTime rawEndTime,
+  //     required DateTime carAvailabilityEndDate}) {
+  //   return rawEndTime.isAfter(carAvailabilityEndDate);
+  // }
 
 // raw date should be passed from previous screen
   RxList<BookedData> bookedData = <BookedData>[].obs;
@@ -541,7 +541,7 @@ class CarSelectionResultController extends GetxController
 
     isLoading.value = true;
 
-    // if the user selects a date that is not withing the car's availability date
+    // if the user selects a date that is not within the car's availability date
     // it throws this
     var isEndDaterWithinAvailabilityFrame = isDateAfterCarAvailability(
         rawEndTime: rawEndTime!,
@@ -554,7 +554,7 @@ class CarSelectionResultController extends GetxController
     }
 
     // checks car availability frame matching the supplied start and end date if
-    // the car is booked withing the frame
+    // the car is booked within the frame
     var isCarAvailable = await checkCarAvailability();
     if (!isCarAvailable) {
       if (carNotAvailable.value == 'An error occurred') {

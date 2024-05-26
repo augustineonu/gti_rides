@@ -907,7 +907,7 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                         child: NormalInputTextWidget(
                           title: AppStrings.from,
                           expectedVariable: "field",
-                          hintText: AppStrings.yourStart,
+                          hintText: AppStrings.startRoute,
                           textInputType: TextInputType.text,
                           contentPadding: const EdgeInsets.symmetric(
                               vertical: 5, horizontal: 10),

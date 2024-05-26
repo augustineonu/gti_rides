@@ -321,6 +321,11 @@ String formatRelativeDateTime({required DateTime date, bool relative = false}) {
     return 'NAN';
   }
 }
+bool isDateAfterCarAvailability(
+      {required DateTime rawEndTime,
+      required DateTime carAvailabilityEndDate}) {
+    return rawEndTime.isAfter(carAvailabilityEndDate);
+  }
 
 // String isSingleDateSelection({required DateTime date, bool relative = false}) {
 //   try {

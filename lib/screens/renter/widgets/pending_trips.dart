@@ -30,317 +30,344 @@ class PendingTrips extends StatelessWidget {
           itemBuilder: (context, index) {
             var pendingTrips = controller.pendingTrips[index];
             // pendingTrips.tripOrders.first
-            return ExpandableNotifier(
-                child: Card(
-              // clipBehavior: Clip.antiAlias,
-              //  color: white,
-              margin: EdgeInsets.symmetric(vertical: 12.sp, horizontal: 0),
-              surfaceTintColor: Colors.transparent,
-              shape: BeveledRectangleBorder(
-                borderRadius: BorderRadius.circular(4.0),
-              ),
-              color: greyLight1,
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 12.sp, horizontal: 0),
-                child: Column(
-                  children: <Widget>[
-                    Padding(
+            return controller.pendingTrips.isEmpty
+                ? Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: context.height * 0.1),
+                    child: Center(
+                        child: textWidget(
+                            textOverflow: TextOverflow.visible,
+                            textAlign: TextAlign.center,
+                            text: AppStrings.noPendingCarsYet,
+                            style: getExtraBoldStyle(fontSize: 18))),
+                  )
+                : ExpandableNotifier(
+                    child: Card(
+                    // clipBehavior: Clip.antiAlias,
+                    //  color: white,
+                    margin:
+                        EdgeInsets.symmetric(vertical: 12.sp, horizontal: 0),
+                    surfaceTintColor: Colors.transparent,
+                    shape: BeveledRectangleBorder(
+                      borderRadius: BorderRadius.circular(4.0),
+                    ),
+                    color: greyLight1,
+                    child: Padding(
                       padding:
-                          EdgeInsets.symmetric(vertical: 0.sp, horizontal: 8),
-                      child: headerCard(size, pendingTrips),
-                    ),
-                    SizedBox(
-                      height: 14.sp,
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 0.sp, horizontal: 8),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(6.r)),
-                        child: carImage(
-                            height: 65.sp, imgUrl: pendingTrips.carProfilePic),
-                      ),
-                    ),
-                    Builder(builder: (context) {
-                      return ScrollOnExpand(
-                        scrollOnExpand: true,
-                        scrollOnCollapse: false,
-                        child: ExpandablePanel(
-                          theme: const ExpandableThemeData(
-                            iconColor: primaryColor,
-                            headerAlignment:
-                                ExpandablePanelHeaderAlignment.center,
-                            tapBodyToCollapse: true,
-                          ),
-                          header: Padding(
+                          EdgeInsets.symmetric(vertical: 12.sp, horizontal: 0),
+                      child: Column(
+                        children: <Widget>[
+                          Padding(
                             padding: EdgeInsets.symmetric(
-                                vertical: 10.sp, horizontal: 13),
-                            child: textWidget(
-                                text: AppStrings.seeBookingDetails,
-                                style: getRegularStyle(color: grey4)),
+                                vertical: 0.sp, horizontal: 8),
+                            child: headerCard(size, pendingTrips),
                           ),
-                          collapsed: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Visibility(
-                                visible: !controller.isExpanded.value,
-                                child: Row(
-                                  children: [
-                                    textWidget(
-                                      text: AppStrings.estFee,
-                                      style: getLightStyle(
-                                          fontSize: 10.sp, color: grey2),
-                                    ),
-                                    SvgPicture.asset(ImageAssets.naira),
-                                    textWidget(
-                                      text: pendingTrips.totalFee.toString() ??
-                                          '0',
-                                      style:
-                                          getRegularStyle(color: secondaryColor)
-                                              .copyWith(fontFamily: 'Neue'),
-                                    ),
-                                  ],
+                          SizedBox(
+                            height: 14.sp,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 0.sp, horizontal: 8),
+                            child: ClipRRect(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(6.r)),
+                              child: carImage(
+                                  height: 65.sp,
+                                  imgUrl: pendingTrips.carProfilePic),
+                            ),
+                          ),
+                          Builder(builder: (context) {
+                            return ScrollOnExpand(
+                              scrollOnExpand: true,
+                              scrollOnCollapse: false,
+                              child: ExpandablePanel(
+                                theme: const ExpandableThemeData(
+                                  iconColor: primaryColor,
+                                  headerAlignment:
+                                      ExpandablePanelHeaderAlignment.center,
+                                  tapBodyToCollapse: true,
                                 ),
-                              ),
-                              SizedBox(
-                                height: 8.sp,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  continueButton(
-                                      controller, pendingTrips, context),
-                                ],
-                              ),
-                            ],
-                          ),
-                          expanded: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  dateTimeColWIdget(
-                                      alignment: CrossAxisAlignment.start,
-                                      title: formatDayDate(
-                                          pendingTrips.tripStartDate!),
-                                      subTitle: formatTime(
-                                          pendingTrips.tripStartDate!)),
-                                  SvgPicture.asset(
-                                    ImageAssets.arrowForwardRounded,
-                                    height: 24.sp,
-                                    width: 24.sp,
-                                    color: primaryColor,
-                                  ),
-                                  dateTimeColWIdget(
-                                      alignment: CrossAxisAlignment.end,
-                                      title: formatDayDate(
-                                          pendingTrips.tripEndDate!),
-                                      subTitle: formatTime(
-                                          pendingTrips.tripEndDate!)),
-                                ],
-                              ),
-                              divider(color: borderColor),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    // crossAxisAlignment: alignment,
-                                    children: [
-                                      SvgPicture.asset(ImageAssets.naira),
-                                      textWidget(
-                                          text: pendingTrips
-                                                  .tripOrders!.first.pricePerDay
-                                                  .toString() ??
-                                              '',
-                                          style: getRegularStyle(color: grey5)),
-                                      // textWidget(
-                                      //     text: ' x ', style: getRegularStyle()),
-                                      const SizedBox(
-                                        width: 2,
-                                      ),
-                                      SvgPicture.asset(
-                                        ImageAssets.closeSmall,
-                                        width: 7.sp,
-                                        height: 7.sp,
-                                      ),
-                                      const SizedBox(
-                                        width: 2,
-                                      ),
-                                      textWidget(
-                                          text:
-                                              '${pendingTrips.tripOrders!.first.tripsDays} ${int.parse(pendingTrips.tripOrders!.first.tripsDays) > 1 ? 'days' : 'day'}',
-                                          style: getRegularStyle(color: grey5)),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      SvgPicture.asset(ImageAssets.naira),
-                                      textWidget(
-                                          text: pendingTrips.tripOrders!.first
-                                              .pricePerDayTotal
-                                              .toString(),
-                                          style: getRegularStyle(color: grey5)),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 10.sp,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    // crossAxisAlignment: alignment,
-                                    children: [
-                                      textWidget(
-                                          text: 'Discount',
-                                          style: getRegularStyle(color: grey5)),
-                                      const SizedBox(
-                                        width: 2,
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      textWidget(
-                                          text: '- ',
-                                          style: getRegularStyle(color: grey5)),
-                                      SvgPicture.asset(ImageAssets.naira),
-                                      textWidget(
-                                          text: pendingTrips.tripOrders!.first
-                                              .discountPerDayTotal
-                                              .toString(),
-                                          style: getRegularStyle(color: grey5)),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              rowNairaText(
-                                  title: 'VAT',
-                                  subTitle: pendingTrips
-                                          .tripOrders!.first.vatFee
-                                          .toString() ??
-                                      ''),
-                              Visibility(
-                                  visible: pendingTrips
-                                              .tripOrders!.first.pickUpFee
-                                              .toString() ==
-                                          '0'
-                                      ? false
-                                      : true,
-                                  child: rowNairaText(
-                                      title: 'Pick up',
-                                      subTitle: pendingTrips
-                                          .tripOrders!.first.pickUpFee
-                                          .toString())),
-                              Visibility(
-                                  visible: pendingTrips
-                                              .tripOrders!.first.dropOffFee
-                                              .toString() ==
-                                          '0'
-                                      ? false
-                                      : true,
-                                  child: rowNairaText(
-                                      title: 'Drop off',
-                                      subTitle: pendingTrips
-                                          .tripOrders!.first.dropOffFee
-                                          .toString())),
-                              Visibility(
-                                  visible: pendingTrips
-                                              .tripOrders!.first.escortFee
-                                              .toString() ==
-                                          '0'
-                                      ? false
-                                      : true,
-                                  child: rowNairaText(
-                                      title: 'Escort',
-                                      subTitle: pendingTrips
-                                          .tripOrders!.first.escortFee
-                                          .toString())),
-                              Visibility(
-                                  visible: pendingTrips.tripType ==
-                                              "selfDrive" ||
-                                          pendingTrips.tripType.toString() ==
-                                              'self drive'
-                                      ? true
-                                      : false,
-                                  child: rowNairaText(
-                                      title: 'Caution fee',
-                                      subTitle: pendingTrips
-                                          .tripOrders!.first.cautionFee
-                                          .toString())),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 14, vertical: 9),
-                                decoration: BoxDecoration(
-                                    color: primaryColorLight.withOpacity(0.1)),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                header: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 10.sp, horizontal: 13),
+                                  child: textWidget(
+                                      text: AppStrings.seeBookingDetails,
+                                      style: getRegularStyle(color: grey4)),
+                                ),
+                                collapsed: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
                                   children: [
-                                    Row(
-                                      // crossAxisAlignment: alignment,
-                                      children: [
-                                        textWidget(
-                                            text: 'Total:',
-                                            style: getRegularStyle(
-                                                    color: primaryColor)
-                                                .copyWith(
-                                                    fontWeight:
-                                                        FontWeight.w700)),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        SvgPicture.asset(
-                                          ImageAssets.naira,
-                                          color: primaryColor,
-                                        ),
-                                        textWidget(
+                                    Visibility(
+                                      visible: !controller.isExpanded.value,
+                                      child: Row(
+                                        children: [
+                                          textWidget(
+                                            text: AppStrings.estFee,
+                                            style: getLightStyle(
+                                                fontSize: 10.sp, color: grey2),
+                                          ),
+                                          SvgPicture.asset(ImageAssets.naira),
+                                          textWidget(
                                             text: pendingTrips.totalFee
                                                     .toString() ??
                                                 '0',
                                             style: getRegularStyle(
-                                                    color: primaryColor)
-                                                .copyWith(
-                                                    fontFamily: "Neue",
-                                                    fontWeight:
-                                                        FontWeight.w700)),
+                                                    color: secondaryColor)
+                                                .copyWith(fontFamily: 'Neue'),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 8.sp,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        continueButton(
+                                            controller, pendingTrips, context),
                                       ],
                                     ),
                                   ],
                                 ),
-                              ),
-                              SizedBox(
-                                height: 14.sp,
-                              ),
-                              continueButton(controller, pendingTrips, context),
-                            ],
-                          ),
-                          builder: (_, collapsed, expanded) {
-                            return Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 10, right: 10, bottom: 10),
-                              child: Expandable(
-                                collapsed: collapsed,
-                                expanded: expanded,
-                                theme: const ExpandableThemeData(
-                                    crossFadePoint: 0),
+                                expanded: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        dateTimeColWIdget(
+                                            alignment: CrossAxisAlignment.start,
+                                            title: formatDayDate(
+                                                pendingTrips.tripStartDate!),
+                                            subTitle: formatTime(
+                                                pendingTrips.tripStartDate!)),
+                                        SvgPicture.asset(
+                                          ImageAssets.arrowForwardRounded,
+                                          height: 24.sp,
+                                          width: 24.sp,
+                                          color: primaryColor,
+                                        ),
+                                        dateTimeColWIdget(
+                                            alignment: CrossAxisAlignment.end,
+                                            title: formatDayDate(
+                                                pendingTrips.tripEndDate!),
+                                            subTitle: formatTime(
+                                                pendingTrips.tripEndDate!)),
+                                      ],
+                                    ),
+                                    divider(color: borderColor),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          // crossAxisAlignment: alignment,
+                                          children: [
+                                            SvgPicture.asset(ImageAssets.naira),
+                                            textWidget(
+                                                text: pendingTrips.tripOrders!
+                                                        .first.pricePerDay
+                                                        .toString() ??
+                                                    '',
+                                                style: getRegularStyle(
+                                                    color: grey5)),
+                                            // textWidget(
+                                            //     text: ' x ', style: getRegularStyle()),
+                                            const SizedBox(
+                                              width: 2,
+                                            ),
+                                            SvgPicture.asset(
+                                              ImageAssets.closeSmall,
+                                              width: 7.sp,
+                                              height: 7.sp,
+                                            ),
+                                            const SizedBox(
+                                              width: 2,
+                                            ),
+                                            textWidget(
+                                                text:
+                                                    '${pendingTrips.tripOrders!.first.tripsDays} ${int.parse(pendingTrips.tripOrders!.first.tripsDays) > 1 ? 'days' : 'day'}',
+                                                style: getRegularStyle(
+                                                    color: grey5)),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            SvgPicture.asset(ImageAssets.naira),
+                                            textWidget(
+                                                text: pendingTrips.tripOrders!
+                                                    .first.pricePerDayTotal
+                                                    .toString(),
+                                                style: getRegularStyle(
+                                                    color: grey5)),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 10.sp,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          // crossAxisAlignment: alignment,
+                                          children: [
+                                            textWidget(
+                                                text: 'Discount',
+                                                style: getRegularStyle(
+                                                    color: grey5)),
+                                            const SizedBox(
+                                              width: 2,
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            textWidget(
+                                                text: '- ',
+                                                style: getRegularStyle(
+                                                    color: grey5)),
+                                            SvgPicture.asset(ImageAssets.naira),
+                                            textWidget(
+                                                text: pendingTrips.tripOrders!
+                                                    .first.discountPerDayTotal
+                                                    .toString(),
+                                                style: getRegularStyle(
+                                                    color: grey5)),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    rowNairaText(
+                                        title: 'VAT',
+                                        subTitle: pendingTrips
+                                                .tripOrders!.first.vatFee
+                                                .toString() ??
+                                            ''),
+                                    Visibility(
+                                        visible: pendingTrips
+                                                    .tripOrders!.first.pickUpFee
+                                                    .toString() ==
+                                                '0'
+                                            ? false
+                                            : true,
+                                        child: rowNairaText(
+                                            title: 'Pick up',
+                                            subTitle: pendingTrips
+                                                .tripOrders!.first.pickUpFee
+                                                .toString())),
+                                    Visibility(
+                                        visible: pendingTrips.tripOrders!.first
+                                                    .dropOffFee
+                                                    .toString() ==
+                                                '0'
+                                            ? false
+                                            : true,
+                                        child: rowNairaText(
+                                            title: 'Drop off',
+                                            subTitle: pendingTrips
+                                                .tripOrders!.first.dropOffFee
+                                                .toString())),
+                                    Visibility(
+                                        visible: pendingTrips
+                                                    .tripOrders!.first.escortFee
+                                                    .toString() ==
+                                                '0'
+                                            ? false
+                                            : true,
+                                        child: rowNairaText(
+                                            title: 'Escort',
+                                            subTitle: pendingTrips
+                                                .tripOrders!.first.escortFee
+                                                .toString())),
+                                    Visibility(
+                                        visible: pendingTrips.tripType ==
+                                                    "selfDrive" ||
+                                                pendingTrips.tripType
+                                                        .toString() ==
+                                                    'self drive'
+                                            ? true
+                                            : false,
+                                        child: rowNairaText(
+                                            title: 'Caution fee',
+                                            subTitle: pendingTrips
+                                                .tripOrders!.first.cautionFee
+                                                .toString())),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 14, vertical: 9),
+                                      decoration: BoxDecoration(
+                                          color: primaryColorLight
+                                              .withOpacity(0.1)),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            // crossAxisAlignment: alignment,
+                                            children: [
+                                              textWidget(
+                                                  text: 'Total:',
+                                                  style: getRegularStyle(
+                                                          color: primaryColor)
+                                                      .copyWith(
+                                                          fontWeight:
+                                                              FontWeight.w700)),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              SvgPicture.asset(
+                                                ImageAssets.naira,
+                                                color: primaryColor,
+                                              ),
+                                              textWidget(
+                                                  text: pendingTrips.totalFee
+                                                          .toString() ??
+                                                      '0',
+                                                  style: getRegularStyle(
+                                                          color: primaryColor)
+                                                      .copyWith(
+                                                          fontFamily: "Neue",
+                                                          fontWeight:
+                                                              FontWeight.w700)),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 14.sp,
+                                    ),
+                                    continueButton(
+                                        controller, pendingTrips, context),
+                                  ],
+                                ),
+                                builder: (_, collapsed, expanded) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 10, right: 10, bottom: 10),
+                                    child: Expandable(
+                                      collapsed: collapsed,
+                                      expanded: expanded,
+                                      theme: const ExpandableThemeData(
+                                          crossFadePoint: 0),
+                                    ),
+                                  );
+                                },
                               ),
                             );
-                          },
-                        ),
-                      );
-                    }),
-                  ],
-                ),
-              ),
-            ));
+                          }),
+                        ],
+                      ),
+                    ),
+                  ));
           },
         );
       },

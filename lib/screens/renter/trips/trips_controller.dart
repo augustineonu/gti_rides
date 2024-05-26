@@ -332,6 +332,8 @@ class TripsController extends GetxController
     }
   }
 
+  DateTime? carAvialbilityEndDate;
+
   Future<void> getCarHistory({required String carId}) async {
     try {
       isCheckingCarAvailability.value = true;
@@ -350,8 +352,8 @@ class TripsController extends GetxController
               .map((car) => CarHistoryData.fromJson(car))
               .toList();
 
-          // var endDateString = carHistory?.first.endDate;
-          // carAvialbilityEndDate = DateTime.parse(endDateString!);
+          var endDateString = carHistory?.first.endDate;
+          carAvialbilityEndDate = DateTime.parse(endDateString!);
 
           pricePerDay.value = carHistory?.first.pricePerDay;
           //price per day total x no of days
@@ -434,6 +436,8 @@ class TripsController extends GetxController
           isCheckingCarAvailability.value = false;
           return true;
         } else {
+          // need to do another level of check
+          // if car booked dates
           logger.log("trip booked dates: ${response.data}");
           carNotAvailable.value =
               response.message ?? 'Car booked for selected dates';
