@@ -233,7 +233,9 @@ class TripsScreen extends GetView<TripsController> {
                                 // isLoading.value = false;
                                 return;
                               }
-
+                          // i think there should be an extra level of check
+                          // to say if it the same user trying to book, it should 
+                          // allow to extend even from current trip end date(even if it has not gotten to that time) to a new date
                               var isCarAvailable =
                                   await controller.checkCarAvailability(
                                       carId: activeTrip.carId.toString(),

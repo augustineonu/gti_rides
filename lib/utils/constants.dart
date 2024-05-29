@@ -530,7 +530,7 @@ class AppStrings {
   static String addNewDriver = 'Add a new driver';
   static String editDriver = 'Edit driver details';
   static String driverFullName = 'Driver Full Name';
-  static String driversNumber = "Driver's Number";
+  static String driversNumber = "Driver's Phone Number";
   static String driversEmail = "Driver's Email";
   static String driverAddedMessage = "Driver Successfully Added";
   static String thankYouForAddingDriver = "Thank you, for adding a new driver.";

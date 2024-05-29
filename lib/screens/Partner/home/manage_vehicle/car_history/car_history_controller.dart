@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/models/partner/car_history_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/partner_service.dart';
 import 'package:gti_rides/services/route_service.dart';
+import 'package:gti_rides/utils/constants.dart';
+import 'package:gti_rides/utils/utils.dart';
 
 class CarHistoryController extends GetxController
     with StateMixin<List<dynamic>> {
@@ -96,6 +99,12 @@ class CarHistoryController extends GetxController
         "enablePastDates": false,
         "pricePerDay": pricePerDay.value,
       });
+
+      void copy({required String value}) async {
+    await Clipboard.setData(ClipboardData(text: value));
+
+    await showSuccessSnackbar(message: AppStrings.copied);
+  }
 
   void onSelectInterState(bool value) => selectedInterState.value = value;
   void onSelectSecurityEscort(bool value) =>

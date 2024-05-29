@@ -57,6 +57,32 @@ class CarHistoryScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 12.sp),
                     divider(color: borderColor),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10.sp),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          textWidget(
+                              text: "Car ID:",
+                              style:
+                                  getRegularStyle(fontSize: 12.sp, color: grey5)
+                                      .copyWith(fontFamily: 'Neue')),
+                          InkWell(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(5.r)),
+                            onTap: () => controller.copy(
+                                value: state[0]["carID"].toString()),
+                            child: Padding(
+                              padding: const EdgeInsets.all(3.0),
+                              child: textWidget(
+                                  text: state[0]["carID"].toString(),
+                                  style: getMediumStyle(color: primaryColor)),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    divider(color: borderColor),
 
                     seeAllFeedbacks(
                         feedbackCount:
