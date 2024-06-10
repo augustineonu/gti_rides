@@ -85,9 +85,9 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
                             width: 150.sp,
                             title: AppStrings.allCarsSm,
                             selected: controller.selectedIndex.value == 0,
-                            onTap: () {
+                            onTap: () async {
                               controller.selectedIndex.value = 0;
-                              controller.getAllCars;
+                             await  controller.getAllCars();
                               setState(() {});
                             },
                           ),
@@ -95,9 +95,9 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
                             width: 150.sp,
                             title: AppStrings.booked,
                             selected: controller.selectedIndex.value == 1,
-                            onTap: () {
+                            onTap: () async {
                               controller.selectedIndex.value = 1;
-                              controller.getBookedCars;
+                              await controller.getBookedCars();
                               setState(() {});
                             },
                           ),

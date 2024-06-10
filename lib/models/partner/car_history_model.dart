@@ -219,8 +219,10 @@ class BrandModel {
 class ModelYear {
   final dynamic yearCode;
   final dynamic yearName;
+  final dynamic cautionFee;
+  
 
-  ModelYear({this.yearCode, this.yearName});
+  ModelYear({this.yearCode, this.yearName, this.cautionFee});
 
 
   factory ModelYear.fromRawJson(String str) => ModelYear.fromJson(json.decode(str));
@@ -230,11 +232,13 @@ class ModelYear {
     factory ModelYear.fromJson(Map<String, dynamic> json) => ModelYear(
         yearCode: json["yearCode"],
         yearName: json["yearName"],
+        cautionFee: json["cautionFee"],
     );
 
     Map<String, dynamic> toJson() => {
         "yearCode": yearCode,
         "yearName": yearName,
+        "cautionFee": cautionFee
     };
 }
 

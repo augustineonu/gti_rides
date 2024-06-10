@@ -371,6 +371,10 @@ class CarSelectionResultController extends GetxController
           var endDateString = carHistory?.first.endDate;
           carAvialbilityEndDate = DateTime.parse(endDateString!);
 
+          cautionFee.value =
+              carHistory!.first.modelYear!.first.cautionFee.toString();
+
+          logger.log("Caution fee: ${cautionFee.value}");
           pricePerDay.value = carHistory?.first.pricePerDay;
           //price per day total x no of days
           total.value =
@@ -673,7 +677,7 @@ class CarSelectionResultController extends GetxController
               response.data!.map((e) => TripAmountData.fromJson(e)));
 
           tripAmountData.value = tripData;
-          cautionFee.value = tripAmountData.first.cautionFee!;
+          // cautionFee.value = tripAmountData.first.cautionFee!;
           dropOffFee.value = tripAmountData.first.dropOffFee!;
           escortFee.value = tripAmountData.first.escortFee!;
           pickUpFee.value = tripAmountData.first.pickUp!;
