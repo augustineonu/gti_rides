@@ -90,6 +90,13 @@ class TripsScreen extends GetView<TripsController> {
                         ),
                       ),
                     ),
+                    controller.isLoadingMore.value
+                        ? Center(
+                            child: SizedBox(
+                            height: 40.sp,
+                            child: centerLoadingIcon(),
+                          ))
+                        : const SizedBox.shrink(),
                   ],
                 ),
               ),
@@ -167,6 +174,7 @@ class TripsScreen extends GetView<TripsController> {
                   return ListView.builder(
                     itemCount: controller.activeTrips.length,
                     shrinkWrap: true,
+                    controller: controller.activeScrollController,
                     physics: const ScrollPhysics(),
                     itemBuilder: (context, index) {
                       var activeTrip = controller.activeTrips[index];
@@ -233,9 +241,9 @@ class TripsScreen extends GetView<TripsController> {
                                 // isLoading.value = false;
                                 return;
                               }
-                          // i think there should be an extra level of check
-                          // to say if it the same user trying to book, it should 
-                          // allow to extend even from current trip end date(even if it has not gotten to that time) to a new date
+                              // i think there should be an extra level of check
+                              // to say if it the same user trying to book, it should
+                              // allow to extend even from current trip end date(even if it has not gotten to that time) to a new date
                               var isCarAvailable =
                                   await controller.checkCarAvailability(
                                       carId: activeTrip.carId.toString(),
@@ -376,6 +384,7 @@ class TripsScreen extends GetView<TripsController> {
                   return ListView.builder(
                       itemCount: controller.completedTrips.length,
                       shrinkWrap: true,
+                      controller: controller.compScrollController,
                       physics: const ScrollPhysics(),
                       itemBuilder: (context, index) {
                         var completedTrip = controller.completedTrips[index];
@@ -1705,4 +1714,3 @@ enum PaymentStatus {
 //   default:
 //     return 'Chat with admin';
 // }
-

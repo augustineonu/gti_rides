@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -31,10 +32,28 @@ class ManageVehicleScreen extends StatefulWidget {
 
 class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
   late ManageVehicleController controller = Get.put(ManageVehicleController());
+  // final ScrollController scrollController = ScrollController();
+  // final ScrollController bookedCarsScrollController = ScrollController();
 
   @override
   void initState() {
     // TODO: implement initState
+    // scrollController.addListener(() {
+    //   if (scrollController.position.pixels ==
+    //           scrollController.position.maxScrollExtent &&
+    //       !controller.isLoadingMore.value) {
+    //     controller.getAllCars(isLoadMore: true);
+    //   }
+    // });
+
+
+
+    controller.bookedCarsScrollController.addListener(() {
+      if (controller.bookedCarsScrollController.position.pixels == controller.bookedCarsScrollController.position.maxScrollExtent &&
+          !controller.isLoadingMoreBooked.value) {
+        controller.getBookedCars(isLoadingMore: true);
+      }
+    });
     super.initState();
     Get.delete<ManageVehicleController>();
 
@@ -87,7 +106,7 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
                             selected: controller.selectedIndex.value == 0,
                             onTap: () async {
                               controller.selectedIndex.value = 0;
-                             await  controller.getAllCars();
+                              await controller.getAllCars();
                               setState(() {});
                             },
                           ),
@@ -108,6 +127,15 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
                       height: 24.sp,
                     ),
                     Expanded(child: buildBody(context, size)),
+                    Obx(() {
+                      return controller.isLoadingMore.value || controller.isLoadingMoreBooked.value
+                          ? Center(
+                              child: SizedBox(
+                                height: 40.sp,
+                              child: centerLoadingIcon(),
+                            ))
+                          : const SizedBox.shrink();
+                    })
                   ],
                 ),
               );
@@ -136,25 +164,32 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
           init: ManageVehicleController(),
           initState: (_) {},
           builder: (_) {
-            return ListView.builder(
-              shrinkWrap: true,
-              physics: const ScrollPhysics(),
-              itemCount: state!.length,
-              itemBuilder: (context, index) {
-                var car = state[index];
-                return car['status'] == 'pending' ||
-                        car['availability'] == "booked" ||
-                        car['status'] == "decline"
-                    ? bookedOrPendingCars(
-                        context,
-                        size,
-                        car,
-                        imgUrl: car['photoUrl'] != ''
-                            ? car['photoUrl']
-                            : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnKpMPFWYvaoInINJ44Qh4weo_z8nDwDUf8Q&usqp=CAU',
-                      )
-                    : allCarsWidget(context, size, controller, car);
-              },
+            return Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: const ScrollPhysics(),
+                    controller: controller.scrollController,
+                    itemCount: state!.length,
+                    itemBuilder: (context, index) {
+                      var car = state[index];
+                      return car['status'] == 'pending' ||
+                              car['availability'] == "booked" ||
+                              car['status'] == "decline"
+                          ? bookedOrPendingCars(
+                              context,
+                              size,
+                              car,
+                              imgUrl: car['photoUrl'] != ''
+                                  ? car['photoUrl']
+                                  : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnKpMPFWYvaoInINJ44Qh4weo_z8nDwDUf8Q&usqp=CAU',
+                            )
+                          : allCarsWidget(context, size, controller, car);
+                    },
+                  ),
+                ),
+              ],
             );
           },
         );
@@ -801,6 +836,7 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
                   text: AppStrings.noBookedCarsYet, style: getMediumStyle()))
           : ListView.builder(
               shrinkWrap: true,
+              controller: controller.bookedCarsScrollController,
               itemCount:
                   state!.where((car) => car['availability'] == 'booked').length,
               physics: const ScrollPhysics(),
@@ -859,16 +895,6 @@ class _ManageVehicleScreenState extends State<ManageVehicleScreen> {
     );
   }
 
-  Widget continueButton() {
-    return controller.isLoading.isTrue
-        ? centerLoadingIcon()
-        : GtiButton(
-            height: 50.sp,
-            width: 3000.sp,
-            text: "continue".tr,
-            color: primaryColor,
-            // onTap: controller.routeToPhoneVerification,
-            isLoading: controller.isLoading.value,
-          );
-  }
+ 
+
 }

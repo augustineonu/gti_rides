@@ -7,19 +7,21 @@ Widget tabIndicator(
       {required String title, required bool selected, void Function()? onTap,
       double? width
       }) {
-    return InkWell(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: Duration(milliseconds: 200),
-        width: width,
-        padding: EdgeInsets.symmetric(vertical: 8.sp, horizontal: 16.sp),
-        decoration: BoxDecoration(
-            color: selected ? primaryColor : Colors.transparent,
-            borderRadius: BorderRadius.all(Radius.circular(4.r))),
-        child: Center(
-          child: textWidget(
-              text: title,
-              style: getRegularStyle(color: selected ? white : grey3)),
+    return Expanded(
+      child: InkWell(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: Duration(milliseconds: 200),
+          width: width,
+          padding: EdgeInsets.symmetric(vertical: 8.sp, horizontal: 16.sp),
+          decoration: BoxDecoration(
+              color: selected ? primaryColor : Colors.transparent,
+              borderRadius: BorderRadius.all(Radius.circular(4.r))),
+          child: Center(
+            child: textWidget(
+                text: title,
+                style: getRegularStyle(color: selected ? white : grey3)),
+          ),
         ),
       ),
     );

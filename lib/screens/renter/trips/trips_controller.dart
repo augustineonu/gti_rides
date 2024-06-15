@@ -31,6 +31,13 @@ class TripsController extends GetxController
 
   @override
   void onInit() async {
+     scrollController.addListener(() {
+      if (scrollController.position.pixels ==
+              scrollController.position.maxScrollExtent &&
+          isLoadingMore.value) {
+        getAllTrips(isLoadMore: true);
+      }
+    });
     super.onInit();
     await getTripAmountData();
     // await getAllTrips();
@@ -48,6 +55,10 @@ class TripsController extends GetxController
     super.onReady();
     await getAllTrips();
   }
+
+    var skip = 0;
+  final int limit = 10;
+  RxBool isLoadingMore = false.obs;
 
   final animationValue = 0.0.obs;
   RxInt currentIndex = 0.obs;
@@ -92,6 +103,9 @@ class TripsController extends GetxController
   Rx<String> fifthPointValue = '0'.obs;
   Rx<String> tripId = ''.obs;
   TextEditingController reviewMessageController = TextEditingController();
+  final ScrollController scrollController = ScrollController();
+  final ScrollController activeScrollController = ScrollController();
+  final ScrollController compScrollController = ScrollController();
 
   //  methods
   void goBack() => routeService.goBack();
@@ -461,8 +475,15 @@ class TripsController extends GetxController
     }
   }
 
-  Future<void> getAllTrips() async {
+  Future<void> getAllTrips({bool isLoadMore = false}) async {
     // RxStatus.loading();
+    if (isLoadMore) {
+      isLoadingMore.value = true;
+      skip += limit;
+    } else {
+      skip = 0;
+      isLoadingMore.value = false;
+    }
     change([], status: RxStatus.loading());
     try {
       final response = await renterService.getAllTrips(param: 'renter');
@@ -505,6 +526,8 @@ class TripsController extends GetxController
     } catch (e) {
       change([], status: RxStatus.error('Unable to get trips'));
       logger.log("Error occurred while getting trips: $e");
+    } finally {
+      isLoadingMore.value = false;
     }
   }
 

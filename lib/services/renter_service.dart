@@ -266,10 +266,12 @@ class RenterService {
     String? status,
     required String? param,
     String? carID,
+    int? skip,
+    int? limit,
   }) async {
     try {
       final result = await apiService.getRequest(
-          '/user/$param/trip/getAllTrips?status=&carID=${carID ?? ''}&skip=0&limit=100');
+          '/user/$param/trip/getAllTrips?status=&carID=${carID ?? ''}&skip=${skip ?? 0}&limit=${limit ?? 100}');
       // "/user/partner/trip/getAllTrips?status=&carID=&skip=0&limit=1000");
       // logger.log("result $result");
 

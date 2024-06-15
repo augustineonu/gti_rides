@@ -26,6 +26,7 @@ class PendingTrips extends StatelessWidget {
         return ListView.builder(
           itemCount: controller.pendingTrips.length,
           shrinkWrap: true,
+          controller: controller.scrollController,
           physics: const ScrollPhysics(),
           itemBuilder: (context, index) {
             var pendingTrips = controller.pendingTrips[index];

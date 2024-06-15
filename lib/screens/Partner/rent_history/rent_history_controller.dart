@@ -16,6 +16,8 @@ import 'package:intercom_flutter/intercom_flutter.dart';
 class RentHistoryController extends GetxController
     with StateMixin<List<AllTripsData>> {
   Logger logger = Logger("Controller");
+  final ScrollController scrollController = ScrollController();
+  final ScrollController compScrollController = ScrollController();
 
   RentHistoryController() {
     init();
@@ -31,6 +33,14 @@ class RentHistoryController extends GetxController
       update();
     });
     user = userService.user;
+
+    scrollController.addListener(() {
+      if (scrollController.position.pixels ==
+              scrollController.position.maxScrollExtent &&
+          isLoadingMore.value) {
+        getAllTrips(isLoadMore: true);
+      }
+    });
     super.onInit();
   }
 
@@ -74,21 +84,35 @@ class RentHistoryController extends GetxController
   void routeToCompletedTrip({Object? arguments}) =>
       routeService.gotoRoute(AppLinks.completedTrip, arguments: arguments);
 
-  Future<void> getAllTrips() async {
-    // RxStatus.loading();
+  var skip = 0;
+  final int limit = 10;
+  RxBool isLoadingMore = false.obs;
+
+  Future<void> getAllTrips({bool isLoadMore = false}) async {
+    if (isLoadMore) {
+      isLoadingMore.value = true;
+      skip += limit;
+    } else {
+      skip = 0;
+      isLoadingMore.value = false;
+    }
+
     change([], status: RxStatus.loading());
     try {
-      final response = await renterService.getAllTrips(param: 'partner');
+      final response = await renterService.getAllTrips(
+          param: 'partner', skip: skip, limit: limit);
 
       if (response.status == 'success' || response.status_code == 200) {
         // logger.log("All Trips:: ${response.data}");
         List<AllTripsData> trips = List<AllTripsData>.from(
             response.data!.map((trip) => AllTripsData.fromJson(trip)));
 
-            logger.log("User trips:: ${trips}");
+        logger.log("User trips:: ${trips}");
 
         if (trips.isEmpty) {
-          change([], status: RxStatus.empty());
+          if (!isLoadMore) {
+            change([], status: RxStatus.empty());
+          }
         } else {
           // Clear existing lists
           activeTrips.clear();
@@ -116,6 +140,8 @@ class RentHistoryController extends GetxController
     } catch (e) {
       change([], status: RxStatus.error('Unable to get trips'));
       logger.log("Error occurred while getting trips: $e");
+    } finally {
+      isLoadingMore.value = false;
     }
   }
 

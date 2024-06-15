@@ -101,6 +101,13 @@ class PaymentScreen extends GetView<PaymentController> {
                           ),
                         ),
                       ),
+                      controller.isLoadingMore.value
+                          ? Center(
+                              child: SizedBox(
+                              height: 40.sp,
+                              child: centerLoadingIcon(),
+                            ))
+                          : const SizedBox.shrink(),
                     ],
                   ),
                 ),
@@ -292,147 +299,92 @@ class PaymentScreen extends GetView<PaymentController> {
 
   Widget paymentsCard(Size size) {
     if (controller.paymentList.isNotEmpty) {
-      return Column(
-        children: [
-          for (var payment in controller.paymentList)
-            Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(
-                    bottom: 1,
-                  ),
-                  decoration: BoxDecoration(
-                      color: primaryColor,
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(4.r),
-                        bottomRight: Radius.circular(4.r),
-                      )),
-                  child: Container(
-                    height: 30.0,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
+      return SingleChildScrollView(
+        controller: controller.scrollController,
+        child: Column(
+          children: [
+            for (var payment in controller.paymentList)
+              Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.only(
+                      bottom: 1,
                     ),
                     decoration: BoxDecoration(
-                        color: backgroundColor,
+                        color: primaryColor,
                         borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(2.5.r),
-                          bottomRight: Radius.circular(2.5.r),
+                          bottomLeft: Radius.circular(4.r),
+                          bottomRight: Radius.circular(4.r),
                         )),
+                    child: Container(
+                      height: 30.0,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                      ),
+                      decoration: BoxDecoration(
+                          color: backgroundColor,
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(2.5.r),
+                            bottomRight: Radius.circular(2.5.r),
+                          )),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          textWidget(
+                            text: AppStrings.paymentStatus,
+                            // show AppStrings.aAvailabilityDate
+                            style: getMediumStyle(
+                              color: grey3,
+                              fontSize: 10.sp,
+                            ),
+                          ),
+                          Row(children: [
+                            textWidget(
+                              text: payment["paymentStatus"] == 'pending'
+                                  ? 'Processing'
+                                  : "Sent",
+                              style: getMediumStyle(fontSize: 10.sp),
+                            ),
+                            Image.asset(ImageAssets.doubleCheck),
+                          ]),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 5.0.sp, horizontal: 5),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         textWidget(
-                          text: AppStrings.paymentStatus,
-                          // show AppStrings.aAvailabilityDate
-                          style: getMediumStyle(
-                            color: grey3,
-                            fontSize: 10.sp,
-                          ),
+                            text: AppStrings.totalAmount,
+                            style:
+                                getRegularStyle(fontSize: 12.sp, color: grey3)),
+                        Row(
+                          // crossAxisAlignment: alignment,
+                          children: [
+                            SvgPicture.asset(ImageAssets.naira),
+                            textWidget(
+                                text: payment["paymentAmount"].toString(),
+                                style: getMediumStyle(fontSize: 16.sp)
+                                    .copyWith(fontFamily: 'Neue')),
+                          ],
                         ),
-                        Row(children: [
-                          textWidget(
-                            text: payment["paymentStatus"] == 'pending'
-                                ? 'Processing'
-                                : "Sent",
-                            style: getMediumStyle(fontSize: 10.sp),
-                          ),
-                          Image.asset(ImageAssets.doubleCheck),
-                        ]),
                       ],
+                      // Foreatgreen29@#$
                     ),
                   ),
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 5.0.sp, horizontal: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      textWidget(
-                          text: AppStrings.totalAmount,
-                          style:
-                              getRegularStyle(fontSize: 12.sp, color: grey3)),
-                      Row(
-                        // crossAxisAlignment: alignment,
-                        children: [
-                          SvgPicture.asset(ImageAssets.naira),
-                          textWidget(
-                              text: payment["paymentAmount"].toString(),
-                              style: getMediumStyle(fontSize: 16.sp)
-                                  .copyWith(fontFamily: 'Neue')),
-                        ],
-                      ),
-                    ],
-                    // Foreatgreen29@#$
-                  ),
-                ),
-                tripInfo(
-                  title: AppStrings.tripId,
-                  trailling: InkWell(
-                    onTap: () {
-                      controller.copy(value: payment["tripID"]);
-                    },
-                    child: Row(
-                      children: [
-                        textWidget(
-                          text: payment["tripID"],
-                          style: getRegularStyle(
-                            fontSize: 10.sp,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 3.sp,
-                        ),
-                        SvgPicture.asset(ImageAssets.docCopy),
-                      ],
-                    ),
-                  ),
-                ),
-                Visibility(
-                  visible: payment["paymentDate"] == '' ? false : true,
-                  child: tripInfo(
-                    title: AppStrings.paymentDate,
-                    trailling: textWidget(
-                      text: formateDate(date: payment["paymentDate"]),
-                      style: getRegularStyle(fontSize: 10.sp),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 5.0.sp, horizontal: 5),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: 2.sp,
-                        height: 16.sp,
-                        child: const ColoredBox(
-                          color: primaryColor,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 7.sp,
-                      ),
-                      textWidget(
-                        text: payment["paymentMethod"]["bankName"],
-                        style: getRegularStyle(fontSize: 10.sp),
-                      ),
-                    ],
-                  ),
-                ),
-                Visibility(
-                  visible: payment["paymentStatus"] == "pending" ? false : true,
-                  child: tripInfo(
-                    title: AppStrings.paymentRef,
+                  tripInfo(
+                    title: AppStrings.tripId,
                     trailling: InkWell(
                       onTap: () {
-                        // payment reference
-                        controller.copy(value: payment["paymentReference"]);
+                        controller.copy(value: payment["tripID"]);
                       },
                       child: Row(
                         children: [
                           textWidget(
-                            text: payment["paymentReference"].toString(),
+                            text: payment["tripID"],
                             style: getRegularStyle(
                               fontSize: 10.sp,
                             ),
@@ -445,17 +397,76 @@ class PaymentScreen extends GetView<PaymentController> {
                       ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 5.sp,
-                ),
-                divider(color: borderColor),
-                SizedBox(
-                  height: 15.sp,
-                ),
-              ],
-            ),
-        ],
+                  Visibility(
+                    visible: payment["paymentDate"] == '' ? false : true,
+                    child: tripInfo(
+                      title: AppStrings.paymentDate,
+                      trailling: textWidget(
+                        text: formateDate(date: payment["paymentDate"]),
+                        style: getRegularStyle(fontSize: 10.sp),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 5.0.sp, horizontal: 5),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 2.sp,
+                          height: 16.sp,
+                          child: const ColoredBox(
+                            color: primaryColor,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 7.sp,
+                        ),
+                        textWidget(
+                          text: payment["paymentMethod"]["bankName"],
+                          style: getRegularStyle(fontSize: 10.sp),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Visibility(
+                    visible:
+                        payment["paymentStatus"] == "pending" ? false : true,
+                    child: tripInfo(
+                      title: AppStrings.paymentRef,
+                      trailling: InkWell(
+                        onTap: () {
+                          // payment reference
+                          controller.copy(value: payment["paymentReference"]);
+                        },
+                        child: Row(
+                          children: [
+                            textWidget(
+                              text: payment["paymentReference"].toString(),
+                              style: getRegularStyle(
+                                fontSize: 10.sp,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 3.sp,
+                            ),
+                            SvgPicture.asset(ImageAssets.docCopy),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5.sp,
+                  ),
+                  divider(color: borderColor),
+                  SizedBox(
+                    height: 15.sp,
+                  ),
+                ],
+              ),
+          ],
+        ),
       );
     }
     return noPreviousPaymentWidget(size);

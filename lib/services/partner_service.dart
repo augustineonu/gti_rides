@@ -309,9 +309,8 @@ class PartnerService extends GetxController {
       rethrow;
     }
   }
-  Future<ListResponseModel> getOneDriver({
-    required String driverId
-  }) async {
+
+  Future<ListResponseModel> getOneDriver({required String driverId}) async {
     try {
       final result = await apiService.getRequest(
         '/user/partner/driver/getOneDriver?driverID=$driverId',
@@ -326,12 +325,16 @@ class PartnerService extends GetxController {
     }
   }
 
-  Future<ListResponseModel> getCars({required String queryType}) async {
+  Future<ListResponseModel> getCars({
+    required String queryType,
+    int? skip,
+    int? limit,
+  }) async {
     try {
       final result = await apiService.getRequest(
-        '/user/partner/car/getAllCar?type=$queryType&skip=0&limit=10',
+        '/user/partner/car/getAllCar?type=$queryType&skip=${skip ?? 0}&limit=${limit ?? 10}',
       );
-      logger.log("result $result");
+      // logger.log("result $result");
 
       final decodedResult = json.decode(result);
 
@@ -503,10 +506,10 @@ class PartnerService extends GetxController {
     }
   }
 
-  Future<ListResponseModel> getPaymentList() async {
+  Future<ListResponseModel> getPaymentList({int? limit, int? skip}) async {
     try {
       final result = await apiService.getRequest(
-        '/user/partner/payment/getPaymentList?skip=0&limit=10000',
+        '/user/partner/payment/getPaymentList?skip=${skip ?? 0}&limit=${limit ?? 10000}',
       );
       // logger.log("result $result");
 
@@ -520,10 +523,11 @@ class PartnerService extends GetxController {
 
   Future<ListResponseModel> getNotification({
     String? skipNumber,
+    int? limit,
   }) async {
     try {
       final result = await apiService.getRequest(
-        '/user/notification/getNotification?limit=10&skip=${skipNumber ?? 0}',
+        '/user/notification/getNotification?limit=${limit ?? 5}&skip=${skipNumber ?? 0}',
       );
       logger.log("result $result");
 

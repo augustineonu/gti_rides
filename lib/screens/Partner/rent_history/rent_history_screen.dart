@@ -82,6 +82,13 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
                       ),
                     ),
                   ),
+                  controller.isLoadingMore.value
+                      ? Center(
+                          child: SizedBox(
+                          height: 40.sp,
+                          child: centerLoadingIcon(),
+                        ))
+                      : const SizedBox.shrink(),
                 ],
               ),
             ),
@@ -108,6 +115,7 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
             : controller.obx(
                 (state) {
                   return ListView.separated(
+                    controller: controller.scrollController,
                     physics: const ScrollPhysics(),
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
@@ -117,11 +125,11 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
                       return cardWidget(
                         context,
                         size,
-                        onTap: () =>
-                            controller.routeToCompletedTrip(arguments: {
-                          "completedTrip": activeTrip,
-                          "tripId": activeTrip.tripId
-                        }),
+                        onTap: () => controller.routeToCompletedTrip(
+                            arguments: {
+                              "completedTrip": activeTrip,
+                              "tripId": activeTrip.tripId
+                            }),
                         imgUrl: activeTrip.carProfilePic.toString(),
                         title:
                             ' ${activeTrip.carBrand.toString()} ${activeTrip.carModel.toString()}',
@@ -194,6 +202,7 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
             : controller.obx(
                 (statet) {
                   return ListView.separated(
+                    controller: controller.compScrollController,
                     itemCount: controller.completedTrips.length,
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
@@ -203,11 +212,11 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
                       return cardWidget(
                         context,
                         size,
-                        onTap: () =>
-                            controller.routeToCompletedTrip(arguments: {
-                          "completedTrip": completedTrip,
-                          "tripId": completedTrip.tripId
-                        }),
+                        onTap: () => controller.routeToCompletedTrip(
+                            arguments: {
+                              "completedTrip": completedTrip,
+                              "tripId": completedTrip.tripId
+                            }),
                         imgUrl: completedTrip.carProfilePic.toString(),
                         title:
                             ' ${completedTrip.carBrand.toString()} ${completedTrip.carModel.toString()}',
@@ -225,11 +234,11 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
                           right: 7.sp,
                           top: 11.sp,
                           child: InkWell(
-                            onTap: () =>
-                                controller.routeToCompletedTrip(arguments: {
-                              "completedTrip": completedTrip,
-                              "tripId": completedTrip.tripId
-                            }),
+                            onTap: () => controller.routeToCompletedTrip(
+                                arguments: {
+                                  "completedTrip": completedTrip,
+                                  "tripId": completedTrip.tripId
+                                }),
                             child: Row(children: [
                               textWidget(
                                   text: AppStrings.completed,
@@ -445,8 +454,8 @@ class RentHistoryScreen extends GetView<RentHistoryController> {
               onTap: () {
                 switch (index) {
                   case 0:
-                  // report trip to admin;
-                  controller.launchMessenger();
+                    // report trip to admin;
+                    controller.launchMessenger();
 
                   case 1:
                     controller.routeToCompletedTrip(arguments: {

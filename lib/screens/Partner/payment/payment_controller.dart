@@ -3,21 +3,20 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/models/api_response_model.dart';
 import 'package:gti_rides/models/banks_model.dart';
-import 'package:gti_rides/models/drivers_model.dart';
 import 'package:gti_rides/route/app_links.dart';
-import 'package:gti_rides/screens/Partner/home/list_vehicle/list_vehicle_screen.dart';
 import 'package:gti_rides/services/auth_service.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/partner_service.dart';
 import 'package:gti_rides/services/payment_service.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/services/user_service.dart';
-import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/utils.dart';
 
 class PaymentController extends GetxController with StateMixin<List<dynamic>> {
   Logger logger = Logger("Controller");
+
+  final ScrollController scrollController = ScrollController();
 
   PaymentController() {
     init();
@@ -40,6 +39,14 @@ class PaymentController extends GetxController with StateMixin<List<dynamic>> {
     logger.log("value:: $paymentList");
     pageController.addListener(() {
       update();
+    });
+
+    scrollController.addListener(() {
+      if (scrollController.position.pixels ==
+              scrollController.position.maxScrollExtent &&
+          isLoadingMore.value) {
+        getPaymentList(isLoadMore: true);
+      }
     });
     super.onInit();
 
@@ -239,29 +246,50 @@ class PaymentController extends GetxController with StateMixin<List<dynamic>> {
   // RxList<dynamic> paymentLIst = <Rx>[].obs;
   RxList<dynamic> paymentList = <dynamic>[].obs;
 
-  Future<void> getPaymentList() async {
+  var skip = 0;
+  final int limit = 10;
+  RxBool isLoadingMore = false.obs;
+  
+
+  Future<void> getPaymentList({bool isLoadMore = false}) async {
+    if (isLoadMore) {
+      isLoadingMore.value = true;
+      skip += limit;
+    } else {
+      isLoadingMore.value = false;
+      skip = 0;
+    }
     isGettingPaymentList.value = true;
     try {
-      final response = await partnerService.getPaymentList();
+      final response = await partnerService.getPaymentList(
+        limit: limit, skip: skip
+      );
       if (response.status == 'success' || response.status_code == 200) {
         // logger.log("gotten payment list ${response.data}");
         if (response.data != null && response.data!.isNotEmpty) {
           // paymentList.value = response.data!;
+          if (isLoadMore) {
+            paymentList.addAll(response.data!);
+          } else {
             paymentList.value = response.data!.cast<dynamic>().obs;
+          }
 
           // logger.log("payment list:: ${paymentList}");
           isGettingPaymentList.value = false;
         } else {
           logger.log('data is empty');
-          paymentList.value = [];
+          if (!isLoadMore) {
+            paymentList.value = [];
+          }
         }
       } else {
         logger.log("unable to get payment list ${response.data}");
       }
     } catch (exception) {
       logger.log("error  $exception");
-    } finally{
+    } finally {
       isGettingPaymentList.value = false;
+      isLoadingMore.value = false;
     }
   }
 
