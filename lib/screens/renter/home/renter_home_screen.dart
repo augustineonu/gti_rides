@@ -611,7 +611,7 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
           left: 15,
           right: 15,
           child: Container(
-            height: 130.sp,
+            // height: 130.sp,
             padding: EdgeInsets.all(20.sp),
             decoration: BoxDecoration(
                 color: primaryColorDark.withOpacity(0.6),

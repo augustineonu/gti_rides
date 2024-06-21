@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDbYbMkgCH0_SCSVy_CYXnC20DaQrLI-cs',
-    appId: '1:81002314927:android:a60c734001a3e83f32e85a',
+    appId: '1:81002314927:android:cf3f1f2a2fb8a5e132e85a',
     messagingSenderId: '81002314927',
     projectId: 'gti-rides-01',
     storageBucket: 'gti-rides-01.appspot.com',
@@ -59,12 +59,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDzah57m4q3za33YLd-leGH_lyZkUbVnaY',
-    appId: '1:81002314927:ios:39f9643a17c8d64732e85a',
+    appId: '1:81002314927:ios:680210ef20f8617c32e85a',
     messagingSenderId: '81002314927',
     projectId: 'gti-rides-01',
     storageBucket: 'gti-rides-01.appspot.com',
     androidClientId: '81002314927-4n20creg233t446hfgfeci4lt2ku92li.apps.googleusercontent.com',
-    iosClientId: '81002314927-siqcjsfdr5imt7f5uncvlcon5ks35j4m.apps.googleusercontent.com',
-    iosBundleId: 'com.example.gtiRide',
+    iosBundleId: 'com.gtirides.gtiapp',
   );
+
 }

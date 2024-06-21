@@ -2,10 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CLIENT_ID</key>
-	<string>81002314927-siqcjsfdr5imt7f5uncvlcon5ks35j4m.apps.googleusercontent.com</string>
-	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.81002314927-siqcjsfdr5imt7f5uncvlcon5ks35j4m</string>
 	<key>ANDROID_CLIENT_ID</key>
 	<string>81002314927-4n20creg233t446hfgfeci4lt2ku92li.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
@@ -15,7 +11,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.gtiRide</string>
+	<string>com.gtirides.gtiapp</string>
 	<key>PROJECT_ID</key>
 	<string>gti-rides-01</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,6 +27,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:81002314927:ios:39f9643a17c8d64732e85a</string>
+	<string>1:81002314927:ios:680210ef20f8617c32e85a</string>
 </dict>
 </plist>

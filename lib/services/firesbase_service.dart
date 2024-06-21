@@ -6,6 +6,7 @@ import 'package:gti_rides/firebase_options.dart';
 import 'package:gti_rides/services/logger.dart';
 // import 'package:quicklydrop_agent/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:intercom_flutter/intercom_flutter.dart';
 
 FirebaseService get firebaseService => Get.find();
 
@@ -40,10 +41,19 @@ class FirebaseService {
 
   Future<String> getDeviceToken() async {
     FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
-   await firebaseMessaging.getToken().then((token) {
+    await firebaseMessaging.getToken().then((token) {
       deviceToken.value = token!;
       logger.log(" FCM token is $token and ${deviceToken.value}");
     });
     return deviceToken.value;
   }
+
+  // Future<void> sendIntercomToken(String? intercomToken) async {
+  //   logger.log("Sending intercom token $intercomToken");
+
+  //   Intercom.instance
+  //       .sendTokenToIntercom(intercomToken ?? '')
+  //       .then((value) => print("Sent intercom token successfully"))
+  //       .onError((error, stackTrace) => print("Error: $error"));
+  // }
 }

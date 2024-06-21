@@ -4,8 +4,8 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
+// import 'package:geocoding/geocoding.dart';
+// import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/models/api_response_model.dart';
 import 'package:gti_rides/services/api_service.dart';
@@ -108,38 +108,38 @@ class DeviceService with WidgetsBindingObserver {
     }
   }
 
-  Future<Position> getDeviceCoordinates() async {
-    logger.log('... getting device geo coordinates');
-    try {
-      return await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-    } catch (e) {
-      rethrow;
-    }
-  }
+  // Future<Position> getDeviceCoordinates() async {
+  //   logger.log('... getting device geo coordinates');
+  //   try {
+  //     return await Geolocator.getCurrentPosition(
+  //         desiredAccuracy: LocationAccuracy.high);
+  //   } catch (e) {
+  //     rethrow;
+  //   }
+  // }
 
-  Future<bool> isLocationEnabled() async {
-    logger.log('... checking is app has location permission');
-    bool phoneLocationService = await Geolocator.isLocationServiceEnabled();
-    logger.log('...??..L $phoneLocationService');
-    if (!phoneLocationService) {
-      // Todo: Show dialog
+  // Future<bool> isLocationEnabled() async {
+  //   logger.log('... checking is app has location permission');
+  //   bool phoneLocationService = await Geolocator.isLocationServiceEnabled();
+  //   logger.log('...??..L $phoneLocationService');
+  //   if (!phoneLocationService) {
+  //     // Todo: Show dialog
 
-      // await showCustomDialog(
-      //   message: 'please_enable_your_location'.tr,
-      //   singleBtnText: 'enable'.tr,
-      //   singleBtnPressed: () async {
-      //     await launchAppSettings();
-      //     routeService.goBack();
-      //   },
-      // );
-    }
-    return phoneLocationService;
-    // final status = await Permission.location.status;
-    // logger.log('LSTATUS $status');
-    // logger.log('LSTATUSPER ${PermissionStatus.granted}');
-    // return status == PermissionStatus.granted;
-  }
+  //     // await showCustomDialog(
+  //     //   message: 'please_enable_your_location'.tr,
+  //     //   singleBtnText: 'enable'.tr,
+  //     //   singleBtnPressed: () async {
+  //     //     await launchAppSettings();
+  //     //     routeService.goBack();
+  //     //   },
+  //     // );
+  //   }
+  //   return phoneLocationService;
+  //   // final status = await Permission.location.status;
+  //   // logger.log('LSTATUS $status');
+  //   // logger.log('LSTATUSPER ${PermissionStatus.granted}');
+  //   // return status == PermissionStatus.granted;
+  // }
 
   Future<bool> isLocationPermissionGranted() async {
     logger.log('... checking if app has location permission');
@@ -149,41 +149,41 @@ class DeviceService with WidgetsBindingObserver {
     return status == PermissionStatus.granted;
   }
 
-  Future<void> requestLocationPermission() async {
-    logger.log('requesting location permission');
-    final permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      await Geolocator.requestPermission();
-    } else if (permission == LocationPermission.unableToDetermine) {
-      await Geolocator.requestPermission();
-    } else if (permission == LocationPermission.deniedForever) {
-      await Geolocator.requestPermission();
-    } else {
-      logger.log('prermission granted!');
-    }
-  }
+  // Future<void> requestLocationPermission() async {
+  //   logger.log('requesting location permission');
+  //   final permission = await Geolocator.checkPermission();
+  //   if (permission == LocationPermission.denied) {
+  //     await Geolocator.requestPermission();
+  //   } else if (permission == LocationPermission.unableToDetermine) {
+  //     await Geolocator.requestPermission();
+  //   } else if (permission == LocationPermission.deniedForever) {
+  //     await Geolocator.requestPermission();
+  //   } else {
+  //     logger.log('prermission granted!');
+  //   }
+  // }
 
-  Future<void> launchAppSettings() async {
-    logger.log('launching app setting');
+  // Future<void> launchAppSettings() async {
+  //   logger.log('launching app setting');
 
-    try {
-      await Geolocator.openLocationSettings();
-    } catch (e) {
-      logger.log('Error launching settings: $e');
+  //   try {
+  //     await Geolocator.openLocationSettings();
+  //   } catch (e) {
+  //     logger.log('Error launching settings: $e');
 
-      // Todo: Show dialog
+  //     // Todo: Show dialog
 
-      // await showCustomDialog(
-      //   message: 'error_launching_settings'.tr,
-      //   singleBtnText: 'ok'.tr,
-      //   singleBtnPressed: () async {
-      //     routeService.goBack();
-      //   },
-      // );
-    }
+  //     // await showCustomDialog(
+  //     //   message: 'error_launching_settings'.tr,
+  //     //   singleBtnText: 'ok'.tr,
+  //     //   singleBtnPressed: () async {
+  //     //     routeService.goBack();
+  //     //   },
+  //     // );
+  //   }
 
-    return;
-  }
+  //   return;
+  // }
 
   bool getDeviceDarkMode() {
     var brightness =
@@ -191,45 +191,45 @@ class DeviceService with WidgetsBindingObserver {
     return brightness == Brightness.dark;
   }
 
-  Future<String?> getUserState() async {
-    logger.log('... getting user current state - location');
-    try {
-      final position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-      final placemarks =
-          await placemarkFromCoordinates(position.latitude, position.longitude);
-      return placemarks[0].administrativeArea; // returns state
-    } catch (e) {
-      return null;
-    }
-  }
+  // Future<String?> getUserState() async {
+  //   logger.log('... getting user current state - location');
+  //   try {
+  //     final position = await Geolocator.getCurrentPosition(
+  //         desiredAccuracy: LocationAccuracy.high);
+  //     final placemarks =
+  //         await placemarkFromCoordinates(position.latitude, position.longitude);
+  //     return placemarks[0].administrativeArea; // returns state
+  //   } catch (e) {
+  //     return null;
+  //   }
+  // }
 
-  Future<String?> getUserCountry() async {
-    logger.log('... getting user current country - location');
-    try {
-      final position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-      final placemarks =
-          await placemarkFromCoordinates(position.latitude, position.longitude);
-      return placemarks[0].country; // returns country
-    } catch (e) {
-      return null;
-    }
-  }
+  // Future<String?> getUserCountry() async {
+  //   logger.log('... getting user current country - location');
+  //   try {
+  //     final position = await Geolocator.getCurrentPosition(
+  //         desiredAccuracy: LocationAccuracy.high);
+  //     final placemarks =
+  //         await placemarkFromCoordinates(position.latitude, position.longitude);
+  //     return placemarks[0].country; // returns country
+  //   } catch (e) {
+  //     return null;
+  //   }
+  // }
 
-  Future<String?> getUserAddress() async {
-    logger.log('... getting user current full address - location');
-    try {
-      final position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-      final placemarks =
-          await placemarkFromCoordinates(position.latitude, position.longitude);
+  // Future<String?> getUserAddress() async {
+  //   logger.log('... getting user current full address - location');
+  //   try {
+  //     final position = await Geolocator.getCurrentPosition(
+  //         desiredAccuracy: LocationAccuracy.high);
+  //     final placemarks =
+  //         await placemarkFromCoordinates(position.latitude, position.longitude);
 
-      final address =
-          '${placemarks[0].name}, ${placemarks[0].subLocality}, ${placemarks[0].locality}, ${placemarks[0].administrativeArea}, ${placemarks[0].country}';
-      return address; // returns full address
-    } catch (e) {
-      return null;
-    }
-  }
+  //     final address =
+  //         '${placemarks[0].name}, ${placemarks[0].subLocality}, ${placemarks[0].locality}, ${placemarks[0].administrativeArea}, ${placemarks[0].country}';
+  //     return address; // returns full address
+  //   } catch (e) {
+  //     return null;
+  //   }
+  // }
 }

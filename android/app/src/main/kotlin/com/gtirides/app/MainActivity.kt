@@ -1,4 +1,4 @@
-package com.example.gti_rides
+package com.gtirides.gtiapp
 
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.android.FlutterFragmentActivity

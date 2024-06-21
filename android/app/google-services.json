@@ -40,6 +40,60 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:81002314927:android:f7707ebc05980b6f32e85a",
+        "android_client_info": {
+          "package_name": "com.gtirides.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbYbMkgCH0_SCSVy_CYXnC20DaQrLI-cs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "81002314927-siqcjsfdr5imt7f5uncvlcon5ks35j4m.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.gtiRide"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:81002314927:android:cf3f1f2a2fb8a5e132e85a",
+        "android_client_info": {
+          "package_name": "com.gtirides.gtiapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbYbMkgCH0_SCSVy_CYXnC20DaQrLI-cs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "81002314927-siqcjsfdr5imt7f5uncvlcon5ks35j4m.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.gtiRide"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"
