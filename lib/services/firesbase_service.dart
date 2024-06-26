@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -41,10 +43,17 @@ class FirebaseService {
 
   Future<String> getDeviceToken() async {
     FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
-    await firebaseMessaging.getToken().then((token) {
-      deviceToken.value = token!;
-      logger.log(" FCM token is $token and ${deviceToken.value}");
-    });
+    if (Platform.isIOS) {
+    await  firebaseMessaging.getAPNSToken().then((token) {
+        deviceToken.value = token!;
+        logger.log(" FCM token is $token and ${deviceToken.value}");
+      });
+    } else {
+      await firebaseMessaging.getToken().then((token) {
+        deviceToken.value = token!;
+        logger.log(" FCM token is $token and ${deviceToken.value}");
+      });
+    }
     return deviceToken.value;
   }
 

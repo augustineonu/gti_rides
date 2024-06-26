@@ -956,7 +956,7 @@ class ListVehicleController extends GetxController {
   void goToNextPage() {
     currentIndex.value++;
     // scrollController.position.maxScrollExtent;
-    scrollController.jumpTo(0.0);
+    // scrollController.jumpTo(0.0);
 
     pageController.nextPage(
         duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);

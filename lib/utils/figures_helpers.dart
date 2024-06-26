@@ -114,7 +114,7 @@ Future<double> calculateEstimatedTotal(
 // to be able to know when to subtract
 Future<double> calculatePriceChangesDifference({
   String? total = '0',
-  String? cautionFee = '0',
+  // String? cautionFee = '0.0',
   String? pickUpFee = '0',
   String? dropOffFee = '0',
   // String? escortFee = '0',
@@ -123,14 +123,14 @@ Future<double> calculatePriceChangesDifference({
 
   try {
     // Parse the fees to double
-    double parsedCautionFee = double.parse(cautionFee!.replaceAll(',', ''));
+    // double parsedCautionFee = double.parse(cautionFee!.replaceAll(',', ''));
     double parsedPickUpFee = double.parse(pickUpFee!.replaceAll(',', ''));
     double parsedDropOffFee = double.parse(dropOffFee!.replaceAll(',', ''));
     // double parsedEscortFee = double.parse(escortFee!.replaceAll(',', ''));
     double parsedTotal = double.parse(total!.replaceAll(',', ''));
 
     // Calculate the total by summing up the fees
-    double estimatedTotal = parsedCautionFee +
+    double estimatedTotal =
         parsedPickUpFee +
         parsedDropOffFee +
         // parsedEscortFee +

@@ -16,17 +16,18 @@ class PasswordInputTextWidget extends StatelessWidget {
   final IconData? icon;
   final String title;
   final InputBorder? errorBorder;
-  const PasswordInputTextWidget({
-    super.key,
-    this.theme,
-    this.isObscureValue,
-    required this.controller,
-    required this.expectedVariable,
-    this.onTap,
-    this.icon,
-    required this.title,
-    this.errorBorder,
-  });
+  final String? Function(String?)? validator;
+  const PasswordInputTextWidget(
+      {super.key,
+      this.theme,
+      this.isObscureValue,
+      required this.controller,
+      required this.expectedVariable,
+      this.onTap,
+      this.icon,
+      required this.title,
+      this.errorBorder,
+      this.validator});
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +43,7 @@ class PasswordInputTextWidget extends StatelessWidget {
             obscureText: isObscureValue ?? false,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.all(12),
+              errorMaxLines: 3,
               // prefixIcon: const Icon(
               //   Iconsax.lock,
               //   color: secondaryColor,
@@ -75,16 +77,16 @@ class PasswordInputTextWidget extends StatelessWidget {
                   Radius.circular(5.0.r),
                 ),
               ),
-               errorBorder: errorBorder ?? 
-                OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: danger,
-                    width: 1.0.w,
+              errorBorder: errorBorder ??
+                  OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: danger,
+                      width: 1.0.w,
+                    ),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(5.0.r),
+                    ),
                   ),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(5.0.r),
-                  ),
-                ),
               // label: Text(
               //   'Password ',
               //   // style: theme.bodyText1,
@@ -98,12 +100,14 @@ class PasswordInputTextWidget extends StatelessWidget {
                 onPressed: onTap ?? () {},
               ),
             ),
-            validator: (value) {
-              if (value!.isEmpty) {
-                return fetchErrorText(expectedTextVariable: expectedVariable);
-              }
-              return null;
-            }),
+            validator: validator ??
+                (value) {
+                  if (value!.isEmpty) {
+                    return fetchErrorText(
+                        expectedTextVariable: expectedVariable);
+                  }
+                  return null;
+                }),
       ],
     );
   }

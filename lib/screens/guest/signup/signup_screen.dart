@@ -204,12 +204,29 @@ class SignUpScreen extends GetView<SignUpController> {
                         height: 16.sp,
                       ),
                       PasswordInputTextWidget(
-                        title: AppStrings.password,
-                        controller: controller.passwordController,
-                        expectedVariable: 'password',
-                        isObscureValue: controller.showPassword.value,
-                        onTap: () => controller.obscurePassword(),
-                      ),
+                          title: AppStrings.password,
+                          controller: controller.passwordController,
+                          expectedVariable: 'password',
+                          isObscureValue: controller.showPassword.value,
+                          onTap: () => controller.obscurePassword(),
+                          validator: (password) {
+                            if (password!.isEmpty) {
+                              return fetchErrorText(
+                                  expectedTextVariable: "password");
+                            }
+                            // Password should be at least 8 characters long
+                            if (password.length < 8) {
+                              return "Password must be at least 8 characters long";
+                            }
+
+                            // Password should contain at least one uppercase letter, one lowercase letter, one number, and one special character
+                            final RegExp passwordRegex = RegExp(
+                                r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#\$&*~]).{8,}$');
+                            if (!passwordRegex.hasMatch(password)) {
+                              return "Password should contain at least one uppercase letter, one lowercase letter, one number, and one special character";
+                            }
+                            return null;
+                          }),
                       SizedBox(
                         height: 16.sp,
                       ),

@@ -57,21 +57,23 @@ class NotificationService {
         notificationInfo!.value = pushNotification;
         totalNotifications.value++;
 
-        if (notification.title!.toLowerCase().contains("order")) {
-          logger.log("Notification:: ${notification.body ?? "unknown"}");
-          // check if user accept order is true/ false
-          // route to current order or awaiting order screen
-          // routeService.offAllNamed(AppLinks.currentOrders, arguments: {
-          //   "title": pushNotification.title,
-          //   "body": pushNotification.body,
-          // });
-        } else {
-           logger.log("Notification:: ${notification.body ?? "unknown"}");
-          // routeService.offAllNamed(AppLinks.notification, arguments: {
-          //   "title": pushNotification.title,
-          //   "body": pushNotification.body,
-          // });
-        }
+        
+
+        // if (notification.title!.toLowerCase().contains("order")) {
+        //   logger.log("Notification:: ${notification.body ?? "unknown"}");
+        //   // check if user accept order is true/ false
+        //   // route to current order or awaiting order screen
+        //   // routeService.offAllNamed(AppLinks.currentOrders, arguments: {
+        //   //   "title": pushNotification.title,
+        //   //   "body": pushNotification.body,
+        //   // });
+        // } else {
+        //    logger.log("Notification:: ${notification.body ?? "unknown"}");
+        //   // routeService.offAllNamed(AppLinks.notification, arguments: {
+        //   //   "title": pushNotification.title,
+        //   //   "body": pushNotification.body,
+        //   // });
+        // }
       }
     }
   }

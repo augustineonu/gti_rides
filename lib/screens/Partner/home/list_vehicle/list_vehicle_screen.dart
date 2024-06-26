@@ -1,4 +1,4 @@
-import 'package:dropdown_search/dropdown_search.dart';
+import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,7 +10,6 @@ import 'package:gti_rides/models/drivers_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/screens/Partner/home/list_vehicle/list_vehicle_controller.dart';
 import 'package:gti_rides/services/route_service.dart';
-import 'package:gti_rides/shared_widgets/date_container.dart';
 import 'package:gti_rides/shared_widgets/dropdown_widget.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
@@ -61,6 +60,208 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    // second retrial
+                    // SizedBox(
+                    //   height: 30,
+                    //   child: Expanded(
+                    //     child: ListView.separated(
+                    //       itemCount: 5,
+                    //       shrinkWrap: true,
+                    //       scrollDirection: Axis.horizontal,
+                    //       itemBuilder: (context, index) {
+                    //         var current = index + 1;
+                    //         return AnimatedContainer(
+                    //           duration: const Duration(milliseconds: 300),
+                    //           margin: const EdgeInsets.symmetric(horizontal: 0),
+                    //           // height: 38.sp,
+                    //           // width: 32.sp,
+                    //           padding: EdgeInsets.symmetric(
+                    //               horizontal: 5.sp, vertical: 7.sp),
+                    //           decoration: BoxDecoration(
+                    //             color: white,
+                    //             shape: BoxShape.circle,
+                    //             border: Border.all(color: primaryColor),
+                    //           ),
+                    //           child: Center(
+                    //             child: Transform.scale(
+                    //               scale: 0.6.sp,
+                    //               child: SvgPicture.asset(
+                    //                 ImageAssets.toyCar1,
+                    //                 // width: 33,
+                    //               ),
+                    //             ),
+                    //           ),
+                    //         );
+                    //       },
+                    //       separatorBuilder: (context, i) => i == 4
+                    //           ? SizedBox.shrink()
+                    //           : DottedLine(
+                    //               dashLength: 2.5,
+                    //               dashGapLength: 2,
+                    //               lineThickness: 2.0,
+                    //               dashColor: primaryColor,
+                    //               lineLength: 22),
+                    //     ),
+                    //   ),
+                    // ),
+
+                    // first retrial
+                    Row(
+                      children: [
+                        Row(
+                          children: [
+                            AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              margin: const EdgeInsets.symmetric(horizontal: 0),
+                              // height: 38.sp,
+                              // width: 32.sp,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 5.sp, vertical: 7.sp),
+                              decoration: BoxDecoration(
+                                color: controller.currentIndex.value == 0
+                                    ? primaryColor
+                                    : white,
+                                shape: BoxShape.circle,
+                                border: Border.all(color: primaryColor),
+                              ),
+                              child: Center(
+                                child: Transform.scale(
+                                  scale: 0.6.sp,
+                                  child: SvgPicture.asset(
+                                    ImageAssets.toyCar1,
+                                    // width: 33,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            DottedLine(
+                                dashLength: 2.5,
+                                dashGapLength: 2,
+                                lineThickness: 2.0,
+                                dashColor: primaryColor,
+                                lineLength: 22),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              margin: const EdgeInsets.symmetric(horizontal: 0),
+                              // height: 38.sp,
+                              // width: 32.sp,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 5.sp, vertical: 7.sp),
+                              decoration: BoxDecoration(
+                                color: white,
+                                shape: BoxShape.circle,
+                                border: Border.all(color: primaryColor),
+                              ),
+                              child: Center(
+                                child: Transform.scale(
+                                  scale: 0.6.sp,
+                                  child: SvgPicture.asset(
+                                    ImageAssets.toyCar1,
+                                    // width: 33,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            DottedLine(
+                                dashLength: 2.5,
+                                dashGapLength: 2,
+                                lineThickness: 2.0,
+                                dashColor: primaryColor,
+                                lineLength: 22),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              margin: const EdgeInsets.symmetric(horizontal: 0),
+                              // height: 38.sp,
+                              // width: 32.sp,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 5.sp, vertical: 7.sp),
+                              decoration: BoxDecoration(
+                                color: white,
+                                shape: BoxShape.circle,
+                                border: Border.all(color: primaryColor),
+                              ),
+                              child: Center(
+                                child: Transform.scale(
+                                  scale: 0.6.sp,
+                                  child: SvgPicture.asset(
+                                    ImageAssets.toyCar1,
+                                    // width: 33,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            DottedLine(
+                                dashLength: 2.5,
+                                dashGapLength: 2,
+                                lineThickness: 2.0,
+                                dashColor: primaryColor,
+                                lineLength: 22),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              margin: const EdgeInsets.symmetric(horizontal: 0),
+                              // height: 38.sp,
+                              // width: 32.sp,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 5.sp, vertical: 7.sp),
+                              decoration: BoxDecoration(
+                                color: white,
+                                shape: BoxShape.circle,
+                                border: Border.all(color: primaryColor),
+                              ),
+                              child: Center(
+                                child: Transform.scale(
+                                  scale: 0.6.sp,
+                                  child: SvgPicture.asset(
+                                    ImageAssets.toyCar1,
+                                    // width: 33,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            DottedLine(
+                                dashLength: 2.5,
+                                dashGapLength: 2,
+                                lineThickness: 2.0,
+                                dashColor: primaryColor,
+                                lineLength: 22),
+                          ],
+                        ),
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
+                          margin: const EdgeInsets.symmetric(horizontal: 0),
+                          // height: 38.sp,
+                          // width: 32.sp,
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 5.sp, vertical: 7.sp),
+                          decoration: BoxDecoration(
+                            color: white,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: primaryColor),
+                          ),
+                          child: Center(
+                            child: Transform.scale(
+                              scale: 0.6.sp,
+                              child: SvgPicture.asset(
+                                ImageAssets.toyCar1,
+                                // width: 33,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(left: 0),
                       child: Row(
@@ -141,56 +342,58 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     //   body: AppStrings.pleaseMakeSurePicAreClear,
                     //   onTap: () {},
                     // ),
-                    Flexible(
-                      fit: FlexFit.tight,
-                      child: SingleChildScrollView(
-                          controller: controller.scrollController,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              // stepper widget
-                              SizedBox(
-                                height: 20.sp,
-                              ),
-                              // pageview pages
-                              SizedBox(
-                                // height: controller.currentIndex.value == 2
-                                //     ? size.height / 0.7
-                                //     :
-                                height: size.height / 0.71.sp,
-                                child: PageView(
-                                  // itemCount: controller.pages.length,
-                                  physics: ScrollPhysics(),
-                                  controller: controller.pageController,
-                                  onPageChanged: (value) {
-                                    controller.currentIndex.value = value;
-                                    setState(() {});
-                                  },
-                                  children: <Widget>[
-                                    // Vehicle type page
-                                    vehicleTypePage(context, controller, size),
+                    // Flexible(
+                    //   fit: FlexFit.tight,
+                    //   child: SingleChildScrollView(
+                    //       controller: controller.scrollController,
+                    //       child: Column(
+                    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //         crossAxisAlignment: CrossAxisAlignment.center,
+                    //         children: [
+                    //           // stepper widget
+                    //           SizedBox(
+                    //             height: 20.sp,
+                    //           ),
+                    // pageview pages
+                    // SizedBox(
+                    // height: controller.currentIndex.value == 2
+                    //     ? size.height / 0.7
+                    //     :
+                    // height: size.height / 0.71.sp,
+                    // child:
+                    Expanded(
+                      child: PageView(
+                        // itemCount: controller.pages.length,
+                        physics: const ScrollPhysics(),
+                        controller: controller.pageController,
+                        onPageChanged: (value) {
+                          controller.currentIndex.value = value;
+                          setState(() {});
+                        },
+                        children: <Widget>[
+                          // Vehicle type page
+                          vehicleTypePage(context, controller, size),
 
-                                    // vehicle info page
-                                    vehicleInfoPage(context, controller, size),
+                          // vehicle info page
+                          vehicleInfoPage(context, controller, size),
 
-                                    // Documantation page
-                                    documentationPage(
-                                        context, controller, size),
+                          // Documantation page
+                          documentationPage(context, controller, size),
 
-                                    //Add photos page
-                                    addPhotosPage(size, controller),
-                                    availabilityPage(controller, context, size),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: size.height * 0.02.h,
-                              ),
-                              // continueButto
-                            ],
-                          )),
+                          //Add photos page
+                          addPhotosPage(size, controller),
+                          availabilityPage(controller, context, size),
+                        ],
+                      ),
                     ),
+                    // ),
+                    // SizedBox(
+                    //   height: size.height * 0.02.h,
+                    // ),
+                    // continueButto
+                    //         ],
+                    //       )),
+                    // ),
                   ],
                 ),
                 controller.isFetchingCarDetails.isTrue
@@ -248,436 +451,386 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
       child: Form(
         autovalidateMode: AutovalidateMode.onUserInteraction,
         key: controller.availabilityFormKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            textWidget(
-                text: AppStrings.availability,
-                textOverflow: TextOverflow.visible,
-                style: getMediumStyle()),
-            SizedBox(
-              height: 8.sp,
-            ),
-            // Row(
-            //   children: [
-            //     Expanded(
-            //       child: dateContainer(
-            //         size,
-            //         title: AppStrings.from,
-            //         color:
-            //             controller.startDateTime.value.isEmpty ? grey1 : grey5,
-            //         text: controller.startDateTime.value.isEmpty
-            //             ? AppStrings.dateTimeHintText
-            //             : controller.startDateTime.value,
-            //         onTap: () async {
-            //           var data = await Get.toNamed(AppLinks.chooseTripDate,
-            //               arguments: {
-            //                 "appBarTitle": AppStrings.selectAvailabilityDate,
-            //                 "to": AppStrings.to,
-            //                 "from": AppStrings.from
-            //               });
-            //           // Handle the selected date here
-            //           print('Selected Date page: $data');
-            //           controller.startDateTime.value = data['start'];
-            //           controller.endDateTime.value = data['end'];
-            //         },
-            //       ),
-            //     ),
-            //     SizedBox(width: 20.sp),
-            //     Expanded(
-            //       child: dateContainer(
-            //         size,
-            //         color: controller.endDateTime.value.isEmpty ? grey1 : grey5,
-            //         title: AppStrings.to,
-            //         text: controller.endDateTime.value.isEmpty
-            //             ? AppStrings.dateTimeHintText
-            //             : controller.endDateTime.value,
-            //         onTap: () async {
-            //           // final data = await controller
-            //           //     .routeToSelectDate();
-            //           var data = await Get.toNamed(AppLinks.chooseTripDate,
-            //               arguments: {
-            //                 "appBarTitle": AppStrings.selectAvailabilityDate,
-            //                 "to": AppStrings.to,
-            //                 "from": AppStrings.from
-            //               });
-            //           // Handle the selected date here
-            //           print('Selected Date page: $data');
-            //           controller.startDateTime.value = data['start'];
-            //           controller.endDateTime.value = data['end'];
-            //         },
-            //       ),
-            //     ),
-            //   ],
-            // ),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.only(bottom: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              textWidget(
+                  text: AppStrings.availability,
+                  textOverflow: TextOverflow.visible,
+                  style: getMediumStyle()),
+              SizedBox(
+                height: 8.sp,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: NormalInputTextWidget(
+                      title: "From",
+                      expectedVariable: "field",
+                      hintText: "1 Nov, 9:00am",
+                      textColor: controller.startDateTime.value.isEmpty
+                          ? grey1
+                          : grey5,
+                      controller: controller.fromController.value
+                        ..text = controller.startDateTime.value,
+                      readOnly: true,
+                      fontSize: 12.sp,
+                      onTap: () async {
+                        var data = await Get.toNamed(AppLinks.chooseTripDate,
+                            arguments: {
+                              "appBarTitle": AppStrings.selectAvailabilityDate,
+                              "to": AppStrings.to,
+                              "from": AppStrings.from,
+                              "rawStartTime": controller.rawStartTime,
+                              "rawEndTime": controller.rawEndTime,
+                              "isRenterHome": true
+                            });
 
-            Row(
-              children: [
-                Expanded(
-                  child: NormalInputTextWidget(
-                    title: "From",
-                    expectedVariable: "field",
-                    hintText: "1 Nov, 9:00am",
-                    textColor:
-                        controller.startDateTime.value.isEmpty ? grey1 : grey5,
-                    controller: controller.fromController.value
-                      ..text = controller.startDateTime.value,
-                    readOnly: true,
-                    fontSize: 12.sp,
-                    onTap: () async {
-                      var data = await Get.toNamed(AppLinks.chooseTripDate,
-                          arguments: {
-                            "appBarTitle": AppStrings.selectAvailabilityDate,
-                            "to": AppStrings.to,
-                            "from": AppStrings.from,
-                            "rawStartTime": controller.rawStartTime,
-                            "rawEndTime": controller.rawEndTime,
-                            "isRenterHome": true
-                          });
-
-                      // Handle the selected date here
-                      print('Selected Date page: $data');
-                      if (data != null) {
-                        controller.startDateTime.value = data['start'] ?? '';
-                        controller.endDateTime.value = data['end'] ?? '';
-                        controller.rawStartTime = data['rawStartTime'] ?? '';
-                        controller.rawEndTime = data['rawEndTime'] ?? '';
-                      }
-                    },
-                  ),
-                ),
-                SizedBox(
-                  width: 20.sp,
-                ),
-                Expanded(
-                  child: NormalInputTextWidget(
-                    title: "To",
-                    textColor:
-                        controller.endDateTime.value.isEmpty ? grey1 : grey5,
-                    expectedVariable: "field",
-                    hintText: "5 Nov, 9:00am",
-                    readOnly: true,
-                    fontSize: 12.sp,
-                    controller: controller.toController.value
-                      ..text = controller.endDateTime.value,
-                    onTap: () async {
-                      // final data = await controller
-                      //     .routeToSelectDate();
-                      var data = await Get.toNamed(AppLinks.chooseTripDate,
-                          arguments: {
-                            "appBarTitle": AppStrings.selectAvailabilityDate,
-                            "to": AppStrings.to,
-                            "from": AppStrings.from,
-                            "rawStartTime": controller.rawStartTime,
-                            "rawEndTime": controller.rawEndTime,
-                            "isRenterHome": true
-                          });
-
-                      // Handle the selected date here
-                      if (data != null) {
+                        // Handle the selected date here
                         print('Selected Date page: $data');
-                        controller.startDateTime.value = data['start'];
-                        controller.endDateTime.value = data['end'];
-                        controller.rawStartTime = data['rawStartTime'];
-                        controller.rawEndTime = data['rawEndTime'];
-                      }
-                    },
-                  ),
-                ),
-              ],
-            ),
-
-            SizedBox(
-              height: 24.sp,
-            ),
-
-            dropdownWidget1(
-                context: context,
-                hintText: 'Select',
-                title: AppStrings.howMuchForAdvance,
-                iconColor: grey3,
-                selectedValue: controller.isFromManageCars.isTrue &&
-                        controller.advanceTime.value.isNotEmpty
-                    ? controller.advanceTime.value.contains('hours')
-                        ? controller.advanceTime.value
-                        : "4 hours"
-                    : null,
-                values: <String>[
-                  "4 hours",
-                  "12 hours",
-                  "24 hours",
-                  "48 hours",
-                  "72 hours"
-                ],
-                onChange: (value) {
-                  print('Selected value: $value');
-                  controller.advanceTime.value = value;
-                  print("selected day ${controller.advanceTime.value}");
-                }),
-
-            SizedBox(
-              height: 24.sp,
-            ),
-            NormalInputTextWidget(
-              expectedVariable: 'field',
-              title: AppStrings.proposeRentalRate,
-              titleFontSize: 12.sp,
-              showCursor: true,
-              hintText: AppStrings.amountHintText,
-              prefixIcon: Transform.scale(
-                  scale: 0.3,
-                  child: SvgPicture.asset(
-                    ImageAssets.naira,
-                    width: 10.sp,
-                  )),
-              textInputType: TextInputType.number,
-              inputFormatters: [
-                LengthLimitingTextInputFormatter(10),
-                NumberTextInputFormatter(),
-              ],
-              controller: controller.rentPerDayController,
-            ),
-            SizedBox(
-              height: 7.sp,
-            ),
-            Row(
-              children: [
-                SvgPicture.asset(
-                  ImageAssets.info,
-                ),
-                SizedBox(
-                  width: 4.sp,
-                ),
-                textWidget(
-                    text:
-                        '${AppStrings.standardPrice} ${controller.advisedRenterPrice.value}',
-                    style:
-                        getMediumStyle(color: primaryColor, fontSize: 10.sp)),
-              ],
-            ),
-            SizedBox(
-              height: 24.sp,
-            ),
-            Row(
-              children: [
-                textWidget(
-                    text: '${AppStrings.discount} (Optional)',
-                    style: getMediumStyle()),
-                SizedBox(
-                  width: 4.sp,
-                ),
-                SvgPicture.asset(
-                  ImageAssets.info,
-                ),
-                SizedBox(
-                  width: 3.sp,
-                ),
-                textWidget(
-                    text: AppStrings.learnMore,
-                    style:
-                        getMediumStyle(color: primaryColor, fontSize: 10.sp)),
-              ],
-            ),
-            SizedBox(
-              height: 4.sp,
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Expanded(
-                  child: dropdownWidget1(
-                      context: context,
-                      hintText: 'Select',
-                      title: AppStrings.chooseNuberOfDays,
-                      iconColor: grey3,
-                      selectedValue: controller.isFromManageCars.isTrue &&
-                              controller.discountDays.isNotEmpty
-                          ? controller.discountDays.value
-                          : null,
-                      values: List.generate(21, (index) => (index).toString()),
-                      onChange: (value) {
-                        controller.discountDays.value = value;
-                        print(
-                            'Selected value: $value ${controller.discountDays.value}');
+                        if (data != null) {
+                          controller.startDateTime.value = data['start'] ?? '';
+                          controller.endDateTime.value = data['end'] ?? '';
+                          controller.rawStartTime = data['rawStartTime'] ?? '';
+                          controller.rawEndTime = data['rawEndTime'] ?? '';
+                        }
                       },
-                      validator: (value) => null),
-                ),
-                SizedBox(width: 20.sp),
-                Expanded(
-                  child: NormalInputTextWidget(
-                    expectedVariable: 'field',
-                    title: "${AppStrings.inputDiscountPerDay} %",
-                    titleFontSize: 12.sp,
-                    showCursor: false,
-                    hintText: '10',
-                    controller: controller.discountPerDayController,
-                    textInputType: TextInputType.number,
-                    validator: (vg) {},
-                    inputFormatters: [
-                      LengthLimitingTextInputFormatter(3),
-                      // this formatter allows decimal values
-                      // FilteringTextInputFormatter.allow(
-                      //     RegExp(r'^\d+\.?\d{0,2}')),
-                      DiscountInputFormatter(),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 24.sp,
-            ),
-            textWidget(
-                text: AppStrings.selectDriver,
-                style: getRegularStyle(fontSize: 12.sp)),
-
-            controller.drivers!.isEmpty
-                ? GestureDetector(
-                    onTap: () async {
-                      noDriverDialog(size, controller)
-                          .then((value) => controller.getDrivers());
-                    },
-                    child: Container(
-                      height: 45.h,
-                      width: size.width,
-                      constraints: BoxConstraints.tightFor(
-                          width: size.width.sp, height: 45.sp),
-                      // width: size.width,
-                      margin: EdgeInsets.symmetric(vertical: 5.sp),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(4.r),
-                        ),
-                        border: Border.all(color: grey3),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 10.sp, vertical: 10.sp),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            textWidget(
-                                text: controller.selectedView.value,
-                                style: getRegularStyle(fontSize: 10.sp)),
-                            const Icon(
-                              Iconsax.arrow_down_1,
-                              color: grey3,
-                            ),
-                          ],
-                        ),
-                      ),
                     ),
-                  )
-                : PopupMenuButton<Driver>(
-                    // padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                    constraints:
-                        BoxConstraints.tightFor(width: 320.sp, height: 250.sp),
-                    surfaceTintColor: Colors.transparent,
-                    color: backgroundColor,
-                    onSelected: (value) {},
-                    onOpened: () {},
-                    itemBuilder: (BuildContext context) {
-                      if (controller.drivers?.isNotEmpty == true) {
-                        // Set selectedDriverId to the driverId of the first driver
-                        controller.selectedDriverId.value =
-                            controller.drivers?[0]['driverID'];
-                      }
+                  ),
+                  SizedBox(
+                    width: 20.sp,
+                  ),
+                  Expanded(
+                    child: NormalInputTextWidget(
+                      title: "To",
+                      textColor:
+                          controller.endDateTime.value.isEmpty ? grey1 : grey5,
+                      expectedVariable: "field",
+                      hintText: "5 Nov, 9:00am",
+                      readOnly: true,
+                      fontSize: 12.sp,
+                      controller: controller.toController.value
+                        ..text = controller.endDateTime.value,
+                      onTap: () async {
+                        // final data = await controller
+                        //     .routeToSelectDate();
+                        var data = await Get.toNamed(AppLinks.chooseTripDate,
+                            arguments: {
+                              "appBarTitle": AppStrings.selectAvailabilityDate,
+                              "to": AppStrings.to,
+                              "from": AppStrings.from,
+                              "rawStartTime": controller.rawStartTime,
+                              "rawEndTime": controller.rawEndTime,
+                              "isRenterHome": true
+                            });
 
-                      return List<PopupMenuEntry<Driver>>.generate(
-                        controller.drivers!.length,
-                        (int index) {
-                          final driver = Driver(
-                            fullName: controller.drivers?[index]['fullName'],
-                            driverEmail: controller.drivers?[index]
-                                ['driverEmail'],
-                            driverId: controller.drivers?[index]['driverID'],
-                          );
-                          return PopupMenuItem(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 0),
-                            value: driver,
-                            child: AnimatedBuilder(
-                              animation: controller.selectedItem.value.reactive,
-                              builder: (context, child) {
-                                return RadioListTile<Driver>(
-                                  value: driver,
-                                  groupValue: controller.selectedItem1.value,
-                                  title: child,
-                                  onChanged: (Driver? value) {
-                                    controller.selectedItem1.value = value!;
-                                    controller.selectedView.value =
-                                        value.fullName ?? '';
-                                    controller.selectedDriverId.value =
-                                        driver.driverId!;
+                        // Handle the selected date here
+                        if (data != null) {
+                          print('Selected Date page: $data');
+                          controller.startDateTime.value = data['start'];
+                          controller.endDateTime.value = data['end'];
+                          controller.rawStartTime = data['rawStartTime'];
+                          controller.rawEndTime = data['rawEndTime'];
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 24.sp,
+              ),
+              dropdownWidget1(
+                  context: context,
+                  hintText: 'Select',
+                  title: AppStrings.howMuchForAdvance,
+                  iconColor: grey3,
+                  selectedValue: controller.isFromManageCars.isTrue &&
+                          controller.advanceTime.value.isNotEmpty
+                      ? controller.advanceTime.value.contains('hours')
+                          ? controller.advanceTime.value
+                          : "4 hours"
+                      : null,
+                  values: <String>[
+                    "4 hours",
+                    "12 hours",
+                    "24 hours",
+                    "48 hours",
+                    "72 hours"
+                  ],
+                  onChange: (value) {
+                    print('Selected value: $value');
+                    controller.advanceTime.value = value;
+                    print("selected day ${controller.advanceTime.value}");
+                  }),
+              SizedBox(
+                height: 24.sp,
+              ),
+              NormalInputTextWidget(
+                expectedVariable: 'field',
+                title: AppStrings.proposeRentalRate,
+                titleFontSize: 12.sp,
+                showCursor: true,
+                hintText: AppStrings.amountHintText,
+                prefixIcon: Transform.scale(
+                    scale: 0.3,
+                    child: SvgPicture.asset(
+                      ImageAssets.naira,
+                      width: 10.sp,
+                    )),
+                textInputType: TextInputType.number,
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(10),
+                  NumberTextInputFormatter(),
+                ],
+                controller: controller.rentPerDayController,
+              ),
+              SizedBox(
+                height: 7.sp,
+              ),
+              Row(
+                children: [
+                  SvgPicture.asset(
+                    ImageAssets.info,
+                  ),
+                  SizedBox(
+                    width: 4.sp,
+                  ),
+                  textWidget(
+                      text:
+                          '${AppStrings.standardPrice} ${controller.advisedRenterPrice.value}',
+                      style:
+                          getMediumStyle(color: primaryColor, fontSize: 10.sp)),
+                ],
+              ),
+              SizedBox(
+                height: 24.sp,
+              ),
+              Row(
+                children: [
+                  textWidget(
+                      text: '${AppStrings.discount} (Optional)',
+                      style: getMediumStyle()),
+                  SizedBox(
+                    width: 4.sp,
+                  ),
+                  SvgPicture.asset(
+                    ImageAssets.info,
+                  ),
+                  SizedBox(
+                    width: 3.sp,
+                  ),
+                  textWidget(
+                      text: AppStrings.learnMore,
+                      style:
+                          getMediumStyle(color: primaryColor, fontSize: 10.sp)),
+                ],
+              ),
+              SizedBox(
+                height: 4.sp,
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: dropdownWidget1(
+                        context: context,
+                        hintText: 'Select',
+                        title: AppStrings.chooseNuberOfDays,
+                        iconColor: grey3,
+                        selectedValue: controller.isFromManageCars.isTrue &&
+                                controller.discountDays.isNotEmpty
+                            ? controller.discountDays.value
+                            : null,
+                        values:
+                            List.generate(21, (index) => (index).toString()),
+                        onChange: (value) {
+                          controller.discountDays.value = value;
+                          print(
+                              'Selected value: $value ${controller.discountDays.value}');
+                        },
+                        validator: (value) => null),
+                  ),
+                  SizedBox(width: 20.sp),
+                  Expanded(
+                    child: NormalInputTextWidget(
+                      expectedVariable: 'field',
+                      title: "${AppStrings.inputDiscountPerDay} %",
+                      titleFontSize: 12.sp,
+                      showCursor: false,
+                      hintText: '10',
+                      controller: controller.discountPerDayController,
+                      textInputType: TextInputType.number,
+                      validator: (vg) {},
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(3),
+                        // this formatter allows decimal values
+                        // FilteringTextInputFormatter.allow(
+                        //     RegExp(r'^\d+\.?\d{0,2}')),
+                        DiscountInputFormatter(),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 24.sp,
+              ),
+              textWidget(
+                  text: AppStrings.selectDriver,
+                  style: getRegularStyle(fontSize: 12.sp)),
+              controller.drivers!.isEmpty
+                  ? GestureDetector(
+                      onTap: () async {
+                        noDriverDialog(size, controller)
+                            .then((value) => controller.getDrivers());
+                      },
+                      child: Container(
+                        height: 45.h,
+                        width: size.width,
+                        constraints: BoxConstraints.tightFor(
+                            width: size.width.sp, height: 45.sp),
+                        // width: size.width,
+                        margin: EdgeInsets.symmetric(vertical: 5.sp),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(4.r),
+                          ),
+                          border: Border.all(color: grey3),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 10.sp, vertical: 10.sp),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              textWidget(
+                                  text: controller.selectedView.value,
+                                  style: getRegularStyle(fontSize: 10.sp)),
+                              const Icon(
+                                Iconsax.arrow_down_1,
+                                color: grey3,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                  : PopupMenuButton<Driver>(
+                      // padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                      constraints: BoxConstraints.tightFor(
+                          width: 320.sp, height: 250.sp),
+                      surfaceTintColor: Colors.transparent,
+                      color: backgroundColor,
+                      onSelected: (value) {},
+                      onOpened: () {},
+                      itemBuilder: (BuildContext context) {
+                        if (controller.drivers?.isNotEmpty == true) {
+                          // Set selectedDriverId to the driverId of the first driver
+                          controller.selectedDriverId.value =
+                              controller.drivers?[0]['driverID'];
+                        }
 
-                                    Navigator.pop(context);
-                                  },
-                                  dense: true,
-                                  fillColor:
-                                      MaterialStateProperty.all(primaryColor),
-                                  activeColor: primaryColor,
-                                );
-                              },
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    textWidget(
-                                        text: driver.fullName,
-                                        style: getMediumStyle()),
-                                    textWidget(
-                                        text: driver.driverEmail,
-                                        style:
-                                            getRegularStyle(fontSize: 10.sp)),
-                                  ],
+                        return List<PopupMenuEntry<Driver>>.generate(
+                          controller.drivers!.length,
+                          (int index) {
+                            final driver = Driver(
+                              fullName: controller.drivers?[index]['fullName'],
+                              driverEmail: controller.drivers?[index]
+                                  ['driverEmail'],
+                              driverId: controller.drivers?[index]['driverID'],
+                            );
+                            return PopupMenuItem(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 0),
+                              value: driver,
+                              child: AnimatedBuilder(
+                                animation:
+                                    controller.selectedItem.value.reactive,
+                                builder: (context, child) {
+                                  return RadioListTile<Driver>(
+                                    value: driver,
+                                    groupValue: controller.selectedItem1.value,
+                                    title: child,
+                                    onChanged: (Driver? value) {
+                                      controller.selectedItem1.value = value!;
+                                      controller.selectedView.value =
+                                          value.fullName ?? '';
+                                      controller.selectedDriverId.value =
+                                          driver.driverId!;
+
+                                      Navigator.pop(context);
+                                    },
+                                    dense: true,
+                                    fillColor:
+                                        MaterialStateProperty.all(primaryColor),
+                                    activeColor: primaryColor,
+                                  );
+                                },
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      textWidget(
+                                          text: driver.fullName,
+                                          style: getMediumStyle()),
+                                      textWidget(
+                                          text: driver.driverEmail,
+                                          style:
+                                              getRegularStyle(fontSize: 10.sp)),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    child: Container(
-                      constraints: BoxConstraints.tightFor(
-                          width: size.width.sp, height: 45.sp),
-                      // width: size.width,
-                      margin: EdgeInsets.symmetric(vertical: 5.sp),
+                            );
+                          },
+                        );
+                      },
+                      child: Container(
+                        constraints: BoxConstraints.tightFor(
+                            width: size.width.sp, height: 45.sp),
+                        // width: size.width,
+                        margin: EdgeInsets.symmetric(vertical: 5.sp),
 
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(4.r)),
-                          border: Border.all(color: grey3)),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 10.sp, vertical: 10.sp),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            textWidget(
-                                text: controller.selectedView.value,
-                                style: getRegularStyle(fontSize: 10.sp)),
-                            const Icon(
-                              Iconsax.arrow_down_1,
-                              color: grey3,
-                            ),
-                          ],
+                        decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(4.r)),
+                            border: Border.all(color: grey3)),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 10.sp, vertical: 10.sp),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              textWidget(
+                                  text: controller.selectedView.value,
+                                  style: getRegularStyle(fontSize: 10.sp)),
+                              const Icon(
+                                Iconsax.arrow_down_1,
+                                color: grey3,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-
-            SizedBox(
-              height: 50.sp,
-            ),
-            controller.isLoading1.isTrue
-                ? centerLoadingIcon()
-                : GtiButton(
-                    onTap: () {
-                      controller.addCarAvailability();
-                    },
-                    text: AppStrings.cont,
-                    width: size.width,
-                  ),
-          ],
+              SizedBox(
+                height: 50.sp,
+              ),
+              controller.isLoading1.isTrue
+                  ? centerLoadingIcon()
+                  : GtiButton(
+                      onTap: () {
+                        controller.addCarAvailability();
+                      },
+                      text: AppStrings.cont,
+                      width: size.width,
+                    ),
+            ],
+          ),
         ),
       ),
     );
@@ -908,260 +1061,263 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
       child: Form(
         autovalidateMode: AutovalidateMode.onUserInteraction,
         key: controller.documentationFormKey,
-        child: Column(
-          children: [
-            imageUploadWidget(
-              title: AppStrings.uploadVehicleDoc,
-              body: AppStrings.pleaseMakeSurePicAreClear,
-              onTap: () {},
-            ),
-            SizedBox(
-              height: 24.sp,
-            ),
-            // vehicle license
-            photoUploadWithTitle(
-              size,
-              title: AppStrings.vehicleLicense,
-              content: controller.selectedPhotoName.isNotEmpty
-                  ? controller.selectedPhotoName.value
-                  : AppStrings.uploadDocument,
-              onTap: () {
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.only(bottom: 20),
+          child: Column(
+            children: [
+              imageUploadWidget(
+                title: AppStrings.uploadVehicleDoc,
+                body: AppStrings.pleaseMakeSurePicAreClear,
+                onTap: () {},
+              ),
+              SizedBox(
+                height: 24.sp,
+              ),
+              // vehicle license
+              photoUploadWithTitle(
+                size,
+                title: AppStrings.vehicleLicense,
+                content: controller.selectedPhotoName.isNotEmpty
+                    ? controller.selectedPhotoName.value
+                    : AppStrings.uploadDocument,
+                onTap: () {
+                  selectOptionSheet(size,
+                      onSelectCamera: () => controller
+                          .openCamera()
+                          .then((value) => routeService.goBack()),
+                      onSelectGallery: () => controller
+                          .openGallery()
+                          .then((value) => routeService.goBack()),
+                      button1Title: AppStrings.document);
+                },
+              ),
+              const SizedBox(height: 10),
+              NormalInputTextWidget(
+                titleFontSize: 12,
+                title: AppStrings.vehicleLicenseExpiryDate,
+                expectedVariable: "field",
+                hintText: AppStrings.inputDetails,
+                textInputType: TextInputType.none,
+                controller: controller.licenseExpiryDateController
+                  ..text = controller.licenseExpiryDate.value,
+                readOnly: true,
+                onTap: () async {
+                  var data =
+                      await Get.toNamed(AppLinks.chooseTripDate, arguments: {
+                    "appBarTitle": AppStrings.selectExpiryDate,
+                    "enablePastDates": false,
+                    "isSingleDateSelection": true,
+                    "isExpiryDateSelection": true
+                  });
+
+                  // Handle the selected date here
+                  if (kDebugMode) {
+                    print('Selected Date page: $data');
+                  }
+                  if (data != null && data['selectedExpiryDate'] != null) {
+                    controller.licenseExpiryDate.value =
+                        data['selectedExpiryDate'];
+                    print("value ${controller.licenseExpiryDate.value}");
+                  }
+                },
+              ),
+
+              SizedBox(
+                height: 24.sp,
+              ),
+              // road worthiness
+              photoUploadWithTitle(size,
+                  title: AppStrings.roadWorthiness,
+                  content: controller.selectedRoadWorthinessPhotoName.isNotEmpty
+                      ? controller.selectedRoadWorthinessPhotoName.value
+                      : AppStrings.uploadDocument, onTap: () {
                 selectOptionSheet(size,
                     onSelectCamera: () => controller
-                        .openCamera()
+                        .openRoadWorthinessCamera()
                         .then((value) => routeService.goBack()),
                     onSelectGallery: () => controller
-                        .openGallery()
+                        .openRoadWorthinessGallery()
                         .then((value) => routeService.goBack()),
                     button1Title: AppStrings.document);
-              },
-            ),
-            const SizedBox(height: 10),
-            NormalInputTextWidget(
-              titleFontSize: 12,
-              title: AppStrings.vehicleLicenseExpiryDate,
-              expectedVariable: "field",
-              hintText: AppStrings.inputDetails,
-              textInputType: TextInputType.none,
-              controller: controller.licenseExpiryDateController
-                ..text = controller.licenseExpiryDate.value,
-              readOnly: true,
-              onTap: () async {
-                var data =
-                    await Get.toNamed(AppLinks.chooseTripDate, arguments: {
-                  "appBarTitle": AppStrings.selectExpiryDate,
-                  "enablePastDates": false,
-                  "isSingleDateSelection": true,
-                  "isExpiryDateSelection": true
-                });
+              }),
+              const SizedBox(height: 10),
+              NormalInputTextWidget(
+                titleFontSize: 12,
+                title: AppStrings.roadWorthinessExpiryDate,
+                expectedVariable: "field",
+                hintText: AppStrings.inputDetails,
+                textInputType: TextInputType.none,
+                controller: controller.roadWorthinessExpiryDateController
+                  ..text = controller.roadWorthinessExpiryDate.value,
+                readOnly: true,
+                onTap: () async {
+                  var data =
+                      await Get.toNamed(AppLinks.chooseTripDate, arguments: {
+                    "appBarTitle": AppStrings.selectExpiryDate,
+                    "enablePastDates": false,
+                    "isSingleDateSelection": true,
+                    "isExpiryDateSelection": true
+                  });
 
-                // Handle the selected date here
-                if (kDebugMode) {
-                  print('Selected Date page: $data');
-                }
-                if (data != null && data['selectedExpiryDate'] != null) {
-                  controller.licenseExpiryDate.value =
-                      data['selectedExpiryDate'];
-                  print("value ${controller.licenseExpiryDate.value}");
-                }
-              },
-            ),
-
-            SizedBox(
-              height: 24.sp,
-            ),
-            // road worthiness
-            photoUploadWithTitle(size,
-                title: AppStrings.roadWorthiness,
-                content: controller.selectedRoadWorthinessPhotoName.isNotEmpty
-                    ? controller.selectedRoadWorthinessPhotoName.value
-                    : AppStrings.uploadDocument, onTap: () {
-              selectOptionSheet(size,
-                  onSelectCamera: () => controller
-                      .openRoadWorthinessCamera()
-                      .then((value) => routeService.goBack()),
-                  onSelectGallery: () => controller
-                      .openRoadWorthinessGallery()
-                      .then((value) => routeService.goBack()),
-                  button1Title: AppStrings.document);
-            }),
-            const SizedBox(height: 10),
-            NormalInputTextWidget(
-              titleFontSize: 12,
-              title: AppStrings.roadWorthinessExpiryDate,
-              expectedVariable: "field",
-              hintText: AppStrings.inputDetails,
-              textInputType: TextInputType.none,
-              controller: controller.roadWorthinessExpiryDateController
-                ..text = controller.roadWorthinessExpiryDate.value,
-              readOnly: true,
-              onTap: () async {
-                var data =
-                    await Get.toNamed(AppLinks.chooseTripDate, arguments: {
-                  "appBarTitle": AppStrings.selectExpiryDate,
-                  "enablePastDates": false,
-                  "isSingleDateSelection": true,
-                  "isExpiryDateSelection": true
-                });
-
-                // Handle the selected date here
-                if (kDebugMode) {
-                  print('Selected Date page: $data');
-                }
-                if (data != null && data['selectedExpiryDate'] != null) {
-                  controller.roadWorthinessExpiryDate.value =
-                      data['selectedExpiryDate'];
-                  print("value ${controller.roadWorthinessExpiryDate.value}");
-                }
-              },
-            ),
-
-            SizedBox(
-              height: 24.sp,
-            ),
-            dropdownWidget1(
-                context: context,
-                hintText: 'Select',
-                title: AppStrings.selectInsuranceType,
-                iconColor: grey3,
-                expectedVariable: 'field',
-                values: (controller.insurances?.value ?? [])
-                    .map((insurance) => insurance['insuranceName'] as String)
-                    .toList(),
-                selectedValue: controller.isFromManageCars.isTrue &&
-                        controller.insurance.value.isNotEmpty
-                    ? controller.insurance.value
-                    : null,
-                onChange: (selectedInsurance) {
-                  controller.insurance.value = selectedInsurance;
-                  print('Selected value: $selectedInsurance');
-                  // Find the brand object with the selected name
-                  var selectedObject =
-                      (controller.insurances?.value ?? []).firstWhere(
-                    (insurance) =>
-                        insurance['insuranceName'] == selectedInsurance,
-                    orElse: () => null,
-                  );
-                  if (selectedObject != null) {
-                    String insuranceCode =
-                        selectedObject['insuranceCode'] as String;
-                    controller.insuranceCode.value = insuranceCode;
-                    print(
-                        "seleted insuranceCode:: ${controller.insuranceCode.value}");
+                  // Handle the selected date here
+                  if (kDebugMode) {
+                    print('Selected Date page: $data');
                   }
-                }),
+                  if (data != null && data['selectedExpiryDate'] != null) {
+                    controller.roadWorthinessExpiryDate.value =
+                        data['selectedExpiryDate'];
+                    print("value ${controller.roadWorthinessExpiryDate.value}");
+                  }
+                },
+              ),
 
-            SizedBox(
-              height: 24.sp,
-            ),
-            // certificate of insurance
-            photoUploadWithTitle(size,
-                title: AppStrings.certificateOfInsurance,
-                content: controller.selectedInsurancePhotoName.isNotEmpty
-                    ? controller.selectedInsurancePhotoName.value
-                    : AppStrings.uploadDocument, onTap: () {
-              selectOptionSheet(size,
-                  onSelectCamera: () => controller
-                      .openInsuranceCamera()
-                      .then((value) => routeService.goBack()),
-                  onSelectGallery: () => controller
-                      .openInsuranceGallery()
-                      .then((value) => routeService.goBack()),
-                  button1Title: AppStrings.document);
-            }),
-            const SizedBox(height: 10),
-            NormalInputTextWidget(
-              titleFontSize: 12,
-              title: AppStrings.certificateOfInsuranceExpiryDate,
-              expectedVariable: "field",
-              hintText: AppStrings.inputDetails,
-              textInputType: TextInputType.none,
-              controller: controller.insuranceExpiryDateController
-                ..text = controller.insuranceExpiryDate.value,
-              readOnly: true,
-              onTap: () async {
-                var data =
-                    await Get.toNamed(AppLinks.chooseTripDate, arguments: {
-                  "appBarTitle": AppStrings.selectExpiryDate,
-                  "enablePastDates": false,
-                  "isSingleDateSelection": true,
-                  "isExpiryDateSelection": true
-                });
+              SizedBox(
+                height: 24.sp,
+              ),
+              dropdownWidget1(
+                  context: context,
+                  hintText: 'Select',
+                  title: AppStrings.selectInsuranceType,
+                  iconColor: grey3,
+                  expectedVariable: 'field',
+                  values: (controller.insurances?.value ?? [])
+                      .map((insurance) => insurance['insuranceName'] as String)
+                      .toList(),
+                  selectedValue: controller.isFromManageCars.isTrue &&
+                          controller.insurance.value.isNotEmpty
+                      ? controller.insurance.value
+                      : null,
+                  onChange: (selectedInsurance) {
+                    controller.insurance.value = selectedInsurance;
+                    print('Selected value: $selectedInsurance');
+                    // Find the brand object with the selected name
+                    var selectedObject =
+                        (controller.insurances?.value ?? []).firstWhere(
+                      (insurance) =>
+                          insurance['insuranceName'] == selectedInsurance,
+                      orElse: () => null,
+                    );
+                    if (selectedObject != null) {
+                      String insuranceCode =
+                          selectedObject['insuranceCode'] as String;
+                      controller.insuranceCode.value = insuranceCode;
+                      print(
+                          "seleted insuranceCode:: ${controller.insuranceCode.value}");
+                    }
+                  }),
 
-                // Handle the selected date here
-                if (kDebugMode) {
-                  print('Selected Date page: $data');
-                }
-                if (data != null && data['selectedExpiryDate'] != null) {
-                  controller.insuranceExpiryDate.value =
-                      data['selectedExpiryDate'];
-                  print("value ${controller.insuranceExpiryDate.value}");
-                }
-              },
-            ),
+              SizedBox(
+                height: 24.sp,
+              ),
+              // certificate of insurance
+              photoUploadWithTitle(size,
+                  title: AppStrings.certificateOfInsurance,
+                  content: controller.selectedInsurancePhotoName.isNotEmpty
+                      ? controller.selectedInsurancePhotoName.value
+                      : AppStrings.uploadDocument, onTap: () {
+                selectOptionSheet(size,
+                    onSelectCamera: () => controller
+                        .openInsuranceCamera()
+                        .then((value) => routeService.goBack()),
+                    onSelectGallery: () => controller
+                        .openInsuranceGallery()
+                        .then((value) => routeService.goBack()),
+                    button1Title: AppStrings.document);
+              }),
+              const SizedBox(height: 10),
+              NormalInputTextWidget(
+                titleFontSize: 12,
+                title: AppStrings.certificateOfInsuranceExpiryDate,
+                expectedVariable: "field",
+                hintText: AppStrings.inputDetails,
+                textInputType: TextInputType.none,
+                controller: controller.insuranceExpiryDateController
+                  ..text = controller.insuranceExpiryDate.value,
+                readOnly: true,
+                onTap: () async {
+                  var data =
+                      await Get.toNamed(AppLinks.chooseTripDate, arguments: {
+                    "appBarTitle": AppStrings.selectExpiryDate,
+                    "enablePastDates": false,
+                    "isSingleDateSelection": true,
+                    "isExpiryDateSelection": true
+                  });
 
-            SizedBox(
-              height: 24.sp,
-            ),
-            // vehicle inspection
-            photoUploadWithTitle(size,
-                title: AppStrings.vehicleInspectionReport,
-                content: controller.selectedInspectionPhotoName.isNotEmpty
-                    ? controller.selectedInspectionPhotoName.value
-                    : AppStrings.uploadDocument, onTap: () {
-              selectOptionSheet(size,
-                  onSelectCamera: () => controller
-                      .openInspectionCamera()
-                      .then((value) => routeService.goBack()),
-                  onSelectGallery: () => controller
-                      .openInspectionGallery()
-                      .then((value) => routeService.goBack()),
-                  button1Title: AppStrings.document);
-            }),
-            const SizedBox(height: 10),
-            NormalInputTextWidget(
-              titleFontSize: 12,
-              title: AppStrings.vehicleInspectionExpiryDate,
-              expectedVariable: "field",
-              hintText: AppStrings.inputDetails,
-              textInputType: TextInputType.none,
-              controller: controller.inspectionExpiryDateController
-                ..text = controller.inspectionExpiryDate.value,
-              readOnly: true,
-              onTap: () async {
-                var data =
-                    await Get.toNamed(AppLinks.chooseTripDate, arguments: {
-                  "appBarTitle": AppStrings.selectExpiryDate,
-                  "enablePastDates": false,
-                  "isSingleDateSelection": true,
-                  "isExpiryDateSelection": true
-                });
+                  // Handle the selected date here
+                  if (kDebugMode) {
+                    print('Selected Date page: $data');
+                  }
+                  if (data != null && data['selectedExpiryDate'] != null) {
+                    controller.insuranceExpiryDate.value =
+                        data['selectedExpiryDate'];
+                    print("value ${controller.insuranceExpiryDate.value}");
+                  }
+                },
+              ),
 
-                // Handle the selected date here
-                if (kDebugMode) {
-                  print('Selected Date page: $data');
-                }
-                if (data != null && data['selectedExpiryDate'] != null) {
-                  controller.inspectionExpiryDate.value =
-                      data['selectedExpiryDate'];
-                  print("value ${controller.inspectionExpiryDate.value}");
-                }
-              },
-            ),
+              SizedBox(
+                height: 24.sp,
+              ),
+              // vehicle inspection
+              photoUploadWithTitle(size,
+                  title: AppStrings.vehicleInspectionReport,
+                  content: controller.selectedInspectionPhotoName.isNotEmpty
+                      ? controller.selectedInspectionPhotoName.value
+                      : AppStrings.uploadDocument, onTap: () {
+                selectOptionSheet(size,
+                    onSelectCamera: () => controller
+                        .openInspectionCamera()
+                        .then((value) => routeService.goBack()),
+                    onSelectGallery: () => controller
+                        .openInspectionGallery()
+                        .then((value) => routeService.goBack()),
+                    button1Title: AppStrings.document);
+              }),
+              const SizedBox(height: 10),
+              NormalInputTextWidget(
+                titleFontSize: 12,
+                title: AppStrings.vehicleInspectionExpiryDate,
+                expectedVariable: "field",
+                hintText: AppStrings.inputDetails,
+                textInputType: TextInputType.none,
+                controller: controller.inspectionExpiryDateController
+                  ..text = controller.inspectionExpiryDate.value,
+                readOnly: true,
+                onTap: () async {
+                  var data =
+                      await Get.toNamed(AppLinks.chooseTripDate, arguments: {
+                    "appBarTitle": AppStrings.selectExpiryDate,
+                    "enablePastDates": false,
+                    "isSingleDateSelection": true,
+                    "isExpiryDateSelection": true
+                  });
 
-            SizedBox(
-              height: 50.sp,
-            ),
-            controller.isLoading.isTrue
-                ? centerLoadingIcon()
-                : GtiButton(
-                    onTap: () {
-                      controller.addCarDocument();
-                    },
-                    text: AppStrings.cont,
-                    width: size.width,
-                  ),
-          ],
+                  // Handle the selected date here
+                  if (kDebugMode) {
+                    print('Selected Date page: $data');
+                  }
+                  if (data != null && data['selectedExpiryDate'] != null) {
+                    controller.inspectionExpiryDate.value =
+                        data['selectedExpiryDate'];
+                    print("value ${controller.inspectionExpiryDate.value}");
+                  }
+                },
+              ),
+
+              SizedBox(
+                height: 50.sp,
+              ),
+              controller.isLoading.isTrue
+                  ? centerLoadingIcon()
+                  : GtiButton(
+                      onTap: () {
+                        controller.addCarDocument();
+                      },
+                      text: AppStrings.cont,
+                      width: size.width,
+                    ),
+            ],
+          ),
         ),
       ),
     );
@@ -1173,406 +1329,401 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
       child: Form(
         autovalidateMode: AutovalidateMode.onUserInteraction,
         key: controller.vehicleInfoFormKey,
-        child: Column(
-          children: [
-            NormalInputTextWidget(
-                expectedVariable: 'field',
-                title: AppStrings.tellUsAboutYourVehicle,
-                hintText: AppStrings.writeHere,
-                maxLines: 3,
-                maxLength: 300,
-                inputFormatters: [
-                  LengthLimitingTextInputFormatter(100),
-                ],
-                textInputType: TextInputType.text,
-                controller: controller.aboutVehicleController,
-                titleFontSize: 12.sp),
-            SizedBox(
-              height: 24.sp,
-            ),
-            dropdownWidget1(
-                context: context,
-                hintText: 'Select',
-                expectedVariable: 'field',
-                title: AppStrings.vehicleTransmission,
-                iconColor: grey3,
-                selectedValue: controller.isFromManageCars.isTrue &&
-                        controller.transmission.value.isNotEmpty
-                    ? controller.transmission.value
-                    : null,
-                key: UniqueKey(),
-                values: (controller.transmissions ?? [])
-                    .map((transmission) =>
-                        transmission['transmissionName'] as String)
-                    .toList(),
-                onChange: (selectedTransmission) {
-                  controller.transmission.value = selectedTransmission;
-                  print('Selected value: $selectedTransmission');
-                  print('Selected value1: $selectedTransmission');
+        child: SingleChildScrollView(
+          padding: EdgeInsets.only(bottom: 20),
+          child: Column(
+            children: [
+              NormalInputTextWidget(
+                  expectedVariable: 'field',
+                  title: AppStrings.tellUsAboutYourVehicle,
+                  hintText: AppStrings.writeHere,
+                  maxLines: 3,
+                  maxLength: 300,
+                  inputFormatters: [
+                    LengthLimitingTextInputFormatter(100),
+                  ],
+                  textInputType: TextInputType.text,
+                  controller: controller.aboutVehicleController,
+                  titleFontSize: 12.sp),
+              SizedBox(
+                height: 24.sp,
+              ),
+              dropdownWidget1(
+                  context: context,
+                  hintText: 'Select',
+                  expectedVariable: 'field',
+                  title: AppStrings.vehicleTransmission,
+                  iconColor: grey3,
+                  selectedValue: controller.isFromManageCars.isTrue &&
+                          controller.transmission.value.isNotEmpty
+                      ? controller.transmission.value
+                      : null,
+                  key: UniqueKey(),
+                  values: (controller.transmissions ?? [])
+                      .map((transmission) =>
+                          transmission['transmissionName'] as String)
+                      .toList(),
+                  onChange: (selectedTransmission) {
+                    controller.transmission.value = selectedTransmission;
+                    print('Selected value: $selectedTransmission');
+                    print('Selected value1: $selectedTransmission');
 
-                  // Find the brand object with the selected name
-                  var selectedObject =
-                      (controller.transmissions?.value ?? []).firstWhere(
-                    (transmission) =>
-                        transmission['transmissionName'] ==
-                        selectedTransmission,
-                    orElse: () => null,
-                  );
-                  if (selectedObject != null) {
-                    String transmissionCode =
-                        selectedObject['transmissionCode'] as String;
-                    controller.transmissionCode.value = transmissionCode;
-                  }
-                }),
-            SizedBox(
-              height: 24.sp,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                textWidget(
-                  text: AppStrings.vehicleFeatures,
-                  style: getRegularStyle(fontSize: 12.sp),
-                ),
-                SizedBox(
-                  height: 5.sp,
-                ),
-                ButtonTheme(
-                  alignedDropdown: true,
-                  child: DropDownMultiSelect<dynamic>(
-                    // validator: (selectedItems) {
-                    //   if (selectedItems == null || selectedItems.isEmpty) {
-                    //     return "Required field";
-                    //   } else if (selectedItems is String &&
-                    //       selectedItems.isNotEmpty) {
-                    //     return null;
-                    //   } else {
-                    //     return null; // No error
-                    //   }
-                    // },
-                    decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(
-                            horizontal: 14.sp, vertical: 13.sp),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: borderColor,
-                            width: 1.0.w,
+                    // Find the brand object with the selected name
+                    var selectedObject =
+                        (controller.transmissions?.value ?? []).firstWhere(
+                      (transmission) =>
+                          transmission['transmissionName'] ==
+                          selectedTransmission,
+                      orElse: () => null,
+                    );
+                    if (selectedObject != null) {
+                      String transmissionCode =
+                          selectedObject['transmissionCode'] as String;
+                      controller.transmissionCode.value = transmissionCode;
+                    }
+                  }),
+              SizedBox(
+                height: 24.sp,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  textWidget(
+                    text: AppStrings.vehicleFeatures,
+                    style: getRegularStyle(fontSize: 12.sp),
+                  ),
+                  SizedBox(
+                    height: 5.sp,
+                  ),
+                  ButtonTheme(
+                    alignedDropdown: true,
+                    child: DropDownMultiSelect<dynamic>(
+                      decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 14.sp, vertical: 13.sp),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: borderColor,
+                              width: 1.0.w,
+                            ),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(4.0.r),
+                            ),
                           ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(4.0.r),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: red,
+                              width: 1.0.w,
+                            ),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(4.0.r),
+                            ),
                           ),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: red,
-                            width: 1.0.w,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: borderColor,
+                              width: 1.0.w,
+                            ),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(4.0.r),
+                            ),
                           ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(4.0.r),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: secondaryColor,
+                              width: 1.0.w,
+                            ),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(4.0.r),
+                            ),
                           ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: borderColor,
-                            width: 1.0.w,
-                          ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(4.0.r),
-                          ),
-                        ),
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: secondaryColor,
-                            width: 1.0.w,
-                          ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(4.0.r),
-                          ),
-                        ),
 
-                        // filled: true,
-                        fillColor: Colors.transparent),
-                    onChanged: (List<dynamic> selectedFeatures) {
-                      controller.selectedFeatures!.value = selectedFeatures;
-                      print("selected $selectedFeatures");
+                          // filled: true,
+                          fillColor: Colors.transparent),
+                      onChanged: (List<dynamic> selectedFeatures) {
+                        controller.selectedFeatures!.value = selectedFeatures;
+                        print("selected $selectedFeatures");
 
-                      // Find the feature objects with the selected names
-                      var selectedObjects =
-                          (controller.carFeatures?.value ?? [])
-                              .where(
-                                (feature) => selectedFeatures
-                                    .contains(feature['featuresName']),
-                              )
-                              .toList();
-                      // Extract featuresCode from selected objects
-                      List<String> featuresCodes = selectedObjects
-                          .map((feature) => feature['featuresCode'] as String)
-                          .toList();
+                        // Find the feature objects with the selected names
+                        var selectedObjects =
+                            (controller.carFeatures?.value ?? [])
+                                .where(
+                                  (feature) => selectedFeatures
+                                      .contains(feature['featuresName']),
+                                )
+                                .toList();
+                        // Extract featuresCode from selected objects
+                        List<String> featuresCodes = selectedObjects
+                            .map((feature) => feature['featuresCode'] as String)
+                            .toList();
 
-                      // Assign the lists to corresponding controller variables
-                      controller.featuresCode.value = featuresCodes;
-                      print("selectedFeatures: $selectedFeatures");
-                      print("featuresCodes: $featuresCodes");
-                    },
-                    options: (controller.carFeatures?.value ?? [])
-                        .map((feature) => feature['featuresName'] as String)
-                        .toList(),
-                    selectedValues: controller.selectedFeatures!.value,
-                    whenEmpty: 'Select',
-                    isDense: true,
-                    enabled: true,
-                    icon: const Icon(
-                      Iconsax.arrow_down_1,
-                      color: grey3,
+                        // Assign the lists to corresponding controller variables
+                        controller.featuresCode.value = featuresCodes;
+                        print("selectedFeatures: $selectedFeatures");
+                        print("featuresCodes: $featuresCodes");
+                      },
+                      options: (controller.carFeatures?.value ?? [])
+                          .map((feature) => feature['featuresName'] as String)
+                          .toList(),
+                      selectedValues:
+                          controller.selectedFeatures!.take(5).toList(),
+                      whenEmpty: 'Select',
+                      isDense: true,
+                      enabled: true,
+                      icon: const Icon(
+                        Iconsax.arrow_down_1,
+                        color: grey3,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            // Column(
-            //   crossAxisAlignment: CrossAxisAlignment.start,
-            //   children: [
-            //     textWidget(
-            //       text: AppStrings.vehicleFeatures,
-            //       style: getRegularStyle(fontSize: 12.sp),
-            //     ),
-            //     SizedBox(
-            //       height: 5.sp,
-            //     ),
-            //     DropdownSearch<dynamic>.multiSelection(
-            //       clearButtonProps: ClearButtonProps(
-            //         color: primaryColor,
-            //       ),
-            //       items: (controller.carFeatures?.value ?? [])
-            //           .map((feature) => feature['featuresName'] as String)
-            //           .toList(),
-            //       dropdownButtonProps: DropdownButtonProps(
-            //         splashColor: primaryColor,
-            //         focusColor: primaryColor,
-            //         color: primaryColor,
-            //         icon: Icon(
-            //           Iconsax.arrow_down_1,
-            //           color: grey3,
-            //         ),
-            //       ),
-            //       popupProps: PopupPropsMultiSelection.menu(
+                ],
+              ),
+              // Column(
+              //   crossAxisAlignment: CrossAxisAlignment.start,
+              //   children: [
+              //     textWidget(
+              //       text: AppStrings.vehicleFeatures,
+              //       style: getRegularStyle(fontSize: 12.sp),
+              //     ),
+              //     SizedBox(
+              //       height: 5.sp,
+              //     ),
+              //     DropdownSearch<dynamic>.multiSelection(
+              //       clearButtonProps: ClearButtonProps(
+              //         color: primaryColor,
+              //       ),
+              //       items: (controller.carFeatures?.value ?? [])
+              //           .map((feature) => feature['featuresName'] as String)
+              //           .toList(),
+              //       dropdownButtonProps: DropdownButtonProps(
+              //         splashColor: primaryColor,
+              //         focusColor: primaryColor,
+              //         color: primaryColor,
+              //         icon: Icon(
+              //           Iconsax.arrow_down_1,
+              //           color: grey3,
+              //         ),
+              //       ),
+              //       popupProps: PopupPropsMultiSelection.menu(
 
-            //           // selectionWidget: (context, item, isSelected) {
+              //           // selectionWidget: (context, item, isSelected) {
 
-            //           // },
-            //           constraints:
-            //               BoxConstraints(minHeight: 200.sp, maxHeight: 300.sp),
-            //           favoriteItemProps: FavoriteItemProps(),
-            //           menuProps: MenuProps(
-            //             backgroundColor: backgroundColor,
-            //           )
-            //           // showSelectedItems: true,
+              //           // },
+              //           constraints:
+              //               BoxConstraints(minHeight: 200.sp, maxHeight: 300.sp),
+              //           favoriteItemProps: FavoriteItemProps(),
+              //           menuProps: MenuProps(
+              //             backgroundColor: backgroundColor,
+              //           )
+              //           // showSelectedItems: true,
 
-            //           ),
+              //           ),
 
-            //       onChanged: (List<dynamic> selectedFeatures) {
-            //         controller.selectedFeatures!.value = selectedFeatures;
-            //         print("selected $selectedFeatures");
+              //       onChanged: (List<dynamic> selectedFeatures) {
+              //         controller.selectedFeatures!.value = selectedFeatures;
+              //         print("selected $selectedFeatures");
 
-            //         // Find the feature objects with the selected names
-            //         var selectedObjects = (controller.carFeatures?.value ?? [])
-            //             .where(
-            //               (feature) => selectedFeatures
-            //                   .contains(feature['featuresName']),
-            //             )
-            //             .toList();
-            //         // Extract featuresCode from selected objects
-            //         List<String> featuresCodes = selectedObjects
-            //             .map((feature) => feature['featuresCode'] as String)
-            //             .toList();
+              //         // Find the feature objects with the selected names
+              //         var selectedObjects = (controller.carFeatures?.value ?? [])
+              //             .where(
+              //               (feature) => selectedFeatures
+              //                   .contains(feature['featuresName']),
+              //             )
+              //             .toList();
+              //         // Extract featuresCode from selected objects
+              //         List<String> featuresCodes = selectedObjects
+              //             .map((feature) => feature['featuresCode'] as String)
+              //             .toList();
 
-            //         // Assign the lists to corresponding controller variables
-            //         controller.featuresCode.value = featuresCodes;
-            //         print("selectedFeatures: $selectedFeatures");
-            //         print("featuresCodes: $featuresCodes");
-            //       },
-            //       selectedItems: controller.selectedFeatures!.value,
-            //       validator: (selectedItems) {
-            //         if (selectedItems == null || selectedItems.isEmpty) {
-            //           return "Required field";
-            //         } else if (selectedItems.contains("Brazil")) {
-            //           return "Invalid item";
-            //         } else {
-            //           return null; // No error
-            //         }
-            //       },
-            //       dropdownDecoratorProps: DropDownDecoratorProps(
-            //         dropdownSearchDecoration: InputDecoration(
-            //           iconColor: red, suffixIconColor: red,
-            //           contentPadding: EdgeInsets.symmetric(
-            //               horizontal: 5.sp, vertical: 7.sp),
-            //           enabledBorder: OutlineInputBorder(
-            //             borderSide: BorderSide(
-            //               color: borderColor,
-            //               width: 1.0.w,
-            //             ),
-            //             borderRadius: BorderRadius.all(
-            //               Radius.circular(4.0.r),
-            //             ),
-            //           ),
-            //           errorBorder: OutlineInputBorder(
-            //             borderSide: BorderSide(
-            //               color: red,
-            //               width: 1.0.w,
-            //             ),
-            //             borderRadius: BorderRadius.all(
-            //               Radius.circular(4.0.r),
-            //             ),
-            //           ),
-            //           focusedBorder: OutlineInputBorder(
-            //             borderSide: BorderSide(
-            //               color: borderColor,
-            //               width: 1.0.w,
-            //             ),
-            //             borderRadius: BorderRadius.all(
-            //               Radius.circular(4.0.r),
-            //             ),
-            //           ),
-            //           border: OutlineInputBorder(
-            //             borderSide: BorderSide(
-            //               color: secondaryColor,
-            //               width: 1.0.w,
-            //             ),
-            //             borderRadius: BorderRadius.all(
-            //               Radius.circular(4.0.r),
-            //             ),
-            //           ),
-            //           // decoration: InputDecoration(
-            //           //   contentPadding: EdgeInsets.symmetric(horizontal: 14.sp, vertical: 13.sp),
-            //           //   enabledBorder: OutlineInputBorder(
-            //           //     borderSide: BorderSide(
-            //           //       color: borderColor,
-            //           //       width: 1.0.w,
-            //           //     ),
-            //           //     borderRadius: BorderRadius.all(
-            //           //       Radius.circular(4.0.r),
-            //           //     ),
-            //           //   ),
-            //           //   errorBorder: OutlineInputBorder(
-            //           //     borderSide: BorderSide(
-            //           //       color: red,
-            //           //       width: 1.0.w,
-            //           //     ),
-            //           //     borderRadius: BorderRadius.all(
-            //           //       Radius.circular(4.0.r),
-            //           //     ),
-            //           //   ),
-            //           //   focusedBorder: OutlineInputBorder(
-            //           //     borderSide: BorderSide(
-            //           //       color: borderColor,
-            //           //       width: 1.0.w,
-            //           //     ),
-            //           //     borderRadius: BorderRadius.all(
-            //           //       Radius.circular(4.0.r),
-            //           //     ),
-            //           //   ),
-            //           //   border: OutlineInputBorder(
-            //           //     borderSide: BorderSide(
-            //           //       color: secondaryColor,
-            //           //       width: 1.0.w,
-            //           //     ),
-            //           //     borderRadius: BorderRadius.all(
-            //           //       Radius.circular(4.0.r),
-            //           //     ),
-            //           //   ),
-            //           //   // filled: true,
-            //           //   fillColor: Colors.transparent,
-            //           // ),
-            //           // whenEmpty: 'Select',
-            //           // isDense: true,
-            //           enabled: true,
-            //           // icon: const Icon(
-            //           //   Iconsax.arrow_down_1,
-            //           //   color: grey3,
-            //           // ),
-            //         ),
-            //       ),
-            //     ),
-            //   ],
-            // ),
-            SizedBox(
-              height: 24.sp,
-            ),
-            dropdownWidget1(
-                context: context,
-                hintText: 'Select',
-                title: AppStrings.vehicleType,
-                iconColor: grey3,
-                values: (controller.vehicleTypes?.value ?? [])
-                    .map((carType) => carType['typeName'] as String)
-                    .toList(),
-                // key: UniqueKey(),
-                selectedValue: controller.isFromManageCars.isTrue &&
-                        controller.vehicleType.value.isNotEmpty
-                    ? controller.vehicleType.value
-                    : null,
-                onChange: (selectedVehicleType) {
-                  // controller.vehicleType.value = selectedVehicleType;
-                  print('Selected value: $selectedVehicleType');
-                  // Find the Vehicle Type object with the selected name
-                  var selectedObject =
-                      (controller.vehicleTypes?.value ?? []).firstWhere(
-                    (vehicleType) =>
-                        vehicleType['typeName'] == selectedVehicleType,
-                    orElse: () => null,
-                  );
-                  if (selectedObject != null) {
-                    String vehicleTypeCode =
-                        selectedObject['typeCode'] as String;
-                    controller.vehicleTypeCode.value = vehicleTypeCode;
-                    print("vehicle type code $selectedObject $vehicleTypeCode");
-                  }
-                }),
-            SizedBox(
-              height: 24.sp,
-            ),
-            dropdownWidget1(
-                context: context,
-                hintText: 'Select',
-                title: AppStrings.numberOfSeats,
-                iconColor: grey3,
-                values: (controller.vehicleSeats?.value ?? [])
-                    .map((seat) => seat["seatName"] as String)
-                    .toList(),
-                selectedValue: controller.isFromManageCars.isTrue &&
-                        controller.numberOfSeats.value.isNotEmpty
-                    ? controller.numberOfSeats.value
-                    : null,
-                onChange: (selectedNoOfSeat) {
-                  controller.numberOfSeats.value = selectedNoOfSeat;
-                  print('Selected value: $selectedNoOfSeat');
+              //         // Assign the lists to corresponding controller variables
+              //         controller.featuresCode.value = featuresCodes;
+              //         print("selectedFeatures: $selectedFeatures");
+              //         print("featuresCodes: $featuresCodes");
+              //       },
+              //       selectedItems: controller.selectedFeatures!.value,
+              //       validator: (selectedItems) {
+              //         if (selectedItems == null || selectedItems.isEmpty) {
+              //           return "Required field";
+              //         } else if (selectedItems.contains("Brazil")) {
+              //           return "Invalid item";
+              //         } else {
+              //           return null; // No error
+              //         }
+              //       },
+              //       dropdownDecoratorProps: DropDownDecoratorProps(
+              //         dropdownSearchDecoration: InputDecoration(
+              //           iconColor: red, suffixIconColor: red,
+              //           contentPadding: EdgeInsets.symmetric(
+              //               horizontal: 5.sp, vertical: 7.sp),
+              //           enabledBorder: OutlineInputBorder(
+              //             borderSide: BorderSide(
+              //               color: borderColor,
+              //               width: 1.0.w,
+              //             ),
+              //             borderRadius: BorderRadius.all(
+              //               Radius.circular(4.0.r),
+              //             ),
+              //           ),
+              //           errorBorder: OutlineInputBorder(
+              //             borderSide: BorderSide(
+              //               color: red,
+              //               width: 1.0.w,
+              //             ),
+              //             borderRadius: BorderRadius.all(
+              //               Radius.circular(4.0.r),
+              //             ),
+              //           ),
+              //           focusedBorder: OutlineInputBorder(
+              //             borderSide: BorderSide(
+              //               color: borderColor,
+              //               width: 1.0.w,
+              //             ),
+              //             borderRadius: BorderRadius.all(
+              //               Radius.circular(4.0.r),
+              //             ),
+              //           ),
+              //           border: OutlineInputBorder(
+              //             borderSide: BorderSide(
+              //               color: secondaryColor,
+              //               width: 1.0.w,
+              //             ),
+              //             borderRadius: BorderRadius.all(
+              //               Radius.circular(4.0.r),
+              //             ),
+              //           ),
+              //           // decoration: InputDecoration(
+              //           //   contentPadding: EdgeInsets.symmetric(horizontal: 14.sp, vertical: 13.sp),
+              //           //   enabledBorder: OutlineInputBorder(
+              //           //     borderSide: BorderSide(
+              //           //       color: borderColor,
+              //           //       width: 1.0.w,
+              //           //     ),
+              //           //     borderRadius: BorderRadius.all(
+              //           //       Radius.circular(4.0.r),
+              //           //     ),
+              //           //   ),
+              //           //   errorBorder: OutlineInputBorder(
+              //           //     borderSide: BorderSide(
+              //           //       color: red,
+              //           //       width: 1.0.w,
+              //           //     ),
+              //           //     borderRadius: BorderRadius.all(
+              //           //       Radius.circular(4.0.r),
+              //           //     ),
+              //           //   ),
+              //           //   focusedBorder: OutlineInputBorder(
+              //           //     borderSide: BorderSide(
+              //           //       color: borderColor,
+              //           //       width: 1.0.w,
+              //           //     ),
+              //           //     borderRadius: BorderRadius.all(
+              //           //       Radius.circular(4.0.r),
+              //           //     ),
+              //           //   ),
+              //           //   border: OutlineInputBorder(
+              //           //     borderSide: BorderSide(
+              //           //       color: secondaryColor,
+              //           //       width: 1.0.w,
+              //           //     ),
+              //           //     borderRadius: BorderRadius.all(
+              //           //       Radius.circular(4.0.r),
+              //           //     ),
+              //           //   ),
+              //           //   // filled: true,
+              //           //   fillColor: Colors.transparent,
+              //           // ),
+              //           // whenEmpty: 'Select',
+              //           // isDense: true,
+              //           enabled: true,
+              //           // icon: const Icon(
+              //           //   Iconsax.arrow_down_1,
+              //           //   color: grey3,
+              //           // ),
+              //         ),
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              SizedBox(
+                height: 24.sp,
+              ),
+              dropdownWidget1(
+                  context: context,
+                  hintText: 'Select',
+                  title: AppStrings.vehicleType,
+                  iconColor: grey3,
+                  values: (controller.vehicleTypes?.value ?? [])
+                      .map((carType) => carType['typeName'] as String)
+                      .toList(),
+                  // key: UniqueKey(),
+                  selectedValue: controller.isFromManageCars.isTrue &&
+                          controller.vehicleType.value.isNotEmpty
+                      ? controller.vehicleType.value
+                      : null,
+                  onChange: (selectedVehicleType) {
+                    // controller.vehicleType.value = selectedVehicleType;
+                    print('Selected value: $selectedVehicleType');
+                    // Find the Vehicle Type object with the selected name
+                    var selectedObject =
+                        (controller.vehicleTypes?.value ?? []).firstWhere(
+                      (vehicleType) =>
+                          vehicleType['typeName'] == selectedVehicleType,
+                      orElse: () => null,
+                    );
+                    if (selectedObject != null) {
+                      String vehicleTypeCode =
+                          selectedObject['typeCode'] as String;
+                      controller.vehicleTypeCode.value = vehicleTypeCode;
+                      print(
+                          "vehicle type code $selectedObject $vehicleTypeCode");
+                    }
+                  }),
+              SizedBox(
+                height: 24.sp,
+              ),
+              dropdownWidget1(
+                  context: context,
+                  hintText: 'Select',
+                  title: AppStrings.numberOfSeats,
+                  iconColor: grey3,
+                  values: (controller.vehicleSeats?.value ?? [])
+                      .map((seat) => seat["seatName"] as String)
+                      .toList(),
+                  selectedValue: controller.isFromManageCars.isTrue &&
+                          controller.numberOfSeats.value.isNotEmpty
+                      ? controller.numberOfSeats.value
+                      : null,
+                  onChange: (selectedNoOfSeat) {
+                    controller.numberOfSeats.value = selectedNoOfSeat;
+                    print('Selected value: $selectedNoOfSeat');
 
-                  // Find the seat Type object with the selected name
-                  var selectedObject =
-                      (controller.vehicleSeats?.value ?? []).firstWhere(
-                    (vehicleSeat) =>
-                        vehicleSeat['seatName'] == selectedNoOfSeat,
-                    orElse: () => null,
-                  );
-                  if (selectedObject != null) {
-                    String vehicleSeatCode =
-                        selectedObject['seatCode'] as String;
-                    controller.vehicleSeatCode.value = vehicleSeatCode;
-                  }
-                }),
-            SizedBox(
-              height: 50.sp,
-            ),
-            controller.isLoading.isTrue
-                ? centerLoadingIcon()
-                : GtiButton(
-                    onTap: () {
-                      controller.addCarInfo();
-                    },
-                    text: AppStrings.cont,
-                    width: size.width,
-                  ),
-          ],
+                    // Find the seat Type object with the selected name
+                    var selectedObject =
+                        (controller.vehicleSeats?.value ?? []).firstWhere(
+                      (vehicleSeat) =>
+                          vehicleSeat['seatName'] == selectedNoOfSeat,
+                      orElse: () => null,
+                    );
+                    if (selectedObject != null) {
+                      String vehicleSeatCode =
+                          selectedObject['seatCode'] as String;
+                      controller.vehicleSeatCode.value = vehicleSeatCode;
+                    }
+                  }),
+              SizedBox(
+                height: 50.sp,
+              ),
+              controller.isLoading.isTrue
+                  ? centerLoadingIcon()
+                  : GtiButton(
+                      onTap: () {
+                        controller.addCarInfo();
+                      },
+                      text: AppStrings.cont,
+                      width: size.width,
+                    ),
+            ],
+          ),
         ),
       ),
     );
@@ -1584,471 +1735,478 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
       child: Form(
         autovalidateMode: AutovalidateMode.onUserInteraction,
         key: controller.vehicleTypeFormKey,
-        child: Column(
-          children: [
-            dropdownWidget1(
-                context: context,
-                hintText: 'Select',
-                title: AppStrings.whatIsTheBrandOfVehicle,
-                iconColor: grey3,
-                expectedVariable: 'field',
-                selectedValue: controller.isFromManageCars.isTrue ||
-                        controller.brandName.value.isNotEmpty
-                    ? controller.brandName.value
-                    : null,
-                // values: controller.vehicleBrands,
-                values: (controller.brands.value.data ?? [])
-                    .map((brand) => brand['brandName'] as String)
-                    .toList(),
-                onChange: (selectedBrand) async {
-                  print('Selected value: $selectedBrand');
-                  if (selectedBrand != controller.brandName.value) {
-                    controller.selectedBrandModel.value = 'Select';
-                    controller.selectedYearValue!.value = 'Select';
-                  }
-                  controller.brandName.value = selectedBrand;
-                  controller.vehicleYear!.clear();
-                  controller.vehicleYear!.value = [];
-                  controller.selectedValue1 = 'Select';
-                  print(
-                      "VEHICLE YEAR VALUE:: ${controller.vehicleYear!.value} ${controller.brandName.value}");
+        child: SingleChildScrollView(
+          padding: EdgeInsets.only(bottom: 20),
+          child: Column(
+            children: [
+              dropdownWidget1(
+                  context: context,
+                  hintText: 'Select',
+                  title: AppStrings.whatIsTheBrandOfVehicle,
+                  iconColor: grey3,
+                  expectedVariable: 'field',
+                  selectedValue: controller.isFromManageCars.isTrue ||
+                          controller.brandName.value.isNotEmpty
+                      ? controller.brandName.value
+                      : null,
+                  // values: controller.vehicleBrands,
+                  values: (controller.brands.value.data ?? [])
+                      .map((brand) => brand['brandName'] as String)
+                      .toList(),
+                  onChange: (selectedBrand) async {
+                    print('Selected value: $selectedBrand');
+                    if (selectedBrand != controller.brandName.value) {
+                      controller.selectedBrandModel.value = 'Select';
+                      controller.selectedYearValue!.value = 'Select';
+                    }
+                    controller.brandName.value = selectedBrand;
+                    controller.vehicleYear!.clear();
+                    controller.vehicleYear!.value = [];
+                    controller.selectedValue1 = 'Select';
+                    print(
+                        "VEHICLE YEAR VALUE:: ${controller.vehicleYear!.value} ${controller.brandName.value}");
 
-                  // Find the brand object with the selected name
-                  var selectedBrandObject =
-                      (controller.brands.value.data ?? []).firstWhere(
-                    (brand) => brand['brandName'] == selectedBrand,
-                    orElse: () => null,
-                  );
-                  if (selectedBrandObject != null) {
-                    String brandCode =
-                        selectedBrandObject['brandCode'] as String;
-                    await controller.getBrandModel(brandCode1: brandCode);
-                  }
-                }),
-            SizedBox(
-              height: 24.sp,
-            ),
-            Row(
-              children: [
-                textWidget(
-                    text: "Select brand model",
-                    style: getRegularStyle(fontSize: 12.sp)),
-              ],
-            ),
-            if (controller.brandModel!.isEmpty &&
-                controller.selectedBrandModel.value == 'Select')
-              GestureDetector(
-                onTap: () {
-                  // Handle tap if needed
-                },
-                child: Container(
-                  height: 45.h,
-                  width: size.width,
-                  constraints: BoxConstraints.tightFor(
-                    width: size.width.sp,
-                    height: 45.sp,
-                  ),
-                  margin: EdgeInsets.symmetric(vertical: 5.sp),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(4.r),
-                    ),
-                    border: Border.all(color: grey3),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 10.sp,
-                      vertical: 10.sp,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        textWidget(
-                          text: controller.selectedBrandModel.value,
-                          style: getRegularStyle(fontSize: 10.sp),
-                        ),
-                        const Icon(
-                          Iconsax.arrow_down_1,
-                          color: grey3,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              )
-            else
-              Column(
+                    // Find the brand object with the selected name
+                    var selectedBrandObject =
+                        (controller.brands.value.data ?? []).firstWhere(
+                      (brand) => brand['brandName'] == selectedBrand,
+                      orElse: () => null,
+                    );
+                    if (selectedBrandObject != null) {
+                      String brandCode =
+                          selectedBrandObject['brandCode'] as String;
+                      await controller.getBrandModel(brandCode1: brandCode);
+                    }
+                  }),
+              SizedBox(
+                height: 24.sp,
+              ),
+              Row(
                 children: [
-                  PopupMenuButton<Map<String, dynamic>>(
-                    constraints: BoxConstraints(
-                      minWidth: 320.sp,
-                      maxHeight: 500,
-                      minHeight:
-                          50.0 + (controller.brandModel?.length ?? 0) * 30,
-                    ),
-                    // initialValue: ,
-                    surfaceTintColor: Colors.transparent,
-                    color: backgroundColor,
-                    onSelected: (selectedBrand) async {
-                      setState(() {
-                        // controller.errorMessage!.value = controller
-                        //     .validateValue(selectedBrand['modelName'])!;
-                        controller.selectedBrandModel.value =
-                            selectedBrand['modelName'];
-                        controller.modelName?.value =
-                            selectedBrand['modelName'];
-                        controller.modelCode.value =
-                            selectedBrand['modelCode'] as String;
-                        controller.brandCode.value =
-                            selectedBrand['brandCode'] as String;
-                        controller.brandCode1 =
-                            selectedBrand['brandCode'] as String;
-                        controller.brandModelCode =
-                            selectedBrand['modelCode'] as String;
-                        print(
-                            "Selected brand name: ${controller.modelName?.value}");
-
-                        print("Slected brand code ${controller.brandCode1}");
-                      });
-                      await controller.getVehicleYear(
-                          brandCode: controller.brandCode1!,
-                          brandModelCode: controller.brandModelCode!);
-                      print(
-                          "Slected brand valued ${controller.selectedBrandModel}");
-                      var selectedBrandObject =
-                          (controller.brandModel ?? []).firstWhere(
-                        (brand) => brand['modelName'] == selectedBrand,
-                        orElse: () => null,
-                      );
-                      if (selectedBrandObject != null) {
-                        print("object: " + selectedBrandObject);
-                      }
-                    },
-                    onOpened: () {
-                      // Handle when the menu is opened if needed
-                    },
-                    itemBuilder: (BuildContext context) {
-                      return List<
-                          PopupMenuEntry<Map<String, dynamic>>>.generate(
-                        controller.brandModel!.length,
-                        (int index) {
-                          final brandModel = controller.brandModel![index];
-
-                          return PopupMenuItem<Map<String, dynamic>>(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 10),
-                            value: brandModel,
-                            child: textWidget(
-                              text: brandModel['modelName'] as String,
-                              style: getRegularStyle(),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    child: Container(
-                      constraints: BoxConstraints.tightFor(
-                        width: size.width.sp,
-                        height: 45.sp,
-                      ),
-                      margin: EdgeInsets.symmetric(vertical: 5.sp),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(4.r)),
-                        border: Border.all(color: grey3),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          left: 18,
-                          right: 10,
-                          top: 10,
-                          bottom: 10,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            textWidget(
-                              text: controller.selectedBrandModel.value,
-                              style: getRegularStyle(
-                                  fontSize:
-                                      controller.selectedBrandModel.value ==
-                                              'Select'
-                                          ? 10.sp
-                                          : 14,
-                                  color: controller.selectedBrandModel.value ==
-                                          'Select'
-                                      ? borderColor
-                                      : black),
-                            ),
-                            const Icon(
-                              Iconsax.arrow_down_1,
-                              color: grey3,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  // if (controller.errorMessage?.value != null)
-                  //   Padding(
-                  //     padding: const EdgeInsets.all(8.0),
-                  //     child: Text(
-                  //       controller.errorMessage!.value,
-                  //       style: TextStyle(color: Colors.red),
-                  //     ),
-                  //   ),
+                  textWidget(
+                      text: "Select brand model",
+                      style: getRegularStyle(fontSize: 12.sp)),
                 ],
               ),
-            SizedBox(
-              height: 24.sp,
-            ),
-            Row(
-              children: [
-                textWidget(
-                    text: AppStrings.whatIsTheModelOfVehicle,
-                    style: getRegularStyle(fontSize: 12.sp)),
-              ],
-            ),
-            controller.vehicleYear!.isEmpty &&
-                    controller.selectedYearValue!.isEmpty
-                ? GestureDetector(
-                    onTap: () {
-                      // Handle tap if needed
-                    },
-                    child: Container(
-                      height: 45.h,
-                      width: size.width,
-                      constraints: BoxConstraints.tightFor(
-                        width: size.width.sp,
-                        height: 45.sp,
+              if (controller.brandModel!.isEmpty &&
+                  controller.selectedBrandModel.value == 'Select')
+                GestureDetector(
+                  onTap: () {
+                    // Handle tap if needed
+                  },
+                  child: Container(
+                    height: 45.h,
+                    width: size.width,
+                    constraints: BoxConstraints.tightFor(
+                      width: size.width.sp,
+                      height: 45.sp,
+                    ),
+                    margin: EdgeInsets.symmetric(vertical: 5.sp),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(4.r),
                       ),
-                      margin: EdgeInsets.symmetric(vertical: 5.sp),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(4.r),
-                        ),
-                        border: Border.all(color: grey3),
+                      border: Border.all(color: grey3),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10.sp,
+                        vertical: 10.sp,
                       ),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 10.sp,
-                          vertical: 10.sp,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            textWidget(
-                              text: controller.selectedYearValue!.value,
-                              style: getRegularStyle(fontSize: 10.sp),
-                            ),
-                            const Icon(
-                              Iconsax.arrow_down_1,
-                              color: grey3,
-                            ),
-                          ],
-                        ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          textWidget(
+                            text: controller.selectedBrandModel.value,
+                            style: getRegularStyle(fontSize: 10.sp),
+                          ),
+                          const Icon(
+                            Iconsax.arrow_down_1,
+                            color: grey3,
+                          ),
+                        ],
                       ),
                     ),
-                  )
-                : PopupMenuButton<Map<String, dynamic>>(
-                    constraints: BoxConstraints(
-                      minWidth: 320.sp,
-                      maxHeight: 500,
-                      minHeight:
-                          50.0 + (controller.brandModel?.length ?? 0) * 30,
-                    ),
-                    surfaceTintColor: Colors.transparent,
-                    color: backgroundColor,
-                    onSelected: (selectedYear) async {
-                      setState(() {
-                        controller.selectedYearValue!.value =
-                            selectedYear['yearName'];
+                  ),
+                )
+              else
+                Column(
+                  children: [
+                    PopupMenuButton<Map<String, dynamic>>(
+                      constraints: BoxConstraints(
+                        minWidth: 320.sp,
+                        maxHeight: 500,
+                        minHeight:
+                            50.0 + (controller.brandModel?.length ?? 0) * 30,
+                      ),
+                      // initialValue: ,
+                      surfaceTintColor: Colors.transparent,
+                      color: backgroundColor,
+                      onSelected: (selectedBrand) async {
+                        setState(() {
+                          // controller.errorMessage!.value = controller
+                          //     .validateValue(selectedBrand['modelName'])!;
+                          controller.selectedBrandModel.value =
+                              selectedBrand['modelName'];
+                          controller.modelName?.value =
+                              selectedBrand['modelName'];
+                          controller.modelCode.value =
+                              selectedBrand['modelCode'] as String;
+                          controller.brandCode.value =
+                              selectedBrand['brandCode'] as String;
+                          controller.brandCode1 =
+                              selectedBrand['brandCode'] as String;
+                          controller.brandModelCode =
+                              selectedBrand['modelCode'] as String;
+                          print(
+                              "Selected brand name: ${controller.modelName?.value}");
 
-                        // selectedYear['yearName'] = controller.yearName?.value;
-                        controller.yearCode.value = selectedYear['yearCode'];
-                        controller.advisedRenterPrice.value =
-                            selectedYear['advicePrice'];
-                        // Find the brand object with the selected name
-                        var selectedYearObject =
-                            (controller.vehicleYear ?? []).firstWhere(
-                          (year) => year['yearName'] == selectedYear,
+                          print("Slected brand code ${controller.brandCode1}");
+                        });
+                        await controller.getVehicleYear(
+                            brandCode: controller.brandCode1!,
+                            brandModelCode: controller.brandModelCode!);
+                        print(
+                            "Slected brand valued ${controller.selectedBrandModel}");
+                        var selectedBrandObject =
+                            (controller.brandModel ?? []).firstWhere(
+                          (brand) => brand['modelName'] == selectedBrand,
                           orElse: () => null,
                         );
-                        if (selectedYearObject != null) {
-                          String yearCode =
-                              selectedYearObject['yearCode'] as String;
-                          print("code>>>> $yearCode");
+                        if (selectedBrandObject != null) {
+                          print("object: " + selectedBrandObject);
                         }
-                      });
-                    },
-                    onOpened: () {
-                      // Handle when the menu is opened if needed
-                    },
-                    itemBuilder: (BuildContext context) {
-                      return List<
-                          PopupMenuEntry<Map<String, dynamic>>>.generate(
-                        controller.vehicleYear!.length,
-                        (int index) {
-                          final vehicleYear = controller.vehicleYear![index];
+                      },
+                      onOpened: () {
+                        // Handle when the menu is opened if needed
+                      },
+                      itemBuilder: (BuildContext context) {
+                        return List<
+                            PopupMenuEntry<Map<String, dynamic>>>.generate(
+                          controller.brandModel!.length,
+                          (int index) {
+                            final brandModel = controller.brandModel![index];
 
-                          return PopupMenuItem<Map<String, dynamic>>(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 10),
-                            value: vehicleYear,
-                            child: textWidget(
-                              text: vehicleYear['yearName'] as String,
-                              style: getRegularStyle(),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    child: Container(
-                      constraints: BoxConstraints.tightFor(
-                        width: size.width.sp,
-                        height: 45.sp,
-                      ),
-                      margin: EdgeInsets.symmetric(vertical: 5.sp),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(4.r)),
-                        border: Border.all(color: grey3),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          left: 18,
-                          right: 10,
-                          top: 10,
-                          bottom: 10,
+                            return PopupMenuItem<Map<String, dynamic>>(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 10),
+                              value: brandModel,
+                              child: textWidget(
+                                text: brandModel['modelName'] as String,
+                                style: getRegularStyle(),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: Container(
+                        constraints: BoxConstraints.tightFor(
+                          width: size.width.sp,
+                          height: 45.sp,
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            textWidget(
-                              text: controller.selectedYearValue!.value,
-                              style: getRegularStyle(
-                                  fontSize:
-                                      controller.selectedYearValue!.value ==
-                                              'Select'
-                                          ? 10.sp
-                                          : 14,
-                                  color: controller.selectedYearValue!.value ==
-                                          'Select'
-                                      ? borderColor
-                                      : black),
-                            ),
-                            const Icon(
-                              Iconsax.arrow_down_1,
-                              color: grey3,
-                            ),
-                          ],
+                        margin: EdgeInsets.symmetric(vertical: 5.sp),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(4.r)),
+                          border: Border.all(color: grey3),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            left: 18,
+                            right: 10,
+                            top: 10,
+                            bottom: 10,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              textWidget(
+                                text: controller.selectedBrandModel.value,
+                                style: getRegularStyle(
+                                    fontSize:
+                                        controller.selectedBrandModel.value ==
+                                                'Select'
+                                            ? 10.sp
+                                            : 14,
+                                    color:
+                                        controller.selectedBrandModel.value ==
+                                                'Select'
+                                            ? borderColor
+                                            : black),
+                              ),
+                              const Icon(
+                                Iconsax.arrow_down_1,
+                                color: grey3,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-            SizedBox(
-              height: 24.sp,
-            ),
-            NormalInputTextWidget(
-                expectedVariable: 'field',
-                title: AppStrings.whatIsTheVINOfVehicle,
-                hintText: AppStrings.inputVin,
-                textInputType: TextInputType.number,
-                controller: controller.vinController,
-                inputFormatters: [
-                  LengthLimitingTextInputFormatter(17),
-                  FilteringTextInputFormatter.digitsOnly,
+                    // if (controller.errorMessage?.value != null)
+                    //   Padding(
+                    //     padding: const EdgeInsets.all(8.0),
+                    //     child: Text(
+                    //       controller.errorMessage!.value,
+                    //       style: TextStyle(color: Colors.red),
+                    //     ),
+                    //   ),
+                  ],
+                ),
+              SizedBox(
+                height: 24.sp,
+              ),
+              Row(
+                children: [
+                  textWidget(
+                      text: AppStrings.whatIsTheModelOfVehicle,
+                      style: getRegularStyle(fontSize: 12.sp)),
                 ],
-                titleFontSize: 12.sp),
-            SizedBox(
-              height: 24.sp,
-            ),
-            NormalInputTextWidget(
-                expectedVariable: 'field',
-                title: AppStrings.inputLincesePlateNumber,
-                hintText: AppStrings.inputState,
-                textInputType: TextInputType.text,
-                controller: controller.plateNumberController,
-                inputFormatters: [
-                  LengthLimitingTextInputFormatter(9),
-                ],
-                titleFontSize: 12.sp),
-            SizedBox(
-              height: 24.sp,
-            ),
-            dropdownWidget1(
-                context: context,
-                hintText: 'Select',
-                title: AppStrings.whatStateAreYouIn,
-                iconColor: grey3,
-                expectedVariable: 'field',
-                selectedValue: controller.isFromManageCars.isTrue ||
-                        controller.state.value.isNotEmpty
-                    ? controller.state.value
-                    : null,
-                values: (controller.states ?? [])
-                    .map((state) => state['stateName'] as String)
-                    .toList(),
-                onChange: (selectedState) {
-                  controller.state.value = selectedState;
-                  if (kDebugMode) {
-                    print('Selected value: $selectedState');
-                  }
-                  var selectedStateObject =
-                      (controller.states ?? []).firstWhere(
-                    (state) => state['stateName'] == selectedState,
-                    orElse: () => null,
-                  );
-                  if (selectedStateObject != null) {
-                    String stateCode =
-                        selectedStateObject['stateCode'] as String;
-                    // String cityCode =
-                    //     selectedStateObject['stateCode'] as String;
-                    controller.getCity(cityCode1: stateCode);
-                    controller.stateCode.value = stateCode;
-                    // controller.cityCode.value = cityCode;
-                  }
-                }),
-            SizedBox(
-              height: 24.sp,
-            ),
-            dropdownWidget1(
-                context: context,
-                hintText: 'Select',
-                title: AppStrings.whatCityAreYouIn,
-                iconColor: grey3,
-                expectedVariable: 'field',
-                selectedValue: controller.isFromManageCars.isTrue ||
-                        controller.city.value.isNotEmpty
-                    ? controller.city.value
-                    : null,
-                values: (controller.cities ?? [])
-                    .map((city) => city['cityName'] as String)
-                    .toList(),
-                onChange: (selectedCity) {
-                  controller.city.value = selectedCity;
-                  print('Selected value: $selectedCity');
-                  var selectedCityObject = (controller.cities ?? []).firstWhere(
-                    (city) => city['cityName'] == selectedCity,
-                    orElse: () => null,
-                  );
-                  if (selectedCityObject != null) {
-                    String cityCode = selectedCityObject['cityCode'] as String;
-                    controller.cityCode.value = cityCode;
-                  }
-                }),
-            SizedBox(
-              height: 50.sp,
-            ),
-            controller.isLoading.isTrue
-                ? centerLoadingIcon()
-                : GtiButton(
-                    onTap: () {
-                      controller.addCar();
-                      // controller.pageController.nextPage(duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
-                    },
-                    text: AppStrings.cont,
-                    width: size.width,
-                  ),
-          ],
+              ),
+              controller.vehicleYear!.isEmpty &&
+                      controller.selectedYearValue!.isEmpty
+                  ? GestureDetector(
+                      onTap: () {
+                        // Handle tap if needed
+                      },
+                      child: Container(
+                        height: 45.h,
+                        width: size.width,
+                        constraints: BoxConstraints.tightFor(
+                          width: size.width.sp,
+                          height: 45.sp,
+                        ),
+                        margin: EdgeInsets.symmetric(vertical: 5.sp),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(4.r),
+                          ),
+                          border: Border.all(color: grey3),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 10.sp,
+                            vertical: 10.sp,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              textWidget(
+                                text: controller.selectedYearValue!.value,
+                                style: getRegularStyle(fontSize: 10.sp),
+                              ),
+                              const Icon(
+                                Iconsax.arrow_down_1,
+                                color: grey3,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                  : PopupMenuButton<Map<String, dynamic>>(
+                      constraints: BoxConstraints(
+                        minWidth: 320.sp,
+                        maxHeight: 500,
+                        minHeight:
+                            50.0 + (controller.brandModel?.length ?? 0) * 30,
+                      ),
+                      surfaceTintColor: Colors.transparent,
+                      color: backgroundColor,
+                      onSelected: (selectedYear) async {
+                        setState(() {
+                          controller.selectedYearValue!.value =
+                              selectedYear['yearName'];
+
+                          // selectedYear['yearName'] = controller.yearName?.value;
+                          controller.yearCode.value = selectedYear['yearCode'];
+                          controller.advisedRenterPrice.value =
+                              selectedYear['advicePrice'];
+                          // Find the brand object with the selected name
+                          var selectedYearObject =
+                              (controller.vehicleYear ?? []).firstWhere(
+                            (year) => year['yearName'] == selectedYear,
+                            orElse: () => null,
+                          );
+                          if (selectedYearObject != null) {
+                            String yearCode =
+                                selectedYearObject['yearCode'] as String;
+                            print("code>>>> $yearCode");
+                          }
+                        });
+                      },
+                      onOpened: () {
+                        // Handle when the menu is opened if needed
+                      },
+                      itemBuilder: (BuildContext context) {
+                        return List<
+                            PopupMenuEntry<Map<String, dynamic>>>.generate(
+                          controller.vehicleYear!.length,
+                          (int index) {
+                            final vehicleYear = controller.vehicleYear![index];
+
+                            return PopupMenuItem<Map<String, dynamic>>(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 10),
+                              value: vehicleYear,
+                              child: textWidget(
+                                text: vehicleYear['yearName'] as String,
+                                style: getRegularStyle(),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: Container(
+                        constraints: BoxConstraints.tightFor(
+                          width: size.width.sp,
+                          height: 45.sp,
+                        ),
+                        margin: EdgeInsets.symmetric(vertical: 5.sp),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(4.r)),
+                          border: Border.all(color: grey3),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            left: 18,
+                            right: 10,
+                            top: 10,
+                            bottom: 10,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              textWidget(
+                                text: controller.selectedYearValue!.value,
+                                style: getRegularStyle(
+                                    fontSize:
+                                        controller.selectedYearValue!.value ==
+                                                'Select'
+                                            ? 10.sp
+                                            : 14,
+                                    color:
+                                        controller.selectedYearValue!.value ==
+                                                'Select'
+                                            ? borderColor
+                                            : black),
+                              ),
+                              const Icon(
+                                Iconsax.arrow_down_1,
+                                color: grey3,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+              SizedBox(
+                height: 24.sp,
+              ),
+              NormalInputTextWidget(
+                  expectedVariable: 'field',
+                  title: AppStrings.whatIsTheVINOfVehicle,
+                  hintText: AppStrings.inputVin,
+                  textInputType: TextInputType.number,
+                  controller: controller.vinController,
+                  inputFormatters: [
+                    LengthLimitingTextInputFormatter(17),
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  titleFontSize: 12.sp),
+              SizedBox(
+                height: 24.sp,
+              ),
+              NormalInputTextWidget(
+                  expectedVariable: 'field',
+                  title: AppStrings.inputLincesePlateNumber,
+                  hintText: AppStrings.inputState,
+                  textInputType: TextInputType.text,
+                  controller: controller.plateNumberController,
+                  inputFormatters: [
+                    LengthLimitingTextInputFormatter(9),
+                  ],
+                  titleFontSize: 12.sp),
+              SizedBox(
+                height: 24.sp,
+              ),
+              dropdownWidget1(
+                  context: context,
+                  hintText: 'Select',
+                  title: AppStrings.whatStateAreYouIn,
+                  iconColor: grey3,
+                  expectedVariable: 'field',
+                  selectedValue: controller.isFromManageCars.isTrue ||
+                          controller.state.value.isNotEmpty
+                      ? controller.state.value
+                      : null,
+                  values: (controller.states ?? [])
+                      .map((state) => state['stateName'] as String)
+                      .toList(),
+                  onChange: (selectedState) {
+                    controller.state.value = selectedState;
+                    if (kDebugMode) {
+                      print('Selected value: $selectedState');
+                    }
+                    var selectedStateObject =
+                        (controller.states ?? []).firstWhere(
+                      (state) => state['stateName'] == selectedState,
+                      orElse: () => null,
+                    );
+                    if (selectedStateObject != null) {
+                      String stateCode =
+                          selectedStateObject['stateCode'] as String;
+                      // String cityCode =
+                      //     selectedStateObject['stateCode'] as String;
+                      controller.getCity(cityCode1: stateCode);
+                      controller.stateCode.value = stateCode;
+                      // controller.cityCode.value = cityCode;
+                    }
+                  }),
+              SizedBox(
+                height: 24.sp,
+              ),
+              dropdownWidget1(
+                  context: context,
+                  hintText: 'Select',
+                  title: AppStrings.whatCityAreYouIn,
+                  iconColor: grey3,
+                  expectedVariable: 'field',
+                  selectedValue: controller.isFromManageCars.isTrue ||
+                          controller.city.value.isNotEmpty
+                      ? controller.city.value
+                      : null,
+                  values: (controller.cities ?? [])
+                      .map((city) => city['cityName'] as String)
+                      .toList(),
+                  onChange: (selectedCity) {
+                    controller.city.value = selectedCity;
+                    print('Selected value: $selectedCity');
+                    var selectedCityObject =
+                        (controller.cities ?? []).firstWhere(
+                      (city) => city['cityName'] == selectedCity,
+                      orElse: () => null,
+                    );
+                    if (selectedCityObject != null) {
+                      String cityCode =
+                          selectedCityObject['cityCode'] as String;
+                      controller.cityCode.value = cityCode;
+                    }
+                  }),
+              SizedBox(
+                height: 50.sp,
+              ),
+              controller.isLoading.isTrue
+                  ? centerLoadingIcon()
+                  : GtiButton(
+                      onTap: () {
+                        controller.addCar();
+                        // controller.pageController.nextPage(duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
+                      },
+                      text: AppStrings.cont,
+                      width: size.width,
+                    ),
+            ],
+          ),
         ),
       ),
     );

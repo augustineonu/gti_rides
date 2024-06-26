@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/models/partner/car_history_model.dart';
@@ -10,9 +8,7 @@ import 'package:gti_rides/models/review_response_model.dart';
 import 'package:gti_rides/models/user/kyc_response_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/screens/renter/home/search_result/car_selection_result/widgets/booked_sheet.dart';
-import 'package:gti_rides/screens/shared_screens/choose_trip_date/choose_trip_date_controller.dart';
 import 'package:gti_rides/services/logger.dart';
-import 'package:gti_rides/services/partner_service.dart';
 import 'package:gti_rides/services/renter_service.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/services/user_service.dart';
@@ -118,7 +114,7 @@ class CarSelectionResultController extends GetxController
   RxList<TripAmountData> tripAmountData = <TripAmountData>[].obs;
 
   // trips amount data
-  Rx<String> cautionFee = ''.obs;
+  Rx<String>? cautionFee = ''.obs;
   Rx<String> dropOffFee = ''.obs;
   Rx<String> pickUpFee = ''.obs;
   Rx<String> escortFee = ''.obs;
@@ -274,8 +270,11 @@ class CarSelectionResultController extends GetxController
   Future<double> calculateTotalPriceChangesDifference() async {
     return await calculatePriceChangesDifference(
       total: initialEstimatedTotal.value,
-      cautionFee:
-          tripType.value == 1 && cautionFee.isNotEmpty ? cautionFee.value : '0',
+      // cautionFee: tripType.value == 1 &&
+      //         cautionFee!.isNotEmpty &&
+      //         cautionFee?.value != "null"
+      //     ? cautionFee!.value
+      //     : '0.0',
       dropOffFee: !selectedSelfDropOff.value ? dropOffFee.value : '0.0',
       pickUpFee: !selectedSelfPickUp.value ? pickUpFee.value : '0.0',
     );
@@ -326,13 +325,17 @@ class CarSelectionResultController extends GetxController
   }
 
   Future<void> addGrandTotal() async {
+    // logger.log("first time value $caution");
     double vatAmount =
         await calculateVAT(updatedTotalValue.value, vatValue.value);
     logger.log("VAT total:: $vatAmount");
     formattedVatValue.value = await formatAmount(vatAmount);
 
     // sum up vat plus updated total
-    updatedTotalValue.value = updatedTotalValue.value + vatAmount;
+    // then add the caution fee here
+    var caution = double.parse(cautionFee!.replaceAll(',', ''));
+    updatedTotalValue.value = updatedTotalValue.value + vatAmount + caution;
+  
     estimatedTotal.value = await formatAmount(updatedTotalValue.value);
     logger.log("New estimated Total:: ${estimatedTotal.value}");
   }
@@ -371,10 +374,10 @@ class CarSelectionResultController extends GetxController
           var endDateString = carHistory?.first.endDate;
           carAvialbilityEndDate = DateTime.parse(endDateString!);
 
-          cautionFee.value =
+          cautionFee!.value =
               carHistory!.first.modelYear!.first.cautionFee.toString();
 
-          logger.log("Caution fee: ${cautionFee.value}");
+          logger.log("Caution fee: ${cautionFee?.value ?? "0.0"}");
           pricePerDay.value = carHistory?.first.pricePerDay;
           //price per day total x no of days
           total.value =
@@ -540,9 +543,14 @@ class CarSelectionResultController extends GetxController
       showSuccessSnackbar(message: "Car not available");
       return;
     }
+    logger.log("Value::  ${cautionFee?.value ?? "value is empty"}");
+    // return;
+
+    var value = double.parse(cautionFee!.replaceAll(',', ''));
     await updateEstimatedTotal();
     await addGrandTotal();
 
+    // return;
     isLoading.value = true;
 
     // if the user selects a date that is not within the car's availability date
@@ -602,7 +610,7 @@ class CarSelectionResultController extends GetxController
               "selectedSecurityEscort": selectedSecurityEscort.value,
               "vat": vatValue.value,
               "tripType": tripType.value,
-              "cautionFee": tripType.value == 1 ? cautionFee.value : '',
+              "cautionFee": tripType.value == 1 ? cautionFee!.value : '',
               "dropOffFee": tripType.value == 1 && selectedSelfDropOff.isFalse
                   ? dropOffFee.value
                   : null,
@@ -635,7 +643,7 @@ class CarSelectionResultController extends GetxController
               "selectedSecurityEscort": selectedSecurityEscort.value,
               "vat": vatValue.value,
               "tripType": tripType.value,
-              "cautionFee": tripType.value == 1 ? cautionFee.value : '',
+              "cautionFee": tripType.value == 1 ? cautionFee!.value : '',
               "dropOffFee": tripType.value == 1 && selectedSelfDropOff.value
                   ? dropOffFee.value
                   : null,

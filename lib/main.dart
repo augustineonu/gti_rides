@@ -138,7 +138,8 @@ class _GtiRidesState extends State<GtiRides> {
               Intercom.instance
                   .sendTokenToIntercom(firebaseService.deviceToken.value)
                   .then((value) => print("Sent intercom token successfully"))
-                  .onError((error, stackTrace) => print("Error sending token to intercom: $error"));
+                  .onError((error, stackTrace) =>
+                      print("Error sending token to intercom: $error"));
               SystemChrome.setPreferredOrientations([
                 DeviceOrientation.portraitUp,
                 DeviceOrientation.portraitDown

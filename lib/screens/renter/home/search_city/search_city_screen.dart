@@ -33,31 +33,29 @@ class SearchCityScreen extends GetView<SearchCityController> {
       init: SearchCityController(),
       initState: (_) {},
       builder: (_) {
-        return  Scaffold(
-              backgroundColor: backgroundColor,
-              appBar: appBar(),
-              body: Stack(
-                children: [
-                  body(size, context),
-                  controller.isFetchingCars.value
-                      ? Stack(
-                          children: [
-                            const Opacity(
-                              opacity: 0.5,
-                              child: ModalBarrier(
-                                  dismissible: false,
-                                  color: Colors.transparent),
-                            ),
-                            Center(
-                              child: Center(child: centerLoadingIcon()),
-                            ),
-                          ],
-                        )
-                      : const SizedBox()
-                ],
-              ));
-          // }
-        
+        return Scaffold(
+            backgroundColor: backgroundColor,
+            appBar: appBar(),
+            body: Stack(
+              children: [
+                body(size, context),
+                controller.isFetchingCars.value
+                    ? Stack(
+                        children: [
+                          const Opacity(
+                            opacity: 0.5,
+                            child: ModalBarrier(
+                                dismissible: false, color: Colors.transparent),
+                          ),
+                          Center(
+                            child: Center(child: centerLoadingIcon()),
+                          ),
+                        ],
+                      )
+                    : const SizedBox()
+              ],
+            ));
+        // }
       },
     );
   }
@@ -379,20 +377,24 @@ class SearchCityScreen extends GetView<SearchCityController> {
                       print(
                           "selected:: ${controller.locationController.value.text} ");
                     },
-                    child: Row(
-                      children: [
-                        SvgPicture.asset(ImageAssets.location),
-                        SizedBox(width: 20.w),
-                        textWidget(
-                          text: location.name,
-                          style: getMediumStyle(fontSize: 14.sp, color: grey3)
-                              .copyWith(fontWeight: FontWeight.w400),
-                        ),
-                      ],
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 12, horizontal: 5),
+                      child: Row(
+                        children: [
+                          SvgPicture.asset(ImageAssets.location),
+                          SizedBox(width: 20.w),
+                          textWidget(
+                            text: location.name,
+                            style: getMediumStyle(fontSize: 14.sp, color: grey3)
+                                .copyWith(fontWeight: FontWeight.w400),
+                          ),
+                        ],
+                      ),
                     ),
                   ); // Display the widgets from filteredPages
                 },
-                separatorBuilder: (context, _) => SizedBox(height: 24.h),
+                separatorBuilder: (context, _) => SizedBox(height: 2.h),
               );
             });
   }
