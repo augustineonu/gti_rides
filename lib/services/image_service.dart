@@ -97,5 +97,6 @@ class ImageService {
       logger.log('Error $e');
       rethrow;
     }
+    return null;
   }
 }

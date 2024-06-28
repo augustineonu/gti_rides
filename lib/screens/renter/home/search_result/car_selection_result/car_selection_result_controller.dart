@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/models/partner/car_history_model.dart';
 import 'package:gti_rides/models/renter/booked_dates.dart';
@@ -125,6 +126,12 @@ class CarSelectionResultController extends GetxController
   DateTime? rawStartTime;
   DateTime? rawEndTime;
   List<CarHistoryData>? carHistory;
+
+     void copy({required String value}) async {
+    await Clipboard.setData(ClipboardData(text: value));
+
+    await showSuccessSnackbar(message: AppStrings.copied);
+  }
 
   void goBack() => routeService.goBack();
   void routeToSearchFilter() => routeService.gotoRoute(AppLinks.searchFilter);
@@ -339,6 +346,7 @@ class CarSelectionResultController extends GetxController
     estimatedTotal.value = await formatAmount(updatedTotalValue.value);
     logger.log("New estimated Total:: ${estimatedTotal.value}");
   }
+
 
   DateTime? carAvialbilityEndDate;
   Rx<String> vehicleName = ''.obs;

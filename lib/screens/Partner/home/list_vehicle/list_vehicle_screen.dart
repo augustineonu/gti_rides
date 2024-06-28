@@ -105,10 +105,13 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     //   ),
                     // ),
 
-                    // first retrial
+                    // first trial
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        // 1
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             AnimatedContainer(
                               duration: const Duration(milliseconds: 300),
@@ -142,7 +145,9 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                                 lineLength: 22),
                           ],
                         ),
+                        // 2
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             AnimatedContainer(
                               duration: const Duration(milliseconds: 300),
@@ -152,7 +157,9 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                               padding: EdgeInsets.symmetric(
                                   horizontal: 5.sp, vertical: 7.sp),
                               decoration: BoxDecoration(
-                                color: white,
+                                color: controller.currentIndex.value == 1
+                                    ? primaryColor
+                                    : white,
                                 shape: BoxShape.circle,
                                 border: Border.all(color: primaryColor),
                               ),
@@ -174,7 +181,10 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                                 lineLength: 22),
                           ],
                         ),
+
+                        // 3
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             AnimatedContainer(
                               duration: const Duration(milliseconds: 300),
@@ -184,7 +194,9 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                               padding: EdgeInsets.symmetric(
                                   horizontal: 5.sp, vertical: 7.sp),
                               decoration: BoxDecoration(
-                                color: white,
+                                color: controller.currentIndex.value == 2
+                                    ? primaryColor
+                                    : white,
                                 shape: BoxShape.circle,
                                 border: Border.all(color: primaryColor),
                               ),
@@ -206,7 +218,10 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                                 lineLength: 22),
                           ],
                         ),
+
+                        // 4
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             AnimatedContainer(
                               duration: const Duration(milliseconds: 300),
@@ -216,7 +231,9 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                               padding: EdgeInsets.symmetric(
                                   horizontal: 5.sp, vertical: 7.sp),
                               decoration: BoxDecoration(
-                                color: white,
+                                color: controller.currentIndex.value == 3
+                                    ? primaryColor
+                                    : white,
                                 shape: BoxShape.circle,
                                 border: Border.all(color: primaryColor),
                               ),
@@ -238,6 +255,8 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                                 lineLength: 22),
                           ],
                         ),
+
+                        // 5
                         AnimatedContainer(
                           duration: const Duration(milliseconds: 300),
                           margin: const EdgeInsets.symmetric(horizontal: 0),
@@ -246,7 +265,9 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                           padding: EdgeInsets.symmetric(
                               horizontal: 5.sp, vertical: 7.sp),
                           decoration: BoxDecoration(
-                            color: white,
+                            color: controller.currentIndex.value == 4
+                                ? primaryColor
+                                : white,
                             shape: BoxShape.circle,
                             border: Border.all(color: primaryColor),
                           ),
@@ -262,80 +283,82 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                         ),
                       ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: listingTracker(
-                              subTitle: AppStrings.vehicleType,
-                              child: Dash(
-                                  direction: Axis.horizontal,
-                                  length: 27.sp,
-                                  dashLength: 2,
-                                  dashThickness: 2,
-                                  dashColor: primaryColor),
-                              isSelected: controller.currentIndex.value == 0,
-                            ),
-                          ),
 
-                          Expanded(
-                            child: listingTracker(
-                              subTitle: AppStrings.vehicleInfo,
-                              child: Dash(
-                                  direction: Axis.horizontal,
-                                  length: 27.sp,
-                                  dashLength: 2,
-                                  dashThickness: 2,
-                                  dashColor: primaryColor),
-                              isSelected: controller.currentIndex.value == 1,
-                            ),
-                          ),
-                          // CustomPaint(painter: DrawDottedhorizontalline()),
+                    // first trial
+                    // Padding(
+                    //   padding: const EdgeInsets.only(left: 0),
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.end,
+                    //     crossAxisAlignment: CrossAxisAlignment.center,
+                    //     children: [
+                    //       Expanded(
+                    //         child: listingTracker(
+                    //           subTitle: AppStrings.vehicleType,
+                    //           child: Dash(
+                    //               direction: Axis.horizontal,
+                    //               length: 27.sp,
+                    //               dashLength: 2,
+                    //               dashThickness: 2,
+                    //               dashColor: primaryColor),
+                    //           isSelected: controller.currentIndex.value == 0,
+                    //         ),
+                    //       ),
 
-                          Expanded(
-                            child: listingTracker(
-                              subTitle: AppStrings.documentation,
-                              child: Dash(
-                                  direction: Axis.horizontal,
-                                  length: 28.sp,
-                                  dashLength: 2,
-                                  dashThickness: 2,
-                                  dashColor: primaryColor),
-                              isSelected: controller.currentIndex.value == 2,
-                            ),
-                          ),
-                          // CustomPaint(painter: DrawDottedhorizontalline()),
+                    //       Expanded(
+                    //         child: listingTracker(
+                    //           subTitle: AppStrings.vehicleInfo,
+                    //           child: Dash(
+                    //               direction: Axis.horizontal,
+                    //               length: 27.sp,
+                    //               dashLength: 2,
+                    //               dashThickness: 2,
+                    //               dashColor: primaryColor),
+                    //           isSelected: controller.currentIndex.value == 1,
+                    //         ),
+                    //       ),
+                    //       // CustomPaint(painter: DrawDottedhorizontalline()),
 
-                          Expanded(
-                            child: listingTracker(
-                              subTitle: AppStrings.addPhotos,
-                              child: Dash(
-                                  direction: Axis.horizontal,
-                                  length: 28.sp,
-                                  dashLength: 2,
-                                  dashThickness: 2,
-                                  dashColor: primaryColor),
-                              isSelected: controller.currentIndex.value == 3,
-                            ),
-                          ),
-                          Expanded(
-                            child: listingTracker(
-                              subTitle: AppStrings.availability,
-                              child: const Dash(
-                                  direction: Axis.horizontal,
-                                  length: 25,
-                                  dashLength: 4,
-                                  dashThickness: 2,
-                                  dashColor: Colors.transparent),
-                              isSelected: controller.currentIndex.value == 4,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    //       Expanded(
+                    //         child: listingTracker(
+                    //           subTitle: AppStrings.documentation,
+                    //           child: Dash(
+                    //               direction: Axis.horizontal,
+                    //               length: 28.sp,
+                    //               dashLength: 2,
+                    //               dashThickness: 2,
+                    //               dashColor: primaryColor),
+                    //           isSelected: controller.currentIndex.value == 2,
+                    //         ),
+                    //       ),
+                    //       // CustomPaint(painter: DrawDottedhorizontalline()),
+
+                    //       Expanded(
+                    //         child: listingTracker(
+                    //           subTitle: AppStrings.addPhotos,
+                    //           child: Dash(
+                    //               direction: Axis.horizontal,
+                    //               length: 28.sp,
+                    //               dashLength: 2,
+                    //               dashThickness: 2,
+                    //               dashColor: primaryColor),
+                    //           isSelected: controller.currentIndex.value == 3,
+                    //         ),
+                    //       ),
+                    //       Expanded(
+                    //         child: listingTracker(
+                    //           subTitle: AppStrings.availability,
+                    //           child: const Dash(
+                    //               direction: Axis.horizontal,
+                    //               length: 25,
+                    //               dashLength: 4,
+                    //               dashThickness: 2,
+                    //               dashColor: Colors.transparent),
+                    //           isSelected: controller.currentIndex.value == 4,
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
 
                     // imageUploadWidget(
                     //   title: AppStrings.uploadVehicleDoc,
@@ -361,6 +384,10 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                     //     :
                     // height: size.height / 0.71.sp,
                     // child:
+
+                    SizedBox(
+                      height: 20.sp,
+                    ),
                     Expanded(
                       child: PageView(
                         // itemCount: controller.pages.length,
@@ -386,14 +413,6 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                         ],
                       ),
                     ),
-                    // ),
-                    // SizedBox(
-                    //   height: size.height * 0.02.h,
-                    // ),
-                    // continueButto
-                    //         ],
-                    //       )),
-                    // ),
                   ],
                 ),
                 controller.isFetchingCarDetails.isTrue

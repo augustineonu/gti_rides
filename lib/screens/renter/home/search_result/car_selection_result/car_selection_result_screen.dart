@@ -112,7 +112,9 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                             ],
                           ),
                           carAvailabilityTag(
-                            status: car!.status == "booked" ? "Booked" : car.availability,
+                            status: car!.status == "booked"
+                                ? "Booked"
+                                : car.availability,
                             positionLeft: 7,
                             positionTop: 7,
                           ),
@@ -246,6 +248,33 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                       ),
                     ),
                   ),
+                  divider(color: borderColor),
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 10.sp, horizontal: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        textWidget(
+                            text: "Car ID:",
+                            style:
+                                getRegularStyle(fontSize: 12.sp, color: grey5)
+                                    .copyWith(fontFamily: 'Neue')),
+                        InkWell(
+                          borderRadius: BorderRadius.all(Radius.circular(5.r)),
+                          onTap: () => controller.copy(
+                              value: controller.carId.toString()),
+                          child: Padding(
+                            padding: const EdgeInsets.all(3.0),
+                            child: textWidget(
+                                text: controller.carId.toString(),
+                                style: getMediumStyle(color: primaryColor)),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
                   divider(color: borderColor),
 
                   Padding(

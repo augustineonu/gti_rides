@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
-import 'package:gti_rides/shared_widgets/text_widget.dart';
-import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/utils.dart';
-import 'package:intl/intl.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class ChooseTripDateController extends GetxController {
@@ -166,8 +161,9 @@ class ChooseTripDateController extends GetxController {
     logger.log("selected start date:: ${startDate.value}");
     logger.log("selected end date:: ${endDate.value}");
 
+    selectedDateRange = args.value as PickerDateRange?;
+
     if (args.value is PickerDateRange) {
-      selectedDateRange = args.value as PickerDateRange?;
       print('Selected Range: ${selectedDateRange}');
 
       if (selectedDateRange?.startDate != null &&
@@ -180,6 +176,10 @@ class ChooseTripDateController extends GetxController {
         selectedDifferenceInDays.value = difference.inDays + 1;
 
         print('Difference in days: ${difference.inDays}');
+      } else {
+        // if user selects on day from the calendar
+        selectedDifferenceInDays.value = 1;
+        logger.log("unknown difference  ${selectedDifferenceInDays.value}");
       }
     }
   }
