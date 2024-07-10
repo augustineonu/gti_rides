@@ -22,7 +22,8 @@ class RequestResetPasswordBinding extends Bindings {
 
 TextEditingController textController = TextEditingController();
 
-class RequestResetPasswordScreen extends GetView<RequestResetPasswordController> {
+class RequestResetPasswordScreen
+    extends GetView<RequestResetPasswordController> {
   const RequestResetPasswordScreen([Key? key]) : super(key: key);
 
   @override
@@ -66,7 +67,7 @@ class RequestResetPasswordScreen extends GetView<RequestResetPasswordController>
                 textWidget(
                   text: AppStrings.inputYourDetailsContinue,
                   textOverflow: TextOverflow.visible,
-                  style: getLightStyle(fontSize: 12.sp, color: grey2)
+                  style: getLightStyle(fontSize: 14.sp, color: grey2)
                       .copyWith(fontWeight: FontWeight.w300),
                 ),
                 SizedBox(
@@ -110,7 +111,6 @@ class RequestResetPasswordScreen extends GetView<RequestResetPasswordController>
       title: SizedBox(),
     );
   }
-
 
   Widget continueButton() {
     return controller.isLoading.isTrue

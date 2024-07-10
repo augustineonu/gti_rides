@@ -101,6 +101,8 @@ class RequestResetPasswordController extends GetxController {
           'emailOrPhone': emailOrPhoneController.text,
           "isResetPassword": true,
         });
+      } else {
+        showErrorSnackbar(message: result.message!);
       }
     } catch (e) {
       logger.log("error rrr: $e");
@@ -140,4 +142,3 @@ class RequestResetPasswordController extends GetxController {
     }
   }
 }
- 

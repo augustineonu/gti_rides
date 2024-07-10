@@ -1162,6 +1162,7 @@ class TripsScreen extends GetView<TripsController> {
                             height: 65.sp, imgUrl: pendingTrips.carProfilePic),
                       ),
                     ),
+                   
                     ScrollOnExpand(
                       scrollOnExpand: true,
                       scrollOnCollapse: false,
