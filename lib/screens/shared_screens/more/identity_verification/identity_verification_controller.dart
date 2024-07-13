@@ -62,6 +62,7 @@ class IdentityVerificationController extends GetxController {
       rawStartTime = arguments!["rawStartTime"] ?? DateTime.now();
       rawEndTime = arguments!["rawEndTime"] ?? DateTime.now();
       discountTotal.value = arguments!["discountTotal"] ?? '0';
+      numberOfEscort.value = arguments!["numberOfEscort"] ?? '';
 
       logger.log("Received discount total:: ${discountTotal.value}");
 
@@ -131,6 +132,7 @@ class IdentityVerificationController extends GetxController {
   DateTime? rawStartTime;
   DateTime? rawEndTime;
   Rx<String> discountTotal = '0.0'.obs;
+  Rx<String> numberOfEscort = ''.obs;
 
   // list
   List<String> gender = [
@@ -211,6 +213,7 @@ class IdentityVerificationController extends GetxController {
         "rawStartTime": rawStartTime,
         "rawEndTime": rawEndTime,
         "discountTotal": discountTotal.value,
+        "numberOfEscort": numberOfEscort.value,
 
       // "startDateTime": startDateTime.value,
       // "endDateTime": endDateTime.value,

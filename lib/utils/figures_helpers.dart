@@ -149,6 +149,7 @@ Future<double> calculatePriceChangesDifference({
 Future<double> calculateEscortFee(
     {String? escortFee,
     String? numberOfEscort,
+    required int tripDays
     // String? initialEstimatedTotal
     }) async {
   Logger logger = Logger("calculateEscortFee");
@@ -163,7 +164,7 @@ Future<double> calculateEscortFee(
         // double.parse(initialEstimatedTotal!.replaceAll(',', ''));
 
     // Calculate the total escort fee
-    double totalEscortFee = parsedEscortFee * parsedEscortNumber;
+    double totalEscortFee = parsedEscortFee * parsedEscortNumber * tripDays;
 
     logger.log("Total escort fee: ${totalEscortFee.toString()}");
     // var sumTotal = totalEscortFee + parsedEstimatedTotal;

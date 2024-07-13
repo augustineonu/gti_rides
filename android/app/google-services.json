@@ -20,6 +20,10 @@
             "package_name": "com.example.gti_rides",
             "certificate_hash": "f1b0b2c9cd7531fc031e30d7c373f1d96433a925"
           }
+        },
+        {
+          "client_id": "81002314927-roh7p0d2i45vc8botk3ebo5d2kl7vhvt.apps.googleusercontent.com",
+          "client_type": 3
         }
       ],
       "api_key": [
@@ -31,37 +35,14 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "81002314927-siqcjsfdr5imt7f5uncvlcon5ks35j4m.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.gtiRide"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:81002314927:android:f7707ebc05980b6f32e85a",
-        "android_client_info": {
-          "package_name": "com.gtirides.app"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDbYbMkgCH0_SCSVy_CYXnC20DaQrLI-cs"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
+              "client_id": "81002314927-roh7p0d2i45vc8botk3ebo5d2kl7vhvt.apps.googleusercontent.com",
+              "client_type": 3
+            },
             {
-              "client_id": "81002314927-siqcjsfdr5imt7f5uncvlcon5ks35j4m.apps.googleusercontent.com",
+              "client_id": "81002314927-8vic2241kok2kf1ibn3lsaocebukg9n5.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.gtiRide"
+                "bundle_id": "com.gtirides.gtiapp"
               }
             }
           ]
@@ -75,7 +56,20 @@
           "package_name": "com.gtirides.gtiapp"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "81002314927-888b3lphsokoueeab0dac9erdm0jl8lp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gtirides.gtiapp",
+            "certificate_hash": "f1b0b2c9cd7531fc031e30d7c373f1d96433a925"
+          }
+        },
+        {
+          "client_id": "81002314927-roh7p0d2i45vc8botk3ebo5d2kl7vhvt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDbYbMkgCH0_SCSVy_CYXnC20DaQrLI-cs"
@@ -85,10 +79,14 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "81002314927-siqcjsfdr5imt7f5uncvlcon5ks35j4m.apps.googleusercontent.com",
+              "client_id": "81002314927-roh7p0d2i45vc8botk3ebo5d2kl7vhvt.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "81002314927-8vic2241kok2kf1ibn3lsaocebukg9n5.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.gtiRide"
+                "bundle_id": "com.gtirides.gtiapp"
               }
             }
           ]

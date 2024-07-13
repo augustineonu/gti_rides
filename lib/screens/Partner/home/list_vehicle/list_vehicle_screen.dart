@@ -1356,10 +1356,10 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                   expectedVariable: 'field',
                   title: AppStrings.tellUsAboutYourVehicle,
                   hintText: AppStrings.writeHere,
-                  maxLines: 3,
-                  maxLength: 300,
+                  maxLines: 5,
+                  maxLength: 500,
                   inputFormatters: [
-                    LengthLimitingTextInputFormatter(100),
+                    LengthLimitingTextInputFormatter(500),
                   ],
                   textInputType: TextInputType.text,
                   controller: controller.aboutVehicleController,

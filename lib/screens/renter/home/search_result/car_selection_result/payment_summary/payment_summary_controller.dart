@@ -73,6 +73,7 @@ class PaymentSummaryController extends GetxController {
       rawEndTime = arguments!["rawEndTime"] ?? DateTime.now();
       discountTotal.value = arguments!["discountTotal"] ?? 0.0;
       cautionFee.value = arguments!["cautionFee"] ?? '';
+      numberOfEscort.value = arguments!["numberOfEscort"] ?? '';
     }
   }
 
@@ -112,6 +113,7 @@ class PaymentSummaryController extends GetxController {
   DateTime? rawStartTime;
   DateTime? rawEndTime;
   Rx<String> discountTotal = '0.0'.obs;
+  Rx<String> numberOfEscort = ''.obs;
 
   // bool args = Get.arguments;
 

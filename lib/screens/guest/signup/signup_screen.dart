@@ -120,8 +120,10 @@ class SignUpScreen extends GetView<SignUpController> {
   }
 
   Widget signUpPageView(BuildContext context, double width) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.7,
+    return Container(
+      // height: MediaQuery.of(context).size.height * 0.7,
+      constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height * 0.8.sp),
       child: PageView(
         physics: const NeverScrollableScrollPhysics(),
         controller: controller.pageController,
@@ -131,6 +133,7 @@ class SignUpScreen extends GetView<SignUpController> {
         children: [
           /// car renter registration page
           SingleChildScrollView(
+            physics: NeverScrollableScrollPhysics(),
             child: Column(
               children: [
                 Form(

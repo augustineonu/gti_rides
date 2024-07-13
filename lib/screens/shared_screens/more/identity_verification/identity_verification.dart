@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/shared_screens/more/identity_verification/identity_verification_controller.dart';
+import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
@@ -76,7 +77,8 @@ class IdentityVerificationScreen
               const SizedBox(height: 20),
               Visibility(
                 visible: controller.isKycUpdate.isTrue
-                    ? controller.tripData.value.tripType == "selfDrive" || controller.tripData.value.tripType == 'self drive'
+                    ? controller.tripData.value.tripType == "selfDrive" ||
+                        controller.tripData.value.tripType == 'self drive'
                     : true,
                 child: identityVerificationWidget(
                     title: AppStrings.proofOfIdentity,
@@ -116,7 +118,8 @@ class IdentityVerificationScreen
               // address verification
               Visibility(
                 visible: controller.isKycUpdate.isTrue
-                    ? controller.tripData.value.tripType == "selfDrive" || controller.tripData.value.tripType == 'self drive'
+                    ? controller.tripData.value.tripType == "selfDrive" ||
+                        controller.tripData.value.tripType == 'self drive'
                     : true,
                 child: Column(
                   children: [
@@ -203,7 +206,10 @@ class IdentityVerificationScreen
                             subTitle: controller.user.value.status == false
                                 ? AppStrings.pendingApproval
                                 : controller.user.value.status == true
-                                    ? AppStrings.youCanProceedToRent
+                                    ? userService.user.value.userType ==
+                                            "renter"
+                                        ? AppStrings.youCanProceedToRent
+                                        : "Get exciting bonuses when you list your car for rental purposes"
                                     : AppStrings.accountSuspended,
                             onTap: () {}),
                       ],

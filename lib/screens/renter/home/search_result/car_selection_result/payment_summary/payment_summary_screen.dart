@@ -131,9 +131,6 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
                 title: 'Discount',
                 hasPreFix: true,
                 subTitle: controller.discountTotal.value.toString()),
-            rowNairaText(
-                title: 'VAT(${controller.vat.value}%)',
-                subTitle: controller.vatValue.value),
             Visibility(
                 visible: !controller.selectedSelfPickUp.value,
                 child: rowNairaText(
@@ -150,7 +147,8 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
             Visibility(
                 visible: controller.selectedSecurityEscort.value,
                 child: rowNairaText(
-                    title: 'Escort Service Fee',
+                    title:
+                        'Escort Service Fee (x${controller.numberOfEscort.value})',
                     subTitle: controller.totalEscortFee.toString() ?? '')),
             Visibility(
               visible: controller.tripType.value == 1,
@@ -172,10 +170,8 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
                         children: [
                           SvgPicture.asset(ImageAssets.naira),
                           textWidget(
-                              text: controller
-                                      .cautionFee.value
-                                      .toString() ??
-                                  '',
+                              text:
+                                  controller.cautionFee.value.toString() ?? '',
                               style: getRegularStyle(color: grey5)),
                         ],
                       ),
@@ -192,6 +188,9 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
                 ],
               ),
             ),
+            rowNairaText(
+                title: 'VAT(${controller.vat.value}%)',
+                subTitle: controller.vatValue.value),
             Container(
               margin: EdgeInsets.symmetric(vertical: 20),
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
@@ -247,10 +246,11 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
               textWidget(text: title, style: getRegularStyle(color: grey5)),
             ],
           ),
-
           Row(
             children: [
-              hasPreFix! ? textWidget(text: '- ', style: getRegularStyle(color: grey5)) : SizedBox.shrink(),
+              hasPreFix!
+                  ? textWidget(text: '- ', style: getRegularStyle(color: grey5))
+                  : SizedBox.shrink(),
               SvgPicture.asset(ImageAssets.naira),
               textWidget(text: subTitle, style: getRegularStyle(color: grey5)),
             ],
@@ -315,7 +315,7 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
                 //  controller.args
                 // ? AppStrings.proceedToPay
                 // :
-                controller.tripType.value == 0 
+                controller.tripType.value == 0
                     ? AppStrings.proceedToPay
                     : AppStrings.sendRequest,
             color: primaryColor,
