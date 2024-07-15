@@ -79,12 +79,16 @@ class ListVehicleController extends GetxController {
   Rx<String> carID = ''.obs;
   Rx<String> selectedPhotos = ''.obs;
   Rx<String> selectedPhotoName = ''.obs;
+  Rx<String> realPhotoName = ''.obs;
   Rx<String> selectedRoadWorthinessPhoto = ''.obs;
   Rx<String> selectedRoadWorthinessPhotoName = ''.obs;
+  Rx<String> realRoadWorthinessPhotoName = ''.obs;
   Rx<String> selectedInsurancePhotos = ''.obs;
   Rx<String> selectedInsurancePhotoName = ''.obs;
+  Rx<String> realInsurancePhotoName = ''.obs;
   Rx<String> selectedInspectionPhotos = ''.obs;
   Rx<String> selectedInspectionPhotoName = ''.obs;
+  Rx<String> realInspectionPhotoName = ''.obs;
   RxList<String> selectedVehiclePhotos = <String>[].obs;
   RxList<Photo> apiFetchedPhotos =
       <Photo>[].obs; // List of Photo objects from the API
@@ -313,6 +317,7 @@ class ListVehicleController extends GetxController {
         await imageService.pickImage(source: ImageSource.camera);
     if (response != null) {
       // Check if pickedImagePath is not null before accessing its value
+      realPhotoName.value = response.imagePath.split('/').last;
       selectedPhotoName.value = response.imagePath.split('/').last;
       selectedPhotos.value = (response.imagePath);
       logger.log("image path :: ${selectedPhotoName.value}");
@@ -336,23 +341,13 @@ class ListVehicleController extends GetxController {
     }
   }
 
-  // Future<void> openGallery1() async {
-  //   ImageResponse? response =
-  //       await imageService.pickImage(source: ImageSource.gallery);
-  //   if (response != null) {
-  //     logger.log("Picked image $selectedPhotoName");
-  //     selectedPhotoName.value = response.imagePath.split('/').last;
-  //     selectedPhotos.value = (response.imagePath);
-  //     routeService.goBack;
-  //   }
-  // }
-
   Future<void> openGallery() async {
     // ImageResponse? response =
     // await imageService.pickImage(source: ImageSource.gallery);
     ImageResponse? response = await imageService.pickDocument();
     if (response != null) {
       logger.log("Picked image ${selectedPhotoName.value}");
+      realPhotoName.value = response.imagePath.split('/').last;
       selectedPhotos.value = response.imagePath;
 
       // Extract the directory and file name
@@ -384,6 +379,7 @@ class ListVehicleController extends GetxController {
       selectedRoadWorthinessPhoto.value = response.imagePath;
       selectedRoadWorthinessPhotoName.value =
           response.imagePath.split('/').last;
+      realRoadWorthinessPhotoName.value = response.imagePath.split('/').last;
 
       int lastSeparator = selectedRoadWorthinessPhoto.value.lastIndexOf('/');
       String directory = lastSeparator != -1
@@ -412,6 +408,7 @@ class ListVehicleController extends GetxController {
           "selectedRoadWorthinessPhoto: ${selectedRoadWorthinessPhoto.value}");
       selectedRoadWorthinessPhotoName.value =
           response.imagePath.split('/').last;
+      realRoadWorthinessPhotoName.value = response.imagePath.split('/').last;
 
       int lastSeparator = selectedRoadWorthinessPhoto.value.lastIndexOf('/');
       String directory = lastSeparator != -1
@@ -438,6 +435,7 @@ class ListVehicleController extends GetxController {
     if (response != null) {
       selectedInsurancePhotos.value = response.imagePath;
       selectedInsurancePhotoName.value = response.imagePath.split('/').last;
+      realInsurancePhotoName.value = response.imagePath.split('/').last;
 
       int lastSeparator = selectedInsurancePhotos.value.lastIndexOf('/');
       String directory = lastSeparator != -1
@@ -463,6 +461,7 @@ class ListVehicleController extends GetxController {
     if (response != null) {
       selectedInsurancePhotos.value = response.imagePath;
       selectedInsurancePhotoName.value = response.imagePath.split('/').last;
+      realInsurancePhotoName.value = response.imagePath.split('/').last;
 
       int lastSeparator = selectedInsurancePhotos.value.lastIndexOf('/');
       String directory = lastSeparator != -1
@@ -489,6 +488,7 @@ class ListVehicleController extends GetxController {
     if (response != null) {
       selectedInspectionPhotos.value = (response.imagePath);
       selectedInspectionPhotoName.value = (response.imagePath).split('/').last;
+      realInspectionPhotoName.value = (response.imagePath).split('/').last;
 
       int lastSeparator = selectedInspectionPhotos.value.lastIndexOf('/');
       String directory = lastSeparator != -1
@@ -514,6 +514,7 @@ class ListVehicleController extends GetxController {
     if (response != null) {
       selectedInspectionPhotos.value = (response.imagePath);
       selectedInspectionPhotoName.value = (response.imagePath).split('/').last;
+      realInspectionPhotoName.value = (response.imagePath).split('/').last;
 
       int lastSeparator = selectedInspectionPhotos.value.lastIndexOf('/');
       String directory = lastSeparator != -1
@@ -1483,6 +1484,7 @@ class ListVehicleController extends GetxController {
                   (filePath) {
                 selectedPhotos.value = filePath;
                 selectedPhotoName.value = 'vehicleLicense.png';
+                realPhotoName.value = filePath.split('/').last;
 
                 logger.log("extracted name: ${selectedPhotoName.value}");
               });
@@ -1494,6 +1496,7 @@ class ListVehicleController extends GetxController {
                   inspectionDocUrl, 'inspectionReport.png', (filePath) {
                 selectedInspectionPhotos.value = filePath;
                 selectedInspectionPhotoName.value = 'inspectionReport.png';
+                realInspectionPhotoName.value = filePath.split('/').last;
 
                 logger.log("extracted name: ${selectedInspectionPhotos.value}");
               });
@@ -1504,6 +1507,7 @@ class ListVehicleController extends GetxController {
               await downloadAndSaveImage(
                   roadWorthinessDocUrl, 'roadWorthiness.png', (filePath) {
                 selectedRoadWorthinessPhoto.value = filePath;
+                realRoadWorthinessPhotoName.value = filePath.split('/').last;
                 selectedRoadWorthinessPhotoName.value = 'roadWorthiness.png';
 
                 logger.log(
@@ -1520,6 +1524,7 @@ class ListVehicleController extends GetxController {
                   insuranceDocUrl, 'insuranceCertificate.png', (filePath) {
                 selectedInsurancePhotos.value = filePath;
                 selectedInsurancePhotoName.value = 'insuranceCertificate.png';
+                realInsurancePhotoName.value = filePath.split('/').last;
 
                 logger.log("extracted name: ${selectedInsurancePhotos.value}");
               });

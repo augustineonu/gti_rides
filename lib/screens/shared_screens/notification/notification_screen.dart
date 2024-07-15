@@ -173,7 +173,7 @@ class NotificationScreen extends GetView<NotificationController> {
                 child: textWidget(
                     textOverflow: TextOverflow.visible,
                     textAlign: TextAlign.center,
-                    text: AppStrings.noDriversYet,
+                    text: AppStrings.noNotifications,
                     style: getExtraBoldStyle(fontSize: 18.sp))),
           ],
         ),

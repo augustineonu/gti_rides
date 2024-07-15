@@ -146,6 +146,7 @@ class LoginController extends GetxController
           // persist user data
           logger.log("user ${response.data.toString()}");
           final UserModel userModel = UserModel.fromJson(response.data?[0]);
+           UserModel userModel1 = UserModel.fromJson(response.data?[0]);
           userService.setCurrentUser(userModel.toJson());
           // persist data
           await userService.saveUserData(userModel);

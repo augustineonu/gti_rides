@@ -3,11 +3,15 @@ import 'package:get/get.dart';
 import 'package:gti_rides/models/api_response_model.dart';
 import 'package:gti_rides/models/auth/sign_up_request_model.dart';
 import 'package:gti_rides/models/auth/social_signup_request_model.dart';
+import 'package:gti_rides/models/auth/token_model.dart';
+import 'package:gti_rides/models/user_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/auth_service.dart';
 import 'package:gti_rides/services/google_sign_in_service.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
+import 'package:gti_rides/services/token_service.dart';
+import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/utils/utils.dart';
 
 class SignUpController extends GetxController
@@ -118,7 +122,14 @@ class SignUpController extends GetxController
       }
     } catch (e) {
       logger.log("error rrr: $e");
-      showErrorSnackbar(message: e.toString());
+      if (e
+          .toString()
+          .contains("type 'Null' is not a subtype of type 'String'")) {
+        showErrorSnackbar(message: "Failed to sign up. Please try again");
+        return;
+      } else {
+        showErrorSnackbar(message: e.toString());
+      }
     } finally {
       isLoading.value = false;
     }
@@ -137,8 +148,29 @@ class SignUpController extends GetxController
                     socialType: "google",
                     socialId: result["googleId"])
                 .toJson());
+        logger.log("google signin: ${response}");
         if (response.status == "success" || response.status_code == 200) {
+          // save user token
+          TokenModel tokenModel = TokenModel.fromJson(response.data);
+
+          tokenService.saveTokensData(tokenModel);
+          tokenService.setTokenModel(response.data!);
+          tokenService.setAccessToken(response.data!["accessToken"]);
+
+          // get user profile before routing user to landing page
+          final profile = await authService.getProfile();
+          // logger.log("profile: ${profile.message}");
+          if (response.status == "success" || response.status_code == 200) {
+            // persist user data
+            logger.log("user ${profile.data.toString()}");
+            final UserModel userModel = UserModel.fromJson(profile.data?[0]);
+            userService.setCurrentUser(userModel.toJson());
+            // persist data
+            await userService.saveUserData(userModel);
+
+          }
           await showSuccessSnackbar(message: response.message!);
+          // return;
           await routeService.offAllNamed(AppLinks.carRenterLanding);
         } else {
           logger.log("error: ${response.message}");
@@ -147,7 +179,15 @@ class SignUpController extends GetxController
       }
     } catch (e) {
       logger.log("error rrr: $e");
-      showErrorSnackbar(message: e.toString());
+      if (e
+          .toString()
+          .contains("type 'Null' is not a subtype of type 'String'")) {
+        showErrorSnackbar(
+            message: "Failed to sign in with Google. Please try again.");
+        return;
+      } else {
+        showErrorSnackbar(message: e.toString());
+      }
     }
   }
 

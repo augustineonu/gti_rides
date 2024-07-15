@@ -1059,6 +1059,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
           onTap: onTap,
           child: Container(
             width: size.width,
+            height: 50.sp,
             margin: EdgeInsets.symmetric(vertical: 6.sp),
             padding: EdgeInsets.symmetric(horizontal: 10.sp, vertical: 13.sp),
             decoration: BoxDecoration(
@@ -1066,7 +1067,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                 border: Border.all(color: borderColor)),
             child: textWidget(
                 text: content,
-                textOverflow: TextOverflow.visible,
+                textOverflow: TextOverflow.ellipsis,
                 style: getRegularStyle(fontSize: 12.sp, color: primaryColor)),
           ),
         ),
@@ -1096,8 +1097,9 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
               photoUploadWithTitle(
                 size,
                 title: AppStrings.vehicleLicense,
-                content: controller.selectedPhotoName.isNotEmpty
-                    ? controller.selectedPhotoName.value
+                // content: controller.selectedPhotoName.isNotEmpty
+                content: controller.realPhotoName.isNotEmpty
+                    ? controller.realPhotoName.value
                     : AppStrings.uploadDocument,
                 onTap: () {
                   selectOptionSheet(size,
@@ -1147,8 +1149,8 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
               // road worthiness
               photoUploadWithTitle(size,
                   title: AppStrings.roadWorthiness,
-                  content: controller.selectedRoadWorthinessPhotoName.isNotEmpty
-                      ? controller.selectedRoadWorthinessPhotoName.value
+                  content: controller.realRoadWorthinessPhotoName.isNotEmpty
+                      ? controller.realRoadWorthinessPhotoName.value
                       : AppStrings.uploadDocument, onTap: () {
                 selectOptionSheet(size,
                     onSelectCamera: () => controller
@@ -1231,8 +1233,8 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
               // certificate of insurance
               photoUploadWithTitle(size,
                   title: AppStrings.certificateOfInsurance,
-                  content: controller.selectedInsurancePhotoName.isNotEmpty
-                      ? controller.selectedInsurancePhotoName.value
+                  content: controller.realInsurancePhotoName.isNotEmpty
+                      ? controller.realInsurancePhotoName.value
                       : AppStrings.uploadDocument, onTap: () {
                 selectOptionSheet(size,
                     onSelectCamera: () => controller
@@ -1280,8 +1282,8 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
               // vehicle inspection
               photoUploadWithTitle(size,
                   title: AppStrings.vehicleInspectionReport,
-                  content: controller.selectedInspectionPhotoName.isNotEmpty
-                      ? controller.selectedInspectionPhotoName.value
+                  content: controller.realInspectionPhotoName.isNotEmpty
+                      ? controller.realInspectionPhotoName.value
                       : AppStrings.uploadDocument, onTap: () {
                 selectOptionSheet(size,
                     onSelectCamera: () => controller
