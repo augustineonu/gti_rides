@@ -32,17 +32,19 @@ class MoreController extends GetxController {
 
   void init() async {
     logger.log('MoreController initialized');
-  
 
     await getKycProfile();
     // paymentService.getBankAccount();
   }
+
   @override
-  void onInit() async{
+  void onInit() async {
     // TODO: implement onInit
-      user = userService.user;
+    user = userService.user;
     logger.log("User:: ${user.value}");
-    tokens.value = (await tokenService.getTokensData())!;
+    if (!isLogout.value) {
+      tokens.value = (await tokenService.getTokensData())!;
+    }
     logger.log("User:: ${tokens.value.userType}");
     logger.log("User token && User type:: $tokens");
     super.onInit();
@@ -56,6 +58,7 @@ class MoreController extends GetxController {
   // late PageController cardPageController;
   ScrollController scrollController = ScrollController();
 
+  RxBool isLogout = false.obs;
   RxBool isDone = false.obs;
   RxBool showPassword = false.obs;
   Rx<String> exampleText = "".obs;
@@ -82,14 +85,16 @@ class MoreController extends GetxController {
     {'image': ImageAssets.notification, 'title': AppStrings.notification},
   ];
 
-  void routeToNotification() =>
-      routeService.gotoRoute(AppLinks.notification);
+  void routeToNotification() => routeService.gotoRoute(AppLinks.notification);
 
   onPageChanged(int index) {}
 
   void obscurePassword() => showPassword.value = !showPassword.value;
 
   Future<void> logOut() async {
+    // isLogout.value = true;
+    logger.log("value ${isLogout}");
+    // return;
     await tokenService.clearAll();
     // storageService.remove('firstTimeLogin');
     routeService.offAllNamed(AppLinks.login);
@@ -122,7 +127,7 @@ class MoreController extends GetxController {
     await showSuccessSnackbar(message: AppStrings.copied);
   }
 
-   Future<void> launchMessenger() async {
+  Future<void> launchMessenger() async {
     await Intercom.instance
         .loginIdentifiedUser(email: userService.user.value.emailAddress);
     await Intercom.instance.displayMessenger();

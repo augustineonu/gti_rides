@@ -557,7 +557,7 @@ class CarSelectionResultController extends GetxController
     logger.log("Value::  ${cautionFee?.value ?? "value is empty"}");
     // return;
 
-    var value = double.parse(cautionFee!.replaceAll(',', ''));
+    // var value = double.parse(cautionFee!.replaceAll(',', ''));
     await updateEstimatedTotal();
     await addGrandTotal();
 
@@ -566,30 +566,30 @@ class CarSelectionResultController extends GetxController
 
     // if the user selects a date that is not within the car's availability date
     // it throws this
-    // var isEndDaterWithinAvailabilityFrame = isDateAfterCarAvailability(
-    //     rawEndTime: rawEndTime!,
-    //     carAvailabilityEndDate: carAvialbilityEndDate!);
-    // if (isEndDaterWithinAvailabilityFrame) {
-    //   showSuccessSnackbar(
-    //       message: 'Car end date is not within car availability frame');
-    //   isLoading.value = false;
-    //   return;
-    // }
+    var isEndDaterWithinAvailabilityFrame = isDateAfterCarAvailability(
+        rawEndTime: rawEndTime!,
+        carAvailabilityEndDate: carAvialbilityEndDate!);
+    if (isEndDaterWithinAvailabilityFrame) {
+      showSuccessSnackbar(
+          message: 'Car end date is not within car availability frame');
+      isLoading.value = false;
+      return;
+    }
 
     // checks car availability frame matching the supplied start and end date if
     // the car is booked within the frame
-    // var isCarAvailable = await checkCarAvailability();
-    // if (!isCarAvailable) {
-    //   if (carNotAvailable.value == 'An error occurred') {
-    //     isLoading.value = false;
-    //     return;
-    //   }
-    //   showSuccessSnackbar(message: carNotAvailable.value);
-    //   isLoading.value = false;
-    //   return bookedDatedSheet(
-    //     itemCount: bookedData,
-    //   );
-    // }
+    var isCarAvailable = await checkCarAvailability();
+    if (!isCarAvailable) {
+      if (carNotAvailable.value == 'An error occurred') {
+        isLoading.value = false;
+        return;
+      }
+      showSuccessSnackbar(message: carNotAvailable.value);
+      isLoading.value = false;
+      return bookedDatedSheet(
+        itemCount: bookedData,
+      );
+    }
     try {
       final kycResponse = await userService.getKycProfile();
 

@@ -7,9 +7,11 @@ import 'package:gti_rides/models/auth/token_model.dart';
 import 'package:gti_rides/models/user_model.dart';
 import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/services/auth_service.dart';
+import 'package:gti_rides/services/device_service.dart';
 import 'package:gti_rides/services/google_sign_in_service.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:gti_rides/services/route_service.dart';
+import 'package:gti_rides/services/storage_service.dart';
 import 'package:gti_rides/services/token_service.dart';
 import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/utils/utils.dart';
@@ -135,6 +137,19 @@ class SignUpController extends GetxController
     }
   }
 
+  Future<void> sendFirebaseToken() async {
+    final response = await deviceService.addNotificationToken();
+    try {
+      if (response.status_code == 200) {
+        logger.log("Success:: ${response.message} ");
+      } else {
+        logger.log("Failed:: ${response.message} ");
+      }
+    } catch (exception) {
+      logger.log("Exception:: ${exception.toString()} ");
+    }
+  }
+
   Future<void> googleSignUp() async {
     try {
       final Map<String, dynamic>? result =
@@ -157,6 +172,26 @@ class SignUpController extends GetxController
           tokenService.setTokenModel(response.data!);
           tokenService.setAccessToken(response.data!["accessToken"]);
 
+          // check if it's the first time user logged in on this device
+          // then send firebase token
+          var isFirstTimeLogin = await firstTimeLoginCheck();
+
+          if (isFirstTimeLogin!) {
+            await sendFirebaseToken();
+            final res = await authService.addBiometric(
+                payload: {"biometricID": deviceService.deviceId.value});
+            if (res.status == "success" || res.status_code == 200) {
+              isFirstTimeLogin = false;
+              await storageService.insert('firstTimeLogin', isFirstTimeLogin!);
+              userService.saveData('firstTimeLogin', 'false');
+              logger.log("${res.status} ${res.message}");
+              bool? value = await storageService.fetch('firstTimeLogin');
+              logger.log("firstTimeLogin valeu $value");
+            } else {
+              logger.log("${res.status} ${res.message}");
+            }
+          }
+
           // get user profile before routing user to landing page
           final profile = await authService.getProfile();
           // logger.log("profile: ${profile.message}");
@@ -167,7 +202,6 @@ class SignUpController extends GetxController
             userService.setCurrentUser(userModel.toJson());
             // persist data
             await userService.saveUserData(userModel);
-
           }
           await showSuccessSnackbar(message: response.message!);
           // return;
@@ -188,6 +222,15 @@ class SignUpController extends GetxController
       } else {
         showErrorSnackbar(message: e.toString());
       }
+    }
+  }
+
+  Future<bool?> firstTimeLoginCheck() async {
+    String? value = await userService.getData('firstTimeLogin');
+    if (value == null || value == 'true') {
+      return true;
+    } else {
+      return false;
     }
   }
 
