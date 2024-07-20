@@ -85,6 +85,7 @@ dependencies:
   webview_flutter: ^4.5.0
   file_picker: ^6.1.1
   dotted_line: ^3.2.2
+  popover: ^0.3.0+1
 
   multiselect:
    git:

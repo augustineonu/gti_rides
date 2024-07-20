@@ -23,6 +23,7 @@ import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/utils.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:multiselect/multiselect.dart';
+import 'package:popover/popover.dart';
 
 enum Fruit {
   apple,
@@ -635,16 +636,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                   SizedBox(
                     width: 4.sp,
                   ),
-                  SvgPicture.asset(
-                    ImageAssets.info,
-                  ),
-                  SizedBox(
-                    width: 3.sp,
-                  ),
-                  textWidget(
-                      text: AppStrings.learnMore,
-                      style:
-                          getMediumStyle(color: primaryColor, fontSize: 10.sp)),
+                  LearnMore(),
                 ],
               ),
               SizedBox(
@@ -1499,172 +1491,6 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                   ),
                 ],
               ),
-              // Column(
-              //   crossAxisAlignment: CrossAxisAlignment.start,
-              //   children: [
-              //     textWidget(
-              //       text: AppStrings.vehicleFeatures,
-              //       style: getRegularStyle(fontSize: 12.sp),
-              //     ),
-              //     SizedBox(
-              //       height: 5.sp,
-              //     ),
-              //     DropdownSearch<dynamic>.multiSelection(
-              //       clearButtonProps: ClearButtonProps(
-              //         color: primaryColor,
-              //       ),
-              //       items: (controller.carFeatures?.value ?? [])
-              //           .map((feature) => feature['featuresName'] as String)
-              //           .toList(),
-              //       dropdownButtonProps: DropdownButtonProps(
-              //         splashColor: primaryColor,
-              //         focusColor: primaryColor,
-              //         color: primaryColor,
-              //         icon: Icon(
-              //           Iconsax.arrow_down_1,
-              //           color: grey3,
-              //         ),
-              //       ),
-              //       popupProps: PopupPropsMultiSelection.menu(
-
-              //           // selectionWidget: (context, item, isSelected) {
-
-              //           // },
-              //           constraints:
-              //               BoxConstraints(minHeight: 200.sp, maxHeight: 300.sp),
-              //           favoriteItemProps: FavoriteItemProps(),
-              //           menuProps: MenuProps(
-              //             backgroundColor: backgroundColor,
-              //           )
-              //           // showSelectedItems: true,
-
-              //           ),
-
-              //       onChanged: (List<dynamic> selectedFeatures) {
-              //         controller.selectedFeatures!.value = selectedFeatures;
-              //         print("selected $selectedFeatures");
-
-              //         // Find the feature objects with the selected names
-              //         var selectedObjects = (controller.carFeatures?.value ?? [])
-              //             .where(
-              //               (feature) => selectedFeatures
-              //                   .contains(feature['featuresName']),
-              //             )
-              //             .toList();
-              //         // Extract featuresCode from selected objects
-              //         List<String> featuresCodes = selectedObjects
-              //             .map((feature) => feature['featuresCode'] as String)
-              //             .toList();
-
-              //         // Assign the lists to corresponding controller variables
-              //         controller.featuresCode.value = featuresCodes;
-              //         print("selectedFeatures: $selectedFeatures");
-              //         print("featuresCodes: $featuresCodes");
-              //       },
-              //       selectedItems: controller.selectedFeatures!.value,
-              //       validator: (selectedItems) {
-              //         if (selectedItems == null || selectedItems.isEmpty) {
-              //           return "Required field";
-              //         } else if (selectedItems.contains("Brazil")) {
-              //           return "Invalid item";
-              //         } else {
-              //           return null; // No error
-              //         }
-              //       },
-              //       dropdownDecoratorProps: DropDownDecoratorProps(
-              //         dropdownSearchDecoration: InputDecoration(
-              //           iconColor: red, suffixIconColor: red,
-              //           contentPadding: EdgeInsets.symmetric(
-              //               horizontal: 5.sp, vertical: 7.sp),
-              //           enabledBorder: OutlineInputBorder(
-              //             borderSide: BorderSide(
-              //               color: borderColor,
-              //               width: 1.0.w,
-              //             ),
-              //             borderRadius: BorderRadius.all(
-              //               Radius.circular(4.0.r),
-              //             ),
-              //           ),
-              //           errorBorder: OutlineInputBorder(
-              //             borderSide: BorderSide(
-              //               color: red,
-              //               width: 1.0.w,
-              //             ),
-              //             borderRadius: BorderRadius.all(
-              //               Radius.circular(4.0.r),
-              //             ),
-              //           ),
-              //           focusedBorder: OutlineInputBorder(
-              //             borderSide: BorderSide(
-              //               color: borderColor,
-              //               width: 1.0.w,
-              //             ),
-              //             borderRadius: BorderRadius.all(
-              //               Radius.circular(4.0.r),
-              //             ),
-              //           ),
-              //           border: OutlineInputBorder(
-              //             borderSide: BorderSide(
-              //               color: secondaryColor,
-              //               width: 1.0.w,
-              //             ),
-              //             borderRadius: BorderRadius.all(
-              //               Radius.circular(4.0.r),
-              //             ),
-              //           ),
-              //           // decoration: InputDecoration(
-              //           //   contentPadding: EdgeInsets.symmetric(horizontal: 14.sp, vertical: 13.sp),
-              //           //   enabledBorder: OutlineInputBorder(
-              //           //     borderSide: BorderSide(
-              //           //       color: borderColor,
-              //           //       width: 1.0.w,
-              //           //     ),
-              //           //     borderRadius: BorderRadius.all(
-              //           //       Radius.circular(4.0.r),
-              //           //     ),
-              //           //   ),
-              //           //   errorBorder: OutlineInputBorder(
-              //           //     borderSide: BorderSide(
-              //           //       color: red,
-              //           //       width: 1.0.w,
-              //           //     ),
-              //           //     borderRadius: BorderRadius.all(
-              //           //       Radius.circular(4.0.r),
-              //           //     ),
-              //           //   ),
-              //           //   focusedBorder: OutlineInputBorder(
-              //           //     borderSide: BorderSide(
-              //           //       color: borderColor,
-              //           //       width: 1.0.w,
-              //           //     ),
-              //           //     borderRadius: BorderRadius.all(
-              //           //       Radius.circular(4.0.r),
-              //           //     ),
-              //           //   ),
-              //           //   border: OutlineInputBorder(
-              //           //     borderSide: BorderSide(
-              //           //       color: secondaryColor,
-              //           //       width: 1.0.w,
-              //           //     ),
-              //           //     borderRadius: BorderRadius.all(
-              //           //       Radius.circular(4.0.r),
-              //           //     ),
-              //           //   ),
-              //           //   // filled: true,
-              //           //   fillColor: Colors.transparent,
-              //           // ),
-              //           // whenEmpty: 'Select',
-              //           // isDense: true,
-              //           enabled: true,
-              //           // icon: const Icon(
-              //           //   Iconsax.arrow_down_1,
-              //           //   color: grey3,
-              //           // ),
-              //         ),
-              //       ),
-              //     ),
-              //   ],
-              // ),
               SizedBox(
                 height: 24.sp,
               ),
@@ -2364,5 +2190,58 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
             // onTap: controller.routeToPhoneVerification,
             isLoading: controller.isLoading.value,
           );
+  }
+}
+
+class LearnMore extends StatelessWidget {
+  const LearnMore({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      child: Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Row(
+              children: [
+                SvgPicture.asset(
+                  ImageAssets.info,
+                ),
+                SizedBox(
+                  width: 3.sp,
+                ),
+                textWidget(
+                    text: AppStrings.learnMore,
+                    style:
+                        getMediumStyle(color: primaryColor, fontSize: 10.sp)),
+              ],
+            ),
+          ),
+        ],
+      ),
+      onTap: () {
+        showPopover(
+          context: context,
+          bodyBuilder: (context) => Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: textWidget(
+                text:
+                    "Offer discounts to encourage renters to book a vehicle for multiple days.",
+                style: getRegularStyle(),
+                textOverflow: TextOverflow.visible),
+          ),
+          onPop: () => print('Popover was popped!'),
+          direction: PopoverDirection.top,
+          backgroundColor: primaryColorLight3,
+          width: 300.sp,
+          height: 60.sp,
+          arrowHeight: 15,
+          arrowWidth: 30,
+          transition: PopoverTransition.other,
+          transitionDuration: Duration(milliseconds: 700),
+        );
+      },
+    );
   }
 }

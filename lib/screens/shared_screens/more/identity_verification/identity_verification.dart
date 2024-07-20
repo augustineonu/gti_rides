@@ -209,7 +209,7 @@ class IdentityVerificationScreen
                                     ? userService.user.value.userType ==
                                             "renter"
                                         ? AppStrings.youCanProceedToRent
-                                        : "Get exciting bonuses when you list your car for rental purposes"
+                                        : "Your account is now active. We appreciate your ongoing partnership."
                                     : AppStrings.accountSuspended,
                             onTap: () {}),
                       ],
@@ -240,10 +240,12 @@ class IdentityVerificationScreen
               children: [
                 textWidget(
                     text: title,
-                    style: getRegularStyle(color: titleColor ?? black)),
+                    style: getRegularStyle(color: titleColor ?? black),
+                    textOverflow: TextOverflow.visible),
                 textWidget(
                     text: subTitle,
-                    style: getRegularStyle(fontSize: 12.sp, color: grey2)),
+                    style: getRegularStyle(fontSize: 12.sp, color: grey2),
+                    textOverflow: TextOverflow.visible),
               ],
             ),
           ),
