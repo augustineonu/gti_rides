@@ -146,10 +146,26 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
                         '')),
             Visibility(
                 visible: controller.selectedSecurityEscort.value,
-                child: rowNairaText(
-                    title:
-                        'Escort Service Fee (x${controller.numberOfEscort.value})',
-                    subTitle: controller.totalEscortFee.toString() ?? '')),
+                child: Column(
+                  children: [
+                    rowNairaText(
+                        title:
+                            'Escort Service Fee (x${controller.numberOfEscort.value})',
+                        subTitle: controller.totalEscortFee.toString() ?? ''),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 70),
+                          child: textWidget(
+                              text:
+                                  '(Trip days x${controller.tripData.value.tripsDays})',
+                              style: getRegularStyle(color: grey5)),
+                        ),
+                      ],
+                    ),
+                  ],
+                )),
             Visibility(
               visible: controller.tripType.value == 1,
               child: Column(

@@ -19,7 +19,6 @@ import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/utils.dart';
-import 'package:intl/intl.dart';
 
 class TripsScreen extends GetView<TripsController> {
   const TripsScreen({

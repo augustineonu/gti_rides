@@ -123,14 +123,8 @@ class PendingTrips extends StatelessWidget {
                                     SizedBox(
                                       height: 8.sp,
                                     ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        continueButton(
-                                            controller, pendingTrips, context),
-                                      ],
-                                    ),
+                                    continueButton(
+                                        controller, pendingTrips, context),
                                   ],
                                 ),
                                 expanded: Column(
@@ -527,87 +521,103 @@ class PendingTrips extends StatelessWidget {
         pendingTrips.tripOrders?.first.tripStartDate ?? DateTime.now());
     return controller.isLoading.isTrue
         ? centerLoadingIcon()
-        : GtiButton(
-            height: 40.sp,
-            width: MediaQuery.of(context).size.width.sp - 60.sp,
-            text: getPendingTripsStatusMessage(pendingTrips),
-            color: primaryColor,
-            isDisabled: shouldButtonBeDisabled(pendingTrips),
-            disabledColor: (startTrip == true ||
-                    pendingTrips.tripType == "selfDrive" &&
-                        pendingTrips.adminStatus == "pending")
-                ? white
-                : primaryColorLight,
-            disabledTextColor: (startTrip == true ||
-                    pendingTrips.tripType == "selfDrive" ||
-                    pendingTrips.tripType == "self drive" &&
-                        pendingTrips.adminStatus == "pending")
-                ? primaryColorLight
-                : grey5,
-            onTap: () {
-              switch (pendingTrips.status) {
-                case "pending":
-                  if (pendingTrips.tripType == 'chauffeur') {
-                    if (pendingTrips.tripOrders!.first.paymentStatus ==
-                        'pending') {
-                      // payNowMethod();
-                      controller.routeToPayment(
-                          url: pendingTrips.tripOrders!.first.paymentLink);
-                    } else if (pendingTrips.tripOrders!.first.paymentStatus
-                            .toString() ==
-                        'success') {
-                      if (startTrip == true) {
-                        // () {};
-                        print("do nothing ");
+        : Column(
+            children: [
+              GtiButton(
+                height: 40.sp,
+                width: MediaQuery.of(context).size.width.sp - 60.sp,
+                text: getPendingTripsStatusMessage(pendingTrips),
+                color: primaryColor,
+                isDisabled: shouldButtonBeDisabled(pendingTrips),
+                disabledColor: (startTrip == true ||
+                        pendingTrips.tripType == "selfDrive" &&
+                            pendingTrips.adminStatus == "pending")
+                    ? white
+                    : primaryColorLight,
+                disabledTextColor: (startTrip == true ||
+                        pendingTrips.tripType == "selfDrive" ||
+                        pendingTrips.tripType == "self drive" &&
+                            pendingTrips.adminStatus == "pending")
+                    ? primaryColorLight
+                    : grey5,
+                onTap: () {
+                  switch (pendingTrips.status) {
+                    case "pending":
+                      if (pendingTrips.tripType == 'chauffeur') {
+                        if (pendingTrips.tripOrders!.first.paymentStatus ==
+                            'pending') {
+                          // payNowMethod();
+                          controller.routeToPayment(
+                              url: pendingTrips.tripOrders!.first.paymentLink);
+                        } else if (pendingTrips.tripOrders!.first.paymentStatus
+                                .toString() ==
+                            'success') {
+                          if (startTrip == true) {
+                            // () {};
+                            print("do nothing ");
+                          } else {
+                            print("start trip is true ");
+                            controller.updateTripStatus(
+                                type: 'active',
+                                tripID: pendingTrips.tripId.toString());
+                          }
+                        } else {
+                          // chat with admin
+                          controller.launchMessenger();
+                        }
                       } else {
-                        print("start trip is true ");
-                        controller.updateTripStatus(
-                            type: 'active',
-                            tripID: pendingTrips.tripId.toString());
+                        if (pendingTrips.adminStatus == "approved" &&
+                            pendingTrips.tripOrders!.first.paymentStatus ==
+                                "pending") {
+                          // payNowMethod();
+                          controller.routeToPayment(
+                              url: pendingTrips.tripOrders!.first.paymentLink);
+                        } else if (pendingTrips.tripOrders!.first.paymentStatus
+                            .toString()
+                            .contains("success")) {
+                          if (startTrip == true) {
+                            // () {};
+                            print("do nothing ");
+                          } else {
+                            controller.updateTripStatus(
+                                type: 'active',
+                                tripID: pendingTrips.tripId.toString());
+                          }
+                          print("confirm");
+                          // confirm trip button
+                        } else {
+                          print("object");
+                          //chat with admin action
+                          controller.launchMessenger();
+                        }
                       }
-                    } else {
-                      // chat with admin
-                      controller.launchMessenger();
-                    }
-                  } else {
-                    if (pendingTrips.adminStatus == "approved" &&
-                        pendingTrips.tripOrders!.first.paymentStatus ==
-                            "pending") {
-                      // payNowMethod();
-                      controller.routeToPayment(
-                          url: pendingTrips.tripOrders!.first.paymentLink);
-                    } else if (pendingTrips.tripOrders!.first.paymentStatus
-                        .toString()
-                        .contains("success")) {
-                      if (startTrip == true) {
-                        // () {};
-                        print("do nothing ");
-                      } else {
-                        controller.updateTripStatus(
-                            type: 'active',
-                            tripID: pendingTrips.tripId.toString());
-                      }
-                      print("confirm");
-                      // confirm trip button
-                    } else {
-                      print("object");
-                      //chat with admin action
-                      controller.launchMessenger();
-                    }
+                      break;
+                    case "declined":
+                      print("object>>");
+                      // chatWithAdminMethod();
+                      break;
+                    // Add more cases if needed
+                    default:
+                      break;
                   }
-                  break;
-                case "declined":
-                  print("object>>");
-                  // chatWithAdminMethod();
-                  break;
-                // Add more cases if needed
-                default:
-                  break;
-              }
-            },
+                },
 
-            // onTap: controller.routeToPhoneVerification,
-            isLoading: controller.isLoading.value,
+                // onTap: controller.routeToPhoneVerification,
+                isLoading: controller.isLoading.value,
+              ),
+              Visibility(
+                visible: getVehicleArrivalMessage(pendingTrips).isEmpty
+                    ? false
+                    : true,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 5),
+                  child: textWidget(
+                      text: getVehicleArrivalMessage(pendingTrips),
+                      style: getRegularStyle().copyWith(),
+                      textOverflow: TextOverflow.visible),
+                ),
+              ),
+            ],
           );
   }
 
@@ -624,6 +634,7 @@ class PendingTrips extends StatelessWidget {
           return 'Chat with admin';
         }
       } else {
+        // Please only Confirm Trip at your scheduled rental start time after the physical arrival of your vehicle
         if (pendingTrips.adminStatus == "pending") {
           return "Pending admin approval";
         } else if (pendingTrips.adminStatus == "approved" &&
@@ -640,6 +651,40 @@ class PendingTrips extends StatelessWidget {
       }
     } else if (pendingTrips.status == "declined") {
       return 'Chat with admin';
+    }
+    return "null";
+  }
+
+  String getVehicleArrivalMessage(AllTripsData pendingTrips) {
+    if (pendingTrips.status == "pending") {
+      if (pendingTrips.tripType == 'chauffeur') {
+        // if status == 'pending' && paymentStatus == 'pending' ? 'pay'
+
+        if (pendingTrips.tripOrders!.first.paymentStatus == 'pending') {
+          return "";
+        } else if (pendingTrips.tripOrders!.first.paymentStatus == 'success') {
+          return "Please only Confirm Trip at your scheduled rental start time after the physical arrival of your vehicle";
+        } else {
+          return '';
+        }
+      } else {
+        // Please only Confirm Trip at your scheduled rental start time after the physical arrival of your vehicle
+        if (pendingTrips.adminStatus == "pending") {
+          return "";
+        } else if (pendingTrips.adminStatus == "approved" &&
+            pendingTrips.tripOrders!.first.paymentStatus == 'pending') {
+          //
+          return "";
+          // what about if self drive and status is approved ?
+        } else if (pendingTrips.tripOrders!.first.paymentStatus == 'success') {
+          return "Please only Confirm Trip at your scheduled rental start time after the physical arrival of your vehicle";
+        } else {
+          // if the status is none of the above show 'chat with admin'
+          return '';
+        }
+      }
+    } else if (pendingTrips.status == "declined") {
+      return '';
     }
     return "null";
   }
