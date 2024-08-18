@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -43,6 +44,10 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
   late Timer timer;
   RxInt currentIndex = 0.obs;
   RxList visibleCars = [].obs;
+   int currentPromoCard = 0;
+
+  final CarouselSliderController promoCardController =
+      CarouselSliderController();
 
   RxBool isDone = false.obs;
   RxBool showPassword = false.obs;
@@ -300,6 +305,78 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
                             );
                           }),
                         ),
+
+//
+            //               CarouselSlider(
+            //   items: List.generate(4, (index) {
+            //     return Container(
+            //       // height: 98.sp,
+            //       // width: size.width,
+            //       constraints: BoxConstraints(
+            //         minWidth: 320.sp,
+            //       ),
+            //       margin: const EdgeInsets.symmetric(vertical: 28)
+            //           .copyWith(right: 0),
+            //       padding:
+            //           const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+            //       decoration: BoxDecoration(
+            //         color: ThemeColors.of(context).tertiaryLight,
+            //         borderRadius: BorderRadius.all(Radius.circular(12.r)),
+            //         image: const DecorationImage(
+            //             image: AssetImage(
+            //               Assets.menuBg,
+            //             ),
+            //             fit: BoxFit.cover),
+            //       ),
+            //       child: SizedBox(
+            //         width: 150.sp,
+            //         child: Column(
+            //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //           crossAxisAlignment: CrossAxisAlignment.start,
+            //           children: [
+            //             textWidget(
+            //               text: "Foodlify is now in your City",
+            //               style: getSemiBoldStyle(fontSize: 14.sp),
+            //             ),
+            //             const SizedBox(
+            //               height: 4,
+            //             ),
+            //             textWidget(
+            //               text: "Kaduna",
+            //               style: getRegularStyle(
+            //                   fontSize: 12.sp,
+            //                   color: ThemeColors.of(context).tertiary),
+            //             ),
+            //             SizedBox(
+            //               width: 200.sp,
+            //               child: textWidget(
+            //                   text:
+            //                       "You can now register your business with us and earn more",
+            //                   style: getRegularStyle(
+            //                       fontSize: 12.sp,
+            //                       color: ThemeColors.of(context).tertiary),
+            //                   textOverflow: TextOverflow.visible),
+            //             ),
+            //           ],
+            //         ),
+            //       ),
+            //     );
+            //   }),
+            //   carouselController: promoCardController,
+            //   options: CarouselOptions(
+            //     viewportFraction: 1,
+            //     padEnds: false,
+            //     autoPlay: true,
+            //     enlargeCenterPage: true,
+            //     aspectRatio: 2,
+            //     onPageChanged: (index, reason) {
+            //       setState(() {
+            //         // currentPromoCard = index;
+            //         currentIndex.value = index;
+            //       });
+            //     },
+            //   ),
+            // ),
                         Positioned(
                           bottom: 70,
                           right: 0,

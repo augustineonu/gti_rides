@@ -43,8 +43,7 @@ class HomeAddressScreen extends GetView<HomeAddressController> {
     );
   }
 
-  Widget body(Size size, context,
-      {required HomeAddressController controller}) {
+  Widget body(Size size, context, {required HomeAddressController controller}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
       child: Obx(() => Form(
@@ -61,7 +60,7 @@ class HomeAddressScreen extends GetView<HomeAddressController> {
                 ),
                 const SizedBox(height: 32),
                 imageUploadWidget(
-                  title: AppStrings.uploadDocumentToProveAddress,
+                  title: AppStrings.uploadPhotoToProveAddress,
                   body: controller.homeAddressName.value.isNotEmpty
                       ? controller.homeAddressName.value
                       : AppStrings.pleaseMakeSurePicIsClear,
@@ -69,7 +68,6 @@ class HomeAddressScreen extends GetView<HomeAddressController> {
                     selectOptionSheet(size);
                   },
                 ),
-              
                 const SizedBox(height: 55),
                 saveButton(),
               ],
@@ -92,7 +90,6 @@ class HomeAddressScreen extends GetView<HomeAddressController> {
   }
 
   Future<dynamic> selectOptionSheet(Size size) {
-
     return Get.bottomSheet(
       Container(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
@@ -110,7 +107,9 @@ class HomeAddressScreen extends GetView<HomeAddressController> {
                   child: GtiButton(
                     width: 120.sp,
                     text: AppStrings.camera,
-                    onTap: () => controller.openCamera().then((value) => routeService.goBack()),
+                    onTap: () => controller
+                        .openCamera()
+                        .then((value) => routeService.goBack()),
                   ),
                 ),
                 const SizedBox(
@@ -120,7 +119,9 @@ class HomeAddressScreen extends GetView<HomeAddressController> {
                   child: GtiButton(
                     width: 120.sp,
                     text: AppStrings.gallery,
-                    onTap:()=> controller.openGallery().then((value) => routeService.goBack()),
+                    onTap: () => controller
+                        .openGallery()
+                        .then((value) => routeService.goBack()),
                   ),
                 ),
               ],
@@ -134,7 +135,4 @@ class HomeAddressScreen extends GetView<HomeAddressController> {
               topLeft: Radius.circular(0.r), topRight: Radius.circular(0.r))),
     );
   }
-
-
-
 }

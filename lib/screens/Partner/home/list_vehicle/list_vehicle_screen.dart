@@ -1099,7 +1099,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                           .openCamera()
                           .then((value) => routeService.goBack()),
                       onSelectGallery: () => controller
-                          .openGallery()
+                          .pickDocument()
                           .then((value) => routeService.goBack()),
                       button1Title: AppStrings.document);
                 },

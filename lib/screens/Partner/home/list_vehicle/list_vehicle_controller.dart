@@ -341,12 +341,14 @@ class ListVehicleController extends GetxController {
     }
   }
 
-  Future<void> openGallery() async {
+
+//
+  Future<void> pickDocument() async {
     // ImageResponse? response =
     // await imageService.pickImage(source: ImageSource.gallery);
     ImageResponse? response = await imageService.pickDocument();
     if (response != null) {
-      logger.log("Picked image ${selectedPhotoName.value}");
+      logger.log("Picked document ${selectedPhotoName.value}");
       realPhotoName.value = response.imagePath.split('/').last;
       selectedPhotos.value = response.imagePath;
 
@@ -367,7 +369,7 @@ class ListVehicleController extends GetxController {
 
       // Now update the selectedPhotos value
       selectedPhotos.value = newPath;
-      logger.log("selected photo ${selectedPhotos.value}");
+      logger.log("selected document ${selectedPhotos.value}");
       routeService.goBack;
     }
   }

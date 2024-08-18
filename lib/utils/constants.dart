@@ -384,6 +384,7 @@ class AppStrings {
   static String inputEmergencyNumber = 'Input emergency number';
   static String inputName = 'Input name';
   static String emergencyContact = 'Emergency contact';
+  static String uploadPhotoToProveAddress = 'Upload Photo/Image to prove address';
   static String uploadDocumentToProveAddress =
       'Upload document to prove address';
   static String relationship = 'Relationship';
