@@ -130,7 +130,9 @@ class PaymentSummaryScreen extends GetView<PaymentSummaryController> {
             rowNairaText(
                 title: 'Discount',
                 hasPreFix: true,
-                subTitle: controller.discountTotal.value.toString()),
+                subTitle: controller.discountTotal.value.toString().isEmpty
+                    ? "0"
+                    : controller.discountTotal.value.toString()),
             Visibility(
                 visible: !controller.selectedSelfPickUp.value,
                 child: rowNairaText(

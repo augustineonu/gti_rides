@@ -26,6 +26,7 @@ import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 class ListVehicleController extends GetxController {
   Logger logger = Logger("Controller");
@@ -317,6 +318,9 @@ class ListVehicleController extends GetxController {
         await imageService.pickImage(source: ImageSource.camera);
     if (response != null) {
       // Check if pickedImagePath is not null before accessing its value
+      String originalPath = response.imagePath;
+      String originalExtension = path.extension(originalPath).toLowerCase();
+
       realPhotoName.value = response.imagePath.split('/').last;
       selectedPhotoName.value = response.imagePath.split('/').last;
       selectedPhotos.value = (response.imagePath);
@@ -328,6 +332,29 @@ class ListVehicleController extends GetxController {
           : selectedPhotos.value;
       selectedPhotoName.value = 'vehicleLicense.png';
 
+       // Check if the extension is valid (png or jpeg)
+      if (![
+        '.png',
+        '.jpg',
+      ].contains(originalExtension)) {
+        logger.log("Unsupported file type: $originalExtension");
+        // You might want to show an error message to the user here
+
+        showErrorSnackbar(
+            message:
+                "Unsupported file type. Please upload a PNG or Jpeg file.");
+        return;
+      }
+
+      var isLargeFile = await checkFileSize(
+          path: response.imagePath, originalExtension: originalExtension);
+      if (isLargeFile) {
+        showErrorSnackbar(
+            message:
+                "Document size exceeds 2MB limit. Please choose a smaller file.");
+        return;
+      }
+
       // Build the new path with the desired file name
       String newPath = '$directory/$selectedPhotoName';
       logger.log("Picked new path $newPath");
@@ -341,36 +368,124 @@ class ListVehicleController extends GetxController {
     }
   }
 
-
 //
+  // Future<void> pickDocument() async {
+  //   // ImageResponse? response =
+  //   // await imageService.pickImage(source: ImageSource.gallery);
+  //   ImageResponse? response = await imageService.pickDocument();
+  //   if (response != null) {
+  //     logger.log("Picked document ${selectedPhotoName.value}");
+  //     realPhotoName.value = response.imagePath.split('/').last;
+  //     selectedPhotos.value = response.imagePath;
+
+  //     // Extract the directory and file name
+  //     int lastSeparator = selectedPhotos.value.lastIndexOf('/');
+  //     String directory = lastSeparator != -1
+  //         ? selectedPhotos.value.substring(0, lastSeparator)
+  //         : selectedPhotos.value;
+
+  //     selectedPhotoName.value = 'vehicleLicense.png';
+
+  //     // Build the new path with the desired file name
+  //     String newPath = '$directory/$selectedPhotoName';
+  //     logger.log("Picked new path $newPath");
+
+  //     // Rename the file
+  //     File(selectedPhotos.value).renameSync(newPath);
+
+  //     // Now update the selectedPhotos value
+  //     selectedPhotos.value = newPath;
+  //     logger.log("selected document ${selectedPhotos.value}");
+  //     routeService.goBack;
+  //   }
+  // }
+
+  Future<bool> checkFileSize({
+    required String path,
+    required String originalExtension,
+  }) async {
+    // Check file size
+    File file = File(path);
+    int fileSizeInBytes = await file.length();
+    double fileSizeInMB = fileSizeInBytes / (1024 * 1024);
+
+    if (originalExtension == '.pdf' ||
+        originalExtension == '.doc' ||
+        originalExtension == '.docx') {
+      if (fileSizeInMB > 5) {
+        Get.back();
+        logger.log("File too large: ${fileSizeInMB.toStringAsFixed(2)} MB");
+        showErrorSnackbar(
+            message:
+                "Document size exceeds 5MB limit. Please choose a smaller file.");
+        return true;
+      }
+    } else {
+      // Assuming all other files are images
+      if (fileSizeInMB > 2) {
+        Get.back();
+        logger.log("File too large: ${fileSizeInMB.toStringAsFixed(2)} MB");
+        showErrorSnackbar(
+            message:
+                "Image size exceeds 2MB limit. Please choose a smaller file.");
+        return true;
+      }
+    }
+    return false;
+  }
+
   Future<void> pickDocument() async {
-    // ImageResponse? response =
-    // await imageService.pickImage(source: ImageSource.gallery);
     ImageResponse? response = await imageService.pickDocument();
     if (response != null) {
-      logger.log("Picked document ${selectedPhotoName.value}");
-      realPhotoName.value = response.imagePath.split('/').last;
-      selectedPhotos.value = response.imagePath;
+      String originalPath = response.imagePath;
+      String originalExtension = path.extension(originalPath).toLowerCase();
 
-      // Extract the directory and file name
-      int lastSeparator = selectedPhotos.value.lastIndexOf('/');
-      String directory = lastSeparator != -1
-          ? selectedPhotos.value.substring(0, lastSeparator)
-          : selectedPhotos.value;
+      // Check if the extension is valid (pdf or doc/docx)
+      if (!['.pdf', '.doc', '.docx'].contains(originalExtension)) {
+        logger.log("Unsupported file type: $originalExtension");
+        // You might want to show an error message to the user here
 
-      selectedPhotoName.value = 'vehicleLicense.png';
+        showErrorSnackbar(
+            message: "Unsupported file type. Please upload a PDF or DOC file.");
+        return;
+      }
 
-      // Build the new path with the desired file name
-      String newPath = '$directory/$selectedPhotoName';
-      logger.log("Picked new path $newPath");
+      var isLargeFile = await checkFileSize(
+          path: originalPath, originalExtension: originalExtension);
+      if (isLargeFile) {
+        showErrorSnackbar(
+            message:
+                "Document size exceeds 5MB limit. Please choose a smaller file.");
+        return;
+      }
 
-      // Rename the file
-      File(selectedPhotos.value).renameSync(newPath);
+      String fileName = path.basename(originalPath);
+      logger.log("Picked document: $fileName");
 
-      // Now update the selectedPhotos value
-      selectedPhotos.value = newPath;
-      logger.log("selected document ${selectedPhotos.value}");
-      routeService.goBack;
+      // Extract the directory
+      String directory = path.dirname(originalPath);
+
+      // Create the new file name with the original extension
+      String newFileName = 'vehicleLicense$originalExtension';
+      String newPath = path.join(directory, newFileName);
+
+      logger.log("New path: $newPath");
+
+      try {
+        // Rename the file
+        File(originalPath).renameSync(newPath);
+
+        // Update the selectedPhotos value
+        selectedPhotos.value = newPath;
+        selectedPhotoName.value = newFileName;
+        realPhotoName.value = fileName;
+
+        logger.log("Selected document: ${selectedPhotos.value}");
+        // routeService.goBack();
+      } catch (e) {
+        logger.log("Error renaming file: $e");
+        // Handle the error (e.g., show an error message to the user)
+      }
     }
   }
 
@@ -378,6 +493,9 @@ class ListVehicleController extends GetxController {
     ImageResponse? response =
         await imageService.pickImage(source: ImageSource.camera);
     if (response != null) {
+      String originalPath = response.imagePath;
+      String originalExtension = path.extension(originalPath).toLowerCase();
+
       selectedRoadWorthinessPhoto.value = response.imagePath;
       selectedRoadWorthinessPhotoName.value =
           response.imagePath.split('/').last;
@@ -388,6 +506,29 @@ class ListVehicleController extends GetxController {
           ? selectedRoadWorthinessPhoto.value.substring(0, lastSeparator)
           : selectedRoadWorthinessPhoto.value;
       selectedRoadWorthinessPhotoName.value = 'roadWorthiness.png';
+
+      // Check if the extension is valid (png or jpeg)
+      if (![
+        '.png',
+        '.jpg',
+      ].contains(originalExtension)) {
+        logger.log("Unsupported file type: $originalExtension");
+        // You might want to show an error message to the user here
+
+        showErrorSnackbar(
+            message:
+                "Unsupported file type. Please upload a PNG or Jpeg file.");
+        return;
+      }
+
+      var isLargeFile = await checkFileSize(
+          path: response.imagePath, originalExtension: originalExtension);
+      if (isLargeFile) {
+        showErrorSnackbar(
+            message:
+                "Document size exceeds 2MB limit. Please choose a smaller file.");
+        return;
+      }
 
       // Build the new path with the desired file name
       String newPath = '$directory/$selectedRoadWorthinessPhotoName';
@@ -402,32 +543,86 @@ class ListVehicleController extends GetxController {
     }
   }
 
-  Future<void> openRoadWorthinessGallery() async {
+  // Future<void> openRoadWorthinessDocument() async {
+  //   ImageResponse? response = await imageService.pickDocument();
+  //   if (response != null) {
+  //     selectedRoadWorthinessPhoto.value = response.imagePath;
+  //     logger.log(
+  //         "selectedRoadWorthinessPhoto: ${selectedRoadWorthinessPhoto.value}");
+  //     selectedRoadWorthinessPhotoName.value =
+  //         response.imagePath.split('/').last;
+  //     realRoadWorthinessPhotoName.value = response.imagePath.split('/').last;
+
+  //     int lastSeparator = selectedRoadWorthinessPhoto.value.lastIndexOf('/');
+  //     String directory = lastSeparator != -1
+  //         ? selectedRoadWorthinessPhoto.value.substring(0, lastSeparator)
+  //         : selectedRoadWorthinessPhoto.value;
+  //     selectedRoadWorthinessPhotoName.value = 'roadWorthiness.png';
+
+  //     // Build the new path with the desired file name
+  //     String newPath = '$directory/$selectedRoadWorthinessPhotoName';
+  //     logger.log("Picked new path $newPath");
+
+  //     // Rename the file
+  //     File(selectedRoadWorthinessPhoto.value).renameSync(newPath);
+
+  //     // Now update the selectedPhotos value
+  //     selectedRoadWorthinessPhoto.value = newPath;
+  //     routeService.goBack;
+  //   }
+  // }
+
+  Future<void> openRoadWorthinessDocument() async {
     ImageResponse? response = await imageService.pickDocument();
     if (response != null) {
-      selectedRoadWorthinessPhoto.value = response.imagePath;
-      logger.log(
-          "selectedRoadWorthinessPhoto: ${selectedRoadWorthinessPhoto.value}");
-      selectedRoadWorthinessPhotoName.value =
-          response.imagePath.split('/').last;
-      realRoadWorthinessPhotoName.value = response.imagePath.split('/').last;
+      String originalPath = response.imagePath;
+      String originalExtension = path.extension(originalPath).toLowerCase();
 
-      int lastSeparator = selectedRoadWorthinessPhoto.value.lastIndexOf('/');
-      String directory = lastSeparator != -1
-          ? selectedRoadWorthinessPhoto.value.substring(0, lastSeparator)
-          : selectedRoadWorthinessPhoto.value;
-      selectedRoadWorthinessPhotoName.value = 'roadWorthiness.png';
+      // Check if the extension is valid (pdf, doc, docx)
+      if (!['.pdf', '.doc', '.docx'].contains(originalExtension)) {
+        logger.log("Unsupported file type: $originalExtension");
+        // You might want to show an error message to the user here
+        return;
+      }
 
-      // Build the new path with the desired file name
-      String newPath = '$directory/$selectedRoadWorthinessPhotoName';
-      logger.log("Picked new path $newPath");
+      var isLargeFile = await checkFileSize(
+          path: originalPath, originalExtension: originalExtension);
+           if (isLargeFile) {
+        showErrorSnackbar(
+            message:
+                "Document size exceeds 5MB limit. Please choose a smaller file.");
+        return;
+      }
+      
 
-      // Rename the file
-      File(selectedRoadWorthinessPhoto.value).renameSync(newPath);
+      String fileName = path.basename(originalPath);
+      logger.log("Picked document: $fileName");
 
-      // Now update the selectedPhotos value
-      selectedRoadWorthinessPhoto.value = newPath;
-      routeService.goBack;
+      // Extract the directory
+      String directory = path.dirname(originalPath);
+
+      // Create the new file name with the original extension
+      String newFileName = 'roadWorthiness$originalExtension';
+      String newPath = path.join(directory, newFileName);
+
+      logger.log("New path: $newPath");
+
+      try {
+        // Rename the file
+        File(originalPath).renameSync(newPath);
+
+        // Update the values
+        selectedRoadWorthinessPhoto.value = newPath;
+        selectedRoadWorthinessPhotoName.value = newFileName;
+        realRoadWorthinessPhotoName.value = fileName;
+
+        logger.log(
+            "Selected Road Worthiness document: ${selectedRoadWorthinessPhoto.value}");
+        // routeService.goBack();
+      } catch (e) {
+        logger.log("Error renaming file: $e");
+        // Handle the error (e.g., show an error message to the user)
+      }
     }
   }
 
@@ -458,29 +653,77 @@ class ListVehicleController extends GetxController {
     }
   }
 
-  Future<void> openInsuranceGallery() async {
+  // Future<void> openInsuranceDocument() async {
+  //   ImageResponse? response = await imageService.pickDocument();
+  //   if (response != null) {
+  //     selectedInsurancePhotos.value = response.imagePath;
+  //     selectedInsurancePhotoName.value = response.imagePath.split('/').last;
+  //     realInsurancePhotoName.value = response.imagePath.split('/').last;
+  //     int lastSeparator = selectedInsurancePhotos.value.lastIndexOf('/');
+  //     String directory = lastSeparator != -1
+  //         ? selectedInsurancePhotos.value.substring(0, lastSeparator)
+  //         : selectedInsurancePhotos.value;
+  //     selectedInsurancePhotoName.value = 'insuranceCertificate.png';
+  //     // Build the new path with the desired file name
+  //     String newPath = '$directory/$selectedInsurancePhotoName';
+  //     logger.log("Picked new path $newPath");
+  //     // Rename the file
+  //     File(selectedInsurancePhotos.value).renameSync(newPath);
+  //     // Now update the selectedPhotos value
+  //     selectedInsurancePhotos.value = newPath;
+  //     routeService.goBack;
+  //   }
+  // }
+  Future<void> openInsuranceDocument() async {
     ImageResponse? response = await imageService.pickDocument();
     if (response != null) {
-      selectedInsurancePhotos.value = response.imagePath;
-      selectedInsurancePhotoName.value = response.imagePath.split('/').last;
-      realInsurancePhotoName.value = response.imagePath.split('/').last;
+      String originalPath = response.imagePath;
+      String originalExtension = path.extension(originalPath).toLowerCase();
 
-      int lastSeparator = selectedInsurancePhotos.value.lastIndexOf('/');
-      String directory = lastSeparator != -1
-          ? selectedInsurancePhotos.value.substring(0, lastSeparator)
-          : selectedInsurancePhotos.value;
-      selectedInsurancePhotoName.value = 'insuranceCertificate.png';
+      // Check if the extension is valid (pdf, doc, docx)
+      if (!['.pdf', '.doc', '.docx'].contains(originalExtension)) {
+        logger.log("Unsupported file type: $originalExtension");
+        // You might want to show an error message to the user here
+        return;
+      }
 
-      // Build the new path with the desired file name
-      String newPath = '$directory/$selectedInsurancePhotoName';
-      logger.log("Picked new path $newPath");
+       var isLargeFile = await checkFileSize(
+          path: originalPath, originalExtension: originalExtension);
+      if (isLargeFile) {
+        showErrorSnackbar(
+            message:
+                "Document size exceeds 5MB limit. Please choose a smaller file.");
+        return;
+      }
 
-      // Rename the file
-      File(selectedInsurancePhotos.value).renameSync(newPath);
+      String fileName = path.basename(originalPath);
+      logger.log("Picked document: $fileName");
 
-      // Now update the selectedPhotos value
-      selectedInsurancePhotos.value = newPath;
-      routeService.goBack;
+      // Extract the directory
+      String directory = path.dirname(originalPath);
+
+      // Create the new file name with the original extension
+      String newFileName = 'insuranceCertificate$originalExtension';
+      String newPath = path.join(directory, newFileName);
+
+      logger.log("New path: $newPath");
+
+      try {
+        // Rename the file
+        File(originalPath).renameSync(newPath);
+
+        // Update the values
+        selectedInsurancePhotos.value = newPath;
+        selectedInsurancePhotoName.value = newFileName;
+        realInsurancePhotoName.value = fileName;
+
+        logger.log(
+            "Selected Insurance document: ${selectedInsurancePhotos.value}");
+        // routeService.goBack();
+      } catch (e) {
+        logger.log("Error renaming file: $e");
+        // Handle the error (e.g., show an error message to the user)
+      }
     }
   }
 
@@ -511,29 +754,82 @@ class ListVehicleController extends GetxController {
     }
   }
 
-  Future<void> openInspectionGallery() async {
+  // Future<void> openInspectionDocument() async {
+  //   ImageResponse? response = await imageService.pickDocument();
+  //   if (response != null) {
+  //     selectedInspectionPhotos.value = (response.imagePath);
+  //     selectedInspectionPhotoName.value = (response.imagePath).split('/').last;
+  //     realInspectionPhotoName.value = (response.imagePath).split('/').last;
+
+  //     int lastSeparator = selectedInspectionPhotos.value.lastIndexOf('/');
+  //     String directory = lastSeparator != -1
+  //         ? selectedInspectionPhotos.value.substring(0, lastSeparator)
+  //         : selectedInspectionPhotos.value;
+  //     selectedInspectionPhotoName.value = 'inspectionReport.png';
+
+  //     // Build the new path with the desired file name
+  //     String newPath = '$directory/$selectedInspectionPhotoName';
+  //     logger.log("Picked new path $newPath");
+
+  //     // Rename the file
+  //     File(selectedInspectionPhotos.value).renameSync(newPath);
+
+  //     // Now update the selectedPhotos value
+  //     selectedInspectionPhotos.value = newPath;
+  //     routeService.goBack;
+  //   }
+  // }
+
+  Future<void> openInspectionDocument() async {
     ImageResponse? response = await imageService.pickDocument();
     if (response != null) {
-      selectedInspectionPhotos.value = (response.imagePath);
-      selectedInspectionPhotoName.value = (response.imagePath).split('/').last;
-      realInspectionPhotoName.value = (response.imagePath).split('/').last;
+      String originalPath = response.imagePath;
+      String originalExtension = path.extension(originalPath).toLowerCase();
 
-      int lastSeparator = selectedInspectionPhotos.value.lastIndexOf('/');
-      String directory = lastSeparator != -1
-          ? selectedInspectionPhotos.value.substring(0, lastSeparator)
-          : selectedInspectionPhotos.value;
-      selectedInspectionPhotoName.value = 'inspectionReport.png';
+      // Check if the extension is valid (pdf, doc, docx)
+      if (!['.pdf', '.doc', '.docx'].contains(originalExtension)) {
+        logger.log("Unsupported file type: $originalExtension");
+        // You might want to show an error message to the user here
+        return;
+      }
 
-      // Build the new path with the desired file name
-      String newPath = '$directory/$selectedInspectionPhotoName';
-      logger.log("Picked new path $newPath");
+       var isLargeFile = await checkFileSize(
+          path: originalPath, originalExtension: originalExtension);
+      if (isLargeFile) {
+        showErrorSnackbar(
+            message:
+                "Document size exceeds 5MB limit. Please choose a smaller file.");
+        return;
+      }
 
-      // Rename the file
-      File(selectedInspectionPhotos.value).renameSync(newPath);
+      String fileName = path.basename(originalPath);
+      logger.log("Picked document: $fileName");
 
-      // Now update the selectedPhotos value
-      selectedInspectionPhotos.value = newPath;
-      routeService.goBack;
+      // Extract the directory
+      String directory = path.dirname(originalPath);
+
+      // Create the new file name with the original extension
+      String newFileName = 'inspectionReport$originalExtension';
+      String newPath = path.join(directory, newFileName);
+
+      logger.log("New path: $newPath");
+
+      try {
+        // Rename the file
+        File(originalPath).renameSync(newPath);
+
+        // Update the values
+        selectedInspectionPhotos.value = newPath;
+        selectedInspectionPhotoName.value = newFileName;
+        realInspectionPhotoName.value = fileName;
+
+        logger.log(
+            "Selected Inspection document: ${selectedInsurancePhotos.value}");
+        // routeService.goBack();
+      } catch (e) {
+        logger.log("Error renaming file: $e");
+        // Handle the error (e.g., show an error message to the user)
+      }
     }
   }
 
@@ -1114,25 +1410,58 @@ class ListVehicleController extends GetxController {
 
 //////////////
   ///
-  Future<void> downloadAndSaveImage(
+  // Future<void> downloadAndSaveFile(
+  //     String url, String fileName, Function(String) onDownloadComplete) async {
+  //   try {
+  //     final response = await dio.Dio().get<Uint8List>(
+  //       url,
+  //       options: dio.Options(responseType: dio.ResponseType.bytes),
+  //     );
+  //     logger.log("Photo downloaded: ${response.data}");
+
+  //     final directory = await getApplicationDocumentsDirectory();
+  //     final filePath = '${directory.path}/$fileName';
+
+  //     logger.log("Saving to file path: $filePath");
+
+  //     final file = File(filePath);
+  //     await file.writeAsBytes(response.data!, flush: true);
+
+  //     // Rename the file
+  //     File(filePath).renameSync('${directory.path}/$fileName');
+
+  //     // Invoke the callback with the new local file path
+  //     onDownloadComplete(filePath);
+
+  //     // Continue with further operations after the download is complete
+  //   } catch (e) {
+  //     // Handle any errors or exceptions that occur during the process
+  //     print("Error downloading and saving image: $e");
+  //   }
+  // }
+
+  Future<void> downloadAndSaveFile(
       String url, String fileName, Function(String) onDownloadComplete) async {
     try {
-      final response = await dio.Dio().get<Uint8List>(
+      final fileResponse = await dio.Dio().get<Uint8List>(
         url,
         options: dio.Options(responseType: dio.ResponseType.bytes),
       );
-      logger.log("Photo downloaded: ${response.data}");
+      logger.log("File downloaded: ${fileResponse.data}");
 
       final directory = await getApplicationDocumentsDirectory();
-      final filePath = '${directory.path}/$fileName';
+
+      // Extract file extension from the response headers or URL
+      String fileExtension = _getFileExtension(fileResponse, url);
+
+      // Construct the file name with the correct extension
+      String fullFileName = '$fileName.$fileExtension';
+      String filePath = path.join(directory.path, fullFileName);
 
       logger.log("Saving to file path: $filePath");
 
       final file = File(filePath);
-      await file.writeAsBytes(response.data!, flush: true);
-
-      // Rename the file
-      File(filePath).renameSync('${directory.path}/$fileName');
+      await file.writeAsBytes(fileResponse.data!, flush: true);
 
       // Invoke the callback with the new local file path
       onDownloadComplete(filePath);
@@ -1140,8 +1469,26 @@ class ListVehicleController extends GetxController {
       // Continue with further operations after the download is complete
     } catch (e) {
       // Handle any errors or exceptions that occur during the process
-      print("Error downloading and saving image: $e");
+      print("Error downloading and saving file: $e");
     }
+  }
+
+  String _getFileExtension(dio.Response<Uint8List> response, String url) {
+    // Try to get the file extension from the Content-Type header
+    String? contentType = response.headers.value('content-type');
+    if (contentType != null) {
+      if (contentType.contains('pdf')) return 'pdf';
+      if (contentType.contains('msword') ||
+          contentType
+              .contains('vnd.openxmlformats-officedocument.wordprocessingml'))
+        return 'doc';
+      if (contentType.contains('png')) return 'png';
+      // Add more content type checks as needed
+    }
+
+    // If content type is not available or recognized, extract extension from the URL
+    String extension = path.extension(url).toLowerCase();
+    return extension.isNotEmpty ? extension.substring(1) : 'unknown';
   }
 
   Future<void> addCarDocument() async {
@@ -1482,7 +1829,7 @@ class ListVehicleController extends GetxController {
 
             // vehicle License
             if (licenseDocUrl != null) {
-              await downloadAndSaveImage(licenseDocUrl, 'vehicleLicense.png',
+              await downloadAndSaveFile(licenseDocUrl, 'vehicleLicense.png',
                   (filePath) {
                 selectedPhotos.value = filePath;
                 selectedPhotoName.value = 'vehicleLicense.png';
@@ -1494,7 +1841,7 @@ class ListVehicleController extends GetxController {
 
             // vehicle inspection
             if (inspectionDocUrl != null) {
-              await downloadAndSaveImage(
+              await downloadAndSaveFile(
                   inspectionDocUrl, 'inspectionReport.png', (filePath) {
                 selectedInspectionPhotos.value = filePath;
                 selectedInspectionPhotoName.value = 'inspectionReport.png';
@@ -1506,7 +1853,7 @@ class ListVehicleController extends GetxController {
 
             // roadWorthiness
             if (roadWorthinessDocUrl != null) {
-              await downloadAndSaveImage(
+              await downloadAndSaveFile(
                   roadWorthinessDocUrl, 'roadWorthiness.png', (filePath) {
                 selectedRoadWorthinessPhoto.value = filePath;
                 realRoadWorthinessPhotoName.value = filePath.split('/').last;
@@ -1522,7 +1869,7 @@ class ListVehicleController extends GetxController {
 
             // insurance photos
             if (insuranceDocUrl != null) {
-              await downloadAndSaveImage(
+              await downloadAndSaveFile(
                   insuranceDocUrl, 'insuranceCertificate.png', (filePath) {
                 selectedInsurancePhotos.value = filePath;
                 selectedInsurancePhotoName.value = 'insuranceCertificate.png';

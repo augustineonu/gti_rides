@@ -423,7 +423,13 @@ class PaymentScreen extends GetView<PaymentController> {
                           width: 7.sp,
                         ),
                         textWidget(
-                          text: payment["paymentMethod"]["bankName"],
+                          text:
+                              (payment["paymentMethod"] as List?)?.isNotEmpty ==
+                                      true
+                                  ? payment["paymentMethod"][0]["bankName"]
+                                          as String? ??
+                                      ""
+                                  : "Please kindly setup your payment method",
                           style: getRegularStyle(fontSize: 10.sp),
                         ),
                       ],

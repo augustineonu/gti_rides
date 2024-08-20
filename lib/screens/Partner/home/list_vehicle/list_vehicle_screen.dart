@@ -1079,7 +1079,8 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
             children: [
               imageUploadWidget(
                 title: AppStrings.uploadVehicleDoc,
-                body: AppStrings.pleaseMakeSurePicAreClear,
+                body: AppStrings.pleaseMakeSurePicAreClear +
+                    "\nFile size limit: Image: 2mb. Doc: 5mb",
                 onTap: () {},
               ),
               SizedBox(
@@ -1149,7 +1150,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                         .openRoadWorthinessCamera()
                         .then((value) => routeService.goBack()),
                     onSelectGallery: () => controller
-                        .openRoadWorthinessGallery()
+                        .openRoadWorthinessDocument()
                         .then((value) => routeService.goBack()),
                     button1Title: AppStrings.document);
               }),
@@ -1233,7 +1234,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                         .openInsuranceCamera()
                         .then((value) => routeService.goBack()),
                     onSelectGallery: () => controller
-                        .openInsuranceGallery()
+                        .openInsuranceDocument()
                         .then((value) => routeService.goBack()),
                     button1Title: AppStrings.document);
               }),
@@ -1282,7 +1283,7 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                         .openInspectionCamera()
                         .then((value) => routeService.goBack()),
                     onSelectGallery: () => controller
-                        .openInspectionGallery()
+                        .openInspectionDocument()
                         .then((value) => routeService.goBack()),
                     button1Title: AppStrings.document);
               }),
