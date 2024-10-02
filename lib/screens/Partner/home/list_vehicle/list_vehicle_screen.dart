@@ -22,6 +22,7 @@ import 'package:gti_rides/utils/figures_helpers.dart';
 import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/utils.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:multiselect/multiselect.dart';
 import 'package:popover/popover.dart';
 
@@ -1339,6 +1340,13 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
 
   Widget vehicleInfoPage(
       BuildContext context, ListVehicleController controller, Size size) {
+    List<MultiSelectItem<dynamic>> _items =
+        (controller.carFeatures?.value ?? [])
+            .map((feature) => MultiSelectItem(
+                  feature['featuresName'],
+                  feature['featuresName'] as String,
+                ))
+            .toList();
     return SizedBox(
       child: Form(
         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -1409,85 +1417,158 @@ class _ListVehicleScreenState extends State<ListVehicleScreen> {
                   SizedBox(
                     height: 5.sp,
                   ),
-                  ButtonTheme(
-                    alignedDropdown: true,
-                    child: DropDownMultiSelect<dynamic>(
-                      decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(
-                              horizontal: 14.sp, vertical: 13.sp),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: borderColor,
-                              width: 1.0.w,
-                            ),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(4.0.r),
-                            ),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: red,
-                              width: 1.0.w,
-                            ),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(4.0.r),
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: borderColor,
-                              width: 1.0.w,
-                            ),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(4.0.r),
-                            ),
-                          ),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: secondaryColor,
-                              width: 1.0.w,
-                            ),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(4.0.r),
-                            ),
-                          ),
+                  // ButtonTheme(
+                  //   alignedDropdown: true,
+                  //   child: DropDownMultiSelect<dynamic>(
+                  //     decoration: InputDecoration(
+                  //         constraints:
+                  //             BoxConstraints(maxHeight: 100, minHeight: 50),
+                  //         contentPadding: EdgeInsets.symmetric(
+                  //             horizontal: 14.sp, vertical: 13.sp),
+                  //         enabledBorder: OutlineInputBorder(
+                  //           borderSide: BorderSide(
+                  //             color: borderColor,
+                  //             width: 1.0.w,
+                  //           ),
+                  //           borderRadius: BorderRadius.all(
+                  //             Radius.circular(4.0.r),
+                  //           ),
+                  //         ),
+                  //         errorBorder: OutlineInputBorder(
+                  //           borderSide: BorderSide(
+                  //             color: red,
+                  //             width: 1.0.w,
+                  //           ),
+                  //           borderRadius: BorderRadius.all(
+                  //             Radius.circular(4.0.r),
+                  //           ),
+                  //         ),
+                  //         focusedBorder: OutlineInputBorder(
+                  //           borderSide: BorderSide(
+                  //             color: borderColor,
+                  //             width: 1.0.w,
+                  //           ),
+                  //           borderRadius: BorderRadius.all(
+                  //             Radius.circular(4.0.r),
+                  //           ),
+                  //         ),
+                  //         border: OutlineInputBorder(
+                  //           borderSide: BorderSide(
+                  //             color: secondaryColor,
+                  //             width: 1.0.w,
+                  //           ),
+                  //           borderRadius: BorderRadius.all(
+                  //             Radius.circular(4.0.r),
+                  //           ),
+                  //         ),
 
-                          // filled: true,
-                          fillColor: Colors.transparent),
-                      onChanged: (List<dynamic> selectedFeatures) {
-                        controller.selectedFeatures!.value = selectedFeatures;
-                        print("selected $selectedFeatures");
+                  //         // filled: true,
+                  //         fillColor: Colors.transparent),
+                  //     onChanged: (List<dynamic> selectedFeatures) {
+                  //       controller.selectedFeatures!.value = selectedFeatures;
+                  //       print("selected $selectedFeatures");
 
-                        // Find the feature objects with the selected names
-                        var selectedObjects =
-                            (controller.carFeatures?.value ?? [])
-                                .where(
-                                  (feature) => selectedFeatures
-                                      .contains(feature['featuresName']),
-                                )
-                                .toList();
-                        // Extract featuresCode from selected objects
-                        List<String> featuresCodes = selectedObjects
-                            .map((feature) => feature['featuresCode'] as String)
-                            .toList();
+                  //       // Find the feature objects with the selected names
+                  //       var selectedObjects =
+                  //           (controller.carFeatures?.value ?? [])
+                  //               .where(
+                  //                 (feature) => selectedFeatures
+                  //                     .contains(feature['featuresName']),
+                  //               )
+                  //               .toList();
+                  //       // Extract featuresCode from selected objects
+                  //       List<String> featuresCodes = selectedObjects
+                  //           .map((feature) => feature['featuresCode'] as String)
+                  //           .toList();
 
-                        // Assign the lists to corresponding controller variables
-                        controller.featuresCode.value = featuresCodes;
-                        print("selectedFeatures: $selectedFeatures");
-                        print("featuresCodes: $featuresCodes");
-                      },
-                      options: (controller.carFeatures?.value ?? [])
-                          .map((feature) => feature['featuresName'] as String)
+                  //       // Assign the lists to corresponding controller variables
+                  //       controller.featuresCode.value = featuresCodes;
+                  //       print("selectedFeatures: $selectedFeatures");
+                  //       print("featuresCodes: $featuresCodes");
+                  //     },
+                  //     options: (controller.carFeatures?.value ?? [])
+                  //         .map((feature) => feature['featuresName'] as String)
+                  //         .toList(),
+                  //     selectedValues:
+                  //         controller.selectedFeatures!.take(5).toList(),
+                  //     whenEmpty: 'Select',
+                  //     isDense: true,
+                  //     enabled: true,
+                  //     icon: const Icon(
+                  //       Iconsax.arrow_down_1,
+                  //       color: grey3,
+                  //     ),
+                  //   ),
+                  // ),
+
+                  // import 'package:multi_select_flutter/multi_select_flutter.dart';
+
+                  MultiSelectDialogField<dynamic>(
+                    isDismissible: false,
+                    checkColor: white,
+                    selectedColor: primaryColor,
+                    initialValue: controller.selectedFeatures!.take(5).toList(),
+                    searchable: true,
+                    searchHint: "Search features",
+                    title: textWidget(
+                        text: "Select Features", style: getRegularStyle()),
+                    buttonText:
+                        textWidget(text: "Select", style: getRegularStyle()),
+                    buttonIcon: const Icon(
+                      Iconsax.arrow_down_1,
+                      color: grey3,
+                    ),
+                    items: _items,
+                    onConfirm: (values) {
+                      controller.selectedFeatures!.value = values;
+
+                      // Find the feature objects with the selected names
+                      var selectedObjects =
+                          (controller.carFeatures?.value ?? [])
+                              .where((feature) =>
+                                  values.contains(feature['featuresName']))
+                              .toList();
+
+                      // Extract featuresCode from selected objects
+                      List<String> featuresCodes = selectedObjects
+                          .map((feature) => feature['featuresCode'] as String)
+                          .toList();
+
+                      // Assign the lists to corresponding controller variables
+                      controller.featuresCode.value = featuresCodes;
+                      print("selectedFeatures: $values");
+                      print("featuresCodes: $featuresCodes");
+                    },
+                    validator: (values) {
+                      if (values == null || values.length < 1) {
+                        return "At least one feature must be selected.";
+                      }
+                      return null;
+                    },
+                    chipDisplay: MultiSelectChipDisplay(
+                      items: controller.selectedFeatures!
+                          .map((e) => MultiSelectItem(e, e))
                           .toList(),
-                      selectedValues:
-                          controller.selectedFeatures!.take(5).toList(),
-                      whenEmpty: 'Select',
-                      isDense: true,
-                      enabled: true,
-                      icon: const Icon(
-                        Iconsax.arrow_down_1,
-                        color: grey3,
+                      onTap: (item) {
+                        setState(() {
+                          // _items.firstWhere((i) => i.value == item).selected =
+                          //     false;
+                          controller.selectedFeatures?.remove(item);
+                        });
+                      },
+                      chipColor: primaryColorLight,
+                      textStyle: getRegularStyle(),
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(4.0.r),
                       ),
+                      border: Border.all(
+                        color: borderColor,
+                        width: 1.0.w,
+                      ),
+
+                      // filled: true,
                     ),
                   ),
                 ],

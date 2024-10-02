@@ -67,7 +67,7 @@ class GtiButton extends StatelessWidget {
                   ? color
                   : color,
           border: hasBorder
-              ? Border.all(color: borderColor!)
+              ? Border.all(color: borderColor ??  Colors.grey)
               : Border.all(width: 0, color: color),
         ),
         child: Row(

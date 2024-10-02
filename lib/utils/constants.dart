@@ -1,7 +1,8 @@
 import 'package:get/get.dart';
 
 class AppStrings {
-  static String baseURL = 'https://monkfish-app-yfisw.ondigitalocean.app';
+  // static String baseURL = 'https://monkfish-app-yfisw.ondigitalocean.app';
+  static String baseURL = 'https://urchin-app-2-y4xho.ondigitalocean.app';
   static String websiteUrl = 'https://gtirides.com/rent-a-car';
   static String loginButtonText = "Log in";
   static String getStartedButtonText = "Get Started";

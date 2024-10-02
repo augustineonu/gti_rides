@@ -38,6 +38,7 @@ import 'package:gti_rides/screens/shared_screens/more/account_details/account_ve
 import 'package:gti_rides/screens/shared_screens/more/account_details/account_verification/email/email_verification.dart';
 import 'package:gti_rides/screens/shared_screens/more/account_details/account_verification/phone/phone_input_screen.dart';
 import 'package:gti_rides/screens/shared_screens/more/account_details/account_verification/phone/phone_verification.dart';
+import 'package:gti_rides/screens/shared_screens/more/deactivate_account_password.dart';
 import 'package:gti_rides/screens/shared_screens/more/drivers/add_driver_screen.dart';
 import 'package:gti_rides/screens/shared_screens/more/drivers/drivers_screen.dart';
 import 'package:gti_rides/screens/shared_screens/more/drivers/edit_driver_details/edit_driver_screen.dart';
@@ -313,6 +314,10 @@ class AppRoutes {
     GetPage(
       name: AppLinks.extendTripPayment,
       page: () => ExtendTripPaymentSummaryScreen(),
+    ),
+    GetPage(
+      name: AppLinks.deactivateAccountPassword,
+      page: () => DeactivateAccountPassword(),
     ),
   ];
 }

@@ -165,7 +165,25 @@ class LoginScreen extends GetView<LoginController> {
                                 onTap: controller.processLogin,
                               ),
                         SizedBox(
-                          height: 22.sp,
+                          height: 20.sp,
+                        ),
+                        Center(
+                          child: InkWell(
+                            onTap: () {
+                              controller.routeToRenterLanding();
+                            },
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(6.r)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(6.0),
+                              child: textWidget(
+                                  text: "Continue as a Guest",
+                                  style: getMediumStyle()),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 12.sp,
                         ),
                         signUp(onTap: () => controller.routeToSignUp()),
                         SizedBox(

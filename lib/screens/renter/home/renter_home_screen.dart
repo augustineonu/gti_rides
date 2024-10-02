@@ -5,9 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/models/user_model.dart';
+import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/screens/renter/home/renter_home_controller.dart';
 import 'package:gti_rides/screens/renter/landing_controller.dart';
 import 'package:gti_rides/screens/renter/widgets/build_carousel_dot.dart';
+import 'package:gti_rides/services/route_service.dart';
+import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/how_gti_works_widget.dart';
 import 'package:gti_rides/shared_widgets/shimmer_loading/box_shimmer.dart';
@@ -44,7 +48,7 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
   late Timer timer;
   RxInt currentIndex = 0.obs;
   RxList visibleCars = [].obs;
-   int currentPromoCard = 0;
+  int currentPromoCard = 0;
 
   final CarouselSliderController promoCardController =
       CarouselSliderController();
@@ -148,6 +152,7 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
   }
 
   Widget appBar(Size size, CarRenterHomeController controller) {
+    final UserModel user = userService.user.value ?? UserModel();
     final renterController = Get.put(RenterLandingController());
     return Padding(
       padding: const EdgeInsets.only(left: 16, top: 10, bottom: 10),
@@ -155,7 +160,15 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
           size: size,
           title: AppStrings.renter,
           imageUrl: ImageAssets.renter1,
-          onTapCarOwner: controller.switchProfileToOwner),
+          onTapCarOwner: user.fullName == null
+              ? () async {
+                  var value =
+                      await guestActionDialog(action: " access more services");
+                  if (value == true) {
+                    routeService.offAllNamed(AppLinks.login);
+                  }
+                }
+              : controller.switchProfileToOwner),
     );
   }
 
@@ -307,76 +320,76 @@ class _CarRenterHomeScreenState extends State<CarRenterHomeScreen> {
                         ),
 
 //
-            //               CarouselSlider(
-            //   items: List.generate(4, (index) {
-            //     return Container(
-            //       // height: 98.sp,
-            //       // width: size.width,
-            //       constraints: BoxConstraints(
-            //         minWidth: 320.sp,
-            //       ),
-            //       margin: const EdgeInsets.symmetric(vertical: 28)
-            //           .copyWith(right: 0),
-            //       padding:
-            //           const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-            //       decoration: BoxDecoration(
-            //         color: ThemeColors.of(context).tertiaryLight,
-            //         borderRadius: BorderRadius.all(Radius.circular(12.r)),
-            //         image: const DecorationImage(
-            //             image: AssetImage(
-            //               Assets.menuBg,
-            //             ),
-            //             fit: BoxFit.cover),
-            //       ),
-            //       child: SizedBox(
-            //         width: 150.sp,
-            //         child: Column(
-            //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //           crossAxisAlignment: CrossAxisAlignment.start,
-            //           children: [
-            //             textWidget(
-            //               text: "Foodlify is now in your City",
-            //               style: getSemiBoldStyle(fontSize: 14.sp),
-            //             ),
-            //             const SizedBox(
-            //               height: 4,
-            //             ),
-            //             textWidget(
-            //               text: "Kaduna",
-            //               style: getRegularStyle(
-            //                   fontSize: 12.sp,
-            //                   color: ThemeColors.of(context).tertiary),
-            //             ),
-            //             SizedBox(
-            //               width: 200.sp,
-            //               child: textWidget(
-            //                   text:
-            //                       "You can now register your business with us and earn more",
-            //                   style: getRegularStyle(
-            //                       fontSize: 12.sp,
-            //                       color: ThemeColors.of(context).tertiary),
-            //                   textOverflow: TextOverflow.visible),
-            //             ),
-            //           ],
-            //         ),
-            //       ),
-            //     );
-            //   }),
-            //   carouselController: promoCardController,
-            //   options: CarouselOptions(
-            //     viewportFraction: 1,
-            //     padEnds: false,
-            //     autoPlay: true,
-            //     enlargeCenterPage: true,
-            //     aspectRatio: 2,
-            //     onPageChanged: (index, reason) {
-            //       setState(() {
-            //         // currentPromoCard = index;
-            //         currentIndex.value = index;
-            //       });
-            //     },
-            //   ),
-            // ),
+                        //               CarouselSlider(
+                        //   items: List.generate(4, (index) {
+                        //     return Container(
+                        //       // height: 98.sp,
+                        //       // width: size.width,
+                        //       constraints: BoxConstraints(
+                        //         minWidth: 320.sp,
+                        //       ),
+                        //       margin: const EdgeInsets.symmetric(vertical: 28)
+                        //           .copyWith(right: 0),
+                        //       padding:
+                        //           const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                        //       decoration: BoxDecoration(
+                        //         color: ThemeColors.of(context).tertiaryLight,
+                        //         borderRadius: BorderRadius.all(Radius.circular(12.r)),
+                        //         image: const DecorationImage(
+                        //             image: AssetImage(
+                        //               Assets.menuBg,
+                        //             ),
+                        //             fit: BoxFit.cover),
+                        //       ),
+                        //       child: SizedBox(
+                        //         width: 150.sp,
+                        //         child: Column(
+                        //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //           crossAxisAlignment: CrossAxisAlignment.start,
+                        //           children: [
+                        //             textWidget(
+                        //               text: "Foodlify is now in your City",
+                        //               style: getSemiBoldStyle(fontSize: 14.sp),
+                        //             ),
+                        //             const SizedBox(
+                        //               height: 4,
+                        //             ),
+                        //             textWidget(
+                        //               text: "Kaduna",
+                        //               style: getRegularStyle(
+                        //                   fontSize: 12.sp,
+                        //                   color: ThemeColors.of(context).tertiary),
+                        //             ),
+                        //             SizedBox(
+                        //               width: 200.sp,
+                        //               child: textWidget(
+                        //                   text:
+                        //                       "You can now register your business with us and earn more",
+                        //                   style: getRegularStyle(
+                        //                       fontSize: 12.sp,
+                        //                       color: ThemeColors.of(context).tertiary),
+                        //                   textOverflow: TextOverflow.visible),
+                        //             ),
+                        //           ],
+                        //         ),
+                        //       ),
+                        //     );
+                        //   }),
+                        //   carouselController: promoCardController,
+                        //   options: CarouselOptions(
+                        //     viewportFraction: 1,
+                        //     padEnds: false,
+                        //     autoPlay: true,
+                        //     enlargeCenterPage: true,
+                        //     aspectRatio: 2,
+                        //     onPageChanged: (index, reason) {
+                        //       setState(() {
+                        //         // currentPromoCard = index;
+                        //         currentIndex.value = index;
+                        //       });
+                        //     },
+                        //   ),
+                        // ),
                         Positioned(
                           bottom: 70,
                           right: 0,

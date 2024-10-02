@@ -58,6 +58,8 @@ class LoginController extends GetxController
       routeService.gotoRoute(AppLinks.carRenterLanding);
   void routeToRequestRestePassword() =>
       routeService.gotoRoute(AppLinks.requestResetPassword);
+  void routeToRenterLanding() => routeService.gotoRoute(AppLinks.carRenterLanding);
+
 
   List<UserModel> parseUserList(List<dynamic> list) {
     return List<UserModel>.from(

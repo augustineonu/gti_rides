@@ -36,7 +36,7 @@ class SignUpScreen extends GetView<SignUpController> {
           child: Padding(
             padding: EdgeInsets.only(left: 20.sp, right: 20.sp, top: 10.sp),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 textWidget(
                     text: AppStrings.createAccount,
@@ -62,10 +62,23 @@ class SignUpScreen extends GetView<SignUpController> {
         child: Column(
           children: [
             Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 tabButtons(),
                 signUpPageView(context, width),
+                Center(
+                  child: InkWell(
+                    onTap: () {
+                      controller.routeToRenterLanding();
+                    },
+                    borderRadius: BorderRadius.all(Radius.circular(6.r)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: textWidget(
+                          text: "Continue as a Guest", style: getMediumStyle()),
+                    ),
+                  ),
+                ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -73,16 +86,16 @@ class SignUpScreen extends GetView<SignUpController> {
                       height: 22.sp,
                     ),
                     signUp(onTap: () => controller.routeToLogin()),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: textWidget(
-                          text: AppStrings.or,
-                          style: getRegularStyle(color: grey2)
-                              .copyWith(fontWeight: FontWeight.w400)),
-                    ),
-                    googleSignUp(
-                      onTap: controller.googleSignUp,
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(vertical: 10),
+                    //   child: textWidget(
+                    //       text: AppStrings.or,
+                    //       style: getRegularStyle(color: grey2)
+                    //           .copyWith(fontWeight: FontWeight.w400)),
+                    // ),
+                    // googleSignUp(
+                    //   onTap: controller.googleSignUp,
+                    // ),
                   ],
                 ),
               ],

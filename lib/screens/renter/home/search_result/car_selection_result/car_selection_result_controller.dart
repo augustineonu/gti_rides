@@ -271,8 +271,7 @@ class CarSelectionResultController extends GetxController
         ? await calculateEscortFee(
             escortFee: escortFee.value,
             numberOfEscort: escortSecurityNoInputController.text,
-            tripDays: tripDays.value
-          )
+            tripDays: tripDays.value)
         : 0.0;
   }
 
@@ -344,8 +343,21 @@ class CarSelectionResultController extends GetxController
     // sum up vat plus updated total
     // then add the caution fee here
     // caution fee should be added if user selects selfDrive
-    var caution = double.parse(cautionFee!.replaceAll(',', ''));
-    updatedTotalValue.value = updatedTotalValue.value + vatAmount + (tripType.value == 1 ? caution : 0);
+    // String valueToParse;
+    // if (cautionFee == null) {
+    //   valueToParse = 0.toString();
+    // } else {
+    //   valueToParse = cautionFee!.replaceAll(',', '');
+    // }
+
+    // var caution = double.parse(valueToParse);
+    double caution = 0;
+    if (cautionFee != null) {
+      caution = double.parse(cautionFee!.replaceAll(',', ''));
+    }
+    updatedTotalValue.value = updatedTotalValue.value +
+        vatAmount +
+        (tripType.value == 1 ? caution : 0);
 
     estimatedTotal.value = await formatAmount(updatedTotalValue.value);
     logger.log("Total after summing:: ${estimatedTotal.value}");
@@ -386,7 +398,7 @@ class CarSelectionResultController extends GetxController
           carAvialbilityEndDate = DateTime.parse(endDateString!);
 
           cautionFee!.value =
-              carHistory!.first.modelYear!.first.cautionFee.toString();
+              carHistory!.first.modelYear!.first.cautionFee ?? "0";
 
           logger.log("Caution fee: ${cautionFee?.value ?? "0.0"}");
           pricePerDay.value = carHistory?.first.pricePerDay;

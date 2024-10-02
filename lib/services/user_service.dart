@@ -103,7 +103,20 @@ class UserService {
 
       return ApiResponseModel.fromJson(result);
     } catch (err) {
-      logger.log("Login Error: $err");
+      logger.log("change password Error: $err");
+      rethrow;
+    }
+  }
+  Future<ApiResponseModel> deactivateAccount({required Map payload}) async {
+    try {
+      final result = await apiService.deleteRequest(
+        endpoint: '/user/auth/suspendAccount',
+        data: payload,
+      );
+
+      return ApiResponseModel.fromJson(result);
+    } catch (err) {
+      logger.log("suspend account Error: $err");
       rethrow;
     }
   }

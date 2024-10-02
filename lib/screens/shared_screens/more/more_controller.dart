@@ -57,6 +57,8 @@ class MoreController extends GetxController {
 
   // late PageController cardPageController;
   ScrollController scrollController = ScrollController();
+  GlobalKey<FormState> deactivateAccountFormKey = GlobalKey<FormState>();
+  TextEditingController passwordController = TextEditingController();
 
   RxBool isLogout = false.obs;
   RxBool isDone = false.obs;
@@ -86,8 +88,11 @@ class MoreController extends GetxController {
   ];
 
   void routeToNotification() => routeService.gotoRoute(AppLinks.notification);
+  void routeToPasswordConfirmation() =>
+      routeService.gotoRoute(AppLinks.deactivateAccountPassword);
 
   onPageChanged(int index) {}
+  // RxBool showPassword = true.obs;
 
   void obscurePassword() => showPassword.value = !showPassword.value;
 
@@ -134,6 +139,7 @@ class MoreController extends GetxController {
   }
 
   Future<void> getKycProfile() async {
+    isLoading.value = true;
     try {
       final response = await userService.getKycProfile();
 
@@ -150,6 +156,8 @@ class MoreController extends GetxController {
     } catch (e) {
       logger.log("error rrr: $e");
       showErrorSnackbar(message: e.toString());
+    } finally {
+      isLoading.value = false;
     }
   }
 
@@ -167,6 +175,29 @@ class MoreController extends GetxController {
       }
     } catch (exception) {
       logger.log("error  $exception");
+    }
+  }
+
+  Future<void> deactivateAccount() async {
+    if(!deactivateAccountFormKey.currentState!.validate()){
+      return;
+    }
+    try {
+      final response = await userService.deactivateAccount(payload: {
+        "user":
+            userService.user.value.emailAddress ?? "", // email or phone number
+        "password": passwordController.text
+      });
+      if (response.status == 'success' || response.status_code == 200) {
+        logger.log("Deactivated account");
+        await logOut();
+      } else {
+         showErrorSnackbar(message: response.message.toString());
+        logger.log("Unable to deactivate account ${response.data}");
+      }
+    } catch (exception) {
+      logger.log("error  $exception");
+       showErrorSnackbar(message: exception.toString());
     }
   }
 

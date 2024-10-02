@@ -163,6 +163,9 @@ class SearchCityController extends GetxController {
           // If the list is empty
           // change(<FavoriteCarData>[].obs, status: RxStatus.empty());
           states.value = [];
+          isFetchingStates.value = false;
+          locations.value = [];
+           update();
           // logger.log("cars $cars");
         } else {
           // If the list is not empty
@@ -210,6 +213,7 @@ class SearchCityController extends GetxController {
         if (response.data == null || response.data!.isEmpty) {
           // If the list is empty
           // change(<FavoriteCarData>[].obs, status: RxStatus.empty());
+          isFetchingCities.value = false;
           cities.value = [];
           selectedType.value = LocationType.state;
           showSuccessSnackbar(

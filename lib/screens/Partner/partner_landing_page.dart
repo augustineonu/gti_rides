@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:gti_rides/models/user_model.dart';
 import 'package:gti_rides/screens/Partner/home/partner_home_screen.dart';
 import 'package:gti_rides/screens/Partner/partner_landing_controller.dart';
 import 'package:gti_rides/screens/Partner/payment/payment_screen.dart';
 import 'package:gti_rides/screens/Partner/rent_history/rent_history_screen.dart';
 import 'package:gti_rides/screens/renter/inbox/inbox_screen.dart';
+import 'package:gti_rides/screens/shared_screens/guest_view/presentation/guest_user.dart';
 import 'package:gti_rides/screens/shared_screens/more/more_screen.dart';
+import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
 import 'package:gti_rides/styles/styles.dart';
 import 'package:gti_rides/utils/constants.dart';
@@ -17,20 +20,27 @@ class PartnerLandingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final PartnerLandingController controller =
-        Get.put(PartnerLandingController(),);
-    return Scaffold(
-      bottomNavigationBar:
-          Obx(() => bottomNavBar(context, controller)),
-      body: Obx(() => IndexedStack(
-            index: controller.tabIndex.value,
-            children:  [
-              PartnerHomeScreen(),
-              RentHistoryScreen(),
-              PaymentScreen(),
-              MoreScreen(),
-            ],
-          )),
+    final UserModel user = userService.user.value ?? UserModel();
+    final PartnerLandingController controller = Get.put(
+      PartnerLandingController(),
+    );
+    return WillPopScope(
+      onWillPop: () async {
+        // Navigator.of(context).pop(returningValue);
+        return false;
+      },
+      child: Scaffold(
+        bottomNavigationBar: Obx(() => bottomNavBar(context, controller)),
+        body: Obx(() => IndexedStack(
+              index: controller.tabIndex.value,
+              children: [
+                PartnerHomeScreen(),
+                RentHistoryScreen(),
+                PaymentScreen(),
+               user.fullName == null ? GuesUserView() :  MoreScreen(),
+              ],
+            )),
+      ),
     );
   }
 

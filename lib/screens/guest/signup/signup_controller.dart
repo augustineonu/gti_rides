@@ -75,6 +75,7 @@ class SignUpController extends GetxController
   // navigation method
   void routeToLogin() => routeService.offAllNamed(AppLinks.login);
   void routeToOtpVerification() => routeService.gotoRoute(AppLinks.verifyOtp);
+  void routeToRenterLanding() => routeService.gotoRoute(AppLinks.carRenterLanding);
 
   Future<void> processSignup() async {
     if ((signUpFormKey.currentState != null &&
@@ -224,6 +225,7 @@ class SignUpController extends GetxController
       }
     }
   }
+
 
   Future<bool?> firstTimeLoginCheck() async {
     String? value = await userService.getData('firstTimeLogin');

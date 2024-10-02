@@ -10,6 +10,7 @@ import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/image_loader.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/asset_manager.dart';
+import 'package:iconsax/iconsax.dart';
 
 import '../styles/styles.dart';
 
@@ -310,6 +311,7 @@ Widget carImage(
   //   return SizedBox();
   // }
 }
+
 // }
 
 Widget imageWidget({
@@ -625,5 +627,59 @@ Future<dynamic> successDialog({
       ),
     ),
     barrierDismissible: false,
+  );
+}
+
+Future<bool?> guestActionDialog({required String action}) async {
+// Future<bool?> showLocationPermissionDialog(BuildContext context) async {
+  return showDialog<bool>(
+    context: Get.context!,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: textWidget(
+            text: 'Ooops! Kindly Signup',
+            textOverflow: TextOverflow.visible,
+            style: getRegularStyle()),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Iconsax.warning_25,
+                  color: primaryColor,
+                  size: 38,
+                ),
+                SizedBox(
+                  width: 30.sp,
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            textWidget(
+                text:
+                    "You will have to be signedin to GTi Rides to be able to $action",
+                textOverflow: TextOverflow.visible,
+                style: getRegularStyle()),
+          ],
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(true); // Allow
+            },
+            child: textWidget(text: 'Continue', style: getRegularStyle()),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(false); // Decline
+            },
+            child: textWidget(text: 'Decline', style: getRegularStyle()),
+          ),
+        ],
+      );
+    },
   );
 }

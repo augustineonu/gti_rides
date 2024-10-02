@@ -160,6 +160,11 @@ class MoreScreen extends StatelessWidget {
                           }
                         },
                       ),
+                      profileOptionsWIdget(
+                        imageUrl: ImageAssets.treashBin,
+                        title: "Deactivate Account",
+                        onTap: () => controller.routeToPasswordConfirmation(),
+                      ),
                       divider(color: borderColor),
                       SizedBox(
                         height: 10.sp,

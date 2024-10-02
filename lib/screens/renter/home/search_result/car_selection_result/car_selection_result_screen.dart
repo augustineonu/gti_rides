@@ -47,10 +47,10 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
 
   AppBar appBar() {
     return gtiAppBar(
-      onTap: controller.goBack,
-      leading: Transform.scale(
-        scale: 0.3,
-        child: SvgPicture.asset(
+      onTap: () {},
+      leading: IconButton(
+        onPressed: controller.goBack,
+        icon: SvgPicture.asset(
           ImageAssets.close,
           height: 18.sp,
           color: black,

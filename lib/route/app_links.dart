@@ -84,6 +84,7 @@ class AppLinks {
   static const changePasswordOtp = "/more/accountVerification/changePasswordOtp";
   static const paymentWebView = "/payment/paymentWebView";
   static const extendTripPayment = "/payment/extendTripPayment";
+  static const deactivateAccountPassword = "/payment/deactivateAccountPassword";
 
   // static const chatAction = "/user/chat/:key/:action";
 
@@ -147,7 +148,8 @@ class AppLinks {
     'editDriver': editDriver,
     "paymentWebView": paymentWebView,
     "viewNotification": viewNotification,
-    "extendTripPaymet": extendTripPayment
+    "extendTripPaymet": extendTripPayment,
+    "deactivateAccountPassword": deactivateAccountPassword
     // 'trips': trips,
   };
 
