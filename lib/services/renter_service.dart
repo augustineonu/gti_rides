@@ -57,10 +57,10 @@ class RenterService {
   //   return agentModel.value;
   // }
 
-  Future<ListResponseModel> getRecentCars() async {
+  Future<ListResponseModel> getRecentCars({bool? isGuest}) async {
     try {
       final result = await apiService.getRequest(
-        '/user/renter/car/getRecentCars?skip=0&limit=100',
+        '/user/renter/car/getRecentCars?skip=0&limit=100',isGuest: isGuest
       );
       logger.log("result $result");
 

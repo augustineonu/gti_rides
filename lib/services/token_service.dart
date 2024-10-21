@@ -120,5 +120,7 @@ class TokenService {
     await _secureStorage.delete(key: 'auth_tokens');
     // await _secureStorage.deleteAll();
     // await storageService.insert("firstTimeLogin", true);
+
+    tokens.value = TokenModel();
   }
 }

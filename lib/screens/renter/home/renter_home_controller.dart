@@ -37,7 +37,6 @@ class CarRenterHomeController extends GetxController
 
   TextEditingController emailOrPhoneController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  
 
   CarRenterHomeController() {
     init();
@@ -48,7 +47,9 @@ class CarRenterHomeController extends GetxController
     user = userService.user;
 
     logger.log("USER: ${user.value.toJson()}");
-    await getRecentCars();
+    if (user.value.fullName != null) {
+      await getRecentCars();
+    }
   }
 
   onPageChanged(int index) {}
@@ -108,8 +109,7 @@ class CarRenterHomeController extends GetxController
   void routeToCarOwnerLanding() =>
       routeService.offAllNamed(AppLinks.carOwnerLanding);
   void routeToCarSelectionResult({Object? arguments}) =>
-      routeService.gotoRoute(AppLinks.carSelectionResult,
-      arguments: arguments);
+      routeService.gotoRoute(AppLinks.carSelectionResult, arguments: arguments);
 
   void routeToNotification({Object? arguments}) =>
       routeService.gotoRoute(AppLinks.notification, arguments: arguments);
@@ -126,10 +126,9 @@ class CarRenterHomeController extends GetxController
         await showSuccessSnackbar(message: result.message!);
         // await tokenService.getNewAccessToken();
         // await routeService.offAllNamed(AppLinks.carOwnerLanding);
-         await tokenService
+        await tokenService
             .getNewAccessToken()
-            .then(
-                (value) => routeService.offAllNamed(AppLinks.carOwnerLanding))
+            .then((value) => routeService.offAllNamed(AppLinks.carOwnerLanding))
             .onError((error, stackTrace) async {
           logger.log("Error switching user");
           return showErrorSnackbar(message: "Error switching user");
@@ -148,7 +147,8 @@ class CarRenterHomeController extends GetxController
   Future<void> getRecentCars() async {
     change(<RecentCar>[].obs, status: RxStatus.loading());
     try {
-      final response = await renterService.getRecentCars();
+      final response = await renterService.getRecentCars(
+          isGuest: user.value.fullName == null);
       if (response.status == 'success' || response.status_code == 200) {
         logger.log("gotten cars ${response.data}");
 

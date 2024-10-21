@@ -43,7 +43,7 @@ class MoreController extends GetxController {
     user = userService.user;
     logger.log("User:: ${user.value}");
     if (!isLogout.value) {
-      tokens.value = (await tokenService.getTokensData())!;
+      tokens.value = (await tokenService.getTokensData()) ?? TokenModel();
     }
     logger.log("User:: ${tokens.value.userType}");
     logger.log("User token && User type:: $tokens");
@@ -101,6 +101,8 @@ class MoreController extends GetxController {
     logger.log("value ${isLogout}");
     // return;
     await tokenService.clearAll();
+    await userService.deleteUserData();
+    logger.log("User:: ${userService.user.value.fullName}");
     // storageService.remove('firstTimeLogin');
     routeService.offAllNamed(AppLinks.login);
   }
@@ -179,7 +181,7 @@ class MoreController extends GetxController {
   }
 
   Future<void> deactivateAccount() async {
-    if(!deactivateAccountFormKey.currentState!.validate()){
+    if (!deactivateAccountFormKey.currentState!.validate()) {
       return;
     }
     try {
@@ -192,12 +194,12 @@ class MoreController extends GetxController {
         logger.log("Deactivated account");
         await logOut();
       } else {
-         showErrorSnackbar(message: response.message.toString());
+        showErrorSnackbar(message: response.message.toString());
         logger.log("Unable to deactivate account ${response.data}");
       }
     } catch (exception) {
       logger.log("error  $exception");
-       showErrorSnackbar(message: exception.toString());
+      showErrorSnackbar(message: exception.toString());
     }
   }
 

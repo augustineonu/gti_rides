@@ -81,7 +81,7 @@ class SearchResultScreen extends GetView<SearchResultController> {
               onTap:() async {
              var data = await  routeService.gotoRoute(AppLinks.searchFilter);
              if(data != null) {
-              print("received data: $data");
+              print("received data for search filter: $data");
               controller.searchCars(brandCode: data["brandCode"],
                brandModelCode: data["modelCode"], 
                yearCode: data["yearCode"], startPricing: data["startPricing"], 

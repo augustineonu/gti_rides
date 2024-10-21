@@ -244,7 +244,7 @@ class SearchFilterController extends GetxController {
   String selectedBrandModelCode = '';
   RxString selectedYearName = ''.obs;
   String selectedYearCode = '';
-  String selectedPriceSorting = '';
+  String selectedPriceSorting = 'highest';
 
   void clearSearchFilter() {
     selectedPriceSorting = '';

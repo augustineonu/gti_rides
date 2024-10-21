@@ -7,8 +7,12 @@ import 'package:get/get.dart';
 import 'package:gti_rides/models/rating_model.dart';
 import 'package:gti_rides/models/renter/pending_trips_model.dart';
 import 'package:gti_rides/route/app_links.dart';
+import 'package:gti_rides/screens/guest/login/login_screen.dart';
+import 'package:gti_rides/screens/guest/signup/signup_screen.dart';
 import 'package:gti_rides/screens/renter/trips/trips_controller.dart';
 import 'package:gti_rides/screens/renter/widgets/pending_trips.dart';
+import 'package:gti_rides/services/route_service.dart';
+import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/shimmer_loading/box_shimmer.dart';
@@ -84,7 +88,54 @@ class TripsScreen extends GetView<TripsController> {
                             SizedBox(
                               height: 5.sp,
                             ),
-                            buildBody(size, context, controller, expanded),
+                            if (userService.user.value.fullName == null)
+                              Column(
+                                children: [
+                                  SizedBox(
+                                    height: 20.sp,
+                                  ),
+                                  textWidget(
+                                      text: "Oops!",
+                                      style: getBoldStyle(fontSize: 20.sp)),
+                                  SizedBox(
+                                    height: 25.sp,
+                                  ),
+                                  textWidget(
+                                      text:
+                                          "You need to register or login to access GTi Rides.",
+                                      textOverflow: TextOverflow.visible,
+                                      textAlign: TextAlign.center,
+                                      style: getRegularStyle(fontSize: 16.sp)),
+                                  SizedBox(
+                                    height: 24.sp,
+                                  ),
+                                  Center(
+                                    child: GtiButton(
+                                      text: "Create Account",
+                                      onTap: () {
+                                        routeService
+                                            .offAllNamed(AppLinks.signUp);
+                                      },
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 15.sp,
+                                  ),
+                                  GtiButton(
+                                    text: "Login",
+                                    // color: pureWhite,
+                                    textColor: white,
+                                    // hasBorder: true,
+                                    // borderColor: ThemeColors.of(context).errorContainer,
+                                    // borderRadius: 12.r,
+                                    onTap: () {
+                                      routeService.offAllNamed(AppLinks.login);
+                                    },
+                                  ),
+                                ],
+                              )
+                            else
+                              buildBody(size, context, controller, expanded),
                           ],
                         ),
                       ),
@@ -1161,7 +1212,6 @@ class TripsScreen extends GetView<TripsController> {
                             height: 65.sp, imgUrl: pendingTrips.carProfilePic),
                       ),
                     ),
-                   
                     ScrollOnExpand(
                       scrollOnExpand: true,
                       scrollOnCollapse: false,

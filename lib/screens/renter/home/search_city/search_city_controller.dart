@@ -18,7 +18,7 @@ enum LocationType {
 }
 
 class SearchCityController extends GetxController {
-  Logger logger = Logger("Controller");
+  Logger logger = Logger("SearchCityController");
 
   Map<String, dynamic>? arguments = Get.arguments;
   GlobalKey<FormState> searchFormKey = GlobalKey<FormState>();

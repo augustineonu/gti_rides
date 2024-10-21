@@ -698,6 +698,7 @@ class CarSelectionResultController extends GetxController
   }
 
   Future<void> getTripAmountData() async {
+    if (userService.user.value.fullName == null) return;
     try {
       final response = await renterService.getTripAmountData();
       if (response.status == 'success' || response.status_code == 200) {

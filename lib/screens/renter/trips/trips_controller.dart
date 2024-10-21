@@ -31,15 +31,18 @@ class TripsController extends GetxController
 
   @override
   void onInit() async {
-     scrollController.addListener(() {
+    scrollController.addListener(() {
       if (scrollController.position.pixels ==
               scrollController.position.maxScrollExtent &&
           isLoadingMore.value) {
+        if (userService.user.value.fullName == null) return;
         getAllTrips(isLoadMore: true);
       }
     });
     super.onInit();
-    await getTripAmountData();
+    if (userService.user.value.fullName != null) {
+      await getTripAmountData();
+    }
     // await getAllTrips();
     // Initialize your ratings list with default values
     ratings1 = List<RatingItem>.generate(
@@ -53,10 +56,11 @@ class TripsController extends GetxController
     // TODO: implement onReady
     lastDateTimeController.value.text = '1 Nov, 9:00am'.obs.toString();
     super.onReady();
+    if (userService.user.value.fullName == null) return;
     await getAllTrips();
   }
 
-    var skip = 0;
+  var skip = 0;
   final int limit = 10;
   RxBool isLoadingMore = false.obs;
 

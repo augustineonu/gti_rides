@@ -5,8 +5,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/models/partner/car_history_model.dart';
 import 'package:gti_rides/route/app_links.dart';
+import 'package:gti_rides/screens/guest/login/login_screen.dart';
+import 'package:gti_rides/screens/guest/signup/signup_screen.dart';
 import 'package:gti_rides/screens/renter/home/search_result/car_selection_result/car_selection_result_controller.dart';
 import 'package:gti_rides/screens/renter/widgets/car_availability_tag.dart';
+import 'package:gti_rides/screens/shared_screens/guest_view/presentation/guest_user.dart';
+import 'package:gti_rides/services/route_service.dart';
+import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/shared_widgets/dropdown_widget.dart';
 import 'package:gti_rides/shared_widgets/generic_car_widgets.dart';
 import 'package:gti_rides/shared_widgets/sqaure_check_box_widget.dart';
@@ -177,9 +182,20 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                                     width: 6,
                                   ),
                                   InkWell(
-                                    onTap: () => controller.onAddCarToFav(
-                                        carId: car?.carId,
-                                        carStatus: car?.favorite),
+                                    onTap: () {
+                                      if (userService.user.value.fullName ==
+                                          null) {
+                                        showSuccessSnackbar(
+                                            title: "Oops!",
+                                            message:
+                                                "Kindly sign-up to add Car to favorites");
+                                        return;
+                                      }
+
+                                      controller.onAddCarToFav(
+                                          carId: car?.carId,
+                                          carStatus: car?.favorite);
+                                    },
                                     child: Container(
                                       padding: EdgeInsets.all(10.sp),
                                       decoration: BoxDecoration(
@@ -460,7 +476,7 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                   SizedBox(
                     height: size.height * 0.02,
                   ),
-                  continueButton(),
+                  continueButton(context),
                   // textWidget(
                   // text: controller.testString.value, style: getMediumStyle()),
                   SizedBox(
@@ -1281,7 +1297,7 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
     );
   }
 
-  Widget continueButton() {
+  Widget continueButton(BuildContext context) {
     return controller.isLoading.isTrue
         ? centerLoadingIcon()
         : Padding(
@@ -1290,7 +1306,79 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
               width: 400.sp,
               text: "continue".tr,
               color: primaryColor,
-              onTap: controller.processCarBooking,
+              onTap: () async {
+                if (userService.user.value.fullName == null) {
+                   var value =
+                      await guestActionDialog(action: " access more services");
+                  if (value == true) {
+                    routeService.offAllNamed(AppLinks.login);
+                  }
+                  // showModalBottomSheet(
+                  //     shape: RoundedRectangleBorder(
+                  //         borderRadius: BorderRadius.only(
+                  //             topLeft: Radius.circular(10.r),
+                  //             topRight: Radius.circular(10.r))),
+                  //     context: context,
+                  //     builder: (context) {
+                  //       return SizedBox(
+                  //           height: 300.sp,
+                  //           child: Column(
+                  //             children: [
+                  //               SizedBox(
+                  //                 height: 20.sp,
+                  //               ),
+                  //               textWidget(
+                  //                   text: "Oops!",
+                  //                   style: getBoldStyle(fontSize: 20.sp)),
+                  //               SizedBox(
+                  //                 height: 25.sp,
+                  //               ),
+                  //               textWidget(
+                  //                   text:
+                  //                       "You need to register or login to book a ride on GTi Rides.",
+                  //                   textOverflow: TextOverflow.visible,
+                  //                   textAlign: TextAlign.center,
+                  //                   style: getRegularStyle(fontSize: 16.sp)),
+                  //               SizedBox(
+                  //                 height: 24.sp,
+                  //               ),
+                  //               Center(
+                  //                 child: GtiButton(
+                  //                   text: "Create Account",
+                  //                   onTap: () {
+                  //                     Navigator.pushReplacement(
+                  //                         context,
+                  //                         MaterialPageRoute(
+                  //                             builder: (context) =>
+                  //                                 SignUpScreen()));
+                  //                   },
+                  //                 ),
+                  //               ),
+                  //               SizedBox(
+                  //                 height: 15.sp,
+                  //               ),
+                  //               GtiButton(
+                  //                 text: "Login",
+                  //                 // color: pureWhite,
+                  //                 textColor: white,
+                  //                 // hasBorder: true,
+                  //                 // borderColor: ThemeColors.of(context).errorContainer,
+                  //                 // borderRadius: 12.r,
+                  //                 onTap: () {
+                  //                   Navigator.pushReplacement(
+                  //                       context,
+                  //                       MaterialPageRoute(
+                  //                           builder: (context) =>
+                  //                               LoginScreen()));
+                  //                 },
+                  //               ),
+                  //             ],
+                  //           ));
+                  //     });
+                  return;
+                }
+                controller.processCarBooking();
+              },
               // onTap: controller.routeToPhoneVerification,
               isLoading: controller.isLoading.value,
             ),

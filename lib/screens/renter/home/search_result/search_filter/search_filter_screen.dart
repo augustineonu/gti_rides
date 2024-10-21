@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gti_rides/screens/renter/home/search_result/search_filter/search_filter_controller.dart';
+import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/shared_widgets/generic_widgts.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/sqaure_check_box_widget.dart';
@@ -94,6 +95,7 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
                 size,
                 alignment: Alignment.topCenter,
                 contentHeight: size.height * 0.20,
+                onTap: routeService.goBack,
                 title: AppStrings.sortBy,
                 content: StatefulBuilder(builder: (context, state) {
                   return Padding(
@@ -106,7 +108,9 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
                         return InkWell(
                           onTap: () {
                             controller.onSelectSortBy(index);
-                            controller.selectedPriceSorting = sortBy;
+                            controller.selectedPriceSorting =
+                                index == 0 ? "highest" : "lowest";
+                            // controller.selectedPriceSorting = sortBy;
                             state(() {
                               controller.selectedSortby.value =
                                   !controller.selectedSortby.value;
@@ -160,7 +164,7 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
             // filterOptions(size),
             // vehicle brand
             InkWell(
-              onTap: (){
+              onTap: () {
                 vehicleBrandSheet(size);
               },
               child: Padding(
@@ -193,7 +197,7 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
             ),
             // vehicle model
             InkWell(
-              onTap: (){
+              onTap: () {
                 vehicleModelSheet(size);
               },
               child: Padding(
@@ -205,7 +209,7 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         textWidget(
-                            text:  "VEHICLE ${AppStrings.model}",
+                            text: "VEHICLE ${AppStrings.model}",
                             style: getMediumStyle(fontSize: 12.sp, color: grey2)
                                 .copyWith(fontWeight: FontWeight.w500)),
                         SvgPicture.asset(ImageAssets.arrowDown),
@@ -225,7 +229,7 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
               ),
             ),
             InkWell(
-              onTap: (){
+              onTap: () {
                 vehicleYearSheet(size);
               },
               child: Padding(
@@ -237,7 +241,7 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         textWidget(
-                            text:  "VEHICLE YEAR",
+                            text: "VEHICLE YEAR",
                             style: getMediumStyle(fontSize: 12.sp, color: grey2)
                                 .copyWith(fontWeight: FontWeight.w500)),
                         SvgPicture.asset(ImageAssets.arrowDown),
@@ -384,10 +388,11 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
                                 controller.onVehicleModelChecked(index);
                                 controller.selectedBrandModelCode =
                                     model.modelCode.toString();
-                                    controller.selectedBrandModelName = model.modelName ?? "";
-                                    controller.selectedYearName.value = '';
-                                    controller.selectedYearCode = '';
-                                    Get.back();
+                                controller.selectedBrandModelName =
+                                    model.modelName ?? "";
+                                controller.selectedYearName.value = '';
+                                controller.selectedYearCode = '';
+                                Get.back();
                                 print(
                                     "selected brand model code: ${model.modelCode.toString()}");
 
@@ -490,8 +495,9 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
                                 controller.onVehicleYearChecked(index);
                                 controller.selectedYearCode =
                                     year.yearCode.toString();
-                                    controller.selectedYearName.value = year.yearName ?? "";
-                                    
+                                controller.selectedYearName.value =
+                                    year.yearName ?? "";
+
                                 print(
                                     "selected brand model code: ${year.yearCode.toString()}");
 
@@ -501,7 +507,7 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
                                 //         controller.selectedBrandModelCode);
 
                                 state(() {
-                                    // controller.selectedYearName = year.yearName ?? "";
+                                  // controller.selectedYearName = year.yearName ?? "";
                                   //   controller.selectedVehicleModel.value =
                                   //       !controller.selectedVehicleModel.value;
                                 });
@@ -599,11 +605,11 @@ class SearchFilterScreen extends GetView<SearchFilterController> {
 
                                 controller.getBrandModel(
                                     brandCode: brand.brandCode.toString());
-                                    controller.selectedBrandModelName = '';
-                                    controller.selectedBrandModelCode = '';
-                                    controller.selectedYearCode = '';
-                                    controller.selectedYearName.value = '';
-                                  Get.back();
+                                controller.selectedBrandModelName = '';
+                                controller.selectedBrandModelCode = '';
+                                controller.selectedYearCode = '';
+                                controller.selectedYearName.value = '';
+                                Get.back();
                                 state(() {
                                   print(
                                       "Selectd car brand:: ${controller.selectedVehicleBrands} ${brand.brandCode.toString()}");

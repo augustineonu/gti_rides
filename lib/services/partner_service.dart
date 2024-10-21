@@ -8,6 +8,7 @@ import 'package:gti_rides/models/user_model.dart';
 import 'package:gti_rides/services/api_service.dart';
 import 'package:gti_rides/services/logger.dart';
 import 'package:dio/dio.dart' as dio;
+import 'package:gti_rides/services/user_service.dart';
 
 PartnerService get partnerService => Get.find();
 
@@ -135,6 +136,8 @@ class PartnerService extends GetxController {
     try {
       final result = await apiService.getRequest(
         '/user/misc/getStates',
+       isGuest: userService.user.value.fullName == null ? true : false
+
       );
       logger.log("result $result");
 

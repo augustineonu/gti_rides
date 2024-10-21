@@ -107,6 +107,7 @@ class UserService {
       rethrow;
     }
   }
+
   Future<ApiResponseModel> deactivateAccount({required Map payload}) async {
     try {
       final result = await apiService.deleteRequest(
@@ -151,5 +152,8 @@ class UserService {
   Future<void> deleteUserData() async {
     logger.log('Deleting user data');
     await _secureStorage.delete(key: 'user_data');
+    await _secureStorage.deleteAll();
+
+    user.value = UserModel();
   }
 }

@@ -9,6 +9,7 @@ import 'package:gti_rides/services/api_exception.dart';
 import 'package:gti_rides/services/error_interceptor.dart';
 import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/services/token_service.dart';
+import 'package:gti_rides/services/user_service.dart';
 import 'package:gti_rides/utils/constants.dart';
 import 'package:gti_rides/utils/utils.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -118,24 +119,20 @@ class ApiService {
     String? token,
   }) async {
     try {
-
-      if(!endpoint.toString().contains("auth")){
-        
-           // Check if the token is expired before making the request
-    if (JwtDecoder.isExpired(tokenService.accessToken.value)) {
-      // Token is expired, attempt to refresh it
-      bool newAccessTokenResult = await tokenService.getNewAccessToken();
-      if (!newAccessTokenResult) {
-        // If the token refresh fails, navigate to the login screen
-        logger.log('Going to Login screen');
-        routeService.offAllNamed(AppLinks.login);
-        return;
-      }
-    }
-
+      if (!endpoint.toString().contains("auth")) {
+        // Check if the token is expired before making the request
+        if (JwtDecoder.isExpired(tokenService.accessToken.value)) {
+          // Token is expired, attempt to refresh it
+          bool newAccessTokenResult = await tokenService.getNewAccessToken();
+          if (!newAccessTokenResult) {
+            // If the token refresh fails, navigate to the login screen
+            logger.log('Going to Login screen');
+            routeService.offAllNamed(AppLinks.login);
+            return;
+          }
+        }
       }
 
-     
       logger.log("POST REQUEST DATA:: $baseURL  $endpoint $data");
       late Response response;
       response = await _dio.post(
@@ -204,17 +201,17 @@ class ApiService {
       late Response response;
       logger.log("PATCH REQUEST DATA:: $data $endpoint");
 
-        // Check if the token is expired before making the request
-    if (JwtDecoder.isExpired(tokenService.accessToken.value)) {
-      // Token is expired, attempt to refresh it
-      bool newAccessTokenResult = await tokenService.getNewAccessToken();
-      if (!newAccessTokenResult) {
-        // If the token refresh fails, navigate to the login screen
-        logger.log('Going to Login screen');
-        routeService.offAllNamed(AppLinks.login);
-        return;
+      // Check if the token is expired before making the request
+      if (JwtDecoder.isExpired(tokenService.accessToken.value)) {
+        // Token is expired, attempt to refresh it
+        bool newAccessTokenResult = await tokenService.getNewAccessToken();
+        if (!newAccessTokenResult) {
+          // If the token refresh fails, navigate to the login screen
+          logger.log('Going to Login screen');
+          routeService.offAllNamed(AppLinks.login);
+          return;
+        }
       }
-    }
 
       // Function to make the actual request
       Future<void> makeRequest() async {
@@ -274,18 +271,17 @@ class ApiService {
     required FormData data,
   }) async {
     try {
-
-        // Check if the token is expired before making the request
-    if (JwtDecoder.isExpired(tokenService.accessToken.value)) {
-      // Token is expired, attempt to refresh it
-      bool newAccessTokenResult = await tokenService.getNewAccessToken();
-      if (!newAccessTokenResult) {
-        // If the token refresh fails, navigate to the login screen
-        logger.log('Going to Login screen');
-        routeService.offAllNamed(AppLinks.login);
-        return;
+      // Check if the token is expired before making the request
+      if (JwtDecoder.isExpired(tokenService.accessToken.value)) {
+        // Token is expired, attempt to refresh it
+        bool newAccessTokenResult = await tokenService.getNewAccessToken();
+        if (!newAccessTokenResult) {
+          // If the token refresh fails, navigate to the login screen
+          logger.log('Going to Login screen');
+          routeService.offAllNamed(AppLinks.login);
+          return;
+        }
       }
-    }
       logger.log("POST REQUEST DATA:: ${data.fields.toString()}");
       logger.log("POST REQUEST DATA:: ${data.files.toString()}");
       late Response response;
@@ -387,20 +383,20 @@ class ApiService {
     }
   }
 
-  Future<dynamic> getRequest(
-    String endpoint,
-  ) async {
+  Future<dynamic> getRequest(String endpoint, {bool? isGuest}) async {
     try {
       // Check if the token is expired before making the request
-      var isExpired  = JwtDecoder.isExpired(tokenService.accessToken.value);
-      if (isExpired) {
-        // Token is expired, attempt to refresh it
-        bool newAccessTokenResult = await tokenService.getNewAccessToken();
-        if (!newAccessTokenResult) {
-          // If the token refresh fails, navigate to the login screen
-          logger.log('Going to Login screen');
-          routeService.offAllNamed(AppLinks.login);
-          return;
+      if (userService.user.value.fullName != null) {
+        var isExpired = JwtDecoder.isExpired(tokenService.accessToken.value);
+        if (isExpired) {
+          // Token is expired, attempt to refresh it
+          bool newAccessTokenResult = await tokenService.getNewAccessToken();
+          if (!newAccessTokenResult) {
+            // If the token refresh fails, navigate to the login screen
+            logger.log('Going to Login screen');
+            routeService.offAllNamed(AppLinks.login);
+            return;
+          }
         }
       }
 
@@ -446,13 +442,10 @@ class ApiService {
     }
   }
 
-
- Future<dynamic> getRequest1(
+  Future<dynamic> getRequest1(
     String endpoint,
   ) async {
     try {
-    
-
       // Proceed with the request using the (new) valid token
       final response = await _dio.get(
         endpoint,
@@ -495,24 +488,23 @@ class ApiService {
     }
   }
 
-
   Future<dynamic> deleteRequest({
     required String endpoint,
     Map? data,
     String? token,
   }) async {
     try {
-        // Check if the token is expired before making the request
-    if (JwtDecoder.isExpired(tokenService.accessToken.value)) {
-      // Token is expired, attempt to refresh it
-      bool newAccessTokenResult = await tokenService.getNewAccessToken();
-      if (!newAccessTokenResult) {
-        // If the token refresh fails, navigate to the login screen
-        logger.log('Going to Login screen');
-        routeService.offAllNamed(AppLinks.login);
-        return;
+      // Check if the token is expired before making the request
+      if (JwtDecoder.isExpired(tokenService.accessToken.value)) {
+        // Token is expired, attempt to refresh it
+        bool newAccessTokenResult = await tokenService.getNewAccessToken();
+        if (!newAccessTokenResult) {
+          // If the token refresh fails, navigate to the login screen
+          logger.log('Going to Login screen');
+          routeService.offAllNamed(AppLinks.login);
+          return;
+        }
       }
-    }
       logger.log("DELETE REQUEST DATA:: $baseURL  $endpoint");
       late Response response;
       response = await _dio.delete(

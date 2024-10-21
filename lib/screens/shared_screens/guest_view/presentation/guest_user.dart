@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gti_rides/route/app_links.dart';
 import 'package:gti_rides/screens/guest/login/login_screen.dart';
 import 'package:gti_rides/screens/guest/signup/signup_screen.dart';
+import 'package:gti_rides/services/route_service.dart';
 import 'package:gti_rides/shared_widgets/gti_btn_widget.dart';
 import 'package:gti_rides/shared_widgets/text_widget.dart';
 import 'package:gti_rides/styles/styles.dart';
@@ -34,8 +36,10 @@ class GuesUserView extends StatelessWidget {
             child: GtiButton(
               text: "Create Account",
               onTap: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => SignUpScreen()));
+                routeService.offAllNamed(AppLinks.signUp);
+
+                // Navigator.pushReplacement(context,
+                //     MaterialPageRoute(builder: (context) => SignUpScreen()));
               },
             ),
           ),
@@ -50,8 +54,9 @@ class GuesUserView extends StatelessWidget {
             // borderColor: ThemeColors.of(context).errorContainer,
             // borderRadius: 12.r,
             onTap: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => LoginScreen()));
+              routeService.offAllNamed(AppLinks.login);
+              // Navigator.pushReplacement(context,
+              //     MaterialPageRoute(builder: (context) => LoginScreen()));
             },
           ),
         ],
@@ -59,3 +64,10 @@ class GuesUserView extends StatelessWidget {
     );
   }
 }
+
+
+//  i have remove token for the below 
+// 1.⁠ ⁠all MIS url 
+// 2.⁠ ⁠⁠get all cars 
+// 3.⁠ ⁠⁠get one car 
+// 4.⁠ ⁠⁠get review

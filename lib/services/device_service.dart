@@ -66,7 +66,7 @@ class DeviceService with WidgetsBindingObserver {
   Future<String> getDeviceInfo() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     logger.log("Getting device info");
-    logger.log("deviceType 1: $deviceType");
+    logger.log("deviceType : $deviceType");
 
     if (Platform.isAndroid) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
