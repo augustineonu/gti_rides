@@ -126,6 +126,18 @@ class OnboardingScreen extends GetView<OnboardingController> {
             child: Column(
               children: [
                 GtiButton(
+                  text: "Continue as a Guest",
+                  width: width,
+                  textColor: primaryColor,
+                  hasBorder: true,
+                  borderColor: primaryColor,
+                  color: white,
+                  onTap: controller.routeToRenterLanding,
+                ),
+                SizedBox(
+                  height: 10.sp,
+                ),
+                GtiButton(
                   text: AppStrings.getStartedButtonText,
                   width: width,
                   onTap: controller.routeToSignUp,
@@ -142,6 +154,20 @@ class OnboardingScreen extends GetView<OnboardingController> {
                   color: white,
                   onTap: controller.routeToLogin,
                 ),
+
+                // Center(
+                //   child: InkWell(
+                //     onTap: () {
+                //       controller.routeToRenterLanding();
+                //     },
+                //     borderRadius: BorderRadius.all(Radius.circular(6.r)),
+                //     child: Padding(
+                //       padding: const EdgeInsets.all(6.0),
+                //       child: textWidget(
+                //           text: "Continue as a Guest", style: getMediumStyle()),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),

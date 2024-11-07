@@ -90,6 +90,7 @@ class CarSelectionResultController extends GetxController
 
   Rx<String> testString = "Hello".obs;
   Rx<String> carId = "".obs;
+  Rx<String> plateNumber = "".obs;
   Rx<String> startDateTime = "".obs;
   Rx<String> endDateTime = "".obs;
   RxList<ReviewData>? reviews = <ReviewData>[].obs;

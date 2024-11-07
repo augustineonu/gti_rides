@@ -279,11 +279,11 @@ class CarSelectionResultScreen extends GetView<CarSelectionResultController> {
                         InkWell(
                           borderRadius: BorderRadius.all(Radius.circular(5.r)),
                           onTap: () => controller.copy(
-                              value: controller.carId.toString()),
+                              value: car.plateNumber.toString()),
                           child: Padding(
                             padding: const EdgeInsets.all(3.0),
                             child: textWidget(
-                                text: controller.carId.toString(),
+                                text: car.plateNumber.toString(),
                                 style: getMediumStyle(color: primaryColor)),
                           ),
                         ),

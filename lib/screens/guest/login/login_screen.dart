@@ -157,15 +157,18 @@ class LoginScreen extends GetView<LoginController> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        controller.isLoading.value
-                            ? centerLoadingIcon()
-                            : GtiButton(
-                                text: AppStrings.loginButtonText,
-                                width: width,
-                                onTap: controller.processLogin,
-                              ),
+                        GtiButton(
+                          text: "Continue as a Guest",
+                          width: width,
+                          textColor: primaryColor,
+                          hasBorder: true,
+                          borderColor: primaryColor,
+                          color: white,
+                          onTap: controller.routeToRenterLanding,
+                        ),
+
                         SizedBox(
-                          height: 20.sp,
+                          height: 10.sp,
                         ),
                         Center(
                           child: InkWell(
@@ -177,11 +180,37 @@ class LoginScreen extends GetView<LoginController> {
                             child: Padding(
                               padding: const EdgeInsets.all(6.0),
                               child: textWidget(
-                                  text: "Continue as a Guest",
-                                  style: getMediumStyle()),
+                                  text: "Or", style: getMediumStyle()),
                             ),
                           ),
                         ),
+                        SizedBox(
+                          height: 10.sp,
+                        ),
+
+                        controller.isLoading.value
+                            ? centerLoadingIcon()
+                            : GtiButton(
+                                text: AppStrings.loginButtonText,
+                                width: width,
+                                onTap: controller.processLogin,
+                              ),
+
+                        // Center(
+                        //   child: InkWell(
+                        //     onTap: () {
+                        //       controller.routeToRenterLanding();
+                        //     },
+                        //     borderRadius:
+                        //         BorderRadius.all(Radius.circular(6.r)),
+                        //     child: Padding(
+                        //       padding: const EdgeInsets.all(6.0),
+                        //       child: textWidget(
+                        //           text: "Continue as a Guest",
+                        //           style: getMediumStyle()),
+                        //     ),
+                        //   ),
+                        // ),
                         SizedBox(
                           height: 12.sp,
                         ),
